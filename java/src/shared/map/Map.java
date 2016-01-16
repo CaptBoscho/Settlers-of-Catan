@@ -5,5 +5,5 @@ package shared.map;
  */
 public class Map {
 
-    
+
 }
