@@ -17,27 +17,27 @@ public class Map {
 
     }
 
-    public Hex getHex(HexLocation hexLocation) {
+    public Hex getHex(HexLocation hexLoc) {
         return null;
     }
 
-    public Edge getEdge(EdgeLocation edgeLocation) {
+    public Edge getEdge(EdgeLocation edgeLoc) {
         return null;
     }
 
-    public Vertex getVertex(VertexLocation vertexLocation) {
+    public Vertex getVertex(VertexLocation vertexLoc) {
         return null;
     }
 
-    public boolean canBuildBuilding(VertexLocation vertexLocation) {
+    public boolean canBuildBuilding(VertexLocation vertexLoc) {
         return false;
     }
 
-    public boolean canBuildRoad(EdgeLocation edgeLocation) {
+    public boolean canBuildRoad(EdgeLocation edgeLoc) {
         return false;
     }
 
-    public PortType getPortType(VertexLocation vertexLocation) {
+    public PortType getPortType(VertexLocation vertexLoc) {
         return null;
     }
 
