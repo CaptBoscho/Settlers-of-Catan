@@ -30,8 +30,7 @@ import javax.swing.event.DocumentListener;
  * and login
  */
 @SuppressWarnings({"serial", "unused"})
-public class LoginView extends OverlayView implements ILoginView
-{
+public class LoginView extends OverlayView implements ILoginView {
 
     private final int LABEL_TEXT_SIZE = 40;
     private final float SMALL_LABEL_TEXT_SIZE = 16.0F;
@@ -42,8 +41,7 @@ public class LoginView extends OverlayView implements ILoginView
     private SignInPanel signInPanel = null;
     private RegisterPanel registerPanel = null;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -55,8 +53,7 @@ public class LoginView extends OverlayView implements ILoginView
         jf.setVisible(true);
     }
 
-    public LoginView()
-    {
+    public LoginView() {
 
         this.setOpaque(true);
         this.setLayout(new BorderLayout());
@@ -82,8 +79,7 @@ public class LoginView extends OverlayView implements ILoginView
         initComponents();
     }
 
-    private void initComponents()
-    {
+    private void initComponents() {
         JComponent left = initLeftComponents();
         JComponent middle = initMiddleComponents();
         JComponent right = initRightComponents();
@@ -95,8 +91,7 @@ public class LoginView extends OverlayView implements ILoginView
         this.add(right);
     }
 
-    private JComponent initLeftComponents()
-    {
+    private JComponent initLeftComponents() {
         JPanel leftPanel = new JPanel(new GridLayout(2, 1));
 
         //Set an empty border to take up space.
@@ -113,22 +108,19 @@ public class LoginView extends OverlayView implements ILoginView
         return leftPanel;
     }
 
-    private JComponent initMiddleComponents()
-    {
+    private JComponent initMiddleComponents() {
         signInPanel = new SignInPanel();
         signInPanel.setBorder(createBufferBorder());
         return signInPanel;
     }
 
-    private JComponent initRightComponents()
-    {
+    private JComponent initRightComponents() {
         registerPanel = new RegisterPanel();
         registerPanel.setBorder(createBufferBorder());
         return registerPanel;
     }
 
-    private Border createBufferBorder()
-    {
+    private Border createBufferBorder() {
         final int BUFFER_SPACE = 15;
         Border innerBuffer = BorderFactory.createEmptyBorder(BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE);
         Border outerBuffer = BorderFactory.createEmptyBorder(BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE);
@@ -140,8 +132,7 @@ public class LoginView extends OverlayView implements ILoginView
         return wholeCompound;
     }
 
-    private ActionListener actionListener = new ActionListener()
-    {
+    private ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e)
         {
@@ -150,8 +141,7 @@ public class LoginView extends OverlayView implements ILoginView
     };
 
     @Override
-    public ILoginController getController()
-    {
+    public ILoginController getController() {
 
         return (ILoginController) super.getController();
     }
@@ -186,8 +176,7 @@ public class LoginView extends OverlayView implements ILoginView
         return registerPanel.txtPasswordAgain.getText();
     }
 
-    private class SignInPanel extends JPanel
-    {
+    private class SignInPanel extends JPanel {
 
         private JLabel lblLogin = null;
         private JLabel lblUsername = null;
@@ -196,15 +185,13 @@ public class LoginView extends OverlayView implements ILoginView
         private JTextField txtPassword = null;
         private JButton btnSignIn = null;
 
-        public SignInPanel()
-        {
+        public SignInPanel() {
             initComponents();
             initLayout();
             initEventListeners();
         }
 
-        private void initComponents()
-        {
+        private void initComponents() {
             lblLogin = new JLabel("Login");
             Font labelFont = lblLogin.getFont();
             labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
@@ -220,8 +207,7 @@ public class LoginView extends OverlayView implements ILoginView
             btnSignIn = new JButton("Sign in");
         }
 
-        private void initLayout()
-        {
+        private void initLayout() {
             this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
             this.add(lblLogin);
@@ -252,10 +238,8 @@ public class LoginView extends OverlayView implements ILoginView
 
         }
 
-        private void initEventListeners()
-        {
-            btnSignIn.addActionListener(new ActionListener()
-            {
+        private void initEventListeners() {
+            btnSignIn.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent e)
@@ -279,16 +263,14 @@ public class LoginView extends OverlayView implements ILoginView
         private JTextField txtPasswordAgain = null;
         private JButton btnRegister = null;
 
-        public RegisterPanel()
-        {
+        public RegisterPanel() {
             initComponents();
             initTooltips();
             initLayout();
             initEventListeners();
         }
 
-        private void initComponents()
-        {
+        private void initComponents() {
             lblRegister = new JLabel("Register");
             Font labelFont = lblRegister.getFont();
             labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
@@ -306,8 +288,7 @@ public class LoginView extends OverlayView implements ILoginView
             btnRegister = new JButton("Register");
         }
 
-        private void initTooltips()
-        {
+        private void initTooltips() {
             txtUsername.setToolTipText("The username must be between three and seven "
                     + "characters: letters, digits, underscore, or dash.");
             txtPassword.setToolTipText("Please match the requested format.  "
@@ -316,8 +297,7 @@ public class LoginView extends OverlayView implements ILoginView
             txtPasswordAgain.setToolTipText("Make sure the two passwords match!");
         }
 
-        private void initLayout()
-        {
+        private void initLayout() {
             this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
             this.add(lblRegister);
@@ -353,10 +333,8 @@ public class LoginView extends OverlayView implements ILoginView
 
         }
 
-        private void initEventListeners()
-        {
-            btnRegister.addActionListener(new ActionListener()
-            {
+        private void initEventListeners() {
+            btnRegister.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent e)
@@ -367,26 +345,19 @@ public class LoginView extends OverlayView implements ILoginView
             });
 
             //Code to check if the username length is correct!
-            TextFieldValidator usernameValidator = new TextFieldValidator(txtUsername)
-            {
+            TextFieldValidator usernameValidator = new TextFieldValidator(txtUsername) {
                 @Override
-                public boolean validateContents(String username)
-                {
+                public boolean validateContents(String username) {
                     final int MIN_UNAME_LENGTH = 3;
                     final int MAX_UNAME_LENGTH = 7;
 
                     if (username.length() < MIN_UNAME_LENGTH
-                            || username.length() > MAX_UNAME_LENGTH)
-                    {
+                            || username.length() > MAX_UNAME_LENGTH) {
                         return false;
-                    }
-                    else
-                    {
-                        for (char c : username.toCharArray())
-                        {
+                    } else {
+                        for (char c : username.toCharArray()) {
                             if (!Character.isLetterOrDigit(c)
-                                    && c != '_' && c != '-')
-                            {
+                                    && c != '_' && c != '-') {
                                 return false;
                             }
                         }
@@ -397,25 +368,17 @@ public class LoginView extends OverlayView implements ILoginView
 
             };
 
-            TextFieldValidator passValidator = new TextFieldValidator(txtPassword)
-            {
+            TextFieldValidator passValidator = new TextFieldValidator(txtPassword) {
 
                 @Override
-                public boolean validateContents(String input)
-                {
+                public boolean validateContents(String input) {
                     final int MIN_PASS_LENGTH = 5;
-
-                    if (input.length() < MIN_PASS_LENGTH)
-                    {
+                    if (input.length() < MIN_PASS_LENGTH) {
                         return false;
-                    }
-                    else
-                    {
-                        for (char c : input.toCharArray())
-                        {
+                    } else {
+                        for (char c : input.toCharArray()) {
                             if (!Character.isLetterOrDigit(c)
-                                    && c != '_' && c != '-')
-                            {
+                                    && c != '_' && c != '-') {
                                 return false;
                             }
                         }
@@ -426,8 +389,7 @@ public class LoginView extends OverlayView implements ILoginView
 
             };
 
-            TextFieldValidator passAgainValidator = new TextFieldValidator(txtPasswordAgain)
-            {
+            TextFieldValidator passAgainValidator = new TextFieldValidator(txtPasswordAgain) {
 
                 @Override
                 public boolean validateContents(String input)
@@ -449,8 +411,7 @@ public class LoginView extends OverlayView implements ILoginView
         }
     }
 
-    private static abstract class TextFieldValidator implements DocumentListener, FocusListener
-    {
+    private static abstract class TextFieldValidator implements DocumentListener, FocusListener {
 
         public abstract boolean validateContents(String input);
 
@@ -458,8 +419,7 @@ public class LoginView extends OverlayView implements ILoginView
         private Border originalBorder = null;
         private Border redBorder = null;
 
-        public TextFieldValidator(JTextField textFieldValidate)
-        {
+        public TextFieldValidator(JTextField textFieldValidate) {
             this.textFieldValidate = textFieldValidate;
             originalBorder = textFieldValidate.getBorder();
             redBorder = BorderFactory.createLineBorder(Color.RED, 2);
@@ -495,21 +455,14 @@ public class LoginView extends OverlayView implements ILoginView
             validateInput();
         }
 
-        private void validateInput()
-        {
+        private void validateInput() {
             String contents = textFieldValidate.getText();
-
-            if (validateContents(contents))
-            {
+            if (validateContents(contents)) {
                 textFieldValidate.setBorder(originalBorder);
-            }
-            else
-            {
+            } else {
                 Border errorBorder = BorderFactory.createCompoundBorder(originalBorder, redBorder);
                 textFieldValidate.setBorder(errorBorder);
             }
         }
     }
-
 }
-

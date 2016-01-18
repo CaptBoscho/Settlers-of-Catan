@@ -16,16 +16,12 @@ public class MapController extends Controller implements IMapController {
 	private IRobView robView;
 	
 	public MapController(IMapView view, IRobView robView) {
-		
 		super(view);
-		
 		setRobView(robView);
-		
 		initFromModel();
 	}
 	
 	public IMapView getView() {
-		
 		return (IMapView)super.getView();
 	}
 	

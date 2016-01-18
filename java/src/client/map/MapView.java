@@ -13,15 +13,12 @@ import shared.locations.*;
  * Implementation for the map view
  */
 @SuppressWarnings("serial")
-public class MapView extends PanelView implements IMapView
-{
+public class MapView extends PanelView implements IMapView {
 	
 	private MapComponent map;
 	private MapOverlay overlay;
 	
-	public MapView()
-	{
-		
+	public MapView() {
 		this.setLayout(new BorderLayout());
 		
 		map = new MapComponent();
@@ -36,11 +33,8 @@ public class MapView extends PanelView implements IMapView
 	}
 	
 	@Override
-	public void setController(IController controller)
-	{
-		
+	public void setController(IController controller) {
 		super.setController(controller);
-		
 		map.setController(controller);
 	}
 	
@@ -87,10 +81,7 @@ public class MapView extends PanelView implements IMapView
 	}
 	
 	@Override
-	public void startDrop(PieceType pieceType, CatanColor pieceColor,
-						  boolean isCancelAllowed)
-	{
-		
+	public void startDrop(PieceType pieceType, CatanColor pieceColor, boolean isCancelAllowed) {
 		overlay = new MapOverlay(map);
 		overlay.setController(overlayController);
 		overlay.startDrop(pieceType, pieceColor, isCancelAllowed);
@@ -100,8 +91,7 @@ public class MapView extends PanelView implements IMapView
 	private IMapController overlayController = new IMapController() {
 		
 		@Override
-		public IView getView()
-		{
+		public IView getView() {
 			assert false;
 			return null;
 		}
@@ -131,48 +121,36 @@ public class MapView extends PanelView implements IMapView
 		}
 		
 		@Override
-		public void placeRoad(EdgeLocation edgeLoc)
-		{
-			
+		public void placeRoad(EdgeLocation edgeLoc) {
 			closeModal();
 			getController().placeRoad(edgeLoc);
 		}
 		
 		@Override
-		public void placeSettlement(VertexLocation vertLoc)
-		{
-			
+		public void placeSettlement(VertexLocation vertLoc) {
 			closeModal();
 			getController().placeSettlement(vertLoc);
 		}
 		
 		@Override
-		public void placeCity(VertexLocation vertLoc)
-		{
-			
+		public void placeCity(VertexLocation vertLoc) {
 			closeModal();
 			getController().placeCity(vertLoc);
 		}
 		
 		@Override
-		public void placeRobber(HexLocation hexLoc)
-		{
-			
+		public void placeRobber(HexLocation hexLoc) {
 			closeModal();
 			getController().placeRobber(hexLoc);
 		}
 		
 		@Override
-		public void startMove(PieceType pieceType, boolean isFree,
-							  boolean allowDisconnected)
-		{
+		public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
 			assert false;
 		}
 		
 		@Override
-		public void cancelMove()
-		{
-			
+		public void cancelMove() {
 			closeModal();
 			getController().cancelMove();
 		}
@@ -195,16 +173,13 @@ public class MapView extends PanelView implements IMapView
 			assert false;
 		}
 		
-		private void closeModal()
-		{
+		private void closeModal() {
 			overlay.cancelDrop();
 			overlay.closeModal();
 		}
 	};
 	
-	private static class MapOverlay extends OverlayView
-	{
-		
+	private static class MapOverlay extends OverlayView {
 		private final int LABEL_TEXT_SIZE = 40;
 		private final int BUTTON_TEXT_SIZE = 28;
 		private final int BORDER_WIDTH = 10;
@@ -214,11 +189,8 @@ public class MapView extends PanelView implements IMapView
 		private MapComponent map;
 		private JButton cancelButton;
 		
-		public MapOverlay(MapComponent mainMap)
-		{
-			
+		public MapOverlay(MapComponent mainMap) {
 			super();
-			
 			this.mainMap = mainMap;
 		}
 		
@@ -228,9 +200,7 @@ public class MapView extends PanelView implements IMapView
 			return (IMapController)super.getController();
 		}
 		
-		public void startDrop(PieceType pieceType, CatanColor pieceColor,
-							  boolean isCancelAllowed)
-		{
+		public void startDrop(PieceType pieceType, CatanColor pieceColor, boolean isCancelAllowed) {
 			
 			this.setOpaque(false);
 			this.setLayout(new BorderLayout());
@@ -248,19 +218,15 @@ public class MapView extends PanelView implements IMapView
 			map = mainMap.copy();
 			map.setController(getController());
 			
-			int prefWidth = (int)(mainMap.getScale() * mainMap.getPreferredSize()
-															  .getWidth());
-			int prefHeight = (int)(mainMap.getScale() * mainMap.getPreferredSize()
-															   .getHeight());
+			int prefWidth = (int)(mainMap.getScale() * mainMap.getPreferredSize().getWidth());
+			int prefHeight = (int)(mainMap.getScale() * mainMap.getPreferredSize().getHeight());
 			Dimension prefSize = new Dimension(prefWidth, prefHeight);
 			map.setPreferredSize(prefSize);
 			
 			this.add(label, BorderLayout.NORTH);
 			this.add(map, BorderLayout.CENTER);
 			
-			if(isCancelAllowed)
-			{
-				
+			if(isCancelAllowed) {
 				cancelButton = new JButton("Cancel");
 				Font buttonFont = cancelButton.getFont();
 				buttonFont = buttonFont.deriveFont(buttonFont.getStyle(),
@@ -282,17 +248,12 @@ public class MapView extends PanelView implements IMapView
 			}
 		};
 		
-		public void cancelDrop()
-		{
-			
+		public void cancelDrop() {
 			map.cancelDrop();
 		}
 		
-		private String getLabelText(PieceType pieceType)
-		{
-			
-			switch (pieceType)
-			{
+		private String getLabelText(PieceType pieceType) {
+			switch (pieceType) {
 				case ROAD:
 					return "Place a Road!";
 				case SETTLEMENT:

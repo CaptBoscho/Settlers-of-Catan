@@ -66,11 +66,8 @@ public class RollView extends OverlayView implements IRollView {
 	private ActionListener actionListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			if (e.getSource() == rollButton) {
-				
 				closeModal();
-				
 				getController().rollDice();
 			}
 		}	
@@ -78,7 +75,6 @@ public class RollView extends OverlayView implements IRollView {
 	
 	@Override
 	public IRollController getController() {
-		
 		return (IRollController)super.getController();
 	}
 
@@ -86,7 +82,4 @@ public class RollView extends OverlayView implements IRollView {
 	public void setMessage(String message) {
 		label.setText(message);
 	}
-
 }
-
-

@@ -5,8 +5,7 @@ import client.base.*;
 /**
  * Interface for the resource bar controller
  */
-public interface IResourceBarController extends IController
-{
+public interface IResourceBarController extends IController {
 	
 	/**
 	 * Called by the view then the user requests to build a road
