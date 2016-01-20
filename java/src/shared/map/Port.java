@@ -4,17 +4,33 @@ import shared.definitions.PortType;
 import shared.locations.VertexLocation;
 
 /**
- * Created by joel on 1/16/16.
+ * Representation of Port in the game
  */
 public class Port {
 
     private PortType portType;
     private VertexLocation vertexLoc;
 
+    /**
+     * Default Constructor
+     * @param portType PortType
+     * @param vertexLoc VertexLocation
+     */
     public Port(PortType portType, VertexLocation vertexLoc) {
 
     }
 
+    /**
+     * Tells if there is a Building at that Port
+     * @return boolean
+     */
+    public boolean existsBuilding() {
+        return false;
+    }
+
+    /*
+    Getters and Setters
+     */
     public void setPortType(PortType portType) {
         this.portType = portType;
     }
@@ -29,10 +45,6 @@ public class Port {
 
     public VertexLocation getVertexLoc() {
         return vertexLoc;
-    }
-
-    public boolean existsBuilding() {
-        return false;
     }
 
 }
