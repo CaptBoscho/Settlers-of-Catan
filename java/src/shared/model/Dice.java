@@ -3,16 +3,14 @@ package shared.model;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @name Dice
- * @description Represents the dice in a game
+ * Representation of game dice
  */
 public class Dice {
     private Integer min;
     private Integer max;
 
     /**
-     * @name Dice
-     * @description Default Constructor
+     * Default Constructor - sets dice range to [1,6]
      */
     public Dice(){
         this.min = 1;
@@ -20,9 +18,9 @@ public class Dice {
     }
 
     /**
-     * @name Dice
-     * @param min
-     * @param max
+     * Overloaded Constructor - sets dice range to [min,max]
+     * @param min minimum value the dice can return
+     * @param max maximum value the dice can return
      * @Description Dice class constructor
      */
     public Dice(Integer min, Integer max){
@@ -31,11 +29,10 @@ public class Dice {
     }
 
     /**
-     * @name roll
-     * @description simulates rolling one or more dice
-     * @return
+     * Simulates rolling one or more dice
+     * @return Integer value between the min and max (inclusive)
      */
     public Integer roll(){
-        return new Integer(ThreadLocalRandom.current().nextInt(this.min, this.max + 1));
+        return ThreadLocalRandom.current().nextInt(this.min, this.max + 1);
     }
 }

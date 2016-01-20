@@ -3,8 +3,7 @@ package shared.model;
 import java.util.List;
 
 /**
- * @name Game
- * @description Main model class for Catan Game
+ * Game class representing a Catan game
  */
 public class Game{
     private Dice dice;
@@ -12,27 +11,47 @@ public class Game{
     private Robber robber;
     private Integer longestRoadCard;
     private Integer largestArmyCard;
-    private List<Player> players;
+    private PlayerManager playerManager;
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
 
     /**
-     * @name Game
-     * @description Game class constructor
-     * @param players
+     * Constructor
      */
-    public Game(List<Player> players){ //// TODO: 1/19/2016 When should players be created??? 
+    public Game(){
         this.dice = new Dice();
         this.map = new GameMap();
         this.robber = new Robber();
-        this.longestRoadCard = -1;
+        this.longestRoadCard = -1; //// TODO: 1/19/2016 Should special victory cards be classes? 
         this.largestArmyCard = -1;
-        this.players = players;
+        this.playerManager = new PlayerManager();
         this.resourceCardBank = new ResourceCardBank();
         this.developmentCardBank = new DevelopmentCardBank();
     }
 
-    //// TODO: 1/19/2016 any other methods 
+    /**
+     * Gets the player with the longest road
+     * @return Player with longest road or null if no player has it
+     */
+    public Player getPlayerWithLongestRoad(){
+        if(this.longestRoadCard != -1){
+            return playerManager.getPlayerByIndex(this.longestRoadCard);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * Gets the player with the largest army
+     * @return Player with largest army or null if no player has it
+     */
+    public Player getPlayerWithLargestArmy(){
+        if(this.largestArmyCard != -1){
+            return playerManager.getPlayerByIndex(this.largestArmyCard);
+        }else {
+            return null;
+        }
+    }
 
     /*===========================================
                    Getters/Setters
@@ -77,12 +96,12 @@ public class Game{
         this.largestArmyCard = largestArmyCard;
     }
 
-    public Array<Player> getPlayers() {
-        return players;
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
-    public void setPlayers(Array<Player> players) {
-        this.players = players;
+    public void setPlayerManager(PlayerManager playerManager) {
+        this.playerManager = playerManager;
     }
 
     public ResourceCardBank getResourceCardBank() {
