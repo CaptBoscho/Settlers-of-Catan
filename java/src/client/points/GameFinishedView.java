@@ -75,7 +75,6 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 	private ActionListener actionListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			if (e.getSource() == okButton) {
 				closeModal();
 			}
@@ -93,12 +92,10 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 		String field = "";
 		String imagePath = "";
 
-		if (isLocalPlayer)
-		{ // We won!
+		if (isLocalPlayer) { // We won!
 			field = "Congratulations! You won!";
 			imagePath = "images/misc/winner2.png";
-		} else
-		{ // We lost!
+		} else { // We lost!
 			field = name + " won! Better luck next time.";
 			imagePath = "images/misc/loser2.png";
 		}
