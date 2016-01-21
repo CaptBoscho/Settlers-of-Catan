@@ -15,15 +15,24 @@ public class DevelopmentCardBank {
     static final int YEAR_OF_PLENTY_CARDS = 2;
     static final int ROAD_BUILD_CARDS = 2;
 
-    private ArrayList<DevelopmentCard> developmentCards;
-    private ArrayList<SoldierCard> soldiers;
+    private int numberSoldierCards;
 
-    DevelopmentCardBank(String parent) {
-        if (parent.equals("game")) {
-            // create full bank
-        } else if (parent.equals("user")) {
-            // create empty bank
-        }
+    private ArrayList<DevelopmentCard> developmentCards;
+
+    /**
+     * Creates a full DevelopmentCardBank
+     * @param game The object that contains the DevelopmentCardBank
+     */
+    DevelopmentCardBank(Game game) {
+
+    }
+
+    /**
+     * Creates an empty DevelopmentCardBank
+     * @param player The object that contains the DevelopmentCardBank
+     */
+    DevelopmentCardBank(Player player) {
+
     }
 
 

@@ -7,4 +7,7 @@ import shared.locations.EdgeLocation;
  */
 public class Road {
     EdgeLocation location;
+    int playerID;
+
+
 }
