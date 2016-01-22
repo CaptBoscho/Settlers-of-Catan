@@ -7,16 +7,16 @@ import shared.resources.ResourceCard;
 import java.util.ArrayList;
 
 /**
- * A bank that holds ResourceCards
+ * A bank owned by either a Player or a Game which holds all the owners DevelopmentCards
  *
  * Created by Danny on 1/18/16.
  */
 public class ResourceCardBank {
-    static final int NUMBER_BRICK = 15;
-    static final int NUMBER_ORE = 15;
-    static final int NUMBER_SHEEP = 15;
-    static final int NUMBER_WHEAT = 15;
-    static final int NUMBER_WOOD = 15;
+    static final int MAX_NUMBER_BRICK = 15;
+    static final int MAX_NUMBER_ORE = 15;
+    static final int MAX_NUMBER_SHEEP = 15;
+    static final int MAX_NUMBER_WHEAT = 15;
+    static final int MAX_NUMBER_WOOD = 15;
 
     private ArrayList<ResourceCard> resourceCards;
 

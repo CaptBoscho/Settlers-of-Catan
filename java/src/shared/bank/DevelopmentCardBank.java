@@ -1,14 +1,15 @@
 package shared.bank;
 
 import shared.devcards.DevelopmentCard;
-import shared.devcards.SoldierCard;
+
 import shared.model.Game;
 import shared.model.Player;
 
 import java.util.ArrayList;
 
+
 /**
- * A bank for DevelopmentCards
+ * A bank owned by either a Player or a Game which holds all the owners DevelopmentCards
  *
  * Created by Danny on 1/18/16.
  */
@@ -38,6 +39,5 @@ public class DevelopmentCardBank {
     DevelopmentCardBank(Player player) {
 
     }
-
 
 }

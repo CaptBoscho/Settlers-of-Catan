@@ -4,10 +4,12 @@ import shared.definitions.ResourceType;
 import shared.locations.VertexLocation;
 
 /**
+ * An abstract parent class for Cities and Settlements
+ *
  * Created by Danny on 1/18/16.
  */
 public abstract class Building {
-    VertexLocation location;
+
     int playerID;
     /**
      * Adds resources to
