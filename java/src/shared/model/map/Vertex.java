@@ -1,8 +1,7 @@
 package shared.model.map;
 
 import shared.locations.VertexLocation;
-import shared.structures.Building;
-import shared.map.Port;
+import shared.model.structures.Building;
 
 /**
  * Contains a normalized VertexLocation
@@ -30,7 +29,7 @@ public class Vertex {
      * @return
      */
     public Building existsBuilding(){
-
+        return null;
     }
 
     /**
