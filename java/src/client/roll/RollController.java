@@ -17,9 +17,7 @@ public class RollController extends Controller implements IRollController {
 	 * @param resultView Roll result view
 	 */
 	public RollController(IRollView view, IRollResultView resultView) {
-
 		super(view);
-		
 		setResultView(resultView);
 	}
 	
@@ -36,7 +34,6 @@ public class RollController extends Controller implements IRollController {
 	
 	@Override
 	public void rollDice() {
-
 		getResultView().showModal();
 	}
 

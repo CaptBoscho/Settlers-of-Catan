@@ -72,9 +72,7 @@ public class RobView extends OverlayView implements IRobView {
 			
 			if (e.getSource() == defaultButton) {
 				closeModal();
-			}
-			else{
-				
+			} else {
 				for(int i = 0; i < victimButtons.size(); i++){
 					if(e.getSource() == victimButtons.get(i)){
 						closeModal();
@@ -88,7 +86,6 @@ public class RobView extends OverlayView implements IRobView {
 
 	@Override
 	public IMapController getController() {
-
 		return (IMapController)super.getController();
 	}
 
@@ -97,8 +94,9 @@ public class RobView extends OverlayView implements IRobView {
 		victims = candidateVictims;
 		
 		int numberOfPlayers = 0;
-		if(candidateVictims != null)
+		if(candidateVictims != null) {
 			numberOfPlayers = candidateVictims.length;
+		}
 		
 		if(numberOfPlayers != 0){
 			this.remove(buttonPanel);

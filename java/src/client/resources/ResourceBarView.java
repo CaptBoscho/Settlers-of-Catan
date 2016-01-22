@@ -96,8 +96,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 	private Map<ResourceBarElement, ResourceElement> resources;
 	private List<ResourceBarElement> resourceElementList;
 	
-	public ResourceBarView()
-	{
+	public ResourceBarView() {
 		
 		// TEMPORARY
 		this.add(new JLabel("Resource Bar View"));
@@ -108,15 +107,13 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 		this.initialize();
 	}
 	
-	private void initialize()
-	{
+	private void initialize() {
 		this.loadImages();
 		this.initializeResources();
 		this.initializeView();
 	}
 	
-	private void loadImages()
-	{
+	private void loadImages() {
 		brickImage = ImageUtils.loadImage(RESOURCE_IMAGE_PATH + "brick.png");
 		oreImage = ImageUtils.loadImage(RESOURCE_IMAGE_PATH + "ore.png");
 		sheepImage = ImageUtils.loadImage(RESOURCE_IMAGE_PATH + "sheep.png");
@@ -130,8 +127,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 		soldierImage = ImageUtils.loadImage(BUILDING_IMAGE_PATH + "soldier.jpg");
 	}
 	
-	private void initializeResources()
-	{
+	private void initializeResources() {
 		resources = new HashMap<>();
 		resourceElementList = new ArrayList<>();
 		
@@ -306,14 +302,12 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 	}
 	
 	@Override
-	public void setElementEnabled(ResourceBarElement element, boolean enabled)
-	{   
+	public void setElementEnabled(ResourceBarElement element, boolean enabled) {
 		resources.get(element).setEnabled(enabled);
 	}
 	
 	@Override
-	public void setElementAmount(ResourceBarElement element, int amount)
-	{   
+	public void setElementAmount(ResourceBarElement element, int amount) {
 		resources.get(element).setElementCount(amount);
 	}
 	
@@ -327,10 +321,8 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 	
 	private KeyAdapter keyAdapter = new KeyAdapter() {
 		@Override
-		public void keyTyped(KeyEvent e)
-		{
-			switch (e.getKeyChar())
-			{
+		public void keyTyped(KeyEvent e) {
+			switch (e.getKeyChar()) {
 				case '1':
 					getController().buildRoad();
 					break;
@@ -394,23 +386,15 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			this(type, clickable, 0);
 		}
 		
-		public ResourceElement(ResourceBarElement type,
-		                       int elementCount)
-		{
+		public ResourceElement(ResourceBarElement type, int elementCount) {
 			this(type, false, elementCount);
 		}
 		
-		public ResourceElement(ResourceBarElement type,
-		                       boolean clickable,
-		                       int elementCount)
-		{
+		public ResourceElement(ResourceBarElement type, boolean clickable, int elementCount) {
 			this(type, clickable, false, elementCount);
 		}
 		
-		public ResourceElement(ResourceBarElement type,
-		                       boolean clickable,
-		                       BufferedImage elementImage)
-		{
+		public ResourceElement(ResourceBarElement type, boolean clickable, BufferedImage elementImage) {
 			this(type, clickable, elementImage, 0);
 		}
 		
@@ -449,8 +433,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			this.setElementCount(elementCount);
 		}
 		
-		private void initialize()
-		{
+		private void initialize() {
 			_resourceElementPanel = new JPanel();
 			_resourceElementPanel.setLayout(new BoxLayout(_resourceElementPanel,
 			                                              BoxLayout.X_AXIS));
@@ -459,8 +442,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			FontUtils.setFont(_elementCountLabel, LABEL_FONT_SIZE);
 		}
 		
-		public void setElementType(ResourceBarElement type)
-		{
+		public void setElementType(ResourceBarElement type) {
 			this._type = type;
 			this.update();
 		}
@@ -470,8 +452,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			return this._type;
 		}
 		
-		public void setClickable(boolean clickable)
-		{
+		public void setClickable(boolean clickable) {
 			this._clickable = clickable;
 			this.update();
 		}
@@ -481,8 +462,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			return this._clickable;
 		}
 		
-		public void setEnabled(boolean enabled)
-		{
+		public void setEnabled(boolean enabled) {
 			this._enabled = enabled;
 			this.update();
 		}
@@ -492,8 +472,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			return this._enabled;
 		}
 		
-		public void setElementImage(BufferedImage elementImage)
-		{
+		public void setElementImage(BufferedImage elementImage) {
 			BufferedImage image;
 			
 			image = new BufferedImage(IMAGE_SIZE, IMAGE_SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -516,8 +495,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			this.update();
 		}
 		
-		public void setElementCount(int elementCount)
-		{
+		public void setElementCount(int elementCount) {
 			this._elementCount = elementCount;
 			this.update();
 		}
@@ -527,16 +505,14 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			return this._elementCount;
 		}
 		
-		public void update()
-		{
+		public void update() {
 			_elementImageButton.setEnabled(this.isEnabled());
 			if(_elementCount >= 0)
 				_elementCountLabel.setText(""+_elementCount);
 			_resourceElementPanel.repaint();
 		}
 		
-		public JComponent asJComponent()
-		{
+		public JComponent asJComponent() {
 			this.initialize();
 			
 			JPanel elementPanel = new JPanel(new GridBagLayout());
@@ -551,8 +527,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			ImageIcon enabledIcon = new ImageIcon(_elementImage);
 			_elementImageButton.setIcon(enabledIcon);
 			
-			if(this.isClickable())
-			{
+			if(this.isClickable()) {
 				ImageIcon disabledIcon = new ImageIcon(_disabledImage);
 				_elementImageButton.setDisabledIcon(disabledIcon);
 			} else {

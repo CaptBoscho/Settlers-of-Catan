@@ -13,9 +13,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	private Map<ResourceBarElement, IAction> elementActions;
 	
 	public ResourceBarController(IResourceBarView view) {
-
 		super(view);
-		
 		elementActions = new HashMap<ResourceBarElement, IAction>();
 	}
 
@@ -31,7 +29,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	 * @param action The action to be executed
 	 */
 	public void setElementAction(ResourceBarElement element, IAction action) {
-
 		elementActions.put(element, action);
 	}
 
@@ -63,7 +60,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	private void executeElementAction(ResourceBarElement element) {
 		
 		if (elementActions.containsKey(element)) {
-			
 			IAction action = elementActions.get(element);
 			action.execute();
 		}
