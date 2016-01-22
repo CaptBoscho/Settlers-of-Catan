@@ -14,7 +14,7 @@ public class PointsController extends Controller implements IPointsController {
 	 * PointsController constructor
 	 * 
 	 * @param view Points view
-	 * @param finishedView Game finished view, which is displayed when the game is over
+	 * @param finishedView game finished view, which is displayed when the game is over
 	 */
 	public PointsController(IPointsView view, IGameFinishedView finishedView) {
 		super(view);

@@ -8,7 +8,7 @@ import javax.swing.*;
 import client.base.*;
 
 /**
- * Game history view implementation
+ * game history view implementation
  */
 @SuppressWarnings("serial")
 public class GameHistoryView extends PanelView implements IGameHistoryView

@@ -35,7 +35,7 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
 		
-		label = new JLabel("Game Finished");
+		label = new JLabel("game Finished");
 		Font labelFont = label.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
