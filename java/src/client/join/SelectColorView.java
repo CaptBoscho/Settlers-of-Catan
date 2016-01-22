@@ -43,7 +43,7 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 
 		String fontName = new JButton().getFont().getName();
 
-		lblTitle = new JLabel("Join Game - Select Color");
+		lblTitle = new JLabel("Join game - Select Color");
 		lblTitle.setFont(new java.awt.Font(fontName, 1, LABEL_TEXT_SIZE));
 		
 		btnRed = new JButton("Red");
@@ -114,7 +114,7 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 		cancelButton.setFont(new java.awt.Font(fontName, 0, DIALOG_BUTTON_TEXT_SIZE));
 		cancelButton.setOpaque(true);
 
-		joinButton = new JButton("Join Game");
+		joinButton = new JButton("Join game");
 		joinButton.addActionListener(actionListener);
 		joinButton.setFont(new java.awt.Font(fontName, 0, DIALOG_BUTTON_TEXT_SIZE));
 		joinButton.setOpaque(true);
