@@ -22,7 +22,7 @@ public class ResourceCardBank {
 
     /**
      * Creates a full ResourceCardBank
-     * @param game
+     * @param game The object that contains the DevelopmentCardBank
      */
     public ResourceCardBank(Game game) {
 
@@ -30,7 +30,7 @@ public class ResourceCardBank {
 
     /**
      * Creates an empty ResourceCardBank
-     * @param player
+     * @param player The object that contains the ResourceCardBank
      */
     public ResourceCardBank (Player player) {
 
