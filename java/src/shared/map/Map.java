@@ -24,28 +24,52 @@ public class Map {
     /**
      * Tells any Building objects on the map to give resources to its player if the chit it needs is rolled
      * @param diceNum Number rolled by dice
+     * @param userID
      */
-    public void giveResources(int diceNum) {
+    public void giveResources(int diceNum, int userID) {
 
     }
 
     /**
-     * Tells if a Building can be built at a specific vertex location
+     * Tells if a Building can be built at a specific vertex location.
+     * Checks if neighboring vertices are occupied.
+     * Checks if the user has a connecting road.
      * @param vertexLoc VertexLocation
+     * @param int userID
      * @return boolean
      */
-    public boolean canBuildBuilding(VertexLocation vertexLoc) {
+    public boolean canBuildBuilding(VertexLocation vertexLoc, int userID) {
         return false;
     }
 
     /**
      * Tells if a Road can be built at a specific edge location
+     * checks if the user has a connecting road.
      * @param edgeLoc EdgeLocation
+     * @param int userID
      * @return boolean
      */
-    public boolean canBuildRoad(EdgeLocation edgeLoc) {
+    public boolean canBuildRoad(EdgeLocation edgeLoc, int userID) {
         return false;
     }
+
+    /**
+     * Checks if the user has a road connecting to the edge.
+     * @param edgeLoc
+     * @param userID
+     * @return
+     */
+    public boolean hasConnectingRoadtoEdge(EdgeLocation edgeLoc, int userID){
+        return true;
+    }
+
+    /**
+     * checks if user has a road connecting to the vertex.
+     * @param vertexLoc
+     * @param userID
+     * @return
+     */
+    public boolean hasConnectingRoadtoVertex(VertexLocation vertexLoc, int userID) {return true;}
 
     /**
      * Returns the type of port found at a vertex location

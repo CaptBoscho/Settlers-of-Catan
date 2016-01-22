@@ -22,7 +22,7 @@ public class Facade {
     /**
      * Facade asks if it's the player's turn, then checks the players
      * hand to see if they have enough resources, then asks the map
-     * class if that player can build an edge at that location.
+     * class if that player can build a road at that location.
      * @param playerID
      * @param edge
      * @return
@@ -74,6 +74,6 @@ public class Facade {
         return true;
     }
 
-    
+
 
 }
