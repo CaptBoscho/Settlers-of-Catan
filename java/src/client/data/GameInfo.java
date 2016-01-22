@@ -8,7 +8,7 @@ import java.util.*;
  * PROPERTIES:<br>
  * <ul>
  * <li>Id: Unique game ID</li>
- * <li>Title: Game title (non-empty string)</li>
+ * <li>Title: game title (non-empty string)</li>
  * <li>Players: List of players who have joined the game (can be empty)</li>
  * </ul>
  * 

@@ -5,7 +5,7 @@ import java.util.List;
 import client.base.*;
 
 /**
- * Game history view interface
+ * game history view interface
  */
 public interface IGameHistoryView extends IView
 {

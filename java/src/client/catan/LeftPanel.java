@@ -41,7 +41,7 @@ public class LeftPanel extends JPanel {
 		
 //		gameStatePanel.setController(turnController);
 		
-		tabPane.add("Game History", historyView);
+		tabPane.add("game History", historyView);
 		tabPane.add("Chat Messages", chatView);
 		
 		this.add(tabPane, BorderLayout.CENTER);

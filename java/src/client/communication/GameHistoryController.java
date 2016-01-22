@@ -8,7 +8,7 @@ import shared.definitions.*;
 
 
 /**
- * Game history controller implementation
+ * game history controller implementation
  */
 public class GameHistoryController extends Controller implements IGameHistoryController {
 
