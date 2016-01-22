@@ -1,10 +1,14 @@
 package shared.bank;
 
+import shared.model.Game;
+import shared.model.Player;
 import shared.resources.ResourceCard;
 
 import java.util.ArrayList;
 
 /**
+ * A bank that holds ResourceCards
+ *
  * Created by Danny on 1/18/16.
  */
 public class ResourceCardBank {
@@ -16,11 +20,19 @@ public class ResourceCardBank {
 
     private ArrayList<ResourceCard> resourceCards;
 
-    ResourceCardBank(String parent) {
-        if (parent.equals("game")) {
-            // create full bank
-        } else if (parent.equals("user")) {
-            // create empty bank
-        }
+    /**
+     * Creates a full ResourceCardBank
+     * @param game The object that contains the DevelopmentCardBank
+     */
+    ResourceCardBank(Game game) {
+
+    }
+
+    /**
+     * Creates an empty ResourceCardBank
+     * @param player The object that contains the ResourceCardBank
+     */
+    ResourceCardBank(Player player) {
+
     }
 }
