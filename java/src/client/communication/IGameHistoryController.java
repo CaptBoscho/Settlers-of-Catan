@@ -3,7 +3,7 @@ package client.communication;
 import client.base.*;
 
 /**
- * Game history controller interface
+ * game history controller interface
  */
 public interface IGameHistoryController extends IController
 {   

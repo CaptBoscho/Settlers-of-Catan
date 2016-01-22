@@ -27,7 +27,7 @@ public interface IJoinGameController extends IController
 	void cancelCreateNewGame();
 	
 	/**
-	 * Called by the new game view when the user clicks the "Create Game" button
+	 * Called by the new game view when the user clicks the "Create game" button
 	 */
 	void createNewGame();
 	
@@ -46,7 +46,7 @@ public interface IJoinGameController extends IController
 	void cancelJoinGame();
 	
 	/**
-	 * Called by the select color view when the user clicks the "Join Game"
+	 * Called by the select color view when the user clicks the "Join game"
 	 * button
 	 * 
 	 * @param color

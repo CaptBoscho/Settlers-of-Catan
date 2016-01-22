@@ -36,7 +36,7 @@ public class NewGameView extends OverlayView implements INewGameView
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
 
-        lblNewGameSettings = new JLabel("New Game Settings");
+        lblNewGameSettings = new JLabel("New game Settings");
         Font labelFont = lblNewGameSettings.getFont();
         labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
         lblNewGameSettings.setFont(labelFont);
@@ -50,7 +50,7 @@ public class NewGameView extends OverlayView implements INewGameView
         buttonFont = buttonFont.deriveFont(buttonFont.getStyle(), BUTTON_TEXT_SIZE);
         cancelButton.setFont(buttonFont);
 
-        createButton = new JButton("Create Game");
+        createButton = new JButton("Create game");
         createButton.addActionListener(actionListener);
         createButton.setFont(buttonFont);
 
