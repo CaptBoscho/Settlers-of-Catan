@@ -5,12 +5,12 @@ import shared.definitions.DevCardType;
 /**
  * Created by Danny on 1/18/16.
  */
-public class DevelopmentCard {
+public abstract class DevelopmentCard {
 
     protected DevCardType type;
 
     /**
-     * Plays a Development Card based on the DevCardType
+     * Plays a Development Card based on its DevCardType
      * @throws Exception
      */
     public void playCard() throws InvalidCardTypeException {
