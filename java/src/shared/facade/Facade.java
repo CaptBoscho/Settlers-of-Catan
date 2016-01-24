@@ -32,6 +32,20 @@ public class Facade {
     }
 
     /**
+     * Builds a road
+     * @param playerID
+     * @param edge
+     * @throws BuildException
+     */
+    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException{
+        if(canBuildRoad(playerID, edge)){
+
+        } else {
+            throw new BuildException("Can't build the road");
+        }
+    }
+
+    /**
      * Facade asks if it's the player's turn, then checks the players
      * hand to see if they have enough resources, then asks the map
      * class if that player can build a Building at that location.
@@ -41,6 +55,20 @@ public class Facade {
      */
     public boolean canBuildBuilding(int playerID, VertexLocation vertex){
         return true;
+    }
+
+    /**
+     * Builds a building
+     * @param playerID
+     * @param vertex
+     * @throws BuildException
+     */
+    public void buildBuilding(int playerID, VertexLocation vertex) throws BuildException{
+        if(canBuildBuilding(playerID,vertex)){
+
+        } else {
+            throw new BuikldException("Can't build the building");
+        }
     }
 
     /**
@@ -55,6 +83,19 @@ public class Facade {
     }
 
     /**
+     * player Buys a development card
+     * @param playerID
+     * @throws BuildException
+     */
+    public void buyDC(int playerID) throws BuildException {
+        if(canBuyDC(playerID)){
+
+        } else {
+            throw new BuildException("Can't buy Develpment Card");
+        }
+    }
+
+    /**
      * Facade asks the game who then asks the turn tracker if trading
      * is permitted for this player.
      * @param playerID
@@ -62,6 +103,19 @@ public class Facade {
      */
     public boolean canTrade(int playerID){
         return true;
+    }
+
+    /**
+     * Commits the trade
+     * @param playerID
+     * @throws BuildException
+     */
+    public void Trade(int playerID) throws BuildException {
+        if(canTrade(playerID)){
+
+        } else {
+            throw new BuildException("Can't complete this trade");
+        }
     }
 
     /**
@@ -74,6 +128,19 @@ public class Facade {
         return true;
     }
 
+    /**
+     * plays the Development Card
+     * @param playerID
+     * @param dc
+     * @throws BuildException
+     */
+    public void playDC(int playerID, DevelopmentCard dc) throws BuildException {
+        if(canPlayDC(playerID)){
+
+        } else {
+            throw new BuildException("can't play this Develpment Card");
+        }
+    }
 
 
 }
