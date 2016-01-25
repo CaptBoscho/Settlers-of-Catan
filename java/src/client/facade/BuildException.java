@@ -5,5 +5,5 @@ package client.facade;
  * the Facade.
  */
 public class BuildException extends Exception {
-    public BuildException(string message) {super(message);}
+    public BuildException(String message) {super(message);}
 }
