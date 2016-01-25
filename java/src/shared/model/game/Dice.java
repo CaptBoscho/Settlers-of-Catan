@@ -21,7 +21,6 @@ public class Dice {
      * Overloaded Constructor - sets dice range to [min,max]
      * @param min minimum value the dice can return
      * @param max maximum value the dice can return
-     * @Description Dice class constructor
      */
     public Dice(Integer min, Integer max) {
         this.min = min;

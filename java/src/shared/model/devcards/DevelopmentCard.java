@@ -11,7 +11,7 @@ public abstract class DevelopmentCard {
 
     /**
      * Plays a Development Card based on its DevCardType
-     * @throws Exception
+     * @throws InvalidCardTypeException
      */
     public void playCard() throws InvalidCardTypeException {
         switch (type) {

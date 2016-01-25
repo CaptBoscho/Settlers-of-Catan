@@ -25,7 +25,7 @@ public class ServerProxy implements IServer {
         this.host = host;
         this.port = port;
     }
-    
+
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *

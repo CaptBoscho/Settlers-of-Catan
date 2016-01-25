@@ -18,7 +18,8 @@ public class Facade {
     /**
      * Asks the game who then asks the turn tracker
      * if it's the player's turn.
-     * @param playerID
+     *
+     * @param playerID The ID of the player asking this
      */
     public boolean myTurn(int playerID) {
         return true;
@@ -28,9 +29,10 @@ public class Facade {
      * Facade asks if it's the player's turn, then checks the players
      * hand to see if they have enough resources, then asks the map
      * class if that player can build a road at that location.
-     * @param playerID
+     *
+     * @param playerID The ID of the player asking this
      * @param edge
-     * @return
+     * @return A boolean indicating if the asking player can build a road
      */
     public boolean canBuildRoad(int playerID, EdgeLocation edge) {
         return true;
@@ -40,9 +42,10 @@ public class Facade {
      * Facade asks if it's the player's turn, then checks the players
      * hand to see if they have enough resources, then asks the map
      * class if that player can build a Building at that location.
-     * @param playerID
+     *
+     * @param playerID The ID of the player asking this
      * @param vertex
-     * @return
+     * @return A boolean indicating if the asking player can build a building
      */
     public boolean canBuildBuilding(int playerID, VertexLocation vertex) {
         return true;
@@ -52,8 +55,9 @@ public class Facade {
      * Facade asks if it's the player's turn, then checks the players
      * hand to see if they have enough resources to buy a development
      * card.
-     * @param playerID
-     * @return
+     *
+     * @param playerID The ID of the player asking this
+     * @return A boolean value indicating if the asking player can buy a development card
      */
     public boolean canBuyDC(int playerID) {
         return true;
@@ -62,8 +66,9 @@ public class Facade {
     /**
      * Facade asks the game who then asks the turn tracker if trading
      * is permitted for this player.
-     * @param playerID
-     * @return
+     *
+     * @param playerID The ID of the player asking this
+     * @return A boolean value indicating if the asking player can trade
      */
     public boolean canTrade(int playerID) {
         return true;
@@ -71,9 +76,10 @@ public class Facade {
 
     /**
      * Facade asks the game who then asks the turn tracker if the
-     * player can play a Development CArd
-     * @param playerID
-     * @return
+     * player can play a Development Card
+     *
+     * @param playerID The ID of the player asking this
+     * @return A boolean value indicating if a development card can be played
      */
     public boolean canPlayDC(int playerID) {
         return true;

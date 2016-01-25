@@ -63,7 +63,7 @@ public class Game {
     private void randomizePlayers() {
         try{
             playerManager.randomizePlayers();
-        }catch(Exception e){
+        } catch(Exception e) {
 
         }
     }

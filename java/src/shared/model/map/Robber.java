@@ -14,7 +14,7 @@ public class Robber {
     /**
      * Default Constructor
      */
-    public Robber(){
+    public Robber() {
         this.location = new HexLocation(0,0);
     }
 
@@ -22,7 +22,7 @@ public class Robber {
      * Overloaded Constructor
      * @param location HexLocation of the Robber
      */
-    public Robber(HexLocation location){
+    public Robber(HexLocation location) {
         this.location = location;
     }
 

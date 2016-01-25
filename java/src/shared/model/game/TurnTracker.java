@@ -14,7 +14,7 @@ public class TurnTracker {
      * Default Constructor
      * @param index index of the current player
      */
-    public TurnTracker(int index, int numPlayers) {
+    public TurnTracker(int index) {
         this.currentTurn = index;
         this.longestRoad = -1;
         this.largestArmy = -1;

@@ -102,6 +102,8 @@ public class Map {
      * @throws StructureException Throws exception if the player is not allowed to build a Road at the edge location.
      * @return returns size of longest road if the player has the longest road. Otherwise returns zero.
      */
+    // TODO this function has a bad design - it does 2 things: build road, and gets the longest road. If the calling
+    // code needs to check for longest road, it should call getLongestRoad
     public int buildRoad(EdgeLocation edgeLoc, int userID) throws StructureException {
         return 0;
     }
@@ -127,9 +129,9 @@ public class Map {
 
     /**
      * checks if user has a road connecting to the vertex.
-     * @param vertexLoc
-     * @param userID
-     * @return
+     * @param vertexLoc The location that we are checking
+     * @param userID The ID of the user calling this function
+     * @return A boolean value indicating if the vertex has a road connected
      */
     public boolean hasConnectingRoadtoVertex(VertexLocation vertexLoc, int userID) {return true;}
 

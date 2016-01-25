@@ -10,7 +10,7 @@ public class LongestRoad {
     /**
      * Default Constructor
      */
-    public LongestRoad(){
+    public LongestRoad() {
         this.playerID = -1;
     }
 
@@ -18,7 +18,7 @@ public class LongestRoad {
      * Get the current owner of the card
      * @return owner of the card by id
      */
-    public int getOwner(){
+    public int getOwner() {
         return this.playerID;
     }
 
@@ -26,7 +26,7 @@ public class LongestRoad {
      * Set the owner by player id
      * @param id id of the player owning this card (-1 for no owner)
      */
-    public void setOwner(int id){
+    public void setOwner(int id) {
         this.playerID = id;
     }
 
@@ -34,7 +34,7 @@ public class LongestRoad {
      * Get the points this card is worth
      * @return Point Value
      */
-    public int getPointWorth(){
+    public int getPointWorth() {
         return pointWorth;
     }
 }

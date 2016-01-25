@@ -38,7 +38,8 @@ public class Vertex {
      * If not, then it checks the nearest 3 vertices and checks
      * if there exists buildings on them, if they don't then
      * it can add a building.
-     * @return
+     *
+     * @return A boolean value indicating if this vertex can have a building added to it
      */
     public boolean canAddBuilding(){
         return true;
