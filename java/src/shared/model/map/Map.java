@@ -1,5 +1,7 @@
 package shared.model.map;
 
+import shared.exceptions.AlreadyRobbedException;
+import shared.exceptions.StructureException;
 import shared.locations.*;
 import shared.definitions.*;
 import shared.model.structures.*;
@@ -8,7 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Representation of the map in the game
+ * Representation of the map in the game. The game map keeps track of all locations, buildings, and chits as well as the
+ * special robber character. The map uses a HashMap in the underlaying implementation, which allows O(1)
+ * insertion/retrieval.
  */
 public class Map {
 

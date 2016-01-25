@@ -5,7 +5,7 @@ import shared.definitions.ResourceType;
 /**
  * An abstract parent class for Cities and Settlements
  *
- * Created by Danny on 1/18/16.
+ * @author Danny Harding
  */
 public abstract class Building {
 

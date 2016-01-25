@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * A bank owned by either a Player or a game which holds all the owners DevelopmentCards
  *
- * Created by Danny on 1/18/16.
+ * @author Danny Harding
  */
 public class DevelopmentCardBank {
     static final int SOLDIER_CARDS = 14;

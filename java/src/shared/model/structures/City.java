@@ -3,7 +3,9 @@ package shared.model.structures;
 import shared.definitions.ResourceType;
 
 /**
- * Created by Danny on 1/18/16.
+ * A City is a second-level structure for players, and can only be built from a previously existing settlement.
+ *
+ * @author Danny Harding
  */
 public class City extends Building {
 

@@ -1,4 +1,4 @@
-package shared.model.player;
+package shared.exceptions;
 
 /**
  * Exception for invalid player names

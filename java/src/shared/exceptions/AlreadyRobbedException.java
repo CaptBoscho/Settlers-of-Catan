@@ -1,4 +1,4 @@
-package shared.model.map;
+package shared.exceptions;
 
 /**
  * Exception if Robber is moved to where it previously was located

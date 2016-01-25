@@ -4,7 +4,9 @@ import shared.locations.HexLocation;
 
 /**
  *
- * Representation of a Hex in the map
+ * Representation of a Hex in the map. The map is comprised of hex pieces. Each hex has a chit that represents the
+ * probability of that hex getting rolled. A hex can only have a resource type. All structures/players belong on
+ * edge pieces, not hexes.
  */
 public class Hex {
 

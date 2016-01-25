@@ -3,7 +3,9 @@ package shared.model.resources;
 import shared.definitions.ResourceType;
 
 /**
- * Created by Danny on 1/18/16.
+ * Object representation of a Brick resource.
+ *
+ * @author Danny Harding
  */
 public class Brick extends ResourceCard{
 

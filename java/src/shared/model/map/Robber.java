@@ -4,7 +4,9 @@ package shared.model.map;
 import shared.locations.HexLocation;
 
 /**
- * Robber class representing the Robber piece in a game
+ * Robber class representing the Robber piece in a game.
+ *
+ * @author Bubba Bradley
  */
 public class Robber {
     private HexLocation location;

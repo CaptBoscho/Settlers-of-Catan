@@ -148,10 +148,10 @@ public class Game{
         if(this.longestRoadCard.getOwner() != -1){
             try {
                 return playerManager.getPlayerByIndex(this.longestRoadCard.getOwner());
-            }catch(Exception e){
+            } catch(Exception e) {
                 return null;
             }
-        }else {
+        } else {
             return null;
         }
     }
@@ -167,7 +167,7 @@ public class Game{
             }catch(Exception e){
                 return null;
             }
-        }else {
+        } else {
             return null;
         }
     }
@@ -206,7 +206,7 @@ public class Game{
      * @return True if the players can trade
      */
     public boolean canTrade(int playerOne, int playerTwo){
-        return (isPlayerTurn(playerOne) || isPlayerTurn(playerTwo)) ? true : false;
+        return isPlayerTurn(playerOne) || isPlayerTurn(playerTwo);
     }
 
     /*===========================================

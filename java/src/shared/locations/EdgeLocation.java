@@ -3,14 +3,12 @@ package shared.locations;
 /**
  * Represents the location of an edge on a hex map
  */
-public class EdgeLocation
-{
+public class EdgeLocation {
 	
 	private HexLocation hexLoc;
 	private EdgeDirection dir;
 	
-	public EdgeLocation(HexLocation hexLoc, EdgeDirection dir)
-	{
+	public EdgeLocation(HexLocation hexLoc, EdgeDirection dir) {
 		setHexLoc(hexLoc);
 		setDir(dir);
 	}
@@ -20,10 +18,8 @@ public class EdgeLocation
 		return hexLoc;
 	}
 	
-	private void setHexLoc(HexLocation hexLoc)
-	{
-		if(hexLoc == null)
-		{
+	private void setHexLoc(HexLocation hexLoc) {
+		if(hexLoc == null) {
 			throw new IllegalArgumentException("hexLoc cannot be null");
 		}
 		this.hexLoc = hexLoc;
@@ -46,8 +42,7 @@ public class EdgeLocation
 	}
 	
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dir == null) ? 0 : dir.hashCode());
@@ -56,8 +51,7 @@ public class EdgeLocation
 	}
 	
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if(this == obj)
 			return true;
 		if(obj == null)
@@ -67,8 +61,7 @@ public class EdgeLocation
 		EdgeLocation other = (EdgeLocation)obj;
 		if(dir != other.dir)
 			return false;
-		if(hexLoc == null)
-		{
+		if(hexLoc == null) {
 			if(other.hexLoc != null)
 				return false;
 		}
@@ -85,13 +78,11 @@ public class EdgeLocation
 	 * 
 	 * @return Normalized hex location
 	 */
-	public EdgeLocation getNormalizedLocation()
-	{
+	public EdgeLocation getNormalizedLocation() {
 		
 		// Return an EdgeLocation that has direction NW, N, or NE
 		
-		switch (dir)
-		{
+		switch (dir) {
 			case NorthWest:
 			case North:
 			case NorthEast:
@@ -107,4 +98,3 @@ public class EdgeLocation
 		}
 	}
 }
-

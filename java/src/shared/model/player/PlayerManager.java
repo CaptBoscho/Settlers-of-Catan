@@ -1,6 +1,8 @@
 package shared.model.player;
 
 import shared.exceptions.FailedToRandomizeException;
+import shared.exceptions.PlayerExistException;
+import shared.exceptions.TooManyPlayersException;
 
 import javax.security.sasl.AuthenticationException;
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 
 /**
  * Class for managing users
+ *
+ * @author Kyle Cornelison
  */
 public class PlayerManager {
     List<Player> players;

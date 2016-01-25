@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * A bank owned by either a Player or a game which holds all the owners DevelopmentCards
  *
- * Created by Danny on 1/18/16.
+ * @author Danny Harding
  */
 public class ResourceCardBank {
     static final int MAX_NUMBER_BRICK = 15;

@@ -1,9 +1,13 @@
 package shared.facade;
-import shared.*;
+import shared.locations.EdgeLocation;
+import shared.locations.VertexLocation;
+import shared.model.map.Map;
 
 /**
  * The Facade class handles all the communication
  * between the UI and game model.
+ *
+ * @author Corbin Byers
  */
 public class Facade {
 
@@ -73,7 +77,4 @@ public class Facade {
     public boolean canPlayDC(int playerID){
         return true;
     }
-
-
-
 }

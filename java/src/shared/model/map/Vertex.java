@@ -10,7 +10,8 @@ import shared.model.structures.Building;
  * Also has a port object, if there is no port
  * connected to the vertex, then it is initialized
  * as null.
- * Created by Corbin on 1/16/2016.
+ *
+ * @author Corbin Byers
  */
 public class Vertex {
 

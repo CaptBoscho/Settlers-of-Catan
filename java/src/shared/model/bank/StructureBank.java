@@ -3,7 +3,7 @@ package shared.model.bank;
 /**
  * A bank owned by a Player which holds a count of the owners remaining structures
  *
- * Created by Danny on 1/20/16.
+ * @author Danny Harding
  */
 public class StructureBank {
     private final int MAX_ROADS = 15;

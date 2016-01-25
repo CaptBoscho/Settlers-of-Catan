@@ -1,4 +1,4 @@
-package shared.model.player;
+package shared.exceptions;
 
 /**
  * Exception for trying to access a player that doesn't exist

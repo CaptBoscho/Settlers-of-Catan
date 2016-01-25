@@ -4,7 +4,8 @@ import shared.definitions.PortType;
 import shared.locations.VertexLocation;
 
 /**
- * Representation of Port in the game
+ * Representation of Port in the game. A port is a special structure that players can interact with to trade certain
+ * resources for others depending on the implemented port.
  */
 public class Port {
 

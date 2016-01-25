@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.model.bank.StructureBank;
@@ -7,6 +8,8 @@ import shared.definitions.CatanColor;
 
 /**
  * Representation of a player in the game
+ *
+ * @author Kyle Cornelison
  */
 public class Player implements Comparable<Player>{
     private static int _id;
