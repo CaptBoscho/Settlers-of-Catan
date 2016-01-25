@@ -124,7 +124,7 @@ public interface IServer {
      * Returns a list of supported AI player types (currently, LARGEST_ARMY is the only supported type) with a GET
      * request
      *
-     * @return
+     * @return A list of the supported AI types represented as arbitrary strings
      */
     public List<String> getAITypes();
 
@@ -133,18 +133,18 @@ public interface IServer {
     /**
      * Sends a chat message
      *
-     * @param playerIndex
-     * @param content
-     * @return
+     * @param playerId The ID of the player who is sending the message
+     * @param content The actual message
+     * @return The current state of the game
      */
-    public ClientModel sendChat(int playerIndex, String content);
+    public ClientModel sendChat(int playerId, String content);
 
     /**
      * Used to roll a number at the beginning of your turn
      *
      * @param playerIndex Who's sending this command (0-3)
      * @param numberRolled what number was rolled (2-12)
-     * @return
+     * @return The current state of the game
      */
     public ClientModel rollNumber(int playerIndex, int numberRolled);
 
@@ -154,7 +154,7 @@ public interface IServer {
      * @param playerIndex Who's doing the robbing
      * @param victimIndex The order index of the player to rob
      * @param location The new location of the robber
-     * @return
+     * @return The current state of the game
      */
     public ClientModel robPlayer(int playerIndex, int victimIndex, HexLocation location);
 
@@ -162,7 +162,7 @@ public interface IServer {
      * Used to finish your turn
      *
      * @param playerIndex Who's sending this command (0-3)
-     * @return
+     * @return The current state of the game
      */
     public ClientModel finishTurn(int playerIndex);
 
@@ -170,7 +170,7 @@ public interface IServer {
      * Used to buy a development card
      *
      * @param playerIndex Who's playing this dev card
-     * @return
+     * @return The current state of the game
      */
     public ClientModel buyDevCard(int playerIndex);
 
@@ -178,9 +178,9 @@ public interface IServer {
      * Plays a 'Year of Plenty' card from the player's hand to gain the two specified resources
      *
      * @param playerIndex Who's playing this dev card
-     * @param resource1
-     * @param resource2
-     * @return
+     * @param resource1 The first resource being acquired
+     * @param resource2 The second resource being acquired
+     * @return The current state of the game
      */
     public ClientModel playYearOfPlentyCard(int playerIndex, ResourceType resource1, ResourceType resource2);
 
@@ -190,7 +190,7 @@ public interface IServer {
      * @param playerIndex Who's placing the roads
      * @param spot1 The EdgeLocation of the first road
      * @param spot2 The EdgeLocation of the second road
-     * @return
+     * @return The current state of the game
      */
     public ClientModel playRoadBuildingCard(int playerIndex, EdgeLocation spot1, EdgeLocation spot2);
 
@@ -200,7 +200,7 @@ public interface IServer {
      * @param playerIndex Who's playing this dev card
      * @param victimIndex The index of the player to rob
      * @param location The new location of the robber
-     * @return
+     * @return The current state of the game
      */
     public ClientModel playSoldierCard(int playerIndex, int victimIndex, HexLocation location);
 
@@ -209,7 +209,7 @@ public interface IServer {
      *
      * @param playerIndex Who's playing this dev card
      * @param resource
-     * @return
+     * @return The current state of the game
      */
     public ClientModel playMonopolyCard(int playerIndex, String resource);
 
@@ -217,16 +217,16 @@ public interface IServer {
      * Plays a 'Monument' card from your hand to give you a victory point
      *
      * @param playerIndex Who's playing this dev card
-     * @return
+     * @return The current state of the game
      */
     public ClientModel playMonumentCard(int playerIndex);
 
     /**
      * Builds a road at the specified location. (Set 'free' to true during initial setup.)
      * @param playerIndex Who's placing the road
-     * @param roadLocation
+     * @param roadLocation The location of the road
      * @param free Whether this is placed for free (setup)
-     * @return
+     * @return The current state of the game
      */
     public ClientModel buildRoad(int playerIndex, EdgeLocation roadLocation, boolean free);
 
@@ -234,9 +234,9 @@ public interface IServer {
      * Builds a settlement at the specified location. (Set 'free' to true during initial setup.)
      *
      * @param playerIndex Who's placing the settlement
-     * @param location
+     * @param location The location of the new settlement
      * @param free Whether this is placed for free (setup)
-     * @return
+     * @return The current state of the game
      */
     public ClientModel buildSettlement(int playerIndex, VertexLocation location, boolean free);
 
@@ -245,7 +245,7 @@ public interface IServer {
      *
      * @param playerIndex Who's placing the city
      * @param location
-     * @return
+     * @return The current state of the game
      */
     public ClientModel buildCity(int playerIndex, VertexLocation location);
 
@@ -255,7 +255,7 @@ public interface IServer {
      * @param playerIndex Who's sending the offer
      * @param offer What you get (+) and what you give (-)
      * @param receiver Who you're offering the trade to (0-3)
-     * @return
+     * @return The current state of the game
      */
     public ClientModel offerTrade(int playerIndex, Trade offer, int receiver);
 
@@ -264,7 +264,7 @@ public interface IServer {
      *
      * @param playerIndex Who's accepting / rejecting this trade
      * @param willAccept Whether the player accepted the trade or not
-     * @return
+     * @return The current state of the game
      */
     public ClientModel respondToTradeOffer(int playerIndex, boolean willAccept);
 
@@ -275,7 +275,7 @@ public interface IServer {
      * @param ratio (<i>optional</i>) The ratio of the trade your doing as an integer (ie. put 3 for a 3:1 trade)
      * @param inputResource (<i>optional</i>) What type of resource you're giving
      * @param outputResource (<i>optional</i>) What type of resource you're getting
-     * @return
+     * @return The current state of the game
      */
     public ClientModel maritimeTrade(int playerIndex, int ratio, String inputResource, String outputResource);
 
@@ -284,7 +284,7 @@ public interface IServer {
      *
      * @param playerIndex Who's discarding
      * @param resourceList
-     * @return
+     * @return The current state of the game
      */
     public ClientModel discardCards(int playerIndex, List<ResourceType> resourceList);
 
