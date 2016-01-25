@@ -3,7 +3,7 @@ package shared.model.devcards;
 import shared.definitions.DevCardType;
 
 /**
- * Created by Danny on 1/18/16.
+ * @author Danny Harding
  */
 public abstract class DevelopmentCard {
 
@@ -11,7 +11,7 @@ public abstract class DevelopmentCard {
 
     /**
      * Plays a Development Card based on its DevCardType
-     * @throws Exception
+     * @throws InvalidCardTypeException
      */
     public void playCard() throws InvalidCardTypeException {
         switch (type) {

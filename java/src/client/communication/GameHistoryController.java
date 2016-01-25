@@ -13,15 +13,12 @@ import shared.definitions.*;
 public class GameHistoryController extends Controller implements IGameHistoryController {
 
 	public GameHistoryController(IGameHistoryView view) {
-		
 		super(view);
-		
 		initFromModel();
 	}
 	
 	@Override
 	public IGameHistoryView getView() {
-		
 		return (IGameHistoryView)super.getView();
 	}
 	
@@ -43,6 +40,4 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 	
 		//</temp>
 	}
-	
 }
-

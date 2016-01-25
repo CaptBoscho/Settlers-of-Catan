@@ -3,7 +3,9 @@ package shared.model.resources;
 import shared.definitions.ResourceType;
 
 /**
- * Created by Danny on 1/18/16.
+ * Object representation of a Wheat resource.
+ *
+ * @author Danny Harding
  */
 public class Wheat extends ResourceCard {
 

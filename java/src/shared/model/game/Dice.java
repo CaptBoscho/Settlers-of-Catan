@@ -12,7 +12,7 @@ public class Dice {
     /**
      * Default Constructor - sets dice range to [1,6]
      */
-    public Dice(){
+    public Dice() {
         this.min = 1;
         this.max = 6;
     }
@@ -21,9 +21,8 @@ public class Dice {
      * Overloaded Constructor - sets dice range to [min,max]
      * @param min minimum value the dice can return
      * @param max maximum value the dice can return
-     * @Description Dice class constructor
      */
-    public Dice(Integer min, Integer max){
+    public Dice(Integer min, Integer max) {
         this.min = min;
         this.max = max;
     }
@@ -32,7 +31,7 @@ public class Dice {
      * Simulates rolling one or more dice
      * @return Integer value between the min and max (inclusive)
      */
-    public Integer roll(){
+    public Integer roll() {
         return ThreadLocalRandom.current().nextInt(this.min, this.max + 1);
     }
 }

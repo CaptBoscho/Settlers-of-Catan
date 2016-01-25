@@ -10,7 +10,8 @@ import shared.model.structures.Building;
  * Also has a port object, if there is no port
  * connected to the vertex, then it is initialized
  * as null.
- * Created by Corbin on 1/16/2016.
+ *
+ * @author Corbin Byers
  */
 public class Vertex {
 
@@ -25,7 +26,7 @@ public class Vertex {
     }
 
     /**
-     * Tlls if there is a building
+     * Tells if there is a building
      * @return
      */
     public Building existsBuilding(){
@@ -37,7 +38,8 @@ public class Vertex {
      * If not, then it checks the nearest 3 vertices and checks
      * if there exists buildings on them, if they don't then
      * it can add a building.
-     * @return
+     *
+     * @return A boolean value indicating if this vertex can have a building added to it
      */
     public boolean canAddBuilding(){
         return true;

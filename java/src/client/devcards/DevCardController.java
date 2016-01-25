@@ -41,31 +41,26 @@ public class DevCardController extends Controller implements IDevCardController 
 
 	@Override
 	public void startBuyCard() {
-		
 		getBuyCardView().showModal();
 	}
 
 	@Override
 	public void cancelBuyCard() {
-		
 		getBuyCardView().closeModal();
 	}
 
 	@Override
 	public void buyCard() {
-		
 		getBuyCardView().closeModal();
 	}
 
 	@Override
 	public void startPlayCard() {
-		
 		getPlayCardView().showModal();
 	}
 
 	@Override
 	public void cancelPlayCard() {
-
 		getPlayCardView().closeModal();
 	}
 
@@ -81,13 +76,11 @@ public class DevCardController extends Controller implements IDevCardController 
 
 	@Override
 	public void playRoadBuildCard() {
-		
 		roadAction.execute();
 	}
 
 	@Override
 	public void playSoldierCard() {
-		
 		soldierAction.execute();
 	}
 
@@ -95,6 +88,4 @@ public class DevCardController extends Controller implements IDevCardController 
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
 		
 	}
-
 }
-

@@ -3,7 +3,10 @@ package shared.model.structures;
 import shared.definitions.ResourceType;
 
 /**
- * Created by Danny on 1/18/16.
+ * A settlement is a first-level structure for a player, and provides the player with one victory point. Settlements
+ * can be placed on Edge pieces.
+ *
+ * @author Danny Harding
  */
 public class Settlement extends Building {
 

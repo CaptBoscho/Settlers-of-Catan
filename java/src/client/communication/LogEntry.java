@@ -5,8 +5,7 @@ import shared.definitions.*;
 /**
  * Message (or entry) displayed in the LogComponent
  */
-public class LogEntry
-{
+public class LogEntry {
 	
 	/**
 	 * Color used when displaying the message
@@ -18,8 +17,7 @@ public class LogEntry
 	 */
 	private String message;
 	
-	public LogEntry(CatanColor color, String message)
-	{
+	public LogEntry(CatanColor color, String message) {
 		this.color = color;
 		this.message = message;
 	}
@@ -43,6 +41,4 @@ public class LogEntry
 	{
 		this.message = message;
 	}
-	
 }
-

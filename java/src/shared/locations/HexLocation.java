@@ -1,49 +1,53 @@
 package shared.locations;
 
+import com.google.gson.JsonObject;
+import shared.model.JsonSerializable;
+
 /**
  * Represents the location of a hex on a hex map
  */
-public class HexLocation
-{
+public class HexLocation implements JsonSerializable {
 	
 	private int x;
 	private int y;
 	
-	public HexLocation(int x, int y)
-	{
+	public HexLocation(int x, int y) {
 		setX(x);
 		setY(y);
 	}
+
+    /**
+     * Construct a HexLocation object from a JSON blob
+     *
+     * @param json The JSON being used to construct this object
+     */
+	public HexLocation(JsonObject json) {
+
+    }
 	
-	public int getX()
-	{
+	public int getX() {
 		return x;
 	}
 	
-	private void setX(int x)
-	{
+	private void setX(int x) {
 		this.x = x;
 	}
 	
-	public int getY()
-	{
+	public int getY() {
 		return y;
 	}
 	
-	private void setY(int y)
-	{
+	private void setY(int y) {
 		this.y = y;
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "HexLocation [x=" + x + ", y=" + y + "]";
 	}
 	
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + x;
@@ -52,8 +56,7 @@ public class HexLocation
 	}
 	
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if(this == obj)
 			return true;
 		if(obj == null)
@@ -68,10 +71,8 @@ public class HexLocation
 		return true;
 	}
 	
-	public HexLocation getNeighborLoc(EdgeDirection dir)
-	{
-		switch (dir)
-		{
+	public HexLocation getNeighborLoc(EdgeDirection dir) {
+		switch (dir) {
 			case NorthWest:
 				return new HexLocation(x - 1, y);
 			case North:
@@ -89,6 +90,14 @@ public class HexLocation
 				return null;
 		}
 	}
-	
-}
 
+	/**
+	 * Converts the object to JSON
+	 *
+	 * @return The JSON representation of the object
+	 */
+	@Override
+	public JsonObject toJSON() {
+		return null;
+	}
+}

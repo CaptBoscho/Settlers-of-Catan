@@ -3,9 +3,11 @@ package shared.model.resources;
 import shared.definitions.ResourceType;
 
 /**
- * Created by Danny on 1/18/16.
+ * Object representation of a Sheep resource.
+ *
+ * @author Danny Harding
  */
-public class Sheep extends ResourceCard{
+public class Sheep extends ResourceCard {
 
     public Sheep() {
         this.type = ResourceType.SHEEP;

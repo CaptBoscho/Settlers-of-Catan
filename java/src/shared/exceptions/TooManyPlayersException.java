@@ -1,4 +1,4 @@
-package shared.model.player;
+package shared.exceptions;
 
 /**
  * Exception for too many players - can't add any more players
