@@ -1,10 +1,14 @@
 package shared.model.game;
 
+import shared.exceptions.FailedToRandomizeException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
+import shared.model.bank.StructureBank;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
+
+import java.util.List;
 
 /**
  * game class representing a Catan game
@@ -12,7 +16,6 @@ import shared.model.player.PlayerManager;
 public class Game{
     private Dice dice;
     private Map map;
-    private Robber robber;
     private TurnTracker turnTracker;
     private LongestRoad longestRoadCard;
     private LargestArmy largestArmyCard;
@@ -26,7 +29,6 @@ public class Game{
     public Game(){
         this.dice = new Dice();
         this.map = new Map();
-        this.robber = new Robber();
         this.turnTracker = new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
@@ -36,12 +38,119 @@ public class Game{
     }
 
     /**
+     * Initialize a new game
+     * @param players List of players for this game
+     */
+    public void initializeGame(List<Player> players){
+        //Add the new players to the player manager
+
+        //Shuffle the players' turn order
+        this.randomizePlayers();
+
+        //Initiate picking of settlement placements
+        this.placeSettlements();
+
+        //Give players their resources
+        //this.map.giveInitialResources()
+
+        //Start the game
+        this.startGame();
+    }
+
+    /**
+     * Randomize the players' turn order
+     */
+    private void randomizePlayers() {
+        try{
+            playerManager.randomizePlayers();
+        }catch(Exception e){
+
+        }
+    }
+
+    /**
+     * Place settlements phase of setup
+     */
+    private void placeSettlements(){
+        //First phase order
+        for(Player player : playerManager.getPlayers()){
+            //Set player turn
+        }
+
+        //Second phase order
+        for(int i = playerManager.getPlayers().size() - 1; i >= 0; i--){
+            //Set player turn
+        }
+    }
+
+    /**
+     * Starts the game - after setup
+     * @return id of winning player
+     */
+    private int startGame(){
+        return 0;
+    }
+
+    /**
+     * Handles a player's turn
+     * @param player Player who's turn it is
+     */
+    private void playTurn(Player player){
+        //Dev Card - technically one card can be played at anytime during a player's turn
+//        try {
+//            this.playDevCard(player.getDevelopmentCardBank());
+//        }catch(Exception e){
+//
+//        }
+
+        //Roll dice
+        int roll = dice.roll();
+
+            //Pass resources
+            map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
+
+        //Trade Phase
+        this.trade();
+
+        //Build Phase
+        this.build(player.getStructureBank());
+    }
+
+    /**
+     * Initializes playing of a development card
+     * @param devCrdBnk Development Card Bank from which to play a card
+     * @throws Exception
+     */
+    private void playDevCard(DevelopmentCardBank devCrdBnk) throws Exception{
+        //Init play of dev card
+    }
+
+    /**
+     * Trade resources between players - Initializes phase
+     */
+    private void trade(){
+
+    }
+
+    /**
+     * Build a building = Initializes phase
+     * @param strBnk
+     */
+    private void build(StructureBank strBnk){
+
+    }
+
+    /**
      * Gets the player with the longest road
      * @return Player with longest road or null if no player has it
      */
-    public Player getPlayerWithLongestRoad(){
+    public Player getPlayerWithLongestRoad() {
         if(this.longestRoadCard.getOwner() != -1){
-            return playerManager.getPlayerByIndex(this.longestRoadCard.getOwner());
+            try {
+                return playerManager.getPlayerByIndex(this.longestRoadCard.getOwner());
+            }catch(Exception e){
+                return null;
+            }
         }else {
             return null;
         }
@@ -53,7 +162,11 @@ public class Game{
      */
     public Player getPlayerWithLargestArmy(){
         if(this.largestArmyCard.getOwner() != -1){
-            return playerManager.getPlayerByIndex(this.largestArmyCard.getOwner());
+            try {
+                return playerManager.getPlayerByIndex(this.largestArmyCard.getOwner());
+            }catch(Exception e){
+                return null;
+            }
         }else {
             return null;
         }
@@ -113,14 +226,6 @@ public class Game{
 
     public void setMap(Map map) {
         this.map = map;
-    }
-
-    public Robber getRobber() {
-        return robber;
-    }
-
-    public void setRobber(Robber robber) {
-        this.robber = robber;
     }
 
     public LongestRoad getLongestRoadCard() {

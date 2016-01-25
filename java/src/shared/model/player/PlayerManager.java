@@ -1,6 +1,10 @@
 package shared.model.player;
 
+import shared.exceptions.FailedToRandomizeException;
+
+import javax.security.sasl.AuthenticationException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,10 +33,19 @@ public class PlayerManager {
     }
 
     /**
+     * Randomize player order (turn order)
+     * @throws FailedToRandomizeException
+     */
+    public void randomizePlayers() throws FailedToRandomizeException {
+        Collections.shuffle(this.players);
+    }
+
+    /**
      * Validate
      * @return True if player authentication is successful
+     * @throws AuthenticationException
      */
-    public boolean authenticatePlayer(){
+    public boolean authenticatePlayer() throws AuthenticationException{
         return true;
     }
 
@@ -52,8 +65,17 @@ public class PlayerManager {
      * Gets a player by index
      * @param index Index of the player
      * @return Player at index
+     * @throws PlayerExistException
      */
-    public Player getPlayerByIndex(int index){
+    public Player getPlayerByIndex(int index) throws PlayerExistException{
         return this.players.get(index);
+    }
+
+    /**
+     * Get all players
+     * @return a list of players
+     */
+    public List<Player> getPlayers(){
+        return this.players;
     }
 }
