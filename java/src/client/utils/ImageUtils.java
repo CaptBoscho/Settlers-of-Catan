@@ -6,21 +6,14 @@ import java.io.*;
 
 import javax.imageio.*;
 
-public class ImageUtils
-{
+public class ImageUtils {
 	
-	public static BufferedImage DEFAULT_IMAGE = new BufferedImage(1,
-																  1,
-																  BufferedImage.TYPE_INT_ARGB);
+	public static BufferedImage DEFAULT_IMAGE = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	
-	public static BufferedImage loadImage(String file)
-	{
-		try
-		{
+	public static BufferedImage loadImage(String file) {
+		try {
 			return ImageIO.read(new File(file));
-		}
-		catch(IOException e)
-		{
+		} catch(IOException e) {
 			assert false;
 		}
 		
@@ -36,6 +29,4 @@ public class ImageUtils
 	    g.dispose();
 	    return resized;
 	}
-	
 }
-

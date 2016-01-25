@@ -6,8 +6,7 @@ import shared.definitions.*;
 /**
  * Interface for the maritime trade controller
  */
-public interface IMaritimeTradeController extends IController
-{
+public interface IMaritimeTradeController extends IController {
 	
 	/**
 	 * Called by the maritime trade view when the user clicks the maritime trade
@@ -52,4 +51,3 @@ public interface IMaritimeTradeController extends IController
 	void unsetGiveValue();
 	
 }
-

@@ -87,7 +87,4 @@ public class BuyDevCardView extends OverlayView implements IBuyDevCardView {
 			}			
 		}	
 	};
-
 }
-
-

@@ -13,14 +13,12 @@ import java.util.*;
  * </ul>
  * 
  */
-public class GameInfo
-{
+public class GameInfo {
 	private int id;
 	private String title;
 	private List<PlayerInfo> players;
 	
-	public GameInfo()
-	{
+	public GameInfo() {
 		setId(-1);
 		setTitle("");
 		players = new ArrayList<PlayerInfo>();
@@ -56,4 +54,3 @@ public class GameInfo
 		return Collections.unmodifiableList(players);
 	}
 }
-

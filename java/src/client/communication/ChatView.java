@@ -110,7 +110,4 @@ public class ChatView extends PanelView implements IChatView {
             }
         }
     }
-	
 }
-
-

@@ -7,8 +7,7 @@ import shared.definitions.*;
  * Interface for the maritime trade overlay, which lets the user make a maritime
  * trade
  */
-public interface IMaritimeTradeOverlay extends IOverlayView
-{
+public interface IMaritimeTradeOverlay extends IOverlayView {
 	
 	/**
 	 * Resets the view to its initial state.
@@ -94,6 +93,4 @@ public interface IMaritimeTradeOverlay extends IOverlayView
 	 *            Array of "give" resources that should be enabled.
 	 */
 	void showGiveOptions(ResourceType[] enabledResources);
-	
 }
-

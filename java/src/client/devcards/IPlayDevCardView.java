@@ -6,8 +6,7 @@ import shared.definitions.*;
 /**
  * "Play dev card" view interface
  */
-public interface IPlayDevCardView extends IOverlayView
-{
+public interface IPlayDevCardView extends IOverlayView {
 	
 	/**
 	 * Resets the view to its initial state.
@@ -34,4 +33,3 @@ public interface IPlayDevCardView extends IOverlayView
 	 */
 	void setCardAmount(DevCardType cardType, int amount);
 }
-

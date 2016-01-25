@@ -12,14 +12,11 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	private IMaritimeTradeOverlay tradeOverlay;
 	
 	public MaritimeTradeController(IMaritimeTradeView tradeView, IMaritimeTradeOverlay tradeOverlay) {
-		
 		super(tradeView);
-
 		setTradeOverlay(tradeOverlay);
 	}
 	
 	public IMaritimeTradeView getTradeView() {
-		
 		return (IMaritimeTradeView)super.getView();
 	}
 	
@@ -33,19 +30,16 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void startTrade() {
-		
 		getTradeOverlay().showModal();
 	}
 
 	@Override
 	public void makeTrade() {
-
 		getTradeOverlay().closeModal();
 	}
 
 	@Override
 	public void cancelTrade() {
-
 		getTradeOverlay().closeModal();
 	}
 
@@ -68,6 +62,4 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void unsetGiveValue() {
 
 	}
-
 }
-

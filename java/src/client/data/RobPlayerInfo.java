@@ -13,8 +13,7 @@ package client.data;
  * </ul>
  * 
  */
-public class RobPlayerInfo extends PlayerInfo
-{
+public class RobPlayerInfo extends PlayerInfo {
 	
 	private int numCards;
 	
@@ -32,6 +31,4 @@ public class RobPlayerInfo extends PlayerInfo
 	{
 		this.numCards = numCards;
 	}
-	
 }
-

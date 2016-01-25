@@ -12,7 +12,7 @@ import shared.definitions.CatanColor;
  * @author Kyle Cornelison
  */
 public class Player implements Comparable<Player>{
-    private static int _id;
+    private int _id;
     private Name name;
     private boolean discarded;
     private int monuments;
@@ -102,11 +102,7 @@ public class Player implements Comparable<Player>{
         if (!(other instanceof Player))return false;
 
         Player otherPlayer = (Player)other;
-        if(otherPlayer._id == this._id){
-            return true;
-        }else{
-            return false;
-        }
+        return otherPlayer._id == this._id;
     }
 
     @Override
@@ -123,12 +119,12 @@ public class Player implements Comparable<Player>{
     /*===========================================
                    Getters/Setters
      ============================================*/
-    public static int get_id() {
+    public int get_id() {
         return _id;
     }
 
-    public static void set_id(int _id) {
-        Player._id = _id;
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
     public Name getName() {
