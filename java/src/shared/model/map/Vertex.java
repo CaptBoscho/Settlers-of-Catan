@@ -26,7 +26,7 @@ public class Vertex {
     }
 
     /**
-     * Tlls if there is a building
+     * Tells if there is a building
      * @return
      */
     public Building existsBuilding(){

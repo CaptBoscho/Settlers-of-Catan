@@ -20,7 +20,7 @@ public class Facade {
      * if it's the player's turn.
      * @param playerID
      */
-    public boolean myTurn(int playerID){
+    public boolean myTurn(int playerID) {
         return true;
     }
 
@@ -32,7 +32,7 @@ public class Facade {
      * @param edge
      * @return
      */
-    public boolean canBuildRoad(int playerID, EdgeLocation edge){
+    public boolean canBuildRoad(int playerID, EdgeLocation edge) {
         return true;
     }
 
@@ -44,7 +44,7 @@ public class Facade {
      * @param vertex
      * @return
      */
-    public boolean canBuildBuilding(int playerID, VertexLocation vertex){
+    public boolean canBuildBuilding(int playerID, VertexLocation vertex) {
         return true;
     }
 
@@ -55,7 +55,7 @@ public class Facade {
      * @param playerID
      * @return
      */
-    public boolean canBuyDC(int playerID){
+    public boolean canBuyDC(int playerID) {
         return true;
     }
 
@@ -65,7 +65,7 @@ public class Facade {
      * @param playerID
      * @return
      */
-    public boolean canTrade(int playerID){
+    public boolean canTrade(int playerID) {
         return true;
     }
 
@@ -75,7 +75,7 @@ public class Facade {
      * @param playerID
      * @return
      */
-    public boolean canPlayDC(int playerID){
+    public boolean canPlayDC(int playerID) {
         return true;
     }
 }

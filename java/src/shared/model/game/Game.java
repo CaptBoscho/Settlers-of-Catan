@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * game class representing a Catan game
  */
-public class Game{
+public class Game {
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -26,7 +26,7 @@ public class Game{
     /**
      * Constructor
      */
-    public Game(){
+    public Game() {
         this.dice = new Dice();
         this.map = new Map();
         this.turnTracker = new TurnTracker(0,0);
@@ -41,7 +41,7 @@ public class Game{
      * Initialize a new game
      * @param players List of players for this game
      */
-    public void initializeGame(List<Player> players){
+    public void initializeGame(List<Player> players) {
         //Add the new players to the player manager
 
         //Shuffle the players' turn order
@@ -71,14 +71,14 @@ public class Game{
     /**
      * Place settlements phase of setup
      */
-    private void placeSettlements(){
+    private void placeSettlements() {
         //First phase order
-        for(Player player : playerManager.getPlayers()){
+        for(Player player : playerManager.getPlayers()) {
             //Set player turn
         }
 
         //Second phase order
-        for(int i = playerManager.getPlayers().size() - 1; i >= 0; i--){
+        for(int i = playerManager.getPlayers().size() - 1; i >= 0; i--) {
             //Set player turn
         }
     }
@@ -128,7 +128,7 @@ public class Game{
     /**
      * Trade resources between players - Initializes phase
      */
-    private void trade(){
+    private void trade() {
 
     }
 
@@ -136,7 +136,7 @@ public class Game{
      * Build a building = Initializes phase
      * @param strBnk
      */
-    private void build(StructureBank strBnk){
+    private void build(StructureBank strBnk) {
 
     }
 
@@ -160,11 +160,11 @@ public class Game{
      * Gets the player with the largest army
      * @return Player with largest army or null if no player has it
      */
-    public Player getPlayerWithLargestArmy(){
+    public Player getPlayerWithLargestArmy() {
         if(this.largestArmyCard.getOwner() != -1){
             try {
                 return playerManager.getPlayerByIndex(this.largestArmyCard.getOwner());
-            }catch(Exception e){
+            } catch(Exception e) {
                 return null;
             }
         } else {
