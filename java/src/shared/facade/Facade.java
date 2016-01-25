@@ -1,6 +1,7 @@
 package shared.facade;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
+import shared.model.game.Game;
 import shared.model.map.Map;
 
 /**

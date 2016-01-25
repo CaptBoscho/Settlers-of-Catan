@@ -7,12 +7,14 @@ import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.game.trade.Trade;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
+ * This class is used for all network calls. Every request is a POST or GET HTTP request.
+ *
  * @author Derek Argueta
  */
 public class ServerProxy implements IServer {
@@ -333,7 +335,7 @@ public class ServerProxy implements IServer {
      * @return
      */
     @Override
-    public ClientModel offerTrade(int playerIndex, HashMap<String, Integer> offer, int receiver) {
+    public ClientModel offerTrade(int playerIndex, Trade offer, int receiver) {
         return null;
     }
 

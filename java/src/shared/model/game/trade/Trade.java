@@ -4,7 +4,8 @@ import shared.model.player.Player;
 
 /**
  * Represents a trade done between two players
- * Created by Danny on 1/22/16.
+ *
+ * @author Danny Harding
  */
 public class Trade {
     TradePackage package1;

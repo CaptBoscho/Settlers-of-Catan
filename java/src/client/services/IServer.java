@@ -7,15 +7,17 @@ import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.game.trade.Trade;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
+ * This is the common interface that both the real and mock servers implement. By providing this, we can substitute the
+ * real or mock server as needed for testing.
+ *
  * @author Derek Argueta
  */
-
 public interface IServer {
 
 
@@ -255,8 +257,7 @@ public interface IServer {
      * @param receiver Who you're offering the trade to (0-3)
      * @return
      */
-    // TODO - ResourceList instead of HashMap
-    public ClientModel offerTrade(int playerIndex, HashMap<String, Integer> offer, int receiver);
+    public ClientModel offerTrade(int playerIndex, Trade offer, int receiver);
 
     /**
      * Used to accept or reject a trade offered to the player

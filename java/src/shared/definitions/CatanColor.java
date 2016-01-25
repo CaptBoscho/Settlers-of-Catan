@@ -2,8 +2,8 @@ package shared.definitions;
 
 import java.awt.Color;
 
-public enum CatanColor
-{
+public enum CatanColor {
+
 	RED, ORANGE, YELLOW, BLUE, GREEN, PURPLE, PUCE, WHITE, BROWN;
 	
 	private Color color;

@@ -106,8 +106,8 @@ public class Game{
         //Roll dice
         int roll = dice.roll();
 
-            //Pass resources
-            map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
+        //Pass resources
+        map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
 
         //Trade Phase
         this.trade();

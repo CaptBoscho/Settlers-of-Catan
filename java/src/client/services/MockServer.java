@@ -7,13 +7,13 @@ import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.game.trade.Trade;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by derek on 1/25/16.
+ * @author Derek Argueta
  */
 public class MockServer implements IServer {
     /**
@@ -325,7 +325,7 @@ public class MockServer implements IServer {
      * @return
      */
     @Override
-    public ClientModel offerTrade(int playerIndex, HashMap<String, Integer> offer, int receiver) {
+    public ClientModel offerTrade(int playerIndex, Trade offer, int receiver) {
         return null;
     }
 
