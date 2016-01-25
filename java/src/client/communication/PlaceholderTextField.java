@@ -47,6 +47,4 @@ public class PlaceholderTextField extends JTextField {
             g2d.getFontMetrics().getMaxAscent() + getInsets().top
         );
     }
-    
 }
-

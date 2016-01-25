@@ -3,7 +3,9 @@ package shared.model.resources;
 import shared.definitions.ResourceType;
 
 /**
- * Created by Danny on 1/18/16.
+ * Object representation of an Ore resource.
+ *
+ * @author Danny Harding
  */
 public class Ore extends ResourceCard {
 

@@ -23,7 +23,6 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 	private final int BUTTON_TEXT_SIZE = 28;
 	private final int BORDER_WIDTH = 10;
 
-	private JLabel label; //Where is this used? //It's for the name
 	private JPanel mainPane;
 
 	//Image variables
@@ -316,8 +315,8 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 	}
 	private JPanel createWholePanel() {
 		createListeners();
-		
-		label = new JLabel("Maritime Trade Overlay");
+
+		JLabel label = new JLabel("Maritime Trade Overlay");
 		Font labelFont = label.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
@@ -505,4 +504,3 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 		return bi;
 	}
 }
-

@@ -43,11 +43,7 @@ public class MaritimeTradeView extends PanelView implements IMaritimeTradeView {
 	private ActionListener buttonListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			getController().startTrade();
 		}
 	};
-	
 }
-
-

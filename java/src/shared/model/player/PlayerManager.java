@@ -1,6 +1,8 @@
 package shared.model.player;
 
 import shared.exceptions.FailedToRandomizeException;
+import shared.exceptions.PlayerExistException;
+import shared.exceptions.TooManyPlayersException;
 
 import javax.security.sasl.AuthenticationException;
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 
 /**
  * Class for managing users
+ *
+ * @author Kyle Cornelison
  */
 public class PlayerManager {
     List<Player> players;
@@ -27,7 +31,7 @@ public class PlayerManager {
     public void addNewPlayer() throws TooManyPlayersException{
         if(canAddPlayer()){
             this.players.add(new Player()); //// TODO: 1/19/2016 Decide to do this way or add a method including the player color 
-        }else{
+        } else {
             throw new TooManyPlayersException("Max number of players reached!");
         }
     }
@@ -54,11 +58,7 @@ public class PlayerManager {
      * @return True if a new player can be added
      */
     private boolean canAddPlayer(){
-        if(this.players.size() >= 4){
-            return false;
-        }else{
-            return true;
-        }
+        return this.players.size() < 4;
     }
 
     /**

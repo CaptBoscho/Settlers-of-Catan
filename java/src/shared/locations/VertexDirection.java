@@ -1,13 +1,11 @@
 package shared.locations;
 
-public enum VertexDirection
-{
+public enum VertexDirection {
 	West, NorthWest, NorthEast, East, SouthEast, SouthWest;
 	
 	private VertexDirection opposite;
 	
-	static
-	{
+	static {
 		West.opposite = East;
 		NorthWest.opposite = SouthEast;
 		NorthEast.opposite = SouthWest;
@@ -21,4 +19,3 @@ public enum VertexDirection
 		return opposite;
 	}
 }
-

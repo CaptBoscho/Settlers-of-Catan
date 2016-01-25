@@ -5,7 +5,7 @@ package shared.model.game;
  */
 public class LargestArmy {
     private int playerID;
-    private static int pointWorth = 3;
+    private static final int pointWorth = 3;
 
     /**
      * Default Constructor

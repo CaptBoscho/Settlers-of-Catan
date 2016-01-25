@@ -2,14 +2,13 @@ package shared.definitions;
 
 import java.awt.Color;
 
-public enum CatanColor
-{
+public enum CatanColor {
+
 	RED, ORANGE, YELLOW, BLUE, GREEN, PURPLE, PUCE, WHITE, BROWN;
 	
 	private Color color;
 	
-	static
-	{
+	static {
 		RED.color = new Color(227, 66, 52);
 		ORANGE.color = new Color(255, 165, 0);
 		YELLOW.color = new Color(253, 224, 105);

@@ -7,8 +7,7 @@ import client.base.*;
 /**
  * game history view interface
  */
-public interface IGameHistoryView extends IView
-{
+public interface IGameHistoryView extends IView {
 	
 	/**
 	 * Sets the history messages to be displayed in the view.

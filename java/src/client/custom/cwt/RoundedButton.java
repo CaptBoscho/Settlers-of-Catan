@@ -9,8 +9,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 
 @SuppressWarnings("unused")
-public class RoundedButton extends JButton
-{
+public class RoundedButton extends JButton {
 	private static final long serialVersionUID = 3193769590459118040L;   
 	
 	public RoundedButton()
@@ -24,8 +23,7 @@ public class RoundedButton extends JButton
 	}
 	
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		RenderingHints rh = g2.getRenderingHints();
 		rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -59,4 +57,3 @@ public class RoundedButton extends JButton
 		g2.drawString(getText(), xMargin, (float)getFont().getSize() + yMargin);
 	}
 }
-

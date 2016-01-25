@@ -3,14 +3,12 @@ package shared.locations;
 /**
  * Represents the location of a vertex on a hex map
  */
-public class VertexLocation
-{
+public class VertexLocation {
 	
 	private HexLocation hexLoc;
 	private VertexDirection dir;
 	
-	public VertexLocation(HexLocation hexLoc, VertexDirection dir)
-	{
+	public VertexLocation(HexLocation hexLoc, VertexDirection dir) {
 		setHexLoc(hexLoc);
 		setDir(dir);
 	}
@@ -20,10 +18,8 @@ public class VertexLocation
 		return hexLoc;
 	}
 	
-	private void setHexLoc(HexLocation hexLoc)
-	{
-		if(hexLoc == null)
-		{
+	private void setHexLoc(HexLocation hexLoc) {
+		if(hexLoc == null) {
 			throw new IllegalArgumentException("hexLoc cannot be null");
 		}
 		this.hexLoc = hexLoc;
@@ -46,8 +42,7 @@ public class VertexLocation
 	}
 	
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dir == null) ? 0 : dir.hashCode());
@@ -56,8 +51,7 @@ public class VertexLocation
 	}
 	
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if(this == obj)
 			return true;
 		if(obj == null)
@@ -85,13 +79,11 @@ public class VertexLocation
 	 * 
 	 * @return Normalized vertex location
 	 */
-	public VertexLocation getNormalizedLocation()
-	{
+	public VertexLocation getNormalizedLocation() {
 		
 		// Return location that has direction NW or NE
 		
-		switch (dir)
-		{
+		switch (dir) {
 			case NorthWest:
 			case NorthEast:
 				return this;
@@ -117,4 +109,3 @@ public class VertexLocation
 		}
 	}
 }
-

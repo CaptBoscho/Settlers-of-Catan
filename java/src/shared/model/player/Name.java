@@ -1,7 +1,11 @@
 package shared.model.player;
 
+import shared.exceptions.InvalidNameException;
+
 /**
  * Representation of Player name
+ *
+ * @author Kyle Cornelison
  */
 public class Name {
     private String name;
@@ -39,7 +43,6 @@ public class Name {
     }
 
     public void setName(String name) throws InvalidNameException {
-
         this.name = name;
     }
 }

@@ -11,15 +11,12 @@ import client.base.*;
  * game history view implementation
  */
 @SuppressWarnings("serial")
-public class GameHistoryView extends PanelView implements IGameHistoryView
-{
+public class GameHistoryView extends PanelView implements IGameHistoryView {
 	
 	private LogComponent logPanel;
 	private JScrollPane logScroll;
 	
-	public GameHistoryView()
-	{
-		
+	public GameHistoryView() {
 		this.setLayout(new BorderLayout());
 		this.setBackground(Color.white);
 		
@@ -37,8 +34,7 @@ public class GameHistoryView extends PanelView implements IGameHistoryView
 	}
 	
 	@Override
-	public void setEntries(final List<LogEntry> entries)
-	{
+	public void setEntries(final List<LogEntry> entries) {
 		
 		// Can't set entries immediately, because logPanel doesn't
 		// have a width or height yet, which messes up the word wrap
@@ -54,6 +50,4 @@ public class GameHistoryView extends PanelView implements IGameHistoryView
 			}
 		});
 	}
-	
 }
-

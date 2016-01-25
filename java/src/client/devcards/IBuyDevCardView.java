@@ -5,8 +5,7 @@ import client.base.*;
 /**
  * "Buy dev card" view interface
  */
-public interface IBuyDevCardView extends IOverlayView
-{   
+public interface IBuyDevCardView extends IOverlayView {
 	
 	// EMPTY
 }

@@ -6,8 +6,7 @@ import shared.definitions.*;
 /**
  * "Dev card" controller interface
  */
-public interface IDevCardController extends IController
-{
+public interface IDevCardController extends IController {
 	
 	/**
 	 * This method displays the "buy dev card" view.
@@ -70,4 +69,3 @@ public interface IDevCardController extends IController
 	 */
 	void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2);
 }
-

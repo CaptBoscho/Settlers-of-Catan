@@ -177,8 +177,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
 				resCard2.setEnabled(false);
-			}
-			else if (selectedDevCard == DevCardType.MONUMENT) {
+			} else if (selectedDevCard == DevCardType.MONUMENT) {
 				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
@@ -186,8 +185,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				
 				closeModal();
 				getController().playMonumentCard();
-			}
-			else if (selectedDevCard == DevCardType.ROAD_BUILD) {
+			} else if (selectedDevCard == DevCardType.ROAD_BUILD) {
 				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
@@ -195,8 +193,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				
 				closeModal();
 				getController().playRoadBuildCard();
-			}
-			else if (selectedDevCard == DevCardType.SOLDIER) {
+			} else if (selectedDevCard == DevCardType.SOLDIER) {
 				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
@@ -204,14 +201,12 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				
 				closeModal();
 				getController().playSoldierCard();
-			}
-			else if (selectedDevCard == DevCardType.MONOPOLY) {
+			} else if (selectedDevCard == DevCardType.MONOPOLY) {
 				useButton.setText("use monopoly");
 				useButton.setEnabled(resCard1.getSelectedResourceCard() != null);
 				resCard1.setEnabled(true);
 				resCard2.setEnabled(false);
-			}
-			else if (selectedDevCard == DevCardType.YEAR_OF_PLENTY) {
+			} else if (selectedDevCard == DevCardType.YEAR_OF_PLENTY) {
 				useButton.setText("use year of plenty");
 				useButton.setEnabled(resCard1.getSelectedResourceCard() != null &&
 										resCard2.getSelectedResourceCard() != null);
@@ -371,8 +366,7 @@ class ResourceCardChooser extends ButtonGroupPanel {
 		
 			if (!enabled) {
 				clearSelection();
-			}
-			else {
+			} else {
 				clearSelection();
 				setSelected(none.getModel(), true);
 			}
@@ -511,6 +505,3 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 			return null;		
 	}
 }
-
-
-

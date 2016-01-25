@@ -5,8 +5,7 @@ import client.base.*;
 /**
  * Chat controller interface
  */
-public interface IChatController extends IController
-{
+public interface IChatController extends IController {
 	
 	/**
 	 * Called by the view when a message is sent

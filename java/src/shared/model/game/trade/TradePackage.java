@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 /**
  * A package of ResourceCards along with a userID
- * Created by Danny on 1/22/16.
+ *
+ * @author Danny Harding
  */
 public class TradePackage {
     private int playerID;

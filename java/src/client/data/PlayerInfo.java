@@ -14,16 +14,14 @@ import shared.definitions.*;
  * </ul>
  * 
  */
-public class PlayerInfo
-{
+public class PlayerInfo {
 	
 	private int id;
 	private int playerIndex;
 	private String name;
 	private CatanColor color;
 	
-	public PlayerInfo()
-	{
+	public PlayerInfo() {
 		setId(-1);
 		setPlayerIndex(-1);
 		setName("");
@@ -77,14 +75,11 @@ public class PlayerInfo
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj == null)
-		{
+	public boolean equals(Object obj) {
+		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass())
-		{
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		final PlayerInfo other = (PlayerInfo) obj;
@@ -92,4 +87,3 @@ public class PlayerInfo
 		return this.id == other.id;
 	}
 }
-

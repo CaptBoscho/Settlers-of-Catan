@@ -1,10 +1,12 @@
-package shared.model.game;
+package shared.model.map;
 
 
 import shared.locations.HexLocation;
 
 /**
- * Robber class representing the Robber piece in a game
+ * Robber class representing the Robber piece in a game.
+ *
+ * @author Bubba Bradley
  */
 public class Robber {
     private HexLocation location;
@@ -12,15 +14,15 @@ public class Robber {
     /**
      * Default Constructor
      */
-    public Robber(){
-        this.location = new HexLocation(0,0); //// TODO: 1/19/2016 Figure out where the desert is going to be
+    public Robber() {
+        this.location = new HexLocation(0,0);
     }
 
     /**
      * Overloaded Constructor
      * @param location HexLocation of the Robber
      */
-    public Robber(HexLocation location){
+    public Robber(HexLocation location) {
         this.location = location;
     }
 

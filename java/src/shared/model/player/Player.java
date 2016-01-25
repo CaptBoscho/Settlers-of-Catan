@@ -1,5 +1,7 @@
 package shared.model.player;
 
+import com.google.gson.JsonObject;
+import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.model.bank.StructureBank;
@@ -7,9 +9,11 @@ import shared.definitions.CatanColor;
 
 /**
  * Representation of a player in the game
+ *
+ * @author Kyle Cornelison
  */
 public class Player implements Comparable<Player>{
-    private static int _id;
+    private int _id;
     private Name name;
     private boolean discarded;
     private int monuments;
@@ -30,6 +34,15 @@ public class Player implements Comparable<Player>{
         this.resourceCardBank = new ResourceCardBank(this);
         this.developmentCardBank = new DevelopmentCardBank(this);
         this.structureBank = new StructureBank();
+    }
+
+    /**
+     * Construct a Player object from a JSON blob
+     *
+     * @param json The JSON being used to construct this object
+     */
+    public Player(JsonObject json) {
+
     }
 
     /**
@@ -99,11 +112,7 @@ public class Player implements Comparable<Player>{
         if (!(other instanceof Player))return false;
 
         Player otherPlayer = (Player)other;
-        if(otherPlayer._id == this._id){
-            return true;
-        }else{
-            return false;
-        }
+        return otherPlayer._id == this._id;
     }
 
     @Override
@@ -117,15 +126,24 @@ public class Player implements Comparable<Player>{
         }
     }
 
+    /**
+     * Converts the object to JSON
+     *
+     * @return a JSON representation of the object
+     */
+    public JsonObject toJSON() {
+        return null;
+    }
+
     /*===========================================
                    Getters/Setters
      ============================================*/
-    public static int get_id() {
+    public int get_id() {
         return _id;
     }
 
-    public static void set_id(int _id) {
-        Player._id = _id;
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
     public Name getName() {

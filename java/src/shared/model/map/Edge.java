@@ -6,7 +6,8 @@ import shared.model.structures.Road;
  * The edge class has a normalized EdgeLocation as well
  * as a road object. If there isn't a road on the edge
  * then the road object is set to null.
- * Created by Corbin on 1/16/2016.
+ *
+ * @author Corbin Byers
  */
 public class Edge {
 
@@ -36,6 +37,4 @@ public class Edge {
     public EdgeLocation getEdgeLoc(){
         return edgeLoc;
     }
-
-
 }
