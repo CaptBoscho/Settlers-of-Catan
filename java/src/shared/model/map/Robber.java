@@ -1,4 +1,4 @@
-package shared.model.game;
+package shared.model.map;
 
 
 import shared.locations.HexLocation;
@@ -13,7 +13,7 @@ public class Robber {
      * Default Constructor
      */
     public Robber(){
-        this.location = new HexLocation(0,0); //// TODO: 1/19/2016 Figure out where the desert is going to be
+        this.location = new HexLocation(0,0);
     }
 
     /**

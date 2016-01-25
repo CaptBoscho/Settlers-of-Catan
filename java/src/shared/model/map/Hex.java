@@ -4,7 +4,7 @@ import shared.locations.HexLocation;
 
 /**
  *
- * Created by Corbin on 1/16/2016.
+ * Representation of a Hex in the map
  */
 public class Hex {
 
