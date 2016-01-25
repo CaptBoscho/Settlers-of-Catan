@@ -14,10 +14,11 @@ public class Name {
     }
 
     /**
-     * Name constructor
+     * Name Constructor
      * @param name Value of name
+     * @throws InvalidNameException
      */
-    public Name(String name){
+    public Name(String name) throws InvalidNameException {
         this.name = name;
     }
 
@@ -25,7 +26,7 @@ public class Name {
      * Validate name value
      * @param name Desired value of name
      */
-    public boolean validate(String name){
+    private boolean validate(String name){
         return true;
     }
 
@@ -37,7 +38,8 @@ public class Name {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws InvalidNameException {
+
         this.name = name;
     }
 }

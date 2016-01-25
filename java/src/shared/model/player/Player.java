@@ -8,7 +8,7 @@ import shared.definitions.CatanColor;
 /**
  * Representation of a player in the game
  */
-public class Player {
+public class Player implements Comparable<Player>{
     private static int _id;
     private Name name;
     private boolean discarded;
@@ -38,8 +38,9 @@ public class Player {
      * @param color     Player Color
      * @param name      Player Name
      * @param index     Player Index
+     * @throws InvalidPlayerException
      */
-    public Player(int points, CatanColor color, int index, Name name) {
+    public Player(int points, CatanColor color, int index, Name name) throws InvalidPlayerException {
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = new ResourceCardBank(this);
@@ -58,8 +59,11 @@ public class Player {
      * @param sBnk      Player Structures
      * @param name      Player Name
      * @param index     Player Index
+     * @throws InvalidPlayerException
      */
-    public Player(int points, CatanColor color, ResourceCardBank rCrdBnk, DevelopmentCardBank devCrdBnk, StructureBank sBnk, int index, Name name) {
+    public Player(int points, CatanColor color, ResourceCardBank rCrdBnk,
+                  DevelopmentCardBank devCrdBnk, StructureBank sBnk,
+                  int index, Name name) throws InvalidPlayerException {
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = rCrdBnk;
@@ -83,6 +87,34 @@ public class Player {
      */
     public void incrementPoints(int increment) {
         this.victoryPoints += increment;
+    }
+
+    /*==========================================
+                   Override Default Methods
+     ============================================*/
+    @Override
+    public boolean equals(Object other){
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof Player))return false;
+
+        Player otherPlayer = (Player)other;
+        if(otherPlayer._id == this._id){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public int compareTo(Player otherPlayer) {
+        if (this._id > otherPlayer._id) {
+            return 1;
+        } else if (this._id < otherPlayer._id) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 
     /*===========================================
