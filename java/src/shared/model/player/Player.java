@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import com.google.gson.JsonObject;
 import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
@@ -33,6 +34,15 @@ public class Player implements Comparable<Player>{
         this.resourceCardBank = new ResourceCardBank(this);
         this.developmentCardBank = new DevelopmentCardBank(this);
         this.structureBank = new StructureBank();
+    }
+
+    /**
+     * Construct a Player object from a JSON blob
+     *
+     * @param json The JSON being used to construct this object
+     */
+    public Player(JsonObject json) {
+
     }
 
     /**
@@ -114,6 +124,15 @@ public class Player implements Comparable<Player>{
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Converts the object to JSON
+     *
+     * @return a JSON representation of the object
+     */
+    public JsonObject toJSON() {
+        return null;
     }
 
     /*===========================================

@@ -1,13 +1,15 @@
 package shared.model.map;
 
+import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.locations.VertexLocation;
+import shared.model.JsonSerializable;
 
 /**
  * Representation of Port in the game. A port is a special structure that players can interact with to trade certain
  * resources for others depending on the implemented port.
  */
-public class Port {
+public class Port implements JsonSerializable {
 
     private PortType portType;
     private VertexLocation vertexLoc;
@@ -18,6 +20,15 @@ public class Port {
      * @param vertexLoc VertexLocation
      */
     public Port(PortType portType, VertexLocation vertexLoc) {
+
+    }
+
+    /**
+     * Construct a Port object from a JSON blob
+     *
+     * @param json The JSON representing the object
+     */
+    public Port(JsonObject json) {
 
     }
 
@@ -48,4 +59,13 @@ public class Port {
         return vertexLoc;
     }
 
+    /**
+     * Converts the object to JSON
+     *
+     * @return The JSON representation of the object
+     */
+    @Override
+    public JsonObject toJSON() {
+        return null;
+    }
 }

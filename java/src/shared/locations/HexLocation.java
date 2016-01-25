@@ -1,9 +1,12 @@
 package shared.locations;
 
+import com.google.gson.JsonObject;
+import shared.model.JsonSerializable;
+
 /**
  * Represents the location of a hex on a hex map
  */
-public class HexLocation {
+public class HexLocation implements JsonSerializable {
 	
 	private int x;
 	private int y;
@@ -12,6 +15,15 @@ public class HexLocation {
 		setX(x);
 		setY(y);
 	}
+
+    /**
+     * Construct a HexLocation object from a JSON blob
+     *
+     * @param json The JSON being used to construct this object
+     */
+	public HexLocation(JsonObject json) {
+
+    }
 	
 	public int getX() {
 		return x;
@@ -77,5 +89,15 @@ public class HexLocation {
 				assert false;
 				return null;
 		}
+	}
+
+	/**
+	 * Converts the object to JSON
+	 *
+	 * @return The JSON representation of the object
+	 */
+	@Override
+	public JsonObject toJSON() {
+		return null;
 	}
 }

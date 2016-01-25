@@ -1,5 +1,7 @@
 package shared.model.bank;
 
+import com.google.gson.JsonObject;
+import shared.model.JsonSerializable;
 import shared.model.devcards.DevelopmentCard;
 import shared.model.game.Game;
 import shared.model.player.Player;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Danny Harding
  */
-public class DevelopmentCardBank {
+public class DevelopmentCardBank implements JsonSerializable {
     static final int SOLDIER_CARDS = 14;
     static final int MONUMENT_CARDS = 5;
     static final int MONOPOLY_CARDS = 2;
@@ -32,10 +34,29 @@ public class DevelopmentCardBank {
     }
 
     /**
+     * Construct a DevelopmentCardBank object from a JSON blob
+     *
+     * @param json The JSON being used to construct this object
+     */
+    public DevelopmentCardBank(JsonObject json) {
+
+    }
+
+    /**
      * Creates an empty DevelopmentCardBank
      * @param player The object that contains the DevelopmentCardBank
      */
     public DevelopmentCardBank(Player player) {
 
+    }
+
+    /**
+     * Converts the object to JSON
+     *
+     * @return The JSON representation of the object
+     */
+    @Override
+    public JsonObject toJSON() {
+        return null;
     }
 }

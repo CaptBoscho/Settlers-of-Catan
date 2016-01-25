@@ -1,9 +1,12 @@
 package shared.locations;
 
+import com.google.gson.JsonObject;
+import shared.model.JsonSerializable;
+
 /**
  * Represents the location of an edge on a hex map
  */
-public class EdgeLocation {
+public class EdgeLocation implements JsonSerializable {
 	
 	private HexLocation hexLoc;
 	private EdgeDirection dir;
@@ -12,6 +15,15 @@ public class EdgeLocation {
 		setHexLoc(hexLoc);
 		setDir(dir);
 	}
+
+    /**
+     * Construct a EdgeLocation object from a JSON blob
+     *
+     * @param json The JSON being used to construct this object
+     */
+	public EdgeLocation(JsonObject json) {
+
+    }
 	
 	public HexLocation getHexLoc()
 	{
@@ -96,5 +108,15 @@ public class EdgeLocation {
 				assert false;
 				return null;
 		}
+	}
+
+	/**
+	 * Converts the object to JSON
+	 *
+	 * @return The JSON representation of the object
+	 */
+	@Override
+	public JsonObject toJSON() {
+		return null;
 	}
 }

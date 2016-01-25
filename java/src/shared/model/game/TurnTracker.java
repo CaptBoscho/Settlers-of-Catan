@@ -1,5 +1,7 @@
 package shared.model.game;
 
+import com.google.gson.JsonObject;
+
 /**
  * Representation of Player Turns
  */
@@ -33,6 +35,15 @@ public class TurnTracker {
     }
 
     /**
+     * Build a TurnTracker object from JSON
+     *
+     * @param json The JSON being used to build the object
+     */
+    public TurnTracker(JsonObject json) {
+
+    }
+
+    /**
      * Increments the turn counter to the next player's turn
      * @return index of the next player
      */
@@ -55,5 +66,14 @@ public class TurnTracker {
      */
     public void setNumPlayers(int numPlayers) {
         this.numPlayers = numPlayers;
+    }
+
+    /**
+     * Converts the object to JSON
+     *
+     * @return a JSON representation of the object
+     */
+    public JsonObject toJSON() {
+        return null;
     }
 }
