@@ -1,4 +1,4 @@
-package shared.facade;
+package client.facade;
 
 /**
  * Throws an exception if there is a build error in

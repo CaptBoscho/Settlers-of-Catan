@@ -1,4 +1,4 @@
-package shared.facade;
+package client.facade;
 import shared.*;
 
 /**
