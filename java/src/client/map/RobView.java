@@ -79,7 +79,6 @@ public class RobView extends OverlayView implements IRobView {
 						getController().robPlayer(victims[i]);
 					}
 				}
-				
 			}
 		}	
 	};
@@ -127,7 +126,4 @@ public class RobView extends OverlayView implements IRobView {
 			}
 		}
 	}
-
 }
-
-

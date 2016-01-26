@@ -14,6 +14,8 @@ public class AuthDTO implements JsonSerializable{
     private String password;
 
     AuthDTO(String username, String password) {
+        assert username != null;
+        assert password != null;
         this.username = username;
         this.password = password;
     }

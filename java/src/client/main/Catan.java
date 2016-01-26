@@ -12,14 +12,11 @@ import client.base.*;
  * Main entry point for the Catan program
  */
 @SuppressWarnings("serial")
-public class Catan extends JFrame
-{
+public class Catan extends JFrame {
 	
 	private CatanPanel catanPanel;
 	
-	public Catan()
-	{
-		
+	public Catan() {
 		client.base.OverlayView.setWindow(this);
 		
 		this.setTitle("Settlers of Catan");
@@ -31,8 +28,7 @@ public class Catan extends JFrame
 		display();
 	}
 	
-	private void display()
-	{
+	private void display() {
 		pack();
 		setVisible(true);
 	}
@@ -41,25 +37,19 @@ public class Catan extends JFrame
 	// Main
 	//
 	
-	public static void main(final String[] args)
-	{
-		try
-		{
+	public static void main(final String[] args) {
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch(Exception e)
-		{
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run()
-			{
+			public void run() {
 				new Catan();
 				
 				PlayerWaitingView playerWaitingView = new PlayerWaitingView();
-				final PlayerWaitingController playerWaitingController = new PlayerWaitingController(
-																									playerWaitingView);
+				final PlayerWaitingController playerWaitingController = new PlayerWaitingController(playerWaitingView);
 				playerWaitingView.setController(playerWaitingController);
 				
 				JoinGameView joinView = new JoinGameView();
@@ -85,9 +75,7 @@ public class Catan extends JFrame
 				
 				LoginView loginView = new LoginView();
 				MessageView loginMessageView = new MessageView();
-				LoginController loginController = new LoginController(
-																	  loginView,
-																	  loginMessageView);
+				LoginController loginController = new LoginController(loginView, loginMessageView);
 				loginController.setLoginAction(new IAction() {
 					@Override
 					public void execute()
@@ -102,6 +90,4 @@ public class Catan extends JFrame
 			}
 		});
 	}
-	
 }
-

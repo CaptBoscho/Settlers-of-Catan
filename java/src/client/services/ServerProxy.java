@@ -37,7 +37,8 @@ public class ServerProxy implements IServer {
     @Override
     public boolean authenticateUser(AuthDTO auth) {
         assert auth != null;
-        String result = Utils.sendPost(Utils.buildUrl(this.host, this.port), auth.toJSON());
+        String url = Utils.buildUrl(this.host, this.port) + "/user/login";
+        String result = Utils.sendPost(url, auth.toJSON());
         assert result != null;
         return result.equals("false");
     }
@@ -50,7 +51,11 @@ public class ServerProxy implements IServer {
      */
     @Override
     public boolean registerUser(AuthDTO auth) {
-        return false;
+        assert auth != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/user/register";
+        String result = Utils.sendPost(url, auth.toJSON());
+        assert result != null;
+        return result.equals("false");
     }
 
     /**
@@ -60,6 +65,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ArrayList<GameInfo> getAllGames() {
+        String url = Utils.buildUrl(this.host, this.port) + "/games/list";
         return null;
     }
 
@@ -74,6 +80,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public GameInfo createNewGame(boolean randomTiles, boolean randomNumbers, boolean randomPorts, String name) {
+        String url = Utils.buildUrl(this.host, this.port) + "/games/create";
         return null;
     }
 
@@ -85,7 +92,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void joinGame(int gameId, CatanColor color) {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/games/join";
     }
 
     /**
@@ -96,7 +103,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void saveGame(int gameId, String name) {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/games/save";
     }
 
     /**
@@ -106,7 +113,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void loadGame(String gameName) {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/games/load";
     }
 
     /**
@@ -120,6 +127,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel getCurrentModel(int version) {
+        String url = Utils.buildUrl(this.host, this.port) + "/game/model";
         return null;
     }
 
@@ -128,7 +136,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void resetCurrentGame() {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/game/reset";
     }
 
     /**
@@ -136,7 +144,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void getAvailableGameCommands() {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/game/commands";
     }
 
     /**
@@ -146,7 +154,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void executeGameCommands(List<String> gameCommands) {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/game/commands";
     }
 
     /**
@@ -156,7 +164,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void addAI(String aiType) {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/game/addAI";
     }
 
     /**
@@ -167,6 +175,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public List<String> getAITypes() {
+        String url = Utils.buildUrl(this.host, this.port) + "/game/listAI";
         return null;
     }
 
@@ -179,6 +188,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel sendChat(int playerId, String content) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/sendChat";
         return null;
     }
 
@@ -191,6 +201,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel rollNumber(int playerIndex, int numberRolled) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/rollNumber";
         return null;
     }
 
@@ -204,6 +215,11 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel robPlayer(int playerIndex, int victimIndex, HexLocation location) {
+        assert playerIndex >= 0;
+        assert victimIndex >= 0;
+        assert playerIndex != victimIndex;
+        assert location != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/robPlayer";
         return null;
     }
 
@@ -215,6 +231,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel finishTurn(int playerIndex) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/finishTurn";
         return null;
     }
 
@@ -226,6 +243,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buyDevCard(int playerIndex) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buyDevCard";
         return null;
     }
 
@@ -239,6 +257,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playYearOfPlentyCard(int playerIndex, ResourceType resource1, ResourceType resource2) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Year_of_Plenty";
         return null;
     }
 
@@ -252,6 +271,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playRoadBuildingCard(int playerIndex, EdgeLocation spot1, EdgeLocation spot2) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Road_Building";
         return null;
     }
 
@@ -265,6 +285,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playSoldierCard(int playerIndex, int victimIndex, HexLocation location) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Soldier";
         return null;
     }
 
@@ -277,6 +298,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playMonopolyCard(int playerIndex, String resource) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Monopoly";
         return null;
     }
 
@@ -288,6 +310,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playMonumentCard(int playerIndex) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Monument";
         return null;
     }
 
@@ -301,6 +324,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildRoad(int playerIndex, EdgeLocation roadLocation, boolean free) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildRoad";
         return null;
     }
 
@@ -314,6 +338,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildSettlement(int playerIndex, VertexLocation location, boolean free) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildSettlement";
         return null;
     }
 
@@ -326,6 +351,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildCity(int playerIndex, VertexLocation location) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildCity";
         return null;
     }
 
@@ -339,6 +365,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel offerTrade(int playerIndex, Trade offer, int receiver) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/offerTrade";
         return null;
     }
 
@@ -351,6 +378,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel respondToTradeOffer(int playerIndex, boolean willAccept) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/acceptTrade";
         return null;
     }
 
@@ -365,6 +393,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel maritimeTrade(int playerIndex, int ratio, String inputResource, String outputResource) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         return null;
     }
 
@@ -377,11 +406,13 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel discardCards(int playerIndex, List<ResourceType> resourceList) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/discardCards";
         return null;
     }
 
     @Override
     public boolean changeLogLevel(String logLevel) {
+        String url = Utils.buildUrl(this.host, this.port) + "/util/changeLogLevel";
         return false;
     }
 }

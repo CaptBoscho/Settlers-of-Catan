@@ -3,8 +3,7 @@ package client.base;
 /**
  * Base class for controllers
  */
-public abstract class Controller implements IController
-{
+public abstract class Controller implements IController {
 	
 	private IView view;
 	
@@ -23,6 +22,4 @@ public abstract class Controller implements IController
 	{
 		return this.view;
 	}
-	
 }
-

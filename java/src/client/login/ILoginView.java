@@ -6,8 +6,7 @@ import client.base.*;
  * Interface for the login view, which lets the user create a new account and
  * login
  */
-public interface ILoginView extends IOverlayView
-{
+public interface ILoginView extends IOverlayView {
 	
 	/**
 	 * Returns the value of the login username field
@@ -43,6 +42,4 @@ public interface ILoginView extends IOverlayView
 	 * @return The value of the register password repeat field
 	 */
 	String getRegisterPasswordRepeat();
-	
 }
-

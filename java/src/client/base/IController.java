@@ -3,9 +3,7 @@ package client.base;
 /**
  * Base controller interface
  */
-public interface IController
-{
-	
+public interface IController {
 	/**
 	 * View getter
 	 * 
@@ -13,4 +11,3 @@ public interface IController
 	 */
 	IView getView();
 }
-

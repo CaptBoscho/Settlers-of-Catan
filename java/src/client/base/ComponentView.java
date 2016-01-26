@@ -6,8 +6,7 @@ import javax.swing.*;
  * Base class for JComponent-based views
  */
 @SuppressWarnings("serial")
-public class ComponentView extends JComponent implements IView
-{
+public class ComponentView extends JComponent implements IView {
 	
 	private IController controller;
 	
@@ -20,6 +19,4 @@ public class ComponentView extends JComponent implements IView
 	{
 		this.controller = controller;
 	}
-	
 }
-

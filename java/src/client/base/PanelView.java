@@ -6,9 +6,8 @@ import javax.swing.*;
  * Base class for JPanel-based views
  */
 @SuppressWarnings("serial")
-public class PanelView extends JPanel implements IView
-{
-	
+public class PanelView extends JPanel implements IView {
+
 	private IController controller;
 	
 	public IController getController()
@@ -20,6 +19,4 @@ public class PanelView extends JPanel implements IView
 	{
 		this.controller = controller;
 	}
-	
 }
-

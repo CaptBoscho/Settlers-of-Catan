@@ -81,6 +81,4 @@ public class LoginController extends Controller implements ILoginController {
 		getLoginView().closeModal();
 		loginAction.execute();
 	}
-
 }
-

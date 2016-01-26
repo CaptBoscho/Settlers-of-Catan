@@ -7,8 +7,7 @@ import client.base.*;
 /**
  * Interface for the map view
  */
-public interface IMapView extends IView
-{
+public interface IMapView extends IView {
 	
 	/**
 	 * This method adds a hex to the map.
@@ -90,7 +89,5 @@ public interface IMapView extends IView
 	 *            true if the player may cancel out of the piece placement,
 	 *            false otherwise
 	 */
-	void startDrop(PieceType pieceType, CatanColor pieceColor,
-				   boolean isCancelAllowed);
+	void startDrop(PieceType pieceType, CatanColor pieceColor, boolean isCancelAllowed);
 }
-
