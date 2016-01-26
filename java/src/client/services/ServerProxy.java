@@ -4,11 +4,13 @@ import client.data.GameInfo;
 import shared.definitions.CatanColor;
 import shared.definitions.ClientModel;
 import shared.definitions.ResourceType;
+import shared.dto.AuthDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.game.trade.Trade;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,24 +31,25 @@ public class ServerProxy implements IServer {
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *
-     * @param username The user's username
-     * @param password The user's password
+     * @param auth The user's credentials, consisting of username/password
      * @return true if the request succeeded
      */
     @Override
-    public boolean authenticateUser(String username, String password) {
-        return false;
+    public boolean authenticateUser(AuthDTO auth) {
+        assert auth != null;
+        String result = Utils.sendPost(Utils.buildUrl(this.host, this.port), auth.toJSON());
+        assert result != null;
+        return result.equals("false");
     }
 
     /**
      * Creates a new player account, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *
-     * @param username The user's username
-     * @param password The user's password
+     * @param auth The user's credentials, consisting of username/password
      * @return true if the request succeeded
      */
     @Override
-    public boolean registerUser(String username, String password) {
+    public boolean registerUser(AuthDTO auth) {
         return false;
     }
 
