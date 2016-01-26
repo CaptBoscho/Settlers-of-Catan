@@ -46,7 +46,7 @@ public class MockServer implements IServer {
      * @return A list of the ongoing games
      */
     @Override
-    public ArrayList<GameInfo> getAllGames() {
+    public List<GameInfo> getAllGames() {
         return null;
     }
 

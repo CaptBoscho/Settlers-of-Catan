@@ -64,8 +64,11 @@ public class ServerProxy implements IServer {
      * @return A list of the ongoing games
      */
     @Override
-    public ArrayList<GameInfo> getAllGames() {
+    public List<GameInfo> getAllGames() {
         String url = Utils.buildUrl(this.host, this.port) + "/games/list";
+        String result = Utils.sendGet(url);
+        assert result != null;
+        // TODO - this is a JSON string that should build into a list of GameInfo items
         return null;
     }
 
@@ -128,6 +131,9 @@ public class ServerProxy implements IServer {
     @Override
     public ClientModel getCurrentModel(int version) {
         String url = Utils.buildUrl(this.host, this.port) + "/game/model";
+        String result = Utils.sendGet(url);
+        assert result != null;
+        // TODO - convert JSON string to ClientModel
         return null;
     }
 
@@ -145,6 +151,8 @@ public class ServerProxy implements IServer {
     @Override
     public void getAvailableGameCommands() {
         String url = Utils.buildUrl(this.host, this.port) + "/game/commands";
+        String result = Utils.sendGet(url);
+        assert result != null;
     }
 
     /**

@@ -47,7 +47,7 @@ public interface IServer {
      *
      * @return A list of the ongoing games
      */
-    public ArrayList<GameInfo> getAllGames();
+    public List<GameInfo> getAllGames();
 
     /**
      * Creates a new game with a POST request
