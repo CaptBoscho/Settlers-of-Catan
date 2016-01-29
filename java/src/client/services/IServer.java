@@ -132,21 +132,18 @@ public interface IServer {
     /**
      * Used to roll a number at the beginning of your turn
      *
-     * @param playerIndex Who's sending this command (0-3)
-     * @param numberRolled what number was rolled (2-12)
+     * @param dto The transport object that contains the information required to roll a number
      * @return The current state of the game
      */
-    public ClientModel rollNumber(int playerIndex, int numberRolled);
+    public ClientModel rollNumber(RollNumberDTO dto);
 
     /**
      * Moves the robber, selecting the new robber position and player to rob
      *
-     * @param playerIndex Who's doing the robbing
-     * @param victimIndex The order index of the player to rob
-     * @param location The new location of the robber
+     * @param dto The transport object that contains the information required to rob a player
      * @return The current state of the game
      */
-    public ClientModel robPlayer(int playerIndex, int victimIndex, HexLocation location);
+    public ClientModel robPlayer(RobPlayerDTO dto);
 
     /**
      * Used to finish your turn
@@ -177,12 +174,10 @@ public interface IServer {
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
      *
-     * @param playerIndex Who's placing the roads
-     * @param spot1 The EdgeLocation of the first road
-     * @param spot2 The EdgeLocation of the second road
+     * @param dto The transport object that contains the information required to play the Year of Plenty card
      * @return The current state of the game
      */
-    public ClientModel playRoadBuildingCard(int playerIndex, EdgeLocation spot1, EdgeLocation spot2);
+    public ClientModel playRoadBuildingCard(PlayYOPCardDTO dto);
 
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob
