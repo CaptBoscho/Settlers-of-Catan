@@ -7,12 +7,12 @@ import shared.definitions.DevCardType;
  */
 public class RoadBuildCard extends DevelopmentCard{
 
-    RoadBuildCard() {
+    public RoadBuildCard() {
         this.type = DevCardType.ROAD_BUILD;
     }
 
     @Override
-    public void playCard() throws InvalidCardTypeException {
+    public void playCard() {
 //                  DevCardController.playRoadBuildCard();
     }
 }

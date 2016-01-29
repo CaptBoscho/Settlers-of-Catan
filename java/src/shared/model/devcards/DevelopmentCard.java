@@ -14,4 +14,8 @@ public abstract class DevelopmentCard {
      * Plays a Development Card based on its DevCardType
      */
     public void playCard() {}
+
+    public DevCardType getType() {
+        return type;
+    }
 }

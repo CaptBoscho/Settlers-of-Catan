@@ -7,12 +7,12 @@ import shared.definitions.DevCardType;
  */
 public class MonopolyCard extends DevelopmentCard {
 
-    MonopolyCard() {
+    public MonopolyCard() {
         this.type = DevCardType.MONOPOLY;
     }
 
     @Override
-    public void playCard() throws InvalidCardTypeException {
+    public void playCard() {
 //                  DevCardController.playMonopolyCard();
     }
 }

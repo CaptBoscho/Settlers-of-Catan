@@ -7,12 +7,12 @@ import shared.definitions.DevCardType;
  */
 public class MonumentCard extends DevelopmentCard {
 
-    MonumentCard() {
+    public MonumentCard() {
         this.type = DevCardType.MONUMENT;
     }
 
     @Override
-    public void playCard() throws InvalidCardTypeException {
+    public void playCard() {
 //                  DevCardController.playMonumentCard();
     }
 }
