@@ -7,8 +7,7 @@ import shared.definitions.*;
 /**
  * Interface for the join game controller
  */
-public interface IJoinGameController extends IController
-{
+public interface IJoinGameController extends IController {
 	
 	/**
 	 * Displays the join game view
@@ -53,6 +52,4 @@ public interface IJoinGameController extends IController
 	 *            The color selected by the user
 	 */
 	void joinGame(CatanColor color);
-	
 }
-

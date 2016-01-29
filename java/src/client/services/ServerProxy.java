@@ -1,17 +1,14 @@
 package client.services;
 
 import client.data.GameInfo;
-import shared.definitions.CatanColor;
 import shared.definitions.ClientModel;
 import shared.definitions.ResourceType;
-import shared.dto.AuthDTO;
+import shared.dto.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.game.trade.Trade;
 
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,61 +72,55 @@ public class ServerProxy implements IServer {
     /**
      * Creates a new game with a POST request
      *
-     * @param randomTiles   Whether the tiles should be randomly placed
-     * @param randomNumbers Whether the numbers should be randomly placed
-     * @param randomPorts   Whether the port should be randomly placed
-     * @param name          The name of the game
+     * @param dto The transport object that contains the information required for a new game
      * @return A new game object
      */
     @Override
-    public GameInfo createNewGame(boolean randomTiles, boolean randomNumbers, boolean randomPorts, String name) {
+    public GameInfo createNewGame(CreateGameDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/games/create";
+        String result = Utils.sendPost(url, dto.toJSON());
         return null;
     }
 
     /**
      * Adds (or re-adds) the player to the specified game, and sets their catan.game HTTP cookie
      *
-     * @param gameId The ID of the game to join
-     * @param color  ['red' or 'green' or 'blue' or 'yellow' or 'puce' or 'brown' or 'white' or 'purple' or 'orange']:
+     * @param dto The transport object that contains the information required to join a game
      */
     @Override
-    public void joinGame(int gameId, CatanColor color) {
+    public void joinGame(JoinGameDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/games/join";
+        String result = Utils.sendPost(url, dto.toJSON());
     }
 
     /**
      * Saves the current state of the specified game to a file with a POST request - FOR DEBUGGING
      *
-     * @param gameId The ID of the game to save
-     * @param name   The file name you want to save it under
+     * @param dto The transport object that contains the information required to save a game
      */
     @Override
-    public void saveGame(int gameId, String name) {
+    public void saveGame(SaveGameDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/games/save";
     }
 
     /**
      * Loads a previously saved game file to restore the state of a game with a POST request
      *
-     * @param gameName The name of the saved game file that you want to load. (The game's ID is restored as well.)
+     * @param dto The transport object that contains the information required to load a game
      */
     @Override
-    public void loadGame(String gameName) {
+    public void loadGame(LoadGameDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/games/load";
     }
 
     /**
      * Returns the current state of the game in JSON format with a GET request
      *
-     * @param version The version number of the model that the caller already has. It goes up by one for each command
-     *                that is applied. If you send this parameter, you will get a model back only if the current model
-     *                is newer than the specified version number. Otherwise, it returns the string "true" to notify the
-     *                caller that it already has the current model state.
+     * @param dto The transport object that contains the information required to get the current model
      * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public ClientModel getCurrentModel(int version) {
+    public ClientModel getCurrentModel(GetCurrentModelDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/game/model";
         String result = Utils.sendGet(url);
         assert result != null;
@@ -172,6 +163,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void addAI(String aiType) {
+        assert aiType != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/addAI";
     }
 
@@ -196,6 +188,9 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel sendChat(int playerId, String content) {
+        assert playerId >= 0;
+        assert content != null;
+        assert content.length() > 0;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/sendChat";
         return null;
     }
@@ -209,6 +204,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel rollNumber(int playerIndex, int numberRolled) {
+        assert playerIndex >= 0;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/rollNumber";
         return null;
     }

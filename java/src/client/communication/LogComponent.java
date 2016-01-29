@@ -50,7 +50,6 @@ public class LogComponent extends JComponent {
 	}
 	
 	private void updateSize(int width) {
-		
 		int height = this.getPreferredHeight(width);		
 		Dimension newSize = new Dimension(width, height);
 		this.setPreferredSize(newSize);
@@ -107,7 +106,7 @@ public class LogComponent extends JComponent {
 	private List<String> wrapText(FontRenderContext context, String text, int width) {
 		int MAX_WIDTH = width - LEFT_MARGIN - RIGHT_MARGIN;
 		
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		
 		try(Scanner scanner = new Scanner(text)) {
 			scanner.useDelimiter("\\s+");
@@ -124,8 +123,7 @@ public class LogComponent extends JComponent {
 					String newLine = line + " " + word;
 					
 					Rectangle2D bounds = font.getStringBounds(newLine, context);
-					if(bounds.getWidth() <= MAX_WIDTH)
-					{
+					if(bounds.getWidth() <= MAX_WIDTH) {
 						line = newLine;
 					} else {
 						result.add(line);
@@ -135,7 +133,7 @@ public class LogComponent extends JComponent {
 			}
 			
 			if(line.length() > 0) {
-				result.add(line.toString());
+				result.add(line);
 			}
 		}
 		return result;

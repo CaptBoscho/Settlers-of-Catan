@@ -21,9 +21,7 @@ public class GameHistoryView extends PanelView implements IGameHistoryView {
 		this.setBackground(Color.white);
 		
 		logPanel = new LogComponent();
-		
 		logScroll = new JScrollPane(logPanel);
-		
 		this.add(logScroll, BorderLayout.CENTER);
 	}
 	
