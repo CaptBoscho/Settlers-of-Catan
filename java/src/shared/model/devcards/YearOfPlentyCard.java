@@ -10,4 +10,9 @@ public class YearOfPlentyCard extends DevelopmentCard {
     YearOfPlentyCard() {
         this.type = DevCardType.YEAR_OF_PLENTY;
     }
+
+    @Override
+    public void playCard() throws InvalidCardTypeException {
+//                  DevCardController.playYearOfPlentyCard();
+    }
 }

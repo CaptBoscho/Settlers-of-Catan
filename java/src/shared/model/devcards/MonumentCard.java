@@ -10,4 +10,9 @@ public class MonumentCard extends DevelopmentCard {
     MonumentCard() {
         this.type = DevCardType.MONUMENT;
     }
+
+    @Override
+    public void playCard() throws InvalidCardTypeException {
+//                  DevCardController.playMonumentCard();
+    }
 }

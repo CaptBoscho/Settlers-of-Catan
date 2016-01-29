@@ -10,4 +10,9 @@ public class MonopolyCard extends DevelopmentCard {
     MonopolyCard() {
         this.type = DevCardType.MONOPOLY;
     }
+
+    @Override
+    public void playCard() throws InvalidCardTypeException {
+//                  DevCardController.playMonopolyCard();
+    }
 }

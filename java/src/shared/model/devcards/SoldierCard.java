@@ -10,4 +10,9 @@ public class SoldierCard extends DevelopmentCard {
     SoldierCard() {
         this.type = DevCardType.SOLDIER;
     }
+
+    @Override
+    public void playCard() throws InvalidCardTypeException {
+//                  DevCardController.playSoldierCard();
+    }
 }

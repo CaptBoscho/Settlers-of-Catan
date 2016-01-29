@@ -19,7 +19,19 @@ public class TradePackage {
      * @param resources An ArrayList of the ResourceCards to be traded
      */
     public TradePackage(int playerID, ArrayList<ResourceCard> resources) {
+        this.playerID = playerID;
+        this.resources = resources;
+    }
 
+    /**
+     * Gives ResourceCards in the TradePackage to the user indicated by the TradePackage's playerID
+     */
+    public void disburseResources() {
+
+    }
+
+    public void setResources(ArrayList<ResourceCard> resources) {
+        this.resources = resources;
     }
 
     public ArrayList<ResourceCard> getResources() {
