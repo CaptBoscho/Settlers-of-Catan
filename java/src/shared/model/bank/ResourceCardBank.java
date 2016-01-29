@@ -48,6 +48,21 @@ public class ResourceCardBank implements JsonSerializable {
     }
 
     /**
+     * Adds a ResourceCard to the ResourceCardBank
+     * @param cardToAdd ResourceCard to add
+     */
+    public void addResource(ResourceCard cardToAdd) {
+        resourceCards.add(cardToAdd);
+    }
+
+    /**
+     * @return number of cards in the ResourceCardBank
+     */
+    public int size() {
+        return resourceCards.size();
+    }
+
+    /**
      * Converts the object to JSON
      *
      * @return The JSON representation of the object

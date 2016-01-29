@@ -6,6 +6,8 @@ import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.model.bank.StructureBank;
 import shared.definitions.CatanColor;
+import shared.model.devcards.DevelopmentCard;
+import shared.model.resources.ResourceCard;
 
 /**
  * Representation of a player in the game
@@ -100,6 +102,24 @@ public class Player implements Comparable<Player>{
      */
     public void incrementPoints(int increment) {
         this.victoryPoints += increment;
+    }
+
+    /**
+     * Adds a dev card to developmentCardBank
+     *
+     * @param cardToAdd
+     */
+    public void addDevCard(DevelopmentCard cardToAdd) {
+        developmentCardBank.addDevCard(cardToAdd);
+    }
+
+    /**
+     * Adds a resource card to resourceCardBank
+     *
+     * @param cardToAdd
+     */
+    public void addResourceCard(ResourceCard cardToAdd) {
+        resourceCardBank.addResource(cardToAdd);
     }
 
     /*==========================================
