@@ -1,13 +1,10 @@
-<<<<<<< HEAD:java/src/client/facade/Facade.java
+
 package client.facade;
-import shared.*;
-=======
-package shared.facade;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
+import shared.model.devcards.DevelopmentCard;
 import shared.model.game.Game;
 import shared.model.map.Map;
->>>>>>> 42b6a704e063e1e04203883513c0916de678bcd8:java/src/shared/facade/Facade.java
 
 /**
  * The Facade class handles all the communication
@@ -80,7 +77,7 @@ public class Facade {
         if(canBuildBuilding(playerID,vertex)){
 
         } else {
-            throw new BuikldException("Can't build the building");
+            throw new BuildException("Can't build the building");
         }
     }
 
@@ -143,7 +140,6 @@ public class Facade {
     public boolean canPlayDC(int playerID) {
         return true;
     }
-<<<<<<< HEAD:java/src/client/facade/Facade.java
 
     /**
      * plays the Development Card
@@ -161,6 +157,3 @@ public class Facade {
 
 
 }
-=======
-}
->>>>>>> 42b6a704e063e1e04203883513c0916de678bcd8:java/src/shared/facade/Facade.java

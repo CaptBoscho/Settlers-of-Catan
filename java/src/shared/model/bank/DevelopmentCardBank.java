@@ -34,6 +34,14 @@ public class DevelopmentCardBank implements JsonSerializable {
     }
 
     /**
+     * Creates an empty DevelopmentCardBank
+     * @param player The object that contains the DevelopmentCardBank
+     */
+    public DevelopmentCardBank(Player player) {
+
+    }
+
+    /**
      * Construct a DevelopmentCardBank object from a JSON blob
      *
      * @param json The JSON being used to construct this object
@@ -43,11 +51,23 @@ public class DevelopmentCardBank implements JsonSerializable {
     }
 
     /**
-     * Creates an empty DevelopmentCardBank
-     * @param player The object that contains the DevelopmentCardBank
+     * Adds a DevelopmentCard to the bank.
+     *
+     * @pre none
+     * @post developmentCards.length() == old.length() + 1
+     * @post cardToAdd is now in developmentCards
+     *
+     * @param cardToAdd Development card to add to the bank
      */
-    public DevelopmentCardBank(Player player) {
+    public void addDevCard(DevelopmentCard cardToAdd) {
+        developmentCards.add(cardToAdd);
+    }
 
+    /**
+     * @return the number of developmentCards in the bank
+     */
+    public int size() {
+        return developmentCards.size();
     }
 
     /**
