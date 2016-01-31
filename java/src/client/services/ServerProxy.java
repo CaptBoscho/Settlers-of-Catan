@@ -182,15 +182,12 @@ public class ServerProxy implements IServer {
     /**
      * Sends a chat message
      *
-     * @param playerId The ID of the player who is sending the message
-     * @param content  The actual message
+     * @param dto The transport object that contains the information required to send a message
      * @return The current state of the game
      */
     @Override
-    public ClientModel sendChat(int playerId, String content) {
-        assert playerId >= 0;
-        assert content != null;
-        assert content.length() > 0;
+    public ClientModel sendChat(SendChatDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/sendChat";
         return null;
     }
@@ -356,6 +353,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel offerTrade(OfferTradeDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/offerTrade";
         return null;
     }
@@ -368,6 +366,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/acceptTrade";
         return null;
     }
@@ -380,6 +379,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel maritimeTrade(MaritimeTradeDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         return null;
     }
@@ -392,6 +392,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel discardCards(DiscardCardsDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/discardCards";
         return null;
     }
@@ -403,6 +404,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public boolean changeLogLevel(ChangeLogLevelDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/util/changeLogLevel";
         return false;
     }

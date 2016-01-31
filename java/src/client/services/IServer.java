@@ -123,11 +123,10 @@ public interface IServer {
     /**
      * Sends a chat message
      *
-     * @param playerId The ID of the player who is sending the message
-     * @param content The actual message
+     * @param dto The transport object that contains the information required to send a message
      * @return The current state of the game
      */
-    public ClientModel sendChat(int playerId, String content);
+    public ClientModel sendChat(SendChatDTO dto);
 
     /**
      * Used to roll a number at the beginning of your turn
