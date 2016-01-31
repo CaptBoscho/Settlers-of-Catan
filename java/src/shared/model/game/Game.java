@@ -30,7 +30,7 @@ public class Game implements IGame,IGameActions {
     public Game() {
         this.dice = new Dice();
         this.map = new Map();
-        this.turnTracker = new TurnTracker(0,0);
+        this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager();
@@ -101,8 +101,24 @@ public class Game implements IGame,IGameActions {
      *
      * @param playerID
      */
+<<<<<<< HEAD
     @Override
     public void buildSettlement(int playerID) {
+=======
+    private void playTurn(Player player){
+        //Dev Card - technically one card can be played at anytime during a player's turn
+//        try {
+//            this.playDevCard(player.getDevelopmentCardBank());
+//        }catch(Exception e){
+//
+//        }
+
+        //Roll dice
+        int roll = dice.roll();
+
+        //Pass resources
+        //map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
+>>>>>>> refs/remotes/origin/master
 
     }
 

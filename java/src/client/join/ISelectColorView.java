@@ -7,8 +7,7 @@ import shared.definitions.*;
  * Interface for the select color view, which lets the user select the desired
  * color when they join a game
  */
-public interface ISelectColorView extends IOverlayView
-{
+public interface ISelectColorView extends IOverlayView {
 	
 	/**
 	 * Enables or disables the specified color. Colors that are already taken by
@@ -28,4 +27,3 @@ public interface ISelectColorView extends IOverlayView
 	 */
 	CatanColor getSelectedColor();
 }
-

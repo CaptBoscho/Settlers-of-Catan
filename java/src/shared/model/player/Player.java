@@ -1,7 +1,9 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
+
 import shared.exceptions.DevCardException;
+import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.MoveRobberException;
 import shared.model.bank.DevelopmentCardBank;
@@ -46,12 +48,58 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     }
 
     /**
+     * Construct a Player object from a JSON blob
+     *
+     * @param json The JSON being used to construct this object
+     */
+    public Player(JsonObject json) {
+        switch(json.get("color").getAsString()) {
+            case "red":
+                this.color = CatanColor.RED;
+                break;
+            case "blue":
+                this.color = CatanColor.BLUE;
+                break;
+            case "green":
+                this.color = CatanColor.GREEN;
+                break;
+            case "brown":
+                this.color = CatanColor.BROWN;
+                break;
+            case "orange":
+                this.color = CatanColor.ORANGE;
+                break;
+            case "puce":
+                this.color = CatanColor.PUCE;
+                break;
+            case "purple":
+                this.color = CatanColor.PURPLE;
+                break;
+            case "white":
+                this.color = CatanColor.WHITE;
+                break;
+        }
+
+        try {
+            this.name = new Name(json.get("name").getAsString());
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
+
+        this._id = json.get("id").getAsInt();
+    }
+
+    /**
      * New Player Constructor
      * @param points    Initial points
      * @param color     Player Color
      * @param name      Player Name
+     * @param id        Player ID
      */
-    public Player(int points, CatanColor color, int id, Name name) {
+    public Player(int points, CatanColor color, int id, Name name) throws InvalidPlayerException {
+        assert points >= 0;
+        assert name != null;
+
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = new ResourceCardBank(this);
@@ -429,14 +477,6 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         return null;
     }
 
-    /**
-     * Construct a Player object from a JSON blob
-     *
-     * @param json The JSON being used to construct this object
-     */
-    public Player(JsonObject json) {
-
-    }
 
     //Getters/Setters
     //============================================

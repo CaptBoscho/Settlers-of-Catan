@@ -100,22 +100,22 @@ public class MapController extends Controller implements IMapController {
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-		
+		// TODO -- implement
 		return true;
 	}
 
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
-		
+		// TODO -- implement
 		return true;
 	}
 
 	public boolean canPlaceCity(VertexLocation vertLoc) {
-		
+		// TODO -- implement
 		return true;
 	}
 
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		
+		// TODO -- implement
 		return true;
 	}
 
@@ -147,20 +147,18 @@ public class MapController extends Controller implements IMapController {
 	}
 	
 	public void cancelMove() {
-		
+		// TODO -- implement
 	}
 	
-	public void playSoldierCard() {	
-		
+	public void playSoldierCard() {
+		// TODO -- implement
 	}
 	
-	public void playRoadBuildingCard() {	
-		
+	public void playRoadBuildingCard() {
+		// TODO -- implement
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
-		
+		// TODO -- implement
 	}
-	
 }
-

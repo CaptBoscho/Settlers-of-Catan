@@ -8,6 +8,8 @@ import shared.model.JsonSerializable;
 /**
  * Representation of Port in the game. A port is a special structure that players can interact with to trade certain
  * resources for others depending on the implemented port.
+ *
+ * @author Joel Bradley
  */
 public class Port implements JsonSerializable {
 
@@ -20,43 +22,16 @@ public class Port implements JsonSerializable {
      * @param vertexLoc VertexLocation
      */
     public Port(PortType portType, VertexLocation vertexLoc) {
-
+        this.portType = portType;
+        this.vertexLoc = vertexLoc;
     }
 
     /**
      * Construct a Port object from a JSON blob
-     *
      * @param json The JSON representing the object
      */
     public Port(JsonObject json) {
 
-    }
-
-    /**
-     * Tells if there is a Building at that Port
-     * @return boolean
-     */
-    public boolean existsBuilding() {
-        return false;
-    }
-
-    /*
-    Getters and Setters
-     */
-    public void setPortType(PortType portType) {
-        this.portType = portType;
-    }
-
-    public void setVertexLoc(VertexLocation vertexLoc) {
-        this.vertexLoc = vertexLoc;
-    }
-
-    public PortType getPortType() {
-        return portType;
-    }
-
-    public VertexLocation getVertexLoc() {
-        return vertexLoc;
     }
 
     /**
@@ -67,5 +42,13 @@ public class Port implements JsonSerializable {
     @Override
     public JsonObject toJSON() {
         return null;
+    }
+
+    public PortType getPortType() {
+        return portType;
+    }
+
+    public VertexLocation getVertexLoc() {
+        return vertexLoc;
     }
 }

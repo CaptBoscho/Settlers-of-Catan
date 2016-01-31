@@ -1,15 +1,12 @@
 package client.services;
 
 import client.data.GameInfo;
-import shared.definitions.CatanColor;
 import shared.definitions.ClientModel;
 import shared.definitions.ResourceType;
+import shared.dto.*;
 import shared.locations.EdgeLocation;
-import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.trade.Trade;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,25 +26,33 @@ public class ServerProxy implements IServer {
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *
-     * @param username The user's username
-     * @param password The user's password
+     * @param auth The user's credentials, consisting of username/password
      * @return true if the request succeeded
      */
     @Override
-    public boolean authenticateUser(String username, String password) {
-        return false;
+    public boolean authenticateUser(AuthDTO auth) {
+        assert auth != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/user/login";
+        String result = Utils.sendPost(url, auth.toJSON());
+        System.out.println(result);
+        assert result != null;
+        return result.equals("Success");
     }
 
     /**
      * Creates a new player account, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *
-     * @param username The user's username
-     * @param password The user's password
+     * @param auth The user's credentials, consisting of username/password
      * @return true if the request succeeded
      */
     @Override
-    public boolean registerUser(String username, String password) {
-        return false;
+    public boolean registerUser(AuthDTO auth) {
+        assert auth != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/user/register";
+        String result = Utils.sendPost(url, auth.toJSON());
+        System.out.println(result);
+        assert result != null;
+        return result.equals("Success");
     }
 
     /**
@@ -56,67 +61,87 @@ public class ServerProxy implements IServer {
      * @return A list of the ongoing games
      */
     @Override
-    public ArrayList<GameInfo> getAllGames() {
-        return null;
+    public List<GameInfo> getAllGames() {
+        String url = Utils.buildUrl(this.host, this.port) + "/games/list";
+        String result = Utils.sendGet(url);
+        assert result != null;
+        GameInfoListDTO list = new GameInfoListDTO(result);
+        // System.out.println(result);
+        return list.getList();
     }
 
     /**
      * Creates a new game with a POST request
      *
-     * @param randomTiles   Whether the tiles should be randomly placed
-     * @param randomNumbers Whether the numbers should be randomly placed
-     * @param randomPorts   Whether the port should be randomly placed
-     * @param name          The name of the game
+     * @param dto The transport object that contains the information required for a new game
      * @return A new game object
      */
     @Override
-    public GameInfo createNewGame(boolean randomTiles, boolean randomNumbers, boolean randomPorts, String name) {
-        return null;
+    public GameInfo createNewGame(CreateGameDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/games/create";
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        return new GameInfo(result);
     }
 
     /**
      * Adds (or re-adds) the player to the specified game, and sets their catan.game HTTP cookie
+     * TODO - requires HTTP cookie
      *
-     * @param gameId The ID of the game to join
-     * @param color  ['red' or 'green' or 'blue' or 'yellow' or 'puce' or 'brown' or 'white' or 'purple' or 'orange']:
+     * @param dto The transport object that contains the information required to join a game
      */
     @Override
-    public void joinGame(int gameId, CatanColor color) {
-
+    public void joinGame(JoinGameDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/games/join";
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        System.out.println(result);
     }
 
     /**
      * Saves the current state of the specified game to a file with a POST request - FOR DEBUGGING
      *
-     * @param gameId The ID of the game to save
-     * @param name   The file name you want to save it under
+     * @param dto The transport object that contains the information required to save a game
      */
     @Override
-    public void saveGame(int gameId, String name) {
-
+    public boolean saveGame(SaveGameDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/games/save";
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        return result.equals("Success");
     }
 
     /**
      * Loads a previously saved game file to restore the state of a game with a POST request
      *
-     * @param gameName The name of the saved game file that you want to load. (The game's ID is restored as well.)
+     * @param dto The transport object that contains the information required to load a game
      */
     @Override
-    public void loadGame(String gameName) {
-
+    public boolean loadGame(LoadGameDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/games/load";
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        System.out.println(result);
+        return result.equals("Success");
     }
 
     /**
      * Returns the current state of the game in JSON format with a GET request
      *
-     * @param version The version number of the model that the caller already has. It goes up by one for each command
-     *                that is applied. If you send this parameter, you will get a model back only if the current model
-     *                is newer than the specified version number. Otherwise, it returns the string "true" to notify the
-     *                caller that it already has the current model state.
+     * @param dto The transport object that contains the information required to get the current model
      * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public ClientModel getCurrentModel(int version) {
+    public ClientModel getCurrentModel(GetCurrentModelDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/game/model";
+        String result = Utils.sendGet(url);
+        assert result != null;
+        // TODO - convert JSON string to ClientModel
         return null;
     }
 
@@ -125,7 +150,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void resetCurrentGame() {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/game/reset";
+        assert url.contains(this.host);
     }
 
     /**
@@ -133,7 +159,9 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void getAvailableGameCommands() {
-
+        String url = Utils.buildUrl(this.host, this.port) + "/game/commands";
+        String result = Utils.sendGet(url);
+        assert result != null;
     }
 
     /**
@@ -143,7 +171,9 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void executeGameCommands(List<String> gameCommands) {
-
+        assert gameCommands != null;
+        assert gameCommands.size() > 0;
+        String url = Utils.buildUrl(this.host, this.port) + "/game/commands";
     }
 
     /**
@@ -153,7 +183,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void addAI(String aiType) {
-
+        assert aiType != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/game/addAI";
     }
 
     /**
@@ -164,54 +195,59 @@ public class ServerProxy implements IServer {
      */
     @Override
     public List<String> getAITypes() {
+        String url = Utils.buildUrl(this.host, this.port) + "/game/listAI";
         return null;
     }
 
     /**
      * Sends a chat message
      *
-     * @param playerId The ID of the player who is sending the message
-     * @param content  The actual message
+     * @param dto The transport object that contains the information required to send a message
      * @return The current state of the game
      */
     @Override
-    public ClientModel sendChat(int playerId, String content) {
+    public ClientModel sendChat(SendChatDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/sendChat";
         return null;
     }
 
     /**
      * Used to roll a number at the beginning of your turn
      *
-     * @param playerIndex  Who's sending this command (0-3)
-     * @param numberRolled what number was rolled (2-12)
+     * @param dto The transport object that contains the information required to roll a number
      * @return The current state of the game
      */
     @Override
-    public ClientModel rollNumber(int playerIndex, int numberRolled) {
+    public ClientModel rollNumber(RollNumberDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/rollNumber";
         return null;
     }
 
     /**
      * Moves the robber, selecting the new robber position and player to rob
      *
-     * @param playerIndex Who's doing the robbing
-     * @param victimIndex The order index of the player to rob
-     * @param location    The new location of the robber
+     * @param dto The transport object that contains the information required to rob a player
      * @return The current state of the game
      */
     @Override
-    public ClientModel robPlayer(int playerIndex, int victimIndex, HexLocation location) {
+    public ClientModel robPlayer(RobPlayerDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/robPlayer";
         return null;
     }
 
     /**
      * Used to finish your turn
      *
-     * @param playerIndex Who's sending this command (0-3)
+     * @param dto The transport object that contains the information required for a player to finish their turn
      * @return The current state of the game
      */
     @Override
-    public ClientModel finishTurn(int playerIndex) {
+    public ClientModel finishTurn(FinishTurnDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/finishTurn";
         return null;
     }
 
@@ -223,6 +259,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buyDevCard(int playerIndex) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buyDevCard";
         return null;
     }
 
@@ -236,32 +273,31 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playYearOfPlentyCard(int playerIndex, ResourceType resource1, ResourceType resource2) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Year_of_Plenty";
         return null;
     }
 
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
      *
-     * @param playerIndex Who's placing the roads
-     * @param spot1       The EdgeLocation of the first road
-     * @param spot2       The EdgeLocation of the second road
+     * @param dto The transport object that contains the information required to play the Year of Plenty card
      * @return The current state of the game
      */
     @Override
-    public ClientModel playRoadBuildingCard(int playerIndex, EdgeLocation spot1, EdgeLocation spot2) {
+    public ClientModel playRoadBuildingCard(PlayYOPCardDTO dto) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Road_Building";
         return null;
     }
 
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob
      *
-     * @param playerIndex Who's playing this dev card
-     * @param victimIndex The index of the player to rob
-     * @param location    The new location of the robber
+     * @param dto The transport object that contains the information required to play the soldier card
      * @return The current state of the game
      */
     @Override
-    public ClientModel playSoldierCard(int playerIndex, int victimIndex, HexLocation location) {
+    public ClientModel playSoldierCard(PlaySoldierCardDTO dto) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Soldier";
         return null;
     }
 
@@ -274,6 +310,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playMonopolyCard(int playerIndex, String resource) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Monopoly";
         return null;
     }
 
@@ -285,6 +322,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playMonumentCard(int playerIndex) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/Monument";
         return null;
     }
 
@@ -298,6 +336,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildRoad(int playerIndex, EdgeLocation roadLocation, boolean free) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildRoad";
         return null;
     }
 
@@ -311,6 +350,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildSettlement(int playerIndex, VertexLocation location, boolean free) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildSettlement";
         return null;
     }
 
@@ -323,62 +363,71 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildCity(int playerIndex, VertexLocation location) {
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildCity";
         return null;
     }
 
     /**
      * Offers a domestic trade to another player
      *
-     * @param playerIndex Who's sending the offer
-     * @param offer       What you get (+) and what you give (-)
-     * @param receiver    Who you're offering the trade to (0-3)
+     * @param dto The transport object that contains the information required respond to offer a trade
      * @return The current state of the game
      */
     @Override
-    public ClientModel offerTrade(int playerIndex, Trade offer, int receiver) {
+    public ClientModel offerTrade(OfferTradeDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/offerTrade";
         return null;
     }
 
     /**
      * Used to accept or reject a trade offered to the player
      *
-     * @param playerIndex Who's accepting / rejecting this trade
-     * @param willAccept  Whether the player accepted the trade or not
+     * @param dto The transport object that contains the information required respond to a trade offer
      * @return The current state of the game
      */
     @Override
-    public ClientModel respondToTradeOffer(int playerIndex, boolean willAccept) {
+    public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/acceptTrade";
         return null;
     }
 
     /**
      * Used to execute a maritime trade
      *
-     * @param playerIndex    Who's doing the trading
-     * @param ratio          (<i>optional</i>) The ratio of the trade your doing as an integer (ie. put 3 for a 3:1 trade)
-     * @param inputResource  (<i>optional</i>) What type of resource you're giving
-     * @param outputResource (<i>optional</i>) What type of resource you're getting
+     * @param dto The transport object that contains the information required to execute a maritime trade
      * @return The current state of the game
      */
     @Override
-    public ClientModel maritimeTrade(int playerIndex, int ratio, String inputResource, String outputResource) {
+    public ClientModel maritimeTrade(MaritimeTradeDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         return null;
     }
 
     /**
      * Discards the specified resource cards
      *
-     * @param playerIndex  Who's discarding
-     * @param resourceList
+     * @param dto The transport object that contains the information required to discard cards
      * @return The current state of the game
      */
     @Override
-    public ClientModel discardCards(int playerIndex, List<ResourceType> resourceList) {
+    public ClientModel discardCards(DiscardCardsDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/moves/discardCards";
         return null;
     }
 
+    /**
+     *
+     * @param dto The transport object that contains the information required to change the log level of the server
+     * @return
+     */
     @Override
-    public boolean changeLogLevel(String logLevel) {
+    public boolean changeLogLevel(ChangeLogLevelDTO dto) {
+        assert dto != null;
+        String url = Utils.buildUrl(this.host, this.port) + "/util/changeLogLevel";
         return false;
     }
 }

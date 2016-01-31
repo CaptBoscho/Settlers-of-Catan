@@ -16,29 +16,18 @@ import client.roll.RollResultView;
 import client.roll.RollView;
 
 @SuppressWarnings("serial")
-public class CatanPanel extends JPanel
-{
-	private TitlePanel titlePanel;
-	private LeftPanel leftPanel;
-	private MidPanel midPanel;
-	private RightPanel rightPanel;
-	
-	private DiscardView discardView;
+public class CatanPanel extends JPanel {
+
+    private DiscardView discardView;
 	private WaitView discardWaitView;
-	private DiscardController discardController;
-	
-	private RollView rollView;
-	private RollResultView rollResultView;
-	private RollController rollController;
-	
-	public CatanPanel()
-	{
+
+    public CatanPanel() {
 		this.setLayout(new BorderLayout());
-		
-		titlePanel = new TitlePanel();
-		midPanel = new MidPanel();
-		leftPanel = new LeftPanel(titlePanel, midPanel.getGameStatePanel());
-		rightPanel = new RightPanel(midPanel.getMapController());
+
+        TitlePanel titlePanel = new TitlePanel();
+        MidPanel midPanel = new MidPanel();
+        LeftPanel leftPanel = new LeftPanel(titlePanel, midPanel.getGameStatePanel());
+        RightPanel rightPanel = new RightPanel(midPanel.getMapController());
 		
 		this.add(titlePanel, BorderLayout.NORTH);
 		this.add(leftPanel, BorderLayout.WEST);
@@ -48,13 +37,13 @@ public class CatanPanel extends JPanel
 		discardView = new DiscardView();
 		discardWaitView = new WaitView();
 		discardWaitView.setMessage("Waiting for other Players to Discard");
-		discardController = new DiscardController(discardView, discardWaitView);
+        DiscardController discardController = new DiscardController(discardView, discardWaitView);
 		discardView.setController(discardController);
 		discardWaitView.setController(discardController);
-		
-		rollView = new RollView();
-		rollResultView = new RollResultView();
-		rollController = new RollController(rollView, rollResultView);
+
+        RollView rollView = new RollView();
+        RollResultView rollResultView = new RollResultView();
+        RollController rollController = new RollController(rollView, rollResultView);
 		rollView.setController(rollController);
 		rollResultView.setController(rollController);
 		
@@ -84,8 +73,7 @@ public class CatanPanel extends JPanel
 			int state = 0;
 			
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 //				rollView.showModal();
 				
 				discardView.setResourceMaxAmount(ResourceType.WOOD, 1);
@@ -102,13 +90,10 @@ public class CatanPanel extends JPanel
 				
 				discardView.setDiscardButtonEnabled(true);
 				
-				if(state == 0)
-				{
+				if(state == 0) {
 					discardView.showModal();
 					state = 1;
-				}
-				else if(state == 1)
-				{
+				} else if(state == 1) {
 					discardWaitView.showModal();
 					state = 2;
 				}
@@ -116,6 +101,4 @@ public class CatanPanel extends JPanel
 		});
 		this.add(testButton, BorderLayout.SOUTH);
 	}
-	
 }
-

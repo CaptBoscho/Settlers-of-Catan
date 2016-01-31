@@ -5,8 +5,7 @@ import client.base.*;
 /**
  * Interface for the login controller
  */
-public interface ILoginController extends IController
-{
+public interface ILoginController extends IController {
 	
 	/**
 	 * Displays the login view
@@ -22,6 +21,4 @@ public interface ILoginController extends IController
 	 * Called when the user clicks the "Register" button in the login view
 	 */
 	void register();
-	
 }
-

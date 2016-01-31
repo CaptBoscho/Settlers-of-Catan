@@ -26,7 +26,6 @@ public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView
 
 	private JLabel label;
 	private JButton addAiButton;
-	private JPanel aiPanel;
 	private JPanel center;
 	private SpinnerListModel aiModel;
 	private JSpinner aiChoices;
@@ -48,7 +47,7 @@ public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView
 		this.add(center, BorderLayout.CENTER);	
 		
 		//create the AI panel for the bottom of the pane
-		aiPanel = new JPanel();
+		JPanel aiPanel = new JPanel();
 		aiPanel.setLayout(new BoxLayout(aiPanel, BoxLayout.Y_AXIS));
 		
 		//create the AI type panel
@@ -152,10 +151,8 @@ public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView
 	@Override
 	public void setAIChoices(String[] value) {	
 		
-		java.util.List<String> choiceList = new ArrayList<String>();
-		for (String v : value) {
-			choiceList.add(v);
-		}
+		java.util.List<String> choiceList = new ArrayList<>();
+		Collections.addAll(choiceList, value);
 		
 		aiModel.setList(choiceList);
 		

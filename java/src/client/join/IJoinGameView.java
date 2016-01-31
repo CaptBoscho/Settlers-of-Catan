@@ -6,8 +6,7 @@ import client.data.*;
 /**
  * Interface for the join game view, which lets the user select a game to join
  */
-public interface IJoinGameView extends IOverlayView
-{
+public interface IJoinGameView extends IOverlayView {
 	
 	/**
 	 * Sets the list of available games to be displayed
@@ -20,4 +19,3 @@ public interface IJoinGameView extends IOverlayView
 	void setGames(GameInfo[] games, PlayerInfo localPlayer);
 	
 }
-

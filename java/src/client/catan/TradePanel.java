@@ -8,8 +8,7 @@ import client.maritime.*;
 import client.misc.*;
 
 @SuppressWarnings("serial")
-public class TradePanel extends JPanel
-{
+public class TradePanel extends JPanel {
 	
 	private DomesticTradeView domesticView;
 	private DomesticTradeOverlay domesticOverlay;
@@ -21,8 +20,7 @@ public class TradePanel extends JPanel
 	private MaritimeTradeOverlay maritimeOverlay;
 	private MaritimeTradeController maritimeController;
 	
-	public TradePanel()
-	{
+	public TradePanel() {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
@@ -31,10 +29,7 @@ public class TradePanel extends JPanel
 		domesticWaitView = new WaitView();
 		domesticWaitView.setMessage("Waiting for Trade to Go Through");
 		domesticAcceptOverlay = new AcceptTradeOverlay();
-		domesticController = new DomesticTradeController(domesticView,
-														 domesticOverlay,
-														 domesticWaitView,
-														 domesticAcceptOverlay);
+		domesticController = new DomesticTradeController(domesticView, domesticOverlay, domesticWaitView, domesticAcceptOverlay);
 		domesticView.setController(domesticController);
 		domesticOverlay.setController(domesticController);
 		domesticWaitView.setController(domesticController);
@@ -56,6 +51,4 @@ public class TradePanel extends JPanel
 		this.add(maritimeView);
 		this.add(Box.createRigidArea(new Dimension(3, 0)));
 	}
-	
 }
-

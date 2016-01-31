@@ -3,9 +3,7 @@ package client.base;
 /**
  * Base interface for overlay views
  */
-public interface IOverlayView extends IView
-{
-	
+public interface IOverlayView extends IView {
 	/**
 	 * Displays the modal overlay view.
 	 */
@@ -23,4 +21,3 @@ public interface IOverlayView extends IView
 	 */
 	boolean isModalShowing();
 }
-
