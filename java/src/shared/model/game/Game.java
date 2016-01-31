@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * game class representing a Catan game
  */
-public class Game implements IGame {
+public class Game implements IGame,IGameActions {
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;

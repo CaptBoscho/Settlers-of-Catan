@@ -1,13 +1,18 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
+import shared.exceptions.DevCardException;
 import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.MoveRobberException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.model.bank.StructureBank;
 import shared.definitions.CatanColor;
 import shared.model.devcards.DevelopmentCard;
+import shared.model.game.trade.TradeType;
 import shared.model.resources.ResourceCard;
+
+import java.util.List;
 
 /**
  * Representation of a player in the game
@@ -17,15 +22,16 @@ import shared.model.resources.ResourceCard;
 public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Add exceptions when danny is done
     private int _id;
     private Name name;
-    private boolean discarded;
     private int monuments;
     private int playerIndex;
-    private boolean playedDevCard;
-    private int victoryPoints;
     private CatanColor color;
+    private int victoryPoints;
+    private boolean discarded;
+    private boolean moveRobber;
+    private boolean playedDevCard;
+    private StructureBank structureBank;
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
-    private StructureBank structureBank;
 
     /**
      * Default Constructor
@@ -33,6 +39,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public Player() {
         this.victoryPoints = 0;
         this.color = null;
+        this.moveRobber = false;
         this.resourceCardBank = new ResourceCardBank(this);
         this.developmentCardBank = new DevelopmentCardBank(this);
         this.structureBank = new StructureBank();
@@ -52,6 +59,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.structureBank = new StructureBank();
         this.name = name;
         this._id = id;
+        this.moveRobber = false;
     }
 
     /**
@@ -67,7 +75,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     public Player(int points, CatanColor color, ResourceCardBank rCrdBnk,
                   DevelopmentCardBank devCrdBnk, StructureBank sBnk,
-                  int index, Name name) throws InvalidPlayerException {
+                  int index, Name name, boolean canMoveRobber) throws InvalidPlayerException {
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = rCrdBnk;
@@ -75,10 +83,214 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.structureBank = sBnk;
         this.name = name;
         this.playerIndex = index;
+        this.moveRobber = canMoveRobber;
     }
 
     //IPlayer Interface Methods
     //========================================================
+
+    /**
+     * Determine if Player can discard cards
+     * Checks resource cards, robber position,
+     *        and hexes from dice roll
+     *
+     * @return True if Player can discard cards
+     */
+    @Override
+    public boolean canDiscardCards() {
+        return resourceCardBank.canDiscardCards(); // TODO: 1/30/2016 What is this one supposed to do??? Discard on 7???
+    }
+
+    /**
+     * Action - Player discards cards
+     *
+     * @param cards Cards to be discarded
+     */
+    @Override
+    public void discardCards(List<ResourceCard> cards) {
+        resourceCardBank.discard(cards);
+        setDiscarded(true);
+    }
+
+    /**
+     * Determine if Player can offer a trade
+     * Checks Player turn, phase, and resources
+     *
+     * @return True if Player can offer a trade
+     */
+    @Override
+    public boolean canOfferTrade() {
+        return resourceCardBank.canOfferTrade();
+    }
+
+    /**
+     * Determine if Player can perform maritime trade
+     * Checks Player turn, phase, resources, and ports
+     *
+     * @return True if Player can perform a maritime trade
+     */
+    @Override
+    public boolean canMaritimeTrade(TradeType type) {
+        return resourceCardBank.canMaritimeTrade(type);
+    }
+
+    /**
+     * Determine if Player can buy a dev card
+     * Checks Player turn, phase, and resources
+     *
+     * @return True if Player can buy a dev card
+     */
+    @Override
+    public boolean canBuyDevCard() {
+        return resourceCardBank.canBuyDevCard();
+    }
+
+    /**
+     * Action - Player buys a dev card
+     */
+    @Override
+    public void buyDevCard() {
+        resourceCardBank.buyDevCard();
+    }
+
+    /**
+     * Determine if Player can play Year of Plenty
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Year of Plenty
+     */
+    @Override
+    public boolean canUseYearOfPlenty() {
+        return hasPlayedDevCard() ? false : developmentCardBank.canUseYearOfPlenty();
+    }
+
+    /**
+     * Action - Player plays Year of Plenty
+     */
+    @Override
+    public void useYearOfPlenty() throws DevCardException {
+        if(canUseYearOfPlenty())
+            developmentCardBank.useYearOfPlenty();
+        else
+            throw new DevCardException("Player has already played a Development card this turn!");
+    }
+
+    /**
+     * Determine if Player can play Road Builder
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Road Builder
+     */
+    @Override
+    public boolean canUseRoadBuilder() {
+        return hasPlayedDevCard() ? false : developmentCardBank.canUseRoadBuilder();
+    }
+
+    /**
+     * Action - Player plays Road Builder
+     */
+    @Override
+    public void useRoadBuilder() throws DevCardException {
+        if(canUseRoadBuilder())
+            developmentCardBank.useRoadBuilder();
+            // TODO: 1/30/2016 Add any additional functionality - does the map or the structure bank build the road 
+        else
+            throw new DevCardException("Player has already played a Development card this turn!");
+    }
+
+    /**
+     * Determine if Player can play Soldier
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Soldier
+     */
+    @Override
+    public boolean canUseSoldier() {
+        return hasPlayedDevCard() ? false : developmentCardBank.canUseSoldier();
+    }
+
+    /**
+     * Action - Player plays Soldier
+     */
+    @Override
+    public void useSoldier() throws DevCardException{
+        if(canUseSoldier()) {
+            developmentCardBank.useSoldier();
+            setMoveRobber(true);
+        }else {
+            throw new DevCardException("Player has already played a Development card this turn!");
+        }
+    }
+
+    /**
+     * Determine if Player can play Monopoly
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Monopoly
+     */
+    @Override
+    public boolean canUseMonopoly() {
+        return hasPlayedDevCard() ? false : developmentCardBank.canUseMonopoly();
+    }
+
+    /**
+     * Action - Player plays Monopoly
+     */
+    @Override
+    public void useMonopoly() throws DevCardException {
+        if(canUseMonopoly())
+            developmentCardBank.useMonopoly();
+        else
+            throw new DevCardException("Player has already played a Development card this turn!");
+    }
+
+    /**
+     * Determine if Player can play Monument
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Monument
+     */
+    @Override
+    public boolean canUseMonument() {
+        return hasPlayedDevCard() ? false : developmentCardBank.canUseMonument();
+    }
+
+    /**
+     * Action - Player plays Monument
+     */
+    @Override
+    public void useMonument() throws DevCardException {
+        if(canUseMonument()) {
+            developmentCardBank.useMonument();
+            incrementMonuments();
+            incrementPoints();
+        }else {
+            throw new DevCardException("Player has already played a Development card this turn!");
+        }
+    }
+
+    /**
+     * Determine if Player can place the Robber
+     * Checks Player turn, event(ie roll 7 or play Soldier)
+     *
+     * @return True if Player can place the Robber
+     */
+    @Override
+    public boolean canPlaceRobber() {
+        return canMoveRobber();
+    }
+
+    /**
+     * Action - Player places the Robber
+     */
+    @Override
+    public void placeRobber() throws MoveRobberException{
+        if(canMoveRobber())
+            setMoveRobber(false);
+        else
+            throw new MoveRobberException("Player cannot move the Robber at this time!");
+    }
+
     /**
      * Determine if Player can build a road
      * Checks resource cards
@@ -160,6 +372,10 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.victoryPoints += increment;
     }
 
+    private void incrementMonuments(){
+        this.monuments++;
+    }
+
     // TODO: 1/30/2016 figure out if card methods are needed???
     /**
      * Adds a dev card to developmentCardBank
@@ -239,6 +455,14 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
 
     public void setDiscarded(boolean discarded) {
         this.discarded = discarded;
+    }
+
+    public boolean canMoveRobber() {
+        return moveRobber;
+    }
+
+    public void setMoveRobber(boolean canMoveRobber) {
+        this.moveRobber = canMoveRobber;
     }
 
     public int getMonuments() {

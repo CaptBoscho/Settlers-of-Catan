@@ -1,5 +1,8 @@
 package shared.model.player;
 
+import shared.exceptions.DevCardException;
+import shared.exceptions.MoveRobberException;
+import shared.model.game.trade.TradeType;
 import shared.model.resources.ResourceCard;
 
 import java.util.List;
@@ -8,12 +11,6 @@ import java.util.List;
  * Created by corne on 1/30/2016.
  */
 public interface IPlayer {
-
-    /*
-    CanUseYearOfPlenty, CanUseRoadBuilder,
-    CanUseSoldier, CanUseMonopoly,
-    CanUseMonument, CanPlaceRobber
-    */
 
     /**
      * Determine if Player can discard cards
@@ -30,55 +27,19 @@ public interface IPlayer {
     void discardCards(List<ResourceCard> cards); // TODO: 1/30/2016 Would be better with Card generic class
 
     /**
-     * Determine if Player can roll the dice
-     * Checks Player turn and phase of turn
-     * @return True if Player can roll the die
-     */
-    boolean CanRollNumber();
-
-    /**
-     * Action - Player rolls the dice
-     */
-    void rollNumber();
-
-    /**
      * Determine if Player can offer a trade
      * Checks Player turn, phase, and resources
      * @return True if Player can offer a trade
      */
-    boolean CanOfferTrade();
-
-    /**
-     * Action - Player offers trade
-     * @param playerId ID of Player to offer the trade
-     */
-    void offerTrade(int playerId);
+    boolean canOfferTrade();
 
     /**
      * Determine if Player can perform maritime trade
      * Checks Player turn, phase, resources, and ports
+     * @param type Type of trade
      * @return True if Player can perform a maritime trade
      */
-    boolean CanMaritimeTrade();
-
-    /**
-     * Action - Player performs maritime trade
-     * @param cardsToGive Cards to trade away
-     * @param cardsToGet Cards to trade for
-     */
-    void maritimeTrade(List<ResourceCard> cardsToGive, List<ResourceCard> cardsToGet);
-
-    /**
-     * Determine if Player can finish their turn
-     * Checks Player turn and phase
-     * @return True if Player can finish their turn
-     */
-    boolean canFinishTurn();
-
-    /**
-     * Action - Player finishes their turn
-     */
-    void finishTurn();
+    boolean canMaritimeTrade(TradeType type);
 
     /**
      * Determine if Player can buy a dev card
@@ -93,19 +54,76 @@ public interface IPlayer {
     void buyDevCard();
 
     /**
-     * Determine if Player can perform maritime trade
-     * Checks Player turn, phase, resources, and ports
-     * @return True if Player can perform a maritime trade
+     * Determine if Player can play Year of Plenty
+     * Checks Player turn, and dev cards
+     * @return True if Player can play Year of Plenty
      */
-    boolean CanMaritimeTrade();
+    boolean canUseYearOfPlenty();
 
     /**
-     * Action - Player performs maritime trade
-     * @param cardsToGive Cards to trade away
-     * @param cardsToGet Cards to trade for
+     * Action - Player plays Year of Plenty
      */
-    void maritimeTrade(List<ResourceCard> cardsToGive, List<ResourceCard> cardsToGet);
+    void useYearOfPlenty() throws DevCardException;
 
+    /**
+     * Determine if Player can play Road Builder
+     * Checks Player turn, and dev cards
+     * @return True if Player can play Road Builder
+     */
+    boolean canUseRoadBuilder();
+
+    /**
+     * Action - Player plays Road Builder
+     */
+    void useRoadBuilder() throws DevCardException;
+
+    /**
+     * Determine if Player can play Soldier
+     * Checks Player turn, and dev cards
+     * @return True if Player can play Soldier
+     */
+    boolean canUseSoldier();
+
+    /**
+     * Action - Player plays Soldier
+     */
+    void useSoldier() throws DevCardException;
+
+    /**
+     * Determine if Player can play Monopoly
+     * Checks Player turn, and dev cards
+     * @return True if Player can play Monopoly
+     */
+    boolean canUseMonopoly();
+
+    /**
+     * Action - Player plays Monopoly
+     */
+    void useMonopoly() throws DevCardException;
+
+    /**
+     * Determine if Player can play Monument
+     * Checks Player turn, and dev cards
+     * @return True if Player can play Monument
+     */
+    boolean canUseMonument();
+
+    /**
+     * Action - Player plays Monument
+     */
+    void useMonument() throws DevCardException;
+
+    /**
+     * Determine if Player can place the Robber
+     * Checks Player turn, event(ie roll 7 or play Soldier)
+     * @return True if Player can place the Robber
+     */
+    boolean canPlaceRobber();
+
+    /**
+     * Action - Player places the Robber
+     */
+    void placeRobber() throws MoveRobberException;
 
     /**
      * Determine if Player can build a road
@@ -142,5 +160,4 @@ public interface IPlayer {
      * Action - Player builds a city
      */
     void buildCity();
-
 }
