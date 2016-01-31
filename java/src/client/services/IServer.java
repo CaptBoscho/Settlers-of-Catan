@@ -148,10 +148,10 @@ public interface IServer {
     /**
      * Used to finish your turn
      *
-     * @param playerIndex Who's sending this command (0-3)
+     * @param dto The transport object that contains the information required for a player to finish their turn
      * @return The current state of the game
      */
-    public ClientModel finishTurn(int playerIndex);
+    public ClientModel finishTurn(FinishTurnDTO dto);
 
     /**
      * Used to buy a development card
@@ -182,12 +182,10 @@ public interface IServer {
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob
      *
-     * @param playerIndex Who's playing this dev card
-     * @param victimIndex The index of the player to rob
-     * @param location The new location of the robber
+     * @param dto The transport object that contains the information required to play the soldier card
      * @return The current state of the game
      */
-    public ClientModel playSoldierCard(int playerIndex, int victimIndex, HexLocation location);
+    public ClientModel playSoldierCard(PlaySoldierCardDTO dto);
 
     /**
      * Plays a 'Monopoly' card from your hand to monopolize the specified resource
@@ -237,41 +235,39 @@ public interface IServer {
     /**
      * Offers a domestic trade to another player
      *
-     * @param playerIndex Who's sending the offer
-     * @param offer What you get (+) and what you give (-)
-     * @param receiver Who you're offering the trade to (0-3)
+     * @param dto The transport object that contains the information required respond to offer a trade
      * @return The current state of the game
      */
-    public ClientModel offerTrade(int playerIndex, Trade offer, int receiver);
+    public ClientModel offerTrade(OfferTradeDTO dto);
 
     /**
      * Used to accept or reject a trade offered to the player
      *
-     * @param playerIndex Who's accepting / rejecting this trade
-     * @param willAccept Whether the player accepted the trade or not
+     * @param dto The transport object that contains the information required respond to a trade offer
      * @return The current state of the game
      */
-    public ClientModel respondToTradeOffer(int playerIndex, boolean willAccept);
+    public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto);
 
     /**
      * Used to execute a maritime trade
      *
-     * @param playerIndex Who's doing the trading
-     * @param ratio (<i>optional</i>) The ratio of the trade your doing as an integer (ie. put 3 for a 3:1 trade)
-     * @param inputResource (<i>optional</i>) What type of resource you're giving
-     * @param outputResource (<i>optional</i>) What type of resource you're getting
+     * @param dto The transport object that contains the information required to execute a maritime trade
      * @return The current state of the game
      */
-    public ClientModel maritimeTrade(int playerIndex, int ratio, String inputResource, String outputResource);
+    public ClientModel maritimeTrade(MaritimeTradeDTO dto);
 
     /**
      * Discards the specified resource cards
      *
-     * @param playerIndex Who's discarding
-     * @param resourceList
+     * @param dto The transport object that contains the information required to discard cards
      * @return The current state of the game
      */
-    public ClientModel discardCards(int playerIndex, List<ResourceType> resourceList);
+    public ClientModel discardCards(DiscardCardsDTO dto);
 
-    public boolean changeLogLevel(String logLevel);
+    /**
+     *
+     * @param dto The transport object that contains the information required to change the log level of the server
+     * @return
+     */
+    public boolean changeLogLevel(ChangeLogLevelDTO dto);
 }
