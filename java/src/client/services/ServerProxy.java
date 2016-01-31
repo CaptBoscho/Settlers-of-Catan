@@ -5,9 +5,7 @@ import shared.definitions.ClientModel;
 import shared.definitions.ResourceType;
 import shared.dto.*;
 import shared.locations.EdgeLocation;
-import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.trade.Trade;
 
 import java.util.List;
 
