@@ -351,11 +351,8 @@ public class MapComponent extends JComponent {
 	private ComponentAdapter componentAdapter = new ComponentAdapter() {
 		
 		@Override
-		public void componentResized(ComponentEvent e)
-		{
-			
+		public void componentResized(ComponentEvent e) {
 			super.componentResized(e);
-			
 			updateScale();
 			repaint();
 		}
@@ -365,15 +362,12 @@ public class MapComponent extends JComponent {
 	private MouseAdapter mouseAdapter = new MouseAdapter() {
 		
 		@Override
-		public void mouseMoved(MouseEvent e)
-		{
+		public void mouseMoved(MouseEvent e) {
 			
-			if(dropType == null)
-			{
+			if(dropType == null) {
 				return;
 			}
-			if(transform == null)
-			{
+			if(transform == null) {
 				return;
 			}
 			
@@ -384,32 +378,26 @@ public class MapComponent extends JComponent {
 			
 			Point2D mousePoint = new Point2D.Double(e.getX(), e.getY());
 			
-			try
-			{
+			try {
 				transform.inverseTransform(mousePoint, mousePoint);
-			}
-			catch(NoninvertibleTransformException ex)
-			{
+			} catch(NoninvertibleTransformException ex) {
 				ex.printStackTrace();
 				return;
 			}
 			
-			if(dropType == PieceType.ROAD)
-			{
+			if(dropType == PieceType.ROAD) {
 				
 				EdgeLocation closestEdgeLoc = null;
 				double closestDistance = 0;
 				
-				for (Map.Entry<EdgeLocation, Point2D> entry : allEdgePoints.entrySet())
-				{
+				for (Map.Entry<EdgeLocation, Point2D> entry : allEdgePoints.entrySet()) {
 					
 					EdgeLocation edgeLoc = entry.getKey();
 					Point2D edgePoint = entry.getValue();
 					
 					double distance = mousePoint.distance(edgePoint);
 					
-					if(closestEdgeLoc == null || (distance < closestDistance))
-					{
+					if(closestEdgeLoc == null || (distance < closestDistance)) {
 						closestEdgeLoc = edgeLoc;
 						closestDistance = distance;
 					}
@@ -417,24 +405,19 @@ public class MapComponent extends JComponent {
 				
 				dropEdgeLoc = closestEdgeLoc;
 				dropAllowed = getController().canPlaceRoad(dropEdgeLoc);
-			}
-			else if(dropType == PieceType.CITY
-					|| dropType == PieceType.SETTLEMENT)
-			{
+			} else if(dropType == PieceType.CITY || dropType == PieceType.SETTLEMENT) {
 				
 				VertexLocation closestVertLoc = null;
 				double closestDistance = 0;
 				
-				for (Map.Entry<VertexLocation, Point2D> entry : allVertexPoints.entrySet())
-				{
+				for (Map.Entry<VertexLocation, Point2D> entry : allVertexPoints.entrySet()) {
 					
 					VertexLocation vertLoc = entry.getKey();
 					Point2D vertPoint = entry.getValue();
 					
 					double distance = mousePoint.distance(vertPoint);
 					
-					if(closestVertLoc == null || (distance < closestDistance))
-					{
+					if(closestVertLoc == null || (distance < closestDistance)) {
 						closestVertLoc = vertLoc;
 						closestDistance = distance;
 					}
@@ -445,32 +428,24 @@ public class MapComponent extends JComponent {
 				if(dropType == PieceType.CITY)
 				{
 					dropAllowed = getController().canPlaceCity(dropVertLoc);
-				}
-				else if(dropType == PieceType.SETTLEMENT)
-				{
+				} else if(dropType == PieceType.SETTLEMENT) {
 					dropAllowed = getController().canPlaceSettlement(dropVertLoc);
-				}
-				else
-				{
+				} else {
 					assert false;
 				}
-			}
-			else if(dropType == PieceType.ROBBER)
-			{
+			} else if(dropType == PieceType.ROBBER) {
 				
 				HexLocation closestHexLoc = null;
 				double closestDistance = 0;
 				
-				for (Map.Entry<HexLocation, Point2D> entry : allHexPoints.entrySet())
-				{
+				for (Map.Entry<HexLocation, Point2D> entry : allHexPoints.entrySet()) {
 					
 					HexLocation hexLoc = entry.getKey();
 					Point2D hexPoint = entry.getValue();
 					
 					double distance = mousePoint.distance(hexPoint);
 					
-					if(closestHexLoc == null || (distance < closestDistance))
-					{
+					if(closestHexLoc == null || (distance < closestDistance)) {
 						closestHexLoc = hexLoc;
 						closestDistance = distance;
 					}
@@ -478,9 +453,7 @@ public class MapComponent extends JComponent {
 				
 				dropHexLoc = closestHexLoc;
 				dropAllowed = getController().canPlaceRobber(dropHexLoc);
-			}
-			else
-			{
+			} else {
 				assert false;
 			}
 			
@@ -924,6 +897,4 @@ public class MapComponent extends JComponent {
 	private static Point2D add(Point2D pt1, Point2D pt2) {
 		return new Point2D.Double((int)(pt1.getX() + pt2.getX()), (int)(pt1.getY() + pt2.getY()));
 	}
-	
 }
-

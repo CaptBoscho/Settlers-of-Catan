@@ -251,8 +251,7 @@ public class LoginView extends OverlayView implements ILoginView {
         }
     }
 
-    private class RegisterPanel extends JPanel
-    {
+    private class RegisterPanel extends JPanel {
 
         private JLabel lblRegister = null;
         private JLabel lblUsername = null;

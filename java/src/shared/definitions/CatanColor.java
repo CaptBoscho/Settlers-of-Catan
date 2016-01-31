@@ -19,9 +19,31 @@ public enum CatanColor {
 		WHITE.color = new Color(223, 223, 223);
 		BROWN.color = new Color(161, 143, 112);
 	}
+
+	public static CatanColor translateFromString(String col) {
+        switch(col) {
+            case "red":
+                return CatanColor.RED;
+            case "blue":
+                return CatanColor.BLUE;
+            case "green":
+                return CatanColor.GREEN;
+            case "brown":
+                return CatanColor.BROWN;
+            case "orange":
+                return CatanColor.ORANGE;
+            case "puce":
+                return CatanColor.PUCE;
+            case "purple":
+                return CatanColor.PURPLE;
+            case "white":
+                return CatanColor.WHITE;
+        }
+
+        return null;
+    }
 	
-	public Color getJavaColor()
-	{
+	public Color getJavaColor() {
 		return color;
 	}
 }

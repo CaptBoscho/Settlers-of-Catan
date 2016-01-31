@@ -15,9 +15,6 @@ import javax.swing.JScrollPane;
 public class ChatView extends PanelView implements IChatView {
     
     private LogComponent chatPanel;
-    private JScrollPane chatScrollPane;
-    private JPanel inputPanel;
-    private JButton sendChatBtn;
     private PlaceholderTextField chatTextInput;
 
     /**
@@ -26,9 +23,9 @@ public class ChatView extends PanelView implements IChatView {
     public ChatView() {
         // Create the components
         chatPanel = new LogComponent();
-        chatScrollPane = new JScrollPane(chatPanel);
-        inputPanel = new JPanel();
-        sendChatBtn = new JButton("Send");
+        JScrollPane chatScrollPane = new JScrollPane(chatPanel);
+        JPanel inputPanel = new JPanel();
+        JButton sendChatBtn = new JButton("Send");
         chatTextInput = new PlaceholderTextField();
         chatTextInput.setPlaceholder("Send a message!");
         chatTextInput.setPreferredSize(new Dimension(260, 20));

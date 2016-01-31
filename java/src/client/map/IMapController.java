@@ -8,8 +8,7 @@ import shared.locations.*;
 /**
  * Interface for the map controller
  */
-public interface IMapController extends IController
-{
+public interface IMapController extends IController {
 	
 	/**
 	 * This method is called whenever the user is trying to place a road on the
@@ -137,4 +136,3 @@ public interface IMapController extends IController
 	 */
 	void robPlayer(RobPlayerInfo victim);
 }
-
