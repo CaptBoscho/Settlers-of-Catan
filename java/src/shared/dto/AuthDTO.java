@@ -13,7 +13,7 @@ public class AuthDTO implements JsonSerializable{
     private String username;
     private String password;
 
-    AuthDTO(String username, String password) {
+    public AuthDTO(String username, String password) {
         assert username != null;
         assert password != null;
         this.username = username;

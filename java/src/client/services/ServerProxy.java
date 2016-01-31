@@ -34,8 +34,9 @@ public class ServerProxy implements IServer {
         assert auth != null;
         String url = Utils.buildUrl(this.host, this.port) + "/user/login";
         String result = Utils.sendPost(url, auth.toJSON());
+        System.out.println(result);
         assert result != null;
-        return result.equals("false");
+        return result.equals("Success");
     }
 
     /**
@@ -49,8 +50,9 @@ public class ServerProxy implements IServer {
         assert auth != null;
         String url = Utils.buildUrl(this.host, this.port) + "/user/register";
         String result = Utils.sendPost(url, auth.toJSON());
+        System.out.println(result);
         assert result != null;
-        return result.equals("false");
+        return result.equals("Success");
     }
 
     /**

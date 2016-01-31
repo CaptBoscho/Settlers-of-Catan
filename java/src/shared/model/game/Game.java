@@ -29,7 +29,7 @@ public class Game {
     public Game() {
         this.dice = new Dice();
         this.map = new Map();
-        this.turnTracker = new TurnTracker(0,0);
+        this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager();
@@ -107,7 +107,7 @@ public class Game {
         int roll = dice.roll();
 
         //Pass resources
-        map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
+        //map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
 
         //Trade Phase
         this.trade();
