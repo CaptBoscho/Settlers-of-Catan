@@ -65,8 +65,9 @@ public class ServerProxy implements IServer {
         String url = Utils.buildUrl(this.host, this.port) + "/games/list";
         String result = Utils.sendGet(url);
         assert result != null;
-        // TODO - this is a JSON string that should build into a list of GameInfo items
-        return null;
+        GameInfoListDTO list = new GameInfoListDTO(result);
+        System.out.println(result);
+        return list.getList();
     }
 
     /**

@@ -1,6 +1,7 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
+import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
@@ -42,7 +43,40 @@ public class Player implements Comparable<Player>{
      * @param json The JSON being used to construct this object
      */
     public Player(JsonObject json) {
+        switch(json.get("color").getAsString()) {
+            case "red":
+                this.color = CatanColor.RED;
+                break;
+            case "blue":
+                this.color = CatanColor.BLUE;
+                break;
+            case "green":
+                this.color = CatanColor.GREEN;
+                break;
+            case "brown":
+                this.color = CatanColor.BROWN;
+                break;
+            case "orange":
+                this.color = CatanColor.ORANGE;
+                break;
+            case "puce":
+                this.color = CatanColor.PUCE;
+                break;
+            case "purple":
+                this.color = CatanColor.PURPLE;
+                break;
+            case "white":
+                this.color = CatanColor.WHITE;
+                break;
+        }
 
+        try {
+            this.name = new Name(json.get("name").getAsString());
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
+
+        this._id = json.get("id").getAsInt();
     }
 
     /**
@@ -54,6 +88,8 @@ public class Player implements Comparable<Player>{
      * @throws InvalidPlayerException
      */
     public Player(int points, CatanColor color, int index, Name name) throws InvalidPlayerException {
+        assert points > 0;
+        assert name != null;
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = new ResourceCardBank(this);

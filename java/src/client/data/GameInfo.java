@@ -53,4 +53,9 @@ public class GameInfo {
 	{
 		return Collections.unmodifiableList(players);
 	}
+
+	@Override
+    public String toString() {
+        return this.title;
+    }
 }
