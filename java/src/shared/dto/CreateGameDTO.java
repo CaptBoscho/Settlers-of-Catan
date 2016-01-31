@@ -16,7 +16,7 @@ public class CreateGameDTO implements JsonSerializable{
     private String name;
 
     public CreateGameDTO(boolean rt, boolean rn, boolean rp, String n) {
-        assert name != null;
+        assert n != null;
         this.randomTiles = rt;
         this.randomNumbers = rn;
         this.randomPorts = rp;
@@ -30,6 +30,11 @@ public class CreateGameDTO implements JsonSerializable{
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("randomTiles", this.randomTiles);
+        obj.addProperty("randomNumbers", this.randomNumbers);
+        obj.addProperty("randomPorts", this.randomPorts);
+        obj.addProperty("name", this.name);
+        return obj;
     }
 }

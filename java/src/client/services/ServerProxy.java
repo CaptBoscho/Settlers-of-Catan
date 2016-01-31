@@ -66,7 +66,7 @@ public class ServerProxy implements IServer {
         String result = Utils.sendGet(url);
         assert result != null;
         GameInfoListDTO list = new GameInfoListDTO(result);
-        System.out.println(result);
+        // System.out.println(result);
         return list.getList();
     }
 
@@ -78,20 +78,26 @@ public class ServerProxy implements IServer {
      */
     @Override
     public GameInfo createNewGame(CreateGameDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/create";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        return new GameInfo(result);
     }
 
     /**
      * Adds (or re-adds) the player to the specified game, and sets their catan.game HTTP cookie
+     * TODO - requires HTTP cookie
      *
      * @param dto The transport object that contains the information required to join a game
      */
     @Override
     public void joinGame(JoinGameDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/join";
         String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        System.out.println(result);
     }
 
     /**
@@ -100,8 +106,12 @@ public class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to save a game
      */
     @Override
-    public void saveGame(SaveGameDTO dto) {
+    public boolean saveGame(SaveGameDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/save";
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        return result.equals("Success");
     }
 
     /**
@@ -110,8 +120,13 @@ public class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to load a game
      */
     @Override
-    public void loadGame(LoadGameDTO dto) {
+    public boolean loadGame(LoadGameDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/load";
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        System.out.println(result);
+        return result.equals("Success");
     }
 
     /**
@@ -122,6 +137,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel getCurrentModel(GetCurrentModelDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/model";
         String result = Utils.sendGet(url);
         assert result != null;
@@ -135,6 +151,7 @@ public class ServerProxy implements IServer {
     @Override
     public void resetCurrentGame() {
         String url = Utils.buildUrl(this.host, this.port) + "/game/reset";
+        assert url.contains(this.host);
     }
 
     /**
@@ -154,6 +171,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public void executeGameCommands(List<String> gameCommands) {
+        assert gameCommands != null;
+        assert gameCommands.size() > 0;
         String url = Utils.buildUrl(this.host, this.port) + "/game/commands";
     }
 
@@ -214,6 +233,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel robPlayer(RobPlayerDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/robPlayer";
         return null;
     }
@@ -226,6 +246,7 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel finishTurn(FinishTurnDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/finishTurn";
         return null;
     }

@@ -23,6 +23,8 @@ public class LoadGameDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("name", this.name);
+        return obj;
     }
 }

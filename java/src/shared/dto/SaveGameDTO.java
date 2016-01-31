@@ -26,6 +26,9 @@ public class SaveGameDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", this.gameId);
+        obj.addProperty("name", this.name);
+        return obj;
     }
 }

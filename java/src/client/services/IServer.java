@@ -65,14 +65,14 @@ public interface IServer {
      *
      * @param dto The transport object that contains the information required to save a game
      */
-    public void saveGame(SaveGameDTO dto);
+    public boolean saveGame(SaveGameDTO dto);
 
     /**
      * Loads a previously saved game file to restore the state of a game with a POST request
      *
      * @param dto The transport object that contains the information required to save a game
      */
-    public void loadGame(LoadGameDTO dto);
+    public boolean loadGame(LoadGameDTO dto);
 
     /**
      * Returns the current state of the game in JSON format with a GET request

@@ -1,5 +1,8 @@
 package client.data;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.util.*;
 
 /**
@@ -21,8 +24,16 @@ public class GameInfo {
 	public GameInfo() {
 		setId(-1);
 		setTitle("");
-		players = new ArrayList<PlayerInfo>();
+		players = new ArrayList<>();
 	}
+
+    public GameInfo(String json) {
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(json).getAsJsonObject();
+        this.id = obj.get("id").getAsInt();
+        this.title = obj.get("title").getAsString();
+        this.players = new ArrayList<>();
+    }
 	
 	public int getId()
 	{

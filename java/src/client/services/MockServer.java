@@ -73,8 +73,8 @@ public class MockServer implements IServer {
      * @param dto The transport object that contains the information required to save a game
      */
     @Override
-    public void saveGame(SaveGameDTO dto) {
-
+    public boolean saveGame(SaveGameDTO dto) {
+        return true;
     }
 
     /**
@@ -83,8 +83,8 @@ public class MockServer implements IServer {
      * @param dto The transport object that contains the information required to save a game
      */
     @Override
-    public void loadGame(LoadGameDTO dto) {
-
+    public boolean loadGame(LoadGameDTO dto) {
+        return true;
     }
 
     /**
