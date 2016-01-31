@@ -8,8 +8,8 @@ import shared.model.JsonSerializable;
  */
 public class TradeOfferResponseDTO implements JsonSerializable {
 
-    int playerIndex;
-    boolean willAccept;
+    private int playerIndex;
+    private boolean willAccept;
 
     /**
      *

@@ -8,7 +8,7 @@ import shared.model.JsonSerializable;
  */
 public class ChangeLogLevelDTO implements JsonSerializable {
 
-    public String logLevel;
+    private String logLevel;
 
     public ChangeLogLevelDTO(String logLevel) {
         assert logLevel != null;

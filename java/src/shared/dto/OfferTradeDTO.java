@@ -9,9 +9,9 @@ import shared.model.game.trade.Trade;
  */
 public class OfferTradeDTO implements JsonSerializable {
 
-    int playerIndex;
-    Trade offer;
-    int receiver;
+    private int playerIndex;
+    private Trade offer;
+    private int receiver;
 
     /**
      *

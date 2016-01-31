@@ -8,7 +8,7 @@ import shared.model.JsonSerializable;
  */
 public class FinishTurnDTO implements JsonSerializable {
 
-    int playerIndex;
+    private int playerIndex;
 
     /**
      *

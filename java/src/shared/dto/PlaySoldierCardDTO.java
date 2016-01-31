@@ -9,9 +9,9 @@ import shared.model.JsonSerializable;
  */
 public class PlaySoldierCardDTO implements JsonSerializable {
 
-    int playerIndex;
-    int victimIndex;
-    HexLocation location;
+    private int playerIndex;
+    private int victimIndex;
+    private HexLocation location;
 
     /**
      *

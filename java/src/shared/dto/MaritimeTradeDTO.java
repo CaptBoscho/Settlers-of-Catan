@@ -8,10 +8,10 @@ import shared.model.JsonSerializable;
  */
 public class MaritimeTradeDTO implements JsonSerializable {
 
-    int playerIndex;
-    int ratio;
-    String inputResource;
-    String outputResource;
+    private int playerIndex;
+    private int ratio;
+    private String inputResource;
+    private String outputResource;
 
     /**
      *

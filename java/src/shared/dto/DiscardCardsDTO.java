@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class DiscardCardsDTO implements JsonSerializable {
 
-    int playerIndex;
-    List<ResourceType> resourceList;
+    private int playerIndex;
+    private List<ResourceType> resourceList;
 
     /**
      *
