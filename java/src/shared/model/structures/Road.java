@@ -18,6 +18,14 @@ public class Road implements JsonSerializable {
 
     }
 
+    public Road(int playerID) {
+        this.playerID = playerID;
+    }
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
     /**
      * Converts the object to JSON
      *
