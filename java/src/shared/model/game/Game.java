@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import shared.definitions.PortType;
 import shared.exceptions.FailedToRandomizeException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * game class representing a Catan game
  */
-public class Game {
+public class Game implements IGame {
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -37,26 +38,224 @@ public class Game {
         this.developmentCardBank = new DevelopmentCardBank(this);
     }
 
+
     /**
-     * Initialize a new game
-     * @param players List of players for this game
+     * Starts the game, returns the Id for the first player
+     *
+     * @param players
+     * @return Id of first player
      */
-    public void initializeGame(List<Player> players) {
-        //Add the new players to the player manager
+    public int initializeGame(List<Player> players) {
+        //Add players to PlayerManager
+        playerManager.
 
-        //Shuffle the players' turn order
-        this.randomizePlayers();
+        //Shuffle Player Turn Order
 
-        //Initiate picking of settlement placements
-        this.placeSettlements();
-
-        //Give players their resources
-        //this.map.giveInitialResources()
-
-        //Start the game
-        this.startGame();
     }
 
+    /**
+     * returns the playerID for whose turn it is
+     *
+     * @return
+     */
+    @Override
+    public int getCurrentTurn() {
+        return 0;
+    }
+
+    /**
+     * returns boolean value denoting if the player can build a
+     * road (just checks cards really)
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuildRoad(int playerID) {
+        return false;
+    }
+
+    /**
+     * builds a road for hte player
+     *
+     * @param playerID
+     */
+    @Override
+    public void buildRoad(int playerID) {
+
+    }
+
+    /**
+     * checks if the player has the cards to build a settlement
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuildSettlement(int playerID) {
+        return false;
+    }
+
+    /**
+     * builds a settlement for this player
+     *
+     * @param playerID
+     */
+    @Override
+    public void buildSettlement(int playerID) {
+
+    }
+
+    /**
+     * checks if the player has the cards to ubild a city
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuildCity(int playerID) {
+        return false;
+    }
+
+    /**
+     * builds a city for this player
+     *
+     * @param playerID
+     */
+    @Override
+    public void buildCity(int playerID) {
+
+    }
+
+    /**
+     * returns the value of how many roads is the LongestRoad
+     *
+     * @return
+     */
+    @Override
+    public int currentLongestRoadSize() {
+        return 0;
+    }
+
+    /**
+     * returns the playerID of who owns the current longest road
+     *
+     * @return
+     */
+    @Override
+    public int currentLongestRoadPlayer() {
+        return 0;
+    }
+
+    /**
+     * deducts Victory Points from playerIDOld
+     * adds Victory Points to playerIDNew
+     * Updates LongestRoad for playerIDNew and roadSize
+     *
+     * @param playerIDOld
+     * @param playerIDNew
+     * @param roadSize
+     */
+    @Override
+    public void newLongestRoad(int playerIDOld, int playerIDNew, int roadSize) {
+
+    }
+
+    /**
+     * checks if the player has the cards to buy a DevelopmentCard
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuyDevelopmentCard(int playerID) {
+        return false;
+    }
+
+    /**
+     * Buys a new developmentCard for the player
+     * deducts cards
+     * adds new developmentCard to his DCBank
+     *
+     * @param playerID
+     */
+    @Override
+    public DevCardType buyDevelopmentCard(int playerID) {
+        return null;
+    }
+
+    /**
+     * checks if the player is in the trade sequence of his turn
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canTrade(int playerID) {
+        return false;
+    }
+
+    /**
+     * checks if that player has the card needed for that port's trade
+     *
+     * @param playerID
+     * @param port
+     * @return
+     */
+    @Override
+    public boolean canMaritimeTrade(int playerID, PortType port) {
+        return false;
+    }
+
+    /**
+     * effectuates a trade based on the port type
+     *
+     * @param playerID
+     * @param port
+     */
+    @Override
+    public void maritimeTrade(int playerID, PortType port) {
+
+    }
+
+    /**
+     * checks if player can play that dc
+     *
+     * @param playerID
+     * @param dc
+     * @return
+     */
+    @Override
+    public boolean canPlayDevelopmentCard(int playerID, DevCardType dc) {
+        return false;
+    }
+
+    /**
+     * plays that development card
+     *
+     * @param playerID
+     * @param dc
+     */
+    public void playDevelopmentCard(int playerID, DevCardType dc) {
+
+    }
+
+    /**
+     * effectuates a trade between playerOneID and playerTwoID
+     * trades the cards in the two lists
+     *
+     * @param playerOneID
+     * @param onecards
+     * @param playerTwoID
+     * @param twocards
+     */
+    public void tradePlayer(int playerOneID, List<ResourceType> onecards, int playerTwoID, List<ResourceType> twocards) {
+
+    }
+
+    /*======================================================
+    * Private - Helper Methods
+    * ======================================================*/
     /**
      * Randomize the players' turn order
      */
@@ -64,207 +263,7 @@ public class Game {
         try{
             playerManager.randomizePlayers();
         } catch(Exception e) {
-
+            //throw new
         }
-    }
-
-    /**
-     * Place settlements phase of setup
-     */
-    private void placeSettlements() {
-        //First phase order
-        for(Player player : playerManager.getPlayers()) {
-            //Set player turn
-        }
-
-        //Second phase order
-        for(int i = playerManager.getPlayers().size() - 1; i >= 0; i--) {
-            //Set player turn
-        }
-    }
-
-    /**
-     * Starts the game - after setup
-     * @return id of winning player
-     */
-    private int startGame(){
-        return 0;
-    }
-
-    /**
-     * Handles a player's turn
-     * @param player Player who's turn it is
-     */
-    private void playTurn(Player player){
-        //Dev Card - technically one card can be played at anytime during a player's turn
-//        try {
-//            this.playDevCard(player.getDevelopmentCardBank());
-//        }catch(Exception e){
-//
-//        }
-
-        //Roll dice
-        int roll = dice.roll();
-
-        //Pass resources
-        map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
-
-        //Trade Phase
-        this.trade();
-
-        //Build Phase
-        this.build(player.getStructureBank());
-    }
-
-    /**
-     * Initializes playing of a development card
-     * @param devCrdBnk Development Card Bank from which to play a card
-     * @throws Exception
-     */
-    private void playDevCard(DevelopmentCardBank devCrdBnk) throws Exception{
-        //Init play of dev card
-    }
-
-    /**
-     * Trade resources between players - Initializes phase
-     */
-    private void trade() {
-
-    }
-
-    /**
-     * Build a building = Initializes phase
-     * @param strBnk
-     */
-    private void build(StructureBank strBnk) {
-
-    }
-
-    /**
-     * Gets the player with the longest road
-     * @return Player with longest road or null if no player has it
-     */
-    public Player getPlayerWithLongestRoad() {
-        if(this.longestRoadCard.getOwner() != -1){
-            try {
-                return playerManager.getPlayerByIndex(this.longestRoadCard.getOwner());
-            } catch(Exception e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Gets the player with the largest army
-     * @return Player with largest army or null if no player has it
-     */
-    public Player getPlayerWithLargestArmy() {
-        if(this.largestArmyCard.getOwner() != -1){
-            try {
-                return playerManager.getPlayerByIndex(this.largestArmyCard.getOwner());
-            } catch(Exception e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Get who's turn it is (by index)
-     * @return index of the current player
-     */
-    public int currentTurn(){
-        return turnTracker.getCurrentTurn();
-    }
-
-    /**
-     * Boolean representing whether or not it's the specified player's turn
-     * @param index position of player
-     * @return True if it's the player's turn
-     */
-    public boolean isPlayerTurn(int index){
-        return currentTurn() == index ? true : false;
-    }
-
-    //Game Can Do Methods - Maybe move the actual calculations to the player manager???
-    /**
-     * Boolean representing whether or not the player can take their turn
-     * @param index position of the player
-     * @return True if the player can play
-     */
-    public boolean canPlay(int index){
-        return isPlayerTurn(index);
-    }
-
-    /**
-     * Boolean representing whether the two players can trade
-     * @param playerOne Player that wants to trade
-     * @param playerTwo Player that wants to trade
-     * @return True if the players can trade
-     */
-    public boolean canTrade(int playerOne, int playerTwo){
-        return isPlayerTurn(playerOne) || isPlayerTurn(playerTwo);
-    }
-
-    /*===========================================
-                   Getters/Setters
-     ============================================*/
-    public Dice getDice() {
-        return dice;
-    }
-
-    public void setDice(Dice dice) {
-        this.dice = dice;
-    }
-
-    public Map getMap() {
-        return map;
-    }
-
-    public void setMap(Map map) {
-        this.map = map;
-    }
-
-    public LongestRoad getLongestRoadCard() {
-        return longestRoadCard;
-    }
-
-    public void setLongestRoadCard(LongestRoad longestRoadCard) {
-        this.longestRoadCard = longestRoadCard;
-    }
-
-    public LargestArmy getLargestArmyCard() {
-        return largestArmyCard;
-    }
-
-    public void setLargestArmyCard(LargestArmy largestArmyCard) {
-        this.largestArmyCard = largestArmyCard;
-    }
-
-    public PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
-    public void setPlayerManager(PlayerManager playerManager) {
-        this.playerManager = playerManager;
-    }
-
-    public ResourceCardBank getResourceCardBank() {
-        return resourceCardBank;
-    }
-
-    public void setResourceCardBank(ResourceCardBank resourceCardBank) {
-        this.resourceCardBank = resourceCardBank;
-    }
-
-    public DevelopmentCardBank getDevelopmentCardBank() {
-        return developmentCardBank;
-    }
-
-    public void setDevelopmentCardBank(DevelopmentCardBank developmentCardBank) {
-        this.developmentCardBank = developmentCardBank;
     }
 }
