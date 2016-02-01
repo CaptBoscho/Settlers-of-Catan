@@ -1,7 +1,6 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
-
 import shared.exceptions.DevCardException;
 import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
@@ -134,7 +133,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.moveRobber = canMoveRobber;
     }
 
-    //IPlayer Interface Methods
+    //IPlayer Interface Methods - Can Do & Do
     //========================================================
 
     /**
@@ -420,11 +419,14 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.victoryPoints += increment;
     }
 
+    /**
+     * Increments the player's monuments
+     * - points are added when the player plays a monument card
+     */
     private void incrementMonuments(){
         this.monuments++;
     }
 
-    // TODO: 1/30/2016 figure out if card methods are needed???
     /**
      * Adds a dev card to developmentCardBank
      *

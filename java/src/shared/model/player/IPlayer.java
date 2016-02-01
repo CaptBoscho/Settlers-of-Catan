@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Created by corne on 1/30/2016.
+ * Player Interface - has required method stubs
  */
 public interface IPlayer {
 
