@@ -1,6 +1,7 @@
 package shared.model.bank;
 
 import shared.definitions.ResourceType;
+import shared.model.game.trade.TradeType;
 import shared.model.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
@@ -22,7 +23,7 @@ public interface IResourceCardBank {
 
     boolean canOfferTrade();
 
-    boolean canMaritimeTrade(ResourceType type) throws InsufficientResourcesException, InvalidTypeException;
+    boolean canMaritimeTrade(TradeType type) throws InsufficientResourcesException, InvalidTypeException;
 
     boolean canBuyDevCard();
 
@@ -39,4 +40,6 @@ public interface IResourceCardBank {
     boolean canBuildCity();
 
     void buildCity() throws InsufficientResourcesException;
+
+    boolean canDiscardCards();
 }

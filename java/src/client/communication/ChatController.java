@@ -9,7 +9,6 @@ import client.base.*;
 public class ChatController extends Controller implements IChatController {
 
 	public ChatController(IChatView view) {
-		
 		super(view);
 	}
 

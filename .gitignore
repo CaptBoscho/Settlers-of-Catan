@@ -13,3 +13,5 @@ hs_err_pid*
 
 # IDE-specific settings
 .idea/
+
+demo/saves/

@@ -34,15 +34,13 @@ public class LoginView extends OverlayView implements ILoginView {
 
     private final int LABEL_TEXT_SIZE = 40;
     private final float SMALL_LABEL_TEXT_SIZE = 16.0F;
-    private final float BIG_LABEL_TEXT_SIZE = LABEL_TEXT_SIZE * 1.5F;
     private final int BUTTON_TEXT_SIZE = 28;
-    private final int BORDER_WIDTH = 10;
 
     private SignInPanel signInPanel = null;
     private RegisterPanel registerPanel = null;
 
     public static void main(String[] args) {
-        JFrame jf = new JFrame();
+        final JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel mainPanel = new JPanel();
@@ -57,6 +55,7 @@ public class LoginView extends OverlayView implements ILoginView {
 
         this.setOpaque(true);
         this.setLayout(new BorderLayout());
+        final int BORDER_WIDTH = 10;
         this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
 //
 //        label = new JLabel("Login View");
@@ -100,6 +99,7 @@ public class LoginView extends OverlayView implements ILoginView {
         //Create the title label, with the large font.
         JLabel lblTitle = new JLabel("<html><body>Settlers<br>of Catan</body></html>");
         Font labelFont = lblTitle.getFont();
+        final float BIG_LABEL_TEXT_SIZE = LABEL_TEXT_SIZE * 1.5F;
         labelFont = labelFont.deriveFont(labelFont.getStyle(), BIG_LABEL_TEXT_SIZE);
         lblTitle.setFont(labelFont);
 
@@ -214,7 +214,7 @@ public class LoginView extends OverlayView implements ILoginView {
 
             this.add(Box.createVerticalGlue());
 
-            JPanel internalInputBox = new JPanel(new GridLayout(4, 1));
+            final JPanel internalInputBox = new JPanel(new GridLayout(4, 1));
             //Change the font on the user entry labels.
             Font smallTextFont = lblUsername.getFont();
             smallTextFont = smallTextFont.deriveFont(smallTextFont.getStyle(), SMALL_LABEL_TEXT_SIZE);
@@ -251,8 +251,7 @@ public class LoginView extends OverlayView implements ILoginView {
         }
     }
 
-    private class RegisterPanel extends JPanel
-    {
+    private class RegisterPanel extends JPanel {
 
         private JLabel lblRegister = null;
         private JLabel lblUsername = null;

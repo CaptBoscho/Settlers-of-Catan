@@ -1,5 +1,6 @@
 package shared.model.map;
 
+import shared.definitions.*;
 import shared.locations.VertexLocation;
 import shared.model.structures.Building;
 
@@ -11,7 +12,7 @@ import shared.model.structures.Building;
  * connected to the vertex, then it is initialized
  * as null.
  *
- * @author Corbin Byers
+ * @author Joel Bradley
  */
 public class Vertex {
 
@@ -19,37 +20,61 @@ public class Vertex {
     private Building building;
     private Port port;
 
-    public Vertex(VertexLocation loc){
-        vertexLoc = loc;
+    public Vertex(VertexLocation vertexLoc) {
+        this.vertexLoc = vertexLoc;
         building = null;
         port = null;
     }
 
     /**
-     * Tells if there is a building
-     * @return
+     * Informs if the vertex has a Building
+     * @return boolean
      */
-    public Building existsBuilding(){
-        return null;
+    public boolean hasBuilding() {
+        if(building != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building){
+        this.building = building;
     }
 
     /**
-     * Checks to see if there is a building on the vertex.
-     * If not, then it checks the nearest 3 vertices and checks
-     * if there exists buildings on them, if they don't then
-     * it can add a building.
-     *
-     * @return A boolean value indicating if this vertex can have a building added to it
+     * Informs if the vertex has a port
+     * @return boolean
      */
-    public boolean canAddBuilding(){
-        return true;
+    public boolean hasPort() {
+        if(port != null) {
+            return true;
+        }
+        return false;
     }
 
-    public void setBuilding(Building b){
-
+    public Port getPort() {
+        return port;
     }
 
-    public void setPort(Port p){
+    public void setPort(Port port){
+        this.port = port;
+    }
 
+    public VertexLocation getVertexLocation() {
+        return vertexLoc;
+    }
+
+    /**
+     * Gives resources to a building
+     * @param resourceType
+     */
+    public void giveResources(ResourceType resourceType) {
+        if(hasBuilding()) {
+            building.addResources(resourceType);
+        }
     }
 }

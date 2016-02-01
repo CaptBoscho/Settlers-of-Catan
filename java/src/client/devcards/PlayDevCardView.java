@@ -26,7 +26,6 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 	
 	private final String DEFAULT_USE_BUTTON_LABEL = "select a development card to use";
 
-	private JLabel title;
 	private DevelopmentCardChooser devCards;
 	private ResourceCardChooser resCard1;
 	private ResourceCardChooser resCard2;
@@ -43,7 +42,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 
 		// Title Panel (immutable)
 		JPanel titlePanel = new JPanel(new BorderLayout());
-		title = new JLabel("Development Cards");
+		JLabel title = new JLabel("Development Cards");
 		FontUtils.setFont(title, LABEL_TEXT_SIZE);
 		titlePanel.add(title, BorderLayout.WEST);
 		this.add(titlePanel, BorderLayout.NORTH);
@@ -150,13 +149,11 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 			
 			if (e.getSource() == cancelButton) {
 				getController().cancelPlayCard();
-			} 
-			else if (e.getSource() == useButton) {
+			} else if (e.getSource() == useButton) {
 				if (devCards.getSelectedDevCard() == DevCardType.MONOPOLY) {					
 					closeModal();
 					getController().playMonopolyCard(resCard1.getSelectedResourceCard());
-				}
-				else if (devCards.getSelectedDevCard() == DevCardType.YEAR_OF_PLENTY) {
+				} else if (devCards.getSelectedDevCard() == DevCardType.YEAR_OF_PLENTY) {
 					closeModal();
 					getController().playYearOfPlentyCard(resCard1.getSelectedResourceCard(),
 														resCard2.getSelectedResourceCard());

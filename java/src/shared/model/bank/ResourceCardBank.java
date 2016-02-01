@@ -1,9 +1,9 @@
 package shared.model.bank;
 
 import com.google.gson.JsonObject;
-import com.google.gson.internal.bind.CollectionTypeAdapterFactory;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
+import shared.model.game.trade.TradeType;
 import shared.model.resources.*;
 
 import javax.naming.InsufficientResourcesException;
@@ -246,18 +246,20 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
     }
 
     @Override
-    public boolean canMaritimeTrade(ResourceType type) throws InsufficientResourcesException, InvalidTypeException {
+    public boolean canMaritimeTrade(TradeType type) throws InsufficientResourcesException, InvalidTypeException {
         switch (type) {
-            case BRICK:
-                return (getNumberOfBrick() >= 3);
-            case ORE:
-                return (getNumberOfOre() >= 3);
-            case SHEEP:
-                return (getNumberOfSheep() >= 3);
-            case WHEAT:
-                return (getNumberOfWheat() >= 3);
-            case WOOD:
-                return (getNumberOfWood() >=3);
+            case BRICK_PORT:
+                return (getNumberOfBrick() >= 2);
+            case ORE_PORT:
+                return (getNumberOfOre() >= 2);
+            case SHEEP_PORT:
+                return (getNumberOfSheep() >= 2);
+            case WHEAT_PORT:
+                return (getNumberOfWheat() >= 2);
+            case WOOD_PORT:
+                return (getNumberOfWood() >= 2);
+            case THREE_ONE_PORT:
+                return (getNumberOfBrick() >= 3 || getNumberOfOre() >= 3 || getNumberOfWheat() >= 3 || getNumberOfWood() >= 3 || getNumberOfSheep() >= 3);
             default:
                 throw new InvalidTypeException("The given type is invalid");
         }
@@ -339,6 +341,11 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
         } else {
             throw new InsufficientResourcesException("Not enough resources to build city");
         }
+    }
+
+    @Override
+    public boolean canDiscardCards() {
+        return (size() > 7);
     }
 
     /**

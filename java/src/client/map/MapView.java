@@ -20,9 +20,7 @@ public class MapView extends PanelView implements IMapView {
 	
 	public MapView() {
 		this.setLayout(new BorderLayout());
-		
 		map = new MapComponent();
-		
 		this.add(map, BorderLayout.CENTER);
 	}
 	
@@ -92,6 +90,7 @@ public class MapView extends PanelView implements IMapView {
 		
 		@Override
 		public IView getView() {
+            // TODO -- implement
 			assert false;
 			return null;
 		}
@@ -156,20 +155,20 @@ public class MapView extends PanelView implements IMapView {
 		}
 		
 		@Override
-		public void playSoldierCard()
-		{
+		public void playSoldierCard() {
+			// TODO -- implement
 			assert false;
 		}
 		
 		@Override
-		public void playRoadBuildingCard()
-		{
+		public void playRoadBuildingCard() {
+            // TODO -- implement
 			assert false;
 		}
 		
 		@Override
-		public void robPlayer(RobPlayerInfo victim)
-		{
+		public void robPlayer(RobPlayerInfo victim) {
+            // TODO -- implement
 			assert false;
 		}
 		
@@ -268,6 +267,4 @@ public class MapView extends PanelView implements IMapView {
 			}
 		}
 	}
-	
 }
-

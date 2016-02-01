@@ -7,32 +7,40 @@ import shared.model.structures.Road;
  * as a road object. If there isn't a road on the edge
  * then the road object is set to null.
  *
- * @author Corbin Byers
+ * @author Joel Bradley
  */
 public class Edge {
 
     private EdgeLocation edgeLoc;
     private Road road;
 
-    public Edge(EdgeLocation l){
-        edgeLoc = l;
+    /**
+     * Default constructor for an edge
+     * @param edgeLoc EdgeLocation
+     */
+    public Edge(EdgeLocation edgeLoc){
+        this.edgeLoc = edgeLoc;
         road = null;
     }
 
-    public void setRoad(Road r){
-        road = r;
+    /**
+     * Informs if the edge has a Road
+     * @return boolean
+     */
+    public boolean hasRoad() {
+        if(road != null) {
+            return true;
+        }
+        return false;
     }
 
-
-    /**
-     * The existsRoad() function will return the road
-     * associated with this edge location. If there is
-     * no road, then it will return a null value.
-     * @return
-     */
-    /*public Road existsRoad(){
+    public Road getRoad() {
         return road;
-    }*/
+    }
+
+    public void setRoad(Road road) {
+        this.road = road;
+    }
 
     public EdgeLocation getEdgeLoc(){
         return edgeLoc;

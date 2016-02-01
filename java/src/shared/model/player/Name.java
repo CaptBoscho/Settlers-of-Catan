@@ -23,7 +23,10 @@ public class Name {
      * @throws InvalidNameException
      */
     public Name(String name) throws InvalidNameException {
-        this.name = name;
+        if(validate(name))
+            this.name = name;
+        else
+            throw new InvalidNameException("The name entered is invalid!");
     }
 
     /**
@@ -31,12 +34,26 @@ public class Name {
      * @param name Desired value of name
      */
     private boolean validate(String name){
-        return true;
+        if(isAlpha(name))
+            return true;
+        else
+            return false;
     }
 
-    /*===========================================
-                  Getters/Setters
-    ============================================*/
+    //Helper Methods
+    //===========================================
+
+    /**
+     * Tests if a string contains only alpha characters
+     * @param str String to test
+     * @return True if the string contains only alpha characters
+     */
+    private boolean isAlpha(String str) {
+        return str.matches("[a-zA-Z]+");
+    }
+
+    //Getters/Setters
+    //============================================
 
     public String getName() {
         return name;

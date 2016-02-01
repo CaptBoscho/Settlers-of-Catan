@@ -74,17 +74,17 @@ public class HexLocation implements JsonSerializable {
 	public HexLocation getNeighborLoc(EdgeDirection dir) {
 		switch (dir) {
 			case NorthWest:
-				return new HexLocation(x - 1, y);
+				return new HexLocation(x - 1, y - 1);
 			case North:
 				return new HexLocation(x, y - 1);
 			case NorthEast:
-				return new HexLocation(x + 1, y - 1);
+				return new HexLocation(x + 1, y);
 			case SouthWest:
-				return new HexLocation(x - 1, y + 1);
+				return new HexLocation(x - 1, y);
 			case South:
 				return new HexLocation(x, y + 1);
 			case SouthEast:
-				return new HexLocation(x + 1, y);
+				return new HexLocation(x + 1, y + 1);
 			default:
 				assert false;
 				return null;

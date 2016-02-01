@@ -10,8 +10,7 @@ import client.map.*;
 import client.devcards.*;
 
 @SuppressWarnings("serial")
-public class RightPanel extends JPanel
-{
+public class RightPanel extends JPanel {
 	
 	private PlayDevCardView playCardView;
 	private BuyDevCardView buyCardView;
@@ -22,8 +21,7 @@ public class RightPanel extends JPanel
 	private ResourceBarView resourceView;
 	private ResourceBarController resourceController;
 	
-	public RightPanel(final IMapController mapController)
-	{
+	public RightPanel(final IMapController mapController) {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		
@@ -62,14 +60,11 @@ public class RightPanel extends JPanel
 		resourceView = new ResourceBarView();
 		resourceController = new ResourceBarController(resourceView);
 		resourceController.setElementAction(ResourceBarElement.ROAD,
-											createStartMoveAction(mapController,
-																  PieceType.ROAD));
+											createStartMoveAction(mapController, PieceType.ROAD));
 		resourceController.setElementAction(ResourceBarElement.SETTLEMENT,
-											createStartMoveAction(mapController,
-																  PieceType.SETTLEMENT));
+											createStartMoveAction(mapController, PieceType.SETTLEMENT));
 		resourceController.setElementAction(ResourceBarElement.CITY,
-											createStartMoveAction(mapController,
-																  PieceType.CITY));
+											createStartMoveAction(mapController, PieceType.CITY));
 		resourceController.setElementAction(ResourceBarElement.BUY_CARD,
 											new IAction() {
 												@Override
@@ -92,21 +87,16 @@ public class RightPanel extends JPanel
 		this.add(resourceView);
 	}
 	
-	private IAction createStartMoveAction(final IMapController mapController,
-										  final PieceType pieceType)
-	{
+	private IAction createStartMoveAction(final IMapController mapController, final PieceType pieceType) {
 		
 		return new IAction() {
 			
 			@Override
-			public void execute()
-			{
+			public void execute() {
 				boolean isFree = false;
 				boolean allowDisconnected = false;
 				mapController.startMove(pieceType, isFree, allowDisconnected);
 			}
 		};
 	}
-	
 }
-

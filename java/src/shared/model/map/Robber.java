@@ -6,34 +6,31 @@ import shared.locations.HexLocation;
 /**
  * Robber class representing the Robber piece in a game.
  *
- * @author Bubba Bradley
+ * @author Joel Bradley
  */
 public class Robber {
-    private HexLocation location;
+    private HexLocation hexLoc;
 
     /**
      * Default Constructor
      */
     public Robber() {
-        this.location = new HexLocation(0,0);
+        this.hexLoc = new HexLocation(0, 0);
     }
 
     /**
      * Overloaded Constructor
-     * @param location HexLocation of the Robber
+     * @param hexLoc HexLocation of the Robber
      */
-    public Robber(HexLocation location) {
-        this.location = location;
+    public Robber(HexLocation hexLoc) {
+        this.hexLoc = hexLoc;
     }
 
-    /*===========================================
-                   Getters/Setters
-     ============================================*/
     public HexLocation getLocation() {
-        return location;
+        return hexLoc;
     }
 
-    public void setLocation(HexLocation location) {
-        this.location = location;
+    public void setLocation(HexLocation hexLoc) {
+        this.hexLoc = hexLoc;
     }
 }

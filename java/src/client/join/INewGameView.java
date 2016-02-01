@@ -6,8 +6,7 @@ import client.base.*;
  * Interface for the new game view, which lets the user enter parameters for a
  * new game
  */
-public interface INewGameView extends IOverlayView
-{
+public interface INewGameView extends IOverlayView {
 	
 	/**
 	 * Sets the value of the title field
@@ -68,6 +67,4 @@ public interface INewGameView extends IOverlayView
 	 * @return Current value
 	 */
 	boolean getUseRandomPorts();
-	
 }
-

@@ -6,8 +6,7 @@ import javax.swing.*;
 import client.map.*;
 
 @SuppressWarnings("serial")
-public class MidPanel extends JPanel
-{
+public class MidPanel extends JPanel {
 	
 	private TradePanel tradePanel;
 	private MapView mapView;
@@ -15,8 +14,7 @@ public class MidPanel extends JPanel
 	private MapController mapController;
 	private GameStatePanel gameStatePanel;
 	
-	public MidPanel()
-	{
+	public MidPanel() {
 		
 		this.setLayout(new BorderLayout());
 		
@@ -46,6 +44,4 @@ public class MidPanel extends JPanel
 	{
 		return mapController;
 	}
-	
 }
-

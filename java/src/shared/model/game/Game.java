@@ -1,19 +1,21 @@
 package shared.model.game;
 
-import shared.exceptions.FailedToRandomizeException;
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
-import shared.model.bank.StructureBank;
+import shared.definitions.DevCardType;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
+import shared.model.resources.ResourceCard;
 
 import java.util.List;
 
 /**
  * game class representing a Catan game
  */
-public class Game {
+public class Game implements IGame {
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -29,7 +31,7 @@ public class Game {
     public Game() {
         this.dice = new Dice();
         this.map = new Map();
-        this.turnTracker = new TurnTracker(0,0);
+        this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager();
@@ -37,26 +39,495 @@ public class Game {
         this.developmentCardBank = new DevelopmentCardBank(this);
     }
 
+    //IGame Methods
+    //======================================================
     /**
-     * Initialize a new game
-     * @param players List of players for this game
+     * Starts the game, returns the Id for the first player
+     *
+     * @param players
+     * @return Id of first player
      */
-    public void initializeGame(List<Player> players) {
-        //Add the new players to the player manager
+    public int initializeGame(List<Player> players) {
+        //Add players to PlayerManager
 
-        //Shuffle the players' turn order
-        this.randomizePlayers();
 
-        //Initiate picking of settlement placements
-        this.placeSettlements();
-
-        //Give players their resources
-        //this.map.giveInitialResources()
-
-        //Start the game
-        this.startGame();
+        //Shuffle Player Turn Order
+        return 0;
     }
 
+    /**
+     * returns the playerID for whose turn it is
+     *
+     * @return
+     */
+    @Override
+    public int getCurrentTurn() {
+        return 0;
+    }
+
+    /**
+     * Determine if Player can discard cards
+     * Checks resource cards, robber position,
+     * and hexes from dice roll
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can discard cards
+     */
+    @Override
+    public boolean canDiscardCards(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player discards cards
+     *
+     * @param playerID ID of Player performing action
+     * @param cards    Cards to be discarded
+     */
+    @Override
+    public void discardCards(int playerID, List<ResourceCard> cards) {
+
+    }
+
+    /**
+     * Determine if Player can roll the dice
+     * Checks Player turn and phase of turn
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can roll the die
+     */
+    @Override
+    public boolean canRollNumber(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player rolls the dice
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void rollNumber(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can offer a trade
+     * Checks Player turn, phase, and resources
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can offer a trade
+     */
+    @Override
+    public boolean canOfferTrade(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player offers trade
+     *
+     * @param playerID   ID of Player offering the trade
+     * @param playerIDTo ID of Player being offered the trade
+     */
+    @Override
+    public void offerTrade(int playerID, int playerIDTo) {
+
+    }
+
+    /**
+     * Determine if Player can perform maritime trade
+     * Checks Player turn, phase, resources, and ports
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can perform a maritime trade
+     */
+    @Override
+    public boolean canMaritimeTrade(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player performs maritime trade
+     *
+     * @param playerID    ID of Player performing action
+     * @param cardsToGive Cards to trade away
+     * @param cardsToGet  Cards to trade for
+     */
+    @Override
+    public void maritimeTrade(int playerID, List<ResourceCard> cardsToGive, List<ResourceCard> cardsToGet) {
+
+    }
+
+    /**
+     * Determine if Player can finish their turn
+     * Checks Player turn and phase
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can finish their turn
+     */
+    @Override
+    public boolean canFinishTurn(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player finishes their turn
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void finishTurn(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can buy a dev card
+     * Checks Player turn, phase, and resources
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can buy a dev card
+     */
+    @Override
+    public boolean canBuyDevCard(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player buys a dev card
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void buyDevCard(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Year of Plenty
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Year of Plenty
+     */
+    @Override
+    public boolean canUseYearOfPlenty(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Year of Plenty
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useYearOfPlenty(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Road Builder
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Road Builder
+     */
+    @Override
+    public boolean canUseRoadBuilder(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Road Builder
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useRoadBuilder(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Soldier
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Soldier
+     */
+    @Override
+    public boolean canUseSoldier(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Soldier
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useSoldier(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Monopoly
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Monopoly
+     */
+    @Override
+    public boolean canUseMonopoly(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Monopoly
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useMonopoly(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Monument
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Monument
+     */
+    @Override
+    public boolean canUseMonument(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Monument
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useMonument(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can place the Robber
+     * Checks Player turn, event(ie roll 7 or play Soldier)
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can place the Robber
+     */
+    @Override
+    public boolean canPlaceRobber(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player places the Robber
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void placeRobber(int playerID) {
+
+    }
+
+    /**
+     * returns boolean value denoting if the player can build a
+     * road (just checks cards really)
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuildRoad(int playerID) {
+        return false;
+    }
+
+    /**
+     * builds a road for hte player
+     *
+     * @param playerID
+     */
+    @Override
+    public void buildRoad(int playerID) {
+
+    }
+
+    /**
+     * checks if the player has the cards to build a settlement
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuildSettlement(int playerID) {
+        return false;
+    }
+
+    /**
+     * builds a settlement for this player
+     *
+     * @param playerID
+     */
+    @Override
+    public void buildSettlement(int playerID) {
+
+
+    }
+
+    /**
+     * checks if the player has the cards to ubild a city
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuildCity(int playerID) {
+        return false;
+    }
+
+    /**
+     * builds a city for this player
+     *
+     * @param playerID
+     */
+    @Override
+    public void buildCity(int playerID) {
+
+    }
+
+    /**
+     * returns the value of how many roads is the LongestRoad
+     *
+     * @return
+     */
+    @Override
+    public int currentLongestRoadSize() {
+        return 0;
+    }
+
+    /**
+     * returns the playerID of who owns the current longest road
+     *
+     * @return
+     */
+    @Override
+    public int currentLongestRoadPlayer() {
+        return 0;
+    }
+
+    /**
+     * deducts Victory Points from playerIDOld
+     * adds Victory Points to playerIDNew
+     * Updates LongestRoad for playerIDNew and roadSize
+     *
+     * @param playerIDOld
+     * @param playerIDNew
+     * @param roadSize
+     */
+    @Override
+    public void newLongestRoad(int playerIDOld, int playerIDNew, int roadSize) {
+
+    }
+
+    /**
+     * checks if the player has the cards to buy a DevelopmentCard
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canBuyDevelopmentCard(int playerID) {
+        return false;
+    }
+
+    /**
+     * Buys a new developmentCard for the player
+     * deducts cards
+     * adds new developmentCard to his DCBank
+     *
+     * @param playerID
+     */
+    @Override
+    public DevCardType buyDevelopmentCard(int playerID) {
+        return null;
+    }
+
+    /**
+     * checks if the player is in the trade sequence of his turn
+     *
+     * @param playerID
+     * @return
+     */
+    @Override
+    public boolean canTrade(int playerID) {
+        return false;
+    }
+
+    /**
+     * checks if that player has the card needed for that port's trade
+     *
+     * @param playerID
+     * @param port
+     * @return
+     */
+    @Override
+    public boolean canMaritimeTrade(int playerID, PortType port) {
+        return false;
+    }
+
+    /**
+     * effectuates a trade based on the port type
+     *
+     * @param playerID
+     * @param port
+     */
+    @Override
+    public void maritimeTrade(int playerID, PortType port) {
+
+    }
+
+    /**
+     * checks if player can play that dc
+     *
+     * @param playerID
+     * @param dc
+     * @return
+     */
+    @Override
+    public boolean canPlayDevelopmentCard(int playerID, DevCardType dc) {
+        return false;
+    }
+
+    /**
+     * plays that development card
+     *
+     * @param playerID
+     * @param dc
+     */
+    public void playDevelopmentCard(int playerID, DevCardType dc) {
+
+    }
+
+    /**
+     * effectuates a trade between playerOneID and playerTwoID
+     * trades the cards in the two lists
+     *
+     * @param playerOneID
+     * @param onecards
+     * @param playerTwoID
+     * @param twocards
+     */
+    public void tradePlayer(int playerOneID, List<ResourceType> onecards, int playerTwoID, List<ResourceType> twocards) {
+
+    }
+
+    /*======================================================
+    * Private - Helper Methods
+    * ======================================================*/
     /**
      * Randomize the players' turn order
      */
@@ -64,207 +535,7 @@ public class Game {
         try{
             playerManager.randomizePlayers();
         } catch(Exception e) {
-
+            //throw new
         }
-    }
-
-    /**
-     * Place settlements phase of setup
-     */
-    private void placeSettlements() {
-        //First phase order
-        for(Player player : playerManager.getPlayers()) {
-            //Set player turn
-        }
-
-        //Second phase order
-        for(int i = playerManager.getPlayers().size() - 1; i >= 0; i--) {
-            //Set player turn
-        }
-    }
-
-    /**
-     * Starts the game - after setup
-     * @return id of winning player
-     */
-    private int startGame(){
-        return 0;
-    }
-
-    /**
-     * Handles a player's turn
-     * @param player Player who's turn it is
-     */
-    private void playTurn(Player player){
-        //Dev Card - technically one card can be played at anytime during a player's turn
-//        try {
-//            this.playDevCard(player.getDevelopmentCardBank());
-//        }catch(Exception e){
-//
-//        }
-
-        //Roll dice
-        int roll = dice.roll();
-
-        //Pass resources
-        map.giveResources(roll, 1); //// TODO: 1/24/2016 should be one that gives to all players
-
-        //Trade Phase
-        this.trade();
-
-        //Build Phase
-        this.build(player.getStructureBank());
-    }
-
-    /**
-     * Initializes playing of a development card
-     * @param devCrdBnk Development Card Bank from which to play a card
-     * @throws Exception
-     */
-    private void playDevCard(DevelopmentCardBank devCrdBnk) throws Exception{
-        //Init play of dev card
-    }
-
-    /**
-     * Trade resources between players - Initializes phase
-     */
-    private void trade() {
-
-    }
-
-    /**
-     * Build a building = Initializes phase
-     * @param strBnk
-     */
-    private void build(StructureBank strBnk) {
-
-    }
-
-    /**
-     * Gets the player with the longest road
-     * @return Player with longest road or null if no player has it
-     */
-    public Player getPlayerWithLongestRoad() {
-        if(this.longestRoadCard.getOwner() != -1){
-            try {
-                return playerManager.getPlayerByIndex(this.longestRoadCard.getOwner());
-            } catch(Exception e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Gets the player with the largest army
-     * @return Player with largest army or null if no player has it
-     */
-    public Player getPlayerWithLargestArmy() {
-        if(this.largestArmyCard.getOwner() != -1){
-            try {
-                return playerManager.getPlayerByIndex(this.largestArmyCard.getOwner());
-            } catch(Exception e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Get who's turn it is (by index)
-     * @return index of the current player
-     */
-    public int currentTurn(){
-        return turnTracker.getCurrentTurn();
-    }
-
-    /**
-     * Boolean representing whether or not it's the specified player's turn
-     * @param index position of player
-     * @return True if it's the player's turn
-     */
-    public boolean isPlayerTurn(int index){
-        return currentTurn() == index ? true : false;
-    }
-
-    //Game Can Do Methods - Maybe move the actual calculations to the player manager???
-    /**
-     * Boolean representing whether or not the player can take their turn
-     * @param index position of the player
-     * @return True if the player can play
-     */
-    public boolean canPlay(int index){
-        return isPlayerTurn(index);
-    }
-
-    /**
-     * Boolean representing whether the two players can trade
-     * @param playerOne Player that wants to trade
-     * @param playerTwo Player that wants to trade
-     * @return True if the players can trade
-     */
-    public boolean canTrade(int playerOne, int playerTwo){
-        return isPlayerTurn(playerOne) || isPlayerTurn(playerTwo);
-    }
-
-    /*===========================================
-                   Getters/Setters
-     ============================================*/
-    public Dice getDice() {
-        return dice;
-    }
-
-    public void setDice(Dice dice) {
-        this.dice = dice;
-    }
-
-    public Map getMap() {
-        return map;
-    }
-
-    public void setMap(Map map) {
-        this.map = map;
-    }
-
-    public LongestRoad getLongestRoadCard() {
-        return longestRoadCard;
-    }
-
-    public void setLongestRoadCard(LongestRoad longestRoadCard) {
-        this.longestRoadCard = longestRoadCard;
-    }
-
-    public LargestArmy getLargestArmyCard() {
-        return largestArmyCard;
-    }
-
-    public void setLargestArmyCard(LargestArmy largestArmyCard) {
-        this.largestArmyCard = largestArmyCard;
-    }
-
-    public PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
-    public void setPlayerManager(PlayerManager playerManager) {
-        this.playerManager = playerManager;
-    }
-
-    public ResourceCardBank getResourceCardBank() {
-        return resourceCardBank;
-    }
-
-    public void setResourceCardBank(ResourceCardBank resourceCardBank) {
-        this.resourceCardBank = resourceCardBank;
-    }
-
-    public DevelopmentCardBank getDevelopmentCardBank() {
-        return developmentCardBank;
-    }
-
-    public void setDevelopmentCardBank(DevelopmentCardBank developmentCardBank) {
-        this.developmentCardBank = developmentCardBank;
     }
 }
