@@ -8,13 +8,14 @@ import shared.definitions.DevCardType;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
+import shared.model.resources.ResourceCard;
 
 import java.util.List;
 
 /**
  * game class representing a Catan game
  */
-public class Game implements IGame, IGameActions {
+public class Game implements IGame {
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -38,7 +39,8 @@ public class Game implements IGame, IGameActions {
         this.developmentCardBank = new DevelopmentCardBank(this);
     }
 
-
+    //IGame Methods
+    //======================================================
     /**
      * Starts the game, returns the Id for the first player
      *
@@ -47,10 +49,10 @@ public class Game implements IGame, IGameActions {
      */
     public int initializeGame(List<Player> players) {
         //Add players to PlayerManager
-        playerManager.
+
 
         //Shuffle Player Turn Order
-
+        return 0;
     }
 
     /**
@@ -61,6 +63,275 @@ public class Game implements IGame, IGameActions {
     @Override
     public int getCurrentTurn() {
         return 0;
+    }
+
+    /**
+     * Determine if Player can discard cards
+     * Checks resource cards, robber position,
+     * and hexes from dice roll
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can discard cards
+     */
+    @Override
+    public boolean canDiscardCards(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player discards cards
+     *
+     * @param playerID ID of Player performing action
+     * @param cards    Cards to be discarded
+     */
+    @Override
+    public void discardCards(int playerID, List<ResourceCard> cards) {
+
+    }
+
+    /**
+     * Determine if Player can roll the dice
+     * Checks Player turn and phase of turn
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can roll the die
+     */
+    @Override
+    public boolean canRollNumber(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player rolls the dice
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void rollNumber(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can offer a trade
+     * Checks Player turn, phase, and resources
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can offer a trade
+     */
+    @Override
+    public boolean canOfferTrade(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player offers trade
+     *
+     * @param playerID   ID of Player offering the trade
+     * @param playerIDTo ID of Player being offered the trade
+     */
+    @Override
+    public void offerTrade(int playerID, int playerIDTo) {
+
+    }
+
+    /**
+     * Determine if Player can perform maritime trade
+     * Checks Player turn, phase, resources, and ports
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can perform a maritime trade
+     */
+    @Override
+    public boolean canMaritimeTrade(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player performs maritime trade
+     *
+     * @param playerID    ID of Player performing action
+     * @param cardsToGive Cards to trade away
+     * @param cardsToGet  Cards to trade for
+     */
+    @Override
+    public void maritimeTrade(int playerID, List<ResourceCard> cardsToGive, List<ResourceCard> cardsToGet) {
+
+    }
+
+    /**
+     * Determine if Player can finish their turn
+     * Checks Player turn and phase
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can finish their turn
+     */
+    @Override
+    public boolean canFinishTurn(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player finishes their turn
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void finishTurn(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can buy a dev card
+     * Checks Player turn, phase, and resources
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can buy a dev card
+     */
+    @Override
+    public boolean canBuyDevCard(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player buys a dev card
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void buyDevCard(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Year of Plenty
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Year of Plenty
+     */
+    @Override
+    public boolean canUseYearOfPlenty(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Year of Plenty
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useYearOfPlenty(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Road Builder
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Road Builder
+     */
+    @Override
+    public boolean canUseRoadBuilder(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Road Builder
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useRoadBuilder(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Soldier
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Soldier
+     */
+    @Override
+    public boolean canUseSoldier(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Soldier
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useSoldier(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Monopoly
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Monopoly
+     */
+    @Override
+    public boolean canUseMonopoly(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Monopoly
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useMonopoly(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can play Monument
+     * Checks Player turn, and dev cards
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can play Monument
+     */
+    @Override
+    public boolean canUseMonument(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player plays Monument
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void useMonument(int playerID) {
+
+    }
+
+    /**
+     * Determine if Player can place the Robber
+     * Checks Player turn, event(ie roll 7 or play Soldier)
+     *
+     * @param playerID ID of Player performing action
+     * @return True if Player can place the Robber
+     */
+    @Override
+    public boolean canPlaceRobber(int playerID) {
+        return false;
+    }
+
+    /**
+     * Action - Player places the Robber
+     *
+     * @param playerID ID of Player performing action
+     */
+    @Override
+    public void placeRobber(int playerID) {
+
     }
 
     /**
