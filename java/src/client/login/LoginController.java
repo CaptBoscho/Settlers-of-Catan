@@ -7,8 +7,11 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
+
+import client.services.ServerProxy;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import shared.dto.AuthDTO;
 
 
 /**
@@ -61,24 +64,31 @@ public class LoginController extends Controller implements ILoginController {
 		getLoginView().showModal();
 	}
 
+	// TODO: Not hard-code host/port, add proper error messaging
 	@Override
 	public void signIn() {
-		
-		// TODO: log in user
-		
+		final String username = getLoginView().getLoginUsername();
+		final String password = getLoginView().getLoginPassword();
 
-		// If log in succeeded
-		getLoginView().closeModal();
-		loginAction.execute();
+		AuthDTO dto = new AuthDTO(username, password);
+		if(new ServerProxy("localhost", 8081).authenticateUser(dto)) {
+			// If log in succeeded
+			getLoginView().closeModal();
+			loginAction.execute();
+		}
 	}
 
+	// TODO: Not hard-code host/port, add proper error messaging
 	@Override
 	public void register() {
-		
-		// TODO: register new user (which, if successful, also logs them in)
-		
-		// If register succeeded
-		getLoginView().closeModal();
-		loginAction.execute();
+		final String username = getLoginView().getLoginUsername();
+		final String password = getLoginView().getLoginPassword();
+
+		AuthDTO dto = new AuthDTO(username, password);
+		if(new ServerProxy("localhost", 8081).registerUser(dto)) {
+			// If register succeeded
+			getLoginView().closeModal();
+			loginAction.execute();
+		}
 	}
 }

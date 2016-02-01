@@ -60,9 +60,8 @@ public class Map implements IMap {
             throw new InvalidDiceRollException("Need to move robber instead of giving resources");
         }
         ArrayList<HexLocation> chitList = chits.get(diceRoll);
-        for(int i=0; i<chitList.size(); i++) {
-            HexLocation hexLoc = chitList.get(i);
-            if(robber.getLocation() != hexLoc) {
+        for (HexLocation hexLoc : chitList) {
+            if (robber.getLocation() != hexLoc) {
                 ResourceType resourceType = getResourceType(hexLoc);
                 VertexLocation northWestLoc = new VertexLocation(hexLoc, VertexDirection.NorthWest);
                 VertexLocation northEastLoc = new VertexLocation(hexLoc, VertexDirection.NorthEast);
@@ -159,21 +158,15 @@ public class Map implements IMap {
 
     @Override
     public boolean canBuildRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException {
-        if(playerID < 1 || playerID > 4) {
+        if (playerID < 1 || playerID > 4) {
             return false;
         }
         edgeLoc = edgeLoc.getNormalizedLocation();
         Edge edge = edges.get(edgeLoc);
-        if(edge == null) {
+        if (edge == null) {
             throw new InvalidLocationException("Edge location is not on the map");
         }
-        if(edge.hasRoad()) {
-            return false;
-        }
-        if(!edgeHasConnectingRoad(playerID, edgeLoc)) {
-            return false;
-        }
-        return true;
+        return !edge.hasRoad() && edgeHasConnectingRoad(playerID, edgeLoc);
     }
 
     @Override
@@ -200,24 +193,18 @@ public class Map implements IMap {
 
     @Override
     public boolean canBuildSettlement(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
-        if(playerID < 1 || playerID > 4) {
+        if (playerID < 1 || playerID > 4) {
             return false;
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
-        if(vertex == null) {
+        if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        if(vertex.hasBuilding()) {
+        if (vertex.hasBuilding()) {
             return false;
         }
-        if(hasNeighborBuildings(vertexLoc)) {
-            return false;
-        }
-        if(!vertexHasConnectingRoad(playerID, vertexLoc)) {
-            return false;
-        }
-        return true;
+        return !hasNeighborBuildings(vertexLoc) && vertexHasConnectingRoad(playerID, vertexLoc);
     }
 
     @Override
@@ -267,9 +254,7 @@ public class Map implements IMap {
                 if(building.getClass() == instance.getClass()) {
                     return true;
                 }
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
@@ -300,9 +285,7 @@ public class Map implements IMap {
             if(building.getClass() != instance.getClass()) {
                 throw new StructureException("A City is already built at the vertex location");
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         ArrayList<Vertex> buildings = this.buildings.get(playerID);
@@ -325,8 +308,8 @@ public class Map implements IMap {
         Set<PortType> portTypes = new HashSet<>();
         ArrayList<Port> ports = this.ports.get(playerID);
         if(ports != null) {
-            for(int i=0; i<ports.size(); i++) {
-                portTypes.add(ports.get(i).getPortType());
+            for (Port port : ports) {
+                portTypes.add(port.getPortType());
             }
         }
         return portTypes;
@@ -409,13 +392,13 @@ public class Map implements IMap {
     private void makeOceanHex(int column, int diagonal, ArrayList<EdgeDirection> edgeDir,
                               ArrayList<VertexDirection> vertexDir) {
         HexLocation hexLoc = new HexLocation(column, diagonal);
-        for(int i=0; i<edgeDir.size(); i++) {
-            EdgeLocation edgeLoc = new EdgeLocation(hexLoc, edgeDir.get(i));
+        for (EdgeDirection anEdgeDir : edgeDir) {
+            EdgeLocation edgeLoc = new EdgeLocation(hexLoc, anEdgeDir);
             Edge edge = new Edge(edgeLoc);
             edges.put(edgeLoc, edge);
         }
-        for(int i=0; i<vertexDir.size(); i++) {
-            VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir.get(i));
+        for (VertexDirection aVertexDir : vertexDir) {
+            VertexLocation vertexLoc = new VertexLocation(hexLoc, aVertexDir);
             Vertex vertex = new Vertex(vertexLoc);
             vertices.put(vertexLoc, vertex);
         }
@@ -716,8 +699,8 @@ public class Map implements IMap {
         if(resourceType != null) {
             resourceList.add(resourceType);
         }
-        for(int i=0; i<resourceList.size(); i++) {
-            giveResourcesToBuilding(vertexLoc, resourceList.get(i));
+        for (ResourceType aResourceList : resourceList) {
+            giveResourcesToBuilding(vertexLoc, aResourceList);
         }
     }
 
@@ -738,8 +721,8 @@ public class Map implements IMap {
         if(resourceType != null) {
             resourceList.add(resourceType);
         }
-        for(int i=0; i<resourceList.size(); i++) {
-            giveResourcesToBuilding(vertexLoc, resourceList.get(i));
+        for (ResourceType aResourceList : resourceList) {
+            giveResourcesToBuilding(vertexLoc, aResourceList);
         }
     }
 
@@ -783,10 +766,7 @@ public class Map implements IMap {
         }
         EdgeLocation rightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
         Edge right = edges.get(rightEdgeLoc);
-        if(right != null && right.hasRoad() && right.getRoad().getPlayerID() == playerID) {
-            return true;
-        }
-        return false;
+        return right != null && right.hasRoad() && right.getRoad().getPlayerID() == playerID;
     }
 
     private boolean vertexHasConnectingRoadNorthEast(int playerID, VertexLocation vertexLoc) {
@@ -803,10 +783,7 @@ public class Map implements IMap {
         }
         EdgeLocation leftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
         Edge left = edges.get(leftEdgeLoc);
-        if(left != null && left.hasRoad() && upperRight.getRoad().getPlayerID() == playerID) {
-            return true;
-        }
-        return false;
+        return left != null && left.hasRoad() && upperRight.getRoad().getPlayerID() == playerID;
     }
 
     private boolean edgeConnectedToVertex(EdgeLocation edgeLoc, VertexLocation vertexLoc) {
@@ -830,10 +807,7 @@ public class Map implements IMap {
             return true;
         }
         EdgeLocation rightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
-        if(rightEdgeLoc.equals(edgeLoc)) {
-            return true;
-        }
-        return false;
+        return rightEdgeLoc.equals(edgeLoc);
     }
 
     private boolean edgeConnectedToVertexNorthEast(EdgeLocation edgeLoc, VertexLocation vertexLoc) {
@@ -847,10 +821,7 @@ public class Map implements IMap {
             return true;
         }
         EdgeLocation leftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
-        if(leftEdgeLoc.equals(edgeLoc)) {
-            return true;
-        }
-        return false;
+        return leftEdgeLoc.equals(edgeLoc);
     }
 
     private boolean edgeHasConnectingRoad(int playerID, EdgeLocation edgeLoc) {
@@ -903,5 +874,4 @@ public class Map implements IMap {
         }
         return false;
     }
-
 }
