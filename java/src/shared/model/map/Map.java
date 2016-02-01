@@ -96,7 +96,7 @@ public class Map implements IMap {
         if(hasNeighborBuildings(vertexLoc)) {
             throw new StructureException("Vertex location has a neighboring building");
         }
-        Settlement settlement = new Settlement(playerID);
+        Settlement settlement = new Settlement(); //TODO: pass in playerID
         vertex.setBuilding(settlement);
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
@@ -227,7 +227,7 @@ public class Map implements IMap {
         if(!vertexHasConnectingRoad(playerID, vertexLoc)) {
             throw new StructureException("Vertex location has no connecting road");
         }
-        Settlement settlement = new Settlement(playerID);
+        Settlement settlement = new Settlement(); //TODO: pass in playerID
         vertex.setBuilding(settlement);
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
@@ -290,7 +290,7 @@ public class Map implements IMap {
         }
         ArrayList<Vertex> buildings = this.buildings.get(playerID);
         buildings.remove(vertex);
-        City city = new City(playerID);
+        City city = new City(); //TODO: pass in playerID
         vertex.setBuilding(city);
         buildings.add(vertex);
     }
@@ -778,12 +778,12 @@ public class Map implements IMap {
         }
         EdgeLocation lowerRightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.NorthEast);
         Edge lowerRight = edges.get(lowerRightEdgeLoc);
-        if(lowerRight != null && lowerRight.hasRoad() && upperRight.getRoad().getPlayerID() == playerID) {
+        if(lowerRight != null && lowerRight.hasRoad() && lowerRight.getRoad().getPlayerID() == playerID) {
             return true;
         }
         EdgeLocation leftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
         Edge left = edges.get(leftEdgeLoc);
-        return left != null && left.hasRoad() && upperRight.getRoad().getPlayerID() == playerID;
+        return left != null && left.hasRoad() && left.getRoad().getPlayerID() == playerID;
     }
 
     private boolean edgeConnectedToVertex(EdgeLocation edgeLoc, VertexLocation vertexLoc) {
