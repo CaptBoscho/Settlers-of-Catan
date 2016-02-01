@@ -1,8 +1,8 @@
 package shared.model.game;
 
 import shared.model.resources.ResourceCard;
-import shared.player.Player;
-import shared.model.devcards.DevCardType;
+import shared.model.player.Player;
+import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 
