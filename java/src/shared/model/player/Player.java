@@ -2,9 +2,7 @@ package shared.model.player;
 
 import com.google.gson.JsonObject;
 import shared.exceptions.InvalidPlayerException;
-import shared.model.bank.DevelopmentCardBank;
-import shared.model.bank.ResourceCardBank;
-import shared.model.bank.StructureBank;
+import shared.model.bank.*;
 import shared.definitions.CatanColor;
 import shared.model.devcards.DevelopmentCard;
 import shared.model.resources.ResourceCard;
@@ -33,8 +31,8 @@ public class Player implements Comparable<Player>{
     public Player() {
         this.victoryPoints = 0;
         this.color = null;
-        this.resourceCardBank = new ResourceCardBank(this);
-        this.developmentCardBank = new DevelopmentCardBank(this);
+        this.resourceCardBank = new ResourceCardBank(false);
+        this.developmentCardBank = new DevelopmentCardBank(false);
         this.structureBank = new StructureBank();
     }
 
@@ -58,8 +56,8 @@ public class Player implements Comparable<Player>{
     public Player(int points, CatanColor color, int index, Name name) throws InvalidPlayerException {
         this.victoryPoints = points;
         this.color = color;
-        this.resourceCardBank = new ResourceCardBank(this);
-        this.developmentCardBank = new DevelopmentCardBank(this);
+        this.resourceCardBank = new ResourceCardBank(false);
+        this.developmentCardBank = new DevelopmentCardBank(false);
         this.structureBank = new StructureBank();
         this.name = name;
         this.playerIndex = index;
@@ -110,7 +108,11 @@ public class Player implements Comparable<Player>{
      * @param cardToAdd
      */
     public void addDevCard(DevelopmentCard cardToAdd) {
-        developmentCardBank.addDevCard(cardToAdd);
+        try {
+            developmentCardBank.addDevCard(cardToAdd);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

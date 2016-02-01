@@ -9,6 +9,10 @@ import shared.definitions.ResourceType;
  */
 public class City extends Building {
 
+    public City(int playerID) {
+        super(playerID);
+    }
+
     /**
      * Adds two of the given resource type to a Player's ResourceCardBank
      * @param resource

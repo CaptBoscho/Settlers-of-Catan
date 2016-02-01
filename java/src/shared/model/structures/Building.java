@@ -10,8 +10,12 @@ import shared.definitions.ResourceType;
 public abstract class Building {
 
     int playerID;
+
+    public Building (int playerID) {
+        this.playerID = playerID;
+    }
     /**
-     * Adds resources to
+     * Gives resources to the Player designated by playerID
      * @param resource
      */
     public void addResources(ResourceType resource) {}

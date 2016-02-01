@@ -1,54 +1,47 @@
 package shared.model.bank;
 
 import com.google.gson.JsonObject;
+import com.google.gson.internal.bind.CollectionTypeAdapterFactory;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
-import shared.model.game.Game;
-import shared.model.player.Player;
 import shared.model.resources.*;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import javax.naming.InsufficientResourcesException;
+import java.util.*;
 
 /**
  * A bank owned by either a Player or a game which holds all the owners DevelopmentCards
  *
  * @author Danny Harding
  */
-public class ResourceCardBank implements JsonSerializable {
+public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
     static final int MAX_NUMBER_BRICK = 15;
     static final int MAX_NUMBER_ORE = 15;
     static final int MAX_NUMBER_SHEEP = 15;
     static final int MAX_NUMBER_WHEAT = 15;
     static final int MAX_NUMBER_WOOD = 15;
 
-    private final Object OWNER;
     private ArrayList<Brick> bricks = new ArrayList<>();
     private ArrayList<Ore> ores = new ArrayList<>();
     private ArrayList<Sheep> sheeps = new ArrayList<>();
     private ArrayList<Wheat> wheats = new ArrayList<>();
     private ArrayList<Wood> woods = new ArrayList<>();
 
+    private boolean ownedByGame;
+
     /**
      * Creates a full ResourceCardBank
-     * @param game The object that contains the DevelopmentCardBank
+     * @param ownedByGame A boolean telling if the ResourceCardBank is owned by the Game
      */
-    public ResourceCardBank(Game game) {
-        OWNER = game;
-        fillBrick();
-        fillOre();
-        fillSheep();
-        fillWheat();
-        fillWood();
-    }
-
-    /**
-     * Creates an empty ResourceCardBank
-     * @param player The object that contains the ResourceCardBank
-     */
-    public ResourceCardBank (Player player) {
-
-        OWNER = player;
+    public ResourceCardBank(boolean ownedByGame) {
+        this.ownedByGame = ownedByGame;
+        if (ownedByGame) {
+            fillBrick();
+            fillOre();
+            fillSheep();
+            fillWheat();
+            fillWood();
+        }
     }
 
     /**
@@ -58,7 +51,6 @@ public class ResourceCardBank implements JsonSerializable {
      */
     public ResourceCardBank(JsonObject json) {
         //deserialize
-        OWNER = null;
     }
 
     private void fillBrick() {
@@ -115,10 +107,9 @@ public class ResourceCardBank implements JsonSerializable {
         }
     }
 
-    public ResourceCard draw(ResourceType type) throws Exception {
-        if (!(OWNER instanceof Game)) {
-            throw new Exception("Can't call draw on ResourceCardBank owned by Player!");
-        } else {
+    @Override
+    public ResourceCard draw(ResourceType type) throws InvalidTypeException, Exception {
+        if (ownedByGame) {
             switch (type) {
                 case BRICK:
                     if (bricks.size() > 0) {
@@ -126,38 +117,60 @@ public class ResourceCardBank implements JsonSerializable {
                     } else {
                         return null;
                     }
-                    break;
                 case ORE:
                     if (ores.size() > 0) {
                         return ores.remove(0);
                     } else {
                         return null;
                     }
-                    break;
                 case SHEEP:
                     if (sheeps.size() > 0) {
                         return sheeps.remove(0);
                     } else {
                         return null;
                     }
-                    break;
                 case WHEAT:
                     if (wheats.size() > 0) {
                         return wheats.remove(0);
                     } else {
                         return null;
                     }
-                    break;
                 case WOOD:
                     if (woods.size() > 0) {
                         return woods.remove(0);
                     } else {
                         return null;
                     }
-                    break;
                 default:
-                    throw new Exception("Invalid ResourceType");
+                    throw new InvalidTypeException("Invalid ResourceType");
             }
+        } else {
+            throw new Exception("Can't choose which resource to draw from player");
+        }
+    }
+
+    @Override
+    public ResourceCard draw() throws Exception {
+        if (ownedByGame) {
+            throw new Exception("Must specify Resource Type to draw from Game");
+        } else {
+            List<ResourceCard> hand = new ArrayList<>();
+            for (ResourceCard brick : bricks) {
+                hand.add(brick);
+            }
+            for (ResourceCard wood : woods) {
+                hand.add(wood);
+            }
+            for (ResourceCard sheep : sheeps) {
+                hand.add(sheep);
+            }
+            for (ResourceCard wheat : wheats) {
+                hand.add(wheat);
+            }
+            for (ResourceCard ore : ores) {
+                hand.add(ore);
+            }
+            return hand.get(new Random().nextInt(hand.size()));
         }
     }
 
@@ -184,8 +197,148 @@ public class ResourceCardBank implements JsonSerializable {
     /**
      * @return number of cards in the ResourceCardBank
      */
+    @Override
     public int size() {
-        return bricks.size() + ores.size() + sheeps.size() + wheats.size() + woods.size();
+        return getNumberOfBrick() + getNumberOfOre() + getNumberOfSheep() + getNumberOfWheat() + getNumberOfWood();
+    }
+
+    @Override
+    public ResourceCard discard(ResourceType type) throws InsufficientResourcesException, InvalidTypeException {
+        switch (type) {
+            case BRICK:
+                if (getNumberOfBrick() > 0) {
+                    return bricks.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no bricks to discard");
+                }
+            case ORE:
+                if (getNumberOfOre() > 0) {
+                    return ores.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no ores to discard");
+                }
+            case SHEEP:
+                if (getNumberOfSheep() > 0) {
+                    return sheeps.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no sheep to discard");
+                }
+            case WHEAT:
+                if (getNumberOfWheat() > 0) {
+                    return wheats.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no wheats to discard");
+                }
+            case WOOD:
+                if (getNumberOfWood() > 0) {
+                    return woods.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no woods to discard");
+                }
+            default:
+                throw new InvalidTypeException("The given type is invalid");
+        }
+    }
+
+    @Override
+    public boolean canOfferTrade() {
+        return size() > 0;
+    }
+
+    @Override
+    public boolean canMaritimeTrade(ResourceType type) throws InsufficientResourcesException, InvalidTypeException {
+        switch (type) {
+            case BRICK:
+                return (getNumberOfBrick() >= 3);
+            case ORE:
+                return (getNumberOfOre() >= 3);
+            case SHEEP:
+                return (getNumberOfSheep() >= 3);
+            case WHEAT:
+                return (getNumberOfWheat() >= 3);
+            case WOOD:
+                return (getNumberOfWood() >=3);
+            default:
+                throw new InvalidTypeException("The given type is invalid");
+        }
+    }
+
+    @Override
+    public boolean canBuyDevCard() {
+        return (getNumberOfSheep() > 0 && getNumberOfWheat() > 0 && getNumberOfOre() > 0);
+    }
+
+    @Override
+    public void buyDevCard() {
+        try {
+            discard(ResourceType.ORE);
+            discard(ResourceType.SHEEP);
+            discard(ResourceType.WHEAT);
+        } catch (InsufficientResourcesException | InvalidTypeException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean canBuildRoad() {
+        return (getNumberOfBrick() > 0 && getNumberOfWood() > 0);
+    }
+
+    @Override
+    public void buildRoad() throws InsufficientResourcesException {
+        if (canBuildRoad()) {
+            try {
+                discard(ResourceType.WOOD);
+                discard(ResourceType.BRICK);
+            } catch (InvalidTypeException e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new InsufficientResourcesException("Not enough resources to build road");
+        }
+    }
+
+    @Override
+    public boolean canBuildSettlement() {
+        return (getNumberOfWood() >= 1 && getNumberOfBrick() >= 1 && getNumberOfWheat() >= 1 && getNumberOfSheep() >= 1);
+    }
+
+    @Override
+    public void buildSettlement() throws InsufficientResourcesException {
+        if (canBuildSettlement()) {
+            try {
+                discard(ResourceType.BRICK);
+                discard(ResourceType.SHEEP);
+                discard(ResourceType.WHEAT);
+                discard(ResourceType.WOOD);
+            } catch (InvalidTypeException e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new InsufficientResourcesException("Not enough resources to build settlement");
+        }
+    }
+
+    @Override
+    public boolean canBuildCity() {
+        return (getNumberOfWheat() >= 3 && getNumberOfOre() >= 2);
+    }
+
+    @Override
+    public void buildCity() throws InsufficientResourcesException {
+        if (canBuildCity()) {
+            try {
+                discard(ResourceType.WHEAT);
+                discard(ResourceType.WHEAT);
+                discard(ResourceType.WHEAT);
+                discard(ResourceType.ORE);
+                discard(ResourceType.ORE);
+            } catch (InvalidTypeException e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new InsufficientResourcesException("Not enough resources to build city");
+        }
     }
 
     /**
