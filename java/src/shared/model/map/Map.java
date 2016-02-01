@@ -51,10 +51,7 @@ public class Map implements IMap {
     @Override
     public void giveResources(int diceRoll) throws InvalidDiceRollException {
         if(diceRoll < 2 || diceRoll > 12) {
-            StringBuilder error = new StringBuilder();
-            error.append("Dice roll was ");
-            error.append(diceRoll);
-            throw new InvalidDiceRollException(error.toString());
+            throw new InvalidDiceRollException("Dice roll was " + diceRoll);
         }
         if(diceRoll == 7) {
             throw new InvalidDiceRollException("Need to move robber instead of giving resources");
@@ -81,9 +78,9 @@ public class Map implements IMap {
 
     @Override
     public void initiateSettlement(int playerID, VertexLocation vertexLoc)
-            throws StructureException, InvalidLocationException {
+            throws StructureException, InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
-            return;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -118,9 +115,9 @@ public class Map implements IMap {
 
     @Override
     public void initiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
-            throws StructureException, InvalidLocationException {
+            throws StructureException, InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
-            return;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -157,9 +154,10 @@ public class Map implements IMap {
     }
 
     @Override
-    public boolean canBuildRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException {
+    public boolean canBuildRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException,
+            InvalidPlayerException {
         if (playerID < 1 || playerID > 4) {
-            return false;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         edgeLoc = edgeLoc.getNormalizedLocation();
         Edge edge = edges.get(edgeLoc);
@@ -170,9 +168,10 @@ public class Map implements IMap {
     }
 
     @Override
-    public void buildRoad(int playerID, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
+    public void buildRoad(int playerID, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException,
+            InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
-            return;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         edgeLoc = edgeLoc.getNormalizedLocation();
         Edge edge = edges.get(edgeLoc);
@@ -192,26 +191,25 @@ public class Map implements IMap {
     }
 
     @Override
-    public boolean canBuildSettlement(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
+    public boolean canBuildSettlement(int playerID, VertexLocation vertexLoc) throws InvalidLocationException,
+            InvalidPlayerException {
         if (playerID < 1 || playerID > 4) {
-            return false;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
         if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        if (vertex.hasBuilding()) {
-            return false;
-        }
-        return !hasNeighborBuildings(vertexLoc) && vertexHasConnectingRoad(playerID, vertexLoc);
+        return !vertex.hasBuilding() && !hasNeighborBuildings(vertexLoc) &&
+                vertexHasConnectingRoad(playerID, vertexLoc);
     }
 
     @Override
     public void buildSettlement(int playerID, VertexLocation vertexLoc) throws StructureException,
-            InvalidLocationException {
+            InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
-            return;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -237,9 +235,10 @@ public class Map implements IMap {
     }
 
     @Override
-    public boolean canBuildCity(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
+    public boolean canBuildCity(int playerID, VertexLocation vertexLoc) throws InvalidLocationException,
+            InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
-            return false;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -263,9 +262,9 @@ public class Map implements IMap {
 
     @Override
     public void buildCity(int playerID, VertexLocation vertexLoc) throws StructureException,
-            InvalidLocationException {
+            InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
-            return;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -296,14 +295,17 @@ public class Map implements IMap {
     }
 
     @Override
-    public int getLongestRoadSize(int playerID) {
+    public int getLongestRoadSize(int playerID) throws InvalidPlayerException {
+        if(playerID < 1 || playerID > 4) {
+            throw new InvalidPlayerException("PlayerID was " + playerID);
+        }
         return 0;
     }
 
     @Override
-    public Set<PortType> getPortTypes(int playerID) {
+    public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException{
         if(playerID < 1 || playerID > 4) {
-            return null;
+            throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         Set<PortType> portTypes = new HashSet<>();
         ArrayList<Port> ports = this.ports.get(playerID);
@@ -316,7 +318,7 @@ public class Map implements IMap {
     }
 
     @Override
-    public void moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
+    public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         Hex hex = hexes.get(hexLoc);
         if(hex == null || hex.getType() == HexType.WATER) {
             throw new InvalidLocationException("Hex location is not on the map");
@@ -325,6 +327,7 @@ public class Map implements IMap {
             throw new AlreadyRobbedException("Robber cannot remain at the same hex location");
         }
         robber.setLocation(hexLoc);
+        return getPlayers(hexLoc);
     }
 
     /*===========================================
@@ -641,10 +644,7 @@ public class Map implements IMap {
         HexLocation hexLoc = vertexLoc.getHexLoc();
         VertexLocation rightLoc = new VertexLocation(hexLoc, VertexDirection.NorthEast);
         Vertex right = vertices.get(rightLoc);
-        if(right != null && right.hasBuilding()) {
-            return true;
-        }
-        return false;
+        return right != null && right.hasBuilding();
     }
 
     private boolean hasNeighborBuildingsNorthEast(VertexLocation vertexLoc) {
@@ -663,10 +663,7 @@ public class Map implements IMap {
         HexLocation hexLoc = vertexLoc.getHexLoc();
         VertexLocation leftLoc = new VertexLocation(hexLoc, VertexDirection.NorthWest);
         Vertex left = vertices.get(leftLoc);
-        if(left != null && left.hasBuilding()) {
-            return true;
-        }
-        return false;
+        return left != null && left.hasBuilding();
     }
 
     private void addPort(int playerID, Vertex vertex) {
@@ -699,8 +696,8 @@ public class Map implements IMap {
         if(resourceType != null) {
             resourceList.add(resourceType);
         }
-        for (ResourceType aResourceList : resourceList) {
-            giveResourcesToBuilding(vertexLoc, aResourceList);
+        for (ResourceType aResourceType : resourceList) {
+            giveResourcesToBuilding(vertexLoc, aResourceType);
         }
     }
 
@@ -721,8 +718,8 @@ public class Map implements IMap {
         if(resourceType != null) {
             resourceList.add(resourceType);
         }
-        for (ResourceType aResourceList : resourceList) {
-            giveResourcesToBuilding(vertexLoc, aResourceList);
+        for (ResourceType aResourceType : resourceList) {
+            giveResourcesToBuilding(vertexLoc, aResourceType);
         }
     }
 
@@ -873,5 +870,46 @@ public class Map implements IMap {
             }
         }
         return false;
+    }
+
+    private HashSet<Integer> getPlayers(HexLocation hexLoc) {
+        HashSet<Integer> players = new HashSet<>();
+        VertexLocation northWestLoc = new VertexLocation(hexLoc, VertexDirection.NorthWest);
+        VertexLocation northEastLoc = new VertexLocation(hexLoc, VertexDirection.NorthEast);
+        VertexLocation eastLoc = new VertexLocation(hexLoc, VertexDirection.East);
+        VertexLocation southEastLoc = new VertexLocation(hexLoc, VertexDirection.SouthEast);
+        VertexLocation southWestLoc = new VertexLocation(hexLoc, VertexDirection.SouthWest);
+        VertexLocation westLoc = new VertexLocation(hexLoc, VertexDirection.West);
+        northWestLoc.getNormalizedLocation();
+        northEastLoc.getNormalizedLocation();
+        eastLoc.getNormalizedLocation();
+        southEastLoc.getNormalizedLocation();
+        southWestLoc.getNormalizedLocation();
+        westLoc.getNormalizedLocation();
+        Vertex northWest = vertices.get(northWestLoc);
+        Vertex northEast = vertices.get(northEastLoc);
+        Vertex east = vertices.get(eastLoc);
+        Vertex southEast = vertices.get(southEastLoc);
+        Vertex southWest = vertices.get(southWestLoc);
+        Vertex west = vertices.get(westLoc);
+        if(northWest.hasBuilding()) {
+            players.add(northWest.getBuilding().getPlayerID());
+        }
+        if(northEast.hasBuilding()) {
+            players.add(northWest.getBuilding().getPlayerID());
+        }
+        if(east.hasBuilding()) {
+            players.add(northWest.getBuilding().getPlayerID());
+        }
+        if(southEast.hasBuilding()) {
+            players.add(northWest.getBuilding().getPlayerID());
+        }
+        if(southWest.hasBuilding()) {
+            players.add(northWest.getBuilding().getPlayerID());
+        }
+        if(west.hasBuilding()) {
+            players.add(northWest.getBuilding().getPlayerID());
+        }
+        return players;
     }
 }
