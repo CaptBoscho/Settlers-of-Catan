@@ -1,13 +1,16 @@
 
 package client.facade;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.map.IMap;
+import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.model.player.Name;
+import shared.exceptions.*;
 
 import java.util.*;
 
@@ -29,7 +32,7 @@ public class Facade {
      * Constructor initializes map and game values
      */
     public Facade() {
-        this.map = new IMap();
+        this.map = new Map();
         this.game = new Game();
     }
 
@@ -66,7 +69,7 @@ public class Facade {
     }
 
 
-    public void initializeGame() throws BuildException {
+    public void initializeGame() throws BuildException, InvalidNameException, InvalidPlayerException {
         if (entries.size() != 4 && entries.size() != 3) {
             throw new BuildException("need 3-4 players to play");
         } else {
@@ -103,7 +106,7 @@ public class Facade {
      * @param edge
      * @return A boolean indicating if the asking player can build a road
      */
-    public boolean canBuildRoad(int playerID, EdgeLocation edge) {
+    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException {
         if (!myTurn(playerID)) {
             return false;
         } else {
@@ -121,7 +124,7 @@ public class Facade {
      * @param edge
      * @throws BuildException
      */
-    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException {
+    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException {
         if (canBuildRoad(playerID, edge)) {
             game.buildRoad(playerID);
             map.buildRoad(playerID, edge);
@@ -143,7 +146,7 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) {
+    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException {
         boolean cangame = game.canBuildSettlement(playerID);
         boolean canmap = map.canBuildSettlement(playerID, vertex);
 
@@ -157,7 +160,7 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException {
+    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException {
         if (canBuildSettlement(playerID, vertex)) {
             game.buildSettlement(playerID);
             map.buildSettlement(playerID, vertex);
@@ -175,7 +178,7 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildCity(int playerID, VertexLocation vertex) {
+    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException{
         boolean cangame = game.canBuildCity(playerID);
         boolean canmap = map.canBuildCity(playerID, vertex);
 
@@ -189,7 +192,7 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildCity(int playerID, VertexLocation vertex) throws BuildException {
+    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException {
         if (canBuildCity(playerID, vertex)) {
             game.buildCity(playerID);
             map.buildCity(playerID, vertex);
@@ -238,11 +241,11 @@ public class Facade {
     /**
      * Commits the trade
      *
-     * @param playerID
+     * @param playerOneID
      * @throws BuildException
      */
     public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException {
-        if (canTrade(playerID)) {
+        if (canTrade(playerOneID)) {
             game.tradePlayer(playerOneID, oneCards, playerTwoID, twoCards);
         } else {
             throw new BuildException("Can't complete this trade");
@@ -251,7 +254,7 @@ public class Facade {
 
     public boolean canMaritimeTrade(int playerID, PortType port) {
         if (canTrade(playerID)) {
-            HashSet<PortType> ports = map.getPortTypes(playerID);
+            Set<PortType> ports = map.getPortTypes(playerID);
             boolean cangame = game.canMaritimeTrade(playerID, port);
             return ports.contains(port) && cangame;
         }
@@ -265,8 +268,8 @@ public class Facade {
     }
 
     public void maritimeTrade(int playerID, PortType port) throws BuildException {
-        if (!canMaritimeTrade(playerID)) {
-            throw new BuildException("can't trade right now");
+        if (!canMaritimeTrade(playerID, port)) {
+            throw new BuildException("invalid maritime trade");
         } else {
             game.maritimeTrade(playerID, port);
         }
@@ -292,7 +295,7 @@ public class Facade {
      * @throws BuildException
      */
     public void playDC(int playerID, DevCardType dc) throws BuildException {
-        if (canPlayDC(playerID)) {
+        if (canPlayDC(playerID, dc)) {
             game.playDevelopmentCard(playerID, dc);
         } else {
             throw new BuildException("can't play this Develpment Card");
