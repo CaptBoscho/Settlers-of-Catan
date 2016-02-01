@@ -1,10 +1,10 @@
 package shared.model.game;
 
 import shared.definitions.PortType;
-import shared.exceptions.FailedToRandomizeException;
+import shared.definitions.ResourceType;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
-import shared.model.bank.StructureBank;
+import shared.definitions.DevCardType;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * game class representing a Catan game
  */
-public class Game implements IGame,IGameActions {
+public class Game implements IGame, IGameActions {
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
