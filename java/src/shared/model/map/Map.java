@@ -97,7 +97,7 @@ public class Map implements IMap {
         if(hasNeighborBuildings(vertexLoc)) {
             throw new StructureException("Vertex location has a neighboring building");
         }
-        Settlement settlement = new Settlement(); //TODO:pass in userid into settlement
+        Settlement settlement = new Settlement(playerID);
         vertex.setBuilding(settlement);
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
@@ -240,7 +240,7 @@ public class Map implements IMap {
         if(!vertexHasConnectingRoad(playerID, vertexLoc)) {
             throw new StructureException("Vertex location has no connecting road");
         }
-        Settlement settlement = new Settlement(); //TODO:pass in userid into settlement
+        Settlement settlement = new Settlement(playerID);
         vertex.setBuilding(settlement);
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
@@ -307,7 +307,7 @@ public class Map implements IMap {
         }
         ArrayList<Vertex> buildings = this.buildings.get(playerID);
         buildings.remove(vertex);
-        City city = new City(); //TODO:pass in userID into city
+        City city = new City(playerID);
         vertex.setBuilding(city);
         buildings.add(vertex);
     }
@@ -658,7 +658,7 @@ public class Map implements IMap {
         HexLocation hexLoc = vertexLoc.getHexLoc();
         VertexLocation rightLoc = new VertexLocation(hexLoc, VertexDirection.NorthEast);
         Vertex right = vertices.get(rightLoc);
-        if(right.hasBuilding()) {
+        if(right != null && right.hasBuilding()) {
             return true;
         }
         return false;
@@ -680,7 +680,7 @@ public class Map implements IMap {
         HexLocation hexLoc = vertexLoc.getHexLoc();
         VertexLocation leftLoc = new VertexLocation(hexLoc, VertexDirection.NorthWest);
         Vertex left = vertices.get(leftLoc);
-        if(left.hasBuilding()) {
+        if(left != null && left.hasBuilding()) {
             return true;
         }
         return false;
