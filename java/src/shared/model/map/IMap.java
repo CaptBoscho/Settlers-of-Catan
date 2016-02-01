@@ -118,7 +118,7 @@ public interface IMap {
     /**
      * Gets all the port types that a player has
      * @param playerID int
-     * @return Set</PortType>
+     * @return Set<PortType></PortType>
      * @throws InvalidPlayerException Throws exception if playerID is invalid
      */
     public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
@@ -126,7 +126,7 @@ public interface IMap {
     /**
      * Moves the Robber to a new hex location
      * @param hexLoc HexLocation
-     * @return Set</Integer> Set of playerID that can be robbed
+     * @return Set<Integer></Integer> Set of playerID that can be robbed
      * @throws AlreadyRobbedException Throws exception if Robber is moved to where it is already at
      * @throws InvalidLocationException Throws exception if vertex location is not on the map
      */
