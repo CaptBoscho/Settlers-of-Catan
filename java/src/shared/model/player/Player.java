@@ -27,8 +27,8 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     private boolean moveRobber;
     private boolean playedDevCard;
     private StructureBank structureBank;
-    private ResourceCardBank resourceCardBank;
-    private DevelopmentCardBank developmentCardBank;
+    private IResourceCardBank resourceCardBank;
+    private IDevelopmentCardBank developmentCardBank;
 
     /**
      * Default Constructor
@@ -215,7 +215,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseYearOfPlenty() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseYearOfPlenty();
+        return !hasPlayedDevCard() && developmentCardBank.canUseYearOfPlenty();
     }
 
     /**
@@ -237,7 +237,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseRoadBuilder() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseRoadBuild();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseRoadBuild());
     }
 
     /**
@@ -260,7 +260,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseSoldier() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseSoldier();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseSoldier());
     }
 
     /**
@@ -284,7 +284,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseMonopoly() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseMonopoly();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseMonopoly());
     }
 
     /**
@@ -306,7 +306,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseMonument() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseMonument();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseMonument());
     }
 
     /**

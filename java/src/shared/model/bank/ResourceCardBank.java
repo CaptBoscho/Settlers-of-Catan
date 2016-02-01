@@ -110,40 +110,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
     @Override
     public ResourceCard draw(ResourceType type) throws InvalidTypeException, Exception {
         if (ownedByGame) {
-            switch (type) {
-                case BRICK:
-                    if (bricks.size() > 0) {
-                        return bricks.remove(0);
-                    } else {
-                        return null;
-                    }
-                case ORE:
-                    if (ores.size() > 0) {
-                        return ores.remove(0);
-                    } else {
-                        return null;
-                    }
-                case SHEEP:
-                    if (sheeps.size() > 0) {
-                        return sheeps.remove(0);
-                    } else {
-                        return null;
-                    }
-                case WHEAT:
-                    if (wheats.size() > 0) {
-                        return wheats.remove(0);
-                    } else {
-                        return null;
-                    }
-                case WOOD:
-                    if (woods.size() > 0) {
-                        return woods.remove(0);
-                    } else {
-                        return null;
-                    }
-                default:
-                    throw new InvalidTypeException("Invalid ResourceType");
-            }
+            return removeCard(type);
         } else {
             throw new Exception("Can't choose which resource to draw from player");
         }
@@ -204,40 +171,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
 
     @Override
     public ResourceCard discard(ResourceType type) throws InsufficientResourcesException, InvalidTypeException {
-        switch (type) {
-            case BRICK:
-                if (getNumberOfBrick() > 0) {
-                    return bricks.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no bricks to discard");
-                }
-            case ORE:
-                if (getNumberOfOre() > 0) {
-                    return ores.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no ores to discard");
-                }
-            case SHEEP:
-                if (getNumberOfSheep() > 0) {
-                    return sheeps.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no sheep to discard");
-                }
-            case WHEAT:
-                if (getNumberOfWheat() > 0) {
-                    return wheats.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no wheats to discard");
-                }
-            case WOOD:
-                if (getNumberOfWood() > 0) {
-                    return woods.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no woods to discard");
-                }
-            default:
-                throw new InvalidTypeException("The given type is invalid");
-        }
+        return removeCard(type);
     }
 
     @Override
@@ -346,6 +280,43 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
     @Override
     public boolean canDiscardCards() {
         return (size() > 7);
+    }
+
+    private ResourceCard removeCard(ResourceType type) throws InsufficientResourcesException, InvalidTypeException {
+        switch (type) {
+            case BRICK:
+                if (getNumberOfBrick() > 0) {
+                    return bricks.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no available bricks");
+                }
+            case ORE:
+                if (getNumberOfOre() > 0) {
+                    return ores.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no available ores");
+                }
+            case SHEEP:
+                if (getNumberOfSheep() > 0) {
+                    return sheeps.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no available sheep");
+                }
+            case WHEAT:
+                if (getNumberOfWheat() > 0) {
+                    return wheats.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no available wheats");
+                }
+            case WOOD:
+                if (getNumberOfWood() > 0) {
+                    return woods.remove(0);
+                } else {
+                    throw new InsufficientResourcesException("There are no available woods");
+                }
+            default:
+                throw new InvalidTypeException("The given type is invalid");
+        }
     }
 
     /**
