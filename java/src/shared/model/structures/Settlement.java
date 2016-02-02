@@ -4,11 +4,15 @@ import shared.definitions.ResourceType;
 
 /**
  * A settlement is a first-level structure for a player, and provides the player with one victory point. Settlements
- * can be placed on Edge pieces.
+ * can be placed on Vertex pieces.
  *
  * @author Danny Harding
  */
 public class Settlement extends Building {
+
+    public Settlement(int playerID) {
+        super(playerID);
+    }
 
     /**
      * Adds one of the given resource type to a Player's ResourceCardBank
