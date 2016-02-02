@@ -49,7 +49,7 @@ public class Map implements IMap {
      ============================================*/
 
     @Override
-    public void giveResources(int diceRoll) throws InvalidDiceRollException {
+    public java.util.Map<Integer, List<ResourceType>> getResources(int diceRoll) throws InvalidDiceRollException {
         if(diceRoll < 2 || diceRoll > 12) {
             throw new InvalidDiceRollException("Dice roll was " + diceRoll);
         }
@@ -57,27 +57,22 @@ public class Map implements IMap {
             throw new InvalidDiceRollException("Need to move robber instead of giving resources");
         }
         ArrayList<HexLocation> chitList = chits.get(diceRoll);
+        java.util.Map<Integer, List<ResourceType>> resourceMap = new HashMap<>();
         for (HexLocation hexLoc : chitList) {
             if (robber.getLocation() != hexLoc) {
-                ResourceType resourceType = getResourceType(hexLoc);
-                VertexLocation northWestLoc = new VertexLocation(hexLoc, VertexDirection.NorthWest);
-                VertexLocation northEastLoc = new VertexLocation(hexLoc, VertexDirection.NorthEast);
-                VertexLocation eastLoc = new VertexLocation(hexLoc, VertexDirection.East);
-                VertexLocation southEastLoc = new VertexLocation(hexLoc, VertexDirection.SouthEast);
-                VertexLocation southWestLoc = new VertexLocation(hexLoc, VertexDirection.SouthWest);
-                VertexLocation westLoc = new VertexLocation(hexLoc, VertexDirection.West);
-                giveResourcesToBuilding(northWestLoc, resourceType);
-                giveResourcesToBuilding(northEastLoc, resourceType);
-                giveResourcesToBuilding(eastLoc, resourceType);
-                giveResourcesToBuilding(southEastLoc, resourceType);
-                giveResourcesToBuilding(southWestLoc, resourceType);
-                giveResourcesToBuilding(westLoc, resourceType);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthWest);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthEast);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.East);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthEast);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthWest);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.West);
             }
         }
+        return resourceMap;
     }
 
     @Override
-    public void initiateSettlement(int playerID, VertexLocation vertexLoc)
+    public List<ResourceType> initiateSettlement(int playerID, VertexLocation vertexLoc)
             throws StructureException, InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
             throw new InvalidPlayerException("PlayerID was " + playerID);
@@ -99,6 +94,7 @@ public class Map implements IMap {
             addPort(playerID, vertex);
         }
         ArrayList<Vertex> buildings = this.buildings.get(playerID);
+        List<ResourceType> resources = new ArrayList<>();
         if(buildings == null) {
             buildings = new ArrayList<>();
             buildings.add(vertex);
@@ -106,11 +102,12 @@ public class Map implements IMap {
         } else {
             buildings.add(vertex);
             if(vertexLoc.getDir() == VertexDirection.NorthWest) {
-                initiateResourcesNorthWest(vertexLoc);
+                initiateResourcesNorthWest(resources, vertexLoc);
             } else {
-                initiateResourcesNorthEast(vertexLoc);
+                initiateResourcesNorthEast(resources, vertexLoc);
             }
         }
+        return resources;
     }
 
     @Override
@@ -611,6 +608,43 @@ public class Map implements IMap {
         return portTypes;
     }
 
+    private void getResourcesFromBuilding(java.util.Map<Integer, List<ResourceType>> resourceMap, HexLocation hexLoc,
+                                          VertexDirection vertexDir) {
+        ResourceType resourceType = getResourceType(hexLoc);
+        VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        Vertex vertex = vertices.get(vertexLoc);
+        if(vertex.hasBuilding()) {
+            Building building = vertex.getBuilding();
+            Settlement instance;
+            boolean isCity = false;
+            try {
+                instance = Settlement.class.newInstance();
+                if(building.getClass() != instance.getClass()) {
+                    isCity = true;
+                }
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            int playerID = vertex.getBuilding().getPlayerID();
+            List<ResourceType> resources = resourceMap.get(playerID);
+            if(resources == null) {
+                resources = new ArrayList<>();
+                resources.add(resourceType);
+                if(isCity) {
+                    resources.add(resourceType);
+                }
+                resourceMap.put(playerID, resources);
+            } else {
+                resources.add(resourceType);
+                if(isCity) {
+                    resources.add(resourceType);
+                }
+            }
+        }
+    }
+
+
     private void giveResourcesToBuilding(VertexLocation vertexLoc, ResourceType resourceType) {
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -679,47 +713,39 @@ public class Map implements IMap {
         }
     }
 
-    private void initiateResourcesNorthWest(VertexLocation vertexLoc) {
-        ArrayList<ResourceType> resourceList = new ArrayList<>();
+    private void initiateResourcesNorthWest(List<ResourceType> resources, VertexLocation vertexLoc) {
         HexLocation upperLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthWest);
         HexLocation lowerLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthWest);
         HexLocation rightHexLoc = vertexLoc.getHexLoc();
         ResourceType resourceType = getResourceType(upperLeftHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(lowerLeftHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(rightHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
-        }
-        for (ResourceType aResourceType : resourceList) {
-            giveResourcesToBuilding(vertexLoc, aResourceType);
+            resources.add(resourceType);
         }
     }
 
-    private void initiateResourcesNorthEast(VertexLocation vertexLoc) {
-        ArrayList<ResourceType> resourceList = new ArrayList<>();
+    private void initiateResourcesNorthEast(List<ResourceType> resources, VertexLocation vertexLoc) {
         HexLocation upperRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthEast);
         HexLocation lowerRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthEast);
         HexLocation leftHexLoc = vertexLoc.getHexLoc();
         ResourceType resourceType = getResourceType(upperRightHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(lowerRightHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(leftHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
-        }
-        for (ResourceType aResourceType : resourceList) {
-            giveResourcesToBuilding(vertexLoc, aResourceType);
+            resources.add(resourceType);
         }
     }
 
@@ -880,12 +906,12 @@ public class Map implements IMap {
         VertexLocation southEastLoc = new VertexLocation(hexLoc, VertexDirection.SouthEast);
         VertexLocation southWestLoc = new VertexLocation(hexLoc, VertexDirection.SouthWest);
         VertexLocation westLoc = new VertexLocation(hexLoc, VertexDirection.West);
-        northWestLoc.getNormalizedLocation();
-        northEastLoc.getNormalizedLocation();
-        eastLoc.getNormalizedLocation();
-        southEastLoc.getNormalizedLocation();
-        southWestLoc.getNormalizedLocation();
-        westLoc.getNormalizedLocation();
+        northWestLoc = northWestLoc.getNormalizedLocation();
+        northEastLoc = northEastLoc.getNormalizedLocation();
+        eastLoc = eastLoc.getNormalizedLocation();
+        southEastLoc = southEastLoc.getNormalizedLocation();
+        southWestLoc = southWestLoc.getNormalizedLocation();
+        westLoc =westLoc.getNormalizedLocation();
         Vertex northWest = vertices.get(northWestLoc);
         Vertex northEast = vertices.get(northEastLoc);
         Vertex east = vertices.get(eastLoc);
