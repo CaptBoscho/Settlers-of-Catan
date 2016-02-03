@@ -60,6 +60,9 @@ public class TurnTracker {
         return this.currentTurn;
     }
 
+
+    public int getLongestRoad() { return longestRoad;}
+
     /**
      * Set the number of players
      * @param numPlayers number of players

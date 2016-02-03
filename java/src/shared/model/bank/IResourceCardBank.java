@@ -1,5 +1,6 @@
 package shared.model.bank;
 
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.game.trade.TradeType;
 import shared.model.resources.ResourceCard;
@@ -23,7 +24,7 @@ public interface IResourceCardBank {
 
     boolean canOfferTrade();
 
-    boolean canMaritimeTrade(TradeType type) throws InsufficientResourcesException, InvalidTypeException;
+    boolean canMaritimeTrade(PortType type) throws InsufficientResourcesException, InvalidTypeException;
 
     boolean canBuyDevCard();
 

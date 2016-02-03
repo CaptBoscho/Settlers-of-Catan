@@ -1,5 +1,7 @@
 package shared.model.player;
 
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.exceptions.DevCardException;
 import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.MoveRobberException;
@@ -21,7 +23,7 @@ public interface IPlayerManager {
      * Randomize player order (turn order)
      * @throws FailedToRandomizeException
      */
-    void randomizePlayers() throws FailedToRandomizeException;
+    List<Integer> randomizePlayers() throws FailedToRandomizeException;
 
     /**
      * Authenticates a player
@@ -64,7 +66,7 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @param cards Cards to be discarded
      */
-    void discardCards(int id, List<ResourceCard> cards) throws PlayerExistException; // TODO: 1/30/2016 Would be better with Card generic class
+    void discardCards(int id, List<ResourceType> cards) throws PlayerExistException; // TODO: 1/30/2016 Would be better with Card generic class
 
     /**
      * Determine if Player can offer a trade
@@ -81,7 +83,7 @@ public interface IPlayerManager {
      * @param type Type of trade
      * @return True if Player can perform a maritime trade
      */
-    boolean canMaritimeTrade(int id, TradeType type) throws PlayerExistException;
+    boolean canMaritimeTrade(int id, PortType type) throws PlayerExistException;
 
     /**
      * Determine if Player can buy a dev card
