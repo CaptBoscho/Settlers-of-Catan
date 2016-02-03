@@ -9,10 +9,8 @@ public class TurnTracker {
     private static final int NUMBER_OF_PHASES = 3;
 
     int setupTurn;
-    boolean finalSetupRound = false;
     private int currentTurn;
-    private int currentPhase;
-    private String status;
+    private String status; //'Rolling' or 'Robbing' or 'Playing' or 'Discarding' or 'FirstRound' or 'SecondRound'
     private int longestRoad;
     private int largestArmy;
     private int numPlayers;
@@ -23,7 +21,6 @@ public class TurnTracker {
      */
     public TurnTracker(int index) {
         this.currentTurn = index;
-        this.currentPhase = 0;
         this.setupTurn = 0;
         this.longestRoad = -1;
         this.largestArmy = -1;
@@ -34,13 +31,13 @@ public class TurnTracker {
      * @param turnIndex index of the current player
      * @param longestRoadIndex index of the player who owns the Longest Road
      * @param largestArmyIndex index of the player who owns the Largest Army
-     * @param phase 0, 1, or 2, indicating which phase of the turn the player is in
+     * @param status 'Rolling' or 'Robbing' or 'Playing' or 'Discarding' or 'FirstRound' or 'SecondRound'
      */
-    public TurnTracker(int turnIndex, int longestRoadIndex, int largestArmyIndex, int phase) {
+    public TurnTracker(int turnIndex, int longestRoadIndex, int largestArmyIndex, String status) {
         this.currentTurn = turnIndex;
         this.longestRoad = longestRoadIndex;
         this.largestArmy = largestArmyIndex;
-        this.currentPhase = phase;
+        this.status = status;
     }
 
     /**
@@ -49,7 +46,8 @@ public class TurnTracker {
      * @param json The JSON being used to build the object
      */
     public TurnTracker(JsonObject json) {
-
+        currentTurn = json.get("currentTurn").getAsInt();
+        status = json.get("status").getAsString();
     }
 
     /**
@@ -62,24 +60,11 @@ public class TurnTracker {
     }
 
     /**
-     * Moves to the next phase of a player's turn.
-     * @return the new phase of the player's turn
-     */
-    public int nextPhase() {
-        this.currentPhase = (this.currentPhase++) % NUMBER_OF_PHASES;
-        return this.currentPhase;
-    }
-
-    /**
      * Get the current turn (by player index)
      * @return index of current player
      */
     public int getCurrentTurn() {
         return this.currentTurn;
-    }
-
-    public int getCurrentPhase() {
-        return currentPhase;
     }
 
     /**
@@ -88,18 +73,24 @@ public class TurnTracker {
      * @throws Exception if setupTurn > getNumPlayers()
      */
     public int nextSetupTurn() throws Exception {
-        if (!finalSetupRound) {
+        if (status.equals("FirstRound")) {
             if (setupTurn < getNumPlayers()) {
                 return setupTurn++;
             } else if (setupTurn == numPlayers) {
-                finalSetupRound = true;
+                status = "SecondRound";
                 return setupTurn;
             } else {
                 throw new Exception("Current setup turn is invalid.  This is broken.");
             }
-        } else {
+        } else if (status.equals("SecondRound")) {
             return setupTurn--;
+        } else {
+            throw new Exception("Invalid status. Can only do setup when status is 'FirstRound' or 'SecondRound'");
         }
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     /**
@@ -110,16 +101,20 @@ public class TurnTracker {
         this.numPlayers = numPlayers - 1;
     }
 
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
     /**
      * Converts the object to JSON
      *
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
-        return null;
+        JsonObject json = new JsonObject();
+        json.addProperty("currentTurn", currentTurn);
+        json.addProperty("status", status);
+        return json;
     }
 
-    public int getNumPlayers() {
-        return numPlayers;
-    }
 }
