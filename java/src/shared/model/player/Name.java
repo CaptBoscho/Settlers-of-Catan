@@ -55,7 +55,8 @@ public class Name {
     //Getters/Setters
     //============================================
 
-    public String getName() {
+    @Override
+    public String toString() {
         return name;
     }
 
