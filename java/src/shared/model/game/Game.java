@@ -543,7 +543,7 @@ public class Game implements IGame {
             //playerManager.maritimeTrade(playerID, port));
         }
     }
-    
+
 
 
     public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException{
