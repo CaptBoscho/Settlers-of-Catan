@@ -327,6 +327,12 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject json = new JsonObject();
+        json.addProperty("brick", getNumberOfBrick());
+        json.addProperty("wood", getNumberOfWood());
+        json.addProperty("sheep", getNumberOfSheep());
+        json.addProperty("wheat", getNumberOfWheat());
+        json.addProperty("ore", getNumberOfOre());
+        return json;
     }
 }
