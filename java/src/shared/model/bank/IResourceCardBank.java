@@ -1,6 +1,8 @@
 package shared.model.bank;
 
 import shared.definitions.PortType;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import shared.definitions.ResourceType;
 import shared.model.game.trade.TradeType;
 import shared.model.resources.ResourceCard;
@@ -43,4 +45,6 @@ public interface IResourceCardBank {
     void buildCity() throws InsufficientResourcesException;
 
     boolean canDiscardCards();
+
+    JsonObject toJSON();
 }

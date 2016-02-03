@@ -25,6 +25,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     private int playerIndex;
     private CatanColor color;
     private int victoryPoints;
+    private int soldiers;
     private boolean discarded;
     private boolean moveRobber;
     private boolean playedDevCard;
@@ -37,6 +38,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     public Player() {
         this.victoryPoints = 0;
+        this.soldiers = 0;
         this.color = null;
         this.resourceCardBank = new ResourceCardBank(false);
         this.developmentCardBank = new DevelopmentCardBank(false);
@@ -50,7 +52,29 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param json The JSON being used to construct this object
      */
     public Player(JsonObject json) {
-        switch(json.get("color").getAsString()) {
+        try {
+            setColor(json.get("color").getAsString());
+            this.name = new Name(json.get("name").getAsString());
+            this.developmentCardBank = new DevelopmentCardBank(json.getAsJsonObject("oldDevCards"));
+            this.developmentCardBank.addDevCards(json.getAsJsonObject("newDevCards"));
+        } catch (InvalidNameException | InvalidColorException | BadCallerException e) {
+            e.printStackTrace();
+        }
+
+        this._id = json.get("playerID").getAsInt();
+        this.playerIndex = json.get("playerIndex").getAsInt();
+        this.monuments = json.get("monuments").getAsInt();
+        this.victoryPoints = json.get("victoryPoints").getAsInt();
+        this.discarded = json.get("discarded").getAsBoolean();
+        this.playedDevCard = json.get("playedDevCard").getAsBoolean();
+        this.soldiers = json.get("soldiers").getAsInt();
+
+        this.resourceCardBank = new ResourceCardBank(json.getAsJsonObject("resources"));
+        this.structureBank = new StructureBank(json.get("roads").getAsInt(), json.get("settlements").getAsInt(), json.get("cities").getAsInt());
+    }
+
+    private void setColor(String color) throws InvalidColorException {
+        switch(color) {
             case "red":
                 this.color = CatanColor.RED;
                 break;
@@ -75,15 +99,32 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
             case "white":
                 this.color = CatanColor.WHITE;
                 break;
+            default:
+                throw new InvalidColorException("The given color is invalid");
         }
+    }
 
-        try {
-            this.name = new Name(json.get("name").getAsString());
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
+    private String getColorString() throws InvalidColorException {
+        switch(color) {
+            case RED:
+                return "red";
+            case BLUE:
+                return "blue";
+            case GREEN:
+                return "green";
+            case BROWN:
+                return "brown";
+            case ORANGE:
+                return "orange";
+            case PUCE:
+                return "puce";
+            case PURPLE:
+                return "purple";
+            case WHITE:
+                return "white";
+            default:
+                throw new InvalidColorException("The given color is invalid");
         }
-
-        this._id = json.get("id").getAsInt();
     }
 
     /**
@@ -99,6 +140,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
 
         this.victoryPoints = points;
         this.color = color;
+        this.soldiers = 0;
         this.resourceCardBank = new ResourceCardBank(false);
         this.developmentCardBank = new DevelopmentCardBank(false);
         this.structureBank = new StructureBank();
@@ -120,7 +162,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     public Player(int points, CatanColor color, ResourceCardBank rCrdBnk,
                   DevelopmentCardBank devCrdBnk, StructureBank sBnk,
-                  int index, Name name, boolean canMoveRobber) throws InvalidPlayerException {
+                  int index, Name name, boolean canMoveRobber, int soldiers) throws InvalidPlayerException {
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = rCrdBnk;
@@ -129,6 +171,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.name = name;
         this.playerIndex = index;
         this.moveRobber = canMoveRobber;
+        this.soldiers = soldiers;
     }
 
     //IPlayer Interface Methods - Can Do & Do
@@ -355,7 +398,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildRoad() {
-        return resourceCardBank.canBuildRoad();
+        return resourceCardBank.canBuildRoad() && structureBank.canBuildRoad();
     }
 
     /**
@@ -365,6 +408,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public void buildRoad() {
         try {
             resourceCardBank.buildRoad();
+            structureBank.buildRoad();
         } catch (InsufficientResourcesException e) {
             e.printStackTrace();
         }
@@ -378,7 +422,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildSettlement() {
-        return resourceCardBank.canBuildSettlement();
+        return resourceCardBank.canBuildSettlement() && structureBank.canBuildSettlement();
     }
 
     /**
@@ -389,6 +433,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         //Delegate action
         try {
             resourceCardBank.buildSettlement();
+            structureBank.buildSettlement();
         } catch (InsufficientResourcesException e) {
             e.printStackTrace();
         }
@@ -404,7 +449,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildCity() {
-        return resourceCardBank.canBuildCity();
+        return resourceCardBank.canBuildCity() && structureBank.canBuildCity();
     }
 
     /**
@@ -415,6 +460,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         //Delegate action
         try {
             resourceCardBank.buildCity();
+            structureBank.buildCity();
         } catch (InsufficientResourcesException e) {
             e.printStackTrace();
         }
@@ -501,9 +547,29 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
-        return null;
-    }
+        JsonObject json = new JsonObject();
+        json.addProperty("cities", structureBank.getAvailableCities());
+        try {
+            json.addProperty("color", getColorString());
+        } catch (InvalidColorException e) {
+            e.printStackTrace();
+        }
+        json.addProperty("discarded", discarded);
+        json.addProperty("monuments", monuments);
+        json.addProperty("name", name.toString());
+        json.add("oldDevCards", developmentCardBank.toJSON());
+        json.add("newDevCards", developmentCardBank.newCardsToJSON());
+        json.addProperty("playerIndex", playerIndex);
+        json.addProperty("playedDevCard", playedDevCard);
+        json.addProperty("playerID", _id);
+        json.add("resources", resourceCardBank.toJSON());
+        json.addProperty("roads", structureBank.getAvailableRoads());
+        json.addProperty("settlements", structureBank.getAvailableSettlements());
+        json.addProperty("soldiers", soldiers);
+        json.addProperty("victoryPoints", victoryPoints);
 
+        return json;
+    }
 
     //Getters/Setters
     //============================================
