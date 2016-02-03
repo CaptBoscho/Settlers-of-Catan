@@ -1,6 +1,6 @@
 package shared.model.map.hex;
 
-import com.google.gson.JsonObject;
+import org.json.simple.JSONObject;
 import shared.definitions.HexType;
 import shared.locations.HexLocation;
 
@@ -22,23 +22,6 @@ public class ChitHex extends Hex {
     public ChitHex(HexLocation hexLoc, HexType hexType, int chit) {
         super(hexLoc, hexType);
         this.chit = chit;
-    }
-
-    /**
-     * Constructs a ChitHex object from JSON
-     * @param json The JSON representation of the object
-     */
-    public ChitHex(JsonObject json) {
-        super(json);
-    }
-
-    /**
-     * Converts the object to JSON
-     * @return The JSON representation of the object
-     */
-    @Override
-    public JsonObject toJSON() {
-        return null;
     }
 
     public int getChit() {

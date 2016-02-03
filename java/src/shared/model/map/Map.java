@@ -1,8 +1,11 @@
 package shared.model.map;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import shared.exceptions.*;
 import shared.locations.*;
 import shared.definitions.*;
+import shared.model.JsonSerializable;
 import shared.model.map.hex.*;
 import shared.model.structures.*;
 
@@ -10,12 +13,12 @@ import java.util.*;
 
 /**
  * Representation of the map in the game. The game map keeps track of all locations, buildings, and chits as well as the
- * special robber character. The map uses a HashMap in the underlaying implementation, which allows O(1)
+ * special robber character. The map uses a HashMap in the underlying implementation, which allows O(1)
  * insertion/retrieval.
  *
  * @author Joel Bradley
  */
-public class Map implements IMap {
+public class Map implements IMap, JsonSerializable{
 
     private java.util.Map<HexLocation, Hex> hexes;
     private java.util.Map<EdgeLocation, Edge> edges;
@@ -51,6 +54,15 @@ public class Map implements IMap {
         makeMap();
     }
 
+    /**
+     * Constructor that builds the map from a json blob
+     * @param blob JSONObject
+     */
+    public Map(JsonObject blob) {
+        Gson gson = new Gson();
+        ArrayList<Hex> hexes = gson.fromJson(blob.getAsJsonArray("hex"), ArrayList.class);
+    }
+
     /*===========================================
                    Interface Methods
      ============================================*/
@@ -79,6 +91,34 @@ public class Map implements IMap {
     }
 
     @Override
+    public boolean canInitiateSettlement(int playerID, VertexLocation vertexLoc) throws InvalidPlayerException,
+            InvalidLocationException {
+        if(playerID < 1 || playerID > 4) {
+            throw new InvalidPlayerException("PlayerID was " + playerID);
+        }
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        Vertex vertex = vertices.get(vertexLoc);
+        if(vertex == null) {
+            throw new InvalidLocationException("Vertex location is not on the map");
+        }
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
+            return false;
+        }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements != null && settlements.size() > 1) {
+            return false;
+        }
+        if(vertex.hasBuilding()) {
+            return false;
+        }
+        if(hasNeighborBuildings(vertexLoc)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public List<ResourceType> initiateSettlement(int playerID, VertexLocation vertexLoc)
             throws StructureException, InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
@@ -89,11 +129,16 @@ public class Map implements IMap {
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        if(vertex.hasCity()) {
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
             throw new StructureException("Map is already initialized");
         }
-        if(vertex.hasSettlement()) {
-            throw new StructureException("Vertex location already has a settlement");
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements != null && settlements.size() > 1) {
+            throw new StructureException("Map is already initialized");
+        }
+        if(vertex.hasBuilding()) {
+            throw new StructureException("Vertex location already has a building");
         }
         if(hasNeighborBuildings(vertexLoc)) {
             throw new StructureException("Vertex location has a neighboring building");
@@ -103,7 +148,7 @@ public class Map implements IMap {
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
         }
-        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        settlements = this.settlements.get(playerID);
         List<ResourceType> resources = new ArrayList<>();
         if(settlements == null) {
             settlements = new ArrayList<>();
@@ -121,6 +166,45 @@ public class Map implements IMap {
     }
 
     @Override
+    public boolean canInitiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
+            throws InvalidPlayerException, InvalidLocationException {
+        if(playerID < 1 || playerID > 4) {
+            throw new InvalidPlayerException("PlayerID was " + playerID);
+        }
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        Vertex vertex = vertices.get(vertexLoc);
+        edgeLoc = edgeLoc.getNormalizedLocation();
+        Edge edge = edges.get(edgeLoc);
+        if(vertex == null || edge == null) {
+            throw new InvalidLocationException("Vertex location is not on the map");
+        }
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
+            return false;
+        }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements == null || settlements.size() > 2) {
+            return false;
+        }
+        if(!vertex.hasSettlement()) {
+            return false;
+        }
+        if(vertex.getPlayerID() != playerID) {
+            return false;
+        }
+        if(vertexHasConnectingRoad(playerID, vertexLoc)) {
+            return false;
+        }
+        if(!edgeConnectedToVertex(edgeLoc, vertexLoc)) {
+            return false;
+        }
+        if(edge.hasRoad()) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void initiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
             throws StructureException, InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
@@ -133,8 +217,13 @@ public class Map implements IMap {
         if(vertex == null || edge == null) {
             throw new InvalidLocationException("Vertex/Edge location is not on the map");
         }
-        if(vertex.hasCity()) {
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
             throw new StructureException("Map is already initialized");
+        }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements == null || settlements.size() > 2) {
+            throw new StructureException("Settlement needs to be built or map is already initialized");
         }
         if(!vertex.hasSettlement()) {
             throw new StructureException("Road must be connected to a settlement");
@@ -324,6 +413,11 @@ public class Map implements IMap {
         }
         robber.setLocation(hexLoc);
         return getPlayers(hexLoc);
+    }
+
+    @Override
+    public JsonObject toJSON() {
+        return null;
     }
 
     /*===========================================
@@ -1000,5 +1094,13 @@ public class Map implements IMap {
         if(vertex.hasBuilding()) {
             players.add(vertex.getPlayerID());
         }
+    }
+
+    /*===========================================
+                   Getter Methods
+     ============================================*/
+
+    public java.util.Map<HexLocation, Hex> getHexes() {
+        return hexes;
     }
 }

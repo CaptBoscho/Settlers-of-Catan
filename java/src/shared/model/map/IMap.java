@@ -20,6 +20,17 @@ public interface IMap {
     public java.util.Map<Integer, List<ResourceType>> getResources(int diceRoll) throws InvalidDiceRollException;
 
     /**
+     * Informs if a Settlement can be initiated at a vertex location
+     * @param playerID int
+     * @param vertexLoc VertexLocation
+     * @return boolean
+     * @throws InvalidPlayerException Throws exception if playerID is invalid
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     */
+    public boolean canInitiateSettlement(int playerID, VertexLocation vertexLoc) throws InvalidPlayerException,
+            InvalidLocationException;
+
+    /**
      * Builds a Settlement in setup phase and gives out resources if it is the players second turn
      * @param playerID int
      * @param vertexLoc VertexLocation
@@ -30,6 +41,18 @@ public interface IMap {
      */
     public List<ResourceType> initiateSettlement(int playerID, VertexLocation vertexLoc) throws StructureException,
             InvalidLocationException, InvalidPlayerException;
+
+    /**
+     * Informs if a road can be initiated at an edge location if connected to a vertex location
+     * @param playerID int
+     * @param edgeLoc EdgeLocation
+     * @param vertexLoc VertexLocation
+     * @return boolean
+     * @throws InvalidPlayerException Throws exception if playerID is invalid
+     * @throws InvalidLocationException Throws exception if Edge/Vertex locaiton is not on the map
+     */
+    public boolean canInitiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
+            throws InvalidPlayerException, InvalidLocationException;
 
     /**
      * Builds a Road in setup phase
