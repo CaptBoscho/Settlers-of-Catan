@@ -1,5 +1,8 @@
 package shared.model.bank;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import shared.exceptions.BadCallerException;
 import shared.model.devcards.DevelopmentCard;
 
 /**
@@ -34,4 +37,10 @@ public interface IDevelopmentCardBank {
     public boolean canUseRoadBuild();
 
     public void useRoadBuild();
+
+    public void addDevCards(JsonObject DevCards) throws BadCallerException;
+
+    public JsonObject toJSON();
+
+    public JsonObject newCardsToJSON();
 }
