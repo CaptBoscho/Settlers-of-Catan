@@ -1,5 +1,5 @@
 package shared.model.map.hex;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import shared.definitions.HexType;
 import shared.locations.HexLocation;
 
@@ -7,7 +7,7 @@ import shared.locations.HexLocation;
  * Representation of a Hex in the map. The map is comprised of hexes. A hex has a HexLocation
  * and a HexType
  *
- * @authorn Joel Bradley
+ * @author Joel Bradley
  */
 public class Hex {
 

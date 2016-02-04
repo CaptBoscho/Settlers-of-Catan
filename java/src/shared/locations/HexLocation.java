@@ -1,6 +1,6 @@
 package shared.locations;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 /**
  * Represents the location of a hex on a hex map
@@ -20,8 +20,9 @@ public class HexLocation {
      *
      * @param json The JSON being used to construct this object
      */
-	public HexLocation(JSONObject json) {
-
+	public HexLocation(JsonObject json) {
+        x = json.get("x").getAsInt();
+        y = json.get("y").getAsInt();
     }
 	
 	public int getX() {

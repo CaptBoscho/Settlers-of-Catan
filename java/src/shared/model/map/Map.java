@@ -1,7 +1,7 @@
 package shared.model.map;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import shared.exceptions.*;
 import shared.locations.*;
 import shared.definitions.*;
@@ -60,7 +60,22 @@ public class Map implements IMap, JsonSerializable{
      */
     public Map(JsonObject blob) {
         Gson gson = new Gson();
-        ArrayList<Hex> hexes = gson.fromJson(blob.getAsJsonArray("hex"), ArrayList.class);
+        hexes = new HashMap<>();
+        chits = new HashMap<>();
+        edges = new HashMap<>();
+        vertices = new HashMap<>();
+        settlements = new HashMap<>();
+        cities = new HashMap<>();
+        roads = new HashMap<>();
+        ports = new HashMap<>();
+        makeOceanHexes();
+        makeIslandHexes(gson.fromJson(blob.getAsJsonArray("hexes"), JsonArray.class));
+        makePorts(gson.fromJson(blob.getAsJsonArray("ports"), JsonArray.class));
+        makeRoads(gson.fromJson(blob.getAsJsonArray("roads"), JsonArray.class));
+        makeSettlements(gson.fromJson(blob.getAsJsonArray("settlements"), JsonArray.class));
+        makeCities(gson.fromJson(blob.getAsJsonArray("cities"), JsonArray.class));
+        HexLocation robberHexLoc = new HexLocation(blob.get("robber").getAsJsonObject());
+        robber = new Robber(robberHexLoc);
     }
 
     /*===========================================
@@ -403,6 +418,15 @@ public class Map implements IMap, JsonSerializable{
     }
 
     @Override
+    public Set<Integer> whoCanGetRobbed(HexLocation hexLoc) throws InvalidLocationException {
+        Hex hex = hexes.get(hexLoc);
+        if(hex == null || hex.getType() == HexType.WATER) {
+            throw new InvalidLocationException("Hex location is not on the map");
+        }
+        return getPlayers(hexLoc);
+    }
+
+    @Override
     public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         Hex hex = hexes.get(hexLoc);
         if(hex == null || hex.getType() == HexType.WATER) {
@@ -418,6 +442,208 @@ public class Map implements IMap, JsonSerializable{
     @Override
     public JsonObject toJSON() {
         return null;
+    }
+
+    /*===========================================
+                   Deserializer Methods
+     ============================================*/
+
+    private void makeIslandHexes(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for (JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            makeEdgesForIslandHex(hexLoc);
+            makeVerticesForIslandHex(hexLoc);
+            if(!json.has("resource")) {
+                Hex hex = new Hex(hexLoc, HexType.DESERT);
+                hexes.put(hexLoc, hex);
+            } else {
+                String resource = json.get("resource").getAsString();
+                int chit = json.get("number").getAsInt();
+                ArrayList<HexLocation> chits = this.chits.get(chit);
+                if(chits == null) {
+                    chits = new ArrayList<>();
+                    chits.add(hexLoc);
+                    this.chits.put(chit, chits);
+                } else {
+                    chits.add(hexLoc);
+                }
+                switch(resource) {
+                    case "Wood":
+                        ChitHex chitHex = new ChitHex(hexLoc, HexType.WOOD, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Brick":
+                        chitHex = new ChitHex(hexLoc, HexType.BRICK, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Sheep":
+                        chitHex = new ChitHex(hexLoc, HexType.SHEEP, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Wheat":
+                        chitHex = new ChitHex(hexLoc, HexType.WHEAT, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Ore":
+                        chitHex = new ChitHex(hexLoc, HexType.ORE, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    private void makePorts(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            String direction = json.get("direction").getAsString();
+            VertexLocation vertexLocOne;
+            VertexLocation vertexLocTwo;
+            PortType portType = PortType.THREE;
+            if(json.has("resource")) {
+                String resource = json.get("resource").getAsString();
+                switch(resource) {
+                    case "Wood":
+                        portType = PortType.WOOD;
+                        break;
+                    case "Brick":
+                        portType = PortType.BRICK;
+                        break;
+                    case "Sheep":
+                        portType = PortType.SHEEP;
+                        break;
+                    case "Wheat":
+                        portType = PortType.WHEAT;
+                        break;
+                    case "Ore":
+                        portType = PortType.ORE;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            switch(direction) {
+                case "NW":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.West);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.NorthWest);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "N":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.NorthWest);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.NorthEast);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "NE":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.NorthEast);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.East);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "SE":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.East);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.SouthEast);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "S":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.SouthEast);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.SouthWest);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "SW":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.SouthWest);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.West);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void makeRoads(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            int playerID = json.get("owner").getAsInt() + 1;
+            EdgeLocation edgeLoc = new EdgeLocation(json.get("location").getAsJsonObject());
+            edgeLoc = edgeLoc.getNormalizedLocation();
+            Edge edge = new Edge(edgeLoc);
+            Road road = new Road(playerID);
+            edge.setRoad(road);
+            ArrayList<Edge> roads = this.roads.get(playerID);
+            if(roads == null) {
+                roads = new ArrayList<>();
+                roads.add(edge);
+                this.roads.put(playerID, roads);
+            } else {
+                roads.add(edge);
+            }
+        }
+    }
+
+    private void makeSettlements(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            int playerID = json.get("owner").getAsInt() + 1;
+            VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
+            vertexLoc = vertexLoc.getNormalizedLocation();
+            Vertex vertex = new Vertex(vertexLoc);
+            Settlement settlement = new Settlement(playerID);
+            vertex.buildSettlement(settlement);
+            ArrayList<Vertex> settlements = this.settlements.get(playerID);
+            if(settlements == null) {
+                settlements = new ArrayList<>();
+                settlements.add(vertex);
+                this.settlements.put(playerID, settlements);
+            } else {
+                settlements.add(vertex);
+            }
+        }
+    }
+
+    private void makeCities(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            int playerID = json.get("owner").getAsInt() + 1;
+            VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
+            vertexLoc = vertexLoc.getNormalizedLocation();
+            Vertex vertex = new Vertex(vertexLoc);
+            City city = new City(playerID);
+            vertex.buildCity(city);
+            ArrayList<Vertex> cities = this.cities.get(playerID);
+            if(cities == null) {
+                cities = new ArrayList<>();
+                cities.add(vertex);
+                this.cities.put(playerID, cities);
+            } else {
+                cities.add(vertex);
+            }
+        }
     }
 
     /*===========================================
@@ -1096,11 +1322,4 @@ public class Map implements IMap, JsonSerializable{
         }
     }
 
-    /*===========================================
-                   Getter Methods
-     ============================================*/
-
-    public java.util.Map<HexLocation, Hex> getHexes() {
-        return hexes;
-    }
 }
