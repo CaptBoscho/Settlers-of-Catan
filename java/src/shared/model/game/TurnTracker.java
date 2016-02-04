@@ -61,8 +61,6 @@ public class TurnTracker {
     }
 
 
-    public int getLongestRoad() { return longestRoad;}
-
     /**
      * Set the number of players
      * @param numPlayers number of players

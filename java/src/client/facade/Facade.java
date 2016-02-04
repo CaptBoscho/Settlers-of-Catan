@@ -22,7 +22,6 @@ import java.util.*;
  */
 public class Facade {
 
-    //private IMap map;
     private IGame game;
     private List<Player> players = new ArrayList<>();
     private HashMap<String, PlayerInfo> entries = new HashMap<>();
@@ -32,7 +31,6 @@ public class Facade {
      * Constructor initializes map and game values
      */
     public Facade() {
-        //this.map = new Map();
         this.game = new Game();
     }
 

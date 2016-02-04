@@ -62,7 +62,7 @@ public interface IGame {
      * Action - Player rolls the dice
      * @param playerID ID of Player performing action
      */
-    void rollNumber(int playerID) throws InvalidDiceRollException;
+    int rollNumber(int playerID) throws InvalidDiceRollException;
 
     /**
      * Determine if Player can offer a trade

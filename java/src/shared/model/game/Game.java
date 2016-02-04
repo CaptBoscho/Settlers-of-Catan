@@ -41,7 +41,6 @@ public class Game implements IGame {
         this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
-        //this.playerManager = new PlayerManager();
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
     }
@@ -130,9 +129,10 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void rollNumber(int playerID) throws InvalidDiceRollException{
+    public int rollNumber(int playerID) throws InvalidDiceRollException{
         int roll = dice.roll();
         map.giveResources(roll);
+        return roll;
     }
 
     /**
@@ -370,7 +370,10 @@ public class Game implements IGame {
      */
     @Override
     public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistException {
-        return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID));
+       // if(turnTracker.canBuild(playerID)){
+            return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID));
+       // }
+       // return false;
     }
 
     /**
@@ -399,7 +402,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistException{
-        return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID);
+        return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID); //&& turnTracker.canBuild(playerID);
     }
 
     /**
@@ -424,7 +427,7 @@ public class Game implements IGame {
     @Override
     public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistException {
 
-        return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID);
+        return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID); //&& turnTracker.canBuild(playerID);
     }
 
     /**
