@@ -1,5 +1,7 @@
 package shared.locations;
 
+import com.google.gson.JsonObject;
+
 /**
  * Represents the location of a vertex on a hex map
  */
@@ -11,6 +13,33 @@ public class VertexLocation {
 	public VertexLocation(HexLocation hexLoc, VertexDirection dir) {
 		setHexLoc(hexLoc);
 		setDir(dir);
+	}
+
+	public VertexLocation(JsonObject json) {
+		hexLoc = new HexLocation(json.get("x").getAsInt(), json.get("y").getAsInt());
+		String direction = json.get("direction").getAsString();
+		switch(direction) {
+			case "NW":
+				dir = VertexDirection.NorthWest;
+				break;
+			case "NE":
+				dir = VertexDirection.NorthEast;
+				break;
+			case "E":
+				dir = VertexDirection.East;
+				break;
+			case "SE":
+				dir = VertexDirection.SouthEast;
+				break;
+			case "SW":
+				dir = VertexDirection.SouthWest;
+				break;
+			case "W":
+				dir = VertexDirection.West;
+				break;
+			default:
+				break;
+		}
 	}
 	
 	public HexLocation getHexLoc()

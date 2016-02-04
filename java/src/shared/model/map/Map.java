@@ -1,47 +1,81 @@
 package shared.model.map;
 
+import com.google.gson.Gson;
+import com.google.gson.*;
 import shared.exceptions.*;
 import shared.locations.*;
 import shared.definitions.*;
-import shared.model.map.hex.ChitHex;
-import shared.model.map.hex.Hex;
+import shared.model.JsonSerializable;
+import shared.model.map.hex.*;
 import shared.model.structures.*;
 
 import java.util.*;
 
 /**
  * Representation of the map in the game. The game map keeps track of all locations, buildings, and chits as well as the
- * special robber character. The map uses a HashMap in the underlaying implementation, which allows O(1)
+ * special robber character. The map uses a HashMap in the underlying implementation, which allows O(1)
  * insertion/retrieval.
  *
  * @author Joel Bradley
  */
-public class Map implements IMap {
+public class Map implements IMap, JsonSerializable{
 
     private java.util.Map<HexLocation, Hex> hexes;
     private java.util.Map<EdgeLocation, Edge> edges;
     private java.util.Map<VertexLocation, Vertex> vertices;
     private java.util.Map<Integer, ArrayList<HexLocation>> chits;
     private Robber robber;
-    private java.util.Map<Integer, ArrayList<Vertex>> buildings;
+    private java.util.Map<Integer, ArrayList<Vertex>> settlements;
+    private java.util.Map<Integer, ArrayList<Vertex>> cities;
     private java.util.Map<Integer, ArrayList<Edge>> roads;
     private java.util.Map<Integer, ArrayList<Port>> ports;
     private Random randomGenerator;
+    private boolean randomHexes;
+    private boolean randomChits;
+    private boolean randomPorts;
 
     /**
      * Default Constructor that initializes the map
      */
-    public Map() {
+    public Map(boolean randomHexes, boolean randomChits, boolean randomPorts) {
         //initialize fields
         hexes = new HashMap<>();
         chits = new HashMap<>();
         edges = new HashMap<>();
         vertices = new HashMap<>();
         randomGenerator = new Random();
-        buildings = new HashMap<>();
+        settlements = new HashMap<>();
+        cities = new HashMap<>();
         roads = new HashMap<>();
         ports = new HashMap<>();
+        this.randomHexes = randomHexes;
+        this.randomChits = randomChits;
+        this.randomPorts = randomPorts;
         makeMap();
+    }
+
+    /**
+     * Constructor that builds the map from a json blob
+     * @param blob JSONObject
+     */
+    public Map(JsonObject blob) {
+        Gson gson = new Gson();
+        hexes = new HashMap<>();
+        chits = new HashMap<>();
+        edges = new HashMap<>();
+        vertices = new HashMap<>();
+        settlements = new HashMap<>();
+        cities = new HashMap<>();
+        roads = new HashMap<>();
+        ports = new HashMap<>();
+        makeOceanHexes();
+        makeIslandHexes(gson.fromJson(blob.getAsJsonArray("hexes"), JsonArray.class));
+        makePorts(gson.fromJson(blob.getAsJsonArray("ports"), JsonArray.class));
+        makeRoads(gson.fromJson(blob.getAsJsonArray("roads"), JsonArray.class));
+        makeSettlements(gson.fromJson(blob.getAsJsonArray("settlements"), JsonArray.class));
+        makeCities(gson.fromJson(blob.getAsJsonArray("cities"), JsonArray.class));
+        HexLocation robberHexLoc = new HexLocation(blob.get("robber").getAsJsonObject());
+        robber = new Robber(robberHexLoc);
     }
 
     /*===========================================
@@ -49,7 +83,7 @@ public class Map implements IMap {
      ============================================*/
 
     @Override
-    public void giveResources(int diceRoll) throws InvalidDiceRollException {
+    public java.util.Map<Integer, List<ResourceType>> getResources(int diceRoll) throws InvalidDiceRollException {
         if(diceRoll < 2 || diceRoll > 12) {
             throw new InvalidDiceRollException("Dice roll was " + diceRoll);
         }
@@ -57,27 +91,50 @@ public class Map implements IMap {
             throw new InvalidDiceRollException("Need to move robber instead of giving resources");
         }
         ArrayList<HexLocation> chitList = chits.get(diceRoll);
+        java.util.Map<Integer, List<ResourceType>> resourceMap = new HashMap<>();
         for (HexLocation hexLoc : chitList) {
             if (robber.getLocation() != hexLoc) {
-                ResourceType resourceType = getResourceType(hexLoc);
-                VertexLocation northWestLoc = new VertexLocation(hexLoc, VertexDirection.NorthWest);
-                VertexLocation northEastLoc = new VertexLocation(hexLoc, VertexDirection.NorthEast);
-                VertexLocation eastLoc = new VertexLocation(hexLoc, VertexDirection.East);
-                VertexLocation southEastLoc = new VertexLocation(hexLoc, VertexDirection.SouthEast);
-                VertexLocation southWestLoc = new VertexLocation(hexLoc, VertexDirection.SouthWest);
-                VertexLocation westLoc = new VertexLocation(hexLoc, VertexDirection.West);
-                giveResourcesToBuilding(northWestLoc, resourceType);
-                giveResourcesToBuilding(northEastLoc, resourceType);
-                giveResourcesToBuilding(eastLoc, resourceType);
-                giveResourcesToBuilding(southEastLoc, resourceType);
-                giveResourcesToBuilding(southWestLoc, resourceType);
-                giveResourcesToBuilding(westLoc, resourceType);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthWest);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthEast);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.East);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthEast);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthWest);
+                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.West);
             }
         }
+        return resourceMap;
     }
 
     @Override
-    public void initiateSettlement(int playerID, VertexLocation vertexLoc)
+    public boolean canInitiateSettlement(int playerID, VertexLocation vertexLoc) throws InvalidPlayerException,
+            InvalidLocationException {
+        if(playerID < 1 || playerID > 4) {
+            throw new InvalidPlayerException("PlayerID was " + playerID);
+        }
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        Vertex vertex = vertices.get(vertexLoc);
+        if(vertex == null) {
+            throw new InvalidLocationException("Vertex location is not on the map");
+        }
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
+            return false;
+        }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements != null && settlements.size() > 1) {
+            return false;
+        }
+        if(vertex.hasBuilding()) {
+            return false;
+        }
+        if(hasNeighborBuildings(vertexLoc)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<ResourceType> initiateSettlement(int playerID, VertexLocation vertexLoc)
             throws StructureException, InvalidLocationException, InvalidPlayerException {
         if(playerID < 1 || playerID > 4) {
             throw new InvalidPlayerException("PlayerID was " + playerID);
@@ -87,30 +144,79 @@ public class Map implements IMap {
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
+            throw new StructureException("Map is already initialized");
+        }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements != null && settlements.size() > 1) {
+            throw new StructureException("Map is already initialized");
+        }
         if(vertex.hasBuilding()) {
             throw new StructureException("Vertex location already has a building");
         }
         if(hasNeighborBuildings(vertexLoc)) {
             throw new StructureException("Vertex location has a neighboring building");
         }
-        Settlement settlement = new Settlement(); //TODO: pass in playerID
-        vertex.setBuilding(settlement);
+        Settlement settlement = new Settlement(playerID);
+        vertex.buildSettlement(settlement);
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
         }
-        ArrayList<Vertex> buildings = this.buildings.get(playerID);
-        if(buildings == null) {
-            buildings = new ArrayList<>();
-            buildings.add(vertex);
-            this.buildings.put(playerID, buildings);
+        settlements = this.settlements.get(playerID);
+        List<ResourceType> resources = new ArrayList<>();
+        if(settlements == null) {
+            settlements = new ArrayList<>();
+            settlements.add(vertex);
+            this.settlements.put(playerID, settlements);
         } else {
-            buildings.add(vertex);
+            settlements.add(vertex);
             if(vertexLoc.getDir() == VertexDirection.NorthWest) {
-                initiateResourcesNorthWest(vertexLoc);
+                initiateResourcesNorthWest(resources, vertexLoc);
             } else {
-                initiateResourcesNorthEast(vertexLoc);
+                initiateResourcesNorthEast(resources, vertexLoc);
             }
         }
+        return resources;
+    }
+
+    @Override
+    public boolean canInitiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
+            throws InvalidPlayerException, InvalidLocationException {
+        if(playerID < 1 || playerID > 4) {
+            throw new InvalidPlayerException("PlayerID was " + playerID);
+        }
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        Vertex vertex = vertices.get(vertexLoc);
+        edgeLoc = edgeLoc.getNormalizedLocation();
+        Edge edge = edges.get(edgeLoc);
+        if(vertex == null || edge == null) {
+            throw new InvalidLocationException("Vertex location is not on the map");
+        }
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
+            return false;
+        }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements == null || settlements.size() > 2) {
+            return false;
+        }
+        if(!vertex.hasSettlement()) {
+            return false;
+        }
+        if(vertex.getPlayerID() != playerID) {
+            return false;
+        }
+        if(vertexHasConnectingRoad(playerID, vertexLoc)) {
+            return false;
+        }
+        if(!edgeConnectedToVertex(edgeLoc, vertexLoc)) {
+            return false;
+        }
+        if(edge.hasRoad()) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -126,17 +232,25 @@ public class Map implements IMap {
         if(vertex == null || edge == null) {
             throw new InvalidLocationException("Vertex/Edge location is not on the map");
         }
-        if(!vertex.hasBuilding()) {
-            throw new StructureException("Road must be connected to a Building");
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities != null) {
+            throw new StructureException("Map is already initialized");
         }
-        if(vertex.getBuilding().getPlayerID() != playerID) {
-            throw new StructureException("Building belongs to different player");
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        if(settlements == null || settlements.size() > 2) {
+            throw new StructureException("Settlement needs to be built or map is already initialized");
+        }
+        if(!vertex.hasSettlement()) {
+            throw new StructureException("Road must be connected to a settlement");
+        }
+        if(vertex.getPlayerID() != playerID) {
+            throw new StructureException("Settlement belongs to different player");
         }
         if(vertexHasConnectingRoad(playerID, vertexLoc)) {
-            throw new StructureException("Road connected to the wrong building");
+            throw new StructureException("Road connected to the wrong settlement");
         }
         if(!edgeConnectedToVertex(edgeLoc, vertexLoc)) {
-            throw new StructureException("Road not connected to the building");
+            throw new StructureException("Road not connected to the settlement");
         }
         if(edge.hasRoad()) {
             throw new StructureException("Edge location already has a road");
@@ -201,7 +315,7 @@ public class Map implements IMap {
         if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        return !vertex.hasBuilding() && !hasNeighborBuildings(vertexLoc) &&
+        return vertex.canBuildSettlement() && !hasNeighborBuildings(vertexLoc) &&
                 vertexHasConnectingRoad(playerID, vertexLoc);
     }
 
@@ -216,7 +330,7 @@ public class Map implements IMap {
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        if(vertex.hasBuilding()) {
+        if(!vertex.canBuildSettlement()) {
             throw new StructureException("Vertex already has a Building");
         }
         if(hasNeighborBuildings(vertexLoc)) {
@@ -225,13 +339,13 @@ public class Map implements IMap {
         if(!vertexHasConnectingRoad(playerID, vertexLoc)) {
             throw new StructureException("Vertex location has no connecting road");
         }
-        Settlement settlement = new Settlement(); //TODO: pass in playerID
-        vertex.setBuilding(settlement);
+        Settlement settlement = new Settlement(playerID);
+        vertex.buildSettlement(settlement);
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
         }
-        ArrayList<Vertex> buildings = this.buildings.get(playerID);
-        buildings.add(vertex);
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        settlements.add(vertex);
     }
 
     @Override
@@ -245,19 +359,7 @@ public class Map implements IMap {
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        if(vertex.hasBuilding() && vertex.getBuilding().getPlayerID() == playerID) {
-            Building building = vertex.getBuilding();
-            Settlement instance;
-            try {
-                instance = Settlement.class.newInstance();
-                if(building.getClass() == instance.getClass()) {
-                    return true;
-                }
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
+        return vertex.canBuildCity() && vertex.getPlayerID() == playerID;
     }
 
     @Override
@@ -271,27 +373,25 @@ public class Map implements IMap {
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        if(!vertex.hasBuilding()) {
-            throw new StructureException("A Settlement needs to be built first");
+        if(!vertex.canBuildCity()) {
+            throw new StructureException("A settlement needs to be built first");
         }
-        if(vertex.getBuilding().getPlayerID() != playerID) {
-            throw new StructureException("The Building doesn't belong to the player");
+        if(vertex.getPlayerID() != playerID) {
+            throw new StructureException("The settlement doesn't belong to the player");
         }
-        Building building = vertex.getBuilding();
-        Settlement instance;
-        try {
-            instance = Settlement.class.newInstance();
-            if(building.getClass() != instance.getClass()) {
-                throw new StructureException("A City is already built at the vertex location");
-            }
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+        if(vertex.hasCity()) {
+            throw new StructureException("The vertex location already has a city");
         }
-        ArrayList<Vertex> buildings = this.buildings.get(playerID);
-        buildings.remove(vertex);
-        City city = new City(); //TODO: pass in playerID
-        vertex.setBuilding(city);
-        buildings.add(vertex);
+        City city = new City(playerID);
+        vertex.buildCity(city);
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        if(cities == null) {
+            cities = new ArrayList<>();
+            cities.add(vertex);
+            this.cities.put(playerID, cities);
+        } else {
+            cities.add(vertex);
+        }
     }
 
     @Override
@@ -318,6 +418,15 @@ public class Map implements IMap {
     }
 
     @Override
+    public Set<Integer> whoCanGetRobbed(HexLocation hexLoc) throws InvalidLocationException {
+        Hex hex = hexes.get(hexLoc);
+        if(hex == null || hex.getType() == HexType.WATER) {
+            throw new InvalidLocationException("Hex location is not on the map");
+        }
+        return getPlayers(hexLoc);
+    }
+
+    @Override
     public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         Hex hex = hexes.get(hexLoc);
         if(hex == null || hex.getType() == HexType.WATER) {
@@ -328,6 +437,213 @@ public class Map implements IMap {
         }
         robber.setLocation(hexLoc);
         return getPlayers(hexLoc);
+    }
+
+    @Override
+    public JsonObject toJSON() {
+        return null;
+    }
+
+    /*===========================================
+                   Deserializer Methods
+     ============================================*/
+
+    private void makeIslandHexes(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for (JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            makeEdgesForIslandHex(hexLoc);
+            makeVerticesForIslandHex(hexLoc);
+            if(!json.has("resource")) {
+                Hex hex = new Hex(hexLoc, HexType.DESERT);
+                hexes.put(hexLoc, hex);
+            } else {
+                String resource = json.get("resource").getAsString();
+                int chit = json.get("number").getAsInt();
+                ArrayList<HexLocation> chits = this.chits.get(chit);
+                if(chits == null) {
+                    chits = new ArrayList<>();
+                    chits.add(hexLoc);
+                    this.chits.put(chit, chits);
+                } else {
+                    chits.add(hexLoc);
+                }
+                switch(resource) {
+                    case "Wood":
+                        ChitHex chitHex = new ChitHex(hexLoc, HexType.WOOD, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Brick":
+                        chitHex = new ChitHex(hexLoc, HexType.BRICK, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Sheep":
+                        chitHex = new ChitHex(hexLoc, HexType.SHEEP, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Wheat":
+                        chitHex = new ChitHex(hexLoc, HexType.WHEAT, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    case "Ore":
+                        chitHex = new ChitHex(hexLoc, HexType.ORE, chit);
+                        hexes.put(hexLoc, chitHex);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    private void makePorts(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            String direction = json.get("direction").getAsString();
+            VertexLocation vertexLocOne;
+            VertexLocation vertexLocTwo;
+            PortType portType = PortType.THREE;
+            if(json.has("resource")) {
+                String resource = json.get("resource").getAsString();
+                switch(resource) {
+                    case "Wood":
+                        portType = PortType.WOOD;
+                        break;
+                    case "Brick":
+                        portType = PortType.BRICK;
+                        break;
+                    case "Sheep":
+                        portType = PortType.SHEEP;
+                        break;
+                    case "Wheat":
+                        portType = PortType.WHEAT;
+                        break;
+                    case "Ore":
+                        portType = PortType.ORE;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            switch(direction) {
+                case "NW":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.West);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.NorthWest);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "N":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.NorthWest);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.NorthEast);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "NE":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.NorthEast);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.East);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "SE":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.East);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.SouthEast);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "S":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.SouthEast);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.SouthWest);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                case "SW":
+                    vertexLocOne = new VertexLocation(hexLoc, VertexDirection.SouthWest);
+                    vertexLocTwo = new VertexLocation(hexLoc, VertexDirection.West);
+                    vertexLocOne = vertexLocOne.getNormalizedLocation();
+                    vertexLocTwo = vertexLocTwo.getNormalizedLocation();
+                    makePort(portType, vertexLocOne);
+                    makePort(portType, vertexLocTwo);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void makeRoads(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            int playerID = json.get("owner").getAsInt() + 1;
+            EdgeLocation edgeLoc = new EdgeLocation(json.get("location").getAsJsonObject());
+            edgeLoc = edgeLoc.getNormalizedLocation();
+            Edge edge = new Edge(edgeLoc);
+            Road road = new Road(playerID);
+            edge.setRoad(road);
+            ArrayList<Edge> roads = this.roads.get(playerID);
+            if(roads == null) {
+                roads = new ArrayList<>();
+                roads.add(edge);
+                this.roads.put(playerID, roads);
+            } else {
+                roads.add(edge);
+            }
+        }
+    }
+
+    private void makeSettlements(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            int playerID = json.get("owner").getAsInt() + 1;
+            VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
+            vertexLoc = vertexLoc.getNormalizedLocation();
+            Vertex vertex = new Vertex(vertexLoc);
+            Settlement settlement = new Settlement(playerID);
+            vertex.buildSettlement(settlement);
+            ArrayList<Vertex> settlements = this.settlements.get(playerID);
+            if(settlements == null) {
+                settlements = new ArrayList<>();
+                settlements.add(vertex);
+                this.settlements.put(playerID, settlements);
+            } else {
+                settlements.add(vertex);
+            }
+        }
+    }
+
+    private void makeCities(JsonArray jsonArray) {
+        Gson gson = new Gson();
+        for(JsonElement jsonElem : jsonArray) {
+            JsonObject json = jsonElem.getAsJsonObject();
+            int playerID = json.get("owner").getAsInt() + 1;
+            VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
+            vertexLoc = vertexLoc.getNormalizedLocation();
+            Vertex vertex = new Vertex(vertexLoc);
+            City city = new City(playerID);
+            vertex.buildCity(city);
+            ArrayList<Vertex> cities = this.cities.get(playerID);
+            if(cities == null) {
+                cities = new ArrayList<>();
+                cities.add(vertex);
+                this.cities.put(playerID, cities);
+            } else {
+                cities.add(vertex);
+            }
+        }
     }
 
     /*===========================================
@@ -450,15 +766,27 @@ public class Map implements IMap {
         HexLocation hexLoc = new HexLocation(column, diagonal);
         makeEdgesForIslandHex(hexLoc);
         makeVerticesForIslandHex(hexLoc);
-        int hexTypeIndex = randomGenerator.nextInt(hexTypes.size());
-        HexType hexType = hexTypes.remove(hexTypeIndex);
+        int hexTypeIndex;
+        HexType hexType;
+        if(randomHexes) {
+            hexTypeIndex = randomGenerator.nextInt(hexTypes.size());
+            hexType = hexTypes.remove(hexTypeIndex);
+        } else {
+            hexType = hexTypes.remove(0);
+        }
         if(hexType == HexType.DESERT) {
             Hex desertHex = new Hex(hexLoc, hexType);
             hexes.put(hexLoc, desertHex);
             robber = new Robber(hexLoc);
         } else {
-            int chitIndex = randomGenerator.nextInt(chits.size());
-            int chit = chits.remove(chitIndex);
+            int chitIndex;
+            int chit;
+            if(randomChits) {
+                chitIndex = randomGenerator.nextInt(chits.size());
+                chit = chits.remove(chitIndex);
+            } else {
+                chit = chits.remove(0);
+            }
             ChitHex chitHex = new ChitHex(hexLoc, hexType, chit);
             hexes.put(hexLoc, chitHex);
             ArrayList<HexLocation> chitList = this.chits.get(chit);
@@ -495,88 +823,169 @@ public class Map implements IMap {
 
     private ArrayList<Integer> makeChits() {
         ArrayList<Integer> chits = new ArrayList<>();
-        for(int i=2; i<13; i++) {
-            if(i==2 || i==12) {
-                chits.add(i);
-            } else if(i!=7) {
-                chits.add(i);
-                chits.add(i);
+        if(randomChits) {
+            for (int i = 2; i < 13; i++) {
+                if (i == 2 || i == 12) {
+                    chits.add(i);
+                } else if (i != 7) {
+                    chits.add(i);
+                    chits.add(i);
+                }
             }
+        } else {
+            chits.add(5);
+            chits.add(2);
+            chits.add(6);
+            chits.add(8);
+            chits.add(10);
+            chits.add(9);
+            chits.add(3);
+            chits.add(3);
+            chits.add(11);
+            chits.add(4);
+            chits.add(8);
+            chits.add(4);
+            chits.add(9);
+            chits.add(5);
+            chits.add(10);
+            chits.add(11);
+            chits.add(12);
+            chits.add(6);
         }
         return chits;
     }
 
     private ArrayList<HexType> makeHexTypes() {
         ArrayList<HexType> hexTypes = new ArrayList<>();
-        for(int i=1; i<5; i++) {
-            if(i==1) {
-                hexTypes.add(HexType.DESERT);
-                hexTypes.add(HexType.BRICK);
-                hexTypes.add(HexType.ORE);
-                hexTypes.add(HexType.SHEEP);
-                hexTypes.add(HexType.WHEAT);
-                hexTypes.add(HexType.WOOD);
-            } else if(i==2 || i==3) {
-                hexTypes.add(HexType.BRICK);
-                hexTypes.add(HexType.ORE);
-                hexTypes.add(HexType.SHEEP);
-                hexTypes.add(HexType.WHEAT);
-                hexTypes.add(HexType.WOOD);
-            } else if(i==4) {
-                hexTypes.add(HexType.SHEEP);
-                hexTypes.add(HexType.WHEAT);
-                hexTypes.add(HexType.WOOD);
+        if(randomHexes) {
+            for (int i = 1; i < 5; i++) {
+                if (i == 1) {
+                    hexTypes.add(HexType.DESERT);
+                    hexTypes.add(HexType.BRICK);
+                    hexTypes.add(HexType.ORE);
+                    hexTypes.add(HexType.SHEEP);
+                    hexTypes.add(HexType.WHEAT);
+                    hexTypes.add(HexType.WOOD);
+                } else if (i == 2 || i == 3) {
+                    hexTypes.add(HexType.BRICK);
+                    hexTypes.add(HexType.ORE);
+                    hexTypes.add(HexType.SHEEP);
+                    hexTypes.add(HexType.WHEAT);
+                    hexTypes.add(HexType.WOOD);
+                } else if (i == 4) {
+                    hexTypes.add(HexType.SHEEP);
+                    hexTypes.add(HexType.WHEAT);
+                    hexTypes.add(HexType.WOOD);
+                }
             }
+        } else {
+            hexTypes.add(HexType.ORE);
+            hexTypes.add(HexType.WHEAT);
+            hexTypes.add(HexType.WOOD);
+            hexTypes.add(HexType.BRICK);
+            hexTypes.add(HexType.SHEEP);
+            hexTypes.add(HexType.SHEEP);
+            hexTypes.add(HexType.ORE);
+            hexTypes.add(HexType.DESERT);
+            hexTypes.add(HexType.WOOD);
+            hexTypes.add(HexType.WHEAT);
+            hexTypes.add(HexType.WOOD);
+            hexTypes.add(HexType.WHEAT);
+            hexTypes.add(HexType.BRICK);
+            hexTypes.add(HexType.ORE);
+            hexTypes.add(HexType.BRICK);
+            hexTypes.add(HexType.SHEEP);
+            hexTypes.add(HexType.WOOD);
+            hexTypes.add(HexType.SHEEP);
+            hexTypes.add(HexType.WHEAT);
         }
         return hexTypes;
     }
 
     private void makePorts() {
         ArrayList<PortType> portTypes = makePortTypes();
+        int portTypeIndex;
+        PortType portType;
 
         //first port
-        int portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        PortType portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(1, -1, 1, -1, VertexDirection.NorthWest, VertexDirection.NorthEast, portType);
 
         //second port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(2, 0, 3, 1, VertexDirection.NorthEast, VertexDirection.NorthWest, portType);
 
         //third port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(3, 2, 2, 2, VertexDirection.NorthWest, VertexDirection.NorthEast, portType);
 
         //fourth port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(2, 3, 1, 3, VertexDirection.NorthWest, VertexDirection.NorthEast, portType);
 
         //fifth port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(0, 3, 0, 3, VertexDirection.NorthEast, VertexDirection.NorthWest, portType);
 
         //sixth port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(-1, 2, -2, 1, VertexDirection.NorthWest, VertexDirection.NorthEast, portType);
 
         //seventh port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(-2, 0, -3, -1, VertexDirection.NorthWest, VertexDirection.NorthEast, portType);
 
         //eighth port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(-3, -2, -2, -2, VertexDirection.NorthEast, VertexDirection.NorthWest, portType);
 
         //ninth port
-        portTypeIndex = randomGenerator.nextInt(portTypes.size());
-        portType = portTypes.remove(portTypeIndex);
+        if(randomPorts) {
+            portTypeIndex = randomGenerator.nextInt(portTypes.size());
+            portType = portTypes.remove(portTypeIndex);
+        } else {
+            portType = portTypes.remove(0);
+        }
         portSetup(-1, -2, -1, -2, VertexDirection.NorthWest, VertexDirection.NorthEast, portType);
     }
 
@@ -598,24 +1007,53 @@ public class Map implements IMap {
 
     private ArrayList<PortType> makePortTypes() {
         ArrayList<PortType> portTypes = new ArrayList<>();
-        for(int i=1; i<5; i++) {
-            if(i==1) {
-                portTypes.add(PortType.BRICK);
-                portTypes.add(PortType.ORE);
-                portTypes.add(PortType.SHEEP);
-                portTypes.add(PortType.WHEAT);
-                portTypes.add(PortType.WOOD);
+        if(randomPorts) {
+            for (int i = 1; i < 5; i++) {
+                if (i == 1) {
+                    portTypes.add(PortType.BRICK);
+                    portTypes.add(PortType.ORE);
+                    portTypes.add(PortType.SHEEP);
+                    portTypes.add(PortType.WHEAT);
+                    portTypes.add(PortType.WOOD);
+                }
+                portTypes.add(PortType.THREE);
             }
+        } else {
+            portTypes.add(PortType.ORE);
             portTypes.add(PortType.THREE);
+            portTypes.add(PortType.SHEEP);
+            portTypes.add(PortType.THREE);
+            portTypes.add(PortType.THREE);
+            portTypes.add(PortType.BRICK);
+            portTypes.add(PortType.WOOD);
+            portTypes.add(PortType.THREE);
+            portTypes.add(PortType.WHEAT);
         }
         return portTypes;
     }
 
-    private void giveResourcesToBuilding(VertexLocation vertexLoc, ResourceType resourceType) {
+    private void getResourcesFromBuilding(java.util.Map<Integer, List<ResourceType>> resourceMap, HexLocation hexLoc,
+                                          VertexDirection vertexDir) {
+        ResourceType resourceType = getResourceType(hexLoc);
+        VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
         if(vertex.hasBuilding()) {
-            vertex.giveResources(resourceType);
+            int playerID = vertex.getPlayerID();
+            List<ResourceType> resources = resourceMap.get(playerID);
+            if(resources == null) {
+                resources = new ArrayList<>();
+                resources.add(resourceType);
+                if(vertex.hasCity()) {
+                    resources.add(resourceType);
+                }
+                resourceMap.put(playerID, resources);
+            } else {
+                resources.add(resourceType);
+                if(vertex.hasCity()) {
+                    resources.add(resourceType);
+                }
+            }
         }
     }
 
@@ -679,47 +1117,39 @@ public class Map implements IMap {
         }
     }
 
-    private void initiateResourcesNorthWest(VertexLocation vertexLoc) {
-        ArrayList<ResourceType> resourceList = new ArrayList<>();
+    private void initiateResourcesNorthWest(List<ResourceType> resources, VertexLocation vertexLoc) {
         HexLocation upperLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthWest);
         HexLocation lowerLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthWest);
         HexLocation rightHexLoc = vertexLoc.getHexLoc();
         ResourceType resourceType = getResourceType(upperLeftHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(lowerLeftHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(rightHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
-        }
-        for (ResourceType aResourceType : resourceList) {
-            giveResourcesToBuilding(vertexLoc, aResourceType);
+            resources.add(resourceType);
         }
     }
 
-    private void initiateResourcesNorthEast(VertexLocation vertexLoc) {
-        ArrayList<ResourceType> resourceList = new ArrayList<>();
+    private void initiateResourcesNorthEast(List<ResourceType> resources, VertexLocation vertexLoc) {
         HexLocation upperRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthEast);
         HexLocation lowerRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthEast);
         HexLocation leftHexLoc = vertexLoc.getHexLoc();
         ResourceType resourceType = getResourceType(upperRightHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(lowerRightHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
+            resources.add(resourceType);
         }
         resourceType = getResourceType(leftHexLoc);
         if(resourceType != null) {
-            resourceList.add(resourceType);
-        }
-        for (ResourceType aResourceType : resourceList) {
-            giveResourcesToBuilding(vertexLoc, aResourceType);
+            resources.add(resourceType);
         }
     }
 
@@ -855,7 +1285,7 @@ public class Map implements IMap {
     private boolean edgeHasConnectingRoad(int playerID, VertexLocation vertexLocOne, VertexLocation vertexLocTwo) {
         if(vertexHasConnectingRoad(playerID, vertexLocOne)) {
             Vertex vertex = vertices.get(vertexLocOne);
-            if(vertex != null && vertex.hasBuilding() && vertex.getBuilding().getPlayerID() == playerID) {
+            if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
                 return true;
             } else if(vertex != null && !vertex.hasBuilding()) {
                 return true;
@@ -863,7 +1293,7 @@ public class Map implements IMap {
         }
         if(vertexHasConnectingRoad(playerID, vertexLocTwo)) {
             Vertex vertex = vertices.get(vertexLocTwo);
-            if(vertex != null && vertex.hasBuilding() && vertex.getBuilding().getPlayerID() == playerID) {
+            if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
                 return true;
             } else if(vertex != null && !vertex.hasBuilding()) {
                 return true;
@@ -874,42 +1304,22 @@ public class Map implements IMap {
 
     private HashSet<Integer> getPlayers(HexLocation hexLoc) {
         HashSet<Integer> players = new HashSet<>();
-        VertexLocation northWestLoc = new VertexLocation(hexLoc, VertexDirection.NorthWest);
-        VertexLocation northEastLoc = new VertexLocation(hexLoc, VertexDirection.NorthEast);
-        VertexLocation eastLoc = new VertexLocation(hexLoc, VertexDirection.East);
-        VertexLocation southEastLoc = new VertexLocation(hexLoc, VertexDirection.SouthEast);
-        VertexLocation southWestLoc = new VertexLocation(hexLoc, VertexDirection.SouthWest);
-        VertexLocation westLoc = new VertexLocation(hexLoc, VertexDirection.West);
-        northWestLoc.getNormalizedLocation();
-        northEastLoc.getNormalizedLocation();
-        eastLoc.getNormalizedLocation();
-        southEastLoc.getNormalizedLocation();
-        southWestLoc.getNormalizedLocation();
-        westLoc.getNormalizedLocation();
-        Vertex northWest = vertices.get(northWestLoc);
-        Vertex northEast = vertices.get(northEastLoc);
-        Vertex east = vertices.get(eastLoc);
-        Vertex southEast = vertices.get(southEastLoc);
-        Vertex southWest = vertices.get(southWestLoc);
-        Vertex west = vertices.get(westLoc);
-        if(northWest.hasBuilding()) {
-            players.add(northWest.getBuilding().getPlayerID());
-        }
-        if(northEast.hasBuilding()) {
-            players.add(northWest.getBuilding().getPlayerID());
-        }
-        if(east.hasBuilding()) {
-            players.add(northWest.getBuilding().getPlayerID());
-        }
-        if(southEast.hasBuilding()) {
-            players.add(northWest.getBuilding().getPlayerID());
-        }
-        if(southWest.hasBuilding()) {
-            players.add(northWest.getBuilding().getPlayerID());
-        }
-        if(west.hasBuilding()) {
-            players.add(northWest.getBuilding().getPlayerID());
-        }
+        getPlayers(players, hexLoc, VertexDirection.NorthWest);
+        getPlayers(players, hexLoc, VertexDirection.NorthEast);
+        getPlayers(players, hexLoc, VertexDirection.East);
+        getPlayers(players, hexLoc, VertexDirection.SouthEast);
+        getPlayers(players, hexLoc, VertexDirection.SouthWest);
+        getPlayers(players, hexLoc, VertexDirection.West);
         return players;
     }
+
+    private void getPlayers(HashSet<Integer> players, HexLocation hexLoc, VertexDirection vertexDir) {
+        VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        Vertex vertex = vertices.get(vertexLoc);
+        if(vertex.hasBuilding()) {
+            players.add(vertex.getPlayerID());
+        }
+    }
+
 }

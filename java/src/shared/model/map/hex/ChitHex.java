@@ -24,23 +24,6 @@ public class ChitHex extends Hex {
         this.chit = chit;
     }
 
-    /**
-     * Constructs a ChitHex object from JSON
-     * @param json The JSON representation of the object
-     */
-    public ChitHex(JsonObject json) {
-        super(json);
-    }
-
-    /**
-     * Converts the object to JSON
-     * @return The JSON representation of the object
-     */
-    @Override
-    public JsonObject toJSON() {
-        return null;
-    }
-
     public int getChit() {
         return chit;
     }
