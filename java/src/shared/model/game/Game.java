@@ -59,7 +59,7 @@ public class Game implements IGame {
         List<Integer> order = this.playerManager.randomizePlayers();
         turnTracker = new TurnTracker(order.get(0));
 
-        return 0;
+        return order.get(0);
     }
 
 
