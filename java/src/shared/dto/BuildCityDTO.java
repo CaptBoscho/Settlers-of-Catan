@@ -1,0 +1,30 @@
+package shared.dto;
+
+import com.google.gson.JsonObject;
+import shared.locations.VertexLocation;
+import shared.model.JsonSerializable;
+
+/**
+ * @author Derek Argueta
+ */
+public class BuildCityDTO implements JsonSerializable {
+
+    private int playerIndex;
+    private VertexLocation location;
+
+    public BuildCityDTO(int playerIndex, VertexLocation location) {
+        this.playerIndex = playerIndex;
+        this.location = location;
+    }
+
+    /**
+     * Converts the object to JSON
+     *
+     * @return The JSON representation of the object
+     */
+    @Override
+    public JsonObject toJSON() {
+        // TODO --
+        return null;
+    }
+}

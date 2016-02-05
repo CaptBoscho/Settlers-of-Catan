@@ -151,28 +151,26 @@ public interface IServer {
     /**
      * Used to buy a development card
      *
-     * @param playerIndex Who's playing this dev card
+     * @param dto The transport object that contains the information required to buy a development card
      * @return The current state of the game
      */
-    public ClientModel buyDevCard(int playerIndex);
+    public ClientModel buyDevCard(BuyDevCardDTO dto);
 
     /**
      * Plays a 'Year of Plenty' card from the player's hand to gain the two specified resources
      *
-     * @param playerIndex Who's playing this dev card
-     * @param resource1 The first resource being acquired
-     * @param resource2 The second resource being acquired
+     * @param dto The transport object that contains the information required to play the Year of Plenty card
      * @return The current state of the game
      */
-    public ClientModel playYearOfPlentyCard(int playerIndex, ResourceType resource1, ResourceType resource2);
+    public ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto);
 
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
      *
-     * @param dto The transport object that contains the information required to play the Year of Plenty card
+     * @param dto The transport object that contains the information required to play the Road Building card
      * @return The current state of the game
      */
-    public ClientModel playRoadBuildingCard(PlayYOPCardDTO dto);
+    public ClientModel playRoadBuildingCard(BuildRoadDTO dto);
 
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob
@@ -201,31 +199,26 @@ public interface IServer {
 
     /**
      * Builds a road at the specified location. (Set 'free' to true during initial setup.)
-     * @param playerIndex Who's placing the road
-     * @param roadLocation The location of the road
-     * @param free Whether this is placed for free (setup)
+     * @param dto The transport object that contains the information required to build a road
      * @return The current state of the game
      */
-    public ClientModel buildRoad(int playerIndex, EdgeLocation roadLocation, boolean free);
+    public ClientModel buildRoad(BuildRoadDTO dto);
 
     /**
      * Builds a settlement at the specified location. (Set 'free' to true during initial setup.)
      *
-     * @param playerIndex Who's placing the settlement
-     * @param location The location of the new settlement
-     * @param free Whether this is placed for free (setup)
+     * @param dto The transport object that contains the information required to build a settlement
      * @return The current state of the game
      */
-    public ClientModel buildSettlement(int playerIndex, VertexLocation location, boolean free);
+    public ClientModel buildSettlement(BuildSettlementDTO dto);
 
     /**
      * Builds a city at the specified location
      *
-     * @param playerIndex Who's placing the city
-     * @param location
+     * @param dto The transport object that contains the information required to build a city
      * @return The current state of the game
      */
-    public ClientModel buildCity(int playerIndex, VertexLocation location);
+    public ClientModel buildCity(BuildCityDTO dto);
 
     /**
      * Offers a domestic trade to another player

@@ -1,11 +1,10 @@
 package client.services;
 
 import client.data.GameInfo;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
-import shared.definitions.ResourceType;
 import shared.dto.*;
-import shared.locations.EdgeLocation;
-import shared.locations.VertexLocation;
 
 import java.util.List;
 
@@ -212,7 +211,9 @@ public class ServerProxy implements IServer {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/sendChat";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -226,7 +227,9 @@ public class ServerProxy implements IServer {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/rollNumber";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -240,7 +243,9 @@ public class ServerProxy implements IServer {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/robPlayer";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -254,45 +259,54 @@ public class ServerProxy implements IServer {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/finishTurn";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
      * Used to buy a development card
      *
-     * @param playerIndex Who's playing this dev card
+     * @param dto The transport object that contains the information required to buy a development card
      * @return The current state of the game
      */
     @Override
-    public ClientModel buyDevCard(int playerIndex) {
+    public ClientModel buyDevCard(BuyDevCardDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buyDevCard";
-        return null;
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
      * Plays a 'Year of Plenty' card from the player's hand to gain the two specified resources
      *
-     * @param playerIndex Who's playing this dev card
-     * @param resource1   The first resource being acquired
-     * @param resource2   The second resource being acquired
+     * @param dto The transport object that contains the information required to play the Year of Plenty card
      * @return The current state of the game
      */
     @Override
-    public ClientModel playYearOfPlentyCard(int playerIndex, ResourceType resource1, ResourceType resource2) {
+    public ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Year_of_Plenty";
-        return null;
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
      *
-     * @param dto The transport object that contains the information required to play the Year of Plenty card
+     * @param dto The transport object that contains the information required to play the Road Building card
      * @return The current state of the game
      */
     @Override
-    public ClientModel playRoadBuildingCard(PlayYOPCardDTO dto) {
+    public ClientModel playRoadBuildingCard(BuildRoadDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Road_Building";
-        return null;
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -305,7 +319,9 @@ public class ServerProxy implements IServer {
     public ClientModel playSoldierCard(PlaySoldierCardDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Soldier";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -336,42 +352,46 @@ public class ServerProxy implements IServer {
     /**
      * Builds a road at the specified location. (Set 'free' to true during initial setup.)
      *
-     * @param playerIndex  Who's placing the road
-     * @param roadLocation The location of the road
-     * @param free         Whether this is placed for free (setup)
+     * @param dto The transport object that contains the information required to build a road
      * @return The current state of the game
      */
     @Override
-    public ClientModel buildRoad(int playerIndex, EdgeLocation roadLocation, boolean free) {
+    public ClientModel buildRoad(BuildRoadDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buildRoad";
-        return null;
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
      * Builds a settlement at the specified location. (Set 'free' to true during initial setup.)
      *
-     * @param playerIndex Who's placing the settlement
-     * @param location    The location of the new settlement
-     * @param free        Whether this is placed for free (setup)
+     * @param dto The transport object that contains the information required to build a settlement
      * @return The current state of the game
      */
     @Override
-    public ClientModel buildSettlement(int playerIndex, VertexLocation location, boolean free) {
+    public ClientModel buildSettlement(BuildSettlementDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buildSettlement";
-        return null;
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
      * Builds a city at the specified location
      *
-     * @param playerIndex Who's placing the city
-     * @param location
+     * @param dto The transport object that contains the information required to build a city
      * @return The current state of the game
      */
     @Override
-    public ClientModel buildCity(int playerIndex, VertexLocation location) {
+    public ClientModel buildCity(BuildCityDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buildCity";
-        return null;
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -384,7 +404,10 @@ public class ServerProxy implements IServer {
     public ClientModel offerTrade(OfferTradeDTO dto) {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/offerTrade";
-        return null;
+        String result = Utils.sendPost(url, dto.toJSON());
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -398,7 +421,9 @@ public class ServerProxy implements IServer {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/acceptTrade";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -412,7 +437,9 @@ public class ServerProxy implements IServer {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -426,7 +453,9 @@ public class ServerProxy implements IServer {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/discardCards";
         String result = Utils.sendPost(url, dto.toJSON());
-        return null;
+        assert result != null;
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
