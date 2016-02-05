@@ -497,6 +497,29 @@ public class MapTest {
         assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
     }
 
+    @Test
+    public void testGetLongestRoad() throws Exception {
+        initializeMap();
+        assertTrue(1 == map.getLongestRoadSize(1));
+        assertTrue(2 == map.getLongestRoadSize(2));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(2,2), EdgeDirection.NorthWest));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(-1,1), EdgeDirection.NorthEast));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthWest));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.North));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.NorthWest));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.North));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.NorthEast));
+        assertTrue(7 == map.getLongestRoadSize(1));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(1,2), EdgeDirection.NorthWest));
+        assertTrue(10 == map.getLongestRoadSize(1));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.SouthWest));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.NorthWest));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.North));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.NorthEast));
+        map.getLongestRoadSize(1);
+        assertTrue(12 == map.getLongestRoadSize(1));
+    }
+
     private void initializeMap() {
         int playerOne = 1;
         int playerTwo = 2;
