@@ -102,6 +102,7 @@ public class TurnTracker {
         return this.currentTurn;
     }
 
+
     /**
      * Goes to the next players turn during the setup phase.
      * @return The index of the next player to setup

@@ -6,6 +6,7 @@ package shared.model.game;
 public class LongestRoad {
     private int playerID;
     private static final int pointWorth = 3;
+    private int size = 0;
 
     /**
      * Default Constructor
@@ -26,8 +27,13 @@ public class LongestRoad {
      * Set the owner by player id
      * @param id id of the player owning this card (-1 for no owner)
      */
-    public void setOwner(int id) {
+    public void setOwner(int id, int roadlength) {
         this.playerID = id;
+        this.size = roadlength;
+    }
+
+    public int getSize(){
+        return this.size;
     }
 
     /**
@@ -37,4 +43,5 @@ public class LongestRoad {
     public int getPointWorth() {
         return pointWorth;
     }
+
 }

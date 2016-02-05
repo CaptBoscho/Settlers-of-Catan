@@ -1,6 +1,8 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.model.bank.*;
 import shared.definitions.CatanColor;
@@ -193,10 +195,10 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param cards Cards to be discarded
      */
     @Override
-    public void discardCards(List<ResourceCard> cards) {
+    public void discardCards(List<ResourceType> cards) {
         try {
-            for (ResourceCard card : cards) {
-                resourceCardBank.discard(card.getType());
+            for (ResourceType card : cards) {
+                resourceCardBank.discard(card);
             }
         } catch (InsufficientResourcesException | InvalidTypeException e) {
             e.printStackTrace();
@@ -222,7 +224,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @return True if Player can perform a maritime trade
      */
     @Override
-    public boolean canMaritimeTrade(TradeType type) {
+    public boolean canMaritimeTrade(PortType type) {
         try {
             return resourceCardBank.canMaritimeTrade(type);
         } catch (InsufficientResourcesException | InvalidTypeException e) {
