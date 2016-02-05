@@ -20,6 +20,10 @@ public class AuthDTO implements JsonSerializable{
         this.password = password;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
 
     /**
      * Converts the object to JSON

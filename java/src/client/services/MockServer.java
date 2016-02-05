@@ -1,6 +1,8 @@
 package client.services;
 
 import client.data.GameInfo;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
 import shared.definitions.ResourceType;
 import shared.dto.*;
@@ -14,6 +16,46 @@ import java.util.List;
  */
 public class MockServer implements IServer {
 
+    // TODO - read directly out of .json files
+    private final String noUser = "The catan.user HTTP cookie is missing.  You must login before calling this method.";
+    private final String noGame = "The catan.game HTTP cookie is missing.  You must join a game before calling this method.";
+    private final String exampleModel = "{\"deck\": {\"yearOfPlenty\": 2,\"monopoly\": 2,\"soldier\": 14,\"roadBuilding\": 2,\"monument\": 5},"
+            + "\"map\": {\"hexes\": [{\"location\": {\"x\": 0,\"y\": -2}},{\"resource\": \"brick\",\"location\": {\"x\": 1,\"y\": -2},"
+            + "\"number\": 4},{\"resource\": \"wood\",\"location\": {\"x\": 2,\"y\": -2},\"number\": 11},"
+            + "{\"resource\": \"brick\",\"location\": {\"x\": -1,\"y\": -1},\"number\": 8},"
+            + "{\"resource\": \"wood\",\"location\": {\"x\": 0,\"y\": -1},\"number\": 3},"
+            + "{\"resource\": \"ore\",\"location\": {\"x\": 1,\"y\": -1},\"number\": 9},"
+            + "{\"resource\": \"sheep\",\"location\": {\"x\": 2,\"y\": -1},\"number\": 12},"
+            + "{\"resource\": \"ore\",\"location\": {\"x\": -2,\"y\": 0},\"number\": 5},"
+            + "{\"resource\": \"sheep\",\"location\": {\"x\": -1,\"y\": 0},\"number\": 10},"
+            + "{\"resource\": \"wheat\",\"location\": {\"x\": 0,\"y\": 0},\"number\": 11},"
+            + "{\"resource\": \"brick\",\"location\": {\"x\": 1,\"y\": 0},\"number\": 5},"
+            + "{\"resource\": \"wheat\",\"location\": {\"x\": 2,\"y\": 0},\"number\": 6},"
+            + "{\"resource\": \"wheat\",\"location\": {\"x\": -2,\"y\": 1},\"number\": 2},"
+            + "{\"resource\": \"sheep\",\"location\": {\"x\": -1,\"y\": 1},\"number\": 9},"
+            + "{\"resource\": \"wood\",\"location\": {\"x\": 0,\"y\": 1},\"number\": 4},"
+            + "{\"resource\": \"sheep\",\"location\": {\"x\": 1,\"y\": 1},\"number\": 10},"
+            + "{\"resource\": \"wood\",\"location\": {\"x\": -2,\"y\": 2},\"number\": 6},"
+            + "{\"resource\": \"ore\",\"location\": {\"x\": -1,\"y\": 2},\"number\": 3},"
+            + "{\"resource\": \"wheat\",\"location\": {\"x\": 0,\"y\": 2},\"number\": 8}],"
+            + "\"roads\": [],\"cities\": [],\"settlements\": [],\"radius\": 3,\"ports\": [{\"ratio\": 3,"
+            + "\"direction\": \"N\",\"location\": {\"x\": 0,\"y\": 3}},{\"ratio\": 3,\"direction\": \"NW\",\"location\": {\"x\": 2,\"y\": 1}},"
+            + "{\"ratio\": 2,\"resource\": \"sheep\",\"direction\": \"NW\",\"location\": {\"x\": 3,\"y\": -1}},"
+            + "{\"ratio\": 3,\"direction\": \"SW\",\"location\": {\"x\": 3,\"y\": -3}},"
+            + "{\"ratio\": 2,\"resource\": \"wheat\",\"direction\": \"S\",\"location\": {\"x\": -1,\"y\": -2}},"
+            + "{\"ratio\": 2,\"resource\": \"wood\",\"direction\": \"NE\",\"location\": {\"x\": -3,\"y\": 2}},"
+            + "{\"ratio\": 2,\"resource\": \"brick\",\"direction\": \"NE\",\"location\": {\"x\": -2,\"y\": 3}},"
+            + "{\"ratio\": 3,\"direction\": \"SE\",\"location\": {\"x\": -3,\"y\": 0}},"
+            + "{\"ratio\": 2,\"resource\": \"ore\",\"direction\": \"S\",\"location\": {\"x\": 1,\"y\": -3}}],"
+            + "\"robber\": {\"x\": 0,\"y\": -2}},\"players\": [{\"resources\": {\"brick\": 0,\"wood\": 0,\"sheep\": 0,\"wheat\": 0,\"ore\": 0},"
+            + "\"oldDevCards\": {\"yearOfPlenty\": 0,\"monopoly\": 0,\"soldier\": 0,\"roadBuilding\": 0,\"monument\": 0},"
+            + "\"newDevCards\": {\"yearOfPlenty\": 0,\"monopoly\": 0,\"soldier\": 0,\"roadBuilding\": 0,\"monument\": 0},"
+            + "\"roads\": 15,\"cities\": 4,\"settlements\": 5,\"soldiers\": 0,\"victoryPoints\": 0,\"monuments\": 0,\"playedDevCard\": false,"
+            + "\"discarded\": false,\"playerID\": 12,\"playerIndex\": 0,\"name\": \"Test\",\"color\": \"orange\"},null,null,null],"
+            + "\"log\": {\"lines\": []},\"chat\": {\"lines\": []},\"bank\": {\"brick\": 24,\"wood\": 24,\"sheep\": 24,\"wheat\": 24,\"ore\": 24},"
+            + "\"turnTracker\": {\"status\": \"FirstRound\",\"currentTurn\": 0,\"longestRoad\": -1,\"largestArmy\": -1},"
+            + "\"winner\": -1,\"version\": 0}";
+
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *
@@ -22,7 +64,7 @@ public class MockServer implements IServer {
      */
     @Override
     public boolean authenticateUser(AuthDTO auth) {
-        return false;
+        return auth.getUsername().equals("dev");
     }
 
     /**
@@ -33,7 +75,8 @@ public class MockServer implements IServer {
      */
     @Override
     public boolean registerUser(AuthDTO auth) {
-        return false;
+        // accept any registration for dev/test purposes
+        return true;
     }
 
     /**
@@ -54,7 +97,7 @@ public class MockServer implements IServer {
      */
     @Override
     public GameInfo createNewGame(CreateGameDTO dto) {
-        return null;
+        return new GameInfo("{\"name\": \"" + dto.getName() + "\", \"id\": " + ((int)(Math.random()*100)) + " }");
     }
 
     /**
@@ -64,7 +107,7 @@ public class MockServer implements IServer {
      */
     @Override
     public void joinGame(JoinGameDTO dto) {
-
+        // TODO --
     }
 
     /**
@@ -74,6 +117,7 @@ public class MockServer implements IServer {
      */
     @Override
     public boolean saveGame(SaveGameDTO dto) {
+        // TODO - not needed, only for swagger page
         return true;
     }
 
@@ -84,6 +128,7 @@ public class MockServer implements IServer {
      */
     @Override
     public boolean loadGame(LoadGameDTO dto) {
+        // TODO - not needed, only for swagger page
         return true;
     }
 
@@ -104,7 +149,7 @@ public class MockServer implements IServer {
      */
     @Override
     public void resetCurrentGame() {
-
+        // TODO - not needed, only for swagger page
     }
 
     /**
@@ -112,7 +157,7 @@ public class MockServer implements IServer {
      */
     @Override
     public void getAvailableGameCommands() {
-
+        // TODO - not needed, only for swagger page
     }
 
     /**
@@ -122,7 +167,7 @@ public class MockServer implements IServer {
      */
     @Override
     public void executeGameCommands(List<String> gameCommands) {
-
+        // TODO - not needed, only for swagger page
     }
 
     /**
@@ -154,7 +199,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel sendChat(SendChatDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -165,7 +212,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel rollNumber(RollNumberDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -176,7 +225,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel robPlayer(RobPlayerDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -187,7 +238,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel finishTurn(FinishTurnDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -198,7 +251,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel buyDevCard(int playerIndex) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -211,7 +266,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel playYearOfPlentyCard(int playerIndex, ResourceType resource1, ResourceType resource2) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -222,7 +279,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel playRoadBuildingCard(PlayYOPCardDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -233,7 +292,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel playSoldierCard(PlaySoldierCardDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -245,7 +306,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel playMonopolyCard(int playerIndex, String resource) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -256,7 +319,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel playMonumentCard(int playerIndex) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -269,7 +334,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel buildRoad(int playerIndex, EdgeLocation roadLocation, boolean free) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -282,7 +349,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel buildSettlement(int playerIndex, VertexLocation location, boolean free) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -294,7 +363,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel buildCity(int playerIndex, VertexLocation location) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -305,7 +376,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel offerTrade(OfferTradeDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -316,7 +389,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -327,7 +402,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel maritimeTrade(MaritimeTradeDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -338,7 +415,9 @@ public class MockServer implements IServer {
      */
     @Override
     public ClientModel discardCards(DiscardCardsDTO dto) {
-        return null;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
+        return new ClientModel(obj);
     }
 
     /**
@@ -348,6 +427,7 @@ public class MockServer implements IServer {
      */
     @Override
     public boolean changeLogLevel(ChangeLogLevelDTO dto) {
+        // TODO - not needed, only for swagger page
         return false;
     }
 }
