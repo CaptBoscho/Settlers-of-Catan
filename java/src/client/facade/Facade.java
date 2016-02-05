@@ -67,7 +67,7 @@ public class Facade {
     }
 
 
-    public void initializeGame() throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
+    public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
         if (entries.size() != 4 && entries.size() != 3) {
             throw new BuildException("need 3-4 players to play");
         } else {
@@ -78,7 +78,7 @@ public class Facade {
                 players.add(p);
                 id++;
             }
-            int firstPlayerID = this.game.initializeGame(players);
+            int firstPlayerID = this.game.initializeGame(players, randomhex, randomchit, randomport);
             //map stuff
 
         }

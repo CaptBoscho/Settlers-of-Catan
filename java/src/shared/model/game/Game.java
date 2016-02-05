@@ -37,7 +37,6 @@ public class Game implements IGame {
      */
     public Game() {
         this.dice = new Dice();
-        this.map = new Map();
         this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
@@ -53,9 +52,10 @@ public class Game implements IGame {
      * @param players
      * @return Id of first player
      */
-    public int initializeGame(List<Player> players) throws FailedToRandomizeException{
+    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) throws FailedToRandomizeException{
         //Add players to PlayerManager
         this.playerManager = new PlayerManager(players);
+        this.map = new Map(randomhexes, randomchits, randomports);
         List<Integer> order = this.playerManager.randomizePlayers();
         turnTracker = new TurnTracker(order.get(0));
 
@@ -65,7 +65,7 @@ public class Game implements IGame {
 
     public boolean canFirstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException{
         if(getCurrentTurn()==playerID){
-            //return map.canInitiateSettlement(playerID, vertex) && map.canInitiateRoad(playerID, edge, vertex);
+            return map.canInitiateSettlement(playerID, vertex) && map.canInitiateRoad(playerID, edge, vertex);
         }
         return false;
     }
@@ -131,7 +131,7 @@ public class Game implements IGame {
     @Override
     public int rollNumber(int playerID) throws InvalidDiceRollException{
         int roll = dice.roll();
-        map.giveResources(roll);
+       // map.giveResources(roll);
         return roll;
     }
 
