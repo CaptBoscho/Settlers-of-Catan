@@ -1,5 +1,7 @@
 package shared.model.player;
 
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
 import shared.model.game.trade.TradeType;
@@ -25,7 +27,7 @@ public interface IPlayer {
      * Action - Player discards cards
      * @param cards Cards to be discarded
      */
-    void discardCards(List<ResourceCard> cards); // TODO: 1/30/2016 Would be better with Card generic class
+    void discardCards(List<ResourceType> cards); // TODO: 1/30/2016 Would be better with Card generic class
 
     /**
      * Determine if Player can offer a trade
@@ -40,7 +42,7 @@ public interface IPlayer {
      * @param type Type of trade
      * @return True if Player can perform a maritime trade
      */
-    boolean canMaritimeTrade(TradeType type);
+    boolean canMaritimeTrade(PortType type);
 
     /**
      * Determine if Player can buy a dev card
