@@ -1,5 +1,8 @@
 package model.game;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.Assert;
 import shared.definitions.CatanColor;
 import shared.exceptions.FailedToRandomizeException;
@@ -12,21 +15,29 @@ import shared.model.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
- * @author Corbin Byers
+ * Created by corne on 2/5/2016.
  */
 public class GameTest {
-
     private Game game = new Game();
 
-    /*void testInitializeGame() {
+    @Before
+    public void setUp() throws Exception {
 
-    }*/
+    }
 
-    void testCanFirstTurn() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
+    @After
+    public void tearDown() throws Exception {
+
+    }
+
+    @Test
+    public void testCanFirstTurn() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
         List<Player> players = new ArrayList<>();
 
-        Player one = new Player(0, CatanColor.BLUE, 0, new Name ("Hope"));
+        Player one = new Player(0, CatanColor.BLUE, 0, new Name("Hope"));
         Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
         Player three = new Player(0, CatanColor.GREEN, 2, new Name("Hanna"));
         Player four = new Player(0, CatanColor.ORANGE, 3, new Name("Becca"));
@@ -38,166 +49,200 @@ public class GameTest {
 
         int first = game.initializeGame(players, false, false, false);
 
+    }
+
+    @Test
+    public void testFirstTurn() throws Exception {
 
     }
 
-    void testFirstTurn() {
+    @Test
+    public void testGetCurrentTurn() throws Exception {
 
     }
 
-    void testGetCurrentTurn() {
+    @Test
+    public void testCanDiscardCards() throws Exception {
 
     }
 
-    void testCanDiscardCards() {
+    @Test
+    public void testDiscardCards() throws Exception {
 
     }
 
-    void testDiscardCards() {
+    @Test
+    public void testCanRollNumber() throws Exception {
 
     }
 
-    void testCanRollNumber() {
+    @Test
+    public void testRollNumber() throws Exception {
 
     }
 
-    void testRollNumber() {
+    @Test
+    public void testCanOfferTrade() throws Exception {
 
     }
 
-    void testCanOfferTrade() {
+    @Test
+    public void testOfferTrade() throws Exception {
 
     }
 
-    void testOfferTrade() {
+    @Test
+    public void testCanFinishTurn() throws Exception {
 
     }
 
-    void testCanFinishTurn() {
+    @Test
+    public void testFinishTurn() throws Exception {
 
     }
 
-    void testFinishTurn() {
+    @Test
+    public void testCanBuyDevCard() throws Exception {
 
     }
 
-    void testCanBuyDevCard() {
+    @Test
+    public void testBuyDevCard() throws Exception {
 
     }
 
-    void testBuyDevCard() {
+    @Test
+    public void testCanUseYearOfPlenty() throws Exception {
 
     }
 
-    void testCanUseYearOfPlenty() {
+    @Test
+    public void testUseYearOfPlenty() throws Exception {
 
     }
 
-    void testUseYearOfPlenty() {
+    @Test
+    public void testCanUseRoadBuilder() throws Exception {
 
     }
 
-    void testCanUseRoadBuilder() {
+    @Test
+    public void testUseRoadBuilder() throws Exception {
 
     }
 
-    void testUseRoadBuilder() {
+    @Test
+    public void testCanUseSoldier() throws Exception {
 
     }
 
-    void testCanUseSoldier() {
+    @Test
+    public void testUseSoldier() throws Exception {
 
     }
 
-    void testUseSoldier() {
+    @Test
+    public void testCanUseMonopoly() throws Exception {
 
     }
 
-    void testCanUseMonopoly() {
+    @Test
+    public void testUseMonopoly() throws Exception {
 
     }
 
-    void testUseMonopoly() {
+    @Test
+    public void testCanUseMonument() throws Exception {
 
     }
 
-    void testCanUseMonument() {
+    @Test
+    public void testUseMonument() throws Exception {
 
     }
 
-    void testUseMonument() {
+    @Test
+    public void testCanPlaceRobber() throws Exception {
 
     }
 
-    void testCanPlaceRobber() {
+    @Test
+    public void testPlaceRobber() throws Exception {
 
     }
 
-    void testPlaceRobber() {
+    @Test
+    public void testRob() throws Exception {
 
     }
 
-    void testRob() {
+    @Test
+    public void testCanBuildRoad() throws Exception {
 
     }
 
-    void testCanBuildRoad() {
+    @Test
+    public void testBuildRoad() throws Exception {
 
     }
 
-    void testBuildRoad() {
+    @Test
+    public void testCanBuildSettlement() throws Exception {
 
     }
 
-    void testCanBuildSettlement() {
+    @Test
+    public void testBuildSettlement() throws Exception {
 
     }
 
-    void testBuildSettlement() {
+    @Test
+    public void testCanBuildCity() throws Exception {
 
     }
 
-    void testCanBuildCity() {
+    @Test
+    public void testBuildCity() throws Exception {
 
     }
 
-    void testBuildCity() {
+    @Test
+    public void testCurrentLongestRoadSize() throws Exception {
 
     }
 
-    void testCurrentLongestRoadSize() {
+    @Test
+    public void testCurrentLongestRoadPlayer() throws Exception {
 
     }
 
-    void testCurrentLongestRoadPlayer() {
+    @Test
+    public void testNewLongestRoad() throws Exception {
 
     }
 
-    void testNewLongestRoad() {
+    @Test
+    public void testCanBuyDevelopmentCard() throws Exception {
 
     }
 
-    void testCanBuyDevelopmentCard() {
+    @Test
+    public void testBuyDevelopmentCard() throws Exception {
 
     }
 
-    void testBuyDevelopmentCard() {
+    @Test
+    public void testCanTrade() throws Exception {
 
     }
 
-    void testCanTrade() {
+    @Test
+    public void testCanMaritimeTrade() throws Exception {
 
     }
 
-    void testCanMaritimeTrade() {
-
-    }
-
-    void testMaritimeTrade() {
-
-    }
-
-    void testGetPortTypes() {
+    @Test
+    public void testMaritimeTrade() throws Exception {
 
     }
 }
