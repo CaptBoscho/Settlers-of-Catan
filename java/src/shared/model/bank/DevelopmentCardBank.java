@@ -1,6 +1,8 @@
 package shared.model.bank;
 
 import com.google.gson.JsonObject;
+import shared.definitions.DevCardType;
+import shared.exceptions.BadCallerException;
 import shared.model.JsonSerializable;
 import shared.model.devcards.*;
 
@@ -23,11 +25,18 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
     private boolean ownedByGame;
 
     private ArrayList<DevelopmentCard> developmentCards;
+
     private ArrayList<SoldierCard> soldierCards;
     private ArrayList<MonumentCard> monumentCards;
     private ArrayList<MonopolyCard> monopolyCards;
     private ArrayList<YearOfPlentyCard> yearOfPlentyCards;
     private ArrayList<RoadBuildCard> roadBuildCards;
+
+    private ArrayList<SoldierCard> newSoldierCards;
+    private ArrayList<MonumentCard> newMonumentCards;
+    private ArrayList<MonopolyCard> newMonopolyCards;
+    private ArrayList<YearOfPlentyCard> newYearOfPlentyCards;
+    private ArrayList<RoadBuildCard> newRoadBuildCards;
 
     /**
      * Creates a DevelopmentCardBank
@@ -106,19 +115,19 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         } else {
             switch (cardToAdd.getType()) {
                 case SOLDIER:
-                    soldierCards.add((SoldierCard) cardToAdd);
+                    newSoldierCards.add((SoldierCard) cardToAdd);
                     break;
                 case MONUMENT:
-                    monumentCards.add((MonumentCard) cardToAdd);
+                    newMonumentCards.add((MonumentCard) cardToAdd);
                     break;
                 case MONOPOLY:
-                    monopolyCards.add((MonopolyCard) cardToAdd);
+                    newMonopolyCards.add((MonopolyCard) cardToAdd);
                     break;
                 case YEAR_OF_PLENTY:
-                    yearOfPlentyCards.add((YearOfPlentyCard) cardToAdd);
+                    newYearOfPlentyCards.add((YearOfPlentyCard) cardToAdd);
                     break;
                 case ROAD_BUILD:
-                    roadBuildCards.add((RoadBuildCard) cardToAdd);
+                    newRoadBuildCards.add((RoadBuildCard) cardToAdd);
                     break;
                 default:
                     throw new InvalidTypeException("The given card has an invalid type");
@@ -193,6 +202,29 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         roadBuildCards.remove(0);
     }
 
+    @Override
+    public void addDevCards(JsonObject DevCards) throws BadCallerException {
+        if (ownedByGame) {
+            throw new BadCallerException("Can't call this method on DevelopmentCardBank owned by game");
+        } else {
+            for (int i = 0; i < DevCards.get("monopoly").getAsInt(); i++) {
+                monopolyCards.add(new MonopolyCard());
+            }
+            for (int i = 0; i < DevCards.get("monument").getAsInt(); i++) {
+                monumentCards.add(new MonumentCard());
+            }
+            for (int i = 0; i < DevCards.get("roadBuilding").getAsInt(); i++) {
+                roadBuildCards.add(new RoadBuildCard());
+            }
+            for (int i = 0; i < DevCards.get("soldier").getAsInt(); i++) {
+                soldierCards.add(new SoldierCard());
+            }
+            for (int i = 0; i < DevCards.get("yearOfPlenty").getAsInt(); i++) {
+                yearOfPlentyCards.add(new YearOfPlentyCard());
+            }
+        }
+    }
+
     /**
      * Removes one DevelopmentCard from the DevelopmentCardBank and returns it
      * @pre getOwner() instanceof Game, not Player
@@ -212,6 +244,76 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         }
     }
 
+    private int getNumberOfMonopolies() {
+        if (ownedByGame) {
+            int counter = 0;
+            for (DevelopmentCard card : developmentCards) {
+                if (card.getType() == DevCardType.MONOPOLY) {
+                    counter++;
+                }
+            }
+            return counter;
+        } else {
+            return monopolyCards.size();
+        }
+    }
+
+    private int getNumberOfMonuments() {
+        if (ownedByGame) {
+            int counter = 0;
+            for (DevelopmentCard card : developmentCards) {
+                if (card.getType() == DevCardType.MONUMENT) {
+                    counter++;
+                }
+            }
+            return counter;
+        } else {
+            return monumentCards.size();
+        }
+    }
+
+    private int getNumberOfRoadBuilds() {
+        if (ownedByGame) {
+            int counter = 0;
+            for (DevelopmentCard card : developmentCards) {
+                if (card.getType() == DevCardType.ROAD_BUILD) {
+                    counter++;
+                }
+            }
+            return counter;
+        } else {
+            return roadBuildCards.size();
+        }
+    }
+
+    private int getNumberOfSoldiers() {
+        if (ownedByGame) {
+            int counter = 0;
+            for (DevelopmentCard card : developmentCards) {
+                if (card.getType() == DevCardType.SOLDIER) {
+                    counter++;
+                }
+            }
+            return counter;
+        } else {
+            return soldierCards.size();
+        }
+    }
+
+    private int getNumberOfYearOfPlenty() {
+        if (ownedByGame) {
+            int counter = 0;
+            for (DevelopmentCard card : developmentCards) {
+                if (card.getType() == DevCardType.YEAR_OF_PLENTY) {
+                    counter++;
+                }
+            }
+            return counter;
+        } else {
+            return yearOfPlentyCards.size();
+        }
+    }
+
     /**
      * Converts the object to JSON
      *
@@ -219,6 +321,26 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject json = new JsonObject();
+        json.addProperty("monopoly", getNumberOfMonopolies());
+        json.addProperty("monument", getNumberOfMonuments());
+        json.addProperty("roadBuilding", getNumberOfRoadBuilds());
+        json.addProperty("soldier", getNumberOfSoldiers());
+        json.addProperty("yearOfPlenty", getNumberOfYearOfPlenty());
+        return json;
     }
+
+    @Override
+    public JsonObject newCardsToJSON() {
+        JsonObject json = new JsonObject();
+        json.addProperty("monopoly", newMonopolyCards.size());
+        json.addProperty("monument", newMonumentCards.size());
+        json.addProperty("roadBuilding", newRoadBuildCards.size());
+        json.addProperty("soldier", newSoldierCards.size());
+        json.addProperty("yearOfPlenty", newYearOfPlentyCards.size());
+        return json;
+    }
+
+
+
 }
