@@ -11,6 +11,7 @@ public class TurnTracker {
 
     private boolean setupPhase;
     private boolean setupRoundOne;
+    private boolean canUseRobber = false;
 
     private int currentTurn;
     private Phase phase;
@@ -103,6 +104,12 @@ public class TurnTracker {
     }
 
 
+
+    public boolean isSetupPhase(){
+        return this.setupPhase;
+    }
+
+
     /**
      * Goes to the next players turn during the setup phase.
      * @return The index of the next player to setup
@@ -165,13 +172,22 @@ public class TurnTracker {
         return phase == Phase.DISCARDING;
     }
 
+    public void updateRobber(boolean now){
+        this.canUseRobber = now;
+    }
+
+    public boolean canUseRobber(){
+        return this.canUseRobber;
+    }
+
     /**
      * Takes a playerID and responds whether it is that player's turn or not.
+     * ID system is base 0 so we don't need to subtract one fromt the currentTurn
      * @param playerID the playerID to check
      * @return true if it is the given player's turn, else false
      */
     public boolean isPlayersTurn(int playerID) {
-        return playerID == currentTurn + 1;
+        return playerID == currentTurn;
     }
 
     /**
@@ -188,7 +204,7 @@ public class TurnTracker {
     }
 
 
-    private enum Phase {
+    public enum Phase {
         ROLLING,
         PLAYING,
         DISCARDING {

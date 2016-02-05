@@ -320,6 +320,30 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
         }
     }
 
+
+    public boolean canBeRobbed(){
+        if(size() > 0){return true;}
+        return false;
+    }
+
+    public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException{
+        if(canBeRobbed()){
+            List<ResourceType> content = new ArrayList<ResourceType>();
+            if(getNumberOfBrick()>0){content.add(ResourceType.BRICK);}
+            if(getNumberOfOre()>0){content.add(ResourceType.ORE);}
+            if(getNumberOfSheep()>0){content.add(ResourceType.SHEEP);}
+            if(getNumberOfWheat()>0){content.add(ResourceType.WHEAT);}
+            if(getNumberOfWood()>0){content.add(ResourceType.WOOD);}
+
+            Random ran = new Random();
+            int card = ran.nextInt(content.size());
+
+            return discard(content.get(card));
+        } else {
+            throw new InsufficientResourcesException("this player has no resources");
+        }
+    }
+
     /**
      * Converts the object to JSON
      *
