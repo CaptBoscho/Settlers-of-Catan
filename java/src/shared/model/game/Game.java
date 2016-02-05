@@ -56,15 +56,17 @@ public class Game implements IGame {
         //Add players to PlayerManager
         this.playerManager = new PlayerManager(players);
         this.map = new Map(randomhexes, randomchits, randomports);
-        List<Integer> order = this.playerManager.randomizePlayers();
-        turnTracker = new TurnTracker(order.get(0));
+        //List<Integer> order = this.playerManager.randomizePlayers();
+        turnTracker = new TurnTracker(players.get(0).getPlayerIndex());
+        turnTracker.setNumPlayers(players.size());
 
-        return order.get(0);
+        return players.get(0).getPlayerIndex();
     }
 
 
+
     public boolean canFirstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException{
-        if(getCurrentTurn()==playerID){
+        if(turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase()){
             return map.canInitiateSettlement(playerID, vertex) && map.canInitiateRoad(playerID, edge, vertex);
         }
         return false;
@@ -95,8 +97,11 @@ public class Game implements IGame {
      */
     @Override
     public boolean canDiscardCards(int playerID) throws PlayerExistException{
-
-        return playerManager.canDiscardCards(playerID);
+        if(turnTracker.getPhase() == TurnTracker.Phase.DISCARDING)
+        {
+            return playerManager.canDiscardCards(playerID);
+        }
+        return false;
     }
 
     /**
@@ -131,7 +136,7 @@ public class Game implements IGame {
     @Override
     public int rollNumber(int playerID) throws InvalidDiceRollException{
         int roll = dice.roll();
-       // map.giveResources(roll);
+        map.getResources(roll);
         return roll;
     }
 
@@ -551,6 +556,10 @@ public class Game implements IGame {
 
     public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException{
         return map.getPortTypes(playerID);
+    }
+
+    public TurnTracker getTurnTracker() {
+        return turnTracker;
     }
 
 
