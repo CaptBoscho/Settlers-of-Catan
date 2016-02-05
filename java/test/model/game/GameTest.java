@@ -1,10 +1,11 @@
-package shared.model.game;
+package model.game;
 
 import org.junit.Assert;
 import shared.definitions.CatanColor;
 import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
+import shared.model.game.Game;
 import shared.model.player.Name;
 import shared.model.player.Player;
 
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * @author Corbin Byers
  */
-class GameTest {
+public class GameTest {
 
     private Game game = new Game();
 
