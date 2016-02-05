@@ -30,13 +30,13 @@ public class Game implements IGame {
      */
     public Game() {
         this.dice = new Dice();
-        this.map = new Map();
+        //this.map = new Map();
         this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager();
-        this.resourceCardBank = new ResourceCardBank(this);
-        this.developmentCardBank = new DevelopmentCardBank(this);
+        //this.resourceCardBank = new ResourceCardBank(this);
+        //this.developmentCardBank = new DevelopmentCardBank(this);
     }
 
     //IGame Methods

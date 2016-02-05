@@ -1321,5 +1321,4 @@ public class Map implements IMap, JsonSerializable{
             players.add(vertex.getPlayerID());
         }
     }
-
 }

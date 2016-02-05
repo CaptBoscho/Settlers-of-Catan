@@ -15,6 +15,9 @@ public class ServerRunner {
         IServer server = new ServerProxy("localhost", 8081);
 //        System.out.println(server.getAllGames());
 
+        AuthDTO dto = new AuthDTO("Sam", "sam");
+        System.out.println(server.authenticateUser(dto));
+
 //        CreateGameDTO dto = new CreateGameDTO(false, false, false, "my tet game yooo");
 //        System.out.println(server.createNewGame(dto));
 
@@ -24,7 +27,12 @@ public class ServerRunner {
 //        SaveGameDTO dto = new SaveGameDTO(3, "lol");
 //        server.saveGame(dto);
 
-        LoadGameDTO dto = new LoadGameDTO("lol");
-        System.out.println(server.loadGame(dto));
+//        LoadGameDTO dto = new LoadGameDTO("lol");
+//        System.out.println(server.loadGame(dto));
+
+//        GetCurrentModelDTO dto  = new GetCurrentModelDTO(4);
+//        server.getCurrentModel(dto);
+
+
     }
 }

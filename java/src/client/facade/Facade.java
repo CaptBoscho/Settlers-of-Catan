@@ -32,7 +32,7 @@ public class Facade {
      * Constructor initializes map and game values
      */
     public Facade() {
-        this.map = new Map();
+        //this.map = new Map();
         this.game = new Game();
     }
 
@@ -106,7 +106,7 @@ public class Facade {
      * @param edge
      * @return A boolean indicating if the asking player can build a road
      */
-    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException {
+    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
         if (!myTurn(playerID)) {
             return false;
         } else {
@@ -124,7 +124,7 @@ public class Facade {
      * @param edge
      * @throws BuildException
      */
-    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException {
+    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException {
         if (canBuildRoad(playerID, edge)) {
             game.buildRoad(playerID);
             map.buildRoad(playerID, edge);
@@ -146,7 +146,7 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException {
+    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
         boolean cangame = game.canBuildSettlement(playerID);
         boolean canmap = map.canBuildSettlement(playerID, vertex);
 
@@ -160,7 +160,7 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException {
+    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException {
         if (canBuildSettlement(playerID, vertex)) {
             game.buildSettlement(playerID);
             map.buildSettlement(playerID, vertex);
@@ -178,7 +178,7 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException{
+    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
         boolean cangame = game.canBuildCity(playerID);
         boolean canmap = map.canBuildCity(playerID, vertex);
 
@@ -192,7 +192,7 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException {
+    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException {
         if (canBuildCity(playerID, vertex)) {
             game.buildCity(playerID);
             map.buildCity(playerID, vertex);
@@ -252,7 +252,7 @@ public class Facade {
         }
     }
 
-    public boolean canMaritimeTrade(int playerID, PortType port) {
+    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException {
         if (canTrade(playerID)) {
             Set<PortType> ports = map.getPortTypes(playerID);
             boolean cangame = game.canMaritimeTrade(playerID, port);
@@ -261,13 +261,14 @@ public class Facade {
         return false;
     }
 
-    public Set<PortType> maritimeTradeOptions(int playerID) {
+    public Set<PortType> maritimeTradeOptions(int playerID) throws InvalidPlayerException {
         if (canTrade(playerID)) {
             return map.getPortTypes(playerID);
         }
+        return null;
     }
 
-    public void maritimeTrade(int playerID, PortType port) throws BuildException {
+    public void maritimeTrade(int playerID, PortType port) throws BuildException, InvalidPlayerException {
         if (!canMaritimeTrade(playerID, port)) {
             throw new BuildException("invalid maritime trade");
         } else {

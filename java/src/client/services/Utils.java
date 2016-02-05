@@ -39,13 +39,15 @@ public class Utils {
     public static String sendPost(String url, JsonObject body) {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(url);
-        StringEntity postingString = null;
-        try {
-            postingString = new StringEntity(new Gson().toJson(body));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if(body != null) {
+            StringEntity postingString = null;
+            try {
+                postingString = new StringEntity(new Gson().toJson(body));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            post.setEntity(postingString);
         }
-        post.setEntity(postingString);
         post.setHeader("Content-type", "application/json");
         try {
             HttpResponse response = httpClient.execute(post);
