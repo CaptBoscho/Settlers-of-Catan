@@ -2,8 +2,9 @@ package shared.model.player;
 
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
+import shared.model.bank.InvalidTypeException;
+import shared.model.cards.Card;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.ResourceCard;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface IPlayer {
      * Action - Player discards cards
      * @param cards Cards to be discarded
      */
-    void discardCards(List<ResourceCard> cards); // TODO: 1/30/2016 Would be better with Card generic class
+    void discardCards(List<Card> cards);
 
     /**
      * Determine if Player can offer a trade

@@ -2,13 +2,15 @@ package shared.model.game;
 
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
+import shared.exceptions.PlayerExistsException;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
+import shared.model.cards.Card;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
-import shared.model.resources.ResourceCard;
+import shared.model.cards.resources.ResourceCard;
 
 import java.util.List;
 
@@ -30,13 +32,13 @@ public class Game implements IGame {
      */
     public Game() {
         this.dice = new Dice();
-        this.map = new Map();
+        this.map = new Map(false, false, false);
         this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager();
-        this.resourceCardBank = new ResourceCardBank(this);
-        this.developmentCardBank = new DevelopmentCardBank(this);
+        this.resourceCardBank = new ResourceCardBank(true);
+        this.developmentCardBank = new DevelopmentCardBank(true);
     }
 
     //IGame Methods
@@ -85,8 +87,8 @@ public class Game implements IGame {
      * @param cards    Cards to be discarded
      */
     @Override
-    public void discardCards(int playerID, List<ResourceCard> cards) {
-
+    public void discardCards(int playerID, List<Card> cards) throws PlayerExistsException {
+        playerManager.discardCards(playerID, cards);
     }
 
     /**

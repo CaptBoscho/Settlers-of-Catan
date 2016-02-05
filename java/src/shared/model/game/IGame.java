@@ -1,6 +1,8 @@
 package shared.model.game;
 
-import shared.model.resources.ResourceCard;
+import shared.exceptions.PlayerExistsException;
+import shared.model.cards.Card;
+import shared.model.cards.resources.ResourceCard;
 import shared.model.player.Player;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -37,7 +39,7 @@ public interface IGame {
      * @param playerID ID of Player performing action
      * @param cards Cards to be discarded
      */
-    void discardCards(int playerID, List<ResourceCard> cards); // TODO: 1/30/2016 Would be better with Card generic class
+    void discardCards(int playerID, List<Card> cards) throws PlayerExistsException;
 
     /**
      * Determine if Player can roll the dice
