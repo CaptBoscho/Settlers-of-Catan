@@ -22,7 +22,34 @@ public class EdgeLocation implements JsonSerializable {
      * @param json The JSON being used to construct this object
      */
 	public EdgeLocation(JsonObject json) {
-		hexLoc = new HexLocation(json.get("x").getAsInt(), json.get("y").getAsInt());
+		int x = json.get("x").getAsInt();
+		int y = 0;
+		switch(x) {
+			case -3:
+				y = json.get("y").getAsInt() - 3;
+				break;
+			case -2:
+				y = json.get("y").getAsInt() - 2;
+				break;
+			case -1:
+				y = json.get("y").getAsInt() - 1;
+				break;
+			case 0:
+				y = json.get("y").getAsInt();
+				break;
+			case 1:
+				y = json.get("y").getAsInt() + 1;
+				break;
+			case 2:
+				y = json.get("y").getAsInt() + 2;
+				break;
+			case 3:
+				y = json.get("y").getAsInt() + 3;
+				break;
+			default:
+				break;
+		}
+		hexLoc = new HexLocation(x, y);
         String direction = json.get("direction").getAsString();
         switch(direction) {
             case "NW":

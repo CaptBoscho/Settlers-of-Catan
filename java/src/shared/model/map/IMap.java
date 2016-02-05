@@ -152,7 +152,7 @@ public interface IMap {
      * Informs who can be robbed at a hex location
      * @param hexLoc HexLocation
      * @return A set of playerID that can be robbed
-     * @throws InvalidLocationException
+     * @throws InvalidLocationException Throws exception if vertex loction is not on the map
      */
     public Set<Integer> whoCanGetRobbed(HexLocation hexLoc) throws InvalidLocationException;
 
