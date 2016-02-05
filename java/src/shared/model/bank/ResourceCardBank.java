@@ -322,8 +322,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
 
 
     public boolean canBeRobbed(){
-        if(size() > 0){return true;}
-        return false;
+        return size() > 0;
     }
 
     public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException{
