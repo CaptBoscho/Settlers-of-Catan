@@ -1,10 +1,11 @@
 package shared.model.bank;
 
+import shared.definitions.PortType;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.definitions.ResourceType;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.ResourceCard;
+import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 
@@ -25,7 +26,7 @@ public interface IResourceCardBank {
 
     boolean canOfferTrade();
 
-    boolean canMaritimeTrade(TradeType type) throws InsufficientResourcesException, InvalidTypeException;
+    boolean canMaritimeTrade(PortType type) throws InsufficientResourcesException, InvalidTypeException;
 
     boolean canBuyDevCard();
 

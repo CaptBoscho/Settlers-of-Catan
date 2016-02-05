@@ -1,10 +1,11 @@
 package shared.model.bank;
 
 import com.google.gson.JsonObject;
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.*;
+import shared.model.cards.resources.*;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
@@ -180,19 +181,19 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
     }
 
     @Override
-    public boolean canMaritimeTrade(TradeType type) throws InsufficientResourcesException, InvalidTypeException {
+    public boolean canMaritimeTrade(PortType type) throws InsufficientResourcesException, InvalidTypeException {
         switch (type) {
-            case BRICK_PORT:
+            case BRICK:
                 return (getNumberOfBrick() >= 2);
-            case ORE_PORT:
+            case ORE:
                 return (getNumberOfOre() >= 2);
-            case SHEEP_PORT:
+            case SHEEP:
                 return (getNumberOfSheep() >= 2);
-            case WHEAT_PORT:
+            case WHEAT:
                 return (getNumberOfWheat() >= 2);
-            case WOOD_PORT:
+            case WOOD:
                 return (getNumberOfWood() >= 2);
-            case THREE_ONE_PORT:
+            case THREE:
                 return (getNumberOfBrick() >= 3 || getNumberOfOre() >= 3 || getNumberOfWheat() >= 3 || getNumberOfWood() >= 3 || getNumberOfSheep() >= 3);
             default:
                 throw new InvalidTypeException("The given type is invalid");

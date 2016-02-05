@@ -1,12 +1,9 @@
 
 package client.facade;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.game.Game;
 import shared.model.game.IGame;
-import shared.model.map.IMap;
-import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.model.player.Name;
@@ -22,7 +19,6 @@ import java.util.*;
  */
 public class Facade {
 
-    private IMap map;
     private IGame game;
     private List<Player> players = new ArrayList<>();
     private HashMap<String, PlayerInfo> entries = new HashMap<>();
@@ -32,7 +28,6 @@ public class Facade {
      * Constructor initializes map and game values
      */
     public Facade() {
-        //this.map = new Map();
         this.game = new Game();
     }
 
@@ -69,7 +64,7 @@ public class Facade {
     }
 
 
-    public void initializeGame() throws BuildException, InvalidNameException, InvalidPlayerException {
+    public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
         if (entries.size() != 4 && entries.size() != 3) {
             throw new BuildException("need 3-4 players to play");
         } else {
@@ -80,7 +75,7 @@ public class Facade {
                 players.add(p);
                 id++;
             }
-            int firstPlayerID = this.game.initializeGame(players);
+            int firstPlayerID = this.game.initializeGame(players, randomhex, randomchit, randomport);
             //map stuff
 
         }
@@ -106,15 +101,8 @@ public class Facade {
      * @param edge
      * @return A boolean indicating if the asking player can build a road
      */
-    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
-        if (!myTurn(playerID)) {
-            return false;
-        } else {
-            boolean cangame = game.canBuildRoad(playerID);
-            boolean canmap = map.canBuildRoad(playerID, edge);
-
-            return cangame && canmap;
-        }
+    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException {
+        return myTurn(playerID) && game.canBuildRoad(playerID, edge);
     }
 
     /**
@@ -124,13 +112,9 @@ public class Facade {
      * @param edge
      * @throws BuildException
      */
-    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException {
+    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildRoad(playerID, edge)) {
-            game.buildRoad(playerID);
-            map.buildRoad(playerID, edge);
-
-            int player_road = map.getLongestRoadSize(playerID);
-            //need to talk to longest road
+            game.buildRoad(playerID, edge);
 
         } else {
             throw new BuildException("Can't build the road");
@@ -146,11 +130,9 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
-        boolean cangame = game.canBuildSettlement(playerID);
-        boolean canmap = map.canBuildSettlement(playerID, vertex);
+    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException {
+        return game.canBuildSettlement(playerID, vertex);
 
-        return cangame && canmap;
     }
 
     /**
@@ -160,10 +142,9 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException {
+    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildSettlement(playerID, vertex)) {
-            game.buildSettlement(playerID);
-            map.buildSettlement(playerID, vertex);
+            game.buildSettlement(playerID, vertex);
         } else {
             throw new BuildException("Can't build the building");
         }
@@ -178,11 +159,9 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
-        boolean cangame = game.canBuildCity(playerID);
-        boolean canmap = map.canBuildCity(playerID, vertex);
+    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException{
+        return game.canBuildCity(playerID, vertex);
 
-        return cangame && canmap;
     }
 
     /**
@@ -192,10 +171,9 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException {
+    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildCity(playerID, vertex)) {
-            game.buildCity(playerID);
-            map.buildCity(playerID, vertex);
+            game.buildCity(playerID, vertex);
         } else {
             throw new BuildException("Can't build the building");
         }
@@ -209,7 +187,7 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if the asking player can buy a development card
      */
-    public boolean canBuyDC(int playerID) {
+    public boolean canBuyDC(int playerID) throws PlayerExistsException {
         return game.canBuyDevelopmentCard(playerID);
     }
 
@@ -219,7 +197,7 @@ public class Facade {
      * @param playerID
      * @throws BuildException
      */
-    public DevCardType buyDC(int playerID) throws BuildException {
+    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistsException {
         if (canBuyDC(playerID)) {
             return game.buyDevelopmentCard(playerID);
         } else {
@@ -246,15 +224,15 @@ public class Facade {
      */
     public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException {
         if (canTrade(playerOneID)) {
-            game.tradePlayer(playerOneID, oneCards, playerTwoID, twoCards);
+            game.offerTrade(playerOneID, playerTwoID, oneCards,  twoCards);
         } else {
             throw new BuildException("Can't complete this trade");
         }
     }
 
-    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException {
+    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException{
         if (canTrade(playerID)) {
-            Set<PortType> ports = map.getPortTypes(playerID);
+            Set<PortType> ports = game.getPortTypes(playerID);
             boolean cangame = game.canMaritimeTrade(playerID, port);
             return ports.contains(port) && cangame;
         }
@@ -263,12 +241,12 @@ public class Facade {
 
     public Set<PortType> maritimeTradeOptions(int playerID) throws InvalidPlayerException {
         if (canTrade(playerID)) {
-            return map.getPortTypes(playerID);
+            return game.getPortTypes(playerID);
         }
-        return null;
+        throw new InvalidPlayerException("can't trade");
     }
 
-    public void maritimeTrade(int playerID, PortType port) throws BuildException, InvalidPlayerException {
+    public void maritimeTrade(int playerID, PortType port) throws BuildException, InvalidPlayerException, PlayerExistsException {
         if (!canMaritimeTrade(playerID, port)) {
             throw new BuildException("invalid maritime trade");
         } else {
@@ -284,8 +262,15 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-    public boolean canPlayDC(int playerID, DevCardType dc) {
-        return myTurn(playerID) && game.canPlayDevelopmentCard(playerID, dc);
+    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException{
+        if(myTurn(playerID)){
+            if(dc == DevCardType.SOLDIER){return game.canUseSoldier(playerID);}
+            if(dc == DevCardType.MONUMENT){return game.canUseMonument(playerID);}
+            if(dc == DevCardType.ROAD_BUILD){return game.canUseRoadBuilder(playerID);}
+            if(dc == DevCardType.MONOPOLY){return game.canUseMonopoly(playerID);}
+            if(dc == DevCardType.YEAR_OF_PLENTY){return game.canUseYearOfPlenty(playerID);}
+        }
+        return false;
     }
 
     /**
@@ -295,9 +280,13 @@ public class Facade {
      * @param dc
      * @throws BuildException
      */
-    public void playDC(int playerID, DevCardType dc) throws BuildException {
+    public void playDC(int playerID, DevCardType dc) throws BuildException, PlayerExistsException, DevCardException {
         if (canPlayDC(playerID, dc)) {
-            game.playDevelopmentCard(playerID, dc);
+            if(dc == DevCardType.SOLDIER){game.useSoldier(playerID);}
+            else if(dc == DevCardType.MONUMENT){game.useMonument(playerID);}
+            else if(dc == DevCardType.ROAD_BUILD){game.useRoadBuilder(playerID);}
+            else if(dc == DevCardType.MONOPOLY){game.useMonopoly(playerID);}
+            else if(dc == DevCardType.YEAR_OF_PLENTY){game.useYearOfPlenty(playerID);}
         } else {
             throw new BuildException("can't play this Develpment Card");
         }
