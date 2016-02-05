@@ -36,7 +36,7 @@ class GameTest {
         players.add(three);
         players.add(four);
 
-        int first = game.initializeGame(players);
+    //    int first = game.initializeGame(players);
 
 
     }

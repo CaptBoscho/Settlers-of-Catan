@@ -510,7 +510,8 @@ public class Map implements IMap, JsonSerializable{
         if(playerID < 1 || playerID > 4) {
             throw new InvalidPlayerException("PlayerID was " + playerID);
         }
-        return 0;
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        return roads.size();
     }
 
     @Override
@@ -695,13 +696,12 @@ public class Map implements IMap, JsonSerializable{
     }
 
     private void makeRoads(JsonArray jsonArray) {
-        Gson gson = new Gson();
         for(JsonElement jsonElem : jsonArray) {
             JsonObject json = jsonElem.getAsJsonObject();
             int playerID = json.get("owner").getAsInt() + 1;
             EdgeLocation edgeLoc = new EdgeLocation(json.get("location").getAsJsonObject());
             edgeLoc = edgeLoc.getNormalizedLocation();
-            Edge edge = new Edge(edgeLoc);
+            Edge edge = edges.get(edgeLoc);
             Road road = new Road(playerID);
             edge.setRoad(road);
             ArrayList<Edge> roads = this.roads.get(playerID);
@@ -716,15 +716,13 @@ public class Map implements IMap, JsonSerializable{
     }
 
     private void makeSettlements(JsonArray jsonArray) {
-        Gson gson = new Gson();
         for(JsonElement jsonElem : jsonArray) {
             JsonObject json = jsonElem.getAsJsonObject();
             int playerID = json.get("owner").getAsInt() + 1;
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
             vertexLoc = vertexLoc.getNormalizedLocation();
-            Vertex vertex = new Vertex(vertexLoc);
+            Vertex vertex = vertices.get(vertexLoc);
             Settlement settlement = new Settlement(playerID);
-            vertex.buildSettlement(settlement);
             vertex.buildSettlement(settlement);
             if(vertex.hasPort()) {
                 addPort(playerID, vertex);
@@ -741,15 +739,17 @@ public class Map implements IMap, JsonSerializable{
     }
 
     private void makeCities(JsonArray jsonArray) {
-        Gson gson = new Gson();
         for(JsonElement jsonElem : jsonArray) {
             JsonObject json = jsonElem.getAsJsonObject();
             int playerID = json.get("owner").getAsInt() + 1;
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
             vertexLoc = vertexLoc.getNormalizedLocation();
-            Vertex vertex = new Vertex(vertexLoc);
+            Vertex vertex = vertices.get(vertexLoc);
             Settlement settlement = new Settlement(playerID);
             vertex.buildSettlement(settlement);
+            if(vertex.hasPort()) {
+                addPort(playerID, vertex);
+            }
             City city = new City(playerID);
             vertex.buildCity(city);
             ArrayList<Vertex> cities = this.cities.get(playerID);
