@@ -2,10 +2,17 @@ package shared.model.player;
 
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
+
 import shared.exceptions.*;
 import shared.model.bank.InvalidTypeException;
+
+import shared.exceptions.DevCardException;
+import shared.exceptions.FailedToRandomizeException;
+import shared.exceptions.MoveRobberException;
+import shared.exceptions.PlayerExistsException;
+import shared.model.cards.Card;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.ResourceCard;
+import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
@@ -36,23 +43,23 @@ public interface IPlayerManager {
      * Gets a player by id
      * @param id ID of the Player
      * @return The Player with the specified ID
-     * @throws PlayerExistException
+     * @throws PlayerExistsException
      */
-    Player getPlayerByID(int id) throws PlayerExistException;
+    Player getPlayerByID(int id) throws PlayerExistsException;
 
     /**
      * Gets a player by index
      * @param index Index of the player
      * @return Player at index
-     * @throws PlayerExistException
+     * @throws PlayerExistsException
      */
-    Player getPlayerByIndex(int index) throws PlayerExistException;
+    Player getPlayerByIndex(int index) throws PlayerExistsException;
 
-    Integer getKnights(int playerID) throws PlayerExistException;
+    Integer getKnights(int playerID) throws PlayerExistsException;
 
-    void playKnight(int playerID) throws PlayerExistException;
+    void playKnight(int playerID) throws PlayerExistsException;
 
-    void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistException;
+    void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException;
 
 
     //Can Do & Do
@@ -64,17 +71,20 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can discard cards
      */
-    boolean canDiscardCards(int id) throws PlayerExistException;
+    boolean canDiscardCards(int id) throws PlayerExistsException;
 
     /**
      * Action - Player discards cards
      * @param id ID of the player
      * @param cards Cards to be discarded
      */
-    List<ResourceCard> discardCards(int id, List<ResourceType> cards) throws PlayerExistException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
+    List<ResourceCard> discardCards(int id, List<Card> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
+
+    List<ResourceCard> discardResourceType(int id, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
 
-    void addResource(int id, ResourceCard rc) throws PlayerExistException;
+    void addResource(int id, ResourceCard rc) throws PlayerExistsException;
+
 
     /**
      * Determine if Player can offer a trade
@@ -82,7 +92,7 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can offer a trade
      */
-    boolean canOfferTrade(int id) throws PlayerExistException;
+    boolean canOfferTrade(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can perform maritime trade
@@ -91,10 +101,10 @@ public interface IPlayerManager {
      * @param type Type of trade
      * @return True if Player can perform a maritime trade
      */
-    boolean canMaritimeTrade(int id, PortType type) throws PlayerExistException;
+    boolean canMaritimeTrade(int id, PortType type) throws PlayerExistsException;
 
 
-    void maritimeTrade(int id, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistException;
+    void maritimeTrade(int id, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistsException;
 
     /**
      * Determine if Player can buy a dev card
@@ -102,13 +112,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can buy a dev card
      */
-    boolean canBuyDevCard(int id) throws PlayerExistException;
+    boolean canBuyDevCard(int id) throws PlayerExistsException;
 
     /**
      * Action - Player buys a dev card
      * @param id ID of the player
      */
-    void buyDevCard(int id) throws PlayerExistException;
+    void buyDevCard(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can play Year of Plenty
@@ -116,13 +126,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can play Year of Plenty
      */
-    boolean canUseYearOfPlenty(int id) throws PlayerExistException;
+    boolean canUseYearOfPlenty(int id) throws PlayerExistsException;
 
     /**
      * Action - Player plays Year of Plenty
      * @param id ID of the player
      */
-    void useYearOfPlenty(int id) throws DevCardException,PlayerExistException;
+    void useYearOfPlenty(int id) throws DevCardException,PlayerExistsException;
 
     /**
      * Determine if Player can play Road Builder
@@ -130,13 +140,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can play Road Builder
      */
-    boolean canUseRoadBuilder(int id) throws PlayerExistException;
+    boolean canUseRoadBuilder(int id) throws PlayerExistsException;
 
     /**
      * Action - Player plays Road Builder
      * @param id ID of the player
      */
-    void useRoadBuilder(int id) throws DevCardException,PlayerExistException;
+    void useRoadBuilder(int id) throws DevCardException,PlayerExistsException;
 
     /**
      * Determine if Player can play Soldier
@@ -144,13 +154,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can play Soldier
      */
-    boolean canUseSoldier(int id) throws PlayerExistException;
+    boolean canUseSoldier(int id) throws PlayerExistsException;
 
     /**
      * Action - Player plays Soldier
      * @param id ID of the player
      */
-    void useSoldier(int id) throws DevCardException,PlayerExistException;
+    void useSoldier(int id) throws DevCardException,PlayerExistsException;
 
     /**
      * Determine if Player can play Monopoly
@@ -158,13 +168,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can play Monopoly
      */
-    boolean canUseMonopoly(int id) throws PlayerExistException;
+    boolean canUseMonopoly(int id) throws PlayerExistsException;
 
     /**
      * Action - Player plays Monopoly
      * @param id ID of the player
      */
-    void useMonopoly(int id) throws DevCardException,PlayerExistException;
+    void useMonopoly(int id) throws DevCardException,PlayerExistsException;
 
     /**
      * Determine if Player can play Monument
@@ -172,13 +182,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can play Monument
      */
-    boolean canUseMonument(int id) throws PlayerExistException;
+    boolean canUseMonument(int id) throws PlayerExistsException;
 
     /**
      * Action - Player plays Monument
      * @param id ID of the player
      */
-    void useMonument(int id) throws DevCardException,PlayerExistException;
+    void useMonument(int id) throws DevCardException,PlayerExistsException;
 
     /**
      * Determine if Player can place the Robber
@@ -186,13 +196,14 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can place the Robber
      */
-    boolean canPlaceRobber(int id) throws PlayerExistException;
+    boolean canPlaceRobber(int id) throws PlayerExistsException;
 
     /**
      * Action - Player places the Robber
      * @param robber ID of the player
      */
-    ResourceType placeRobber(int robber, int robbed) throws MoveRobberException,PlayerExistException, InsufficientResourcesException, InvalidTypeException;
+    ResourceType placeRobber(int robber, int robbed) throws MoveRobberException,PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+
 
     /**
      * Determine if Player can build a road
@@ -200,13 +211,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can build a road
      */
-    boolean canBuildRoad(int id) throws PlayerExistException;
+    boolean canBuildRoad(int id) throws PlayerExistsException;
 
     /**
      * Action - Player builds a road
      * @param id ID of the player
      */
-    void buildRoad(int id) throws PlayerExistException;
+    void buildRoad(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can build a settlement
@@ -214,13 +225,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can build a settlement
      */
-    boolean canBuildSettlement(int id) throws PlayerExistException;
+    boolean canBuildSettlement(int id) throws PlayerExistsException;
 
     /**
      * Action - Player builds a settlement
      * @param id ID of the player
      */
-    void buildSettlement(int id) throws PlayerExistException;
+    void buildSettlement(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can build a city
@@ -228,11 +239,11 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @return True if Player can build a city
      */
-    boolean canBuildCity(int id) throws PlayerExistException;
+    boolean canBuildCity(int id) throws PlayerExistsException;
 
     /**
      * Action - Player builds a city
      * @param id ID of the player
      */
-    void buildCity(int id) throws PlayerExistException;
+    void buildCity(int id) throws PlayerExistsException;
 }

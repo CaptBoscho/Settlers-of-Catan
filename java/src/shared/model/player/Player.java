@@ -6,9 +6,10 @@ import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.model.bank.*;
 import shared.definitions.CatanColor;
-import shared.model.devcards.DevelopmentCard;
+import shared.model.cards.Card;
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.ResourceCard;
+import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
@@ -196,15 +197,34 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param cards Cards to be discarded
      */
     @Override
-    public List<ResourceCard> discardCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
-
-        List<ResourceCard> discarded = new ArrayList<ResourceCard>();
-        for (ResourceType card : cards) {
-            discarded.add(resourceCardBank.discard(card));
+    public List<ResourceCard> discardCards(List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
+        try {
+            List<ResourceCard> discarded = new ArrayList<ResourceCard>();
+            for (Card card : cards) {
+                if (card instanceof ResourceCard) {
+                    ResourceCard resourceCard = (ResourceCard) card;
+                    discarded.add(resourceCardBank.discard(resourceCard.getType()));
+                } else if (card instanceof DevelopmentCard) {
+                    DevelopmentCard developmentCard = (DevelopmentCard) card;
+                    developmentCardBank.discard(developmentCard.getType());
+                }
+            }
+            setDiscarded(true);
+            return discarded;
+        } catch (InsufficientResourcesException | InvalidTypeException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public List<ResourceCard> discardResourceCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
+        List<ResourceCard> discarded = new ArrayList<ResourceCard>();
+        for(ResourceType rt: cards) {
+            discarded.add(resourceCardBank.discard(rt));
+        }
+
         setDiscarded(true);
         return discarded;
-
     }
 
     /**
@@ -313,7 +333,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * Action - Player plays Soldier
      */
     @Override
-    public void useSoldier() throws DevCardException{
+    public void useSoldier() throws DevCardException {
         if(canUseSoldier()) {
             developmentCardBank.useSoldier();
             setMoveRobber(true);

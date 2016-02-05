@@ -1,12 +1,9 @@
 
 package client.facade;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.game.Game;
 import shared.model.game.IGame;
-import shared.model.map.IMap;
-import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.model.player.Name;
@@ -104,13 +101,8 @@ public class Facade {
      * @param edge
      * @return A boolean indicating if the asking player can build a road
      */
-    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, PlayerExistException {
-        if (!myTurn(playerID)) {
-            return false;
-        } else {
-            return game.canBuildRoad(playerID, edge);
-
-        }
+    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException {
+        return myTurn(playerID) && game.canBuildRoad(playerID, edge);
     }
 
     /**
@@ -120,7 +112,7 @@ public class Facade {
      * @param edge
      * @throws BuildException
      */
-    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistException {
+    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildRoad(playerID, edge)) {
             game.buildRoad(playerID, edge);
 
@@ -138,7 +130,7 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistException {
+    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException {
         return game.canBuildSettlement(playerID, vertex);
 
     }
@@ -150,7 +142,7 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistException {
+    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildSettlement(playerID, vertex)) {
             game.buildSettlement(playerID, vertex);
         } else {
@@ -167,7 +159,7 @@ public class Facade {
      * @param vertex
      * @return A boolean indicating if the asking player can build a building
      */
-    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistException{
+    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException{
         return game.canBuildCity(playerID, vertex);
 
     }
@@ -179,7 +171,7 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistException {
+    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildCity(playerID, vertex)) {
             game.buildCity(playerID, vertex);
         } else {
@@ -195,7 +187,7 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if the asking player can buy a development card
      */
-    public boolean canBuyDC(int playerID) throws PlayerExistException {
+    public boolean canBuyDC(int playerID) throws PlayerExistsException {
         return game.canBuyDevelopmentCard(playerID);
     }
 
@@ -205,7 +197,7 @@ public class Facade {
      * @param playerID
      * @throws BuildException
      */
-    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistException {
+    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistsException {
         if (canBuyDC(playerID)) {
             return game.buyDevelopmentCard(playerID);
         } else {
@@ -238,7 +230,7 @@ public class Facade {
         }
     }
 
-    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistException{
+    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException{
         if (canTrade(playerID)) {
             Set<PortType> ports = game.getPortTypes(playerID);
             boolean cangame = game.canMaritimeTrade(playerID, port);
@@ -254,7 +246,7 @@ public class Facade {
         throw new InvalidPlayerException("can't trade");
     }
 
-    public void maritimeTrade(int playerID, PortType port) throws BuildException, InvalidPlayerException, PlayerExistException {
+    public void maritimeTrade(int playerID, PortType port) throws BuildException, InvalidPlayerException, PlayerExistsException {
         if (!canMaritimeTrade(playerID, port)) {
             throw new BuildException("invalid maritime trade");
         } else {
@@ -270,7 +262,7 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistException{
+    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException{
         if(myTurn(playerID)){
             if(dc == DevCardType.SOLDIER){return game.canUseSoldier(playerID);}
             if(dc == DevCardType.MONUMENT){return game.canUseMonument(playerID);}
@@ -288,7 +280,7 @@ public class Facade {
      * @param dc
      * @throws BuildException
      */
-    public void playDC(int playerID, DevCardType dc) throws BuildException, PlayerExistException, DevCardException {
+    public void playDC(int playerID, DevCardType dc) throws BuildException, PlayerExistsException, DevCardException {
         if (canPlayDC(playerID, dc)) {
             if(dc == DevCardType.SOLDIER){game.useSoldier(playerID);}
             else if(dc == DevCardType.MONUMENT){game.useMonument(playerID);}

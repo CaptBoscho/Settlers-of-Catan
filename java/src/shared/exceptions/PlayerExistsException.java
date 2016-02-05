@@ -3,8 +3,8 @@ package shared.exceptions;
 /**
  * Exception for trying to access a player that doesn't exist
  */
-public class PlayerExistException extends Exception {
-    public PlayerExistException(String message) {
+public class PlayerExistsException extends Exception {
+    public PlayerExistsException(String message) {
         super(message);
     }
 }

@@ -1,11 +1,12 @@
 package shared.locations;
 
 import com.google.gson.JsonObject;
+import shared.model.JsonSerializable;
 
 /**
  * Represents the location of a vertex on a hex map
  */
-public class VertexLocation {
+public class VertexLocation implements JsonSerializable {
 	
 	private HexLocation hexLoc;
 	private VertexDirection dir;
@@ -16,7 +17,34 @@ public class VertexLocation {
 	}
 
 	public VertexLocation(JsonObject json) {
-		hexLoc = new HexLocation(json.get("x").getAsInt(), json.get("y").getAsInt());
+		int x = json.get("x").getAsInt();
+		int y = 0;
+		switch(x) {
+			case -3:
+				y = json.get("y").getAsInt() - 3;
+				break;
+			case -2:
+				y = json.get("y").getAsInt() - 2;
+				break;
+			case -1:
+				y = json.get("y").getAsInt() - 1;
+				break;
+			case 0:
+				y = json.get("y").getAsInt();
+				break;
+			case 1:
+				y = json.get("y").getAsInt() + 1;
+				break;
+			case 2:
+				y = json.get("y").getAsInt() + 2;
+				break;
+			case 3:
+				y = json.get("y").getAsInt() + 3;
+				break;
+			default:
+				break;
+		}
+		hexLoc = new HexLocation(x, y);
 		String direction = json.get("direction").getAsString();
 		switch(direction) {
 			case "NW":
@@ -90,13 +118,13 @@ public class VertexLocation {
 		VertexLocation other = (VertexLocation)obj;
 		if(dir != other.dir)
 			return false;
-		if(hexLoc == null)
-		{
-			if(other.hexLoc != null)
+		if(hexLoc == null) {
+			if(other.hexLoc != null) {
 				return false;
-		}
-		else if(!hexLoc.equals(other.hexLoc))
-			return false;
+			}
+		} else if(!hexLoc.equals(other.hexLoc)) {
+            return false;
+        }
 		return true;
 	}
 	
@@ -136,5 +164,15 @@ public class VertexLocation {
 				assert false;
 				return null;
 		}
+	}
+
+	/**
+	 * Converts the object to JSON
+	 *
+	 * @return The JSON representation of the object
+	 */
+	@Override
+	public JsonObject toJSON() {
+		return null;
 	}
 }

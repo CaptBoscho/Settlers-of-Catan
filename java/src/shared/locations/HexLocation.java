@@ -22,7 +22,31 @@ public class HexLocation {
      */
 	public HexLocation(JsonObject json) {
         x = json.get("x").getAsInt();
-        y = json.get("y").getAsInt();
+		switch(x) {
+			case -3:
+				y = json.get("y").getAsInt() - 3;
+				break;
+			case -2:
+				y = json.get("y").getAsInt() - 2;
+				break;
+			case -1:
+				y = json.get("y").getAsInt() - 1;
+				break;
+			case 0:
+				y = json.get("y").getAsInt();
+				break;
+			case 1:
+				y = json.get("y").getAsInt() + 1;
+				break;
+			case 2:
+				y = json.get("y").getAsInt() + 2;
+				break;
+			case 3:
+				y = json.get("y").getAsInt() + 3;
+				break;
+			default:
+				break;
+		}
     }
 	
 	public int getX() {

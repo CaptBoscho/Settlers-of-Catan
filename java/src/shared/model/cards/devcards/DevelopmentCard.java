@@ -1,12 +1,12 @@
-package shared.model.devcards;
+package shared.model.cards.devcards;
 
-import client.devcards.DevCardController;
 import shared.definitions.DevCardType;
+import shared.model.cards.Card;
 
 /**
  * @author Danny Harding
  */
-public abstract class DevelopmentCard {
+public abstract class DevelopmentCard extends Card {
 
     protected DevCardType type;
 

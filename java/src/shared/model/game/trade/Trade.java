@@ -1,9 +1,9 @@
 package shared.model.game.trade;
 
 import com.google.gson.JsonObject;
+import shared.model.cards.resources.ResourceCard;
 import shared.definitions.ResourceType;
 import shared.model.player.Player;
-import shared.model.resources.ResourceCard;
 
 import java.util.ArrayList;
 import java.util.List;
