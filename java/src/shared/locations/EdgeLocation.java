@@ -25,6 +25,9 @@ public class EdgeLocation implements JsonSerializable {
 		int x = json.get("x").getAsInt();
 		int y = 0;
 		switch(x) {
+			case -3:
+				y = json.get("y").getAsInt() - 3;
+				break;
 			case -2:
 				y = json.get("y").getAsInt() - 2;
 				break;
@@ -39,6 +42,9 @@ public class EdgeLocation implements JsonSerializable {
 				break;
 			case 2:
 				y = json.get("y").getAsInt() + 2;
+				break;
+			case 3:
+				y = json.get("y").getAsInt() + 3;
 				break;
 			default:
 				break;

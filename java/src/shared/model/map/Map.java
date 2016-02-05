@@ -582,23 +582,23 @@ public class Map implements IMap, JsonSerializable{
                     chits.add(hexLoc);
                 }
                 switch(resource) {
-                    case "Wood":
+                    case "wood":
                         ChitHex chitHex = new ChitHex(hexLoc, HexType.WOOD, chit);
                         hexes.put(hexLoc, chitHex);
                         break;
-                    case "Brick":
+                    case "brick":
                         chitHex = new ChitHex(hexLoc, HexType.BRICK, chit);
                         hexes.put(hexLoc, chitHex);
                         break;
-                    case "Sheep":
+                    case "sheep":
                         chitHex = new ChitHex(hexLoc, HexType.SHEEP, chit);
                         hexes.put(hexLoc, chitHex);
                         break;
-                    case "Wheat":
+                    case "wheat":
                         chitHex = new ChitHex(hexLoc, HexType.WHEAT, chit);
                         hexes.put(hexLoc, chitHex);
                         break;
-                    case "Ore":
+                    case "ore":
                         chitHex = new ChitHex(hexLoc, HexType.ORE, chit);
                         hexes.put(hexLoc, chitHex);
                         break;
@@ -621,19 +621,19 @@ public class Map implements IMap, JsonSerializable{
             if(json.has("resource")) {
                 String resource = json.get("resource").getAsString();
                 switch(resource) {
-                    case "Wood":
+                    case "wood":
                         portType = PortType.WOOD;
                         break;
-                    case "Brick":
+                    case "brick":
                         portType = PortType.BRICK;
                         break;
-                    case "Sheep":
+                    case "sheep":
                         portType = PortType.SHEEP;
                         break;
-                    case "Wheat":
+                    case "wheat":
                         portType = PortType.WHEAT;
                         break;
-                    case "Ore":
+                    case "ore":
                         portType = PortType.ORE;
                         break;
                     default:

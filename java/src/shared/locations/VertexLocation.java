@@ -19,6 +19,9 @@ public class VertexLocation {
 		int x = json.get("x").getAsInt();
 		int y = 0;
 		switch(x) {
+			case -3:
+				y = json.get("y").getAsInt() - 3;
+				break;
 			case -2:
 				y = json.get("y").getAsInt() - 2;
 				break;
@@ -33,6 +36,9 @@ public class VertexLocation {
 				break;
 			case 2:
 				y = json.get("y").getAsInt() + 2;
+				break;
+			case 3:
+				y = json.get("y").getAsInt() + 3;
 				break;
 			default:
 				break;

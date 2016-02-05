@@ -1,6 +1,7 @@
 package shared.model.map;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,249 @@ public class MapTest {
     @Before
     public void setUp() {
         map = new Map(false, false, false);
-        jsonMap = new Map(new JsonObject()); //TODO: pass in JsonObject
+        String json = "{" +
+                "    \"hexes\": [" +
+                "      {" +
+                "        \"location\": {" +
+                "          \"x\": 0," +
+                "          \"y\": -2" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"brick\"," +
+                "        \"location\": {" +
+                "          \"x\": 1," +
+                "          \"y\": -2" +
+                "        }," +
+                "        \"number\": 4" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wood\"," +
+                "        \"location\": {" +
+                "          \"x\": 2," +
+                "          \"y\": -2" +
+                "        }," +
+                "        \"number\": 11" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"brick\"," +
+                "        \"location\": {" +
+                "          \"x\": -1," +
+                "          \"y\": -1" +
+                "        }," +
+                "        \"number\": 8" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wood\"," +
+                "        \"location\": {" +
+                "          \"x\": 0," +
+                "          \"y\": -1" +
+                "        }," +
+                "        \"number\": 3" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"ore\"," +
+                "        \"location\": {" +
+                "          \"x\": 1," +
+                "          \"y\": -1" +
+                "        }," +
+                "        \"number\": 9" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"sheep\"," +
+                "        \"location\": {" +
+                "          \"x\": 2," +
+                "          \"y\": -1" +
+                "        }," +
+                "        \"number\": 12" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"ore\"," +
+                "        \"location\": {" +
+                "          \"x\": -2," +
+                "          \"y\": 0" +
+                "        }," +
+                "        \"number\": 5" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"sheep\"," +
+                "        \"location\": {" +
+                "          \"x\": -1," +
+                "          \"y\": 0" +
+                "        }," +
+                "        \"number\": 10" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wheat\"," +
+                "        \"location\": {" +
+                "          \"x\": 0," +
+                "          \"y\": 0" +
+                "        }," +
+                "        \"number\": 11" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"brick\"," +
+                "        \"location\": {" +
+                "          \"x\": 1," +
+                "          \"y\": 0" +
+                "        }," +
+                "        \"number\": 5" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wheat\"," +
+                "        \"location\": {" +
+                "          \"x\": 2," +
+                "          \"y\": 0" +
+                "        }," +
+                "        \"number\": 6" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wheat\"," +
+                "        \"location\": {" +
+                "          \"x\": -2," +
+                "          \"y\": 1" +
+                "        },\n" +
+                "        \"number\": 2" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"sheep\"," +
+                "        \"location\": {" +
+                "          \"x\": -1," +
+                "          \"y\": 1" +
+                "        }," +
+                "        \"number\": 9" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wood\"," +
+                "        \"location\": {" +
+                "          \"x\": 0," +
+                "          \"y\": 1" +
+                "        }," +
+                "        \"number\": 4" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"sheep\"," +
+                "        \"location\": {" +
+                "          \"x\": 1," +
+                "          \"y\": 1" +
+                "        }," +
+                "        \"number\": 10" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wood\"," +
+                "        \"location\": {" +
+                "          \"x\": -2," +
+                "          \"y\": 2" +
+                "        }," +
+                "        \"number\": 6" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"ore\"," +
+                "        \"location\": {" +
+                "          \"x\": -1," +
+                "          \"y\": 2" +
+                "        }," +
+                "        \"number\": 3" +
+                "      }," +
+                "      {" +
+                "        \"resource\": \"wheat\"," +
+                "        \"location\": {" +
+                "          \"x\": 0," +
+                "          \"y\": 2" +
+                "        }," +
+                "        \"number\": 8" +
+                "      }" +
+                "    ]," +
+                "    \"roads\": []," +
+                "    \"cities\": []," +
+                "    \"settlements\": []," +
+                "    \"radius\": 3," +
+                "    \"ports\": [" +
+                "      {" +
+                "        \"ratio\": 2," +
+                "        \"resource\": \"brick\"," +
+                "        \"direction\": \"NE\"," +
+                "        \"location\": {" +
+                "          \"x\": -2," +
+                "          \"y\": 3" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 3," +
+                "        \"direction\": \"SE\"," +
+                "        \"location\": {" +
+                "          \"x\": -3," +
+                "          \"y\": 0" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 2," +
+                "        \"resource\": \"sheep\"," +
+                "        \"direction\": \"NW\"," +
+                "        \"location\": {" +
+                "          \"x\": 3," +
+                "          \"y\": -1" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 3," +
+                "        \"direction\": \"NW\"," +
+                "        \"location\": {" +
+                "          \"x\": 2," +
+                "          \"y\": 1" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 3," +
+                "        \"direction\": \"N\"," +
+                "        \"location\": {" +
+                "          \"x\": 0," +
+                "          \"y\": 3" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 2," +
+                "        \"resource\": \"ore\"," +
+                "        \"direction\": \"S\"," +
+                "        \"location\": {" +
+                "          \"x\": 1," +
+                "          \"y\": -3" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 3," +
+                "        \"direction\": \"SW\"," +
+                "        \"location\": {" +
+                "          \"x\": 3," +
+                "          \"y\": -3" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 2," +
+                "        \"resource\": \"wheat\"," +
+                "        \"direction\": \"S\"," +
+                "        \"location\": {" +
+                "          \"x\": -1," +
+                "          \"y\": -2" +
+                "        }" +
+                "      }," +
+                "      {" +
+                "        \"ratio\": 2," +
+                "        \"resource\": \"wood\"," +
+                "        \"direction\": \"NE\"," +
+                "        \"location\": {" +
+                "          \"x\": -3," +
+                "          \"y\": 2" +
+                "        }" +
+                "      }" +
+                "    ]," +
+                "    \"robber\": {" +
+                "      \"x\": 0," +
+                "      \"y\": -2" +
+                "    }" +
+                "  }";
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        jsonMap = new Map(jsonObject);
     }
 
     @After
