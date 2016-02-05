@@ -3,10 +3,13 @@ package shared.model.player;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
+import shared.model.bank.InvalidTypeException;
 import shared.model.game.trade.TradeType;
 import shared.model.resources.ResourceCard;
 
+import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
+import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,6 +106,15 @@ public class PlayerManager implements IPlayerManager {
             throw new PlayerExistException("The player at index " + index + " doesn't exist!");
     }
 
+
+    public Integer getKnights(int playerID) throws PlayerExistException{
+        return getPlayerByID(playerID).getKnights();}
+
+
+    public void playKnight(int playerID) throws PlayerExistException{
+        getPlayerByID(playerID).playKnight();
+    }
+
     //Can Do & Do
     //=============================================================
     /**
@@ -126,9 +138,14 @@ public class PlayerManager implements IPlayerManager {
      * @param cards Cards to be discarded
      */
     @Override
-    public void discardCards(int id, List<ResourceType> cards) throws PlayerExistException {
+    public List<ResourceCard> discardCards(int id, List<ResourceType> cards) throws PlayerExistException, InsufficientResourcesException, InvalidTypeException {
         Player player = getPlayerByID(id);
-        player.discardCards(cards);
+        return player.discardCards(cards);
+    }
+
+    public void addResource(int id, ResourceCard rc) throws PlayerExistException{
+        Player player = getPlayerByID(id);
+        player.addResourceCard(rc);
     }
 
     /**
@@ -156,6 +173,14 @@ public class PlayerManager implements IPlayerManager {
     public boolean canMaritimeTrade(int id, PortType type) throws PlayerExistException {
         Player player = getPlayerByID(id);
         return player.canMaritimeTrade(type);
+    }
+
+
+    public void maritimeTrade(int playerID, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistException{
+        Player player = getPlayerByID(playerID);
+
+
+
     }
 
     /**
@@ -254,6 +279,12 @@ public class PlayerManager implements IPlayerManager {
         player.useSoldier();
     }
 
+
+    public void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistException{
+        getPlayerByID(playerold).loseArmyCard();
+        getPlayerByID(playernew).winArmyCard();
+    }
+
     /**
      * Determine if Player can play Monopoly
      * Checks Player turn, and dev cards
@@ -318,12 +349,16 @@ public class PlayerManager implements IPlayerManager {
     /**
      * Action - Player places the Robber
      *
-     * @param id ID of the player
+     * @param robber ID of the player
      */
     @Override
-    public void placeRobber(int id) throws MoveRobberException, PlayerExistException {
-        Player player = getPlayerByID(id);
+    public ResourceType placeRobber(int robber, int robbed) throws MoveRobberException, PlayerExistException, InsufficientResourcesException, InvalidTypeException {
+        Player player = getPlayerByID(robber);
+        Player two = getPlayerByID(robbed);
         player.placeRobber();
+        ResourceCard treasure = two.robbed();
+        player.addResourceCard(treasure);
+        return treasure.getType();
     }
 
     /**

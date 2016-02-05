@@ -3,10 +3,7 @@ package shared.model.game;
 import org.junit.Assert;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import shared.definitions.CatanColor;
-import shared.exceptions.FailedToRandomizeException;
-import shared.exceptions.InvalidLocationException;
-import shared.exceptions.InvalidNameException;
-import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.*;
 import shared.locations.*;
 import shared.model.player.Name;
 import shared.model.player.Player;
@@ -60,13 +57,13 @@ class GameTest {
 
     }
 
-    void testFirstTurn() {
+    void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException{
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
         VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
         EdgeLocation eloc = new EdgeLocation(hloc, EdgeDirection.NorthEast);
 
-
+        game.firstTurn(current_turn,vloc,eloc);
     }
 
     void testGetCurrentTurn() {

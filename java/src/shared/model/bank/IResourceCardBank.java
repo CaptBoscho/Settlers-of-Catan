@@ -47,4 +47,8 @@ public interface IResourceCardBank {
     boolean canDiscardCards();
 
     JsonObject toJSON();
+
+    boolean canBeRobbed();
+
+    ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException;
 }

@@ -11,6 +11,7 @@ public class TurnTracker {
 
     private boolean setupPhase;
     private boolean setupRoundOne;
+    private boolean canUseRobber = false;
 
     private int currentTurn;
     private Phase phase;
@@ -169,6 +170,14 @@ public class TurnTracker {
 
     public boolean canDiscard() {
         return phase == Phase.DISCARDING;
+    }
+
+    public void updateRobber(boolean now){
+        this.canUseRobber = now;
+    }
+
+    public boolean canUseRobber(){
+        return this.canUseRobber;
     }
 
     /**

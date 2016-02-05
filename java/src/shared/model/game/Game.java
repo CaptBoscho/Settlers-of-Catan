@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import org.omg.CORBA.DynAnyPackage.Invalid;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
@@ -7,6 +8,7 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.bank.DevelopmentCardBank;
+import shared.model.bank.InvalidTypeException;
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
 import shared.model.game.trade.Trade;
@@ -16,6 +18,8 @@ import shared.model.player.Player;
 import shared.model.player.PlayerManager;
 import shared.model.resources.ResourceCard;
 
+import javax.naming.InsufficientResourcesException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -111,8 +115,11 @@ public class Game implements IGame {
      * @param cards    Cards to be discarded
      */
     @Override
-    public void discardCards(int playerID, List<ResourceType> cards) throws PlayerExistException{
-        playerManager.discardCards(playerID, cards);
+    public void discardCards(int playerID, List<ResourceType> cards) throws PlayerExistException, InsufficientResourcesException, InvalidTypeException{
+        if(canDiscardCards(playerID)){
+            playerManager.discardCards(playerID, cards);
+        }
+
     }
 
     /**
@@ -124,7 +131,11 @@ public class Game implements IGame {
      */
     @Override
     public boolean canRollNumber(int playerID) {
-        //check turntracker
+        if(turnTracker.isPlayersTurn(playerID))
+        {
+            return turnTracker.canRoll();
+        }
+
         return false;
     }
 
@@ -149,7 +160,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canOfferTrade(int playerID) {
-        return false;
+        return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**
@@ -160,9 +171,11 @@ public class Game implements IGame {
      */
     @Override
     public void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) {
-        TradePackage one = new TradePackage(playerIDOne,onecards);
-        TradePackage two = new TradePackage(playerIDTwo, twocards);
-        Trade trade = new Trade(one,two);
+        if(canOfferTrade(playerIDOne)){
+            TradePackage one = new TradePackage(playerIDOne,onecards);
+            TradePackage two = new TradePackage(playerIDTwo, twocards);
+            Trade trade = new Trade(one,two);
+        }
     }
 
 
@@ -175,7 +188,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canFinishTurn(int playerID) {
-        return false;
+        return turnTracker.canDiscard() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**
@@ -184,8 +197,8 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void finishTurn(int playerID) {
-
+    public Integer finishTurn(int playerID) throws Exception {
+        return turnTracker.nextTurn();
     }
 
     /**
@@ -198,7 +211,7 @@ public class Game implements IGame {
     @Override
     public boolean canBuyDevCard(int playerID) throws PlayerExistException{
 
-        return playerManager.canBuyDevCard(playerID);
+        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canDiscard();
     }
 
     /**
@@ -222,7 +235,7 @@ public class Game implements IGame {
     public boolean canUseYearOfPlenty(int playerID) throws PlayerExistException{
         if(getCurrentTurn() == playerID){
             //can use DC
-            return playerManager.canUseYearOfPlenty(playerID);
+            return playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
         }
         return false;
     }
@@ -248,8 +261,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canUseRoadBuilder(int playerID) throws PlayerExistException{
-        //turnTracker.canUseDC(playerID);
-        return playerManager.canUseRoadBuilder(playerID) ;
+        return playerManager.canUseRoadBuilder(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**
@@ -273,8 +285,8 @@ public class Game implements IGame {
      */
     @Override
     public boolean canUseSoldier(int playerID) throws PlayerExistException{
-        //turnTracker.canUseDC(playerID);
-        return playerManager.canUseSoldier(playerID);
+
+        return playerManager.canUseSoldier(playerID)  && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**
@@ -286,6 +298,14 @@ public class Game implements IGame {
     public void useSoldier(int playerID) throws PlayerExistException, DevCardException{
         if(canUseSoldier(playerID)){
             playerManager.useSoldier(playerID);
+            int used = playerManager.getKnights(playerID);
+            if(used >= 3 && used > largestArmyCard.getMostSoldiers()){
+                int oldplayer = largestArmyCard.getOwner();
+                largestArmyCard.setNewOwner(playerID, used);
+                playerManager.changeLargestArmyPossession(oldplayer, playerID);
+            }
+
+            turnTracker.updateRobber(true);
         }
     }
 
@@ -298,8 +318,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canUseMonopoly(int playerID) throws PlayerExistException{
-        //turnTracker.canUseDC(playerID);
-        return playerManager.canUseMonopoly(playerID);
+        return playerManager.canUseMonopoly(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**
@@ -323,8 +342,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canUseMonument(int playerID) throws PlayerExistException{
-        //turnTracker.canUseDC(playerID);
-        return playerManager.canUseMonument(playerID);
+        return playerManager.canUseMonument(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**
@@ -348,8 +366,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canPlaceRobber(int playerID) {
-        //turnTracker.canPlaceRobber
-        return false;
+        return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber();
     }
 
     /**
@@ -362,7 +379,12 @@ public class Game implements IGame {
         return map.moveRobber(hexloc);
     }
 
-    public ResourceType rob(int playerrobber, int playerrobbed){
+    public ResourceType rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistException, InsufficientResourcesException{
+        if(canPlaceRobber(playerrobber)){
+            turnTracker.updateRobber(false);
+            ResourceType treasure = playerManager.placeRobber(playerrobber, playerrobbed);
+        }
+
         return null;
     }
 
@@ -376,7 +398,7 @@ public class Game implements IGame {
     @Override
     public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistException {
        // if(turnTracker.canBuild(playerID)){
-            return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID));
+            return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID) && turnTracker.canDiscard());
        // }
        // return false;
     }
@@ -407,7 +429,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistException{
-        return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID); //&& turnTracker.canBuild(playerID);
+        return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID) && turnTracker.canDiscard(); //&& turnTracker.canBuild(playerID);
     }
 
     /**
@@ -432,7 +454,7 @@ public class Game implements IGame {
     @Override
     public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistException {
 
-        return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID); //&& turnTracker.canBuild(playerID);
+        return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID) && turnTracker.canDiscard(); //&& turnTracker.canBuild(playerID);
     }
 
     /**
@@ -491,7 +513,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistException {
-        return playerManager.canBuyDevCard(playerID);
+        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canDiscard();
     }
 
     /**
@@ -517,8 +539,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canTrade(int playerID) {
-        //turnTracker.canTrade(playerID);
-        return false;
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
     }
 
     /**
@@ -546,9 +567,60 @@ public class Game implements IGame {
      * @param port
      */
     @Override
-    public void maritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistException{
+    public void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistException, InvalidTypeException, InsufficientResourcesException{
         if(canMaritimeTrade(playerID, port)){
-            //playerManager.maritimeTrade(playerID, port));
+            List<ResourceType> cards = new ArrayList<ResourceType>();
+            if(port == PortType.BRICK){
+                cards.add(ResourceType.BRICK);
+                cards.add(ResourceType.BRICK);
+            }
+            else if(port == PortType.ORE){
+                cards.add(ResourceType.ORE);
+                cards.add(ResourceType.ORE);
+            }
+            else if(port == PortType.SHEEP){
+                cards.add(ResourceType.SHEEP);
+                cards.add(ResourceType.SHEEP);
+            }
+            else if(port == PortType.WHEAT){
+                cards.add(ResourceType.WHEAT);
+                cards.add(ResourceType.WHEAT);
+            }
+            else if(port == PortType.WOOD){
+                cards.add(ResourceType.WOOD);
+                cards.add(ResourceType.WOOD);
+            }
+            List<ResourceCard> discarded = playerManager.discardCards(playerID, cards);
+
+            for(ResourceCard rc: discarded)
+            {
+                resourceCardBank.addResource(rc);
+            }
+
+            playerManager.addResource(playerID, resourceCardBank.discard(want));
+        }
+    }
+
+    public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistException, InsufficientResourcesException, InvalidTypeException{
+        if(canMaritimeTrade(playerID, port)){
+            if(port == PortType.THREE){
+                List<ResourceType> cards = new ArrayList<ResourceType>();
+                cards.add(give);
+                cards.add(give);
+                cards.add(give);
+
+                List<ResourceCard> discarded = playerManager.discardCards(playerID, cards);
+
+                for(ResourceCard rc: discarded)
+                {
+                    resourceCardBank.addResource(rc);
+                }
+
+                playerManager.addResource(playerID, resourceCardBank.discard(want));
+
+            } else{
+                throw new InvalidTypeException("not 3:1 port types");
+            }
         }
     }
 

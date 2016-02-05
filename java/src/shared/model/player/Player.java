@@ -11,6 +11,7 @@ import shared.model.game.trade.TradeType;
 import shared.model.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -195,15 +196,15 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param cards Cards to be discarded
      */
     @Override
-    public void discardCards(List<ResourceType> cards) {
-        try {
-            for (ResourceType card : cards) {
-                resourceCardBank.discard(card);
-            }
-        } catch (InsufficientResourcesException | InvalidTypeException e) {
-            e.printStackTrace();
+    public List<ResourceCard> discardCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
+
+        List<ResourceCard> discarded = new ArrayList<ResourceCard>();
+        for (ResourceType card : cards) {
+            discarded.add(resourceCardBank.discard(card));
         }
         setDiscarded(true);
+        return discarded;
+
     }
 
     /**
@@ -316,9 +317,19 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         if(canUseSoldier()) {
             developmentCardBank.useSoldier();
             setMoveRobber(true);
+            this.soldiers++;
         }else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
+    }
+
+    public void loseArmyCard(){
+        victoryPoints -=2;
+    }
+
+
+    public void winArmyCard(){
+        victoryPoints +=2;
     }
 
     /**
@@ -388,6 +399,11 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
             setMoveRobber(false);
         else
             throw new MoveRobberException("Player cannot move the Robber at this time!");
+    }
+
+    public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException{
+
+        return resourceCardBank.robbed();
     }
 
     /**
@@ -506,6 +522,11 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
             e.printStackTrace();
         }
     }
+
+    public void playKnight(){this.soldiers++;}
+
+
+    public Integer getKnights(){return this.soldiers;}
 
     /**
      * Adds a resource card to resourceCardBank
