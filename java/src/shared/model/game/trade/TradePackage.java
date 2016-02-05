@@ -1,7 +1,9 @@
 package shared.model.game.trade;
 
 import shared.definitions.ResourceType;
-import shared.model.resources.ResourceCard;
+
+import shared.model.cards.resources.ResourceCard;
+import shared.definitions.ResourceType;
 
 import java.util.ArrayList;
 import java.util.List;

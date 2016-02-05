@@ -6,9 +6,10 @@ import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.model.bank.*;
 import shared.definitions.CatanColor;
-import shared.model.devcards.DevelopmentCard;
+import shared.model.cards.Card;
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.ResourceCard;
+import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.List;
@@ -195,10 +196,16 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param cards Cards to be discarded
      */
     @Override
-    public void discardCards(List<ResourceType> cards) {
+    public void discardCards(List<Card> cards) {
         try {
-            for (ResourceType card : cards) {
-                resourceCardBank.discard(card);
+            for (Card card : cards) {
+                if (card instanceof ResourceCard) {
+                    ResourceCard resourceCard = (ResourceCard) card;
+                    resourceCardBank.discard(resourceCard.getType());
+                } else if (card instanceof DevelopmentCard) {
+                    DevelopmentCard developmentCard = (DevelopmentCard) card;
+                    developmentCardBank.discard(developmentCard.getType());
+                }
             }
         } catch (InsufficientResourcesException | InvalidTypeException e) {
             e.printStackTrace();
@@ -312,7 +319,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * Action - Player plays Soldier
      */
     @Override
-    public void useSoldier() throws DevCardException{
+    public void useSoldier() throws DevCardException {
         if(canUseSoldier()) {
             developmentCardBank.useSoldier();
             setMoveRobber(true);

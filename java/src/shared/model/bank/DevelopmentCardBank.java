@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import shared.definitions.DevCardType;
 import shared.exceptions.BadCallerException;
 import shared.model.JsonSerializable;
-import shared.model.devcards.*;
+import shared.model.cards.devcards.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -158,8 +158,13 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
     }
 
     @Override
-    public void useYearOfPlenty() {
-        yearOfPlentyCards.remove(0);
+    public DevelopmentCard useYearOfPlenty() {
+        try {
+            return discard(DevCardType.YEAR_OF_PLENTY);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -168,8 +173,13 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
     }
 
     @Override
-    public void useSoldier() {
-        soldierCards.remove(0);
+    public DevelopmentCard useSoldier() {
+        try {
+            return discard(DevCardType.SOLDIER);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -178,8 +188,13 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
     }
 
     @Override
-    public void useMonopoly() {
-        monopolyCards.remove(0);
+    public DevelopmentCard useMonopoly() {
+        try {
+            return discard(DevCardType.MONOPOLY);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -188,8 +203,13 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
     }
 
     @Override
-    public void useMonument() {
-        monumentCards.remove(0);
+    public DevelopmentCard useMonument() {
+        try {
+            return discard(DevCardType.MONUMENT);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -198,8 +218,13 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
     }
 
     @Override
-    public void useRoadBuild() {
-        roadBuildCards.remove(0);
+    public DevelopmentCard useRoadBuild() {
+        try {
+            return discard(DevCardType.ROAD_BUILD);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -311,6 +336,24 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
             return counter;
         } else {
             return yearOfPlentyCards.size();
+        }
+    }
+
+    @Override
+    public DevelopmentCard discard(DevCardType type) throws InvalidTypeException {
+        switch (type) {
+            case SOLDIER:
+                return soldierCards.remove(0);
+            case MONUMENT:
+                return monumentCards.remove(0);
+            case MONOPOLY:
+                return monopolyCards.remove(0);
+            case YEAR_OF_PLENTY:
+                return yearOfPlentyCards.remove(0);
+            case ROAD_BUILD:
+                return roadBuildCards.remove(0);
+            default:
+                throw new InvalidTypeException("The given card type is invalid");
         }
     }
 

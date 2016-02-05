@@ -1,11 +1,12 @@
-package shared.model.resources;
+package shared.model.cards.resources;
 
 import shared.definitions.ResourceType;
+import shared.model.cards.Card;
 
 /**
  * @author Danny Harding
  */
-public abstract class ResourceCard {
+public abstract class ResourceCard extends Card {
     protected ResourceType type;
 
     public ResourceType getType() {

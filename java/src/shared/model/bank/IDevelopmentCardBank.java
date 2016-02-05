@@ -1,9 +1,9 @@
 package shared.model.bank;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import shared.definitions.DevCardType;
 import shared.exceptions.BadCallerException;
-import shared.model.devcards.DevelopmentCard;
+import shared.model.cards.devcards.DevelopmentCard;
 
 /**
  * Created by Danny on 2/1/16.
@@ -20,27 +20,29 @@ public interface IDevelopmentCardBank {
 
     public boolean canUseYearOfPlenty();
 
-    public void useYearOfPlenty();
+    public DevelopmentCard useYearOfPlenty();
 
     public boolean canUseSoldier();
 
-    public void useSoldier();
+    public DevelopmentCard useSoldier();
 
     public boolean canUseMonopoly();
 
-    public void useMonopoly();
+    public DevelopmentCard useMonopoly();
 
     public boolean canUseMonument();
 
-    public void useMonument();
+    public DevelopmentCard useMonument();
 
     public boolean canUseRoadBuild();
 
-    public void useRoadBuild();
+    public DevelopmentCard useRoadBuild();
 
     public void addDevCards(JsonObject DevCards) throws BadCallerException;
 
     public JsonObject toJSON();
 
     public JsonObject newCardsToJSON();
+
+    DevelopmentCard discard(DevCardType type) throws InvalidTypeException;
 }

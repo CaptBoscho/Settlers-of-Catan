@@ -5,7 +5,7 @@ import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.*;
+import shared.model.cards.resources.*;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
