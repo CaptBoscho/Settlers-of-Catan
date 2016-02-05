@@ -2,10 +2,7 @@ package client.services;
 
 import client.data.GameInfo;
 import shared.definitions.ClientModel;
-import shared.definitions.ResourceType;
 import shared.dto.*;
-import shared.locations.EdgeLocation;
-import shared.locations.VertexLocation;
 
 import java.util.List;
 
@@ -58,7 +55,7 @@ public interface IServer {
      *
      * @param dto The transport object that contains the information required to join a game
      */
-    public void joinGame(JoinGameDTO dto);
+    public String joinGame(JoinGameDTO dto);
 
     /**
      * Saves the current state of the specified game to a file with a POST request - FOR DEBUGGING
