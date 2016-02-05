@@ -1,4 +1,4 @@
-package shared.model.map;
+package model.map;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -8,6 +8,7 @@ import org.junit.Test;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.locations.*;
+import shared.model.map.Map;
 
 import java.util.List;
 
@@ -22,7 +23,6 @@ public class MapTest {
 
     private Map map;
     private Map jsonMap;
-
 
 
     @Before
@@ -333,18 +333,16 @@ public class MapTest {
             }
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(8);
             StringBuilder test = new StringBuilder();
-            for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet())
-            {
-                test.append(entry.getKey() + "/" + entry.getValue());
+            for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                test.append(entry.getKey()).append("/").append(entry.getValue());
             }
             String answer = "1/[WHEAT]" + "2/[BRICK, BRICK]";
             assertTrue(test.toString().equals(answer));
             map.moveRobber(new HexLocation(-1,-2));
             resources = map.getResources(8);
             test = new StringBuilder();
-            for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet())
-            {
-                test.append(entry.getKey() + "/" + entry.getValue());
+            for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                test.append(entry.getKey()).append("/").append(entry.getValue());
             }
             answer = "1/[WHEAT]";
             assertTrue(test.toString().equals(answer));
@@ -355,7 +353,7 @@ public class MapTest {
         } catch(InvalidDiceRollException e) {
             assertTrue(e.getMessage().equals("Need to move robber instead of giving resources"));
         }
-        try{
+        try {
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(13);
         } catch(InvalidDiceRollException e) {
             assertTrue(e.getMessage().equals("Dice roll was 13"));
@@ -562,7 +560,7 @@ public class MapTest {
             if (jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond)) {
                 jsonMap.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
             }
-        } catch(Exception e) {
+        } catch(Exception ignored) {
 
         }
     }

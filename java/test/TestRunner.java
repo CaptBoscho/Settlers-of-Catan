@@ -26,6 +26,7 @@ public class TestRunner {
         client.networking.AuthenticationTest.class,
 
         // model tests
-        model.game.GameTest.class
+        model.game.GameTest.class,
+        model.map.MapTest.class
 })
 class TestSuite {}
