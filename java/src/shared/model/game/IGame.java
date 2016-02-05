@@ -8,12 +8,17 @@ import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+
+import shared.model.bank.InvalidTypeException;
+import shared.model.cards.resources.ResourceCard;
+
 import shared.model.player.Player;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 
 import javax.annotation.Resource;
+import javax.naming.InsufficientResourcesException;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +56,8 @@ public interface IGame {
      * @param playerID ID of Player performing action
      * @param cards Cards to be discarded
      */
-    void discardCards(int playerID, List<Card> cards) throws PlayerExistsException;
+    void discardCards(int playerID, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
+
 
     /**
      * Determine if Player can roll the dice
@@ -95,7 +101,7 @@ public interface IGame {
      * Action - Player finishes their turn
      * @param playerID ID of Player performing action
      */
-    void finishTurn(int playerID);
+    Integer finishTurn(int playerID) throws Exception;
 
     /**
      * Determine if Player can buy a dev card
@@ -195,7 +201,7 @@ public interface IGame {
      */
     Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException;
 
-    ResourceType rob(int playerrobber, int playerrobbed);
+    ResourceType rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
 
     /**
      * returns boolean value denoting if the player can build a
@@ -293,8 +299,10 @@ public interface IGame {
      * @param playerID
      * @param port
      */
-    public void maritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException;
+    public void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
+
+    public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
 

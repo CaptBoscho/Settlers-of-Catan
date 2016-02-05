@@ -2,6 +2,10 @@ package shared.model.player;
 
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
+
+import shared.exceptions.*;
+import shared.model.bank.InvalidTypeException;
+
 import shared.exceptions.DevCardException;
 import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.MoveRobberException;
@@ -10,6 +14,7 @@ import shared.model.cards.Card;
 import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
+import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
 import java.util.List;
 
@@ -50,6 +55,12 @@ public interface IPlayerManager {
      */
     Player getPlayerByIndex(int index) throws PlayerExistsException;
 
+    Integer getKnights(int playerID) throws PlayerExistsException;
+
+    void playKnight(int playerID) throws PlayerExistsException;
+
+    void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException;
+
 
     //Can Do & Do
     //==========================================================
@@ -67,7 +78,13 @@ public interface IPlayerManager {
      * @param id ID of the player
      * @param cards Cards to be discarded
      */
-    void discardCards(int id, List<Card> cards) throws PlayerExistsException;
+    List<ResourceCard> discardCards(int id, List<Card> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
+
+    List<ResourceCard> discardResourceType(int id, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+
+
+    void addResource(int id, ResourceCard rc) throws PlayerExistsException;
+
 
     /**
      * Determine if Player can offer a trade
@@ -85,6 +102,9 @@ public interface IPlayerManager {
      * @return True if Player can perform a maritime trade
      */
     boolean canMaritimeTrade(int id, PortType type) throws PlayerExistsException;
+
+
+    void maritimeTrade(int id, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistsException;
 
     /**
      * Determine if Player can buy a dev card
@@ -180,9 +200,10 @@ public interface IPlayerManager {
 
     /**
      * Action - Player places the Robber
-     * @param id ID of the player
+     * @param robber ID of the player
      */
-    void placeRobber(int id) throws MoveRobberException,PlayerExistsException;
+    ResourceType placeRobber(int robber, int robbed) throws MoveRobberException,PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+
 
     /**
      * Determine if Player can build a road

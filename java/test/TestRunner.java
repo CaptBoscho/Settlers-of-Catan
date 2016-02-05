@@ -1,7 +1,6 @@
 import model.Player.PlayerManagerTest;
 import model.Player.PlayerTest;
 import model.game.DiceTest;
-import model.game.GameTest;
 import model.game.TurnTrackerTest;
 import model.map.MapTest;
 import org.junit.runner.JUnitCore;
@@ -28,8 +27,7 @@ public class TestRunner {
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         // server tests
-        client.networking.CreateGameTest.class,
-        client.networking.AuthenticationTest.class,
+        client.networking.ServerTest.class,
 
         // model tests
         MapTest.class,
