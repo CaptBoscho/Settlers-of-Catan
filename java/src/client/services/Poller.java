@@ -1,7 +1,10 @@
 package client.services;
 
 
-import javax.swing.Timer;
+import shared.dto.GetCurrentModelDTO;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * The poller keeps the client updated with the game information via long-polling.
@@ -10,7 +13,7 @@ import javax.swing.Timer;
  */
 public class Poller {
 
-    private final static long DEFAULT_POLL_INTERVAL = 1000;
+    private final static int DEFAULT_POLL_INTERVAL = 1000;
     private IServer server;
     private Timer poller;
 
@@ -27,14 +30,25 @@ public class Poller {
      * @return boolean value indicating if the poller is running
      */
     public boolean isRunning() {
-        return poller.isRunning();
+        return poller != null;
+    }
+
+    public void start() {
+        poller = new Timer(true);
+        poller.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                GetCurrentModelDTO dto = new GetCurrentModelDTO(4);
+                server.getCurrentModel(dto);
+            }
+        }, 0, DEFAULT_POLL_INTERVAL);
     }
 
     /**
      * Stops the poller and de-allocates it (sets to null)
      */
     public void stop() {
-        poller.stop();
+        poller.cancel();
         poller = null;
     }
 }

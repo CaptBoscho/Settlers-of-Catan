@@ -23,6 +23,22 @@ public class CreateGameDTO implements JsonSerializable{
         this.name = n;
     }
 
+    public boolean isRandomTiles() {
+        return this.randomTiles;
+    }
+
+    public boolean isRandomNumbers() {
+        return this.randomNumbers;
+    }
+
+    public boolean isRandomPorts() {
+        return this.randomPorts;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
     /**
      * Converts the object to JSON
      *

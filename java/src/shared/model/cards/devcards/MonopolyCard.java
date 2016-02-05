@@ -1,4 +1,4 @@
-package shared.model.devcards;
+package shared.model.cards.devcards;
 
 import shared.definitions.DevCardType;
 

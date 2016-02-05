@@ -2,6 +2,11 @@ package shared.model.game;
 
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
+import shared.exceptions.PlayerExistsException;
+import shared.model.bank.DevelopmentCardBank;
+import shared.model.bank.ResourceCardBank;
+import shared.definitions.DevCardType;
+import shared.model.cards.Card;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -14,10 +19,9 @@ import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
-import shared.model.resources.ResourceCard;
+import shared.model.cards.resources.ResourceCard;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * game class representing a Catan game
@@ -37,9 +41,11 @@ public class Game implements IGame {
      */
     public Game() {
         this.dice = new Dice();
+        this.map = new Map(false, false, false);
         this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
+        this.playerManager = new PlayerManager(new ArrayList<Player>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
     }
@@ -94,7 +100,7 @@ public class Game implements IGame {
      * @return True if Player can discard cards
      */
     @Override
-    public boolean canDiscardCards(int playerID) throws PlayerExistException{
+    public boolean canDiscardCards(int playerID) throws PlayerExistsException {
 
         return playerManager.canDiscardCards(playerID);
     }
@@ -106,7 +112,7 @@ public class Game implements IGame {
      * @param cards    Cards to be discarded
      */
     @Override
-    public void discardCards(int playerID, List<ResourceType> cards) throws PlayerExistException{
+    public void discardCards(int playerID, List<Card> cards) throws PlayerExistsException {
         playerManager.discardCards(playerID, cards);
     }
 
@@ -191,7 +197,7 @@ public class Game implements IGame {
      * @return True if Player can buy a dev card
      */
     @Override
-    public boolean canBuyDevCard(int playerID) throws PlayerExistException{
+    public boolean canBuyDevCard(int playerID) throws PlayerExistsException{
 
         return playerManager.canBuyDevCard(playerID);
     }
@@ -202,7 +208,7 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void buyDevCard(int playerID) throws PlayerExistException{
+    public void buyDevCard(int playerID) throws PlayerExistsException{
         playerManager.buyDevCard(playerID);
     }
 
@@ -214,7 +220,7 @@ public class Game implements IGame {
      * @return True if Player can play Year of Plenty
      */
     @Override
-    public boolean canUseYearOfPlenty(int playerID) throws PlayerExistException{
+    public boolean canUseYearOfPlenty(int playerID) throws PlayerExistsException{
         if(getCurrentTurn() == playerID){
             //can use DC
             return playerManager.canUseYearOfPlenty(playerID);
@@ -228,7 +234,7 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useYearOfPlenty(int playerID) throws PlayerExistException, DevCardException{
+    public void useYearOfPlenty(int playerID) throws PlayerExistsException, DevCardException{
         if(canUseYearOfPlenty(playerID)){
             playerManager.useYearOfPlenty(playerID);
         }
@@ -242,7 +248,7 @@ public class Game implements IGame {
      * @return True if Player can play Road Builder
      */
     @Override
-    public boolean canUseRoadBuilder(int playerID) throws PlayerExistException{
+    public boolean canUseRoadBuilder(int playerID) throws PlayerExistsException{
         //turnTracker.canUseDC(playerID);
         return playerManager.canUseRoadBuilder(playerID) ;
     }
@@ -253,7 +259,7 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useRoadBuilder(int playerID) throws PlayerExistException, DevCardException{
+    public void useRoadBuilder(int playerID) throws PlayerExistsException, DevCardException{
         if(canUseRoadBuilder(playerID)){
             playerManager.useRoadBuilder(playerID);
         }
@@ -267,7 +273,7 @@ public class Game implements IGame {
      * @return True if Player can play Soldier
      */
     @Override
-    public boolean canUseSoldier(int playerID) throws PlayerExistException{
+    public boolean canUseSoldier(int playerID) throws PlayerExistsException{
         //turnTracker.canUseDC(playerID);
         return playerManager.canUseSoldier(playerID);
     }
@@ -278,7 +284,7 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useSoldier(int playerID) throws PlayerExistException, DevCardException{
+    public void useSoldier(int playerID) throws PlayerExistsException, DevCardException{
         if(canUseSoldier(playerID)){
             playerManager.useSoldier(playerID);
         }
@@ -292,7 +298,7 @@ public class Game implements IGame {
      * @return True if Player can play Monopoly
      */
     @Override
-    public boolean canUseMonopoly(int playerID) throws PlayerExistException{
+    public boolean canUseMonopoly(int playerID) throws PlayerExistsException{
         //turnTracker.canUseDC(playerID);
         return playerManager.canUseMonopoly(playerID);
     }
@@ -303,7 +309,7 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useMonopoly(int playerID) throws PlayerExistException, DevCardException{
+    public void useMonopoly(int playerID) throws PlayerExistsException, DevCardException{
         if(canUseMonopoly(playerID)){
             playerManager.useMonopoly(playerID);
         }
@@ -317,7 +323,7 @@ public class Game implements IGame {
      * @return True if Player can play Monument
      */
     @Override
-    public boolean canUseMonument(int playerID) throws PlayerExistException{
+    public boolean canUseMonument(int playerID) throws PlayerExistsException{
         //turnTracker.canUseDC(playerID);
         return playerManager.canUseMonument(playerID);
     }
@@ -328,7 +334,7 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useMonument(int playerID) throws PlayerExistException, DevCardException{
+    public void useMonument(int playerID) throws PlayerExistsException, DevCardException{
         if(canUseMonument(playerID)){
             playerManager.useMonument(playerID);
         }
@@ -369,7 +375,7 @@ public class Game implements IGame {
      * @return
      */
     @Override
-    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistException {
+    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
        // if(turnTracker.canBuild(playerID)){
             return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID));
        // }
@@ -382,7 +388,7 @@ public class Game implements IGame {
      * @param playerID
      */
     @Override
-    public void buildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistException {
+    public void buildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
         if(canBuildRoad(playerID, edge)){
             map.buildRoad(playerID, edge);
             playerManager.buildRoad(playerID);
@@ -401,7 +407,7 @@ public class Game implements IGame {
      * @return
      */
     @Override
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistException{
+    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException{
         return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID); //&& turnTracker.canBuild(playerID);
     }
 
@@ -411,7 +417,7 @@ public class Game implements IGame {
      * @param playerID
      */
     @Override
-    public void buildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistException {
+    public void buildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
         if(canBuildSettlement(playerID, vertex)){
             map.buildSettlement(playerID, vertex);
             playerManager.buildSettlement(playerID);
@@ -425,7 +431,7 @@ public class Game implements IGame {
      * @return
      */
     @Override
-    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistException {
+    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
 
         return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID); //&& turnTracker.canBuild(playerID);
     }
@@ -436,7 +442,7 @@ public class Game implements IGame {
      * @param playerID
      */
     @Override
-    public void buildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistException {
+    public void buildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
         if(canBuildCity(playerID, vertex)){
             map.buildCity(playerID, vertex);
             playerManager.buildCity(playerID);
@@ -485,7 +491,7 @@ public class Game implements IGame {
      * @return
      */
     @Override
-    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistException {
+    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistsException {
         return playerManager.canBuyDevCard(playerID);
     }
 
@@ -497,7 +503,7 @@ public class Game implements IGame {
      * @param playerID
      */
     @Override
-    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistException {
+    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException {
         if(canBuyDevelopmentCard(playerID)){
             playerManager.buyDevCard(playerID);
         }
@@ -524,7 +530,7 @@ public class Game implements IGame {
      * @return
      */
     @Override
-    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistException{
+    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException{
         if(canTrade(playerID)){
             Set<PortType> ports = getPortTypes(playerID);
             if(ports.contains(port)){
@@ -541,7 +547,7 @@ public class Game implements IGame {
      * @param port
      */
     @Override
-    public void maritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistException{
+    public void maritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException{
         if(canMaritimeTrade(playerID, port)){
             //playerManager.maritimeTrade(playerID, port));
         }

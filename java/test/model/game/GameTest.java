@@ -1,11 +1,11 @@
-package shared.model.game;
+package model.game;
 
 import org.junit.Assert;
-import org.omg.CORBA.ORBPackage.InvalidName;
 import shared.definitions.CatanColor;
 import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
+import shared.model.game.Game;
 import shared.model.player.Name;
 import shared.model.player.Player;
 
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by boscho on 2/3/16.
+ * @author Corbin Byers
  */
-class GameTest {
+public class GameTest {
 
     private Game game = new Game();
 
@@ -24,7 +24,7 @@ class GameTest {
     }*/
 
     void testCanFirstTurn() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
-        List<Player> players = new ArrayList<Player>();
+        List<Player> players = new ArrayList<>();
 
         Player one = new Player(0, CatanColor.BLUE, 0, new Name ("Hope"));
         Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
@@ -36,7 +36,7 @@ class GameTest {
         players.add(three);
         players.add(four);
 
-        int first = game.initializeGame(players);
+        int first = game.initializeGame(players, false, false, false);
 
 
     }
