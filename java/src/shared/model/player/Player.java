@@ -1,6 +1,8 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.model.bank.*;
 import shared.definitions.CatanColor;
@@ -229,7 +231,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @return True if Player can perform a maritime trade
      */
     @Override
-    public boolean canMaritimeTrade(TradeType type) {
+    public boolean canMaritimeTrade(PortType type) {
         try {
             return resourceCardBank.canMaritimeTrade(type);
         } catch (InsufficientResourcesException | InvalidTypeException e) {

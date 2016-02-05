@@ -1,5 +1,7 @@
 package shared.model.player;
 
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
 import shared.model.bank.InvalidTypeException;
@@ -41,7 +43,7 @@ public interface IPlayer {
      * @param type Type of trade
      * @return True if Player can perform a maritime trade
      */
-    boolean canMaritimeTrade(TradeType type);
+    boolean canMaritimeTrade(PortType type);
 
     /**
      * Determine if Player can buy a dev card

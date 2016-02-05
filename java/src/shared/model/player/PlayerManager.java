@@ -1,5 +1,7 @@
 package shared.model.player;
 
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.model.cards.Card;
 import shared.model.game.trade.TradeType;
@@ -21,8 +23,8 @@ public class PlayerManager implements IPlayerManager {
     /**
      * Default Constructor
      */
-    public PlayerManager(){
-        this.players = new ArrayList<Player>(4);
+    public PlayerManager(List<Player> ps){
+        this.players = ps;
     }
 
     /**
@@ -41,9 +43,15 @@ public class PlayerManager implements IPlayerManager {
      * Randomize player order (turn order)
      * @throws FailedToRandomizeException
      */
-    public void randomizePlayers() throws FailedToRandomizeException {
-        if(!this.players.isEmpty())
+    public List<Integer> randomizePlayers() throws FailedToRandomizeException {
+        if (!this.players.isEmpty()){
             Collections.shuffle(this.players);
+            List<Integer> id_order = new ArrayList<Integer>();
+            for (Player p : this.players) {
+                id_order.add(p.get_id());
+            }
+            return id_order;
+        }
         else
             throw new FailedToRandomizeException("There are no players to shuffle");
     }
@@ -146,7 +154,7 @@ public class PlayerManager implements IPlayerManager {
      * @return True if Player can perform a maritime trade
      */
     @Override
-    public boolean canMaritimeTrade(int id, TradeType type) throws PlayerExistsException {
+    public boolean canMaritimeTrade(int id, PortType type) throws PlayerExistsException {
         Player player = getPlayerByID(id);
         return player.canMaritimeTrade(type);
     }

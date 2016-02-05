@@ -2,8 +2,11 @@ package shared.model.game.trade;
 
 import com.google.gson.JsonObject;
 import shared.model.cards.resources.ResourceCard;
+import shared.definitions.ResourceType;
+import shared.model.player.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a trade done between two players
@@ -35,7 +38,7 @@ public class Trade {
      * @post The resource(s) from package1 are now in package2, and vice versa
      */
     public void switchResources() {
-        ArrayList<ResourceCard> ghost = package1.getResources();
+        List<ResourceType> ghost = package1.getResources();
         package1.setResources(package2.getResources());
         package2.setResources(ghost); //todo JUnit tests
     }
