@@ -327,12 +327,11 @@ public class ServerProxy implements IServer {
     /**
      * Plays a 'Monopoly' card from your hand to monopolize the specified resource
      *
-     * @param playerIndex Who's playing this dev card
-     * @param resource
+     * @param dto The transport object that contains the information required to play a monopoly card
      * @return The current state of the game
      */
     @Override
-    public ClientModel playMonopolyCard(int playerIndex, String resource) {
+    public ClientModel playMonopolyCard(PlayMonopolyDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Monopoly";
         return null;
     }
@@ -340,11 +339,11 @@ public class ServerProxy implements IServer {
     /**
      * Plays a 'Monument' card from your hand to give you a victory point
      *
-     * @param playerIndex Who's playing this dev card
+     * @param dto The transport object that contains the information required to play a monopoly card
      * @return The current state of the game
      */
     @Override
-    public ClientModel playMonumentCard(int playerIndex) {
+    public ClientModel playMonumentCard(PlayMonumentDTO dto) {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Monument";
         return null;
     }

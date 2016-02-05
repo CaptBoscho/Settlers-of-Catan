@@ -24,7 +24,10 @@ public class BuildCityDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        // TODO --
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "buildCity");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.add("vertexLocation", this.location.toJSON());
+        return obj;
     }
 }

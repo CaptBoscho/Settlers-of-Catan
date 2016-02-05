@@ -183,19 +183,18 @@ public interface IServer {
     /**
      * Plays a 'Monopoly' card from your hand to monopolize the specified resource
      *
-     * @param playerIndex Who's playing this dev card
-     * @param resource
+     * @param dto The transport object that contains the information required to play a monopoly card
      * @return The current state of the game
      */
-    public ClientModel playMonopolyCard(int playerIndex, String resource);
+    public ClientModel playMonopolyCard(PlayMonopolyDTO dto);
 
     /**
      * Plays a 'Monument' card from your hand to give you a victory point
      *
-     * @param playerIndex Who's playing this dev card
+     * @param dto The transport object that contains the information required to play a monument card
      * @return The current state of the game
      */
-    public ClientModel playMonumentCard(int playerIndex);
+    public ClientModel playMonumentCard(PlayMonumentDTO dto);
 
     /**
      * Builds a road at the specified location. (Set 'free' to true during initial setup.)

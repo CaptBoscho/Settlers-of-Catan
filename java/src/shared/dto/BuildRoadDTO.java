@@ -26,7 +26,11 @@ public class BuildRoadDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        // TODO --
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "buildRoad");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.addProperty("free", this.free);
+        obj.add("roadLocation", this.roadLocation.toJSON());
+        return obj;
     }
 }

@@ -26,7 +26,11 @@ public class BuildSettlementDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        // TODO --
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "buildSettlement");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.addProperty("free", this.free);
+        obj.add("vertexLocation", this.location.toJSON());
+        return obj;
     }
 }
