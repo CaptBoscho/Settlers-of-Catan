@@ -510,8 +510,19 @@ public class Map implements IMap, JsonSerializable{
         if(playerID < 1 || playerID > 4) {
             throw new InvalidPlayerException("PlayerID was " + playerID);
         }
+        int size = 0;
         ArrayList<Edge> roads = this.roads.get(playerID);
-        return roads.size();
+        if(roads != null) {
+            for(Edge edge : roads) {
+                refreshRoads(roads);
+                ArrayList<EdgeLocation> oldConnectingRoads = new ArrayList<>();
+                int newSize = getLongestRoadSize(0, playerID, edge.getEdgeLoc(), oldConnectingRoads);
+                if(newSize > size) {
+                    size = newSize;
+                }
+            }
+        }
+        return size;
     }
 
     @Override
@@ -1437,5 +1448,151 @@ public class Map implements IMap, JsonSerializable{
         if(vertex.hasBuilding()) {
             players.add(vertex.getPlayerID());
         }
+    }
+
+    private void refreshRoads(ArrayList<Edge> roads) {
+        for(Edge edge: roads) {
+            edge.getRoad().setVisited(false);
+        }
+    }
+
+    private int getLongestRoadSize(int size, int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> oldConnectingRoads) {
+        edgeLoc = edgeLoc.getNormalizedLocation();
+        Edge edge = edges.get(edgeLoc);
+        if(edge.getRoad().isVisited()) {
+            return size;
+        } else {
+            edge.getRoad().setVisited(true);
+            size++;
+            ArrayList<EdgeLocation> connectingRoads = getConnectingRoads(playerID, edgeLoc);
+            int oldSize = size;
+            for(EdgeLocation road : connectingRoads) {
+                if(!oldConnectedToNew(oldConnectingRoads, road)) {
+                    int newSize = getLongestRoadSize(oldSize, playerID, road, connectingRoads);
+                    if (newSize > size) {
+                        size = newSize;
+                    }
+                }
+            }
+            edge.getRoad().setVisited(false);
+            return size;
+        }
+    }
+
+    private boolean oldConnectedToNew(ArrayList<EdgeLocation> oldConnectingRoads, EdgeLocation road) {
+        for(EdgeLocation edgeLoc : oldConnectingRoads) {
+            if(edgeLoc.equals(road)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoads(int playerID, EdgeLocation edgeLoc) {
+        edgeLoc = edgeLoc.getNormalizedLocation();
+        ArrayList<EdgeLocation> connectingRoads = new ArrayList<>();
+        connectingRoads = getConnectingRoadsForEdge(playerID, edgeLoc, connectingRoads);
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdge(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        edgeLoc = edgeLoc.getNormalizedLocation();
+        if(edgeLoc.getDir() == EdgeDirection.NorthWest) {
+            connectingRoads = getConnectingRoadsForEdgeNorthWest(playerID, edgeLoc, connectingRoads);
+        } else if(edgeLoc.getDir() == EdgeDirection.North) {
+            connectingRoads = getConnectingRoadsForEdgeNorth(playerID, edgeLoc, connectingRoads);
+        } else {
+            connectingRoads = getConnectingRoadsForEdgeNorthEast(playerID, edgeLoc, connectingRoads);
+        }
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorthWest(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        HexLocation lowerLeftHexLoc = edgeLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthWest);
+        VertexLocation lowerLeftVertexLoc = new VertexLocation(lowerLeftHexLoc, VertexDirection.NorthEast);
+        VertexLocation upperRightVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthWest);
+        connectingRoads = getConnectingRoadsForEdge(playerID, lowerLeftVertexLoc, upperRightVertexLoc, connectingRoads);
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorth(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        VertexLocation leftVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthWest);
+        VertexLocation rightVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthEast);
+        connectingRoads = getConnectingRoadsForEdge(playerID, leftVertexLoc, rightVertexLoc, connectingRoads);
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorthEast(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        HexLocation lowerRightHexLoc = edgeLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthEast);
+        VertexLocation lowerRightVertexLoc = new VertexLocation(lowerRightHexLoc, VertexDirection.NorthWest);
+        VertexLocation upperLeftVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthEast);
+        connectingRoads =  getConnectingRoadsForEdge(playerID, lowerRightVertexLoc, upperLeftVertexLoc, connectingRoads);
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdge(int playerID, VertexLocation vertexLocOne, VertexLocation vertexLocTwo, ArrayList<EdgeLocation> connectingRoads) {
+        Vertex vertex = vertices.get(vertexLocOne);
+        if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
+            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocOne, connectingRoads);
+        } else if(vertex != null && !vertex.hasBuilding()) {
+            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocOne, connectingRoads);
+        }
+        vertex = vertices.get(vertexLocTwo);
+        if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
+            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocTwo, connectingRoads);
+        } else if(vertex != null && !vertex.hasBuilding()) {
+            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocTwo, connectingRoads);
+        }
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForVertex(int playerID, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        if(vertexLoc.getDir() == VertexDirection.NorthWest) {
+            connectingRoads = getConnectingRoadsForVertexNorthWest(playerID, vertexLoc, connectingRoads);
+        } else {
+            connectingRoads = getConnectingRoadsForVertexNorthEast(playerID, vertexLoc, connectingRoads);
+        }
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForVertexNorthWest(int playerID, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
+        HexLocation upperLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthWest);
+        EdgeLocation upperLeftEdgeLoc = new EdgeLocation(upperLeftHexLoc, EdgeDirection.NorthEast);
+        Edge upperLeft = edges.get(upperLeftEdgeLoc);
+        if(upperLeft != null && upperLeft.hasRoad() && upperLeft.getRoad().getPlayerID() == playerID) {
+            connectingRoads.add(upperLeftEdgeLoc);
+        }
+        EdgeLocation lowerLeftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.NorthWest);
+        Edge lowerLeft = edges.get(lowerLeftEdgeLoc);
+        if(lowerLeft != null && lowerLeft.hasRoad() && lowerLeft.getRoad().getPlayerID() == playerID) {
+            connectingRoads.add(lowerLeftEdgeLoc);
+        }
+        EdgeLocation rightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
+        Edge right = edges.get(rightEdgeLoc);
+        if(right != null && right.hasRoad() && right.getRoad().getPlayerID() == playerID) {
+            connectingRoads.add(rightEdgeLoc);
+        }
+        return connectingRoads;
+    }
+
+    private ArrayList<EdgeLocation> getConnectingRoadsForVertexNorthEast(int playerID, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
+        HexLocation upperRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthEast);
+        EdgeLocation upperRightEdgeLoc = new EdgeLocation(upperRightHexLoc, EdgeDirection.NorthWest);
+        Edge upperRight = edges.get(upperRightEdgeLoc);
+        if(upperRight != null && upperRight.hasRoad() && upperRight.getRoad().getPlayerID() == playerID) {
+            connectingRoads.add(upperRightEdgeLoc);
+        }
+        EdgeLocation lowerRightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.NorthEast);
+        Edge lowerRight = edges.get(lowerRightEdgeLoc);
+        if(lowerRight != null && lowerRight.hasRoad() && lowerRight.getRoad().getPlayerID() == playerID) {
+            connectingRoads.add(lowerRightEdgeLoc);
+        }
+        EdgeLocation leftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
+        Edge left = edges.get(leftEdgeLoc);
+        if(left != null && left.hasRoad() && left.getRoad().getPlayerID() == playerID) {
+            connectingRoads.add(leftEdgeLoc);
+        }
+        return connectingRoads;
     }
 }
