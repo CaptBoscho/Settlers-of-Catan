@@ -22,6 +22,10 @@ public class ServerProxy implements IServer {
         this.port = port;
     }
 
+    private void checkClientModelForErrors() {
+
+    }
+
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *
@@ -133,13 +137,15 @@ public class ServerProxy implements IServer {
      * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public ClientModel getCurrentModel(GetCurrentModelDTO dto) {
+    public ClientModel getCurrentModel(GetCurrentModelDTO dto) throws MissingUserCookieException {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/model";
         String result = Utils.sendGet(url);
         assert result != null;
         // TODO - convert JSON string to ClientModel
-        System.out.println(result);
+        if(result.contains("The catan.user HTTP cookie is missing.")) {
+            throw new MissingUserCookieException("The catan.user HTTP cookie is missing");
+        }
         return null;
     }
 
@@ -205,11 +211,15 @@ public class ServerProxy implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel sendChat(SendChatDTO dto) {
+    public ClientModel sendChat(SendChatDTO dto) throws MissingUserCookieException {
         assert dto != null;
+        assert dto.toJSON() != null; // avoid empty request error
         String url = Utils.buildUrl(this.host, this.port) + "/moves/sendChat";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
+        if(result.contains("The catan.user HTTP cookie is missing.")) {
+            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
+        }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         return new ClientModel(obj);
     }
@@ -221,11 +231,15 @@ public class ServerProxy implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel rollNumber(RollNumberDTO dto) {
+    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/rollNumber";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
+        if(result.contains("The catan.user HTTP cookie is missing.")) {
+            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
+        }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         return new ClientModel(obj);
     }

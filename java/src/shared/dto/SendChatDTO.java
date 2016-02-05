@@ -32,6 +32,10 @@ public class SendChatDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "sendChat");
+        obj.addProperty("playerIndex", this.playerId);
+        obj.addProperty("content", this.content);
+        return obj;
     }
 }

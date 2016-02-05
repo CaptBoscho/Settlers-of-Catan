@@ -106,12 +106,8 @@ public class Game implements IGame {
      * @return True if Player can discard cards
      */
     @Override
-    public boolean canDiscardCards(int playerID) throws PlayerExistsException{
-        if(turnTracker.getPhase() == TurnTracker.Phase.DISCARDING)
-        {
-            return playerManager.canDiscardCards(playerID);
-        }
-        return false;
+    public boolean canDiscardCards(int playerID) throws PlayerExistsException {
+        return turnTracker.getPhase() == TurnTracker.Phase.DISCARDING && playerManager.canDiscardCards(playerID);
 
     }
 
@@ -126,7 +122,6 @@ public class Game implements IGame {
         if(canDiscardCards(playerID)){
             playerManager.discardResourceType(playerID, cards);
         }
-
     }
 
     /**
@@ -138,12 +133,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canRollNumber(int playerID) {
-        if(turnTracker.isPlayersTurn(playerID))
-        {
-            return turnTracker.canRoll();
-        }
-
-        return false;
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.canRoll();
     }
 
     /**
@@ -583,31 +573,26 @@ public class Game implements IGame {
     public void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException{
 
         if(canMaritimeTrade(playerID, port)){
-            List<ResourceType> cards = new ArrayList<ResourceType>();
-            if(port == PortType.BRICK){
+            List<ResourceType> cards = new ArrayList<>();
+            if(port == PortType.BRICK) {
                 cards.add(ResourceType.BRICK);
                 cards.add(ResourceType.BRICK);
-            }
-            else if(port == PortType.ORE){
+            } else if(port == PortType.ORE) {
                 cards.add(ResourceType.ORE);
                 cards.add(ResourceType.ORE);
-            }
-            else if(port == PortType.SHEEP){
+            } else if(port == PortType.SHEEP) {
                 cards.add(ResourceType.SHEEP);
                 cards.add(ResourceType.SHEEP);
-            }
-            else if(port == PortType.WHEAT){
+            } else if(port == PortType.WHEAT) {
                 cards.add(ResourceType.WHEAT);
                 cards.add(ResourceType.WHEAT);
-            }
-            else if(port == PortType.WOOD){
+            } else if(port == PortType.WOOD) {
                 cards.add(ResourceType.WOOD);
                 cards.add(ResourceType.WOOD);
             }
             List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
 
-            for(ResourceCard rc: discarded)
-            {
+            for(ResourceCard rc: discarded) {
                 resourceCardBank.addResource(rc);
             }
 
@@ -617,22 +602,21 @@ public class Game implements IGame {
 
     public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
         if(canMaritimeTrade(playerID, port)){
-            if(port == PortType.THREE){
-                List<ResourceType> cards = new ArrayList<ResourceType>();
+            if(port == PortType.THREE) {
+                List<ResourceType> cards = new ArrayList<>();
                 cards.add(give);
                 cards.add(give);
                 cards.add(give);
 
                 List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
 
-                for(ResourceCard rc: discarded)
-                {
+                for(ResourceCard rc: discarded) {
                     resourceCardBank.addResource(rc);
                 }
 
                 playerManager.addResource(playerID, resourceCardBank.discard(want));
 
-            } else{
+            } else {
                 throw new InvalidTypeException("not 3:1 port types");
             }
         }

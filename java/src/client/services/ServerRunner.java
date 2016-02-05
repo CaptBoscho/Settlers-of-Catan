@@ -32,11 +32,11 @@ public class ServerRunner {
 //        LoadGameDTO dto = new LoadGameDTO("lol");
 //        System.out.println(server.loadGame(dto));
 
-//        GetCurrentModelDTO dto  = new GetCurrentModelDTO(4);
-//        server.getCurrentModel(dto);
+        SendChatDTO dto = new SendChatDTO(2, "hello world");
+//        server.sendChat(dto);
 
-        JoinGameDTO dto = new JoinGameDTO(4, CatanColor.BROWN);
-        server.joinGame(dto);
+//        JoinGameDTO dto = new JoinGameDTO(4, CatanColor.BROWN);
+//        server.joinGame(dto);
 
     }
 }

@@ -2,12 +2,11 @@ package client.networking;
 
 import client.data.GameInfo;
 import client.services.IServer;
+import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
 import org.junit.Test;
 import shared.definitions.CatanColor;
-import shared.dto.AuthDTO;
-import shared.dto.CreateGameDTO;
-import shared.dto.JoinGameDTO;
+import shared.dto.*;
 
 import java.util.List;
 
@@ -63,7 +62,35 @@ public class ServerTest {
     }
 
     @Test
-    public void testGetCurrentGameModel() {
-        
+    public void testBadGetCurrentGameModel() {
+        GetCurrentModelDTO dto = new GetCurrentModelDTO(2);
+        try {
+            server.getCurrentModel(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadSendChat() {
+        SendChatDTO dto = new SendChatDTO(2, "hello world");
+        try {
+            server.sendChat(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadRollNumber() {
+        RollNumberDTO dto = new RollNumberDTO(2, 2);
+        try {
+            server.rollNumber(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
     }
 }

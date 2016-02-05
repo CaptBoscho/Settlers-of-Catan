@@ -77,7 +77,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to get the current model
      * @return A ClientModel object that contains all the information about the state of the game
      */
-    public ClientModel getCurrentModel(GetCurrentModelDTO dto);
+    public ClientModel getCurrentModel(GetCurrentModelDTO dto) throws MissingUserCookieException;
 
     /**
      * Clears out the command history of the current game with a POST request
@@ -119,7 +119,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to send a message
      * @return The current state of the game
      */
-    public ClientModel sendChat(SendChatDTO dto);
+    public ClientModel sendChat(SendChatDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to roll a number at the beginning of your turn
@@ -127,7 +127,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to roll a number
      * @return The current state of the game
      */
-    public ClientModel rollNumber(RollNumberDTO dto);
+    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException;
 
     /**
      * Moves the robber, selecting the new robber position and player to rob
