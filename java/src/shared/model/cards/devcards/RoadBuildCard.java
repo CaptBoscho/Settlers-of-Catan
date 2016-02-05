@@ -1,4 +1,4 @@
-package shared.model.devcards;
+package shared.model.cards.devcards;
 
 import shared.definitions.DevCardType;
 
@@ -7,7 +7,12 @@ import shared.definitions.DevCardType;
  */
 public class RoadBuildCard extends DevelopmentCard{
 
-    RoadBuildCard() {
+    public RoadBuildCard() {
         this.type = DevCardType.ROAD_BUILD;
+    }
+
+    @Override
+    public void playCard() {
+//                  DevCardController.playRoadBuildCard();
     }
 }

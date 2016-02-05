@@ -1,38 +1,29 @@
 package shared.model.structures;
 
-import com.google.gson.JsonObject;
-import shared.model.JsonSerializable;
-
 /**
- * @author Danny Harding
+ * A Road is built on an edge location
+ *
+ * @author Joel Bradley
  */
-public class Road implements JsonSerializable {
-    int playerID;
+public class Road {
 
-    /**
-     * Construct a Road object from a JSON blob
-     *
-     * @param json The JSON being used to construct this object
-     */
-    public Road(JsonObject json) {
-
-    }
+    private int playerID;
+    private boolean visited;
 
     public Road(int playerID) {
         this.playerID = playerID;
+        visited = false;
     }
 
     public int getPlayerID() {
         return playerID;
     }
 
-    /**
-     * Converts the object to JSON
-     *
-     * @return The JSON representation of the object
-     */
-    @Override
-    public JsonObject toJSON() {
-        return null;
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 }

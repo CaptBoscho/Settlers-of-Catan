@@ -1,7 +1,12 @@
 package shared.model.game.trade;
 
 import com.google.gson.JsonObject;
+import shared.model.cards.resources.ResourceCard;
+import shared.definitions.ResourceType;
 import shared.model.player.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a trade done between two players
@@ -13,7 +18,8 @@ public class Trade {
     TradePackage package2;
 
     public Trade(TradePackage package1, TradePackage package2) {
-
+        this.package1 = package1;
+        this.package2 = package2;
     }
 
     /**
@@ -27,9 +33,14 @@ public class Trade {
 
     /**
      * Gives resources from package1 to Player from package2 and vice versa.
+     * @pre package1 and package2 both have at least 1 resource
+     *
+     * @post The resource(s) from package1 are now in package2, and vice versa
      */
     public void switchResources() {
-
+        List<ResourceType> ghost = package1.getResources();
+        package1.setResources(package2.getResources());
+        package2.setResources(ghost); //todo JUnit tests
     }
 
     /**

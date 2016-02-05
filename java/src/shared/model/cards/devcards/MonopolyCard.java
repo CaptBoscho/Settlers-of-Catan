@@ -1,4 +1,4 @@
-package shared.model.devcards;
+package shared.model.cards.devcards;
 
 import shared.definitions.DevCardType;
 
@@ -7,7 +7,12 @@ import shared.definitions.DevCardType;
  */
 public class MonopolyCard extends DevelopmentCard {
 
-    MonopolyCard() {
+    public MonopolyCard() {
         this.type = DevCardType.MONOPOLY;
+    }
+
+    @Override
+    public void playCard() {
+//                  DevCardController.playMonopolyCard();
     }
 }

@@ -9,8 +9,8 @@ import com.google.gson.JsonObject;
  */
 public class ClientModel {
 
-    public static ClientModel buildFromJson(JsonObject obj) {
-        return null;
+    public ClientModel (JsonObject obj) {
+        // TODO --
     }
 
     public JsonObject toJson() {

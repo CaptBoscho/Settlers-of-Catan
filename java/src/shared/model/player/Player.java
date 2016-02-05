@@ -1,18 +1,17 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
-import shared.exceptions.DevCardException;
-import shared.exceptions.InvalidNameException;
-import shared.exceptions.InvalidPlayerException;
-import shared.exceptions.MoveRobberException;
-import shared.model.bank.DevelopmentCardBank;
-import shared.model.bank.ResourceCardBank;
-import shared.model.bank.StructureBank;
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
+import shared.exceptions.*;
+import shared.model.bank.*;
 import shared.definitions.CatanColor;
-import shared.model.devcards.DevelopmentCard;
+import shared.model.cards.Card;
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
-import shared.model.resources.ResourceCard;
+import shared.model.cards.resources.ResourceCard;
 
+import javax.naming.InsufficientResourcesException;
 import java.util.List;
 
 /**
@@ -27,22 +26,24 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     private int playerIndex;
     private CatanColor color;
     private int victoryPoints;
+    private int soldiers;
     private boolean discarded;
     private boolean moveRobber;
     private boolean playedDevCard;
     private StructureBank structureBank;
-    private ResourceCardBank resourceCardBank;
-    private DevelopmentCardBank developmentCardBank;
+    private IResourceCardBank resourceCardBank;
+    private IDevelopmentCardBank developmentCardBank;
 
     /**
      * Default Constructor
      */
     public Player() {
         this.victoryPoints = 0;
+        this.soldiers = 0;
         this.color = null;
+        this.resourceCardBank = new ResourceCardBank(false);
+        this.developmentCardBank = new DevelopmentCardBank(false);
         this.moveRobber = false;
-        this.resourceCardBank = new ResourceCardBank(this);
-        this.developmentCardBank = new DevelopmentCardBank(this);
         this.structureBank = new StructureBank();
     }
 
@@ -52,7 +53,29 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param json The JSON being used to construct this object
      */
     public Player(JsonObject json) {
-        switch(json.get("color").getAsString()) {
+        try {
+            setColor(json.get("color").getAsString());
+            this.name = new Name(json.get("name").getAsString());
+            this.developmentCardBank = new DevelopmentCardBank(json.getAsJsonObject("oldDevCards"));
+            this.developmentCardBank.addDevCards(json.getAsJsonObject("newDevCards"));
+        } catch (InvalidNameException | InvalidColorException | BadCallerException e) {
+            e.printStackTrace();
+        }
+
+        this._id = json.get("playerID").getAsInt();
+        this.playerIndex = json.get("playerIndex").getAsInt();
+        this.monuments = json.get("monuments").getAsInt();
+        this.victoryPoints = json.get("victoryPoints").getAsInt();
+        this.discarded = json.get("discarded").getAsBoolean();
+        this.playedDevCard = json.get("playedDevCard").getAsBoolean();
+        this.soldiers = json.get("soldiers").getAsInt();
+
+        this.resourceCardBank = new ResourceCardBank(json.getAsJsonObject("resources"));
+        this.structureBank = new StructureBank(json.get("roads").getAsInt(), json.get("settlements").getAsInt(), json.get("cities").getAsInt());
+    }
+
+    private void setColor(String color) throws InvalidColorException {
+        switch(color) {
             case "red":
                 this.color = CatanColor.RED;
                 break;
@@ -77,15 +100,32 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
             case "white":
                 this.color = CatanColor.WHITE;
                 break;
+            default:
+                throw new InvalidColorException("The given color is invalid");
         }
+    }
 
-        try {
-            this.name = new Name(json.get("name").getAsString());
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
+    private String getColorString() throws InvalidColorException {
+        switch(color) {
+            case RED:
+                return "red";
+            case BLUE:
+                return "blue";
+            case GREEN:
+                return "green";
+            case BROWN:
+                return "brown";
+            case ORANGE:
+                return "orange";
+            case PUCE:
+                return "puce";
+            case PURPLE:
+                return "purple";
+            case WHITE:
+                return "white";
+            default:
+                throw new InvalidColorException("The given color is invalid");
         }
-
-        this._id = json.get("id").getAsInt();
     }
 
     /**
@@ -101,8 +141,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
 
         this.victoryPoints = points;
         this.color = color;
-        this.resourceCardBank = new ResourceCardBank(this);
-        this.developmentCardBank = new DevelopmentCardBank(this);
+        this.soldiers = 0;
+        this.resourceCardBank = new ResourceCardBank(false);
+        this.developmentCardBank = new DevelopmentCardBank(false);
         this.structureBank = new StructureBank();
         this.name = name;
         this._id = id;
@@ -122,7 +163,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     public Player(int points, CatanColor color, ResourceCardBank rCrdBnk,
                   DevelopmentCardBank devCrdBnk, StructureBank sBnk,
-                  int index, Name name, boolean canMoveRobber) throws InvalidPlayerException {
+                  int index, Name name, boolean canMoveRobber, int soldiers) throws InvalidPlayerException {
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = rCrdBnk;
@@ -131,6 +172,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.name = name;
         this.playerIndex = index;
         this.moveRobber = canMoveRobber;
+        this.soldiers = soldiers;
     }
 
     //IPlayer Interface Methods - Can Do & Do
@@ -154,8 +196,20 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param cards Cards to be discarded
      */
     @Override
-    public void discardCards(List<ResourceCard> cards) {
-        resourceCardBank.discard(cards);
+    public void discardCards(List<Card> cards) {
+        try {
+            for (Card card : cards) {
+                if (card instanceof ResourceCard) {
+                    ResourceCard resourceCard = (ResourceCard) card;
+                    resourceCardBank.discard(resourceCard.getType());
+                } else if (card instanceof DevelopmentCard) {
+                    DevelopmentCard developmentCard = (DevelopmentCard) card;
+                    developmentCardBank.discard(developmentCard.getType());
+                }
+            }
+        } catch (InsufficientResourcesException | InvalidTypeException e) {
+            e.printStackTrace();
+        }
         setDiscarded(true);
     }
 
@@ -177,8 +231,13 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @return True if Player can perform a maritime trade
      */
     @Override
-    public boolean canMaritimeTrade(TradeType type) {
-        return resourceCardBank.canMaritimeTrade(type);
+    public boolean canMaritimeTrade(PortType type) {
+        try {
+            return resourceCardBank.canMaritimeTrade(type);
+        } catch (InsufficientResourcesException | InvalidTypeException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -208,7 +267,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseYearOfPlenty() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseYearOfPlenty();
+        return !hasPlayedDevCard() && developmentCardBank.canUseYearOfPlenty();
     }
 
     /**
@@ -230,7 +289,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseRoadBuilder() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseRoadBuilder();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseRoadBuild());
     }
 
     /**
@@ -239,7 +298,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     @Override
     public void useRoadBuilder() throws DevCardException {
         if(canUseRoadBuilder())
-            developmentCardBank.useRoadBuilder();
+            developmentCardBank.useRoadBuild();
             // TODO: 1/30/2016 Add any additional functionality - does the map or the structure bank build the road 
         else
             throw new DevCardException("Player has already played a Development card this turn!");
@@ -253,14 +312,14 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseSoldier() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseSoldier();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseSoldier());
     }
 
     /**
      * Action - Player plays Soldier
      */
     @Override
-    public void useSoldier() throws DevCardException{
+    public void useSoldier() throws DevCardException {
         if(canUseSoldier()) {
             developmentCardBank.useSoldier();
             setMoveRobber(true);
@@ -277,7 +336,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseMonopoly() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseMonopoly();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseMonopoly());
     }
 
     /**
@@ -299,7 +358,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseMonument() {
-        return hasPlayedDevCard() ? false : developmentCardBank.canUseMonument();
+        return (!hasPlayedDevCard() && developmentCardBank.canUseMonument());
     }
 
     /**
@@ -331,7 +390,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * Action - Player places the Robber
      */
     @Override
-    public void placeRobber() throws MoveRobberException{
+    public void placeRobber() throws MoveRobberException {
         if(canMoveRobber())
             setMoveRobber(false);
         else
@@ -346,7 +405,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildRoad() {
-        return resourceCardBank.canBuildRoad();
+        return resourceCardBank.canBuildRoad() && structureBank.canBuildRoad();
     }
 
     /**
@@ -354,7 +413,12 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void buildRoad() {
-        resourceCardBank.buildRoad();
+        try {
+            resourceCardBank.buildRoad();
+            structureBank.buildRoad();
+        } catch (InsufficientResourcesException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -365,7 +429,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildSettlement() {
-        return resourceCardBank.canBuildSettlement();
+        return resourceCardBank.canBuildSettlement() && structureBank.canBuildSettlement();
     }
 
     /**
@@ -374,7 +438,12 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     @Override
     public void buildSettlement() {
         //Delegate action
-        resourceCardBank.buildSettlement();
+        try {
+            resourceCardBank.buildSettlement();
+            structureBank.buildSettlement();
+        } catch (InsufficientResourcesException e) {
+            e.printStackTrace();
+        }
         //Increment points
         incrementPoints();
     }
@@ -387,7 +456,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildCity() {
-        return resourceCardBank.canBuildCity();
+        return resourceCardBank.canBuildCity() && structureBank.canBuildCity();
     }
 
     /**
@@ -396,7 +465,12 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     @Override
     public void buildCity() {
         //Delegate action
-        resourceCardBank.buildCity();
+        try {
+            resourceCardBank.buildCity();
+            structureBank.buildCity();
+        } catch (InsufficientResourcesException e) {
+            e.printStackTrace();
+        }
         //Increment points
         incrementPoints(); //Note: only have to increment by 1 since we are replacing a settlement
     }
@@ -433,7 +507,11 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param cardToAdd
      */
     public void addDevCard(DevelopmentCard cardToAdd) {
-        developmentCardBank.addDevCard(cardToAdd);
+        try {
+            developmentCardBank.addDevCard(cardToAdd);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -476,9 +554,29 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
-        return null;
-    }
+        JsonObject json = new JsonObject();
+        json.addProperty("cities", structureBank.getAvailableCities());
+        try {
+            json.addProperty("color", getColorString());
+        } catch (InvalidColorException e) {
+            e.printStackTrace();
+        }
+        json.addProperty("discarded", discarded);
+        json.addProperty("monuments", monuments);
+        json.addProperty("name", name.toString());
+        json.add("oldDevCards", developmentCardBank.toJSON());
+        json.add("newDevCards", developmentCardBank.newCardsToJSON());
+        json.addProperty("playerIndex", playerIndex);
+        json.addProperty("playedDevCard", playedDevCard);
+        json.addProperty("playerID", _id);
+        json.add("resources", resourceCardBank.toJSON());
+        json.addProperty("roads", structureBank.getAvailableRoads());
+        json.addProperty("settlements", structureBank.getAvailableSettlements());
+        json.addProperty("soldiers", soldiers);
+        json.addProperty("victoryPoints", victoryPoints);
 
+        return json;
+    }
 
     //Getters/Setters
     //============================================

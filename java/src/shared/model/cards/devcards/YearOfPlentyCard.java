@@ -1,4 +1,4 @@
-package shared.model.devcards;
+package shared.model.cards.devcards;
 
 import shared.definitions.DevCardType;
 
@@ -7,7 +7,12 @@ import shared.definitions.DevCardType;
  */
 public class YearOfPlentyCard extends DevelopmentCard {
 
-    YearOfPlentyCard() {
+    public YearOfPlentyCard() {
         this.type = DevCardType.YEAR_OF_PLENTY;
+    }
+
+    @Override
+    public void playCard() {
+//                  DevCardController.playYearOfPlentyCard();
     }
 }
