@@ -4,10 +4,7 @@ import client.data.GameInfo;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
-import shared.definitions.ResourceType;
 import shared.dto.*;
-import shared.locations.EdgeLocation;
-import shared.locations.VertexLocation;
 
 import java.util.List;
 
@@ -106,8 +103,8 @@ public class MockServer implements IServer {
      * @param dto The transport object that contains the information required to join a game
      */
     @Override
-    public void joinGame(JoinGameDTO dto) {
-        // TODO --
+    public String joinGame(JoinGameDTO dto) {
+        return "Success";
     }
 
     /**

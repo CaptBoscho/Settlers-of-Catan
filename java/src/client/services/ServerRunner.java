@@ -15,8 +15,10 @@ public class ServerRunner {
         IServer server = new ServerProxy("localhost", 8081);
 //        System.out.println(server.getAllGames());
 
-        AuthDTO dto = new AuthDTO("Sam", "sam");
-        System.out.println(server.authenticateUser(dto));
+//        AuthDTO dto = new AuthDTO("Sam", "sam");
+//        System.out.println(server.authenticateUser(dto));
+
+//        System.out.println(server.getAllGames());
 
 //        CreateGameDTO dto = new CreateGameDTO(false, false, false, "my tet game yooo");
 //        System.out.println(server.createNewGame(dto));
@@ -33,6 +35,8 @@ public class ServerRunner {
 //        GetCurrentModelDTO dto  = new GetCurrentModelDTO(4);
 //        server.getCurrentModel(dto);
 
+        JoinGameDTO dto = new JoinGameDTO(4, CatanColor.BROWN);
+        server.joinGame(dto);
 
     }
 }

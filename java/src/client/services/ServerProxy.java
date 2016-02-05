@@ -33,7 +33,6 @@ public class ServerProxy implements IServer {
         assert auth != null;
         String url = Utils.buildUrl(this.host, this.port) + "/user/login";
         String result = Utils.sendPost(url, auth.toJSON());
-        System.out.println(result);
         assert result != null;
         return result.equals("Success");
     }
@@ -49,7 +48,6 @@ public class ServerProxy implements IServer {
         assert auth != null;
         String url = Utils.buildUrl(this.host, this.port) + "/user/register";
         String result = Utils.sendPost(url, auth.toJSON());
-        System.out.println(result);
         assert result != null;
         return result.equals("Success");
     }
@@ -64,8 +62,8 @@ public class ServerProxy implements IServer {
         String url = Utils.buildUrl(this.host, this.port) + "/games/list";
         String result = Utils.sendGet(url);
         assert result != null;
+        System.out.println(result);
         GameInfoListDTO list = new GameInfoListDTO(result);
-        // System.out.println(result);
         return list.getList();
     }
 
@@ -91,12 +89,12 @@ public class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to join a game
      */
     @Override
-    public void joinGame(JoinGameDTO dto) {
+    public String joinGame(JoinGameDTO dto) {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/join";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
-        System.out.println(result);
+        return result;
     }
 
     /**
