@@ -56,7 +56,7 @@ public class Map implements IMap, JsonSerializable{
 
     /**
      * Constructor that builds the map from a json blob
-     * @param blob JSONObject
+     * @param blob JsonObject
      */
     public Map(JsonObject blob) {
         Gson gson = new Gson();
@@ -93,7 +93,7 @@ public class Map implements IMap, JsonSerializable{
         ArrayList<HexLocation> chitList = chits.get(diceRoll);
         java.util.Map<Integer, List<ResourceType>> resourceMap = new HashMap<>();
         for (HexLocation hexLoc : chitList) {
-            if (robber.getLocation() != hexLoc) {
+            if (!robber.getLocation().equals(hexLoc)) {
                 getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthWest);
                 getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthEast);
                 getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.East);
@@ -124,6 +124,10 @@ public class Map implements IMap, JsonSerializable{
         if(settlements != null && settlements.size() > 1) {
             return false;
         }
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads != null && roads.size() > 1) {
+            return false;
+        }
         if(vertex.hasBuilding()) {
             return false;
         }
@@ -150,6 +154,10 @@ public class Map implements IMap, JsonSerializable{
         }
         ArrayList<Vertex> settlements = this.settlements.get(playerID);
         if(settlements != null && settlements.size() > 1) {
+            throw new StructureException("Map is already initialized");
+        }
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads != null && roads.size() > 1) {
             throw new StructureException("Map is already initialized");
         }
         if(vertex.hasBuilding()) {
@@ -201,6 +209,10 @@ public class Map implements IMap, JsonSerializable{
         if(settlements == null || settlements.size() > 2) {
             return false;
         }
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads != null && roads.size() > 1) {
+            return false;
+        }
         if(!vertex.hasSettlement()) {
             return false;
         }
@@ -237,8 +249,15 @@ public class Map implements IMap, JsonSerializable{
             throw new StructureException("Map is already initialized");
         }
         ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        if(settlements == null || settlements.size() > 2) {
-            throw new StructureException("Settlement needs to be built or map is already initialized");
+        if(settlements == null) {
+            throw new StructureException("Settlement needs to be built first");
+        }
+        if(settlements.size() > 2) {
+            throw new StructureException("Map is already initialized");
+        }
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads != null && roads.size() > 1) {
+            throw new StructureException("Map is already initialized");
         }
         if(!vertex.hasSettlement()) {
             throw new StructureException("Road must be connected to a settlement");
@@ -257,7 +276,7 @@ public class Map implements IMap, JsonSerializable{
         }
         Road road = new Road(playerID);
         edge.setRoad(road);
-        ArrayList<Edge> roads = this.roads.get(playerID);
+        roads = this.roads.get(playerID);
         if(roads == null) {
             roads = new ArrayList<>();
             roads.add(edge);
@@ -278,6 +297,21 @@ public class Map implements IMap, JsonSerializable{
         if (edge == null) {
             throw new InvalidLocationException("Edge location is not on the map");
         }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads == null || roads.size() < 2) {
+            return false;
+        }
+        if(settlements == null) {
+            return false;
+        }
+        if(cities == null && settlements.size() < 2) {
+            return false;
+        }
+        if(cities != null && (cities.size() + settlements.size()) < 2) {
+            return false;
+        }
         return !edge.hasRoad() && edgeHasConnectingRoad(playerID, edgeLoc);
     }
 
@@ -292,6 +326,21 @@ public class Map implements IMap, JsonSerializable{
         if(edge == null) {
             throw new InvalidLocationException("Edge location is not on the map");
         }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads == null || roads.size() < 2) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(settlements == null) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(cities == null && settlements.size() < 2) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(cities != null && (cities.size() + settlements.size()) < 2) {
+            throw new StructureException("Map is not initialized");
+        }
         if(edge.hasRoad()) {
             throw new StructureException("Edge already has a Road");
         }
@@ -300,7 +349,7 @@ public class Map implements IMap, JsonSerializable{
         }
         Road road = new Road(playerID);
         edge.setRoad(road);
-        ArrayList<Edge> roads = this.roads.get(playerID);
+        roads = this.roads.get(playerID);
         roads.add(edge);
     }
 
@@ -314,6 +363,21 @@ public class Map implements IMap, JsonSerializable{
         Vertex vertex = vertices.get(vertexLoc);
         if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
+        }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads == null || roads.size() < 2) {
+            return false;
+        }
+        if(settlements == null) {
+            return false;
+        }
+        if(cities == null && settlements.size() < 2) {
+            return false;
+        }
+        if(cities != null && (cities.size() + settlements.size()) < 2) {
+            return false;
         }
         return vertex.canBuildSettlement() && !hasNeighborBuildings(vertexLoc) &&
                 vertexHasConnectingRoad(playerID, vertexLoc);
@@ -330,6 +394,21 @@ public class Map implements IMap, JsonSerializable{
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads == null || roads.size() < 2) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(settlements == null) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(cities == null && settlements.size() < 2) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(cities != null && (cities.size() + settlements.size()) < 2) {
+            throw new StructureException("Map is not initialized");
+        }
         if(!vertex.canBuildSettlement()) {
             throw new StructureException("Vertex already has a Building");
         }
@@ -344,7 +423,7 @@ public class Map implements IMap, JsonSerializable{
         if(vertex.hasPort()) {
             addPort(playerID, vertex);
         }
-        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        settlements = this.settlements.get(playerID);
         settlements.add(vertex);
     }
 
@@ -359,7 +438,22 @@ public class Map implements IMap, JsonSerializable{
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        return vertex.canBuildCity() && vertex.getPlayerID() == playerID;
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads == null || roads.size() < 2) {
+            return false;
+        }
+        if(settlements == null) {
+            return false;
+        }
+        if(cities == null && settlements.size() < 2) {
+            return false;
+        }
+        if(cities != null && (cities.size() + settlements.size()) < 2) {
+            return false;
+        }
+        return vertex.canBuildCity() && vertex.getPlayerID() == playerID && !vertex.hasCity();
     }
 
     @Override
@@ -373,6 +467,21 @@ public class Map implements IMap, JsonSerializable{
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
+        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerID);
+        if(roads == null || roads.size() < 2) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(settlements == null) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(cities == null && settlements.size() < 2) {
+            throw new StructureException("Map is not initialized");
+        }
+        if(cities != null && (cities.size() + settlements.size()) < 2) {
+            throw new StructureException("Map is not initialized");
+        }
         if(!vertex.canBuildCity()) {
             throw new StructureException("A settlement needs to be built first");
         }
@@ -382,9 +491,11 @@ public class Map implements IMap, JsonSerializable{
         if(vertex.hasCity()) {
             throw new StructureException("The vertex location already has a city");
         }
+        settlements = this.settlements.get(playerID);
+        settlements.remove(vertex);
         City city = new City(playerID);
         vertex.buildCity(city);
-        ArrayList<Vertex> cities = this.cities.get(playerID);
+        cities = this.cities.get(playerID);
         if(cities == null) {
             cities = new ArrayList<>();
             cities.add(vertex);
@@ -614,6 +725,10 @@ public class Map implements IMap, JsonSerializable{
             Vertex vertex = new Vertex(vertexLoc);
             Settlement settlement = new Settlement(playerID);
             vertex.buildSettlement(settlement);
+            vertex.buildSettlement(settlement);
+            if(vertex.hasPort()) {
+                addPort(playerID, vertex);
+            }
             ArrayList<Vertex> settlements = this.settlements.get(playerID);
             if(settlements == null) {
                 settlements = new ArrayList<>();
@@ -633,6 +748,8 @@ public class Map implements IMap, JsonSerializable{
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
             vertexLoc = vertexLoc.getNormalizedLocation();
             Vertex vertex = new Vertex(vertexLoc);
+            Settlement settlement = new Settlement(playerID);
+            vertex.buildSettlement(settlement);
             City city = new City(playerID);
             vertex.buildCity(city);
             ArrayList<Vertex> cities = this.cities.get(playerID);
@@ -1118,36 +1235,36 @@ public class Map implements IMap, JsonSerializable{
     }
 
     private void initiateResourcesNorthWest(List<ResourceType> resources, VertexLocation vertexLoc) {
-        HexLocation upperLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthWest);
-        HexLocation lowerLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthWest);
-        HexLocation rightHexLoc = vertexLoc.getHexLoc();
-        ResourceType resourceType = getResourceType(upperLeftHexLoc);
+        HexLocation leftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthWest);
+        HexLocation upperHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.North);
+        HexLocation lowerHexLoc = vertexLoc.getHexLoc();
+        ResourceType resourceType = getResourceType(leftHexLoc);
         if(resourceType != null) {
             resources.add(resourceType);
         }
-        resourceType = getResourceType(lowerLeftHexLoc);
+        resourceType = getResourceType(upperHexLoc);
         if(resourceType != null) {
             resources.add(resourceType);
         }
-        resourceType = getResourceType(rightHexLoc);
+        resourceType = getResourceType(lowerHexLoc);
         if(resourceType != null) {
             resources.add(resourceType);
         }
     }
 
     private void initiateResourcesNorthEast(List<ResourceType> resources, VertexLocation vertexLoc) {
-        HexLocation upperRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthEast);
-        HexLocation lowerRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthEast);
-        HexLocation leftHexLoc = vertexLoc.getHexLoc();
-        ResourceType resourceType = getResourceType(upperRightHexLoc);
+        HexLocation rightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthEast);
+        HexLocation lowerHexLoc = vertexLoc.getHexLoc();
+        HexLocation upperHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.North);
+        ResourceType resourceType = getResourceType(rightHexLoc);
         if(resourceType != null) {
             resources.add(resourceType);
         }
-        resourceType = getResourceType(lowerRightHexLoc);
+        resourceType = getResourceType(lowerHexLoc);
         if(resourceType != null) {
             resources.add(resourceType);
         }
-        resourceType = getResourceType(leftHexLoc);
+        resourceType = getResourceType(upperHexLoc);
         if(resourceType != null) {
             resources.add(resourceType);
         }
