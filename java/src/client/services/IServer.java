@@ -135,7 +135,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to rob a player
      * @return The current state of the game
      */
-    public ClientModel robPlayer(RobPlayerDTO dto);
+    public ClientModel robPlayer(RobPlayerDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to finish your turn
@@ -143,7 +143,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required for a player to finish their turn
      * @return The current state of the game
      */
-    public ClientModel finishTurn(FinishTurnDTO dto);
+    public ClientModel finishTurn(FinishTurnDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to buy a development card
@@ -151,7 +151,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to buy a development card
      * @return The current state of the game
      */
-    public ClientModel buyDevCard(BuyDevCardDTO dto);
+    public ClientModel buyDevCard(BuyDevCardDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Year of Plenty' card from the player's hand to gain the two specified resources
@@ -159,7 +159,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to play the Year of Plenty card
      * @return The current state of the game
      */
-    public ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto);
+    public ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
@@ -167,7 +167,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to play the Road Building card
      * @return The current state of the game
      */
-    public ClientModel playRoadBuildingCard(BuildRoadDTO dto);
+    public ClientModel playRoadBuildingCard(BuildRoadDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob
@@ -175,7 +175,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to play the soldier card
      * @return The current state of the game
      */
-    public ClientModel playSoldierCard(PlaySoldierCardDTO dto);
+    public ClientModel playSoldierCard(PlaySoldierCardDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Monopoly' card from your hand to monopolize the specified resource

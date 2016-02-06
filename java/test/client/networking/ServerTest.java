@@ -6,7 +6,11 @@ import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
 import org.junit.Test;
 import shared.definitions.CatanColor;
+import shared.definitions.ResourceType;
 import shared.dto.*;
+import shared.locations.EdgeDirection;
+import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
 
 import java.util.List;
 
@@ -90,6 +94,72 @@ public class ServerTest {
         RollNumberDTO dto = new RollNumberDTO(2, 2);
         try {
             server.rollNumber(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadRobPlayer() {
+        RobPlayerDTO dto = new RobPlayerDTO(1, 2, new HexLocation(4, 5));
+        try {
+            server.robPlayer(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadFinishTurn() {
+        FinishTurnDTO dto = new FinishTurnDTO(2);
+        try {
+            server.finishTurn(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadBuyDevCard() {
+        BuyDevCardDTO dto = new BuyDevCardDTO(2);
+        try {
+            server.buyDevCard(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadPlayYOPCard() {
+        PlayYOPCardDTO dto = new PlayYOPCardDTO(2, ResourceType.BRICK, ResourceType.ORE);
+        try {
+            server.playYearOfPlentyCard(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadPlayRoadBuildingCard() {
+        BuildRoadDTO dto = new BuildRoadDTO(2, new EdgeLocation(new HexLocation(3, 4), EdgeDirection.South), true);
+        try {
+            server.playRoadBuildingCard(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadPlaySoldierCard() {
+        PlaySoldierCardDTO dto = new PlaySoldierCardDTO(2, 3, new HexLocation(4, 3));
+        try {
+            server.playSoldierCard(dto);
             fail("MissingUserCookieException should be thrown");
         } catch(MissingUserCookieException e) {
             assertTrue(true);
