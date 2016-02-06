@@ -1869,7 +1869,6 @@ public class GameTest {
         int second = game.getTurnTracker().nextTurn();
         assertTrue(second == 2);
         int third = game.getTurnTracker().nextTurn();
-        System.out.println(third);
         assertTrue(third == 3);
         int fourth = game.getTurnTracker().nextTurn();
         assertTrue(fourth == 4);
@@ -1912,7 +1911,6 @@ public class GameTest {
     public void testOfferTrade() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException {
         int guy = game.getCurrentTurn();
         game.getTurnTracker().nextPhase();
-        System.out.println(game.getTurnTracker().getPhase());
         int friend = 3;
         if(guy == 3){friend = 4;}
         ResourceCard one = game.getResourceCard(ResourceType.BRICK);
@@ -1946,7 +1944,6 @@ public class GameTest {
         int guy = game.getCurrentTurn();
         game.getTurnTracker().nextPhase();
         game.getTurnTracker().nextPhase();
-        System.out.println(game.getTurnTracker().getPhase());
         assertTrue(game.canFinishTurn(guy));
     }
 
@@ -1956,7 +1953,6 @@ public class GameTest {
         game.nextPhase();
         TurnTracker.Phase p = game.getCurrentPhase();
 
-        System.out.println(p);
         if(p == TurnTracker.Phase.DISCARDING){
             assertTrue(game.canFinishTurn(guy));
         }
