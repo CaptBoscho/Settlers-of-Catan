@@ -70,7 +70,7 @@ public class Facade {
         if (entries.size() != 4 && entries.size() != 3) {
             throw new BuildException("need 3-4 players to play");
         } else {
-            int id = 0;
+            int id = 1;
             for (String currKey : entries.keySet()) {
                 Name him = new Name(entries.get(currKey).getName());
                 Player p = new Player(0, entries.get(currKey).getColor(), id, him);
@@ -78,7 +78,7 @@ public class Facade {
                 id++;
             }
             int firstPlayerID = this.game.initializeGame(players, randomhex, randomchit, randomport);
-            //map stuff
+
 
         }
     }
