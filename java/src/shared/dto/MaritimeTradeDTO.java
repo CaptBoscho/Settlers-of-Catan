@@ -34,6 +34,12 @@ public class MaritimeTradeDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "maritimeTrade");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.addProperty("ratio", this.ratio);
+        obj.addProperty("inputResource", this.inputResource);
+        obj.addProperty("outputResource", this.outputResource);
+        return obj;
     }
 }

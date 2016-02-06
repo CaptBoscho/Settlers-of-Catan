@@ -12,19 +12,34 @@ import java.util.List;
 public class DiscardCardsDTO implements JsonSerializable {
 
     private int playerIndex;
-    private List<ResourceType> resourceList;
+    private int brickCount;
+    private int oreCount;
+    private int sheepCount;
+    private int wheatCount;
+    private int woodCount;
 
     /**
      *
      * @param playerIndex  Who's discarding
-     * @param resourceList
+     * @param discardedBrick
+     * @param discardedOre
+     * @param discardedSheep
+     * @param discardedWheat
+     * @param discardedWood
      */
-    public DiscardCardsDTO(int playerIndex, List<ResourceType> resourceList) {
+    public DiscardCardsDTO(int playerIndex, int discardedBrick, int discardedOre, int discardedSheep, int discardedWheat, int discardedWood) {
         assert playerIndex >= 0;
-        assert resourceList != null;
-        assert resourceList.size() > 0;
+        assert discardedBrick > 0;
+        assert discardedOre > 0;
+        assert discardedSheep > 0;
+        assert discardedWheat > 0;
+        assert discardedWood > 0;
         this.playerIndex = playerIndex;
-        this.resourceList = resourceList;
+        this.brickCount = discardedBrick;
+        this.oreCount = discardedOre;
+        this.sheepCount = discardedSheep;
+        this.wheatCount = discardedWheat;
+        this.woodCount = discardedWood;
     }
 
     /**
@@ -34,6 +49,18 @@ public class DiscardCardsDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+
+        JsonObject inner = new JsonObject();
+        inner.addProperty("brick", this.brickCount);
+        inner.addProperty("ore", this.oreCount);
+        inner.addProperty("sheep", this.sheepCount);
+        inner.addProperty("wheat", this.wheatCount);
+        inner.addProperty("wood", this.woodCount);
+
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "discardCards");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.add("discardedCards", inner);
+        return obj;
     }
 }

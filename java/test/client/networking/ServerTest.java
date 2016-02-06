@@ -51,6 +51,9 @@ public class ServerTest {
     public void testRegisterNewUser() {
         AuthDTO dto = new AuthDTO("user", "password");
         assertTrue(server.registerUser(dto));
+
+        // registration should now fail if we try the same credentials
+        assertFalse(server.registerUser(dto));
     }
 
     @Test
@@ -63,9 +66,8 @@ public class ServerTest {
 
     @Test
     public void testBadGetCurrentGameModel() {
-        GetCurrentModelDTO dto = new GetCurrentModelDTO(2);
         try {
-            server.getCurrentModel(dto);
+            server.getCurrentModel(3);
             fail("MissingUserCookieException should be thrown");
         } catch(MissingUserCookieException e) {
             assertTrue(true);

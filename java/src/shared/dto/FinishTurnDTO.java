@@ -27,6 +27,9 @@ public class FinishTurnDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "finishTurn");
+        obj.addProperty("playerIndex", this.playerIndex);
+        return obj;
     }
 }

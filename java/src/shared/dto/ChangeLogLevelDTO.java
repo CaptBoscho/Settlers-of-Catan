@@ -23,6 +23,8 @@ public class ChangeLogLevelDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("logLevel", this.logLevel);
+        return obj;
     }
 }

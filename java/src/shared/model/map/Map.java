@@ -10,6 +10,7 @@ import shared.model.map.hex.*;
 import shared.model.structures.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Representation of the map in the game. The game map keeps track of all locations, buildings, and chits as well as the
@@ -92,49 +93,38 @@ public class Map implements IMap, JsonSerializable{
         }
         ArrayList<HexLocation> chitList = chits.get(diceRoll);
         java.util.Map<Integer, List<ResourceType>> resourceMap = new HashMap<>();
-        for (HexLocation hexLoc : chitList) {
-            if (!robber.getLocation().equals(hexLoc)) {
-                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthWest);
-                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthEast);
-                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.East);
-                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthEast);
-                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthWest);
-                getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.West);
-            }
-        }
+        chitList.stream().filter(hexLoc -> !robber.getLocation().equals(hexLoc)).forEach(hexLoc -> {
+            getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthWest);
+            getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthEast);
+            getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.East);
+            getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthEast);
+            getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthWest);
+            getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.West);
+        });
         return resourceMap;
     }
 
     @Override
     public boolean canInitiateSettlement(int playerID, VertexLocation vertexLoc) throws InvalidPlayerException,
             InvalidLocationException {
-        if(playerID < 1 || playerID > 4) {
+        if (playerID < 1 || playerID > 4) {
             throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
-        if(vertex == null) {
+        if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
         ArrayList<Vertex> cities = this.cities.get(playerID);
-        if(cities != null) {
+        if (cities != null) {
             return false;
         }
         ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        if(settlements != null && settlements.size() > 1) {
+        if (settlements != null && settlements.size() > 1) {
             return false;
         }
         ArrayList<Edge> roads = this.roads.get(playerID);
-        if(roads != null && roads.size() > 1) {
-            return false;
-        }
-        if(vertex.hasBuilding()) {
-            return false;
-        }
-        if(hasNeighborBuildings(vertexLoc)) {
-            return false;
-        }
-        return true;
+        return !(roads != null && roads.size() > 1) && !vertex.hasBuilding() && !hasNeighborBuildings(vertexLoc);
     }
 
     @Override
@@ -191,44 +181,35 @@ public class Map implements IMap, JsonSerializable{
     @Override
     public boolean canInitiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
             throws InvalidPlayerException, InvalidLocationException {
-        if(playerID < 1 || playerID > 4) {
+        if (playerID < 1 || playerID > 4) {
             throw new InvalidPlayerException("PlayerID was " + playerID);
         }
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
         edgeLoc = edgeLoc.getNormalizedLocation();
         Edge edge = edges.get(edgeLoc);
-        if(vertex == null || edge == null) {
+        if (vertex == null || edge == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
         ArrayList<Vertex> cities = this.cities.get(playerID);
-        if(cities != null) {
+        if (cities != null) {
             return false;
         }
         ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        if(settlements == null || settlements.size() > 2) {
+        if (settlements == null || settlements.size() > 2) {
             return false;
         }
         ArrayList<Edge> roads = this.roads.get(playerID);
-        if(roads != null && roads.size() > 1) {
+        if (roads != null && roads.size() > 1) {
             return false;
         }
-        if(!vertex.hasSettlement()) {
+        if (!vertex.hasSettlement()) {
             return false;
         }
-        if(vertex.getPlayerID() != playerID) {
+        if (vertex.getPlayerID() != playerID) {
             return false;
         }
-        if(vertexHasConnectingRoad(playerID, vertexLoc)) {
-            return false;
-        }
-        if(!edgeConnectedToVertex(edgeLoc, vertexLoc)) {
-            return false;
-        }
-        if(edge.hasRoad()) {
-            return false;
-        }
-        return true;
+        return !vertexHasConnectingRoad(playerID, vertexLoc) && edgeConnectedToVertex(edgeLoc, vertexLoc) && !edge.hasRoad();
     }
 
     @Override
@@ -533,9 +514,7 @@ public class Map implements IMap, JsonSerializable{
         Set<PortType> portTypes = new HashSet<>();
         ArrayList<Port> ports = this.ports.get(playerID);
         if(ports != null) {
-            for (Port port : ports) {
-                portTypes.add(port.getPortType());
-            }
+            portTypes.addAll(ports.stream().map(Port::getPortType).collect(Collectors.toList()));
         }
         return portTypes;
     }
