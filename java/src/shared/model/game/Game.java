@@ -47,7 +47,7 @@ public class Game implements IGame, JsonSerializable {
     protected Game() {
         this.dice = new Dice(2,12);
         this.map = new Map(false, false, false);
-        this.turnTracker = null;//new TurnTracker(0,0);
+        this.turnTracker = new TurnTracker(0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager(new ArrayList<>());
@@ -61,6 +61,17 @@ public class Game implements IGame, JsonSerializable {
         }
 
         return instance;
+    }
+
+    public void reset() {
+        this.dice = new Dice(2,12);
+        this.map = new Map(false, false, false);
+        this.turnTracker = new TurnTracker(0);
+        this.longestRoadCard = new LongestRoad();
+        this.largestArmyCard = new LargestArmy();
+        this.playerManager = new PlayerManager(new ArrayList<>());
+        this.resourceCardBank = new ResourceCardBank(true);
+        this.developmentCardBank = new DevelopmentCardBank(true);
     }
 
     public void updateGame(JsonObject json) {

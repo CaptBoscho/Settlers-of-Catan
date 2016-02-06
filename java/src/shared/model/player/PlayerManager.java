@@ -32,8 +32,11 @@ public class PlayerManager implements IPlayerManager {
     }
 
     public PlayerManager(JsonArray players) {
+        this.players = new ArrayList<>();
         for (int i = 0; i < players.size(); i++) {
-            addPlayer(new Player((JsonObject) players.get(i)));
+            if (!(players.get(i) instanceof JsonNull)) {
+                addPlayer(new Player((JsonObject) players.get(i)));
+            }
         }
     }
 
