@@ -26,6 +26,11 @@ public class PlayYOPCardDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "Year_of_Plenty");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.addProperty("resource1", this.resource1.toString());
+        obj.addProperty("resource2", this.resource2.toString());
+        return obj;
     }
 }

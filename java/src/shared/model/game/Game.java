@@ -155,6 +155,7 @@ public class Game implements IGame {
     public int rollNumber(int playerID) throws InvalidDiceRollException{
         int roll = dice.roll();
         map.getResources(roll);
+        turnTracker.nextPhase();
         return roll;
     }
 

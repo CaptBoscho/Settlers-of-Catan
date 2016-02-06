@@ -17,6 +17,7 @@ import shared.exceptions.*;
 import shared.locations.*;
 >>>>>>> refs/remotes/origin/master
 import shared.model.game.Game;
+import shared.model.game.TurnTracker;
 import shared.model.player.Name;
 import shared.model.player.Player;
 
@@ -84,7 +85,7 @@ public class GameTest {
     }
 
     @Test
-    public void testCanFirstTurn() throws InvalidPlayerException, InvalidLocationException, Exception{
+    public void testInitialization() throws InvalidPlayerException, InvalidLocationException, Exception{
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
         VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
@@ -100,18 +101,13 @@ public class GameTest {
         HexLocation hloc2 = new HexLocation(8,8);
         VertexLocation vloc2 = new VertexLocation(hloc2, VertexDirection.East);
 
-
-
-
         int next = game.getTurnTracker().nextTurn();
 
         assertFalse(game.canInitiateSettlement(next, vloc));
-
-
-
     }
 
     @Test
+<<<<<<< HEAD
     public void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException {
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
@@ -123,12 +119,54 @@ public class GameTest {
 
     @Test
     public void testFirstTurn() throws Exception {
+=======
+    public void testGetCurrentTurnStartUp() throws Exception{
+        int first = game.getCurrentTurn();
+        assertTrue(first == 1);
+        int second = game.getTurnTracker().nextTurn();
+        assertTrue(second == 2);
+        int third = game.getTurnTracker().nextTurn();
+        System.out.println(third);
+        assertTrue(third == 3);
+        int fourth = game.getTurnTracker().nextTurn();
+        assertTrue(fourth == 4);
+        int fifth = game.getTurnTracker().nextTurn();
+        assertTrue(fifth == 3);
 
+        game.getTurnTracker().setSetupPhase(false);
+        int sixth = game.getTurnTracker().nextTurn();
+        assertTrue(sixth == 4);
+        int seventh = game.getTurnTracker().nextTurn();
+        assertTrue(seventh == 1);
     }
 
     @Test
+    public void testCanRollNumber() {
+        int turn = game.getCurrentTurn();
+        assertTrue(game.canRollNumber(turn));
+        game.getTurnTracker().nextPhase();
+        assertFalse(game.canRollNumber(turn));
+    }
+>>>>>>> refs/remotes/origin/master
+
+    @Test
+    public void testRollNumber() throws InvalidDiceRollException{
+        int turn = game.getCurrentTurn();
+        game.getTurnTracker().nextPhase();
+        game.getTurnTracker().nextPhase();
+        int roll = game.rollNumber(turn);
+        assertTrue(roll > 1);
+        assertTrue(roll <= 12);
+    }
+
+<<<<<<< HEAD
+    @Test
     public void testGetCurrentTurn() throws Exception {
 
+=======
+    void testCanDiscardCards() {
+        int turn = game.getCurrentTurn();
+>>>>>>> refs/remotes/origin/master
     }
 
     @Test
@@ -136,15 +174,19 @@ public class GameTest {
 
     }
 
+<<<<<<< HEAD
     @Test
     public void testDiscardCards() throws Exception {
+=======
+>>>>>>> refs/remotes/origin/master
 
-    }
 
+<<<<<<< HEAD
     @Test
     public void testCanRollNumber() throws Exception {
+=======
+>>>>>>> refs/remotes/origin/master
 
-    }
 
     @Test
     public void testRollNumber() throws Exception {
