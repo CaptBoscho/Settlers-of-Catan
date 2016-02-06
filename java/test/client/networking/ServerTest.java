@@ -16,6 +16,7 @@ import shared.model.game.trade.TradePackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -25,6 +26,14 @@ import static org.junit.Assert.*;
 public class ServerTest {
 
     private IServer server = new ServerProxy("localhost", 8081);
+
+    private String generateString(Random rng, String characters, int length) {
+        char[] text = new char[length];
+        for (int i = 0; i < length; i++) {
+            text[i] = characters.charAt(rng.nextInt(characters.length()));
+        }
+        return new String(text);
+    }
 
     @Before
     public void setup() {
@@ -61,7 +70,9 @@ public class ServerTest {
 
     @Test
     public void testRegisterNewUser() {
-        AuthDTO dto = new AuthDTO("user", "password");
+        String fakeUsername = generateString(new Random(), "qwertyuiopasdfghjklzxcvbnm", 10);
+        String fakePassword = generateString(new Random(), "qwertyuiopasdfghjklzxcvbnm", 10);
+        AuthDTO dto = new AuthDTO(fakeUsername, fakePassword);
         assertTrue(server.registerUser(dto));
 
         // registration should now fail if we try the same credentials
