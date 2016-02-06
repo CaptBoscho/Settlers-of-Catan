@@ -199,7 +199,7 @@ public class Facade {
      * @param playerID
      * @throws BuildException
      */
-    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistsException {
+    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistsException, Exception {
         if (canBuyDC(playerID)) {
             return game.buyDevelopmentCard(playerID);
         } else {

@@ -10,6 +10,7 @@ import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.locations.*;
 import shared.model.bank.InvalidTypeException;
+import shared.model.cards.devcards.*;
 import shared.model.cards.resources.ResourceCard;
 import shared.model.game.Game;
 import shared.model.game.TurnTracker;
@@ -183,7 +184,7 @@ public class GameTest {
     public void testCanBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException{
         int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.DISCARDING);
-        assertFalse(game.canBuyDevCard(guy));
+        assertFalse(game.canBuyDevelopmentCard(guy));
 
         ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
         ResourceCard two = game.getResourceCard(ResourceType.ORE);
@@ -193,11 +194,102 @@ public class GameTest {
         game.giveResource(two, guy);
         game.giveResource(three, guy);
 
-        assertTrue(game.canBuyDevCard(guy));
+        assertTrue(game.canBuyDevelopmentCard(guy));
     }
 
     @Test
-    public void testBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException{
+    public void testCanUseYearOfPlenty() throws PlayerExistsException, BadCallerException {
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+
+        if(game.numberOfDevCard(guy) == 0){
+            assertFalse(game.canUseYearOfPlenty(guy));
+        }
+        YearOfPlentyCard card = new YearOfPlentyCard();
+        game.addDevCard(card, guy);
+        game.moveNewToOld(guy);
+        assertTrue(game.canUseYearOfPlenty(guy));
+
+    }
+
+    void testUseYearOfPlenty() {
+
+    }
+
+    @Test
+    public void testCanUseRoadBuilder() throws PlayerExistsException, BadCallerException{
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+
+        if(game.numberOfDevCard(guy) == 0){
+            assertFalse(game.canUseRoadBuilder(guy));
+        }
+        RoadBuildCard card = new RoadBuildCard();
+        game.addDevCard(card, guy);
+        game.moveNewToOld(guy);
+        assertTrue(game.canUseRoadBuilder(guy));
+    }
+
+    void testUseRoadBuilder() {
+
+    }
+
+    @Test
+    public void testCanUseSoldier() throws PlayerExistsException, BadCallerException{
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+
+        if(game.numberOfDevCard(guy) == 0){
+            assertFalse(game.canUseSoldier(guy));
+        }
+        SoldierCard card = new SoldierCard();
+        game.addDevCard(card, guy);
+        game.moveNewToOld(guy);
+        assertTrue(game.canUseSoldier(guy));
+    }
+
+    void testUseSoldier() {
+
+    }
+
+    @Test
+    public void testCanUseMonopoly() throws PlayerExistsException, BadCallerException{
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+
+        if(game.numberOfDevCard(guy) == 0){
+            assertFalse(game.canUseMonopoly(guy));
+        }
+        MonopolyCard card = new MonopolyCard();
+        game.addDevCard(card, guy);
+        game.moveNewToOld(guy);
+        assertTrue(game.canUseMonopoly(guy));
+    }
+
+    void testUseMonopoly() {
+
+    }
+
+    @Test
+    public void testCanUseMonument() throws PlayerExistsException, BadCallerException{
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+
+        if(game.numberOfDevCard(guy) == 0){
+            assertFalse(game.canUseMonument(guy));
+        }
+        MonumentCard card = new MonumentCard();
+        game.addDevCard(card, guy);
+        game.moveNewToOld(guy);
+        assertTrue(game.canUseMonument(guy));
+    }
+
+    void testUseMonument() {
+
+    }
+
+    @Test
+    public void testBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException, Exception{
         int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.DISCARDING);
 
@@ -209,53 +301,19 @@ public class GameTest {
         game.giveResource(two, guy);
         game.giveResource(three, guy);
 
-        game.buyDevCard(guy);
-
         Player p = game.getPlayerManager().getPlayerByID(guy);
-        
+        int sizeold = p.quantityOfDevCards();
 
+        game.buyDevelopmentCard(guy);
+        p = game.getPlayerManager().getPlayerByID(guy);
+        int sizenew = p.quantityOfDevCards();
 
+        System.out.println(sizeold);
+        System.out.println(sizenew);
+        assertTrue(sizenew == sizeold + 1);
     }
 
-    void testCanUseYearOfPlenty() {
 
-    }
-
-    void testUseYearOfPlenty() {
-
-    }
-
-    void testCanUseRoadBuilder() {
-
-    }
-
-    void testUseRoadBuilder() {
-
-    }
-
-    void testCanUseSoldier() {
-
-    }
-
-    void testUseSoldier() {
-
-    }
-
-    void testCanUseMonopoly() {
-
-    }
-
-    void testUseMonopoly() {
-
-    }
-
-    void testCanUseMonument() {
-
-    }
-
-    void testUseMonument() {
-
-    }
 
     void testCanPlaceRobber() {
 

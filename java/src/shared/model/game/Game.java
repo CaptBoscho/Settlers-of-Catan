@@ -16,6 +16,7 @@ import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
@@ -253,26 +254,27 @@ public class Game implements IGame {
     public void setPhase(TurnTracker.Phase p){turnTracker.setPhase(p);}
 
     /**
-     * Determine if Player can buy a dev card
-     * Checks Player turn, phase, and resources
+     * checks if the player has the cards to buy a DevelopmentCard
      *
-     * @param playerID ID of Player performing action
-     * @return True if Player can buy a dev card
+     * @param playerID
+     * @return
      */
     @Override
-    public boolean canBuyDevCard(int playerID) throws PlayerExistsException{
-
+    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistsException {
         return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canDiscard();
     }
 
-    /**
-     * Action - Player buys a dev card
-     *
-     * @param playerID ID of Player performing action
-     */
+        /**
+         * Action - Player buys a dev card
+         *
+         * @param playerID ID of Player performing action
+         */
     @Override
-    public void buyDevCard(int playerID) throws PlayerExistsException{
+    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception{
         playerManager.buyDevCard(playerID);
+        DevelopmentCard dc = developmentCardBank.draw();
+        playerManager.addDevCard(playerID, dc);
+        return dc.getType();
     }
 
     /**
@@ -289,6 +291,16 @@ public class Game implements IGame {
         }
         return false;
     }
+
+    public void addDevCard(DevelopmentCard dc, int playerID) throws PlayerExistsException{
+        playerManager.getPlayerByID(playerID).addDevCard(dc);
+    }
+
+    public Integer numberOfDevCard(int playerID) throws PlayerExistsException{
+        return playerManager.getPlayerByID(playerID).quantityOfDevCards();
+    }
+
+    public void moveNewToOld(int playerID) throws PlayerExistsException, BadCallerException {playerManager.moveNewToOld(playerID);}
 
     /**
      * Action - Player plays Year of Plenty
@@ -559,33 +571,6 @@ public class Game implements IGame {
     public void newLongestRoad(int playerIDOld, int playerIDNew, int roadSize) {
         longestRoadCard.setOwner(playerIDNew, roadSize);
         //playerManager.newLongestRoad(playerIDOld, playerIDNew)
-    }
-
-    /**
-     * checks if the player has the cards to buy a DevelopmentCard
-     *
-     * @param playerID
-     * @return
-     */
-    @Override
-    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistsException {
-        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canDiscard();
-
-    }
-
-    /**
-     * Buys a new developmentCard for the player
-     * deducts cards
-     * adds new developmentCard to his DCBank
-     *
-     * @param playerID
-     */
-    @Override
-    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException {
-        if(canBuyDevelopmentCard(playerID)){
-            playerManager.buyDevCard(playerID);
-        }
-        return null;
     }
 
     /**

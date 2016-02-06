@@ -46,6 +46,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.developmentCardBank = new DevelopmentCardBank(false);
         this.moveRobber = false;
         this.structureBank = new StructureBank();
+        this.playedDevCard = false;
     }
 
     /**
@@ -263,6 +264,10 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         }
     }
 
+    public Integer quantityOfDevCards(){
+        return developmentCardBank.size();
+    }
+
     /**
      * Determine if Player can buy a dev card
      * Checks Player turn, phase, and resources
@@ -281,6 +286,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public void buyDevCard() {
         resourceCardBank.buyDevCard();
     }
+
+
+    public void moveNewToOld() throws BadCallerException{ developmentCardBank.moveNewToOld();}
 
     /**
      * Determine if Player can play Year of Plenty

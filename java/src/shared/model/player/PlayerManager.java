@@ -7,6 +7,7 @@ import shared.exceptions.*;
 import shared.model.bank.InvalidTypeException;
 
 import shared.model.cards.Card;
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
@@ -216,6 +217,15 @@ public class PlayerManager implements IPlayerManager {
     public void buyDevCard(int id) throws PlayerExistsException {
         Player player = getPlayerByID(id);
         player.buyDevCard();
+    }
+
+    public void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException{
+        Player player = getPlayerByID(id);
+        player.addDevCard(dc);
+    }
+
+    public void moveNewToOld(int id) throws PlayerExistsException, BadCallerException{
+        getPlayerByID(id).moveNewToOld();
     }
 
     /**

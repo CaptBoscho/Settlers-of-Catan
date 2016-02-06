@@ -128,6 +128,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         if (ownedByGame) {
             developmentCards.add(cardToAdd);
         } else {
+
             switch (cardToAdd.getType()) {
                 case SOLDIER:
                     newSoldierCards.add((SoldierCard) cardToAdd);
@@ -139,6 +140,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
                     newMonopolyCards.add((MonopolyCard) cardToAdd);
                     break;
                 case YEAR_OF_PLENTY:
+                    System.out.println("here i am");
                     newYearOfPlentyCards.add((YearOfPlentyCard) cardToAdd);
                     break;
                 case ROAD_BUILD:
@@ -165,10 +167,14 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseYearOfPlenty() {
+        System.out.println(yearOfPlentyCards.size());
         if (ownedByGame) {
             return false;
+        } else if(yearOfPlentyCards.size() > 0) {
+
+            return true;
         } else {
-            return (yearOfPlentyCards.size() > 0);
+            return false;
         }
     }
 

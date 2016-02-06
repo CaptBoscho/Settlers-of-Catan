@@ -112,19 +112,6 @@ public interface IGame {
 
     void nextPhase();
 
-    /**
-     * Determine if Player can buy a dev card
-     * Checks Player turn, phase, and resources
-     * @param playerID ID of Player performing action
-     * @return True if Player can buy a dev card
-     */
-    boolean canBuyDevCard(int playerID) throws PlayerExistsException;
-
-    /**
-     * Action - Player buys a dev card
-     * @param playerID ID of Player performing action
-     */
-    void buyDevCard(int playerID) throws PlayerExistsException;
 
     /**
      * Determine if Player can play Year of Plenty
@@ -283,7 +270,7 @@ public interface IGame {
      * adds new developmentCard to his DCBank
      * @param playerID
      */
-    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException;
+    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception;
 
     /**
      * checks if the player is in the trade sequence of his turn

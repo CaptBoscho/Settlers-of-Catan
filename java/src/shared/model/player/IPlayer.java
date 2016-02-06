@@ -2,6 +2,7 @@ package shared.model.player;
 
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
+import shared.exceptions.BadCallerException;
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
 import shared.model.bank.InvalidTypeException;
@@ -183,4 +184,8 @@ public interface IPlayer {
     void winArmyCard();
 
     ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException;
+
+    Integer quantityOfDevCards();
+
+    void moveNewToOld() throws BadCallerException;
 }

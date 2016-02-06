@@ -11,6 +11,7 @@ import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.MoveRobberException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
@@ -60,6 +61,8 @@ public interface IPlayerManager {
     void playKnight(int playerID) throws PlayerExistsException;
 
     void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException;
+
+    void moveNewToOld(int id) throws PlayerExistsException, BadCallerException;
 
 
     //Can Do & Do
@@ -249,4 +252,6 @@ public interface IPlayerManager {
      * @param id ID of the player
      */
     void buildCity(int id) throws PlayerExistsException;
+
+    void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException;
 }
