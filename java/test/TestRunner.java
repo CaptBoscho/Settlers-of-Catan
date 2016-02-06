@@ -29,7 +29,6 @@ public class TestRunner {
     public static void main(String[] args) {
 
         String[] testClasses = new String[] {
-                "client.networking.PollerTests",
                 "client.networking.ServerTest",
                 "model.game.GameTest",
                 "model.map.MapTest",
