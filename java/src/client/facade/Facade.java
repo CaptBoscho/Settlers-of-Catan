@@ -30,7 +30,7 @@ public class Facade {
      * Constructor initializes map and game values
      */
     public Facade() {
-        this.game = new Game();
+        this.game = Game.getInstance();
     }
 
     public Set<CatanColor> canJoin() {

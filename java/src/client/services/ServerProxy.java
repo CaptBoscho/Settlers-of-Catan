@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
 import shared.dto.*;
+import shared.model.game.Game;
 
 import java.util.List;
 
@@ -62,7 +63,6 @@ public class ServerProxy implements IServer {
         String url = Utils.buildUrl(this.host, this.port) + "/games/list";
         String result = Utils.sendGet(url);
         assert result != null;
-        System.out.println(result);
         GameInfoListDTO list = new GameInfoListDTO(result);
         return list.getList();
     }
@@ -125,7 +125,6 @@ public class ServerProxy implements IServer {
         String url = Utils.buildUrl(this.host, this.port) + "/games/load";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
-        System.out.println(result);
         return result.equals("Success");
     }
 
@@ -137,15 +136,20 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel getCurrentModel(int version) throws MissingUserCookieException {
-        assert version > 0;
+        assert version >= 0;
         String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
         String result = Utils.sendGet(url);
         assert result != null;
-        // TODO - convert JSON string to ClientModel
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing");
         }
-        return null;
+        if(result.contains("true")) {
+            // already have latest model, don't update anything
+            return null;
+        }
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
+        return new ClientModel(obj);
     }
 
     /**
@@ -220,6 +224,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -230,7 +235,7 @@ public class ServerProxy implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException {
+    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException, CommandExecutionFailed {
         assert dto != null;
         assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/rollNumber";
@@ -239,7 +244,11 @@ public class ServerProxy implements IServer {
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
+        if(result.contains("Command execution failed")) {
+            throw new CommandExecutionFailed();
+        }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -260,6 +269,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -280,6 +290,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -300,6 +311,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -320,6 +332,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -340,6 +353,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -360,6 +374,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -380,6 +395,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -400,6 +416,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -420,6 +437,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -440,6 +458,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -460,6 +479,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -480,6 +500,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -500,6 +521,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -520,6 +542,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -540,6 +563,7 @@ public class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
     }
 

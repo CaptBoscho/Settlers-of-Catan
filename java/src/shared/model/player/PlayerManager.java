@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import com.google.gson.*;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
@@ -7,13 +8,14 @@ import shared.exceptions.*;
 import shared.model.bank.InvalidTypeException;
 
 import shared.model.cards.Card;
+
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
+
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
-import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +33,19 @@ public class PlayerManager implements IPlayerManager {
      */
     public PlayerManager(List<Player> ps){
         this.players = ps;
+    }
+
+    public PlayerManager(JsonArray players) {
+        this.players = new ArrayList<>();
+        for (int i = 0; i < players.size(); i++) {
+            if (!(players.get(i) instanceof JsonNull)) {
+                addPlayer(new Player((JsonObject) players.get(i)));
+            }
+        }
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 
     /**

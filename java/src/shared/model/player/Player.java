@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
@@ -58,7 +59,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         try {
             setColor(json.get("color").getAsString());
             this.name = new Name(json.get("name").getAsString());
-            this.developmentCardBank = new DevelopmentCardBank(json.getAsJsonObject("oldDevCards"));
+            this.developmentCardBank = new DevelopmentCardBank(json.getAsJsonObject("oldDevCards"), false);
             this.developmentCardBank.addDevCards(json.getAsJsonObject("newDevCards"));
         } catch (InvalidNameException | InvalidColorException | BadCallerException e) {
             e.printStackTrace();
@@ -72,7 +73,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.playedDevCard = json.get("playedDevCard").getAsBoolean();
         this.soldiers = json.get("soldiers").getAsInt();
 
-        this.resourceCardBank = new ResourceCardBank(json.getAsJsonObject("resources"));
+        this.resourceCardBank = new ResourceCardBank(json.getAsJsonObject("resources"), false);
         this.structureBank = new StructureBank(json.get("roads").getAsInt(), json.get("settlements").getAsInt(), json.get("cities").getAsInt());
     }
 

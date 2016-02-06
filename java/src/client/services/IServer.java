@@ -127,7 +127,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to roll a number
      * @return The current state of the game
      */
-    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException;
+    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException, CommandExecutionFailed;
 
     /**
      * Moves the robber, selecting the new robber position and player to rob

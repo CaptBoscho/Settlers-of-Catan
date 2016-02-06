@@ -1,22 +1,23 @@
 package shared.model.game;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
+import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.PlayerExistsException;
+import shared.model.JsonSerializable;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
-import shared.model.cards.Card;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
+
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
 import shared.model.cards.devcards.DevelopmentCard;
+
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
@@ -31,7 +32,10 @@ import java.util.*;
 /**
  * game class representing a Catan game
  */
-public class Game implements IGame {
+public class Game implements IGame, JsonSerializable {
+
+    private static Game instance;
+
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -40,19 +44,62 @@ public class Game implements IGame {
     private PlayerManager playerManager;
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
+    private int winner;
+    private int version;
 
     /**
      * Constructor
      */
-    public Game() {
+    protected Game() {
         this.dice = new Dice(2,12);
         this.map = new Map(false, false, false);
-        this.turnTracker = null;//new TurnTracker(0,0);
+        this.turnTracker = new TurnTracker(0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
-        this.playerManager = new PlayerManager(new ArrayList<Player>());
+        this.playerManager = new PlayerManager(new ArrayList<>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
+    }
+
+    public static Game getInstance() {
+        if(instance == null) {
+            instance = new Game();
+        }
+
+        return instance;
+    }
+
+    public void reset() {
+        this.dice = new Dice(2,12);
+        this.map = new Map(false, false, false);
+        this.turnTracker = new TurnTracker(0);
+        this.longestRoadCard = new LongestRoad();
+        this.largestArmyCard = new LargestArmy();
+        this.playerManager = new PlayerManager(new ArrayList<>());
+        this.resourceCardBank = new ResourceCardBank(true);
+        this.developmentCardBank = new DevelopmentCardBank(true);
+    }
+
+    public void updateGame(JsonObject json) {
+        this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
+        this.map = new Map(json.get("map").getAsJsonObject());
+        this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
+        this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
+
+        JsonObject turnTracker = json.getAsJsonObject("turnTracker");
+        this.longestRoadCard = new LongestRoad(turnTracker.get("longestRoad").getAsInt());
+        this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
+        this.version = json.get("version").getAsInt();
+        this.winner = json.get("winner").getAsInt();
+        try {
+            this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
+        } catch (BadJsonException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getVersion() {
+        return this.version;
     }
 
     //IGame Methods
@@ -157,8 +204,7 @@ public class Game implements IGame {
         int roll = dice.roll();
         if(roll == 7){
             turnTracker.updateRobber(true);
-        }
-        else{
+        } else{
             map.getResources(roll);
         }
 
@@ -216,7 +262,6 @@ public class Game implements IGame {
             TradePackage two = new TradePackage(playerIDTwo, twocards);
             Trade trade = new Trade(one,two);
 
-            System.out.println("trading");
             playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards);
 
         }
@@ -249,9 +294,13 @@ public class Game implements IGame {
         return turnTracker.getPhase();
     }
 
-    public void nextPhase(){turnTracker.nextPhase();}
+    public void nextPhase() {
+        turnTracker.nextPhase();
+    }
 
-    public void setPhase(TurnTracker.Phase p){turnTracker.setPhase(p);}
+    public void setPhase(TurnTracker.Phase p) {
+        turnTracker.setPhase(p);
+    }
 
     /**
      * checks if the player has the cards to buy a DevelopmentCard
@@ -694,5 +743,10 @@ public class Game implements IGame {
         } catch(Exception e) {
             //throw new
         }
+    }
+
+    @Override
+    public JsonObject toJSON() {
+        return null;
     }
 }
