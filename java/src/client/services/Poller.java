@@ -1,6 +1,8 @@
 package client.services;
 
 
+import shared.model.game.Game;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,7 +39,7 @@ public class Poller {
             @Override
             public void run() {
                 try {
-                    server.getCurrentModel(4); // TODO - ACTUALLY DO
+                    server.getCurrentModel(Game.getInstance().getVersion());
                 } catch (MissingUserCookieException e) {
                     e.printStackTrace();
                 }

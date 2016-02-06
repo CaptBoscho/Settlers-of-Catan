@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class GameTest {
 
-    private Game game = new Game();
+    private Game game = Game.getInstance();
 
     @Before
     public void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{

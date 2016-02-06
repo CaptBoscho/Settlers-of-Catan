@@ -70,6 +70,7 @@ public class Utils {
                     }
                 }
             }
+            System.out.println(response.getStatusLine());
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
             e.printStackTrace();
