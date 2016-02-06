@@ -24,7 +24,7 @@ public class GameTest {
     private Game game = new Game();
 
     @Before
-    void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
+    public void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
         List<Player> players = new ArrayList<Player>();
 
 
@@ -44,7 +44,7 @@ public class GameTest {
     }
 
     @Test
-    void testCanFirstTurn() throws InvalidPlayerException, InvalidLocationException, Exception{
+    public void testCanFirstTurn() throws InvalidPlayerException, InvalidLocationException, Exception{
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
         VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
@@ -67,7 +67,7 @@ public class GameTest {
     }
 
     @Test
-    void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException {
+    public void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException {
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
         VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
