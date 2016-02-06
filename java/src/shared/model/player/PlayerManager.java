@@ -51,14 +51,14 @@ public class PlayerManager implements IPlayerManager {
     public List<Integer> randomizePlayers() throws FailedToRandomizeException {
         if (!this.players.isEmpty()){
             Collections.shuffle(this.players);
-            List<Integer> id_order = new ArrayList<Integer>();
+            List<Integer> id_order = new ArrayList<>();
             for (Player p : this.players) {
                 id_order.add(p.get_id());
             }
             return id_order;
-        }
-        else
+        } else {
             throw new FailedToRandomizeException("There are no players to shuffle");
+        }
     }
 
     /**
@@ -103,10 +103,11 @@ public class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     public Player getPlayerByIndex(int index) throws PlayerExistsException {
-        if(index < this.players.size() && this.players.get(index) != null)
+        if(index < this.players.size() && this.players.get(index) != null) {
             return this.players.get(index);
-        else
+        } else {
             throw new PlayerExistsException("The player at index " + index + " doesn't exist!");
+        }
     }
 
 
