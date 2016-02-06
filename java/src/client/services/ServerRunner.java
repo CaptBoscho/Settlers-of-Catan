@@ -10,21 +10,31 @@ import shared.dto.*;
  */
 public class ServerRunner {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MissingUserCookieException {
 //        AuthDTO dto = new AuthDTO("totallyuniquserhere", "yee");
         IServer server = new ServerProxy("localhost", 8081);
 //        System.out.println(server.getAllGames());
 
-//        AuthDTO dto = new AuthDTO("Sam", "sam");
-//        System.out.println(server.authenticateUser(dto));
+        System.out.println("------------------------------------ AUTH ------------------------------------");
+        AuthDTO dto = new AuthDTO("Sam", "sam");
+        System.out.println(server.authenticateUser(dto));
 
-//        System.out.println(server.getAllGames());
+        System.out.println("------------------------------------ CREATE GAME ------------------------------------");
+        CreateGameDTO cdto = new CreateGameDTO(false, false, false, "my test game yooo");
+        System.out.println(server.createNewGame(cdto));
 
-//        CreateGameDTO dto = new CreateGameDTO(false, false, false, "my tet game yooo");
-//        System.out.println(server.createNewGame(dto));
+        System.out.println("------------------------------------ GET GAMES ------------------------------------");
+        System.out.println(server.getAllGames());
 
-//        JoinGameDTO dto = new JoinGameDTO(4, CatanColor.WHITE);
-//        server.joinGame(dto);
+        System.out.println("------------------------------------ JOIN GAME ------------------------------------");
+        JoinGameDTO jdto = new JoinGameDTO(4, CatanColor.WHITE);
+        System.out.println(server.joinGame(jdto));
+
+        System.out.println("------------------------------------ SEND CHAT ------------------------------------");
+        SendChatDTO sdto = new SendChatDTO(0, "hello world");
+        server.sendChat(sdto);
+
+
 
 //        SaveGameDTO dto = new SaveGameDTO(3, "lol");
 //        server.saveGame(dto);
@@ -32,8 +42,6 @@ public class ServerRunner {
 //        LoadGameDTO dto = new LoadGameDTO("lol");
 //        System.out.println(server.loadGame(dto));
 
-        SendChatDTO dto = new SendChatDTO(2, "hello world");
-//        server.sendChat(dto);
 
 //        JoinGameDTO dto = new JoinGameDTO(4, CatanColor.BROWN);
 //        server.joinGame(dto);
