@@ -294,7 +294,7 @@ public class GameTest {
         int after = game.amountOwnedResource(guy, ResourceType.ORE);
         System.out.println("after: " + after);
 
-        
+
     }
 
     @Test
