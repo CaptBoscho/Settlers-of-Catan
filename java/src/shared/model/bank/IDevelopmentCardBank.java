@@ -14,8 +14,6 @@ public interface IDevelopmentCardBank {
 
     public void addDevCard(DevelopmentCard cardToAdd) throws InvalidTypeException;
 
-    public int getNumberSoldierCards();
-
     public int size();
 
     public boolean canUseYearOfPlenty();
@@ -40,9 +38,13 @@ public interface IDevelopmentCardBank {
 
     public void addDevCards(JsonObject DevCards) throws BadCallerException;
 
+    void moveNewToOld() throws BadCallerException;
+
     public JsonObject toJSON();
 
     public JsonObject newCardsToJSON();
 
     DevelopmentCard discard(DevCardType type) throws InvalidTypeException;
+
+    void empty();
 }

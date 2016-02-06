@@ -67,23 +67,33 @@ public class Game implements IGame {
         this.playerManager = new PlayerManager(players);
         this.map = new Map(randomhexes, randomchits, randomports);
         //List<Integer> order = this.playerManager.randomizePlayers();
-        turnTracker = new TurnTracker(players.get(0).getPlayerIndex());
+        turnTracker = new TurnTracker(players.get(0).get_id());
         turnTracker.setNumPlayers(players.size());
 
-        return players.get(0).getPlayerIndex();
+        return turnTracker.getCurrentTurn();
     }
 
-
-
-    public boolean canFirstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException{
+    public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException{
         if(turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase()){
-            return map.canInitiateSettlement(playerID, vertex) && map.canInitiateRoad(playerID, edge, vertex);
+            return map.canInitiateSettlement(playerID, vertex);
         }
         return false;
     }
 
-    public void firstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException{
-        map.initiateSettlement(playerID, vertex);
+    public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException{
+        if(canInitiateSettlement(playerID, vertex)){
+            map.initiateSettlement(playerID, vertex);
+        }
+    }
+
+    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException{
+        if(turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase()){
+            return map.canInitiateRoad(playerID, edge, vertex);
+        }
+        return false;
+    }
+
+    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException{
         map.initiateRoad(playerID, edge, vertex);
     }
 
@@ -381,7 +391,8 @@ public class Game implements IGame {
     }
 
     public ResourceType rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
-        if(canPlaceRobber(playerrobber)){
+        Set<Integer> who = map.whoCanGetRobbed();
+        if(canPlaceRobber(playerrobber) && who.contains(playerrobbed)){
             turnTracker.updateRobber(false);
             ResourceType treasure = playerManager.placeRobber(playerrobber, playerrobbed);
         }
