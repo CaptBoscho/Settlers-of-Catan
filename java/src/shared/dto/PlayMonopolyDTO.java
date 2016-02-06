@@ -23,7 +23,10 @@ public class PlayMonopolyDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        // TODO --
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "Monopoly");
+        obj.addProperty("resource", this.resource);
+        obj.addProperty("playerIndex", this.playerIndex);
+        return obj;
     }
 }

@@ -63,9 +63,8 @@ public class ServerTest {
 
     @Test
     public void testBadGetCurrentGameModel() {
-        GetCurrentModelDTO dto = new GetCurrentModelDTO(2);
         try {
-            server.getCurrentModel(dto);
+            server.getCurrentModel(3);
             fail("MissingUserCookieException should be thrown");
         } catch(MissingUserCookieException e) {
             assertTrue(true);

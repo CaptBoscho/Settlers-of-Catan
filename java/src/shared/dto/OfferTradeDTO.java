@@ -36,6 +36,11 @@ public class OfferTradeDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "offerTrade");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.addProperty("receiver", this.receiver);
+        obj.add("offer", this.offer.toJSON());
+        return obj;
     }
 }

@@ -95,6 +95,7 @@ public class ServerProxy implements IServer {
     @Override
     public String joinGame(JoinGameDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/join";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -109,6 +110,7 @@ public class ServerProxy implements IServer {
     @Override
     public boolean saveGame(SaveGameDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/save";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -123,6 +125,7 @@ public class ServerProxy implements IServer {
     @Override
     public boolean loadGame(LoadGameDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/load";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -133,13 +136,13 @@ public class ServerProxy implements IServer {
     /**
      * Returns the current state of the game in JSON format with a GET request
      *
-     * @param dto The transport object that contains the information required to get the current model
+     * @param version The version number of the model that the caller already has.
      * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public ClientModel getCurrentModel(GetCurrentModelDTO dto) throws MissingUserCookieException {
-        assert dto != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/game/model";
+    public ClientModel getCurrentModel(int version) throws MissingUserCookieException {
+        assert version > 0;
+        String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
         String result = Utils.sendGet(url);
         assert result != null;
         // TODO - convert JSON string to ClientModel
@@ -253,6 +256,7 @@ public class ServerProxy implements IServer {
     @Override
     public ClientModel robPlayer(RobPlayerDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/robPlayer";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -269,6 +273,7 @@ public class ServerProxy implements IServer {
     @Override
     public ClientModel finishTurn(FinishTurnDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/finishTurn";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -284,6 +289,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buyDevCard(BuyDevCardDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buyDevCard";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -299,6 +306,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Year_of_Plenty";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -314,6 +323,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playRoadBuildingCard(BuildRoadDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Road_Building";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -329,6 +340,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playSoldierCard(PlaySoldierCardDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Soldier";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -344,6 +357,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playMonopolyCard(PlayMonopolyDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Monopoly";
         return null;
     }
@@ -356,6 +371,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel playMonumentCard(PlayMonumentDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Monument";
         return null;
     }
@@ -368,6 +385,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildRoad(BuildRoadDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buildRoad";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -383,6 +402,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildSettlement(BuildSettlementDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buildSettlement";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -398,6 +419,8 @@ public class ServerProxy implements IServer {
      */
     @Override
     public ClientModel buildCity(BuildCityDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buildCity";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -414,6 +437,7 @@ public class ServerProxy implements IServer {
     @Override
     public ClientModel offerTrade(OfferTradeDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/offerTrade";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -430,6 +454,7 @@ public class ServerProxy implements IServer {
     @Override
     public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/acceptTrade";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -446,6 +471,7 @@ public class ServerProxy implements IServer {
     @Override
     public ClientModel maritimeTrade(MaritimeTradeDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -462,6 +488,7 @@ public class ServerProxy implements IServer {
     @Override
     public ClientModel discardCards(DiscardCardsDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/discardCards";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
