@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
