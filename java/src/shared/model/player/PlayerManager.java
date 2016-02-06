@@ -347,14 +347,14 @@ public class PlayerManager implements IPlayerManager {
         for(int i=1; i<= num; i++){
             if(i!=id){
                 System.out.println("I: " + i);
-                int amount = getPlayerByID(id).getNumberOfType(type);
+                int amount = getPlayerByID(i).getNumberOfType(type);
                 System.out.println("amount: " + amount);
                 List<ResourceType> rt = new ArrayList<ResourceType>();
                 for(int k=0; k<amount; k++){
                     System.out.println("first for");
                     rt.add(type);
                 }
-                List<ResourceCard> returned = getPlayerByID(id).discardResourceCards(rt);
+                List<ResourceCard> returned = getPlayerByID(i).discardResourceCards(rt);
                 for(int k=0; k< returned.size(); k++){
                     System.out.println("adding");
                     addResource(id, returned.get(k));
