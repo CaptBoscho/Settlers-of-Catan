@@ -12,10 +12,7 @@ import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
-import shared.model.bank.ResourceCardBank;
-import shared.definitions.DevCardType;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
@@ -50,14 +47,16 @@ public class Game implements IGame, JsonSerializable {
         this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
-        this.playerManager = new PlayerManager(new ArrayList<Player>());
+        this.playerManager = new PlayerManager(new ArrayList<>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
     }
 
     public Game(JsonObject json) {
+        this.dice = new Dice(2,12);
         this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
         this.map = new Map(json.get("map").getAsJsonObject());
+        this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
         this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
         this.longestRoadCard = new LongestRoad(json.get("longestRoad").getAsInt());
         this.largestArmyCard = new LargestArmy(json.get("biggestArmy").getAsInt());
