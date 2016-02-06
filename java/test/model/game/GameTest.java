@@ -3,9 +3,8 @@ package model.game;
 import org.junit.Assert;
 import shared.definitions.CatanColor;
 
-import shared.exceptions.FailedToRandomizeException;
-import shared.exceptions.InvalidNameException;
-import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.*;
+import shared.locations.*;
 import shared.model.game.Game;
 import shared.model.player.Name;
 import shared.model.player.Player;
@@ -62,7 +61,7 @@ public class GameTest {
 
     }
 
-    void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException{
+    void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException {
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
         VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
