@@ -1,17 +1,22 @@
 package model.game;
 
+import org.apache.http.client.cache.Resource;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
 
+import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.locations.*;
+import shared.model.bank.InvalidTypeException;
+import shared.model.cards.resources.ResourceCard;
 import shared.model.game.Game;
 import shared.model.game.TurnTracker;
 import shared.model.player.Name;
 import shared.model.player.Player;
 
+import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,39 +113,107 @@ public class GameTest {
         assertTrue(roll <= 12);
     }
 
-    void testCanDiscardCards() {
-        int turn = game.getCurrentTurn();
+    @Test
+    public void testCanOfferTrade() {
+        int guy = game.getCurrentTurn();
+        game.getTurnTracker().nextPhase();
+        assertTrue(game.canOfferTrade(guy));
     }
 
-    void testDiscardCards() {
+    @Test
+    public void testOfferTrade() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException {
+        int guy = game.getCurrentTurn();
+        game.getTurnTracker().nextPhase();
+        System.out.println(game.getTurnTracker().getPhase());
+        int friend = 3;
+        if(guy == 3){friend = 4;}
+        ResourceCard one = game.getResourceCard(ResourceType.BRICK);
+        ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
 
+        game.giveResource(one, guy);
+        game.giveResource(two, guy);
+        game.giveResource(three, friend);
+
+        List<ResourceType> ones = new ArrayList<ResourceType>();
+        List<ResourceType> twos = new ArrayList<ResourceType>();
+        ones.add(ResourceType.BRICK);
+        ones.add(ResourceType.ORE);
+        twos.add(ResourceType.SHEEP);
+
+        assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) == 1);
+        assertTrue(game.amountOwnedResource(guy, ResourceType.ORE) == 1);
+        assertTrue(game.amountOwnedResource(friend, ResourceType.SHEEP) == 1);
+
+        game.offerTrade(guy,friend,ones,twos);
+
+        assertTrue(game.amountOwnedResource(friend, ResourceType.BRICK) == 1);
+        assertTrue(game.amountOwnedResource(friend, ResourceType.ORE) == 1);
+        assertTrue(game.amountOwnedResource(guy, ResourceType.SHEEP) == 1);
+        assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) == 0);
     }
 
-
-
-
-
-    void testCanOfferTrade() {
-
+    @Test
+    public void testCanFinishTurn() {
+        int guy = game.getCurrentTurn();
+        game.getTurnTracker().nextPhase();
+        game.getTurnTracker().nextPhase();
+        System.out.println(game.getTurnTracker().getPhase());
+        assertTrue(game.canFinishTurn(guy));
     }
 
-    void testOfferTrade() {
+    @Test
+    public void testFinishTurn() {
+        int guy = game.getCurrentTurn();
+        game.nextPhase();
+        TurnTracker.Phase p = game.getCurrentPhase();
 
+        System.out.println(p);
+        if(p == TurnTracker.Phase.DISCARDING){
+            assertTrue(game.canFinishTurn(guy));
+        }
+        else{
+            assertFalse(game.canFinishTurn(guy));
+        }
+
+        assertFalse(game.canFinishTurn(guy-1));
     }
 
-    void testCanFinishTurn() {
+    @Test
+    public void testCanBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException{
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.DISCARDING);
+        assertFalse(game.canBuyDevCard(guy));
 
+        ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
+        ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
+
+        game.giveResource(one, guy);
+        game.giveResource(two, guy);
+        game.giveResource(three, guy);
+
+        assertTrue(game.canBuyDevCard(guy));
     }
 
-    void testFinishTurn() {
+    @Test
+    public void testBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException{
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.DISCARDING);
 
-    }
+        ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
+        ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
 
-    void testCanBuyDevCard() {
+        game.giveResource(one, guy);
+        game.giveResource(two, guy);
+        game.giveResource(three, guy);
 
-    }
+        game.buyDevCard(guy);
 
-    void testBuyDevCard() {
+        Player p = game.getPlayerManager().getPlayerByID(guy);
+        
+
 
     }
 

@@ -42,6 +42,8 @@ public interface IPlayer {
      */
     boolean canOfferTrade();
 
+    Integer howManyofThisCard(ResourceType t)throws InvalidTypeException;
+
     /**
      * Determine if Player can perform maritime trade
      * Checks Player turn, phase, resources, and ports

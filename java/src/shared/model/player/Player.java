@@ -227,6 +227,15 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         return discarded;
     }
 
+    public Integer howManyofThisCard(ResourceType t) throws InvalidTypeException{
+        if(t == ResourceType.SHEEP){return resourceCardBank.getNumberOfSheep();}
+        if(t == ResourceType.ORE){return resourceCardBank.getNumberOfOre();}
+        if(t == ResourceType.BRICK){return resourceCardBank.getNumberOfBrick();}
+        if(t == ResourceType.WOOD){return resourceCardBank.getNumberOfWood();}
+        if(t == ResourceType.WHEAT){return resourceCardBank.getNumberOfWheat();}
+        throw new InvalidTypeException("not correct resourcetype");
+    }
+
     /**
      * Determine if Player can offer a trade
      * Checks Player turn, phase, and resources
@@ -622,6 +631,12 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public Name getName() {
         return name;
     }
+
+    public IDevelopmentCardBank getDevelopmentCardBank(){return developmentCardBank;}
+
+    public IResourceCardBank getResourceCardBank(){return resourceCardBank;}
+
+    public int countResources(){return resourceCardBank.size();}
 
     public boolean hasDiscarded() {
         return discarded;

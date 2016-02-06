@@ -94,6 +94,9 @@ public interface IPlayerManager {
      */
     boolean canOfferTrade(int id) throws PlayerExistsException;
 
+
+    void offerTrade(int one, int two, List<ResourceType> ones, List<ResourceType> twos) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+
     /**
      * Determine if Player can perform maritime trade
      * Checks Player turn, phase, resources, and ports

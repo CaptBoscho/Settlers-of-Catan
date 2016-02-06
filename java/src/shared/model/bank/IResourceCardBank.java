@@ -51,4 +51,14 @@ public interface IResourceCardBank {
     boolean canBeRobbed();
 
     ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException;
+
+    public int getNumberOfBrick();
+
+    public int getNumberOfOre();
+
+    public int getNumberOfSheep();
+
+    public int getNumberOfWheat();
+
+    public int getNumberOfWood();
 }

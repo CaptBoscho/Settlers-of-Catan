@@ -152,7 +152,7 @@ public class TurnTracker {
         return phase;
     }
 
-
+    public void setPhase(Phase p){this.phase = p;}
     /**
      * Set the number of players
      * @param numPlayers number of players

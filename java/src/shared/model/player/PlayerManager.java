@@ -33,18 +33,6 @@ public class PlayerManager implements IPlayerManager {
     }
 
     /**
-     * Creates a new player and adds it to the list of players
-     * @throws TooManyPlayersException
-     */
-    public void addNewPlayer() throws TooManyPlayersException{
-        if(canAddPlayer()){
-            this.players.add(new Player());
-        } else {
-            throw new TooManyPlayersException("Max number of players reached!");
-        }
-    }
-
-    /**
      * Randomize player order (turn order)
      * @throws FailedToRandomizeException
      */
@@ -169,6 +157,19 @@ public class PlayerManager implements IPlayerManager {
     public boolean canOfferTrade(int id) throws PlayerExistsException {
         Player player = getPlayerByID(id);
         return player.canOfferTrade();
+    }
+
+    public void offerTrade(int one, int two, List<ResourceType> ones, List<ResourceType> twos) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
+        Player player1 = getPlayerByID(one);
+        Player player2 = getPlayerByID(two);
+        List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
+        List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
+        for(ResourceCard rc: discardedOnes){
+            player2.addResourceCard(rc);
+        }
+        for(ResourceCard rc: discardedTwos){
+            player1.addResourceCard(rc);
+        }
     }
 
     /**
