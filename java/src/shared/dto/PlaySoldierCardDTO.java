@@ -37,6 +37,6 @@ public class PlaySoldierCardDTO implements JsonSerializable {
         obj.addProperty("playerIndex", this.playerIndex);
         obj.addProperty("victimIndex", this.victimIndex);
         obj.add("location", this.location.toJSON());
-        return null;
+        return obj;
     }
 }
