@@ -6,8 +6,7 @@ import shared.exceptions.BadCallerException;
 import shared.model.JsonSerializable;
 import shared.model.cards.devcards.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 
 /**
@@ -45,6 +44,22 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
      */
     public DevelopmentCardBank(boolean ownedByGame) {
         this.ownedByGame = ownedByGame;
+
+        if (ownedByGame) {
+            developmentCards = new ArrayList<>();
+        } else {
+            soldierCards = new ArrayList<>();
+            monumentCards = new ArrayList<>();
+            monopolyCards = new ArrayList<>();
+            yearOfPlentyCards = new ArrayList<>();
+            roadBuildCards = new ArrayList<>();
+
+            newSoldierCards = new ArrayList<>();
+            newMonumentCards = new ArrayList<>();
+            newMonopolyCards = new ArrayList<>();
+            newYearOfPlentyCards = new ArrayList<>();
+            newRoadBuildCards = new ArrayList<>();
+        }
 
         if (ownedByGame) {
             try {
@@ -135,11 +150,6 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         }
     }
 
-    @Override
-    public int getNumberSoldierCards() {
-        return soldierCards.size();
-    }
-
     /**
      * @return the number of developmentCards in the bank
      */
@@ -148,13 +158,18 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         if (ownedByGame) {
             return developmentCards.size();
         } else {
-            return soldierCards.size() + monumentCards.size() + monopolyCards.size() + yearOfPlentyCards.size() + roadBuildCards.size();
+            return soldierCards.size() + monumentCards.size() + monopolyCards.size() + yearOfPlentyCards.size() + roadBuildCards.size() +
+                    newSoldierCards.size() + newMonumentCards.size() + newMonopolyCards.size() + newYearOfPlentyCards.size() + newRoadBuildCards.size();
         }
     }
 
     @Override
     public boolean canUseYearOfPlenty() {
-        return (yearOfPlentyCards.size() > 0);
+        if (ownedByGame) {
+            return false;
+        } else {
+            return (yearOfPlentyCards.size() > 0);
+        }
     }
 
     @Override
@@ -169,7 +184,11 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseSoldier() {
-        return (soldierCards.size() > 0);
+        if (ownedByGame) {
+            return false;
+        } else {
+            return (soldierCards.size() > 0);
+        }
     }
 
     @Override
@@ -184,7 +203,11 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseMonopoly() {
-        return (monopolyCards.size() > 0);
+        if (ownedByGame) {
+            return false;
+        } else {
+            return (monopolyCards.size() > 0);
+        }
     }
 
     @Override
@@ -199,7 +222,11 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseMonument() {
-        return (monumentCards.size() > 0);
+        if (ownedByGame) {
+            return false;
+        } else {
+            return (monumentCards.size() > 0);
+        }
     }
 
     @Override
@@ -214,7 +241,11 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseRoadBuild() {
-        return (roadBuildCards.size() > 0);
+        if (ownedByGame) {
+            return false;
+        } else {
+            return (roadBuildCards.size() > 0);
+        }
     }
 
     @Override
@@ -357,6 +388,38 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         }
     }
 
+    @Override
+    public void empty() {
+        if (ownedByGame) {
+            while (!developmentCards.isEmpty()) {
+                developmentCards.remove(0);
+            }
+        }
+    }
+
+    @Override
+    public void moveNewToOld() throws BadCallerException {
+        if (!ownedByGame) {
+            while (newSoldierCards.size() > 0) {
+                soldierCards.add(newSoldierCards.remove(0));
+            }
+            while (newMonumentCards.size() > 0) {
+                monumentCards.add(newMonumentCards.remove(0));
+            }
+            while (newMonopolyCards.size() > 0) {
+                monopolyCards.add(newMonopolyCards.remove(0));
+            }
+            while (newYearOfPlentyCards.size() > 0) {
+                yearOfPlentyCards.add(newYearOfPlentyCards.remove(0));
+            }
+            while (newRoadBuildCards.size() > 0) {
+                roadBuildCards.add(newRoadBuildCards.remove(0));
+            }
+        } else {
+            throw new BadCallerException("Can't call moveNewToOld() on bank owned by game");
+        }
+    }
+
     /**
      * Converts the object to JSON
      *
@@ -383,7 +446,4 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         json.addProperty("yearOfPlenty", newYearOfPlentyCards.size());
         return json;
     }
-
-
-
 }
