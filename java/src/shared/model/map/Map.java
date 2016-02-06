@@ -541,11 +541,8 @@ public class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public Set<Integer> whoCanGetRobbed(HexLocation hexLoc) throws InvalidLocationException {
-        Hex hex = hexes.get(hexLoc);
-        if(hex == null || hex.getType() == HexType.WATER) {
-            throw new InvalidLocationException("Hex location is not on the map");
-        }
+    public Set<Integer> whoCanGetRobbed() {
+        HexLocation hexLoc = robber.getLocation();
         return getPlayers(hexLoc);
     }
 

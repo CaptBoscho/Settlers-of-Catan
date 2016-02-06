@@ -6,10 +6,10 @@ import org.junit.Test;
 import shared.definitions.CatanColor;
 
 import shared.exceptions.*;
+import shared.locations.*;
 import shared.model.game.Game;
 import shared.model.player.Name;
 import shared.model.player.Player;
-import shared.locations.*;
 
 import java.util.ArrayList;
 import java.util.List;
