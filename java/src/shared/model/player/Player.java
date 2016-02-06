@@ -623,6 +623,12 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         return name;
     }
 
+    public IDevelopmentCardBank getDevelopmentCardBank(){return developmentCardBank;}
+
+    public IResourceCardBank getResourceCardBank(){return resourceCardBank;}
+
+    public int countResources(){return resourceCardBank.size();}
+
     public boolean hasDiscarded() {
         return discarded;
     }
