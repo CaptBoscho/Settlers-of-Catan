@@ -15,6 +15,10 @@ public class LargestArmy {
         this.playerID = -1;
     }
 
+    public LargestArmy(int playerID) {
+        this.playerID = playerID;
+    }
+
     /**
      * Get the current owner of the card
      * @return owner of the card by id

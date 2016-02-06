@@ -80,8 +80,46 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
      *
      * @param json The JSON being used to construct this object
      */
-    public DevelopmentCardBank(JsonObject json) {
-        //deserialize blah blah blah
+    public DevelopmentCardBank(JsonObject json, boolean ownedByGame) {
+        this.ownedByGame = ownedByGame;
+        if (ownedByGame) {
+            developmentCards = new ArrayList<>();
+        } else {
+            soldierCards = new ArrayList<>();
+            monumentCards = new ArrayList<>();
+            monopolyCards = new ArrayList<>();
+            yearOfPlentyCards = new ArrayList<>();
+            roadBuildCards = new ArrayList<>();
+
+            newSoldierCards = new ArrayList<>();
+            newMonumentCards = new ArrayList<>();
+            newMonopolyCards = new ArrayList<>();
+            newYearOfPlentyCards = new ArrayList<>();
+            newRoadBuildCards = new ArrayList<>();
+        }
+
+        try {
+            for (int i = 0; i < json.get("yearOfPlenty").getAsInt(); i++) {
+                addDevCard(new YearOfPlentyCard());
+            }
+            for (int i = 0; i < json.get("monopoly").getAsInt(); i++) {
+                addDevCard(new MonopolyCard());
+            }
+            for (int i = 0; i < json.get("monument").getAsInt(); i++) {
+                addDevCard(new MonumentCard());
+            }
+            for (int i = 0; i < json.get("soldier").getAsInt(); i++) {
+                addDevCard(new SoldierCard());
+            }
+            for (int i = 0; i < json.get("roadBuilding").getAsInt(); i++) {
+                addDevCard(new RoadBuildCard());
+            }
+            if (!ownedByGame) {
+                moveNewToOld();
+            }
+        } catch (InvalidTypeException | BadCallerException e) {
+            e.printStackTrace();
+        }
     }
 
     private void fillSoldierCards() throws InvalidTypeException {
@@ -263,20 +301,24 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         if (ownedByGame) {
             throw new BadCallerException("Can't call this method on DevelopmentCardBank owned by game");
         } else {
-            for (int i = 0; i < DevCards.get("monopoly").getAsInt(); i++) {
-                monopolyCards.add(new MonopolyCard());
-            }
-            for (int i = 0; i < DevCards.get("monument").getAsInt(); i++) {
-                monumentCards.add(new MonumentCard());
-            }
-            for (int i = 0; i < DevCards.get("roadBuilding").getAsInt(); i++) {
-                roadBuildCards.add(new RoadBuildCard());
-            }
-            for (int i = 0; i < DevCards.get("soldier").getAsInt(); i++) {
-                soldierCards.add(new SoldierCard());
-            }
-            for (int i = 0; i < DevCards.get("yearOfPlenty").getAsInt(); i++) {
-                yearOfPlentyCards.add(new YearOfPlentyCard());
+            try {
+                for (int i = 0; i < DevCards.get("monopoly").getAsInt(); i++) {
+                    addDevCard(new MonopolyCard());
+                }
+                for (int i = 0; i < DevCards.get("monument").getAsInt(); i++) {
+                    addDevCard(new MonumentCard());
+                }
+                for (int i = 0; i < DevCards.get("roadBuilding").getAsInt(); i++) {
+                    addDevCard(new RoadBuildCard());
+                }
+                for (int i = 0; i < DevCards.get("soldier").getAsInt(); i++) {
+                    addDevCard(new SoldierCard());
+                }
+                for (int i = 0; i < DevCards.get("yearOfPlenty").getAsInt(); i++) {
+                    addDevCard(new YearOfPlentyCard());
+                }
+            } catch (InvalidTypeException e) {
+                e.printStackTrace();
             }
         }
     }
