@@ -28,16 +28,17 @@ public class UserCookie {
         }
     }
 
-    public String getCatanGameCookieValue() {
-        return catanGameCookieValue;
+    public boolean hasContent() {
+        return catanGameCookieValue.length() > 0 || catanUserCookieValue.length() > 0;
+    }
+
+    public void clearCookies() {
+        catanUserCookieValue = "";
+        catanGameCookieValue = "";
     }
 
     public void setCatanGameCookieValue(String catanGameCookieValue) {
         this.catanGameCookieValue = catanGameCookieValue;
-    }
-
-    public String getCatanUserCookieValue() {
-        return catanUserCookieValue;
     }
 
     public void setCatanUserCookieValue(String catanUserCookieValue) {

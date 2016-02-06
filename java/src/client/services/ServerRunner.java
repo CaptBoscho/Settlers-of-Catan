@@ -2,6 +2,9 @@ package client.services;
 
 import shared.definitions.CatanColor;
 import shared.dto.*;
+import shared.locations.HexLocation;
+import shared.locations.VertexDirection;
+import shared.locations.VertexLocation;
 
 /**
  * A playground area to manually test service code
@@ -27,12 +30,26 @@ public class ServerRunner {
         System.out.println(server.getAllGames());
 
         System.out.println("------------------------------------ JOIN GAME ------------------------------------");
-        JoinGameDTO jdto = new JoinGameDTO(4, CatanColor.WHITE);
+        JoinGameDTO jdto = new JoinGameDTO(2, CatanColor.WHITE);
         System.out.println(server.joinGame(jdto));
 
         System.out.println("------------------------------------ SEND CHAT ------------------------------------");
         SendChatDTO sdto = new SendChatDTO(0, "hello world");
         server.sendChat(sdto);
+
+        // Sam rolled a 4
+        RollNumberDTO rdto = new RollNumberDTO(0, 4);
+        try {
+            server.rollNumber(rdto);
+        } catch (MissingUserCookieException e) {
+        }
+
+        // Sam builds a settlement
+        BuildSettlementDTO bsdto = new BuildSettlementDTO(0, new VertexLocation(new HexLocation(2, 1), VertexDirection.SouthEast), true);
+        try {
+            server.buildSettlement(bsdto);
+        } catch (MissingUserCookieException e) {
+        }
 
 
 

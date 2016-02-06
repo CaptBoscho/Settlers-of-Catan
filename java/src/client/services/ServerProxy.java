@@ -240,6 +240,7 @@ public class ServerProxy implements IServer {
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
+        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         return new ClientModel(obj);
     }
@@ -320,6 +321,7 @@ public class ServerProxy implements IServer {
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
+        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         return new ClientModel(obj);
     }
@@ -440,6 +442,7 @@ public class ServerProxy implements IServer {
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
+        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         return new ClientModel(obj);
     }

@@ -156,8 +156,7 @@ public class Game implements IGame {
         int roll = dice.roll();
         if(roll == 7){
             turnTracker.updateRobber(true);
-        }
-        else{
+        } else{
             map.getResources(roll);
         }
 

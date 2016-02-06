@@ -52,23 +52,21 @@ public class Utils {
             post.setEntity(postingString);
         }
         post.setHeader("Content-type", "application/json");
-        System.out.println(UserCookie.getInstance().getCompleteCookieValue());
-        post.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+        if(UserCookie.getInstance().hasContent()) {
+            post.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+        }
         try {
             assert httpClient != null;
             HttpResponse response = httpClient.execute(post);
             if(response.containsHeader("Set-cookie")) {
                 Header cookieHeader = response.getFirstHeader("Set-cookie");
                 String cookieVal = cookieHeader.getValue();
-                System.out.println("ALL COOKIES " + cookieVal);
                 String[] cookies = cookieVal.split(";");
                 for(String cookie : cookies) {
                     if(cookie.startsWith("catan.user")) {
                         UserCookie.getInstance().setCatanUserCookieValue(cookie.substring(cookie.indexOf("=") + 1));
-                        System.out.println("Catan.user " + cookie.substring(cookie.indexOf("=") + 1));
                     } else if(cookie.startsWith("catan.game")) {
                         UserCookie.getInstance().setCatanGameCookieValue(cookie.substring(cookie.indexOf("=") + 1));
-                        System.out.println("Catan.game " + cookie.substring(cookie.indexOf("=") + 1));
                     }
                 }
             }
