@@ -27,8 +27,7 @@ import static org.junit.Assert.assertTrue;
  * @author Corbin Byers
  */
 public class GameTest {
-
-    private Game game;
+    
     private final String json = "{\"deck\":\n" +
             "{\"yearOfPlenty\":\n" +
             "2,\"monopoly\":\n" +
@@ -1818,6 +1817,8 @@ public class GameTest {
             "2,\"longestRoad\":\n" +
             "0,\"winner\":\n" +
             "-1}\n";
+
+    private Game game;
 
     @Before
     public void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{

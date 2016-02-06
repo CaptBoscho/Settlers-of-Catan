@@ -233,7 +233,7 @@ public class ServerProxy implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException {
+    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException, CommandExecutionFailed {
         assert dto != null;
         assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/rollNumber";
@@ -241,6 +241,9 @@ public class ServerProxy implements IServer {
         assert result != null;
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
+        }
+        if(result.contains("Command execution failed")) {
+            throw new CommandExecutionFailed();
         }
         System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();

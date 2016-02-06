@@ -42,6 +42,8 @@ public class ServerRunner {
         try {
             server.rollNumber(rdto);
         } catch (MissingUserCookieException e) {
+        } catch (CommandExecutionFailed commandExecutionFailed) {
+            commandExecutionFailed.printStackTrace();
         }
 
         // Sam builds a settlement

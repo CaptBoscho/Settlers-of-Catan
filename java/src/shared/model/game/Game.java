@@ -40,6 +40,7 @@ public class Game implements IGame, JsonSerializable {
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
     private int winner;
+    private int version;
 
     /**
      * Constructor
@@ -79,14 +80,21 @@ public class Game implements IGame, JsonSerializable {
         this.map = new Map(json.get("map").getAsJsonObject());
         this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
         this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
-        this.longestRoadCard = new LongestRoad(json.get("longestRoad").getAsInt());
-        this.largestArmyCard = new LargestArmy(json.get("biggestArmy").getAsInt());
+
+        JsonObject turnTracker = json.getAsJsonObject("turnTracker");
+        this.longestRoadCard = new LongestRoad(turnTracker.get("longestRoad").getAsInt());
+        this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
+        this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
         try {
             this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
         } catch (BadJsonException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getVersion() {
+        return this.version;
     }
 
     //IGame Methods
