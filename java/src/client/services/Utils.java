@@ -81,6 +81,9 @@ public class Utils {
     public static String sendGet(String url) {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet(url);
+        if(UserCookie.getInstance().hasContent()) {
+            get.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+        }
         try {
             HttpResponse response = httpClient.execute(get);
             return Utils.getStringFromHttpResponse(response);

@@ -65,6 +65,7 @@ public class Game implements IGame, JsonSerializable {
     }
 
     public void updateGame(JsonObject json) {
+        System.out.println("updating");
         this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
         this.map = new Map(json.get("map").getAsJsonObject());
         this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
@@ -279,9 +280,13 @@ public class Game implements IGame, JsonSerializable {
         return turnTracker.getPhase();
     }
 
-    public void nextPhase(){turnTracker.nextPhase();}
+    public void nextPhase() {
+        turnTracker.nextPhase();
+    }
 
-    public void setPhase(TurnTracker.Phase p){turnTracker.setPhase(p);}
+    public void setPhase(TurnTracker.Phase p) {
+        turnTracker.setPhase(p);
+    }
 
     /**
      * Determine if Player can buy a dev card

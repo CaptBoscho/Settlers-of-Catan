@@ -8,6 +8,7 @@ import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.*;
 import shared.locations.*;
+import shared.model.game.Game;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 
@@ -317,5 +318,32 @@ public class ServerTest {
 //        } catch (MissingUserCookieException | CommandExecutionFailed e) {
 //            fail();
 //        }
+
+    }
+
+    @Test
+    public void testPoller() {
+
+        AuthDTO dto = new AuthDTO("Sam", "sam");
+        assertTrue(server.authenticateUser(dto));
+        // Sam joins the game he created
+        JoinGameDTO jdto = new JoinGameDTO(3, CatanColor.WHITE);
+        assertEquals(server.joinGame(jdto), "Success");
+
+        Poller poller = new Poller(server);
+        poller.start();
+
+        long t= System.currentTimeMillis();
+        long end = t+15000;
+        while(System.currentTimeMillis() < end) {
+            // do something
+            // pause to avoid churning
+            System.out.println(Game.getInstance().getVersion());
+            try {
+                Thread.sleep( 500 );
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
