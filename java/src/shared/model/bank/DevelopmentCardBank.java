@@ -205,14 +205,10 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseYearOfPlenty() {
-        System.out.println(yearOfPlentyCards.size());
         if (ownedByGame) {
             return false;
-        } else if(yearOfPlentyCards.size() > 0) {
-
-            return true;
         } else {
-            return false;
+            return yearOfPlentyCards.size() > 0;
         }
     }
 

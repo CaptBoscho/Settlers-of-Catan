@@ -321,7 +321,7 @@ public class PlayerManagerTest {
             p.addDevCard(new MonopolyCard());
             p.setPlayedDevCard(false);
             p.getDevelopmentCardBank().moveNewToOld();
-            pm.useMonopoly(p.get_id(), 4, ResourceType.BRICK);
+            pm.useMonopoly(p.get_id(), 3, ResourceType.BRICK);
             assertFalse(pm.canUseMonopoly(p.get_id()));
         }
     }
