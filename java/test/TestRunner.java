@@ -1,3 +1,4 @@
+import client.networking.ServerTest;
 import model.Player.PlayerManagerTest;
 import model.Player.PlayerTest;
 import model.game.GameTest;
@@ -25,12 +26,9 @@ public class TestRunner {
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // server tests
-        client.networking.ServerTest.class,
-
-        // model tests
         MapTest.class,
         GameTest.class,
+        ServerTest.class,
         PlayerTest.class,
         PlayerManagerTest.class
 })

@@ -28,6 +28,9 @@ import java.util.*;
  * game class representing a Catan game
  */
 public class Game implements IGame, JsonSerializable {
+
+    private static Game instance;
+
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -41,7 +44,7 @@ public class Game implements IGame, JsonSerializable {
     /**
      * Constructor
      */
-    public Game() {
+    protected Game() {
         this.dice = new Dice(2,12);
         this.map = new Map(false, false, false);
         this.turnTracker = null;//new TurnTracker(0,0);
@@ -52,8 +55,15 @@ public class Game implements IGame, JsonSerializable {
         this.developmentCardBank = new DevelopmentCardBank(true);
     }
 
-    public Game(JsonObject json) {
-        this.dice = new Dice(2,12);
+    public static Game getInstance() {
+        if(instance == null) {
+            instance = new Game();
+        }
+
+        return instance;
+    }
+
+    public void updateGame(JsonObject json) {
         this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
         this.map = new Map(json.get("map").getAsJsonObject());
         this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
@@ -170,8 +180,7 @@ public class Game implements IGame, JsonSerializable {
         int roll = dice.roll();
         if(roll == 7){
             turnTracker.updateRobber(true);
-        }
-        else{
+        } else{
             map.getResources(roll);
         }
 

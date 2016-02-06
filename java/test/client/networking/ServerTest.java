@@ -4,6 +4,8 @@ import client.data.GameInfo;
 import client.services.IServer;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
+import client.services.UserCookie;
+import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
@@ -14,6 +16,7 @@ import shared.model.game.trade.TradePackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -23,6 +26,19 @@ import static org.junit.Assert.*;
 public class ServerTest {
 
     private IServer server = new ServerProxy("localhost", 8081);
+
+    private String generateString(Random rng, String characters, int length) {
+        char[] text = new char[length];
+        for (int i = 0; i < length; i++) {
+            text[i] = characters.charAt(rng.nextInt(characters.length()));
+        }
+        return new String(text);
+    }
+
+    @Before
+    public void setup() {
+        UserCookie.getInstance().clearCookies();
+    }
 
     @Test
     public void testCreateGame() {
@@ -54,7 +70,9 @@ public class ServerTest {
 
     @Test
     public void testRegisterNewUser() {
-        AuthDTO dto = new AuthDTO("user", "password");
+        String fakeUsername = generateString(new Random(), "qwertyuiopasdfghjklzxcvbnm", 10);
+        String fakePassword = generateString(new Random(), "qwertyuiopasdfghjklzxcvbnm", 10);
+        AuthDTO dto = new AuthDTO(fakeUsername, fakePassword);
         assertTrue(server.registerUser(dto));
 
         // registration should now fail if we try the same credentials
@@ -263,6 +281,53 @@ public class ServerTest {
             fail("MissingUserCookieException should be thrown");
         } catch(MissingUserCookieException e) {
             assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testActualUserInteraction() {
+
+        // Sam signs in
+        AuthDTO dto = new AuthDTO("Sam", "sam");
+        assertTrue(server.authenticateUser(dto));
+
+        // Sam creates a new game
+        CreateGameDTO cdto = new CreateGameDTO(false, false, false, "my test game yooo");
+        assertNotNull(server.createNewGame(cdto));
+
+        // Sam sees all available games
+        List<GameInfo> games = server.getAllGames();
+        assertTrue(games.size() >= 4);
+
+        // Sam joins the game he created
+        JoinGameDTO jdto = new JoinGameDTO(3, CatanColor.WHITE);
+        assertEquals(server.joinGame(jdto), "Success");
+
+        // Sam sends a chat in the game
+        SendChatDTO sdto = new SendChatDTO(0, "hello world");
+        try {
+            server.sendChat(sdto);
+            assertTrue(true);
+        } catch (MissingUserCookieException e) {
+            fail("Should be able to send message perfectly fine");
+        }
+
+        // Sam rolled a 4
+        RollNumberDTO rdto = new RollNumberDTO(0, 4);
+        try {
+            server.rollNumber(rdto);
+            assertTrue(true);
+        } catch (MissingUserCookieException e) {
+            fail();
+        }
+
+        // Sam builds a settlement
+        BuildSettlementDTO bsdto = new BuildSettlementDTO(0, new VertexLocation(new HexLocation(2, 1), VertexDirection.SouthEast), true);
+        try {
+            server.buildSettlement(bsdto);
+            assertTrue(true);
+        } catch (MissingUserCookieException e) {
+            fail();
         }
     }
 }
