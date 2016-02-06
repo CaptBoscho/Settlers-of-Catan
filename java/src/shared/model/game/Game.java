@@ -381,6 +381,7 @@ public class Game implements IGame {
     }
 
     public ResourceType rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
+
         if(canPlaceRobber(playerrobber)){
             turnTracker.updateRobber(false);
             ResourceType treasure = playerManager.placeRobber(playerrobber, playerrobbed);
