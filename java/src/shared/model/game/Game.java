@@ -1,13 +1,13 @@
 package shared.model.game;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
+import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.PlayerExistsException;
+import shared.model.JsonSerializable;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
-import shared.model.cards.Card;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * game class representing a Catan game
  */
-public class Game implements IGame {
+public class Game implements IGame, JsonSerializable {
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -39,6 +39,7 @@ public class Game implements IGame {
     private PlayerManager playerManager;
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
+    private int winner;
 
     /**
      * Constructor
@@ -52,6 +53,20 @@ public class Game implements IGame {
         this.playerManager = new PlayerManager(new ArrayList<Player>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
+    }
+
+    public Game(JsonObject json) {
+        this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
+        this.map = new Map(json.get("map").getAsJsonObject());
+        this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
+        this.longestRoadCard = new LongestRoad(json.get("longestRoad").getAsInt());
+        this.largestArmyCard = new LargestArmy(json.get("biggestArmy").getAsInt());
+        this.winner = json.get("winner").getAsInt();
+        try {
+            this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
+        } catch (BadJsonException e) {
+            e.printStackTrace();
+        }
     }
 
     //IGame Methods
@@ -702,5 +717,10 @@ public class Game implements IGame {
         } catch(Exception e) {
             //throw new
         }
+    }
+
+    @Override
+    public JsonObject toJSON() {
+        return null;
     }
 }

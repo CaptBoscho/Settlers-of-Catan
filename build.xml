@@ -31,10 +31,6 @@
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
-	<path id="all-classpath">
-		<path refid="java.lib.classpath"/>
-		<pathelement location="${out}"/>
-	</path>
 
 	<!-- TARGETS -->
 	<!-- ******* -->
@@ -88,10 +84,8 @@
 		<delete dir="${java.dist}"/>
 	</target>
 	<target name="compile" depends="init" description="compile the source " >
-		<javac destdir="${java.build}" debug="true" includeantruntime="true">
+		<javac srcdir="${java.src}" destdir="${java.build}" debug="true" includeantruntime="true">
 			<classpath refid="java.lib.classpath" />
-			<src path="java/test"/>
-			<src path="java/src"/>
 		</javac>
 	</target>
 	<target name="compile-test" depends="init" description="compile the source " >
@@ -138,7 +132,7 @@
 		</java>
 	</target>
 
-	<target name="test" depends="compile" description="compiles, packages, and runs the JUnit tests for the project">
+	<target name="test" depends="compile, compile-test" description="compiles, packages, and runs the JUnit tests for the project">
 		<java classname="TestRunner" fork="yes">
 			<classpath>
 				<path refid="java.lib.classpath"/>
