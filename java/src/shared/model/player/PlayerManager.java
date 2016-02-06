@@ -171,6 +171,19 @@ public class PlayerManager implements IPlayerManager {
         return player.canOfferTrade();
     }
 
+    public void offerTrade(int one, int two, List<ResourceType> ones, List<ResourceType> twos) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
+        Player player1 = getPlayerByID(one);
+        Player player2 = getPlayerByID(two);
+        List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
+        List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
+        for(ResourceCard rc: discardedOnes){
+            player2.addResourceCard(rc);
+        }
+        for(ResourceCard rc: discardedTwos){
+            player1.addResourceCard(rc);
+        }
+    }
+
     /**
      * Determine if Player can perform maritime trade
      * Checks Player turn, phase, resources, and ports

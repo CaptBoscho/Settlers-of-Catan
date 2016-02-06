@@ -91,7 +91,7 @@ public interface IGame {
      * @param playerIDOne ID of Player offering the trade
      * @param playerIDTwo ID of Player being offered the trade
      */
-    void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards);
+    void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
 
     /**
@@ -107,6 +107,10 @@ public interface IGame {
      * @param playerID ID of Player performing action
      */
     Integer finishTurn(int playerID) throws Exception;
+
+    TurnTracker.Phase getCurrentPhase();
+
+    void nextPhase();
 
     /**
      * Determine if Player can buy a dev card

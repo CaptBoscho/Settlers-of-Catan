@@ -224,7 +224,7 @@ public class Facade {
      * @param playerOneID
      * @throws BuildException
      */
-    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException {
+    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         if (canTrade(playerOneID)) {
             game.offerTrade(playerOneID, playerTwoID, oneCards,  twoCards);
         } else {

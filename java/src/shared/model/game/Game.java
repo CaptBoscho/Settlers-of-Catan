@@ -44,7 +44,7 @@ public class Game implements IGame {
      * Constructor
      */
     public Game() {
-        this.dice = new Dice();
+        this.dice = new Dice(2,12);
         this.map = new Map(false, false, false);
         this.turnTracker = null;//new TurnTracker(0,0);
         this.longestRoadCard = new LongestRoad();
@@ -117,7 +117,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canDiscardCards(int playerID) throws PlayerExistsException {
-        return turnTracker.getPhase() == TurnTracker.Phase.DISCARDING && playerManager.canDiscardCards(playerID);
+        return playerManager.canDiscardCards(playerID);
 
     }
 
@@ -154,7 +154,13 @@ public class Game implements IGame {
     @Override
     public int rollNumber(int playerID) throws InvalidDiceRollException{
         int roll = dice.roll();
-        map.getResources(roll);
+        if(roll == 7){
+            turnTracker.updateRobber(true);
+        }
+        else{
+            map.getResources(roll);
+        }
+
         turnTracker.nextPhase();
         return roll;
     }
@@ -172,17 +178,46 @@ public class Game implements IGame {
     }
 
     /**
+     * for testing purposes
+     * @param card
+     * @param id
+     * @throws PlayerExistsException
+     */
+    public void giveResource(ResourceCard card, int id) throws PlayerExistsException{
+        playerManager.addResource(id, card);
+    }
+
+    /**
+     * for testing purposes.
+     * @param t
+     * @return
+     * @throws InsufficientResourcesException
+     * @throws InvalidTypeException
+     */
+    public ResourceCard getResourceCard(ResourceType t) throws InsufficientResourcesException, InvalidTypeException{
+        return resourceCardBank.discard(t);
+    }
+
+    public Integer amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException{
+        return playerManager.getPlayerByID(playerID).howManyofThisCard(t);
+    }
+
+    /**
      * Action - Player offers trade
      *
      * @param playerIDOne   ID of Player offering the trade
      * @param playerIDTwo ID of Player being offered the trade
      */
     @Override
-    public void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) {
+    public void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
         if(canOfferTrade(playerIDOne)){
             TradePackage one = new TradePackage(playerIDOne,onecards);
             TradePackage two = new TradePackage(playerIDTwo, twocards);
             Trade trade = new Trade(one,two);
+
+            System.out.println("trading");
+            playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards);
+
         }
     }
 
@@ -208,6 +243,14 @@ public class Game implements IGame {
     public Integer finishTurn(int playerID) throws Exception {
         return turnTracker.nextTurn();
     }
+
+    public TurnTracker.Phase getCurrentPhase(){
+        return turnTracker.getPhase();
+    }
+
+    public void nextPhase(){turnTracker.nextPhase();}
+
+    public void setPhase(TurnTracker.Phase p){turnTracker.setPhase(p);}
 
     /**
      * Determine if Player can buy a dev card
@@ -242,7 +285,6 @@ public class Game implements IGame {
     @Override
     public boolean canUseYearOfPlenty(int playerID) throws PlayerExistsException{
         if(getCurrentTurn() == playerID){
-            //can use DC
             return playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
         }
         return false;
@@ -642,6 +684,10 @@ public class Game implements IGame {
 
     public TurnTracker getTurnTracker() {
         return turnTracker;
+    }
+
+    public PlayerManager getPlayerManager(){
+        return playerManager;
     }
 
 
