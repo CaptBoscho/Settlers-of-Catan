@@ -29,6 +29,7 @@ public class TurnTracker {
         this.setupRoundOne = true;
         this.longestRoad = -1;
         this.largestArmy = -1;
+        this.phase = Phase.ROLLING;
     }
 
     /**
@@ -90,8 +91,11 @@ public class TurnTracker {
     public int nextTurn() throws Exception {
         if (setupPhase) {
             nextSetupTurn();
+            return this.currentTurn;
         }
-        this.currentTurn = (this.currentTurn++) % numPlayers;
+        this.currentTurn++;
+        this.currentTurn = (this.currentTurn) % numPlayers;
+        if(this.currentTurn == 0){this.currentTurn = numPlayers;}
         return this.currentTurn;
     }
 
@@ -148,12 +152,13 @@ public class TurnTracker {
         return phase;
     }
 
+
     /**
      * Set the number of players
      * @param numPlayers number of players
      */
     public void setNumPlayers(int numPlayers) {
-        this.numPlayers = numPlayers - 1;
+        this.numPlayers = numPlayers;
     }
 
     public int getNumPlayers() {
@@ -179,6 +184,8 @@ public class TurnTracker {
     public boolean canUseRobber(){
         return this.canUseRobber;
     }
+
+    public void setSetupPhase(boolean s){this.setupPhase = s;}
 
     /**
      * Takes a playerID and responds whether it is that player's turn or not.
