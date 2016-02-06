@@ -183,7 +183,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to play a monopoly card
      * @return The current state of the game
      */
-    public ClientModel playMonopolyCard(PlayMonopolyDTO dto);
+    public ClientModel playMonopolyCard(PlayMonopolyDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Monument' card from your hand to give you a victory point
@@ -191,14 +191,14 @@ public interface IServer {
      * @param dto The transport object that contains the information required to play a monument card
      * @return The current state of the game
      */
-    public ClientModel playMonumentCard(PlayMonumentDTO dto);
+    public ClientModel playMonumentCard(PlayMonumentDTO dto) throws MissingUserCookieException;
 
     /**
      * Builds a road at the specified location. (Set 'free' to true during initial setup.)
      * @param dto The transport object that contains the information required to build a road
      * @return The current state of the game
      */
-    public ClientModel buildRoad(BuildRoadDTO dto);
+    public ClientModel buildRoad(BuildRoadDTO dto) throws MissingUserCookieException;
 
     /**
      * Builds a settlement at the specified location. (Set 'free' to true during initial setup.)
@@ -206,7 +206,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to build a settlement
      * @return The current state of the game
      */
-    public ClientModel buildSettlement(BuildSettlementDTO dto);
+    public ClientModel buildSettlement(BuildSettlementDTO dto) throws MissingUserCookieException;
 
     /**
      * Builds a city at the specified location
@@ -214,7 +214,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to build a city
      * @return The current state of the game
      */
-    public ClientModel buildCity(BuildCityDTO dto);
+    public ClientModel buildCity(BuildCityDTO dto) throws MissingUserCookieException;
 
     /**
      * Offers a domestic trade to another player
@@ -222,7 +222,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required respond to offer a trade
      * @return The current state of the game
      */
-    public ClientModel offerTrade(OfferTradeDTO dto);
+    public ClientModel offerTrade(OfferTradeDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to accept or reject a trade offered to the player
@@ -230,7 +230,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required respond to a trade offer
      * @return The current state of the game
      */
-    public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto);
+    public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to execute a maritime trade
@@ -238,7 +238,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to execute a maritime trade
      * @return The current state of the game
      */
-    public ClientModel maritimeTrade(MaritimeTradeDTO dto);
+    public ClientModel maritimeTrade(MaritimeTradeDTO dto) throws MissingUserCookieException;
 
     /**
      * Discards the specified resource cards
@@ -246,7 +246,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to discard cards
      * @return The current state of the game
      */
-    public ClientModel discardCards(DiscardCardsDTO dto);
+    public ClientModel discardCards(DiscardCardsDTO dto) throws MissingUserCookieException;
 
     /**
      *

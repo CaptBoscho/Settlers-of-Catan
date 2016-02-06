@@ -8,10 +8,11 @@ import org.junit.Test;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.*;
-import shared.locations.EdgeDirection;
-import shared.locations.EdgeLocation;
-import shared.locations.HexLocation;
+import shared.locations.*;
+import shared.model.game.trade.Trade;
+import shared.model.game.trade.TradePackage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -160,6 +161,105 @@ public class ServerTest {
         PlaySoldierCardDTO dto = new PlaySoldierCardDTO(2, 3, new HexLocation(4, 3));
         try {
             server.playSoldierCard(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadPlayMonopolyCard() {
+        PlayMonopolyDTO dto = new PlayMonopolyDTO(2, "ore");
+        try {
+            server.playMonopolyCard(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadPlayMonumentCard() {
+        PlayMonumentDTO dto = new PlayMonumentDTO(2);
+        try {
+            server.playMonumentCard(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadBuildRoad() {
+        BuildRoadDTO dto = new BuildRoadDTO(2, new EdgeLocation(new HexLocation(3, 4), EdgeDirection.South), true);
+        try {
+            server.buildRoad(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadBuildSettlement() {
+        BuildSettlementDTO dto = new BuildSettlementDTO(2, new VertexLocation(new HexLocation(2, 3), VertexDirection.SouthEast), false);
+        try {
+            server.buildSettlement(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadBuildCity() {
+        BuildCityDTO dto = new BuildCityDTO(2, new VertexLocation(new HexLocation(2, 3), VertexDirection.SouthEast));
+        try {
+            server.buildCity(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadOfferTrade() {
+        OfferTradeDTO dto = new OfferTradeDTO(2, new Trade(new TradePackage(2, new ArrayList<>()), new TradePackage(3, new ArrayList<>())), 3);
+        try {
+            server.offerTrade(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadTradeResponse() {
+        TradeOfferResponseDTO dto = new TradeOfferResponseDTO(2, false);
+        try {
+            server.respondToTradeOffer(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadMaritimeTrade() {
+        MaritimeTradeDTO dto = new MaritimeTradeDTO(2, 4, "wood", "ore");
+        try {
+            server.maritimeTrade(dto);
+            fail("MissingUserCookieException should be thrown");
+        } catch(MissingUserCookieException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testBadDiscardCards() {
+        DiscardCardsDTO dto = new DiscardCardsDTO(2, 1, 1, 1, 1, 1);
+        try {
+            server.discardCards(dto);
             fail("MissingUserCookieException should be thrown");
         } catch(MissingUserCookieException e) {
             assertTrue(true);

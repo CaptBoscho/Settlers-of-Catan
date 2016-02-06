@@ -173,6 +173,10 @@ public class VertexLocation implements JsonSerializable {
 	 */
 	@Override
 	public JsonObject toJSON() {
-		return null;
+		JsonObject obj = new JsonObject();
+        obj.addProperty("x", this.hexLoc.getX());
+        obj.addProperty("y", this.hexLoc.getY());
+        obj.addProperty("direction", this.dir.toString());
+        return obj;
 	}
 }
