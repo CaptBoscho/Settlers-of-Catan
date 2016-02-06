@@ -5,9 +5,12 @@ import shared.definitions.ResourceType;
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
 import shared.model.bank.InvalidTypeException;
+
 import shared.model.cards.Card;
+import shared.model.cards.resources.ResourceCard;
 import shared.model.game.trade.TradeType;
 
+import javax.naming.InsufficientResourcesException;
 import java.util.List;
 
 /**
@@ -28,8 +31,10 @@ public interface IPlayer {
      * Action - Player discards cards
      * @param cards Cards to be discarded
      */
-    void discardCards(List<Card> cards);
+    List<ResourceCard> discardCards(List<Card> cards) throws InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
 
+
+    List<ResourceCard> discardResourceCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException;
     /**
      * Determine if Player can offer a trade
      * Checks Player turn, phase, and resources
@@ -164,4 +169,16 @@ public interface IPlayer {
      * Action - Player builds a city
      */
     void buildCity();
+
+
+    void playKnight();
+
+
+    Integer getKnights();
+
+    void loseArmyCard();
+
+    void winArmyCard();
+
+    ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException;
 }

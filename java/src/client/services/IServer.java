@@ -2,10 +2,7 @@ package client.services;
 
 import client.data.GameInfo;
 import shared.definitions.ClientModel;
-import shared.definitions.ResourceType;
 import shared.dto.*;
-import shared.locations.EdgeLocation;
-import shared.locations.VertexLocation;
 
 import java.util.List;
 
@@ -58,7 +55,7 @@ public interface IServer {
      *
      * @param dto The transport object that contains the information required to join a game
      */
-    public void joinGame(JoinGameDTO dto);
+    public String joinGame(JoinGameDTO dto);
 
     /**
      * Saves the current state of the specified game to a file with a POST request - FOR DEBUGGING
@@ -80,7 +77,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to get the current model
      * @return A ClientModel object that contains all the information about the state of the game
      */
-    public ClientModel getCurrentModel(GetCurrentModelDTO dto);
+    public ClientModel getCurrentModel(GetCurrentModelDTO dto) throws MissingUserCookieException;
 
     /**
      * Clears out the command history of the current game with a POST request
@@ -122,7 +119,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to send a message
      * @return The current state of the game
      */
-    public ClientModel sendChat(SendChatDTO dto);
+    public ClientModel sendChat(SendChatDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to roll a number at the beginning of your turn
@@ -130,7 +127,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to roll a number
      * @return The current state of the game
      */
-    public ClientModel rollNumber(RollNumberDTO dto);
+    public ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException;
 
     /**
      * Moves the robber, selecting the new robber position and player to rob

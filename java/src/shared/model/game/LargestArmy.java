@@ -5,7 +5,8 @@ package shared.model.game;
  */
 public class LargestArmy {
     private int playerID;
-    private static final int pointWorth = 3;
+    private static final int pointWorth = 2;
+    private int mostSoldiers = 0;
 
     /**
      * Default Constructor
@@ -26,7 +27,8 @@ public class LargestArmy {
      * Set the owner by player id
      * @param id id of the player owning this card (-1 for no owner)
      */
-    public void setOwner(int id){
+    public void setNewOwner(int id, int soldiers){
+        this.mostSoldiers = soldiers;
         this.playerID = id;
     }
 
@@ -37,4 +39,6 @@ public class LargestArmy {
     public int getPointWorth(){
         return pointWorth;
     }
+
+    public int getMostSoldiers(){ return mostSoldiers;}
 }

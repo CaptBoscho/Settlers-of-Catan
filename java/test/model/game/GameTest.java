@@ -1,16 +1,20 @@
 package model.game;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import shared.definitions.CatanColor;
-import shared.exceptions.FailedToRandomizeException;
-import shared.exceptions.InvalidNameException;
-import shared.exceptions.InvalidPlayerException;
+
+import shared.exceptions.*;
+import shared.locations.*;
 import shared.model.game.Game;
 import shared.model.player.Name;
 import shared.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Corbin Byers
@@ -19,12 +23,10 @@ public class GameTest {
 
     private Game game = new Game();
 
-    /*void testInitializeGame() {
+    @Before
+    public void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
+        List<Player> players = new ArrayList<Player>();
 
-    }*/
-
-    void testCanFirstTurn() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
-        List<Player> players = new ArrayList<>();
 
         Player one = new Player(0, CatanColor.BLUE, 0, new Name ("Hope"));
         Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
@@ -36,13 +38,42 @@ public class GameTest {
         players.add(three);
         players.add(four);
 
-        int first = game.initializeGame(players, false, false, false);
+        int first = game.initializeGame(players, true, true, false);
+
+        assertTrue(first >= 0 && first <= 4);
+    }
+
+    @Test
+    public void testCanFirstTurn() throws InvalidPlayerException, InvalidLocationException, Exception{
+        int current_turn = game.getCurrentTurn();
+        HexLocation hloc = new HexLocation(0,0);
+        VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
+        EdgeLocation eloc = new EdgeLocation(hloc, EdgeDirection.NorthEast);
+        assert(game.canFirstTurn(current_turn,vloc,eloc));
+
+        HexLocation hloc2 = new HexLocation(8,8);
+        VertexLocation vloc2 = new VertexLocation(hloc2, VertexDirection.East);
+
+        assertTrue(!game.canFirstTurn(current_turn, vloc2,eloc));
+
+        game.firstTurn(current_turn,vloc,eloc);
+
+        int next = game.getTurnTracker().nextTurn();
+
+        assertTrue(!game.canFirstTurn(next, vloc, eloc));
+
 
 
     }
 
-    void testFirstTurn() {
+    @Test
+    public void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException {
+        int current_turn = game.getCurrentTurn();
+        HexLocation hloc = new HexLocation(0,0);
+        VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
+        EdgeLocation eloc = new EdgeLocation(hloc, EdgeDirection.NorthEast);
 
+        game.firstTurn(current_turn,vloc,eloc);
     }
 
     void testGetCurrentTurn() {

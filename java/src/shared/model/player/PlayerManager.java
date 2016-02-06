@@ -3,11 +3,16 @@ package shared.model.player;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
+
+import shared.model.bank.InvalidTypeException;
+
 import shared.model.cards.Card;
 import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
+import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
+import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,14 +51,14 @@ public class PlayerManager implements IPlayerManager {
     public List<Integer> randomizePlayers() throws FailedToRandomizeException {
         if (!this.players.isEmpty()){
             Collections.shuffle(this.players);
-            List<Integer> id_order = new ArrayList<Integer>();
+            List<Integer> id_order = new ArrayList<>();
             for (Player p : this.players) {
                 id_order.add(p.get_id());
             }
             return id_order;
-        }
-        else
+        } else {
             throw new FailedToRandomizeException("There are no players to shuffle");
+        }
     }
 
     /**
@@ -98,10 +103,20 @@ public class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     public Player getPlayerByIndex(int index) throws PlayerExistsException {
-        if(index < this.players.size() && this.players.get(index) != null)
+        if(index < this.players.size() && this.players.get(index) != null) {
             return this.players.get(index);
-        else
+        } else {
             throw new PlayerExistsException("The player at index " + index + " doesn't exist!");
+        }
+    }
+
+
+    public Integer getKnights(int playerID) throws PlayerExistsException{
+        return getPlayerByID(playerID).getKnights();}
+
+
+    public void playKnight(int playerID) throws PlayerExistsException{
+        getPlayerByID(playerID).playKnight();
     }
 
     //Can Do & Do
@@ -127,9 +142,20 @@ public class PlayerManager implements IPlayerManager {
      * @param cards Cards to be discarded
      */
     @Override
-    public void discardCards(int id, List<Card> cards) throws PlayerExistsException {
+    public List<ResourceCard> discardCards(int id, List<Card> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+
         Player player = getPlayerByID(id);
-        player.discardCards(cards);
+        return player.discardCards(cards);
+    }
+
+    public List<ResourceCard> discardResourceType(int id, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        Player player = getPlayerByID(id);
+        return player.discardResourceCards(cards);
+    }
+
+    public void addResource(int id, ResourceCard rc) throws PlayerExistsException{
+        Player player = getPlayerByID(id);
+        player.addResourceCard(rc);
     }
 
     /**
@@ -157,6 +183,14 @@ public class PlayerManager implements IPlayerManager {
     public boolean canMaritimeTrade(int id, PortType type) throws PlayerExistsException {
         Player player = getPlayerByID(id);
         return player.canMaritimeTrade(type);
+    }
+
+
+    public void maritimeTrade(int playerID, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistsException{
+        Player player = getPlayerByID(playerID);
+
+
+
     }
 
     /**
@@ -255,6 +289,12 @@ public class PlayerManager implements IPlayerManager {
         player.useSoldier();
     }
 
+
+    public void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException{
+        getPlayerByID(playerold).loseArmyCard();
+        getPlayerByID(playernew).winArmyCard();
+    }
+
     /**
      * Determine if Player can play Monopoly
      * Checks Player turn, and dev cards
@@ -319,12 +359,17 @@ public class PlayerManager implements IPlayerManager {
     /**
      * Action - Player places the Robber
      *
-     * @param id ID of the player
+     * @param robber ID of the player
      */
     @Override
-    public void placeRobber(int id) throws MoveRobberException, PlayerExistsException {
-        Player player = getPlayerByID(id);
+    public ResourceType placeRobber(int robber, int robbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        Player player = getPlayerByID(robber);
+        Player two = getPlayerByID(robbed);
+
         player.placeRobber();
+        ResourceCard treasure = two.robbed();
+        player.addResourceCard(treasure);
+        return treasure.getType();
     }
 
     /**

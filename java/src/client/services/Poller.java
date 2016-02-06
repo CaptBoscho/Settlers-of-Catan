@@ -39,7 +39,11 @@ public class Poller {
             @Override
             public void run() {
                 GetCurrentModelDTO dto = new GetCurrentModelDTO(4);
-                server.getCurrentModel(dto);
+                try {
+                    server.getCurrentModel(dto);
+                } catch (MissingUserCookieException e) {
+                    e.printStackTrace();
+                }
             }
         }, 0, DEFAULT_POLL_INTERVAL);
     }

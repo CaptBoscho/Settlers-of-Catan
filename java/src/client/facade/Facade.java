@@ -2,6 +2,7 @@
 package client.facade;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
+import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.player.Player;
@@ -9,6 +10,7 @@ import shared.definitions.*;
 import shared.model.player.Name;
 import shared.exceptions.*;
 
+import javax.naming.InsufficientResourcesException;
 import java.util.*;
 
 /**
@@ -246,11 +248,11 @@ public class Facade {
         throw new InvalidPlayerException("can't trade");
     }
 
-    public void maritimeTrade(int playerID, PortType port) throws BuildException, InvalidPlayerException, PlayerExistsException {
+    public void maritimeTrade(int playerID, PortType port, ResourceType type) throws BuildException, InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         if (!canMaritimeTrade(playerID, port)) {
             throw new BuildException("invalid maritime trade");
         } else {
-            game.maritimeTrade(playerID, port);
+            game.maritimeTrade(playerID, port, type);
         }
     }
 

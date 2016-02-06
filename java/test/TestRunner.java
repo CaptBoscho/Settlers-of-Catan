@@ -22,8 +22,7 @@ public class TestRunner {
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         // server tests
-        client.networking.CreateGameTest.class,
-        client.networking.AuthenticationTest.class,
+        client.networking.ServerTest.class,
 
         // model tests
         model.game.GameTest.class,
