@@ -1,6 +1,8 @@
 package model.game;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import shared.definitions.CatanColor;
 
 import shared.exceptions.*;
@@ -12,6 +14,8 @@ import shared.model.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author Corbin Byers
  */
@@ -19,6 +23,7 @@ public class GameTest {
 
     private Game game = new Game();
 
+    @Before
     void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
         List<Player> players = new ArrayList<Player>();
 
@@ -35,9 +40,10 @@ public class GameTest {
 
         int first = game.initializeGame(players, true, true, false);
 
-        assert(first >= 0 && first <= 4);
+        assertTrue(first >= 0 && first <= 4);
     }
 
+    @Test
     void testCanFirstTurn() throws InvalidPlayerException, InvalidLocationException, Exception{
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
@@ -48,19 +54,19 @@ public class GameTest {
         HexLocation hloc2 = new HexLocation(8,8);
         VertexLocation vloc2 = new VertexLocation(hloc2, VertexDirection.East);
 
-        assert(!game.canFirstTurn(current_turn, vloc2,eloc));
+        assertTrue(!game.canFirstTurn(current_turn, vloc2,eloc));
 
         game.firstTurn(current_turn,vloc,eloc);
 
         int next = game.getTurnTracker().nextTurn();
 
-        assert(!game.canFirstTurn(next, vloc, eloc));
+        assertTrue(!game.canFirstTurn(next, vloc, eloc));
 
-        int first = game.initializeGame(players, false, false, false);
 
 
     }
 
+    @Test
     void testFirstTurn() throws InvalidPlayerException, InvalidLocationException, StructureException {
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
