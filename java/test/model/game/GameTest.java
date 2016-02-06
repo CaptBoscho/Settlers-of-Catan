@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  * @author Corbin Byers
  */
 public class GameTest {
-    
+
     private final String json = "{\"deck\":\n" +
             "{\"yearOfPlenty\":\n" +
             "2,\"monopoly\":\n" +
