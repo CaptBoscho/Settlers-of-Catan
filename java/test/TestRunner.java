@@ -1,8 +1,6 @@
 import model.Player.PlayerManagerTest;
 import model.Player.PlayerTest;
-import model.game.DiceTest;
 import model.game.GameTest;
-import model.game.TurnTrackerTest;
 import model.map.MapTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -33,9 +31,7 @@ public class TestRunner {
         // model tests
         MapTest.class,
         GameTest.class,
-        DiceTest.class,
         PlayerTest.class,
-        TurnTrackerTest.class,
         PlayerManagerTest.class
 })
 class TestSuite {}
