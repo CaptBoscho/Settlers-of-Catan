@@ -39,9 +39,7 @@ public class Poller {
             @Override
             public void run() {
                 try {
-                    System.out.println("ayyyeee");
                     server.getCurrentModel(Game.getInstance().getVersion());
-                    System.out.println("doonnneee");
                 } catch (MissingUserCookieException e) {
                     e.printStackTrace();
                 }

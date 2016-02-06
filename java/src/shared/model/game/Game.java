@@ -76,7 +76,6 @@ public class Game implements IGame, JsonSerializable {
     }
 
     public void updateGame(JsonObject json) {
-        System.out.println("updating");
         this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
         this.map = new Map(json.get("map").getAsJsonObject());
         this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
@@ -258,7 +257,6 @@ public class Game implements IGame, JsonSerializable {
             TradePackage two = new TradePackage(playerIDTwo, twocards);
             Trade trade = new Trade(one,two);
 
-            System.out.println("trading");
             playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards);
 
         }

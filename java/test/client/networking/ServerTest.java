@@ -330,17 +330,19 @@ public class ServerTest {
         JoinGameDTO jdto = new JoinGameDTO(3, CatanColor.WHITE);
         assertEquals(server.joinGame(jdto), "Success");
 
+        int initialVersion = Game.getInstance().getVersion();
+
         Poller poller = new Poller(server);
         poller.start();
 
         long t= System.currentTimeMillis();
-        long end = t+15000;
+        long end = t+5000;
         while(System.currentTimeMillis() < end) {
             // do something
             // pause to avoid churning
-            System.out.println(Game.getInstance().getVersion());
+//            assertTrue(Game.getInstance().getVersion() > initialVersion);
             try {
-                Thread.sleep( 500 );
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
