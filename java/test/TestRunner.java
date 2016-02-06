@@ -1,3 +1,7 @@
+import model.Player.PlayerManagerTest;
+import model.Player.PlayerTest;
+import model.game.GameTest;
+import model.map.MapTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
@@ -25,7 +29,9 @@ public class TestRunner {
         client.networking.ServerTest.class,
 
         // model tests
-        model.game.GameTest.class,
-        model.map.MapTest.class
+        MapTest.class,
+        GameTest.class,
+        PlayerTest.class,
+        PlayerManagerTest.class
 })
 class TestSuite {}

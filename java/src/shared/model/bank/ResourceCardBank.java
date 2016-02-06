@@ -258,7 +258,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
 
     @Override
     public boolean canBuildCity() {
-        return (getNumberOfWheat() >= 3 && getNumberOfOre() >= 2);
+        return (getNumberOfWheat() >= 2 && getNumberOfOre() >= 3);
     }
 
     @Override
@@ -267,7 +267,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
             try {
                 discard(ResourceType.WHEAT);
                 discard(ResourceType.WHEAT);
-                discard(ResourceType.WHEAT);
+                discard(ResourceType.ORE);
                 discard(ResourceType.ORE);
                 discard(ResourceType.ORE);
             } catch (InvalidTypeException e) {
