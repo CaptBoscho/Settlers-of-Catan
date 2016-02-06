@@ -33,18 +33,6 @@ public class PlayerManager implements IPlayerManager {
     }
 
     /**
-     * Creates a new player and adds it to the list of players
-     * @throws TooManyPlayersException
-     */
-    public void addNewPlayer() throws TooManyPlayersException{
-        if(canAddPlayer()){
-            this.players.add(new Player());
-        } else {
-            throw new TooManyPlayersException("Max number of players reached!");
-        }
-    }
-
-    /**
      * Randomize player order (turn order)
      * @throws FailedToRandomizeException
      */

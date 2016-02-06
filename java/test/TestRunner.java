@@ -1,6 +1,7 @@
 import model.Player.PlayerManagerTest;
 import model.Player.PlayerTest;
 import model.game.DiceTest;
+import model.game.GameTest;
 import model.game.TurnTrackerTest;
 import model.map.MapTest;
 import org.junit.runner.JUnitCore;
