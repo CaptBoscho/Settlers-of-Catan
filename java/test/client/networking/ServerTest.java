@@ -51,6 +51,9 @@ public class ServerTest {
     public void testRegisterNewUser() {
         AuthDTO dto = new AuthDTO("user", "password");
         assertTrue(server.registerUser(dto));
+
+        // registration should now fail if we try the same credentials
+        assertFalse(server.registerUser(dto));
     }
 
     @Test
