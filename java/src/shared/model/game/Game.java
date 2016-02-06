@@ -308,9 +308,13 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useYearOfPlenty(int playerID) throws PlayerExistsException, DevCardException{
+    public void useYearOfPlenty(int playerID, ResourceType want1, ResourceType want2) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException{
         if(canUseYearOfPlenty(playerID)){
             playerManager.useYearOfPlenty(playerID);
+            ResourceCard rc1 = resourceCardBank.discard(want1);
+            ResourceCard rc2 = resourceCardBank.discard(want2);
+            playerManager.addResource(playerID, rc1);
+            playerManager.addResource(playerID, rc2);
         }
     }
 
@@ -333,9 +337,11 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useRoadBuilder(int playerID) throws PlayerExistsException, DevCardException{
+    public void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException{
         if(canUseRoadBuilder(playerID)){
             playerManager.useRoadBuilder(playerID);
+            buildRoad(playerID, edge1);
+            buildRoad(playerID, edge2);
         }
     }
 
@@ -392,9 +398,9 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useMonopoly(int playerID) throws PlayerExistsException, DevCardException{
+    public void useMonopoly(int playerID, ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException{
         if(canUseMonopoly(playerID)){
-            playerManager.useMonopoly(playerID);
+            playerManager.useMonopoly(playerID, turnTracker.getNumPlayers(), type);
         }
     }
 

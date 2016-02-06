@@ -237,6 +237,10 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         throw new InvalidTypeException("not correct resourcetype");
     }
 
+    public Integer getNumberOfType(ResourceType t){
+        return resourceCardBank.getNumberOfType(t);
+    }
+
     /**
      * Determine if Player can offer a trade
      * Checks Player turn, phase, and resources

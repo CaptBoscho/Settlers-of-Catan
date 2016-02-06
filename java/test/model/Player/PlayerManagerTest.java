@@ -316,12 +316,12 @@ public class PlayerManagerTest {
     }
 
     @Test
-    public void testUseMonopoly() throws Exception, BadCallerException {
+    public void testUseMonopoly() throws Exception, BadCallerException, InvalidTypeException {
         for(Player p : pm.getPlayers()){
             p.addDevCard(new MonopolyCard());
             p.setPlayedDevCard(false);
             p.getDevelopmentCardBank().moveNewToOld();
-            pm.useMonopoly(p.get_id());
+            pm.useMonopoly(p.get_id(), 4, ResourceType.BRICK);
             assertFalse(pm.canUseMonopoly(p.get_id()));
         }
     }

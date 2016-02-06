@@ -61,4 +61,6 @@ public interface IResourceCardBank {
     public int getNumberOfWheat();
 
     public int getNumberOfWood();
+
+    public Integer getNumberOfType(ResourceType type);
 }

@@ -266,8 +266,35 @@ public class GameTest {
         assertTrue(game.canUseMonopoly(guy));
     }
 
-    void testUseMonopoly() {
+    @Test
+    public void testUseMonopoly() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException, DevCardException, BadCallerException{
+        int guy = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+        ResourceCard one = game.getResourceCard(ResourceType.ORE);
+        ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        ResourceCard three = game.getResourceCard(ResourceType.ORE);
+        ResourceCard four = game.getResourceCard(ResourceType.ORE);
+        System.out.println("guy: " + guy);
 
+        game.giveResource(one, 1);
+        game.giveResource(two, 2);
+        game.giveResource(three, 3);
+        game.giveResource(four, 3);
+
+
+
+        MonopolyCard card = new MonopolyCard();
+        game.addDevCard(card, guy);
+        game.moveNewToOld(guy);
+
+        int now = game.amountOwnedResource(guy, ResourceType.ORE);
+        System.out.println("now: " + now);
+        game.useMonopoly(guy, ResourceType.ORE);
+
+        int after = game.amountOwnedResource(guy, ResourceType.ORE);
+        System.out.println("after: " + after);
+
+        
     }
 
     @Test

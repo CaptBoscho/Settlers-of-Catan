@@ -162,6 +162,30 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
         return woods.size();
     }
 
+    public Integer getNumberOfType(ResourceType type){
+        int size = 0;
+        System.out.println("here");
+        switch (type) {
+            case WOOD:
+                size = getNumberOfWood();
+                break;
+            case BRICK:
+                size = getNumberOfBrick();
+                break;
+            case SHEEP:
+                size = getNumberOfSheep();
+                break;
+            case WHEAT:
+                size = getNumberOfWheat();
+                break;
+            case ORE:
+                size = getNumberOfOre();
+                System.out.println("size: " + size);
+                break;
+        }
+        return size;
+    }
+
     /**
      * @return number of cards in the ResourceCardBank
      */

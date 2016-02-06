@@ -282,7 +282,7 @@ public class Facade {
      * @param dc
      * @throws BuildException
      */
-    public void playDC(int playerID, DevCardType dc) throws BuildException, PlayerExistsException, DevCardException {
+    /*public void playDC(int playerID, DevCardType dc, EdgeLocation edge1, EdgeLocation edge2) throws BuildException, PlayerExistsException, DevCardException {
         if (canPlayDC(playerID, dc)) {
             if(dc == DevCardType.SOLDIER){game.useSoldier(playerID);}
             else if(dc == DevCardType.MONUMENT){game.useMonument(playerID);}
@@ -292,5 +292,5 @@ public class Facade {
         } else {
             throw new BuildException("can't play this Develpment Card");
         }
-    }
+    }*/
 }

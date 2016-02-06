@@ -180,7 +180,7 @@ public interface IPlayerManager {
      * Action - Player plays Monopoly
      * @param id ID of the player
      */
-    void useMonopoly(int id) throws DevCardException,PlayerExistsException;
+    void useMonopoly(int id, int num, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
     /**
      * Determine if Player can play Monument
