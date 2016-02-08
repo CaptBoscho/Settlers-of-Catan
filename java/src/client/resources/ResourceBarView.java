@@ -71,9 +71,8 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 //	private final String BUY_CARD = ResourceBarElement.BUY_CARD.toString();
 //	private final String PLAY_CARD = ResourceBarElement.PLAY_CARD.toString();
 //	private final String SOLDIERS = ResourceBarElement.SOLDIERS.toString();
-	
-	private JPanel resourcePanel;
-//	private JPanel buildingPanel;
+
+	//	private JPanel buildingPanel;
 //	private JPanel devCardPanel;
 //	private JPanel armyPanel;
 	
@@ -100,8 +99,36 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 		
 		// TEMPORARY
 		this.add(new JLabel("Resource Bar View"));
-		
+
+		MouseAdapter mouseAdapter = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ResourceBarView.this.requestFocus();
+			}
+		};
 		this.addMouseListener(mouseAdapter);
+		KeyAdapter keyAdapter = new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				switch (e.getKeyChar()) {
+					case '1':
+						getController().buildRoad();
+						break;
+					case '2':
+						getController().buildSettlement();
+						break;
+					case '3':
+						getController().buildCity();
+						break;
+					case '4':
+						getController().buyCard();
+						break;
+					case '5':
+						getController().playCard();
+						break;
+				}
+			}
+		};
 		this.addKeyListener(keyAdapter);
 		
 		this.initialize();
@@ -205,17 +232,15 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 		resources.put(ResourceBarElement.SOLDIERS, soldier);
 	}
 	
-	private void initializeView()
-	{
+	private void initializeView() {
 		this.setOpaque(true);
 		this.setLayout(new BorderLayout());
-		
-		
-		resourcePanel = new JPanel();
+
+
+		JPanel resourcePanel = new JPanel();
 		resourcePanel.setLayout(new BoxLayout(resourcePanel, BoxLayout.Y_AXIS));
 		resourcePanel.setBackground(Color.WHITE);
-		for(ResourceBarElement type : resourceElementList)
-		{
+		for(ResourceBarElement type : resourceElementList) {
 			resourcePanel.add(resources.get(type).asJComponent());
 		}
 		
@@ -225,8 +250,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 		JPanel discardButtonPanel = new JPanel();
 		discardButtonPanel.setBackground(Color.WHITE);
 		
-		if(TESTING)
-		{
+		if(TESTING) {
     		testButton = new JButton("Enable");
     		testButton.addActionListener(actionListener);
     		discardButtonPanel.add(testButton);
@@ -310,40 +334,8 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 	public void setElementAmount(ResourceBarElement element, int amount) {
 		resources.get(element).setElementCount(amount);
 	}
-	
-	private MouseAdapter mouseAdapter = new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e)
-		{
-			ResourceBarView.this.requestFocus();
-		}
-	};
-	
-	private KeyAdapter keyAdapter = new KeyAdapter() {
-		@Override
-		public void keyTyped(KeyEvent e) {
-			switch (e.getKeyChar()) {
-				case '1':
-					getController().buildRoad();
-					break;
-				case '2':
-					getController().buildSettlement();
-					break;
-				case '3':
-					getController().buildCity();
-					break;
-				case '4':
-					getController().buyCard();
-					break;
-				case '5':
-					getController().playCard();
-					break;
-			}
-		}
-	};
-	
-	private class ResourceElement
-	{
+
+	private class ResourceElement {
 		private static final int PADDING = 5;
 		private static final int IMAGE_SIZE = 50;
 		private static final int LABEL_FONT_SIZE = 30;
@@ -423,8 +415,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 		                       boolean clickable,
 		                       boolean enabled,
 		                       BufferedImage elementImage,
-		                       int elementCount)
-		{
+		                       int elementCount) {
 			this.initialize();
 			this.setElementType(type);
 			this.setClickable(clickable);

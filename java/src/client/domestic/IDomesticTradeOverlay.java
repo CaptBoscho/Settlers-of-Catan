@@ -8,8 +8,7 @@ import shared.definitions.*;
  * Implementation of the domestic trade overlay, which allows the user to
  * propose a domestic trade
  */
-public interface IDomesticTradeOverlay extends IOverlayView
-{
+public interface IDomesticTradeOverlay extends IOverlayView {
 	
 	/**
 	 * Resets the view to its initial state.

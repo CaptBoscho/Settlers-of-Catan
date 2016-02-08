@@ -34,10 +34,8 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 	private final String HEAVY_FONT = "Arial Black";
 	private final String NORMAL_FONT = "Arial";
 
-	private JLabel label;
 	private JButton acceptButton;
 	private JButton rejectButton;
-	private JPanel buttonPanel;
 	private JPanel contentPanel;
 	
 	private JLabel offerer_component;
@@ -50,14 +48,13 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		this.initialize();
 	}
 	
-	private void initialize()
-	{
+	private void initialize() {
 		this.setOpaque(true);
 		this.setLayout(new GridBagLayout());
 		this.setBorder(new EmptyBorder(20,20,20,20));
 
 		//Window Title
-		label = new JLabel("Accept Trade Offer?");
+		JLabel label = new JLabel("Accept Trade Offer?");
 		Font labelFont = new Font(HEAVY_FONT, Font.PLAIN, LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
 		GridBagConstraints label_gbc = new GridBagConstraints();
@@ -89,7 +86,7 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		//End Content Panel
 		
 		//Begin Button Panel
-		buttonPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBackground(new Color(255,255,255,255));
 		buttonPanel.setLayout(new GridBagLayout());
 		
@@ -185,9 +182,9 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 
 	@Override
 	public void setAcceptEnabled(boolean enable) {
-		if(enable){
+		if(enable) {
 			acceptButton.setText("Accept");
-		}else{
+		} else {
 			acceptButton.setText("Can't Accept");
 		}
 		acceptButton.setEnabled(enable);
@@ -236,16 +233,14 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 			
 			if (e.getSource() == acceptButton) {
 				getController().acceptTrade(true);
-			}
-			else if (e.getSource() == rejectButton) {
+			} else if (e.getSource() == rejectButton) {
 				getController().acceptTrade(false);
 			}			
 		}	
 	};
 
 	@Override
-	public void reset()
-	{
+	public void reset() {
 		offerer_component = null;
 		offering_component = null;
 		request_component = null;
@@ -253,7 +248,6 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		this.removeAll();
 		this.initialize();
 	}
-	
 }
 
 

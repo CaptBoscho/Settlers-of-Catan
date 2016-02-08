@@ -24,6 +24,7 @@ public class MaritimeTradeView extends PanelView implements IMaritimeTradeView {
 
 		button = new JButton("Maritime Trade");
 		button.setFont(newFont);
+		ActionListener buttonListener = e -> getController().startTrade();
 		button.addActionListener(buttonListener);
 		
 		this.add(button);
@@ -39,11 +40,4 @@ public class MaritimeTradeView extends PanelView implements IMaritimeTradeView {
 		
 		button.setEnabled(value);
 	}
-	
-	private ActionListener buttonListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			getController().startTrade();
-		}
-	};
 }

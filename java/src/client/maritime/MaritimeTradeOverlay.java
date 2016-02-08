@@ -49,8 +49,7 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 	//This was given (some of it was anyway)
 	private JButton tradeButton;
 	private JButton cancelButton;
-	private JPanel buttonPanel;
-	
+
 
 	public MaritimeTradeOverlay() {
 		initImages();
@@ -254,64 +253,54 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 	}
 
 	private void createListeners() {
-		actionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == tradeButton) {
-					getController().makeTrade();
-				}
-				else if (e.getSource() == cancelButton) {
-					reset();//TODO Should I leave this in?  It just emptys the view and starts a new one. should the controller do that?
-					getController().cancelTrade(); 
-				}
-			}
-		};
-		giveActionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		actionListener = e -> {
+            if (e.getSource() == tradeButton) {
+                getController().makeTrade();
+            } else if (e.getSource() == cancelButton) {
+                reset();//TODO Should I leave this in?  It just emptys the view and starts a new one. should the controller do that?
+                getController().cancelTrade();
+            }
+        };
+		giveActionListener = e -> {
 
-				if (e.getSource() == givereload)	
-				{getController().unsetGiveValue();hideGetOptions();}
+            if (e.getSource() == givereload)
+            {getController().unsetGiveValue();hideGetOptions();}
 
-				else if (e.getSource() == givewood) 
-				{getController().setGiveResource(ResourceType.WOOD);}
+            else if (e.getSource() == givewood)
+            {getController().setGiveResource(ResourceType.WOOD);}
 
-				else if (e.getSource() == givebrick) 
-				{getController().setGiveResource(ResourceType.BRICK);}
+            else if (e.getSource() == givebrick)
+            {getController().setGiveResource(ResourceType.BRICK);}
 
-				else if (e.getSource() == givesheep) 
-				{getController().setGiveResource(ResourceType.SHEEP);}
+            else if (e.getSource() == givesheep)
+            {getController().setGiveResource(ResourceType.SHEEP);}
 
-				else if (e.getSource() == givewheat) 
-				{getController().setGiveResource(ResourceType.WHEAT);}
+            else if (e.getSource() == givewheat)
+            {getController().setGiveResource(ResourceType.WHEAT);}
 
-				else if (e.getSource() == giveore) 
-				{getController().setGiveResource(ResourceType.ORE);}
-			}
-		};
-		getActionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+            else if (e.getSource() == giveore)
+            {getController().setGiveResource(ResourceType.ORE);}
+        };
+		getActionListener = e -> {
 
-				if (e.getSource() == getreload)	
-				{getController().unsetGetValue();}
+            if (e.getSource() == getreload)
+            {getController().unsetGetValue();}
 
-				else if (e.getSource() == getwood) 
-				{getController().setGetResource(ResourceType.WOOD);}
+            else if (e.getSource() == getwood)
+            {getController().setGetResource(ResourceType.WOOD);}
 
-				else if (e.getSource() == getbrick) 
-				{getController().setGetResource(ResourceType.BRICK);}
+            else if (e.getSource() == getbrick)
+            {getController().setGetResource(ResourceType.BRICK);}
 
-				else if (e.getSource() == getsheep) 
-				{getController().setGetResource(ResourceType.SHEEP);}
+            else if (e.getSource() == getsheep)
+            {getController().setGetResource(ResourceType.SHEEP);}
 
-				else if (e.getSource() == getwheat) 
-				{getController().setGetResource(ResourceType.WHEAT);}
+            else if (e.getSource() == getwheat)
+            {getController().setGetResource(ResourceType.WHEAT);}
 
-				else if (e.getSource() == getore) 
-				{getController().setGetResource(ResourceType.ORE);}
-			}
-		};
+            else if (e.getSource() == getore)
+            {getController().setGetResource(ResourceType.ORE);}
+        };
 	}
 	private JPanel createWholePanel() {
 		createListeners();
@@ -485,8 +474,8 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 		tradeButton.addActionListener(actionListener);
 		tradeButton.setFont(buttonFont);
 
-		
-		buttonPanel = new JPanel();
+
+		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		buttonPanel.add(tradeButton);
 		buttonPanel.add(cancelButton);		
@@ -497,7 +486,7 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 	
 	public static BufferedImage resize(BufferedImage image, int width, int height) {
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
-		Graphics2D g2d = (Graphics2D) bi.createGraphics();
+		Graphics2D g2d = bi.createGraphics();
 		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
 		g2d.drawImage(image, 0, 0, width, height, null);
 		g2d.dispose();

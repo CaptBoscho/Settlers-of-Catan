@@ -101,7 +101,7 @@ public class RobView extends OverlayView implements IRobView {
 			buttonPanel = new JPanel();
 			buttonPanel.setBorder(BorderFactory.createEmptyBorder(25,0,25,0));
 			
-			victimButtons = new ArrayList<JButton>();
+			victimButtons = new ArrayList<>();
 			
 			for(int i=0; i < numberOfPlayers; i++){
 				JButton victimButton = new JButton("<html>"

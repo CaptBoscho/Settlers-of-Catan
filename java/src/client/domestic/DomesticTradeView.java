@@ -12,13 +12,11 @@ import client.base.*;
  * "Domestic Trade" button
  */
 @SuppressWarnings("serial")
-public class DomesticTradeView extends PanelView implements IDomesticTradeView
-{
+public class DomesticTradeView extends PanelView implements IDomesticTradeView {
 	
 	private JButton button;
 	
-	public DomesticTradeView()
-	{
+	public DomesticTradeView() {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
@@ -27,6 +25,7 @@ public class DomesticTradeView extends PanelView implements IDomesticTradeView
 		
 		button = new JButton("Domestic Trade");
 		button.setFont(newFont);
+		ActionListener buttonListener = e -> getController().startTrade();
 		button.addActionListener(buttonListener);
 		
 		this.add(button);
@@ -39,20 +38,7 @@ public class DomesticTradeView extends PanelView implements IDomesticTradeView
 	}
 	
 	@Override
-	public void enableDomesticTrade(boolean value)
-	{
-		
+	public void enableDomesticTrade(boolean value) {
 		button.setEnabled(value);
 	}
-	
-	private ActionListener buttonListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			
-			getController().startTrade();
-		}
-	};
-	
 }
-

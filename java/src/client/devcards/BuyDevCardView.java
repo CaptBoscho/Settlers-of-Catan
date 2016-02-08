@@ -50,6 +50,14 @@ public class BuyDevCardView extends OverlayView implements IBuyDevCardView {
         }
 
 		acceptButton = new JButton("Buy Card");
+		ActionListener actionListener = e -> {
+
+            if (e.getSource() == acceptButton) {
+                getController().buyCard();
+            } else if (e.getSource() == rejectButton) {
+                getController().cancelBuyCard();
+            }
+        };
 		acceptButton.addActionListener(actionListener);
 		Font buttonFont = acceptButton.getFont();
 		buttonFont = buttonFont.deriveFont(buttonFont.getStyle(), BUTTON_TEXT_SIZE);
@@ -72,16 +80,4 @@ public class BuyDevCardView extends OverlayView implements IBuyDevCardView {
 		return (IDevCardController)super.getController();
 	}
 
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if (e.getSource() == acceptButton) {
-				getController().buyCard();
-			}
-			else if (e.getSource() == rejectButton) {
-				getController().cancelBuyCard();
-			}			
-		}	
-	};
 }

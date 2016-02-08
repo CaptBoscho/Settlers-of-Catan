@@ -218,7 +218,7 @@ public class TurnTracker {
             @Override
             public Phase next() {
                 return values()[0];
-            };
+            }
         };
 
         public Phase next() {

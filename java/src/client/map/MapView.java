@@ -238,14 +238,7 @@ public class MapView extends PanelView implements IMapView {
 			map.startDrop(pieceType, pieceColor);
 		}
 		
-		private ActionListener cancelButtonListener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				getController().cancelMove();
-			}
-		};
+		private ActionListener cancelButtonListener = e -> getController().cancelMove();
 		
 		public void cancelDrop() {
 			map.cancelDrop();

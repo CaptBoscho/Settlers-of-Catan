@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Created by corne on 2/5/2016.
+ * @author Kyle Cornelison
  */
 public class PlayerTest {
     private PlayerManager pm;
