@@ -41,13 +41,13 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 		this.setLayout(new BorderLayout());
 
 		// Title Panel (immutable)
-		JPanel titlePanel = new JPanel(new BorderLayout());
-		JLabel title = new JLabel("Development Cards");
+		final JPanel titlePanel = new JPanel(new BorderLayout());
+		final JLabel title = new JLabel("Development Cards");
 		FontUtils.setFont(title, LABEL_TEXT_SIZE);
 		titlePanel.add(title, BorderLayout.WEST);
 		this.add(titlePanel, BorderLayout.NORTH);
 
-		JPanel mainPanel = new JPanel();
+		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
 		// Separator
@@ -58,13 +58,63 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 
 		// Development Card Chooser
 		devCards = new DevelopmentCardChooser();
+		ButtonGroupPanelListener btnGrpPnlListener = new ButtonGroupPanelListener() {
+
+			@Override
+			public void selectedButtonChanged(ButtonGroupPanel source) {
+
+				DevCardType selectedDevCard = devCards.getSelectedDevCard();
+
+				if (selectedDevCard == null) {
+					useButton.setText(DEFAULT_USE_BUTTON_LABEL);
+					useButton.setEnabled(false);
+					resCard1.setEnabled(false);
+					resCard2.setEnabled(false);
+				} else if (selectedDevCard == DevCardType.MONUMENT) {
+					useButton.setText(DEFAULT_USE_BUTTON_LABEL);
+					useButton.setEnabled(false);
+					resCard1.setEnabled(false);
+					resCard2.setEnabled(false);
+
+					closeModal();
+					getController().playMonumentCard();
+				} else if (selectedDevCard == DevCardType.ROAD_BUILD) {
+					useButton.setText(DEFAULT_USE_BUTTON_LABEL);
+					useButton.setEnabled(false);
+					resCard1.setEnabled(false);
+					resCard2.setEnabled(false);
+
+					closeModal();
+					getController().playRoadBuildCard();
+				} else if (selectedDevCard == DevCardType.SOLDIER) {
+					useButton.setText(DEFAULT_USE_BUTTON_LABEL);
+					useButton.setEnabled(false);
+					resCard1.setEnabled(false);
+					resCard2.setEnabled(false);
+
+					closeModal();
+					getController().playSoldierCard();
+				} else if (selectedDevCard == DevCardType.MONOPOLY) {
+					useButton.setText("use monopoly");
+					useButton.setEnabled(resCard1.getSelectedResourceCard() != null);
+					resCard1.setEnabled(true);
+					resCard2.setEnabled(false);
+				} else if (selectedDevCard == DevCardType.YEAR_OF_PLENTY) {
+					useButton.setText("use year of plenty");
+					useButton.setEnabled(resCard1.getSelectedResourceCard() != null &&
+							resCard2.getSelectedResourceCard() != null);
+					resCard1.setEnabled(true);
+					resCard2.setEnabled(true);
+				}
+			}
+		};
 		devCards.setListener(btnGrpPnlListener);
 		mainPanel.add(devCards);
 
 		// Blank space
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		
-		JPanel resPanel = new JPanel();
+		final JPanel resPanel = new JPanel();
 		resPanel.setLayout(new BoxLayout(resPanel, BoxLayout.Y_AXIS));
 
 		// Resource Card 1
@@ -88,10 +138,24 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		// Use Dev Card Button
-		JPanel usePanel = new JPanel();
+		final JPanel usePanel = new JPanel();
 		useButton = new JButton(DEFAULT_USE_BUTTON_LABEL);
 		useButton.setEnabled(false);
 		FontUtils.setFont(useButton, BUTTON_TEXT_SIZE);
+		ActionListener actionListener = e -> {
+            if (e.getSource() == cancelButton) {
+                getController().cancelPlayCard();
+            } else if (e.getSource() == useButton) {
+                if (devCards.getSelectedDevCard() == DevCardType.MONOPOLY) {
+                    closeModal();
+                    getController().playMonopolyCard(resCard1.getSelectedResourceCard());
+                } else if (devCards.getSelectedDevCard() == DevCardType.YEAR_OF_PLENTY) {
+                    closeModal();
+                    getController().playYearOfPlentyCard(resCard1.getSelectedResourceCard(),
+                            resCard2.getSelectedResourceCard());
+                }
+            }
+        };
 		useButton.addActionListener(actionListener);
 		usePanel.add(useButton);
 		mainPanel.add(usePanel);
@@ -100,7 +164,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		// Cancel Button
-		JPanel cancelPanel = new JPanel();
+		final JPanel cancelPanel = new JPanel();
 		cancelButton = new JButton("Cancel");
 		FontUtils.setFont(cancelButton, BUTTON_TEXT_SIZE);
 		cancelButton.addActionListener(actionListener);
@@ -142,76 +206,6 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 		devCards.setCardAmount(cardType, amount);
 	}
 
-	private ActionListener actionListener = new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if (e.getSource() == cancelButton) {
-				getController().cancelPlayCard();
-			} else if (e.getSource() == useButton) {
-				if (devCards.getSelectedDevCard() == DevCardType.MONOPOLY) {					
-					closeModal();
-					getController().playMonopolyCard(resCard1.getSelectedResourceCard());
-				} else if (devCards.getSelectedDevCard() == DevCardType.YEAR_OF_PLENTY) {
-					closeModal();
-					getController().playYearOfPlentyCard(resCard1.getSelectedResourceCard(),
-														resCard2.getSelectedResourceCard());
-				}
-			}
-		}	
-	};
-	
-	private ButtonGroupPanelListener btnGrpPnlListener = new ButtonGroupPanelListener() {
-
-		@Override
-		public void selectedButtonChanged(ButtonGroupPanel source) {
-			
-			DevCardType selectedDevCard = devCards.getSelectedDevCard();
-			
-			if (selectedDevCard == null) {
-				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
-				useButton.setEnabled(false);
-				resCard1.setEnabled(false);
-				resCard2.setEnabled(false);
-			} else if (selectedDevCard == DevCardType.MONUMENT) {
-				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
-				useButton.setEnabled(false);
-				resCard1.setEnabled(false);
-				resCard2.setEnabled(false);
-				
-				closeModal();
-				getController().playMonumentCard();
-			} else if (selectedDevCard == DevCardType.ROAD_BUILD) {
-				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
-				useButton.setEnabled(false);
-				resCard1.setEnabled(false);
-				resCard2.setEnabled(false);
-				
-				closeModal();
-				getController().playRoadBuildCard();
-			} else if (selectedDevCard == DevCardType.SOLDIER) {
-				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
-				useButton.setEnabled(false);
-				resCard1.setEnabled(false);
-				resCard2.setEnabled(false);
-				
-				closeModal();
-				getController().playSoldierCard();
-			} else if (selectedDevCard == DevCardType.MONOPOLY) {
-				useButton.setText("use monopoly");
-				useButton.setEnabled(resCard1.getSelectedResourceCard() != null);
-				resCard1.setEnabled(true);
-				resCard2.setEnabled(false);
-			} else if (selectedDevCard == DevCardType.YEAR_OF_PLENTY) {
-				useButton.setText("use year of plenty");
-				useButton.setEnabled(resCard1.getSelectedResourceCard() != null &&
-										resCard2.getSelectedResourceCard() != null);
-				resCard1.setEnabled(true);
-				resCard2.setEnabled(true);
-			}
-		}		
-	};
 }
 
 
@@ -262,7 +256,7 @@ class ButtonGroupPanel extends JPanel implements IButtonGroup {
 	@Override
 	public void setEnabled(boolean enabled) {
 				
-		Enumeration<AbstractButton> buttons = getElements();
+		final Enumeration<AbstractButton> buttons = getElements();
 		while (buttons.hasMoreElements()) {	
 			buttons.nextElement().setEnabled(enabled);
 		}
@@ -306,12 +300,7 @@ class ButtonGroupPanel extends JPanel implements IButtonGroup {
 		bg.setSelected(model, selected);
 	}
 	
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			notifySelectedButtonChanged();
-		}	
-	};
+	private ActionListener actionListener = e -> notifySelectedButtonChanged();
 }
 
 
@@ -405,8 +394,8 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 	DevelopmentCardChooser() {
 		super();
 
-		devCards = new HashMap<DevCardType, JToggleButton>();
-		devCardTypes = new HashMap<JToggleButton, DevCardType>();
+		devCards = new HashMap<>();
+		devCardTypes = new HashMap<>();
 
 		soldier = createDevCardButton("0", "images/cards/soldier.jpg");		
 		yearofplenty = createDevCardButton("0", "images/cards/year-of-plenty.jpg");		
@@ -425,9 +414,9 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 
 		final int BUTTON_TEXT_SIZE = 24;
 		
-		BufferedImage image = loadDevCardImage(imageFile);
+		final BufferedImage image = loadDevCardImage(imageFile);
 		
-		JToggleButton button = new JToggleButton(text, new ImageIcon(image)) {
+		final JToggleButton button = new JToggleButton(text, new ImageIcon(image)) {
 			
 			@Override
 			public void paintComponent(Graphics g) {
@@ -446,19 +435,14 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 		button.setVerticalTextPosition(AbstractButton.BOTTOM);
 		button.setHorizontalTextPosition(AbstractButton.CENTER);
 		
-		button.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg) {
-				
-				JToggleButton source = (JToggleButton)arg.getSource();
-				if (source.isSelected()) {
-					source.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-				}
-				else {
-					source.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-				}
-			}		
-		});
+		button.addChangeListener(arg -> {
+            JToggleButton source = (JToggleButton)arg.getSource();
+            if (source.isSelected()) {
+                source.setBorder(BorderFactory.createLineBorder(Color.black, 3));
+            } else {
+                source.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+            }
+        });
 		
 		return button;
 	}

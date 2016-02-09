@@ -54,10 +54,10 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		this.setBorder(new EmptyBorder(20,20,20,20));
 
 		//Window Title
-		JLabel label = new JLabel("Accept Trade Offer?");
-		Font labelFont = new Font(HEAVY_FONT, Font.PLAIN, LABEL_TEXT_SIZE);
+		final JLabel label = new JLabel("Accept Trade Offer?");
+		final Font labelFont = new Font(HEAVY_FONT, Font.PLAIN, LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
-		GridBagConstraints label_gbc = new GridBagConstraints();
+		final GridBagConstraints label_gbc = new GridBagConstraints();
 		label_gbc.gridx = 0;
 		label_gbc.gridy = 0;
 		label_gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -69,16 +69,16 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		contentPanel.setLayout(new GridBagLayout());
 		
 		//In Exchange For... (other pictures and lines are taken care of in other methods in this class
-		Font f = new Font(NORMAL_FONT,Font.PLAIN,OTHER_TEXT_SIZE);
+		final Font f = new Font(NORMAL_FONT,Font.PLAIN,OTHER_TEXT_SIZE);
 		request_component = new JLabel("in exchange for");
 		request_component.setHorizontalAlignment(JLabel.CENTER);
 		request_component.setFont(f);
-		GridBagConstraints request_component_gbc = new GridBagConstraints();
+		final GridBagConstraints request_component_gbc = new GridBagConstraints();
 		request_component_gbc.gridx = 0;
 		request_component_gbc.gridy = 2;
 		contentPanel.add(request_component,request_component_gbc);
 		
-		GridBagConstraints content_panel_gbc = new GridBagConstraints();
+		final GridBagConstraints content_panel_gbc = new GridBagConstraints();
 		content_panel_gbc.gridx = 0;
 		content_panel_gbc.gridy = 1;
 		content_panel_gbc.weighty = 100;
@@ -86,17 +86,17 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		//End Content Panel
 		
 		//Begin Button Panel
-		JPanel buttonPanel = new JPanel();
+		final JPanel buttonPanel = new JPanel();
 		buttonPanel.setBackground(new Color(255,255,255,255));
 		buttonPanel.setLayout(new GridBagLayout());
 		
-		Font buttonFont = new Font(HEAVY_FONT,Font.PLAIN, BUTTON_TEXT_SIZE);
+		final Font buttonFont = new Font(HEAVY_FONT,Font.PLAIN, BUTTON_TEXT_SIZE);
 		
 		//Accept Button
 		acceptButton = new JButton("Accept");
 		acceptButton.addActionListener(actionListener);
 		acceptButton.setFont(buttonFont);		
-		GridBagConstraints accept_gbc = new GridBagConstraints();
+		final GridBagConstraints accept_gbc = new GridBagConstraints();
 		accept_gbc.gridx = 0;
 		accept_gbc.gridy = 0;
 		accept_gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -107,14 +107,14 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		rejectButton = new JButton("No Thanks!");
 		rejectButton.addActionListener(actionListener);
 		rejectButton.setFont(buttonFont);	
-		GridBagConstraints reject_gbc = new GridBagConstraints();
+		final GridBagConstraints reject_gbc = new GridBagConstraints();
 		reject_gbc.gridx = 1;
 		reject_gbc.gridy = 0;
 		reject_gbc.fill = GridBagConstraints.HORIZONTAL;
 		reject_gbc.weightx = 50;
 		buttonPanel.add(rejectButton, reject_gbc);	
 		
-		GridBagConstraints button_panel_gbc = new GridBagConstraints();
+		final GridBagConstraints button_panel_gbc = new GridBagConstraints();
 		button_panel_gbc.gridx = 0;
 		button_panel_gbc.gridy = 2;
 		button_panel_gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -141,11 +141,11 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 			contentPanel.add(offering_component,offering_component_gbc);
 		}
 		//The Image
-		Image i = ImageUtils.loadImage("images/resources/"+resource+".png");
-		ImageIcon ii = new ImageIcon(i.getScaledInstance(50, 50, 0));
+		final Image i = ImageUtils.loadImage("images/resources/"+resource+".png");
+		final ImageIcon ii = new ImageIcon(i.getScaledInstance(50, 50, 0));
 
 		//The Number (and image)
-		JLabel get_combo = new JLabel(Integer.toString(amount));
+		final JLabel get_combo = new JLabel(Integer.toString(amount));
 		get_combo.setFont(new Font(HEAVY_FONT,Font.PLAIN,GIVE_AND_GET_NUMERAL_TEXT_SIZE));
 		get_combo.setBorder(new EmptyBorder(10,10,10,10));
 		get_combo.setIcon(ii);
@@ -161,17 +161,17 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 			requesting_component = new JPanel();
 			requesting_component.setBackground(new Color(255,255,255,255));
 			requesting_component.setLayout(new GridBagLayout());
-			GridBagConstraints requesting_component_gbc = new GridBagConstraints();
+			final GridBagConstraints requesting_component_gbc = new GridBagConstraints();
 			requesting_component_gbc.gridx = 0;
 			requesting_component_gbc.gridy = 3;
 			contentPanel.add(requesting_component,requesting_component_gbc);
 		}
 		//The Image
-		Image i = ImageUtils.loadImage("images/resources/"+resource.toString().toLowerCase()+".png");
-		ImageIcon ii = new ImageIcon(i.getScaledInstance(50, 50, 0));
+		final Image i = ImageUtils.loadImage("images/resources/"+resource.toString().toLowerCase()+".png");
+		final ImageIcon ii = new ImageIcon(i.getScaledInstance(50, 50, 0));
 		
 		//The Number (and image)
-		JLabel give_combo = new JLabel(Integer.toString(amount));
+		final JLabel give_combo = new JLabel(Integer.toString(amount));
 		give_combo.setFont(new Font(HEAVY_FONT,Font.PLAIN,GIVE_AND_GET_NUMERAL_TEXT_SIZE));
 		give_combo.setBorder(new EmptyBorder(10,10,10,10));
 		give_combo.setIcon(ii);
@@ -196,11 +196,11 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 		if(this.offerer_component == null){
 			this.offerer_component = new JLabel();
 		}
-		Font f = new Font(NORMAL_FONT,Font.PLAIN,OTHER_TEXT_SIZE);
+		final Font f = new Font(NORMAL_FONT,Font.PLAIN,OTHER_TEXT_SIZE);
 		offerer_component.setHorizontalAlignment(JLabel.CENTER);
 		offerer_component.setText(name + " offered to give you");
 		offerer_component.setFont(f);
-		GridBagConstraints gbc = new GridBagConstraints();
+		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		contentPanel.add(offerer_component,gbc);
@@ -208,13 +208,13 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-	    int x = 0;
-	    int y = 0;
-	    int w = getWidth();
-	    int h = getHeight();
-	    int arc = 30;
+	    final int x = 0;
+	    final int y = 0;
+	    final int w = getWidth();
+	    final int h = getHeight();
+	    final int arc = 30;
 
-	    Graphics2D g2 = (Graphics2D) g.create();
+	    final Graphics2D g2 = (Graphics2D) g.create();
 	    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 	    g2.setColor(new Color(255, 255, 255, 255));

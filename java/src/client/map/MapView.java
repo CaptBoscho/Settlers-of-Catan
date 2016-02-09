@@ -217,9 +217,9 @@ public class MapView extends PanelView implements IMapView {
 			map = mainMap.copy();
 			map.setController(getController());
 			
-			int prefWidth = (int)(mainMap.getScale() * mainMap.getPreferredSize().getWidth());
-			int prefHeight = (int)(mainMap.getScale() * mainMap.getPreferredSize().getHeight());
-			Dimension prefSize = new Dimension(prefWidth, prefHeight);
+			final int prefWidth = (int)(mainMap.getScale() * mainMap.getPreferredSize().getWidth());
+			final int prefHeight = (int)(mainMap.getScale() * mainMap.getPreferredSize().getHeight());
+			final Dimension prefSize = new Dimension(prefWidth, prefHeight);
 			map.setPreferredSize(prefSize);
 			
 			this.add(label, BorderLayout.NORTH);

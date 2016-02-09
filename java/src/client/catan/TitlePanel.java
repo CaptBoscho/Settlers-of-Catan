@@ -17,8 +17,8 @@ public class TitlePanel extends JPanel {
 		titleLabel = new JLabel("CS 340: Settlers");
 		titleLabel.setOpaque(true);
 		
-		Font font = titleLabel.getFont();
-		Font newFont = font.deriveFont(font.getStyle(), 48);
+		final Font font = titleLabel.getFont();
+		final Font newFont = font.deriveFont(font.getStyle(), 48);
 		titleLabel.setFont(newFont);
 		
 		this.add(titleLabel, BorderLayout.CENTER);

@@ -135,14 +135,11 @@ public class MapController extends Controller implements IMapController {
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
-		
 		getView().placeRobber(hexLoc);
-		
 		getRobView().showModal();
 	}
 	
-	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
-		
+	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
 		getView().startDrop(pieceType, CatanColor.ORANGE, true);
 	}
 	

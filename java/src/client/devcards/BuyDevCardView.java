@@ -34,15 +34,15 @@ public class BuyDevCardView extends OverlayView implements IBuyDevCardView {
 		this.setLayout(new BorderLayout(10, 10));
 		this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
 
-		JLabel label = new JLabel("Really buy a development card?");
+		final JLabel label = new JLabel("Really buy a development card?");
 		Font labelFont = label.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
 		this.add(label, BorderLayout.NORTH);
 
         try {
-            BufferedImage devCardImg = ImageIO.read(new File("images/building/card.jpg"));
-			JLabel imageLabel = new JLabel(new ImageIcon(devCardImg));
+            final BufferedImage devCardImg = ImageIO.read(new File("images/building/card.jpg"));
+			final JLabel imageLabel = new JLabel(new ImageIcon(devCardImg));
             this.setBackground(Color.WHITE);
             this.add(imageLabel, BorderLayout.CENTER);
         } catch (IOException ex) {
@@ -50,8 +50,7 @@ public class BuyDevCardView extends OverlayView implements IBuyDevCardView {
         }
 
 		acceptButton = new JButton("Buy Card");
-		ActionListener actionListener = e -> {
-
+		final ActionListener actionListener = e -> {
             if (e.getSource() == acceptButton) {
                 getController().buyCard();
             } else if (e.getSource() == rejectButton) {
@@ -67,7 +66,7 @@ public class BuyDevCardView extends OverlayView implements IBuyDevCardView {
 		rejectButton.addActionListener(actionListener);
 		rejectButton.setFont(buttonFont);
 
-		JPanel buttonPanel = new JPanel();
+		final JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));		
 		buttonPanel.add(acceptButton);
 		buttonPanel.add(rejectButton);	
