@@ -11,6 +11,7 @@ import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.MoveRobberException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
@@ -61,6 +62,8 @@ public interface IPlayerManager {
 
     void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException;
 
+    void moveNewToOld(int id) throws PlayerExistsException, BadCallerException;
+
 
     //Can Do & Do
     //==========================================================
@@ -93,6 +96,9 @@ public interface IPlayerManager {
      * @return True if Player can offer a trade
      */
     boolean canOfferTrade(int id) throws PlayerExistsException;
+
+
+    void offerTrade(int one, int two, List<ResourceType> ones, List<ResourceType> twos) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     /**
      * Determine if Player can perform maritime trade
@@ -174,7 +180,7 @@ public interface IPlayerManager {
      * Action - Player plays Monopoly
      * @param id ID of the player
      */
-    void useMonopoly(int id) throws DevCardException,PlayerExistsException;
+    void useMonopoly(int id, int num, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
     /**
      * Determine if Player can play Monument
@@ -246,4 +252,6 @@ public interface IPlayerManager {
      * @param id ID of the player
      */
     void buildCity(int id) throws PlayerExistsException;
+
+    void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException;
 }

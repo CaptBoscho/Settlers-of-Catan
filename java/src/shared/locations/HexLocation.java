@@ -1,11 +1,12 @@
 package shared.locations;
 
 import com.google.gson.JsonObject;
+import shared.model.JsonSerializable;
 
 /**
  * Represents the location of a hex on a hex map
  */
-public class HexLocation {
+public class HexLocation implements JsonSerializable {
 	
 	private int x;
 	private int y;
@@ -115,4 +116,16 @@ public class HexLocation {
 		}
 	}
 
+	/**
+	 * Converts the object to JSON
+	 *
+	 * @return The JSON representation of the object
+	 */
+	@Override
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
+        obj.addProperty("x", this.x);
+        obj.addProperty("y", this.y);
+		return obj;
+	}
 }

@@ -21,7 +21,9 @@ public class PlayMonumentDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        // TODO --
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "Monument");
+        obj.addProperty("playerIndex", this.playerIndex);
+        return obj;
     }
 }

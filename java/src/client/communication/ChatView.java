@@ -23,15 +23,15 @@ public class ChatView extends PanelView implements IChatView {
     public ChatView() {
         // Create the components
         chatPanel = new LogComponent();
-        JScrollPane chatScrollPane = new JScrollPane(chatPanel);
-        JPanel inputPanel = new JPanel();
-        JButton sendChatBtn = new JButton("Send");
+        final JScrollPane chatScrollPane = new JScrollPane(chatPanel);
+        final JPanel inputPanel = new JPanel();
+        final JButton sendChatBtn = new JButton("Send");
         chatTextInput = new PlaceholderTextField();
         chatTextInput.setPlaceholder("Send a message!");
         chatTextInput.setPreferredSize(new Dimension(260, 20));
         
         // Register the listeners
-        EventListener listener = new EventListener();
+        final EventListener listener = new EventListener();
         sendChatBtn.addActionListener(listener);
         chatTextInput.addKeyListener(listener);
         
@@ -63,7 +63,7 @@ public class ChatView extends PanelView implements IChatView {
         add(chatScrollPane, BorderLayout.CENTER);
         add(inputPanel, BorderLayout.PAGE_END);
         
-	setBackground(Color.white);
+	    setBackground(Color.white);
     }
 
     @Override

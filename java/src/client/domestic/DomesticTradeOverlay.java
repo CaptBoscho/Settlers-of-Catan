@@ -30,7 +30,6 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	private final int BORDER_WIDTH = 10;
 	private final int RESOURCE_IMAGE_WIDTH = 120;
 
-	private JLabel label;
 	private JButton tradeButton;
 	private JButton cancelButton;
 	private JPanel playerSelectionPanel;
@@ -50,13 +49,13 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	}
 
 	private void buildView() {
-		this.resourceSelectionPanels = new ArrayList<JPanel>();
-		this.resourceCounts = new HashMap<ResourceType, JLabel>();
+		this.resourceSelectionPanels = new ArrayList<>();
+		this.resourceCounts = new HashMap<>();
 		this.setOpaque(true);
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
-		
-		label = new JLabel("Domestic Trade Overlay");
+
+		JLabel label = new JLabel("Domestic Trade Overlay");
 		Font labelFont = label.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
@@ -68,9 +67,9 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 
 	private JPanel setupResourceTradePanel() {
 		// setup resource tiles
-		this.resourceButtonsMap = new HashMap<ResourceType, ArrayList<JButton>>();
-		this.upDownPanels = new ArrayList<JPanel>();
-		this.upDownPanelByResourceType = new HashMap<ResourceType, JPanel>();
+		this.resourceButtonsMap = new HashMap<>();
+		this.upDownPanels = new ArrayList<>();
+		this.upDownPanelByResourceType = new HashMap<>();
 		JPanel brickTile = this.setupResourceTile("images/resources/brick.png", ResourceType.BRICK);
 		JPanel oreTile = this.setupResourceTile("images/resources/ore.png", ResourceType.ORE);
 		JPanel sheepTile = this.setupResourceTile("images/resources/sheep.png", ResourceType.SHEEP);
@@ -97,25 +96,15 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 		this.tradeButton.setFont(buttonFont);
 		this.tradeButton.setEnabled(false);
 		this.tradeButton.setAlignmentX(CENTER_ALIGNMENT);
-		this.tradeButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getController().sendTradeOffer();
-			}
-		});
+		this.tradeButton.addActionListener(e -> getController().sendTradeOffer());
 				
 		this.cancelButton = new JButton("Cancel");
 		FontUtils.setFont(this.cancelButton, BUTTON_TEXT_SIZE);
 		this.cancelButton.setAlignmentX(CENTER_ALIGNMENT);
-		this.cancelButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getController().cancelTrade();
+		this.cancelButton.addActionListener(e -> {
+            getController().cancelTrade();
 //				reset();// TODO, this may not be needed here
-			}
-		});
+        });
 		
 		// setup user select
 		JPanel userSelectPanel = new JPanel();
@@ -129,18 +118,12 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	}
 
 	private JPanel setupUsersList() {
-		this.playerButtons = new ArrayList<JToggleButton>();
+		this.playerButtons = new ArrayList<>();
 		this.toggleButtonGroup = new ButtonGroup();
 		
 		JToggleButton noneToggle = new JToggleButton("None");
 		noneToggle.setSelected(true);
-		noneToggle.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getController().setPlayerToTradeWith(-1);
-			}
-		});
+		noneToggle.addActionListener(e -> getController().setPlayerToTradeWith(-1));
 		noneToggle.setActionCommand("None");
 		noneToggle.putClientProperty( "JButton.buttonType", "segmented" );
 		noneToggle.putClientProperty( "JButton.segmentPosition", "first" );
@@ -180,15 +163,10 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 			sendToggle.setActionCommand("send");
 			sendToggle.putClientProperty( "JButton.buttonType", "segmented" );
 	        sendToggle.putClientProperty( "JButton.segmentPosition", "first" );
-	        sendToggle.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					upDownPanelByResourceType.get(resourceType).setVisible(true);
-					getController().setResourceToSend(resourceType);
-				}
-	        	
-	        });
+	        sendToggle.addActionListener(e -> {
+                upDownPanelByResourceType.get(resourceType).setVisible(true);
+                getController().setResourceToSend(resourceType);
+            });
 	        toggleButtonGroup.add(sendToggle);
 	        
 	        
@@ -197,31 +175,21 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	        noneToggle.setActionCommand("none");
 	        noneToggle.putClientProperty( "JButton.buttonType", "segmented" );
 	        noneToggle.putClientProperty( "JButton.segmentPosition", "middle" );
-	        noneToggle.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					upDownPanelByResourceType.get(resourceType).setVisible(false);
-					resourceCounts.get(resourceType).setText("0");
-					getController().unsetResource(resourceType);
-				}
-	        	
-	        });
+	        noneToggle.addActionListener(e -> {
+                upDownPanelByResourceType.get(resourceType).setVisible(false);
+                resourceCounts.get(resourceType).setText("0");
+                getController().unsetResource(resourceType);
+            });
 	        toggleButtonGroup.add(noneToggle);
 	        
 	        JToggleButton recieveToggle = new JToggleButton("recieve");
 	        recieveToggle.setActionCommand("recieve");
 	        recieveToggle.putClientProperty( "JButton.buttonType", "segmented" );
 	        recieveToggle.putClientProperty( "JButton.segmentPosition", "last" );
-	        recieveToggle.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					upDownPanelByResourceType.get(resourceType).setVisible(true);
-					getController().setResourceToReceive(resourceType);
-				}
-	        	
-	        });
+	        recieveToggle.addActionListener(e -> {
+                upDownPanelByResourceType.get(resourceType).setVisible(true);
+                getController().setResourceToReceive(resourceType);
+            });
 	        toggleButtonGroup.add(recieveToggle);
 			
 
@@ -258,7 +226,7 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	}
 	
 	private JPanel setupUpDownButtonsPanel(final ResourceType resourceType) {
-		this.resourceButtonsMap.put(resourceType, new ArrayList<JButton>());
+		this.resourceButtonsMap.put(resourceType, new ArrayList<>());
 		JPanel upDownButtonsPanel = new JPanel();
 		upDownButtonsPanel.setLayout(new BoxLayout(upDownButtonsPanel, BoxLayout.X_AXIS));
 		
@@ -270,33 +238,25 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 			BufferedImage upImage = ImageIO.read(new File("images/misc/up.png"));
 			upImage = this.getScaledImage(upImage, upDownButtonWidth, upDownButtonWidth);
 			JButton upButton = new JButton(new ImageIcon(upImage));
-			upButton.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Integer currentAmount = Integer.parseInt(resourceCounts.get(resourceType).getText());
-					getController().increaseResourceAmount(resourceType);
-					currentAmount++;
-					resourceCounts.get(resourceType).setText("" + currentAmount);
-				}
-			});
+			upButton.addActionListener(e -> {
+                Integer currentAmount = Integer.parseInt(resourceCounts.get(resourceType).getText());
+                getController().increaseResourceAmount(resourceType);
+                currentAmount++;
+                resourceCounts.get(resourceType).setText("" + currentAmount);
+            });
 			this.resourceButtonsMap.get(resourceType).add(upButton);
 			
 			BufferedImage downImage = ImageIO.read(new File("images/misc/down.png"));
 			downImage = this.getScaledImage(downImage, upDownButtonWidth, upDownButtonWidth);
 			JButton downButton = new JButton(new ImageIcon(downImage));
-			downButton.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Integer currentAmount = Integer.parseInt(resourceCounts.get(resourceType).getText());
-					if(currentAmount > 0){
-						getController().decreaseResourceAmount(resourceType);
-						currentAmount--;
-						resourceCounts.get(resourceType).setText("" + currentAmount);
-					}
-				}
-			});
+			downButton.addActionListener(e -> {
+                Integer currentAmount = Integer.parseInt(resourceCounts.get(resourceType).getText());
+                if(currentAmount > 0){
+                    getController().decreaseResourceAmount(resourceType);
+                    currentAmount--;
+                    resourceCounts.get(resourceType).setText("" + currentAmount);
+                }
+            });
 			this.resourceButtonsMap.get(resourceType).add(downButton);
 			
 			upDownButtonsPanel.add(upButton);
@@ -312,7 +272,7 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 
 	/**
 	* Resizes an image using a Graphics2D object backed by a BufferedImage.
-	* @param srcImg - source image to scale
+	* @param src - source image to scale
 	* @param w - desired width
 	* @param h - desired height
 	* @return - the new resized image
@@ -320,11 +280,11 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	private BufferedImage getScaledImage(BufferedImage src, int w, int h){
 	    int finalw = w;
 	    int finalh = h;
-	    double factor = 1.0d;
-	    if(src.getWidth() > src.getHeight()){
+	    double factor;
+	    if(src.getWidth() > src.getHeight()) {
 	        factor = ((double)src.getHeight()/(double)src.getWidth());
 	        finalh = (int)(finalw * factor);                
-	    }else{
+	    } else {
 	        factor = ((double)src.getWidth()/(double)src.getHeight());
 	        finalw = (int)(finalh * factor);
 	    }   
@@ -337,16 +297,12 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	    return resizedImg;
 	}
 	
-	private ActionListener playerSelectActionListener = new ActionListener(){
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JToggleButton button = (JToggleButton)e.getSource();
-			PlayerInfo pi = getPlayerByName(button.getText());
-			getController().setPlayerToTradeWith(pi.getPlayerIndex());
-		}
-
-	};
+	private ActionListener playerSelectActionListener = e -> {
+        JToggleButton button = (JToggleButton)e.getSource();
+        PlayerInfo pi = getPlayerByName(button.getText());
+		assert pi != null;
+		getController().setPlayerToTradeWith(pi.getPlayerIndex());
+    };
 	
 	
 	@Override

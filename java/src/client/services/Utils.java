@@ -9,9 +9,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.Header;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
@@ -37,8 +37,10 @@ public class Utils {
     }
 
     public static String sendPost(String url, JsonObject body) {
+
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(url);
+
         if(body != null) {
             StringEntity postingString = null;
             try {
@@ -49,8 +51,24 @@ public class Utils {
             post.setEntity(postingString);
         }
         post.setHeader("Content-type", "application/json");
+        if(UserCookie.getInstance().hasContent()) {
+            post.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+        }
         try {
+            assert httpClient != null;
             HttpResponse response = httpClient.execute(post);
+            if(response.containsHeader("Set-cookie")) {
+                Header cookieHeader = response.getFirstHeader("Set-cookie");
+                String cookieVal = cookieHeader.getValue();
+                String[] cookies = cookieVal.split(";");
+                for(String cookie : cookies) {
+                    if(cookie.startsWith("catan.user")) {
+                        UserCookie.getInstance().setCatanUserCookieValue(cookie.substring(cookie.indexOf("=") + 1));
+                    } else if(cookie.startsWith("catan.game")) {
+                        UserCookie.getInstance().setCatanGameCookieValue(cookie.substring(cookie.indexOf("=") + 1));
+                    }
+                }
+            }
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,6 +79,9 @@ public class Utils {
     public static String sendGet(String url) {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet(url);
+        if(UserCookie.getInstance().hasContent()) {
+            get.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+        }
         try {
             HttpResponse response = httpClient.execute(get);
             return Utils.getStringFromHttpResponse(response);

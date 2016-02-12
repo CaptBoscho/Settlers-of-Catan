@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
+import shared.model.cards.devcards.DevelopmentCard;
+import shared.model.cards.devcards.YearOfPlentyCard;
 import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.*;
 
@@ -50,8 +52,24 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
      *
      * @param json The JSON being used to construct this object
      */
-    public ResourceCardBank(JsonObject json) {
-        //deserialize
+    public ResourceCardBank(JsonObject json, boolean ownedByGame) {
+        this.ownedByGame = ownedByGame;
+
+        for (int i = 0; i < json.get("brick").getAsInt(); i++) {
+            addResource(new Brick());
+        }
+        for (int i = 0; i < json.get("wheat").getAsInt(); i++) {
+            addResource(new Wheat());
+        }
+        for (int i = 0; i < json.get("wood").getAsInt(); i++) {
+            addResource(new Wood());
+        }
+        for (int i = 0; i < json.get("sheep").getAsInt(); i++) {
+            addResource(new Sheep());
+        }
+        for (int i = 0; i < json.get("ore").getAsInt(); i++) {
+            addResource(new Ore());
+        }
     }
 
     private void fillBrick() {
@@ -162,6 +180,30 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
         return woods.size();
     }
 
+    public Integer getNumberOfType(ResourceType type){
+        int size = 0;
+        System.out.println("here");
+        switch (type) {
+            case WOOD:
+                size = getNumberOfWood();
+                break;
+            case BRICK:
+                size = getNumberOfBrick();
+                break;
+            case SHEEP:
+                size = getNumberOfSheep();
+                break;
+            case WHEAT:
+                size = getNumberOfWheat();
+                break;
+            case ORE:
+                size = getNumberOfOre();
+                System.out.println("size: " + size);
+                break;
+        }
+        return size;
+    }
+
     /**
      * @return number of cards in the ResourceCardBank
      */
@@ -258,7 +300,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
 
     @Override
     public boolean canBuildCity() {
-        return (getNumberOfWheat() >= 3 && getNumberOfOre() >= 2);
+        return (getNumberOfWheat() >= 2 && getNumberOfOre() >= 3);
     }
 
     @Override
@@ -267,7 +309,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
             try {
                 discard(ResourceType.WHEAT);
                 discard(ResourceType.WHEAT);
-                discard(ResourceType.WHEAT);
+                discard(ResourceType.ORE);
                 discard(ResourceType.ORE);
                 discard(ResourceType.ORE);
             } catch (InvalidTypeException e) {

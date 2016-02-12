@@ -28,10 +28,7 @@ public class Edge {
      * @return boolean
      */
     public boolean hasRoad() {
-        if(road != null) {
-            return true;
-        }
-        return false;
+        return road != null;
     }
 
     public Road getRoad() {

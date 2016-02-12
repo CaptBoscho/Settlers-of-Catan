@@ -346,7 +346,6 @@ public class MapTest {
             }
             answer = "1/[WHEAT]";
             assertTrue(test.toString().equals(answer));
-            resources = map.getResources(7);
 
         } catch(InvalidPlayerException | InvalidLocationException | StructureException e) {
             System.out.println(e.getMessage());

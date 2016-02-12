@@ -28,7 +28,7 @@ public class OverlayView extends PanelView implements IOverlayView {
 	public static void setWindow(JFrame window) {
 		OverlayView.window = window;
 		defaultGlassPane = window.getGlassPane();
-		overlayStack = new ArrayDeque<OverlayInfo>();
+		overlayStack = new ArrayDeque<>();
 	}
 	
 	public OverlayView() {
@@ -41,24 +41,24 @@ public class OverlayView extends PanelView implements IOverlayView {
 	 */
 	public void showModal() {
 		// Open the new overlay
-		JPanel overlayPanel = new JPanel();
+		final JPanel overlayPanel = new JPanel();
 		overlayPanel.setLayout(new BorderLayout());
 		overlayPanel.setOpaque(false);
 		
 		// Discard all mouse and keyboard events
-		MouseAdapter mouseAdapter = new MouseAdapter() {};
+		final MouseAdapter mouseAdapter = new MouseAdapter() {};
 		overlayPanel.addMouseListener(mouseAdapter);
 		overlayPanel.addMouseMotionListener(mouseAdapter);
 		overlayPanel.addMouseWheelListener(mouseAdapter);
 		
-		KeyAdapter keyAdapter = new KeyAdapter() {};
+		final KeyAdapter keyAdapter = new KeyAdapter() {};
 		overlayPanel.addKeyListener(keyAdapter);
 		
-		Dimension winSize = window.getContentPane().getSize();
-		Dimension prefSize = this.getPreferredSize();
+		final Dimension winSize = window.getContentPane().getSize();
+		final Dimension prefSize = this.getPreferredSize();
 		
-		int widthDiff = (int)(winSize.getWidth() - prefSize.getWidth());
-		int heightDiff = (int)(winSize.getHeight() - prefSize.getHeight());
+		final int widthDiff = (int)(winSize.getWidth() - prefSize.getWidth());
+		final int heightDiff = (int)(winSize.getHeight() - prefSize.getHeight());
 		
 		overlayPanel.add(this, BorderLayout.CENTER);
 		if(widthDiff / 2 > 0) {
@@ -91,7 +91,6 @@ public class OverlayView extends PanelView implements IOverlayView {
 			overlayStack.pop().getOverlayPanel().setVisible(false);
 			
 			if(overlayStack.size() > 0) {
-				
 				window.setGlassPane(overlayStack.peek().getOverlayPanel());
 				overlayStack.peek().getOverlayPanel().setVisible(true);
 			} else {
@@ -108,7 +107,7 @@ public class OverlayView extends PanelView implements IOverlayView {
 	 */
 	@Override
 	public boolean isModalShowing() {
-		for (OverlayInfo info : overlayStack) {
+		for (final OverlayInfo info : overlayStack) {
 			if(info.getOverlayView() == this)
 				return true;
 		}

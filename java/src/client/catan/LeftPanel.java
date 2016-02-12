@@ -18,21 +18,21 @@ public class LeftPanel extends JPanel {
 		
 		this.setLayout(new BorderLayout());
 
-		JTabbedPane tabPane = new JTabbedPane();
-		Font font = tabPane.getFont();
-		Font newFont = font.deriveFont(font.getStyle(), 20);
+		final JTabbedPane tabPane = new JTabbedPane();
+		final Font font = tabPane.getFont();
+		final Font newFont = font.deriveFont(font.getStyle(), 20);
 		tabPane.setFont(newFont);
 		
 		historyView = new GameHistoryView();
-		GameHistoryController historyController = new GameHistoryController(historyView);
+		final GameHistoryController historyController = new GameHistoryController(historyView);
 		historyView.setController(historyController);
 		
 		chatView = new ChatView();
-		ChatController chatController = new ChatController(chatView);
+		final ChatController chatController = new ChatController(chatView);
         chatView.setController(chatController);
 		
 		turnView = new TurnTrackerView(titlePanel, gameStatePanel);
-		TurnTrackerController turnController = new TurnTrackerController(turnView);
+		final TurnTrackerController turnController = new TurnTrackerController(turnView);
 		turnView.setController(turnController);
 		
 //		gameStatePanel.setController(turnController);

@@ -41,10 +41,7 @@ public class Vertex {
      * @return boolean
      */
     public boolean hasSettlement() {
-        if(settlement != null && city == null) {
-            return true;
-        }
-        return false;
+        return settlement != null && city == null;
     }
 
     /**
@@ -52,10 +49,7 @@ public class Vertex {
      * @return boolean
      */
     public boolean hasCity() {
-        if(city != null && settlement == null) {
-            return true;
-        }
-        return false;
+        return city != null && settlement == null;
     }
 
     public Settlement getSettlement() {
@@ -81,10 +75,7 @@ public class Vertex {
      * @return boolean
      */
     public boolean canBuildSettlement() {
-        if(settlement == null && city == null) {
-            return true;
-        }
-        return false;
+        return settlement == null && city == null;
     }
 
     /**
@@ -92,10 +83,7 @@ public class Vertex {
      * @return boolean
      */
     public boolean canBuildCity() {
-        if(settlement != null && city == null) {
-            return true;
-        }
-        return false;
+        return settlement != null && city == null;
     }
 
     /**
@@ -124,10 +112,7 @@ public class Vertex {
      * @return boolean
      */
     public boolean hasPort() {
-        if(port != null) {
-            return true;
-        }
-        return false;
+        return port != null;
     }
 
     public Port getPort() {
@@ -137,9 +122,4 @@ public class Vertex {
     public void setPort(Port port){
         this.port = port;
     }
-
-    public VertexLocation getVertexLocation() {
-        return vertexLoc;
-    }
-
 }

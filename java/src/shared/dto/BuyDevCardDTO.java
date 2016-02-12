@@ -21,7 +21,9 @@ public class BuyDevCardDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        // TODO --
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "buyDevCard");
+        obj.addProperty("playerIndex", this.playerIndex);
+        return obj;
     }
 }

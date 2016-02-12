@@ -1,7 +1,7 @@
 package client.services;
 
 
-import shared.dto.GetCurrentModelDTO;
+import shared.model.game.Game;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,9 +38,8 @@ public class Poller {
         poller.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                GetCurrentModelDTO dto = new GetCurrentModelDTO(4);
                 try {
-                    server.getCurrentModel(dto);
+                    server.getCurrentModel(Game.getInstance().getVersion());
                 } catch (MissingUserCookieException e) {
                     e.printStackTrace();
                 }

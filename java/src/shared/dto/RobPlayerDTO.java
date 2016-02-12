@@ -30,6 +30,11 @@ public class RobPlayerDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "robPlayer");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.addProperty("victimIndex", this.victimIndex);
+        obj.add("location", this.location.toJSON());
+        return obj;
     }
 }

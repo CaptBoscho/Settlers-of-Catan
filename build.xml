@@ -21,6 +21,7 @@
 	<property name="demo.dir" value="demo"/>
     <property name="server.jar.file" value="${demo.dir}/server.jar"/>
     <property name="client.jar.file" value="${demo.dir}/client.jar"/>
+	<property name="java.test" location="java/test"/>
   
 	<!-- CLASSPATHS -->
 	<!-- ********** -->
@@ -82,13 +83,17 @@
 		<delete dir="${java.build}"/>
 		<delete dir="${java.dist}"/>
 	</target>
-    
 	<target name="compile" depends="init" description="compile the source " >
 		<javac srcdir="${java.src}" destdir="${java.build}" debug="true" includeantruntime="true">
 			<classpath refid="java.lib.classpath" />
 		</javac>
 	</target>
-	
+	<target name="compile-test" depends="init" description="compile the source " >
+		<javac srcdir="${java.test}" destdir="${java.build}" debug="true" includeantruntime="true">
+			<classpath refid="java.lib.classpath" />
+		</javac>
+	</target>
+
 	<target name="package" depends="compile" description="package the jar file" >
 		<mkdir dir="${java.dist}/lib"/>
 		<copy todir="${java.dist}/lib">
@@ -121,6 +126,21 @@
 	<target name="our-client" depends="package" description="compiles, packages, and runs the student client">
 		<java jar="${java.dist}/catan-client.jar" dir="${java.dist}" fork="yes">
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
+			<assertions>
+				<enable/>
+			</assertions>
+		</java>
+	</target>
+
+	<target name="test" depends="compile, compile-test" description="compiles, packages, and runs the JUnit tests for the project">
+		<java classname="TestRunner" fork="yes">
+			<classpath>
+				<path refid="java.lib.classpath"/>
+			</classpath>
+			<classpath>
+				<pathelement location="${java.build}"/>
+				<pathelement location="java.build.test"/>
+			</classpath>
 			<assertions>
 				<enable/>
 			</assertions>

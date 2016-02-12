@@ -1,21 +1,23 @@
 package shared.model.game;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
+import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.PlayerExistsException;
+import shared.model.JsonSerializable;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
-import shared.model.cards.Card;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
+
 import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
+import shared.model.cards.devcards.DevelopmentCard;
+
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
@@ -30,7 +32,10 @@ import java.util.*;
 /**
  * game class representing a Catan game
  */
-public class Game implements IGame {
+public class Game implements IGame, JsonSerializable {
+
+    private static Game instance;
+
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -39,19 +44,62 @@ public class Game implements IGame {
     private PlayerManager playerManager;
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
+    private int winner;
+    private int version;
 
     /**
      * Constructor
      */
-    public Game() {
-        this.dice = new Dice();
+    protected Game() {
+        this.dice = new Dice(2,12);
         this.map = new Map(false, false, false);
-        this.turnTracker = null;//new TurnTracker(0,0);
+        this.turnTracker = new TurnTracker(0);
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
-        this.playerManager = new PlayerManager(new ArrayList<Player>());
+        this.playerManager = new PlayerManager(new ArrayList<>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
+    }
+
+    public static Game getInstance() {
+        if(instance == null) {
+            instance = new Game();
+        }
+
+        return instance;
+    }
+
+    public void reset() {
+        this.dice = new Dice(2,12);
+        this.map = new Map(false, false, false);
+        this.turnTracker = new TurnTracker(0);
+        this.longestRoadCard = new LongestRoad();
+        this.largestArmyCard = new LargestArmy();
+        this.playerManager = new PlayerManager(new ArrayList<>());
+        this.resourceCardBank = new ResourceCardBank(true);
+        this.developmentCardBank = new DevelopmentCardBank(true);
+    }
+
+    public void updateGame(JsonObject json) {
+        this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
+        this.map = new Map(json.get("map").getAsJsonObject());
+        this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
+        this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
+
+        JsonObject turnTracker = json.getAsJsonObject("turnTracker");
+        this.longestRoadCard = new LongestRoad(turnTracker.get("longestRoad").getAsInt());
+        this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
+        this.version = json.get("version").getAsInt();
+        this.winner = json.get("winner").getAsInt();
+        try {
+            this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
+        } catch (BadJsonException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getVersion() {
+        return this.version;
     }
 
     //IGame Methods
@@ -67,23 +115,33 @@ public class Game implements IGame {
         this.playerManager = new PlayerManager(players);
         this.map = new Map(randomhexes, randomchits, randomports);
         //List<Integer> order = this.playerManager.randomizePlayers();
-        turnTracker = new TurnTracker(players.get(0).getPlayerIndex());
+        turnTracker = new TurnTracker(players.get(0).get_id());
         turnTracker.setNumPlayers(players.size());
 
-        return players.get(0).getPlayerIndex();
+        return turnTracker.getCurrentTurn();
     }
 
-
-
-    public boolean canFirstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException{
+    public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException{
         if(turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase()){
-            return map.canInitiateSettlement(playerID, vertex) && map.canInitiateRoad(playerID, edge, vertex);
+            return map.canInitiateSettlement(playerID, vertex);
         }
         return false;
     }
 
-    public void firstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException{
-        map.initiateSettlement(playerID, vertex);
+    public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException{
+        if(canInitiateSettlement(playerID, vertex)){
+            map.initiateSettlement(playerID, vertex);
+        }
+    }
+
+    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException{
+        if(turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase()){
+            return map.canInitiateRoad(playerID, edge, vertex);
+        }
+        return false;
+    }
+
+    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException{
         map.initiateRoad(playerID, edge, vertex);
     }
 
@@ -107,7 +165,7 @@ public class Game implements IGame {
      */
     @Override
     public boolean canDiscardCards(int playerID) throws PlayerExistsException {
-        return turnTracker.getPhase() == TurnTracker.Phase.DISCARDING && playerManager.canDiscardCards(playerID);
+        return playerManager.canDiscardCards(playerID);
 
     }
 
@@ -144,7 +202,13 @@ public class Game implements IGame {
     @Override
     public int rollNumber(int playerID) throws InvalidDiceRollException{
         int roll = dice.roll();
-        map.getResources(roll);
+        if(roll == 7){
+            turnTracker.updateRobber(true);
+        } else{
+            map.getResources(roll);
+        }
+
+        turnTracker.nextPhase();
         return roll;
     }
 
@@ -161,17 +225,45 @@ public class Game implements IGame {
     }
 
     /**
+     * for testing purposes
+     * @param card
+     * @param id
+     * @throws PlayerExistsException
+     */
+    public void giveResource(ResourceCard card, int id) throws PlayerExistsException{
+        playerManager.addResource(id, card);
+    }
+
+    /**
+     * for testing purposes.
+     * @param t
+     * @return
+     * @throws InsufficientResourcesException
+     * @throws InvalidTypeException
+     */
+    public ResourceCard getResourceCard(ResourceType t) throws InsufficientResourcesException, InvalidTypeException{
+        return resourceCardBank.discard(t);
+    }
+
+    public Integer amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException{
+        return playerManager.getPlayerByID(playerID).howManyofThisCard(t);
+    }
+
+    /**
      * Action - Player offers trade
      *
      * @param playerIDOne   ID of Player offering the trade
      * @param playerIDTwo ID of Player being offered the trade
      */
     @Override
-    public void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) {
+    public void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
         if(canOfferTrade(playerIDOne)){
             TradePackage one = new TradePackage(playerIDOne,onecards);
             TradePackage two = new TradePackage(playerIDTwo, twocards);
             Trade trade = new Trade(one,two);
+
+            playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards);
+
         }
     }
 
@@ -198,27 +290,40 @@ public class Game implements IGame {
         return turnTracker.nextTurn();
     }
 
-    /**
-     * Determine if Player can buy a dev card
-     * Checks Player turn, phase, and resources
-     *
-     * @param playerID ID of Player performing action
-     * @return True if Player can buy a dev card
-     */
-    @Override
-    public boolean canBuyDevCard(int playerID) throws PlayerExistsException{
+    public TurnTracker.Phase getCurrentPhase(){
+        return turnTracker.getPhase();
+    }
 
-        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canDiscard();
+    public void nextPhase() {
+        turnTracker.nextPhase();
+    }
+
+    public void setPhase(TurnTracker.Phase p) {
+        turnTracker.setPhase(p);
     }
 
     /**
-     * Action - Player buys a dev card
+     * checks if the player has the cards to buy a DevelopmentCard
      *
-     * @param playerID ID of Player performing action
+     * @param playerID
+     * @return
      */
     @Override
-    public void buyDevCard(int playerID) throws PlayerExistsException{
+    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistsException {
+        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canDiscard();
+    }
+
+        /**
+         * Action - Player buys a dev card
+         *
+         * @param playerID ID of Player performing action
+         */
+    @Override
+    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception{
         playerManager.buyDevCard(playerID);
+        DevelopmentCard dc = developmentCardBank.draw();
+        playerManager.addDevCard(playerID, dc);
+        return dc.getType();
     }
 
     /**
@@ -231,11 +336,20 @@ public class Game implements IGame {
     @Override
     public boolean canUseYearOfPlenty(int playerID) throws PlayerExistsException{
         if(getCurrentTurn() == playerID){
-            //can use DC
             return playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
         }
         return false;
     }
+
+    public void addDevCard(DevelopmentCard dc, int playerID) throws PlayerExistsException{
+        playerManager.getPlayerByID(playerID).addDevCard(dc);
+    }
+
+    public Integer numberOfDevCard(int playerID) throws PlayerExistsException{
+        return playerManager.getPlayerByID(playerID).quantityOfDevCards();
+    }
+
+    public void moveNewToOld(int playerID) throws PlayerExistsException, BadCallerException {playerManager.moveNewToOld(playerID);}
 
     /**
      * Action - Player plays Year of Plenty
@@ -243,9 +357,13 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useYearOfPlenty(int playerID) throws PlayerExistsException, DevCardException{
+    public void useYearOfPlenty(int playerID, ResourceType want1, ResourceType want2) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException{
         if(canUseYearOfPlenty(playerID)){
             playerManager.useYearOfPlenty(playerID);
+            ResourceCard rc1 = resourceCardBank.discard(want1);
+            ResourceCard rc2 = resourceCardBank.discard(want2);
+            playerManager.addResource(playerID, rc1);
+            playerManager.addResource(playerID, rc2);
         }
     }
 
@@ -268,9 +386,11 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useRoadBuilder(int playerID) throws PlayerExistsException, DevCardException{
+    public void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException{
         if(canUseRoadBuilder(playerID)){
             playerManager.useRoadBuilder(playerID);
+            buildRoad(playerID, edge1);
+            buildRoad(playerID, edge2);
         }
     }
 
@@ -327,9 +447,9 @@ public class Game implements IGame {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useMonopoly(int playerID) throws PlayerExistsException, DevCardException{
+    public void useMonopoly(int playerID, ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException{
         if(canUseMonopoly(playerID)){
-            playerManager.useMonopoly(playerID);
+            playerManager.useMonopoly(playerID, turnTracker.getNumPlayers(), type);
         }
     }
 
@@ -381,7 +501,8 @@ public class Game implements IGame {
     }
 
     public ResourceType rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
-        if(canPlaceRobber(playerrobber)){
+        Set<Integer> who = map.whoCanGetRobbed();
+        if(canPlaceRobber(playerrobber) && who.contains(playerrobbed)){
             turnTracker.updateRobber(false);
             ResourceType treasure = playerManager.placeRobber(playerrobber, playerrobbed);
         }
@@ -508,33 +629,6 @@ public class Game implements IGame {
     }
 
     /**
-     * checks if the player has the cards to buy a DevelopmentCard
-     *
-     * @param playerID
-     * @return
-     */
-    @Override
-    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistsException {
-        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canDiscard();
-
-    }
-
-    /**
-     * Buys a new developmentCard for the player
-     * deducts cards
-     * adds new developmentCard to his DCBank
-     *
-     * @param playerID
-     */
-    @Override
-    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException {
-        if(canBuyDevelopmentCard(playerID)){
-            playerManager.buyDevCard(playerID);
-        }
-        return null;
-    }
-
-    /**
      * checks if the player is in the trade sequence of his turn
      *
      * @param playerID
@@ -632,6 +726,10 @@ public class Game implements IGame {
         return turnTracker;
     }
 
+    public PlayerManager getPlayerManager(){
+        return playerManager;
+    }
+
 
     /*======================================================
     * Private - Helper Methods
@@ -645,5 +743,10 @@ public class Game implements IGame {
         } catch(Exception e) {
             //throw new
         }
+    }
+
+    @Override
+    public JsonObject toJSON() {
+        return null;
     }
 }

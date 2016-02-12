@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
@@ -46,6 +47,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.developmentCardBank = new DevelopmentCardBank(false);
         this.moveRobber = false;
         this.structureBank = new StructureBank();
+        this.playedDevCard = false;
     }
 
     /**
@@ -57,7 +59,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         try {
             setColor(json.get("color").getAsString());
             this.name = new Name(json.get("name").getAsString());
-            this.developmentCardBank = new DevelopmentCardBank(json.getAsJsonObject("oldDevCards"));
+            this.developmentCardBank = new DevelopmentCardBank(json.getAsJsonObject("oldDevCards"), false);
             this.developmentCardBank.addDevCards(json.getAsJsonObject("newDevCards"));
         } catch (InvalidNameException | InvalidColorException | BadCallerException e) {
             e.printStackTrace();
@@ -71,7 +73,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         this.playedDevCard = json.get("playedDevCard").getAsBoolean();
         this.soldiers = json.get("soldiers").getAsInt();
 
-        this.resourceCardBank = new ResourceCardBank(json.getAsJsonObject("resources"));
+        this.resourceCardBank = new ResourceCardBank(json.getAsJsonObject("resources"), false);
         this.structureBank = new StructureBank(json.get("roads").getAsInt(), json.get("settlements").getAsInt(), json.get("cities").getAsInt());
     }
 
@@ -227,6 +229,19 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         return discarded;
     }
 
+    public Integer howManyofThisCard(ResourceType t) throws InvalidTypeException{
+        if(t == ResourceType.SHEEP){return resourceCardBank.getNumberOfSheep();}
+        if(t == ResourceType.ORE){return resourceCardBank.getNumberOfOre();}
+        if(t == ResourceType.BRICK){return resourceCardBank.getNumberOfBrick();}
+        if(t == ResourceType.WOOD){return resourceCardBank.getNumberOfWood();}
+        if(t == ResourceType.WHEAT){return resourceCardBank.getNumberOfWheat();}
+        throw new InvalidTypeException("not correct resourcetype");
+    }
+
+    public Integer getNumberOfType(ResourceType t){
+        return resourceCardBank.getNumberOfType(t);
+    }
+
     /**
      * Determine if Player can offer a trade
      * Checks Player turn, phase, and resources
@@ -254,6 +269,10 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         }
     }
 
+    public Integer quantityOfDevCards(){
+        return developmentCardBank.size();
+    }
+
     /**
      * Determine if Player can buy a dev card
      * Checks Player turn, phase, and resources
@@ -272,6 +291,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public void buyDevCard() {
         resourceCardBank.buyDevCard();
     }
+
+
+    public void moveNewToOld() throws BadCallerException{ developmentCardBank.moveNewToOld();}
 
     /**
      * Determine if Player can play Year of Plenty
@@ -622,6 +644,12 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public Name getName() {
         return name;
     }
+
+    public IDevelopmentCardBank getDevelopmentCardBank(){return developmentCardBank;}
+
+    public IResourceCardBank getResourceCardBank(){return resourceCardBank;}
+
+    public int countResources(){return resourceCardBank.size();}
 
     public boolean hasDiscarded() {
         return discarded;

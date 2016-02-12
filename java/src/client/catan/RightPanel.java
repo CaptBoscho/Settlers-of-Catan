@@ -11,24 +11,17 @@ import client.devcards.*;
 
 @SuppressWarnings("serial")
 public class RightPanel extends JPanel {
-	
-	private PlayDevCardView playCardView;
-	private BuyDevCardView buyCardView;
+
 	private DevCardController devCardController;
-	private PointsView pointsView;
-	private GameFinishedView finishedView;
-	private PointsController pointsController;
-	private ResourceBarView resourceView;
-	private ResourceBarController resourceController;
-	
+
 	public RightPanel(final IMapController mapController) {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		
 		// Initialize development card views and controller
 		//
-		playCardView = new PlayDevCardView();
-		buyCardView = new BuyDevCardView();
+		final PlayDevCardView playCardView = new PlayDevCardView();
+		final BuyDevCardView buyCardView = new BuyDevCardView();
 		IAction soldierAction = new IAction() {
 			@Override
 			public void execute()
@@ -50,15 +43,15 @@ public class RightPanel extends JPanel {
 		
 		// Initialize victory point view and controller
 		//
-		pointsView = new PointsView();
-		finishedView = new GameFinishedView();
-		pointsController = new PointsController(pointsView, finishedView);
+		final PointsView pointsView = new PointsView();
+		final GameFinishedView finishedView = new GameFinishedView();
+		final PointsController pointsController = new PointsController(pointsView, finishedView);
 		pointsView.setController(pointsController);
 		
 		// Initialize resource bar view and controller
 		//
-		resourceView = new ResourceBarView();
-		resourceController = new ResourceBarController(resourceView);
+		final ResourceBarView resourceView = new ResourceBarView();
+		final ResourceBarController resourceController = new ResourceBarController(resourceView);
 		resourceController.setElementAction(ResourceBarElement.ROAD,
 											createStartMoveAction(mapController, PieceType.ROAD));
 		resourceController.setElementAction(ResourceBarElement.SETTLEMENT,
@@ -89,14 +82,10 @@ public class RightPanel extends JPanel {
 	
 	private IAction createStartMoveAction(final IMapController mapController, final PieceType pieceType) {
 		
-		return new IAction() {
-			
-			@Override
-			public void execute() {
-				boolean isFree = false;
-				boolean allowDisconnected = false;
-				mapController.startMove(pieceType, isFree, allowDisconnected);
-			}
-		};
+		return () -> {
+            boolean isFree = false;
+            boolean allowDisconnected = false;
+            mapController.startMove(pieceType, isFree, allowDisconnected);
+        };
 	}
 }

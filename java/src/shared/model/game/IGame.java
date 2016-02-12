@@ -38,9 +38,14 @@ public interface IGame {
     public int getCurrentTurn();
 
 
-    public boolean canFirstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException;
+    public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException;
 
-    public void firstTurn(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
+
+    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException;
+
+    public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException;
+
+    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
 
     /**
      * Determine if Player can discard cards
@@ -86,7 +91,7 @@ public interface IGame {
      * @param playerIDOne ID of Player offering the trade
      * @param playerIDTwo ID of Player being offered the trade
      */
-    void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards);
+    void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
 
     /**
@@ -103,19 +108,10 @@ public interface IGame {
      */
     Integer finishTurn(int playerID) throws Exception;
 
-    /**
-     * Determine if Player can buy a dev card
-     * Checks Player turn, phase, and resources
-     * @param playerID ID of Player performing action
-     * @return True if Player can buy a dev card
-     */
-    boolean canBuyDevCard(int playerID) throws PlayerExistsException;
+    TurnTracker.Phase getCurrentPhase();
 
-    /**
-     * Action - Player buys a dev card
-     * @param playerID ID of Player performing action
-     */
-    void buyDevCard(int playerID) throws PlayerExistsException;
+    void nextPhase();
+
 
     /**
      * Determine if Player can play Year of Plenty
@@ -129,7 +125,7 @@ public interface IGame {
      * Action - Player plays Year of Plenty
      * @param playerID ID of Player performing action
      */
-    void useYearOfPlenty(int playerID) throws PlayerExistsException, DevCardException;
+    void useYearOfPlenty(int playerID, ResourceType want1, ResourceType want2) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException;
 
     /**
      * Determine if Player can play Road Builder
@@ -143,7 +139,7 @@ public interface IGame {
      * Action - Player plays Road Builder
      * @param playerID ID of Player performing action
      */
-    void useRoadBuilder(int playerID) throws PlayerExistsException, DevCardException;
+    void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException;
 
     /**
      * Determine if Player can play Soldier
@@ -171,7 +167,7 @@ public interface IGame {
      * Action - Player plays Monopoly
      * @param playerID ID of Player performing action
      */
-    void useMonopoly(int playerID) throws PlayerExistsException, DevCardException;
+    void useMonopoly(int playerID, ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException;
 
     /**
      * Determine if Player can play Monument
@@ -274,7 +270,7 @@ public interface IGame {
      * adds new developmentCard to his DCBank
      * @param playerID
      */
-    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException;
+    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception;
 
     /**
      * checks if the player is in the trade sequence of his turn

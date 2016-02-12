@@ -24,10 +24,10 @@ public class CatanPanel extends JPanel {
     public CatanPanel() {
 		this.setLayout(new BorderLayout());
 
-        TitlePanel titlePanel = new TitlePanel();
-        MidPanel midPanel = new MidPanel();
-        LeftPanel leftPanel = new LeftPanel(titlePanel, midPanel.getGameStatePanel());
-        RightPanel rightPanel = new RightPanel(midPanel.getMapController());
+        final TitlePanel titlePanel = new TitlePanel();
+        final MidPanel midPanel = new MidPanel();
+        final LeftPanel leftPanel = new LeftPanel(titlePanel, midPanel.getGameStatePanel());
+        final RightPanel rightPanel = new RightPanel(midPanel.getMapController());
 		
 		this.add(titlePanel, BorderLayout.NORTH);
 		this.add(leftPanel, BorderLayout.WEST);
@@ -37,17 +37,17 @@ public class CatanPanel extends JPanel {
 		discardView = new DiscardView();
 		discardWaitView = new WaitView();
 		discardWaitView.setMessage("Waiting for other Players to Discard");
-        DiscardController discardController = new DiscardController(discardView, discardWaitView);
+        final DiscardController discardController = new DiscardController(discardView, discardWaitView);
 		discardView.setController(discardController);
 		discardWaitView.setController(discardController);
 
-        RollView rollView = new RollView();
-        RollResultView rollResultView = new RollResultView();
-        RollController rollController = new RollController(rollView, rollResultView);
+        final RollView rollView = new RollView();
+        final RollResultView rollResultView = new RollResultView();
+        final RollController rollController = new RollController(rollView, rollResultView);
 		rollView.setController(rollController);
 		rollResultView.setController(rollController);
 		
-		JButton testButton = new JButton("Test");
+		final JButton testButton = new JButton("Test");
 		testButton.addActionListener(new ActionListener() {
 			
 //			 @Override

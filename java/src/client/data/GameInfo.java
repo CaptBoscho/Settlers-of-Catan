@@ -28,7 +28,7 @@ public class GameInfo {
 	}
 
     public GameInfo(String json) {
-        JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         this.id = obj.get("id").getAsInt();
         this.title = obj.get("title").getAsString();
         this.players = new ArrayList<>();

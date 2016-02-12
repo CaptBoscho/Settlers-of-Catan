@@ -38,8 +38,7 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 		this.setBorder(BorderFactory.createEmptyBorder(3,3,3,3)); 
 		
 		playerPanel = new JPanel[NUM_PLAYERS];
-		for(int i = 0; i < NUM_PLAYERS; i++)
-		{
+		for(int i = 0; i < NUM_PLAYERS; i++) {
 			playerPanel[i] = new JPanel();
 			this.add(playerPanel[i]);
 		}
@@ -60,13 +59,7 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 	@Override
 	public void setController(IController controller) {
 		super.setController(controller);
-		this.gameStatePanel.setButtonAction(new IAction() {
-			@Override
-			public void execute()
-			{
-				getController().endTurn();
-			}
-		});
+		this.gameStatePanel.setButtonAction(() -> getController().endTurn());
 	}
 
 	@Override

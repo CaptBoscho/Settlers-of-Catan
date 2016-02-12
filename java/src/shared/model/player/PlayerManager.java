@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import com.google.gson.*;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
@@ -7,12 +8,14 @@ import shared.exceptions.*;
 import shared.model.bank.InvalidTypeException;
 
 import shared.model.cards.Card;
+
+import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.game.trade.TradeType;
+
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
-import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,16 +35,17 @@ public class PlayerManager implements IPlayerManager {
         this.players = ps;
     }
 
-    /**
-     * Creates a new player and adds it to the list of players
-     * @throws TooManyPlayersException
-     */
-    public void addNewPlayer() throws TooManyPlayersException{
-        if(canAddPlayer()){
-            this.players.add(new Player());
-        } else {
-            throw new TooManyPlayersException("Max number of players reached!");
+    public PlayerManager(JsonArray players) {
+        this.players = new ArrayList<>();
+        for (int i = 0; i < players.size(); i++) {
+            if (!(players.get(i) instanceof JsonNull)) {
+                addPlayer(new Player((JsonObject) players.get(i)));
+            }
         }
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 
     /**
@@ -51,14 +55,14 @@ public class PlayerManager implements IPlayerManager {
     public List<Integer> randomizePlayers() throws FailedToRandomizeException {
         if (!this.players.isEmpty()){
             Collections.shuffle(this.players);
-            List<Integer> id_order = new ArrayList<Integer>();
+            List<Integer> id_order = new ArrayList<>();
             for (Player p : this.players) {
                 id_order.add(p.get_id());
             }
             return id_order;
-        }
-        else
+        } else {
             throw new FailedToRandomizeException("There are no players to shuffle");
+        }
     }
 
     /**
@@ -103,10 +107,11 @@ public class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     public Player getPlayerByIndex(int index) throws PlayerExistsException {
-        if(index < this.players.size() && this.players.get(index) != null)
+        if(index < this.players.size() && this.players.get(index) != null) {
             return this.players.get(index);
-        else
+        } else {
             throw new PlayerExistsException("The player at index " + index + " doesn't exist!");
+        }
     }
 
 
@@ -170,6 +175,19 @@ public class PlayerManager implements IPlayerManager {
         return player.canOfferTrade();
     }
 
+    public void offerTrade(int one, int two, List<ResourceType> ones, List<ResourceType> twos) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
+        Player player1 = getPlayerByID(one);
+        Player player2 = getPlayerByID(two);
+        List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
+        List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
+        for(ResourceCard rc: discardedOnes){
+            player2.addResourceCard(rc);
+        }
+        for(ResourceCard rc: discardedTwos){
+            player1.addResourceCard(rc);
+        }
+    }
+
     /**
      * Determine if Player can perform maritime trade
      * Checks Player turn, phase, resources, and ports
@@ -214,6 +232,15 @@ public class PlayerManager implements IPlayerManager {
     public void buyDevCard(int id) throws PlayerExistsException {
         Player player = getPlayerByID(id);
         player.buyDevCard();
+    }
+
+    public void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException{
+        Player player = getPlayerByID(id);
+        player.addDevCard(dc);
+    }
+
+    public void moveNewToOld(int id) throws PlayerExistsException, BadCallerException{
+        getPlayerByID(id).moveNewToOld();
     }
 
     /**
@@ -313,10 +340,27 @@ public class PlayerManager implements IPlayerManager {
      * @param id ID of the player
      */
     @Override
-    public void useMonopoly(int id) throws DevCardException, PlayerExistsException {
+    public void useMonopoly(int id, int num, ResourceType type) throws DevCardException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         Player player = getPlayerByID(id);
         player.useMonopoly();
+        for(int i=1; i<= num; i++){
+            if(i!=id){
+                int amount = getPlayerByID(i).getNumberOfType(type);
+                List<ResourceType> rt = new ArrayList<>();
+                for(int k=0; k<amount; k++){
+                    rt.add(type);
+                }
+                List<ResourceCard> returned = getPlayerByID(i).discardResourceCards(rt);
+                for(int k=0; k< returned.size(); k++){
+                    addResource(id, returned.get(k));
+                }
+
+            }
+        }
+        System.out.println("mono2: " + getPlayerByID(id).howManyofThisCard(type));
     }
+
+
 
     /**
      * Determine if Player can play Monument

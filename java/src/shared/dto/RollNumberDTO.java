@@ -23,6 +23,10 @@ public class RollNumberDTO implements JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "rollNumber");
+        obj.addProperty("playerIndex", this.playerIndex);
+        obj.addProperty("number", this.numberRolled);
+        return obj;
     }
 }

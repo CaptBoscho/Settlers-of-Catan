@@ -7,8 +7,7 @@ import shared.definitions.*;
  * Interface for the accept trade overlay, which allows the user to accept or
  * reject a proposed trade
  */
-public interface IAcceptTradeOverlay extends IOverlayView
-{
+public interface IAcceptTradeOverlay extends IOverlayView {
 	
 	/**
 	 * Adds a resource that the player will receive to the view.

@@ -27,9 +27,4 @@ public class Port {
     public PortType getPortType() {
         return portType;
     }
-
-    public VertexLocation getVertexLoc() {
-        return vertexLoc;
-    }
-
 }

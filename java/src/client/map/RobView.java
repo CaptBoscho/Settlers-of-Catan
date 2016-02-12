@@ -37,7 +37,7 @@ public class RobView extends OverlayView implements IRobView {
 		this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
 		this.setPreferredSize(new Dimension(400, 250));
 
-		JLabel label = new JLabel("Choose who to Rob");
+		final JLabel label = new JLabel("Choose who to Rob");
 		Font labelFont = label.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
@@ -101,9 +101,9 @@ public class RobView extends OverlayView implements IRobView {
 			buttonPanel = new JPanel();
 			buttonPanel.setBorder(BorderFactory.createEmptyBorder(25,0,25,0));
 			
-			victimButtons = new ArrayList<JButton>();
+			victimButtons = new ArrayList<>();
 			
-			for(int i=0; i < numberOfPlayers; i++){
+			for(int i = 0; i < numberOfPlayers; i++){
 				JButton victimButton = new JButton("<html>"
 						+ "<body style=\"text-align:center\">"
 						+ "<p style=\"font-size:" + TOP_SIZE + "%\">" + victims[i].getName() + "</p>"

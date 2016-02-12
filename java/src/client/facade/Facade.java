@@ -30,7 +30,7 @@ public class Facade {
      * Constructor initializes map and game values
      */
     public Facade() {
-        this.game = new Game();
+        this.game = Game.getInstance();
     }
 
     public Set<CatanColor> canJoin() {
@@ -70,7 +70,7 @@ public class Facade {
         if (entries.size() != 4 && entries.size() != 3) {
             throw new BuildException("need 3-4 players to play");
         } else {
-            int id = 0;
+            int id = 1;
             for (String currKey : entries.keySet()) {
                 Name him = new Name(entries.get(currKey).getName());
                 Player p = new Player(0, entries.get(currKey).getColor(), id, him);
@@ -78,7 +78,7 @@ public class Facade {
                 id++;
             }
             int firstPlayerID = this.game.initializeGame(players, randomhex, randomchit, randomport);
-            //map stuff
+
 
         }
     }
@@ -199,7 +199,7 @@ public class Facade {
      * @param playerID
      * @throws BuildException
      */
-    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistsException {
+    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistsException, Exception {
         if (canBuyDC(playerID)) {
             return game.buyDevelopmentCard(playerID);
         } else {
@@ -224,7 +224,7 @@ public class Facade {
      * @param playerOneID
      * @throws BuildException
      */
-    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException {
+    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         if (canTrade(playerOneID)) {
             game.offerTrade(playerOneID, playerTwoID, oneCards,  twoCards);
         } else {
@@ -282,7 +282,7 @@ public class Facade {
      * @param dc
      * @throws BuildException
      */
-    public void playDC(int playerID, DevCardType dc) throws BuildException, PlayerExistsException, DevCardException {
+    /*public void playDC(int playerID, DevCardType dc, EdgeLocation edge1, EdgeLocation edge2) throws BuildException, PlayerExistsException, DevCardException {
         if (canPlayDC(playerID, dc)) {
             if(dc == DevCardType.SOLDIER){game.useSoldier(playerID);}
             else if(dc == DevCardType.MONUMENT){game.useMonument(playerID);}
@@ -292,5 +292,5 @@ public class Facade {
         } else {
             throw new BuildException("can't play this Develpment Card");
         }
-    }
+    }*/
 }
