@@ -58,7 +58,7 @@ public class PlayerManager implements IPlayerManager {
     public List<Integer> randomizePlayers() throws FailedToRandomizeException {
         if (!this.players.isEmpty()){
             Collections.shuffle(this.players);
-            List<Integer> id_order = new ArrayList<>();
+            final List<Integer> id_order = new ArrayList<>();
             for (Player p : this.players) {
                 id_order.add(p.getId());
             }
@@ -208,10 +208,10 @@ public class PlayerManager implements IPlayerManager {
         assert twos != null;
         assert twos.size() > 0;
 
-        Player player1 = getPlayerByID(one);
-        Player player2 = getPlayerByID(two);
-        List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
-        List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
+        final Player player1 = getPlayerByID(one);
+        final Player player2 = getPlayerByID(two);
+        final List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
+        final List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
         for(ResourceCard rc: discardedOnes){
             player2.addResourceCard(rc);
         }
@@ -259,8 +259,7 @@ public class PlayerManager implements IPlayerManager {
     public boolean canBuyDevCard(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        Player player = getPlayerByID(id);
-        return player.canBuyDevCard();
+        return getPlayerByID(id).canBuyDevCard();
     }
 
     /**
@@ -272,16 +271,14 @@ public class PlayerManager implements IPlayerManager {
     public void buyDevCard(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        Player player = getPlayerByID(id);
-        player.buyDevCard();
+        getPlayerByID(id).buyDevCard();
     }
 
     public void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException {
         assert id >= 0;
         assert dc != null;
 
-        Player player = getPlayerByID(id);
-        player.addDevCard(dc);
+        getPlayerByID(id).addDevCard(dc);
     }
 
     public void moveNewToOld(int id) throws PlayerExistsException, BadCallerException {

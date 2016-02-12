@@ -345,7 +345,7 @@ public class MapComponent extends JComponent {
 	}
 	
 	public MapComponent copy() {
-		MapComponent copy = new MapComponent();
+		final MapComponent copy = new MapComponent();
 		
 		// copy.controller = this.controller;
 		copy.hexes = this.hexes;
@@ -376,7 +376,7 @@ public class MapComponent extends JComponent {
 			double scaleX = (double)this.getWidth() / (double)WORLD_WIDTH;
 			double scaleY = (double)this.getHeight() / (double)WORLD_HEIGHT;
 			
-			double newScale = Math.min(scaleX, scaleY);
+			final double newScale = Math.min(scaleX, scaleY);
 			
 			if(newScale > 0) {
 				this.scale = newScale;
@@ -438,7 +438,7 @@ public class MapComponent extends JComponent {
 	}
 	
 	public void placeSettlement(VertexLocation vertLoc, CatanColor color) {
-		VertexLocation normVertLoc = vertLoc.getNormalizedLocation();
+		final VertexLocation normVertLoc = vertLoc.getNormalizedLocation();
 		if(cities.containsKey(normVertLoc)) {
 			cities.remove(normVertLoc);
 		}
@@ -446,7 +446,7 @@ public class MapComponent extends JComponent {
 	}
 	
 	public void placeCity(VertexLocation vertLoc, CatanColor color) {
-		VertexLocation normVertLoc = vertLoc.getNormalizedLocation();
+		final VertexLocation normVertLoc = vertLoc.getNormalizedLocation();
 		if(settlements.containsKey(normVertLoc)) {
 			settlements.remove(normVertLoc);
 		}
@@ -632,8 +632,8 @@ public class MapComponent extends JComponent {
 	
 	private void drawPorts(Graphics2D g2) {
 		for (Map.Entry<EdgeLocation, PortType> entry : ports.entrySet()) {
-			EdgeLocation edgeLoc = entry.getKey();
-			PortType portType = entry.getValue();
+			final EdgeLocation edgeLoc = entry.getKey();
+			final PortType portType = entry.getValue();
 			drawPort(g2, edgeLoc, portType);
 		}
 	}
@@ -703,21 +703,20 @@ public class MapComponent extends JComponent {
 	
 	private void drawRotatedImage(Graphics2D g2, BufferedImage image, Point2D location, double radians) {
 		
-		int centerX = image.getWidth() / 2;
-		int centerY = image.getHeight() / 2;
+		final int centerX = image.getWidth() / 2;
+		final int centerY = image.getHeight() / 2;
 		
-		AffineTransform tx = AffineTransform.getRotateInstance(radians, centerX, centerY);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		final AffineTransform tx = AffineTransform.getRotateInstance(radians, centerX, centerY);
+		final AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		
 		drawImage(g2, op.filter(image, null), location);
 	}
 	
 	private void drawImage(Graphics2D g2, BufferedImage image, Point2D location) {
-		int centerX = image.getWidth() / 2;
-		int centerY = image.getHeight() / 2;
+		final int centerX = image.getWidth() / 2;
+		final int centerY = image.getHeight() / 2;
 		
-		g2.drawImage(image, (int)location.getX() - centerX,
-					 (int)location.getY() - centerY, null);
+		g2.drawImage(image, (int)location.getX() - centerX, (int)location.getY() - centerY, null);
 	}
 	
 	private double getPortRotation(EdgeLocation edgeLoc) {
@@ -749,25 +748,25 @@ public class MapComponent extends JComponent {
 	}
 	
 	private static Point2D getEdgePoint(EdgeLocation edgeLoc) {
-		EdgeLocation normEdgeLoc = edgeLoc.getNormalizedLocation();
-		Point2D hexPoint = getHexPoint(normEdgeLoc.getHexLoc());
-		Point2D edgePoint = EDGE_POINTS.get(normEdgeLoc.getDir());
+		final EdgeLocation normEdgeLoc = edgeLoc.getNormalizedLocation();
+		final Point2D hexPoint = getHexPoint(normEdgeLoc.getHexLoc());
+		final Point2D edgePoint = EDGE_POINTS.get(normEdgeLoc.getDir());
 		return add(hexPoint, edgePoint);
 	}
 	
 	private static Point2D getVertexPoint(VertexLocation vertLoc) {
-		VertexLocation normVertLoc = vertLoc.getNormalizedLocation();
-		Point2D hexPoint = getHexPoint(normVertLoc.getHexLoc());
-		Point2D vertPoint = VERTEX_POINTS.get(normVertLoc.getDir());
+		final VertexLocation normVertLoc = vertLoc.getNormalizedLocation();
+		final Point2D hexPoint = getHexPoint(normVertLoc.getHexLoc());
+		final Point2D vertPoint = VERTEX_POINTS.get(normVertLoc.getDir());
 		return add(hexPoint, vertPoint);
 	}
 	
 	private static List<Point2D> rotateShape(List<Point2D> points, double radians) {
-		AffineTransform affine = new AffineTransform();
+		final AffineTransform affine = new AffineTransform();
 		affine.rotate(radians);
-		List<Point2D> result = new ArrayList<>();
+		final List<Point2D> result = new ArrayList<>();
 		for (Point2D pt : points) {
-			Point2D newPt = new Point2D.Double();
+			final Point2D newPt = new Point2D.Double();
 			affine.transform(pt, newPt);
 			result.add(newPt);
 		}

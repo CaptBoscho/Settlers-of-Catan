@@ -242,7 +242,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         assert cards.size() > 0;
         assert this.resourceCardBank != null;
 
-        List<ResourceCard> discarded = new ArrayList<>();
+        final List<ResourceCard> discarded = new ArrayList<>();
         for(ResourceType rt: cards) {
             discarded.add(resourceCardBank.discard(rt));
         }

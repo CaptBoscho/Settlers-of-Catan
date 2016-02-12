@@ -41,7 +41,7 @@ public class Trade {
      * (@post) The resource(s) from package1 are now in package2, and vice versa
      */
     public void switchResources() {
-        List<ResourceType> ghost = package1.getResources();
+        final List<ResourceType> ghost = package1.getResources();
         package1.setResources(package2.getResources());
         package2.setResources(ghost); //todo JUnit tests
     }
@@ -95,7 +95,7 @@ public class Trade {
             }
         }
 
-        JsonObject obj = new JsonObject();
+        final JsonObject obj = new JsonObject();
         obj.addProperty("brick", brickCount);
         obj.addProperty("ore", oreCount);
         obj.addProperty("sheep", sheepCount);

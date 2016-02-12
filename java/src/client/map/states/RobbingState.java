@@ -8,7 +8,7 @@ import shared.locations.VertexLocation;
 import shared.model.game.Game;
 
 /**
- * Created by corne on 2/11/2016.
+ * @author Kyle Cornelison
  *
  * Represents Robbing a Player State
  */

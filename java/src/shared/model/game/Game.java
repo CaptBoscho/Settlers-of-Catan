@@ -310,8 +310,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert !onecards.equals(twocards);
 
         if(canOfferTrade(playerIDOne)){
-            TradePackage one = new TradePackage(playerIDOne,onecards);
-            TradePackage two = new TradePackage(playerIDTwo, twocards);
+            final TradePackage one = new TradePackage(playerIDOne,onecards);
+            final TradePackage two = new TradePackage(playerIDTwo, twocards);
             Trade trade = new Trade(one,two);
 
             playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards);
@@ -389,7 +389,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.developmentCardBank != null;
 
         playerManager.buyDevCard(playerID);
-        DevelopmentCard dc = developmentCardBank.draw();
+        final DevelopmentCard dc = developmentCardBank.draw();
         playerManager.addDevCard(playerID, dc);
         return dc.getType();
     }
@@ -870,7 +870,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 cards.add(ResourceType.WOOD);
                 cards.add(ResourceType.WOOD);
             }
-            List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
+            final List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
             assert discarded != null;
             for(ResourceCard rc: discarded) {
                 resourceCardBank.addResource(rc);
@@ -888,12 +888,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         if(canMaritimeTrade(playerID, port)) {
             if(port == PortType.THREE) {
-                List<ResourceType> cards = new ArrayList<>();
+                final List<ResourceType> cards = new ArrayList<>();
                 cards.add(give);
                 cards.add(give);
                 cards.add(give);
 
-                List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
+                final List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
 
                 for(ResourceCard rc: discarded) {
                     resourceCardBank.addResource(rc);

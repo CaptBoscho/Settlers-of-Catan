@@ -206,7 +206,7 @@ public class TurnTracker {
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("currentTurn", currentTurn);
         //'Rolling' or 'Robbing' or 'Playing' or 'Discarding' or 'FirstRound' or 'SecondRound'
 //        json.addProperty("status", status);

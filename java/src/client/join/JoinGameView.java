@@ -36,22 +36,21 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 		this.initializeView();
 	}
 
-	private void initializeView()
-	{
+	private void initializeView() {
 		this.setOpaque(true);
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
 
-		JLabel label = new JLabel("Welcome to the game hub");
+		final JLabel label = new JLabel("Welcome to the game hub");
 		Font labelFont = label.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
-		JLabel subLabel = new JLabel("Join an existing game, or create your own");
+		final JLabel subLabel = new JLabel("Join an existing game, or create your own");
 		labelFont = subLabel.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE * 2 / 3);
 		subLabel.setFont(labelFont);
 
-		JPanel labelPanel = new JPanel();
+		final JPanel labelPanel = new JPanel();
 		labelPanel.setLayout(new FlowLayout());
 		labelPanel.add(label);
 		labelPanel.add(subLabel);
@@ -61,14 +60,14 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 		// This is the header layout
 		JPanel gamePanel = new JPanel();
 		gamePanel.setLayout(new GridLayout(0, 4));
-		JLabel hash = new JLabel("#");
+		final JLabel hash = new JLabel("#");
 		labelFont = new Font(labelFont.getFontName(), Font.BOLD, PANEL_TEXT_SIZE);
 		hash.setFont(labelFont);
-		JLabel name = new JLabel("Name");
+		final JLabel name = new JLabel("Name");
 		name.setFont(labelFont);
-		JLabel currentPlayer = new JLabel("Current Players");
+		final JLabel currentPlayer = new JLabel("Current Players");
 		currentPlayer.setFont(labelFont);
-		JLabel join = new JLabel("Join");
+		final JLabel join = new JLabel("Join");
 		join.setFont(labelFont);
 
 		gamePanel.add(hash);
@@ -80,10 +79,10 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 		if (games != null && games.length > 0) {
 			labelFont = labelFont.deriveFont(labelFont.getStyle(), PANEL_TEXT_SIZE);
 			for (GameInfo game : games) {
-				JLabel tmp1 = new JLabel(String.valueOf(game.getId()));
+				final JLabel tmp1 = new JLabel(String.valueOf(game.getId()));
 				tmp1.setFont(labelFont);
 				gamePanel.add(tmp1);
-				JLabel tmp2 = new JLabel(game.getTitle());
+				final JLabel tmp2 = new JLabel(game.getTitle());
 				tmp2.setFont(labelFont);
 				gamePanel.add(tmp2);
 				String players = String.valueOf(game.getPlayers().size()) + "/4 : ";
@@ -94,7 +93,7 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 						players = players + game.getPlayers().get(j).getName();
 					}
 				}
-				JLabel tmp3 = new JLabel(players);
+				final JLabel tmp3 = new JLabel(players);
 				tmp3.setFont(labelFont);
 				gamePanel.add(tmp3);
 				JButton joinButton;
@@ -126,7 +125,7 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 		createButton.addActionListener(actionListener);
 		createButton.setFont(buttonFont);
 
-		JPanel buttonPanel = new JPanel();
+		final JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		buttonPanel.add(createButton);
 		buttonPanel.add(tempJoinButton);		
@@ -134,8 +133,7 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 	}
 
 	@Override
-	public IJoinGameController getController()
-	{
+	public IJoinGameController getController() {
 		return (IJoinGameController) super.getController();
 	}
 
