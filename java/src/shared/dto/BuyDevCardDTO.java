@@ -11,6 +11,8 @@ public class BuyDevCardDTO implements JsonSerializable {
     private int playerIndex;
 
     public BuyDevCardDTO(int playerIndex) {
+        assert playerIndex >= 0;
+
         this.playerIndex = playerIndex;
     }
 

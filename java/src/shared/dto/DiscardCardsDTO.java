@@ -29,11 +29,13 @@ public class DiscardCardsDTO implements JsonSerializable {
      */
     public DiscardCardsDTO(int playerIndex, int discardedBrick, int discardedOre, int discardedSheep, int discardedWheat, int discardedWood) {
         assert playerIndex >= 0;
-        assert discardedBrick > 0;
-        assert discardedOre > 0;
-        assert discardedSheep > 0;
-        assert discardedWheat > 0;
-        assert discardedWood > 0;
+        assert discardedBrick >= 0;
+        assert discardedOre >= 0;
+        assert discardedSheep >= 0;
+        assert discardedWheat >= 0;
+        assert discardedWood >= 0;
+        assert discardedBrick + discardedOre + discardedSheep + discardedWheat + discardedWood > 0;
+
         this.playerIndex = playerIndex;
         this.brickCount = discardedBrick;
         this.oreCount = discardedOre;

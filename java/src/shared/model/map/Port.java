@@ -20,6 +20,9 @@ public class Port {
      * @param vertexLoc VertexLocation
      */
     public Port(PortType portType, VertexLocation vertexLoc) {
+        assert portType != null;
+        assert vertexLoc != null;
+
         this.portType = portType;
         this.vertexLoc = vertexLoc;
     }

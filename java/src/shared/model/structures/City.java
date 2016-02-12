@@ -10,6 +10,8 @@ public class City {
     private int playerID;
 
     public City(int playerID) {
+        assert playerID >= 0;
+
         this.playerID = playerID;
     }
 

@@ -38,10 +38,16 @@ public class UserCookie {
     }
 
     public void setCatanGameCookieValue(String catanGameCookieValue) {
+        assert catanGameCookieValue != null;
+        assert catanGameCookieValue.length() > 0;
+
         this.catanGameCookieValue = catanGameCookieValue;
     }
 
     public void setCatanUserCookieValue(String catanUserCookieValue) {
+        assert catanUserCookieValue != null;
+        assert catanUserCookieValue.length() > 0;
+
         this.catanUserCookieValue = catanUserCookieValue;
     }
 }

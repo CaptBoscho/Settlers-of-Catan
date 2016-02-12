@@ -16,6 +16,8 @@ public class LongestRoad {
     }
 
     public LongestRoad(int playerID) {
+        assert playerID >= 0;
+
         this.playerID = playerID;
     }
 
@@ -32,6 +34,9 @@ public class LongestRoad {
      * @param id id of the player owning this card (-1 for no owner)
      */
     public void setOwner(int id, int roadlength) {
+        assert id >= 0;
+        assert roadlength > 0;
+
         this.playerID = id;
         this.size = roadlength;
     }

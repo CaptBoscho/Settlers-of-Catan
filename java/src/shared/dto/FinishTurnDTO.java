@@ -17,6 +17,7 @@ public class FinishTurnDTO implements JsonSerializable {
     public FinishTurnDTO(int playerIndex) {
         assert playerIndex >= 0;
         assert playerIndex <= 3;
+
         this.playerIndex = playerIndex;
     }
 

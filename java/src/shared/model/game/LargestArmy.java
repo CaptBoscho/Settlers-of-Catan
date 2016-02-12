@@ -11,7 +11,7 @@ public class LargestArmy {
     /**
      * Default Constructor
      */
-    public LargestArmy(){
+    public LargestArmy() {
         this.playerID = -1;
     }
 
@@ -23,7 +23,7 @@ public class LargestArmy {
      * Get the current owner of the card
      * @return owner of the card by id
      */
-    public int getOwner(){
+    public int getOwner() {
         return this.playerID;
     }
 
@@ -31,7 +31,7 @@ public class LargestArmy {
      * Set the owner by player id
      * @param id id of the player owning this card (-1 for no owner)
      */
-    public void setNewOwner(int id, int soldiers){
+    public void setNewOwner(int id, int soldiers) {
         this.mostSoldiers = soldiers;
         this.playerID = id;
     }

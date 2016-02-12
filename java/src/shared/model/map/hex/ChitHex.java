@@ -20,6 +20,8 @@ public class ChitHex extends Hex {
      */
     public ChitHex(HexLocation hexLoc, HexType hexType, int chit) {
         super(hexLoc, hexType);
+
+        assert (chit >= 2 && chit <= 6) || (chit >= 8 && chit <= 12);
         this.chit = chit;
     }
 

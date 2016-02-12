@@ -12,6 +12,10 @@ public class PlayMonopolyDTO implements JsonSerializable {
     private String resource;
 
     public PlayMonopolyDTO(int playerIndex, String resource) {
+        assert playerIndex >= 0;
+        assert resource != null;
+        assert resource.length() > 0;
+
         this.playerIndex = playerIndex;
         this.resource = resource;
     }

@@ -24,6 +24,9 @@ public class GameInfoListDTO implements JsonSerializable {
      * @param json a JSON representation of the games
      */
     public GameInfoListDTO(String json) {
+        assert json != null;
+        assert json.length() > 0;
+
         JsonParser parser = new JsonParser();
         JsonArray obj = parser.parse(json).getAsJsonArray();
         this.games = new ArrayList<>();

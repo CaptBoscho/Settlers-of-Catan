@@ -11,6 +11,8 @@ public class PlayMonumentDTO implements JsonSerializable {
     private int playerIndex;
 
     public PlayMonumentDTO(int playerIndex) {
+        assert playerIndex >= 0;
+
         this.playerIndex = playerIndex;
     }
 

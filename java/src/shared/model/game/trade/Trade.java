@@ -15,6 +15,10 @@ public class Trade {
     TradePackage package2;
 
     public Trade(TradePackage package1, TradePackage package2) {
+        assert package1 != null;
+        assert package2 != null;
+        assert !package1.equals(package2);
+
         this.package1 = package1;
         this.package2 = package2;
     }

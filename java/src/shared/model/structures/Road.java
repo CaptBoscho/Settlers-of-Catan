@@ -11,6 +11,8 @@ public class Road {
     private boolean visited;
 
     public Road(int playerID) {
+        assert playerID >= 0;
+
         this.playerID = playerID;
         visited = false;
     }

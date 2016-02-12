@@ -21,6 +21,7 @@ public class Vertex {
     private Port port;
 
     public Vertex(VertexLocation vertexLoc) {
+        assert vertexLoc != null;
         this.vertexLoc = vertexLoc;
         settlement = null;
         city = null;
@@ -90,6 +91,7 @@ public class Vertex {
      * @param settlement Settlement
      */
     public void buildSettlement(Settlement settlement) {
+        assert settlement != null;
         if(canBuildSettlement()) {
             this.settlement = settlement;
         }
@@ -100,6 +102,7 @@ public class Vertex {
      * @param city City
      */
     public void buildCity(City city) {
+        assert city != null;
         if(canBuildCity()) {
             settlement = null;
             this.city = city;
@@ -119,6 +122,7 @@ public class Vertex {
     }
 
     public void setPort(Port port){
+        assert port != null;
         this.port = port;
     }
 }

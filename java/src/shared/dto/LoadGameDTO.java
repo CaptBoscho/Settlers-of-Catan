@@ -13,6 +13,7 @@ public class LoadGameDTO implements JsonSerializable {
     public LoadGameDTO(String name) {
         assert name != null;
         assert name.length() > 0;
+
         this.name = name;
     }
 

@@ -14,6 +14,10 @@ public class PlayYOPCardDTO implements JsonSerializable {
     private ResourceType resource2;
 
     public PlayYOPCardDTO(int playerIndex, ResourceType resource1, ResourceType resource2) {
+        assert playerIndex >= 0;
+        assert resource1 != null;
+        assert resource2 != null;
+
         this.playerIndex = playerIndex;
         this.resource1 = resource1;
         this.resource2 = resource2;

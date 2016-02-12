@@ -21,6 +21,9 @@ public class Hex {
      * @param hexType HexType
      */
     public Hex(HexLocation hexLoc, HexType hexType) {
+        assert hexLoc != null;
+        assert hexType != null;
+
         this.hexLoc = hexLoc;
         this.hexType = hexType;
     }

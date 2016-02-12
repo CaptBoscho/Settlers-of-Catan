@@ -23,6 +23,7 @@ public class Robber {
      * @param hexLoc HexLocation of the Robber
      */
     public Robber(HexLocation hexLoc) {
+        assert hexLoc != null;
         this.hexLoc = hexLoc;
     }
 
@@ -31,6 +32,7 @@ public class Robber {
     }
 
     public void setLocation(HexLocation hexLoc) {
+        assert hexLoc != null;
         this.hexLoc = hexLoc;
     }
 }

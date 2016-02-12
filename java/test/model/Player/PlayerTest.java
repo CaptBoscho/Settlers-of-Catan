@@ -82,11 +82,15 @@ public class PlayerTest {
 
     @Test
     public void testCanOfferTrade() throws Exception {
+        for(Player p : pm.getPlayers()) {
+            assertFalse(p.canOfferTrade());
+        }
+
         for(Player p : pm.getPlayers()){
             for(int i = 0; i < 8; i++){
                 p.addResourceCard(new Brick());
             }
-            p.canOfferTrade();
+            assertTrue(p.canOfferTrade());
         }
     }
 
@@ -107,7 +111,11 @@ public class PlayerTest {
 
     @Test
     public void testCanUseYearOfPlenty() throws Exception {
+        for(Player p : pm.getPlayers()) {
+            assertFalse(p.canUseYearOfPlenty());
+        }
 
+        // TODO -- give YOP to a player and assert true
     }
 
     @Test

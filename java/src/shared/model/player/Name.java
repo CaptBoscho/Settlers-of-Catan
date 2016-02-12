@@ -16,6 +16,9 @@ public class Name {
      * @throws InvalidNameException
      */
     public Name(String name) throws InvalidNameException {
+        assert name != null;
+        assert name.length() > 0;
+
         if(isAlpha(name)) {
             this.name = name;
         } else {

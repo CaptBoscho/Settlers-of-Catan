@@ -19,12 +19,16 @@ public class MessageList {
     public MessageList(){}
 
     public void addMessage(MessageLine m){
+        assert m != null;
+        assert m.getMessage() != null;
+        assert m.getMessage().length() > 0;
+
         chat.add(m);
     }
 
     public void loadJSON(JsonObject js){
        // HashMap<String,Object> result = new ObjectMapper().readValue(js, HashMap.class);
-        chat = new ArrayList<MessageLine>();
+        chat = new ArrayList<>();
 
         Gson gs = new Gson();
         makeMessageLog(gs.fromJson(js.getAsJsonArray("lines"), JsonArray.class));

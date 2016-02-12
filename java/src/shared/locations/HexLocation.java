@@ -82,19 +82,15 @@ public class HexLocation implements JsonSerializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(getClass() != obj.getClass())
-			return false;
-		HexLocation other = (HexLocation)obj;
-		if(x != other.x)
-			return false;
-		if(y != other.y)
-			return false;
-		return true;
-	}
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        HexLocation other = (HexLocation) obj;
+        return x == other.x && y == other.y;
+    }
 	
 	public HexLocation getNeighborLoc(EdgeDirection dir) {
 		switch (dir) {

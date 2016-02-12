@@ -17,6 +17,10 @@ public class VertexLocation implements JsonSerializable {
 	}
 
 	public VertexLocation(JsonObject json) {
+        assert json != null;
+        assert json.has("x");
+        assert json.has("y");
+
 		int x = json.get("x").getAsInt();
 		int y = 0;
 		switch(x) {
@@ -76,9 +80,8 @@ public class VertexLocation implements JsonSerializable {
 	}
 	
 	private void setHexLoc(HexLocation hexLoc) {
-		if(hexLoc == null) {
-			throw new IllegalArgumentException("hexLoc cannot be null");
-		}
+		assert hexLoc != null;
+
 		this.hexLoc = hexLoc;
 	}
 	
@@ -87,8 +90,8 @@ public class VertexLocation implements JsonSerializable {
 		return dir;
 	}
 	
-	private void setDir(VertexDirection direction)
-	{
+	private void setDir(VertexDirection direction) {
+        assert direction != null;
 		this.dir = direction;
 	}
 	

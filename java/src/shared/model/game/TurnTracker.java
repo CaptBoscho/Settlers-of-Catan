@@ -24,6 +24,8 @@ public class TurnTracker {
      * @param index index of the current player
      */
     public TurnTracker(int index) {
+        assert index >= 0;
+
         this.currentTurn = index;
         this.setupPhase = true;
         this.setupRoundOne = true;

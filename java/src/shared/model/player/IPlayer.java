@@ -9,7 +9,6 @@ import shared.model.bank.InvalidTypeException;
 
 import shared.model.cards.Card;
 import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradeType;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.List;
