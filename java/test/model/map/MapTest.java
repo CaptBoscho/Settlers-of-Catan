@@ -347,7 +347,7 @@ public class MapTest {
             answer = "1/[WHEAT]";
             assertTrue(test.toString().equals(answer));
 
-        } catch(InvalidPlayerException | InvalidLocationException | StructureException e) {
+        } catch(InvalidLocationException | StructureException e) {
             System.out.println(e.getMessage());
         } catch(InvalidDiceRollException e) {
             assertTrue(e.getMessage().equals("Need to move robber instead of giving resources"));
@@ -370,22 +370,18 @@ public class MapTest {
         VertexLocation vertexLocThree = new VertexLocation(hexLocThree, VertexDirection.NorthEast);
         HexLocation hexLocFour = new HexLocation(0,0);
         VertexLocation vertexLocFour = new VertexLocation(hexLocFour, VertexDirection.NorthWest);
-        try {
-            assertTrue(map.canInitiateSettlement(playerOne, vertexLocOne));
-            map.initiateSettlement(playerOne, vertexLocOne);
-            assertFalse(map.canInitiateSettlement(playerOne, vertexLocTwo));
-            assertFalse(map.canInitiateSettlement(playerOne, vertexLocThree));
-            assertTrue(map.canInitiateSettlement(playerOne, vertexLocFour));
+        assertTrue(map.canInitiateSettlement(playerOne, vertexLocOne));
+        map.initiateSettlement(playerOne, vertexLocOne);
+        assertFalse(map.canInitiateSettlement(playerOne, vertexLocTwo));
+        assertFalse(map.canInitiateSettlement(playerOne, vertexLocThree));
+        assertTrue(map.canInitiateSettlement(playerOne, vertexLocFour));
 
-            assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOne));
-            jsonMap.initiateSettlement(playerOne, vertexLocOne);
-            assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocTwo));
-            assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocThree));
-            assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocFour));
-            jsonMap.canInitiateSettlement(0, vertexLocFour);
-        } catch(InvalidPlayerException e) {
-            assertTrue(e.getMessage().equals("PlayerID was 0"));
-        }
+        assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOne));
+        jsonMap.initiateSettlement(playerOne, vertexLocOne);
+        assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocTwo));
+        assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocThree));
+        assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocFour));
+        jsonMap.canInitiateSettlement(0, vertexLocFour);
         try{
             map.canInitiateSettlement(1, new VertexLocation(new HexLocation(3,0), VertexDirection.NorthEast));
         } catch(InvalidLocationException e) {
@@ -425,7 +421,7 @@ public class MapTest {
             assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocTwoFirst, vertexLocOneSecond));
             assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
             assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
-        } catch(InvalidLocationException | InvalidPlayerException | StructureException e) {
+        } catch(InvalidLocationException | StructureException e) {
             System.out.println(e.getMessage());
         }
     }
