@@ -660,7 +660,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     //Getters/Setters
     //============================================
 
-    public int get_id() {
+    public int getId() {
         return _id;
     }
 

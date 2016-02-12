@@ -4,9 +4,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
+import shared.exceptions.FailedToRandomizeException;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.resources.Brick;
+import shared.model.cards.resources.ResourceCard;
+import shared.model.cards.resources.Wood;
+import shared.model.game.Game;
 import shared.model.player.Name;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
@@ -23,7 +27,7 @@ public class PlayerTest {
     private PlayerManager pm;
 
     @Before
-    public void setUp() {
+    public void setUp() throws FailedToRandomizeException {
         List<Player> players = new ArrayList<>();
 
         try {
@@ -41,6 +45,7 @@ public class PlayerTest {
         }
 
         pm = new PlayerManager(players);
+        Game.getInstance().initializeGame(players, false, false, false);
     }
 
     @After
@@ -135,7 +140,11 @@ public class PlayerTest {
 
     @Test
     public void testCanUseSoldier() throws Exception {
+        for(Player p : pm.getPlayers()) {
+            assertFalse(p.canUseSoldier());
+        }
 
+        // TODO -- give soldier card to a player and assert true
     }
 
     @Test
@@ -145,7 +154,11 @@ public class PlayerTest {
 
     @Test
     public void testCanUseMonopoly() throws Exception {
+        for(Player p : pm.getPlayers()) {
+            assertFalse(p.canUseMonopoly());
+        }
 
+        // TODO -- give monopoly card to a player and assert true
     }
 
     @Test
@@ -155,7 +168,13 @@ public class PlayerTest {
 
     @Test
     public void testCanUseMonument() throws Exception {
+        for(Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+            assertFalse(p.canUseMonument());
+        }
 
+
+
+        // TODO -- give monument card to a player and assert true
     }
 
     @Test
@@ -175,7 +194,21 @@ public class PlayerTest {
 
     @Test
     public void testCanBuildRoad() throws Exception {
+        // no players should be able to build a road at first
+        for(Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+            assertFalse(p.canBuildRoad());
+        }
+        // give player 0 the resources to build a road
+        Game.getInstance().giveResource(new Brick(), 0);
+        Game.getInstance().giveResource(new Wood(), 0);
 
+        // verify he can build a road
+        assertTrue(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildRoad());
+
+        Game.getInstance().getPlayerManager().getPlayerByID(0).buildRoad();
+
+        // verify that the resources were consumed
+        assertFalse(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildRoad());
     }
 
     @Test

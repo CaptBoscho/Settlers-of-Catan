@@ -124,7 +124,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(players);
         this.map = new Map(randomhexes, randomchits, randomports);
         //List<Integer> order = this.playerManager.randomizePlayers();
-        turnTracker = new TurnTracker(players.get(0).get_id());
+        turnTracker = new TurnTracker(players.get(0).getId());
         turnTracker.setNumPlayers(players.size());
 
         return turnTracker.getCurrentTurn();

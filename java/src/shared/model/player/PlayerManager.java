@@ -60,7 +60,7 @@ public class PlayerManager implements IPlayerManager {
             Collections.shuffle(this.players);
             List<Integer> id_order = new ArrayList<>();
             for (Player p : this.players) {
-                id_order.add(p.get_id());
+                id_order.add(p.getId());
             }
             return id_order;
         } else {
@@ -101,8 +101,9 @@ public class PlayerManager implements IPlayerManager {
         assert id >= 0;
 
         for (Player player : this.players) {
-            if(player.get_id() == id)
+            if(player.getId() == id) {
                 return player;
+            }
         }
 
         throw new PlayerExistsException("Player with id " + id + " doesn't exist!");

@@ -1824,7 +1824,7 @@ public class GameTest {
     @Before
     public void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
         game = Game.getInstance();
-        List<Player> players = new ArrayList<Player>();
+        List<Player> players = new ArrayList<>();
 
         Player one = new Player(0, CatanColor.BLUE, 1, new Name ("Hope"));
         Player two = new Player(0, CatanColor.BROWN, 2, new Name("Corbin"));
@@ -1842,7 +1842,7 @@ public class GameTest {
     }
 
     @Test
-    public void testInitialization() throws InvalidPlayerException, InvalidLocationException, Exception{
+    public void testInitialization() throws Exception{
         int current_turn = game.getCurrentTurn();
         HexLocation hloc = new HexLocation(0,0);
         VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
@@ -1854,9 +1854,6 @@ public class GameTest {
         assertTrue(game.canInitiateRoad(current_turn,vloc,eloc));
         assertFalse(game.canInitiateRoad(current_turn,vloc,new EdgeLocation(hloc, EdgeDirection.SouthWest)));
         game.initiateRoad(current_turn,vloc,eloc);
-
-        HexLocation hloc2 = new HexLocation(8,8);
-        VertexLocation vloc2 = new VertexLocation(hloc2, VertexDirection.East);
 
         int next = game.getTurnTracker().nextTurn();
 
@@ -1922,8 +1919,8 @@ public class GameTest {
         game.giveResource(two, guy);
         game.giveResource(three, friend);
 
-        List<ResourceType> ones = new ArrayList<ResourceType>();
-        List<ResourceType> twos = new ArrayList<ResourceType>();
+        List<ResourceType> ones = new ArrayList<>();
+        List<ResourceType> twos = new ArrayList<>();
         ones.add(ResourceType.BRICK);
         ones.add(ResourceType.ORE);
         twos.add(ResourceType.SHEEP);
@@ -1956,8 +1953,7 @@ public class GameTest {
 
         if(p == TurnTracker.Phase.DISCARDING){
             assertTrue(game.canFinishTurn(guy));
-        }
-        else{
+        } else{
             assertFalse(game.canFinishTurn(guy));
         }
 
@@ -2065,20 +2061,11 @@ public class GameTest {
         game.giveResource(three, 3);
         game.giveResource(four, 3);
 
-
-
         MonopolyCard card = new MonopolyCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
 
-        int now = game.amountOwnedResource(guy, ResourceType.ORE);
-        System.out.println("now: " + now);
         game.useMonopoly(guy, ResourceType.ORE);
-
-        int after = game.amountOwnedResource(guy, ResourceType.ORE);
-        System.out.println("after: " + after);
-
-
     }
 
     @Test
@@ -2100,7 +2087,7 @@ public class GameTest {
     }
 
     @Test
-    public void testBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException, Exception{
+    public void testBuyDevCard() throws InvalidTypeException, Exception{
         int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.DISCARDING);
 
