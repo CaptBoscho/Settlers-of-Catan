@@ -371,11 +371,12 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public void useRoadBuilder() throws DevCardException {
         assert this.developmentCardBank != null;
 
-        if(canUseRoadBuilder())
+        if(canUseRoadBuilder()) {
             developmentCardBank.useRoadBuild();
             // TODO: 1/30/2016 Add any additional functionality - does the map or the structure bank build the road 
-        else
+        } else {
             throw new DevCardException("Player has already played a Development card this turn!");
+        }
     }
 
     /**
@@ -648,7 +649,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         if (!(other instanceof Player))return false;
 
         Player otherPlayer = (Player)other;
-        return otherPlayer._id == this._id;
+        return otherPlayer._id == this._id && otherPlayer.getName().equals(this.name) && otherPlayer.getVictoryPoints() == this.victoryPoints && otherPlayer.getColor() == this.color;
     }
 
     @Override

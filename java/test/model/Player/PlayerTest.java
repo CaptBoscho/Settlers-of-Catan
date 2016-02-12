@@ -5,11 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
 import shared.exceptions.FailedToRandomizeException;
+import shared.exceptions.InvalidNameException;
+import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
-import shared.model.cards.resources.Brick;
-import shared.model.cards.resources.ResourceCard;
-import shared.model.cards.resources.Wood;
+import shared.model.cards.resources.*;
 import shared.model.game.Game;
 import shared.model.player.Name;
 import shared.model.player.Player;
@@ -40,7 +40,7 @@ public class PlayerTest {
             players.add(two);
             players.add(three);
             players.add(four);
-        }catch(Exception e){
+        } catch(Exception e) {
             fail();
         }
 
@@ -55,11 +55,11 @@ public class PlayerTest {
 
     @Test
     public void testCanDiscardCards() throws Exception {
-        for(Player p : pm.getPlayers()){
+        for(Player p : pm.getPlayers()) {
             assertFalse(p.canDiscardCards());
         }
 
-        for(Player p : pm.getPlayers()){
+        for(Player p : pm.getPlayers()) {
             for(int i = 0; i < 9; i++){
                 p.addResourceCard(new Brick());
             }
@@ -74,7 +74,7 @@ public class PlayerTest {
             cards.add(new Brick());
         }
 
-        for(Player p : pm.getPlayers()){
+        for(Player p : pm.getPlayers()) {
             for(int i = 0; i < 8; i++){
                 p.addResourceCard(new Brick());
             }
@@ -91,7 +91,7 @@ public class PlayerTest {
             assertFalse(p.canOfferTrade());
         }
 
-        for(Player p : pm.getPlayers()){
+        for(Player p : pm.getPlayers()) {
             for(int i = 0; i < 8; i++){
                 p.addResourceCard(new Brick());
             }
@@ -218,7 +218,23 @@ public class PlayerTest {
 
     @Test
     public void testCanBuildSettlement() throws Exception {
+        // no players should be able to build a settlement at first
+        for(Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+            assertFalse(p.canBuildSettlement());
+        }
+        // give player 0 the resources to build a settlement
+        Game.getInstance().giveResource(new Brick(), 0);
+        Game.getInstance().giveResource(new Wood(), 0);
+        Game.getInstance().giveResource(new Sheep(), 0);
+        Game.getInstance().giveResource(new Wheat(), 0);
 
+        // verify he can build a settlement
+        assertTrue(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildSettlement());
+
+        Game.getInstance().getPlayerManager().getPlayerByID(0).buildSettlement();
+
+        // verify that the resources were consumed
+        assertFalse(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildSettlement());
     }
 
     @Test
@@ -234,5 +250,28 @@ public class PlayerTest {
     @Test
     public void testBuildCity() throws Exception {
 
+    }
+
+    @Test
+    public void testEquals() throws InvalidNameException, InvalidPlayerException {
+        Player playerOne = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
+        Player playerTwo = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
+        Player playerThree = new Player(0, CatanColor.BROWN, 1, new Name("Rick"));
+        Player playerFour = new Player(0, CatanColor.BROWN, 2, new Name("Derek"));
+        Player playerFive = new Player(0, CatanColor.RED, 1, new Name("Derek"));
+        Player playerSix = new Player(100, CatanColor.BROWN, 1, new Name("Derek"));
+        Player playerOneCopy = playerOne;
+        String notAPlayer = "";
+
+        assertFalse(playerOne.equals(null));
+        assertFalse(playerOne.equals(notAPlayer));
+
+        assertTrue(playerOne.equals(playerOneCopy));
+        assertTrue(playerOne.equals(playerTwo));
+
+        assertFalse(playerOne.equals(playerThree));
+        assertFalse(playerOne.equals(playerFour));
+        assertFalse(playerOne.equals(playerFive));
+        assertFalse(playerOne.equals(playerSix));
     }
 }

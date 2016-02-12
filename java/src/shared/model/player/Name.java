@@ -40,6 +40,16 @@ public class Name {
         return str.matches("[a-zA-Z]+");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (!(o instanceof Name))return false;
+
+        Name otherName = (Name)o;
+        return this.name.equals(otherName.toString());
+    }
+
     //Getters/Setters
     //============================================
 

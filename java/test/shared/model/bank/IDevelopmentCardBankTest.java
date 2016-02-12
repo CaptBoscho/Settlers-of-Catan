@@ -7,7 +7,7 @@ import shared.model.cards.devcards.*;
 import static org.junit.Assert.*;
 
 /**
- * Created by Danny on 2/4/16.
+ * @author Danny Harding
  */
 public class IDevelopmentCardBankTest {
     IDevelopmentCardBank developmentCardBank;
