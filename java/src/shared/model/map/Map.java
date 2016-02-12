@@ -116,8 +116,8 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -146,8 +146,8 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -206,13 +206,13 @@ public class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
-        assert edgeLoc.getHexLoc().getX() >= 0;
-        assert edgeLoc.getHexLoc().getY() >= 0;
+//        assert edgeLoc.getHexLoc().getX() >= 0;
+//        assert edgeLoc.getHexLoc().getY() >= 0;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.edges != null;
@@ -255,14 +255,14 @@ public class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
-        assert edgeLoc.getHexLoc().getX() >= 0;
-        assert edgeLoc.getHexLoc().getY() >= 0;
+//        assert edgeLoc.getHexLoc().getX() >= 0;
+//        assert edgeLoc.getHexLoc().getY() >= 0;
         assert edgeLoc.getNormalizedLocation() != null;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.edges != null;
         assert this.vertices != null;
@@ -325,8 +325,8 @@ public class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
-        assert edgeLoc.getHexLoc().getX() >= 0;
-        assert edgeLoc.getHexLoc().getY() >= 0;
+//        assert edgeLoc.getHexLoc().getX() >= 0;
+//        assert edgeLoc.getHexLoc().getY() >= 0;
         assert edgeLoc.getNormalizedLocation() != null;
         assert this.edges != null;
         assert this.cities != null;
@@ -362,8 +362,8 @@ public class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
-        assert edgeLoc.getHexLoc().getX() >= 0;
-        assert edgeLoc.getHexLoc().getY() >= 0;
+//        assert edgeLoc.getHexLoc().getX() >= 0;
+//        assert edgeLoc.getHexLoc().getY() >= 0;
         assert edgeLoc.getNormalizedLocation() != null;
         assert this.edges != null;
         assert this.cities != null;
@@ -408,8 +408,8 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -446,8 +446,8 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -497,8 +497,8 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -534,8 +534,8 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert this.vertices != null;
         assert this.settlements != null;
         assert this.cities != null;
@@ -627,8 +627,8 @@ public class Map implements IMap, JsonSerializable{
     @Override
     public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         assert hexLoc != null;
-        assert hexLoc.getX() >= 0;
-        assert hexLoc.getY() >= 0;
+//        assert hexLoc.getX() >= 0;
+//        assert hexLoc.getY() >= 0;
         assert this.hexes != null;
         assert this.hexes.size() > 0;
 

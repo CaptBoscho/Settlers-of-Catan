@@ -13,8 +13,8 @@ public class EdgeLocation implements JsonSerializable {
 	
 	public EdgeLocation(HexLocation hexLoc, EdgeDirection dir) {
         assert hexLoc != null;
-        assert hexLoc.getX() > 0;
-        assert hexLoc.getY() > 0;
+//        assert hexLoc.getX() > 0;
+//        assert hexLoc.getY() > 0;
         assert dir != null;
 		setHexLoc(hexLoc);
 		setDir(dir);

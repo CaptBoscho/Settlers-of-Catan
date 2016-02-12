@@ -24,8 +24,8 @@ public class Robber {
      */
     public Robber(HexLocation hexLoc) {
         assert hexLoc != null;
-        assert hexLoc.getX() >= 0;
-        assert hexLoc.getY() >= 0;
+//        assert hexLoc.getX() >= 0;
+//        assert hexLoc.getY() >= 0;
 
         this.hexLoc = hexLoc;
     }
@@ -36,8 +36,8 @@ public class Robber {
 
     public void setLocation(HexLocation hexLoc) {
         assert hexLoc != null;
-        assert hexLoc.getX() >= 0;
-        assert hexLoc.getY() >= 0;
+//        assert hexLoc.getX() >= 0;
+//        assert hexLoc.getY() >= 0;
 
         this.hexLoc = hexLoc;
     }

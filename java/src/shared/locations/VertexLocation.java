@@ -13,8 +13,8 @@ public class VertexLocation implements JsonSerializable {
 	
 	public VertexLocation(HexLocation hexLoc, VertexDirection dir) {
         assert hexLoc != null;
-        assert hexLoc.getX() >= 0;
-        assert hexLoc.getY() >= 0;
+//        assert hexLoc.getX() >= 0;
+//        assert hexLoc.getY() >= 0;
         assert dir != null;
 
 		setHexLoc(hexLoc);

@@ -24,8 +24,8 @@ public class Vertex {
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-        assert vertexLoc.getHexLoc().getX() >= 0;
-        assert vertexLoc.getHexLoc().getY() >= 0;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
 
         this.vertexLoc = vertexLoc;
         settlement = null;
