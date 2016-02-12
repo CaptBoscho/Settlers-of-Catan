@@ -11,33 +11,16 @@ public class Name {
     private String name;
 
     /**
-     * Default Constructor
-     */
-    public Name(){
-        this.name = null;
-    }
-
-    /**
      * Name Constructor
      * @param name Value of name
      * @throws InvalidNameException
      */
     public Name(String name) throws InvalidNameException {
-        if(validate(name))
+        if(isAlpha(name)) {
             this.name = name;
-        else
+        } else {
             throw new InvalidNameException("The name entered is invalid!");
-    }
-
-    /**
-     * Validate name value
-     * @param name Desired value of name
-     */
-    private boolean validate(String name){
-        if(isAlpha(name))
-            return true;
-        else
-            return false;
+        }
     }
 
     //Helper Methods

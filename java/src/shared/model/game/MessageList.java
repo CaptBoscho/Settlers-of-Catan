@@ -10,11 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by boscho on 2/3/16.
+ * @author Corbin Byers
  */
 public class MessageList {
 
-    private List<MessageLine> chat = new ArrayList<MessageLine>();
+    private List<MessageLine> chat = new ArrayList<>();
 
     public MessageList(){}
 

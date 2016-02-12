@@ -55,7 +55,7 @@ public class PlayerManagerTest {
 
     @Test
     public void testRandomizePlayers() throws Exception {
-        List<Player> players = new ArrayList<Player>(pm.getPlayers());
+        List<Player> players = new ArrayList<>(pm.getPlayers());
 
         int counter = 0;
         while(!wasShuffled(players)){
@@ -102,7 +102,7 @@ public class PlayerManagerTest {
 
     @Test
     public void testDiscardCards() throws Exception, InvalidTypeException {
-        List<Card> cards = new ArrayList<Card>();
+        List<Card> cards = new ArrayList<>();
         for(int j = 0; j < 4; j++){
             cards.add(new Brick());
         }

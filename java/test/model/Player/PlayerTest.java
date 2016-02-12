@@ -64,7 +64,7 @@ public class PlayerTest {
 
     @Test
     public void testDiscardCards() throws Exception, InvalidTypeException {
-        List<Card> cards = new ArrayList<Card>();
+        List<Card> cards = new ArrayList<>();
         for(int j = 0; j < 4; j++){
             cards.add(new Brick());
         }

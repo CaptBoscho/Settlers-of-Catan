@@ -110,7 +110,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param players
      * @return Id of first player
      */
-    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) throws FailedToRandomizeException{
+    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) throws FailedToRandomizeException {
         //Add players to PlayerManager
         this.playerManager = new PlayerManager(players);
         this.map = new Map(randomhexes, randomchits, randomports);
@@ -121,27 +121,27 @@ public class Game extends Observable implements IGame, JsonSerializable {
         return turnTracker.getCurrentTurn();
     }
 
-    public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException{
+    public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
         if(turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase()){
             return map.canInitiateSettlement(playerID, vertex);
         }
         return false;
     }
 
-    public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException{
+    public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
         if(canInitiateSettlement(playerID, vertex)){
             map.initiateSettlement(playerID, vertex);
         }
     }
 
-    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException{
+    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
         if(turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase()){
             return map.canInitiateRoad(playerID, edge, vertex);
         }
         return false;
     }
 
-    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException{
+    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
         map.initiateRoad(playerID, edge, vertex);
     }
 
@@ -177,7 +177,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public void discardCards(int playerID, List<ResourceType> cards) throws PlayerExistsException, InvalidTypeException, InsufficientResourcesException{
-        if(canDiscardCards(playerID)){
+        if(canDiscardCards(playerID)) {
             playerManager.discardResourceType(playerID, cards);
         }
     }
@@ -241,11 +241,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws InsufficientResourcesException
      * @throws InvalidTypeException
      */
-    public ResourceCard getResourceCard(ResourceType t) throws InsufficientResourcesException, InvalidTypeException{
+    public ResourceCard getResourceCard(ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
         return resourceCardBank.discard(t);
     }
 
-    public Integer amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException{
+    public Integer amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException {
         return playerManager.getPlayerByID(playerID).howManyofThisCard(t);
     }
 
@@ -319,7 +319,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
          * @param playerID ID of Player performing action
          */
     @Override
-    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception{
+    public DevCardType buyDevelopmentCard(int playerID) throws Exception {
         playerManager.buyDevCard(playerID);
         DevelopmentCard dc = developmentCardBank.draw();
         playerManager.addDevCard(playerID, dc);
@@ -334,22 +334,24 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can play Year of Plenty
      */
     @Override
-    public boolean canUseYearOfPlenty(int playerID) throws PlayerExistsException{
+    public boolean canUseYearOfPlenty(int playerID) throws PlayerExistsException {
         if(getCurrentTurn() == playerID){
             return playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
         }
         return false;
     }
 
-    public void addDevCard(DevelopmentCard dc, int playerID) throws PlayerExistsException{
+    public void addDevCard(DevelopmentCard dc, int playerID) throws PlayerExistsException {
         playerManager.getPlayerByID(playerID).addDevCard(dc);
     }
 
-    public Integer numberOfDevCard(int playerID) throws PlayerExistsException{
+    public Integer numberOfDevCard(int playerID) throws PlayerExistsException {
         return playerManager.getPlayerByID(playerID).quantityOfDevCards();
     }
 
-    public void moveNewToOld(int playerID) throws PlayerExistsException, BadCallerException {playerManager.moveNewToOld(playerID);}
+    public void moveNewToOld(int playerID) throws PlayerExistsException, BadCallerException {
+        playerManager.moveNewToOld(playerID);
+    }
 
     /**
      * Action - Player plays Year of Plenty
@@ -357,7 +359,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useYearOfPlenty(int playerID, ResourceType want1, ResourceType want2) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException{
+    public void useYearOfPlenty(int playerID, ResourceType want1, ResourceType want2) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException {
         if(canUseYearOfPlenty(playerID)){
             playerManager.useYearOfPlenty(playerID);
             ResourceCard rc1 = resourceCardBank.discard(want1);
@@ -375,7 +377,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can play Road Builder
      */
     @Override
-    public boolean canUseRoadBuilder(int playerID) throws PlayerExistsException{
+    public boolean canUseRoadBuilder(int playerID) throws PlayerExistsException {
         return playerManager.canUseRoadBuilder(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
 
     }
@@ -386,7 +388,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException{
+    public void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException {
         if(canUseRoadBuilder(playerID)){
             playerManager.useRoadBuilder(playerID);
             buildRoad(playerID, edge1);
@@ -496,7 +498,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException{
+    public Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException {
         return map.moveRobber(hexloc);
     }
 
@@ -550,7 +552,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @return
      */
     @Override
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException{
+    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
         return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID) && turnTracker.canDiscard(); //&& turnTracker.canBuild(playerID);
 
     }
@@ -664,7 +666,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param port
      */
     @Override
-    public void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException{
+    public void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
 
         if(canMaritimeTrade(playerID, port)){
             List<ResourceType> cards = new ArrayList<>();
@@ -694,8 +696,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
-    public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
-        if(canMaritimeTrade(playerID, port)){
+    public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        if(canMaritimeTrade(playerID, port)) {
             if(port == PortType.THREE) {
                 List<ResourceType> cards = new ArrayList<>();
                 cards.add(give);

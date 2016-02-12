@@ -1,6 +1,5 @@
 package shared.model.map;
 
-import shared.definitions.*;
 import shared.locations.VertexLocation;
 import shared.model.structures.*;
 

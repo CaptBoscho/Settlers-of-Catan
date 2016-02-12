@@ -155,9 +155,9 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
     /**
      * Adds a DevelopmentCard to the bank.
      *
-     * @pre none
-     * @post developmentCards.length() == old.length() + 1
-     * @post cardToAdd is now in developmentCards
+     * (@pre) none
+     * (@post) developmentCards.length() == old.length() + 1
+     * (@post) cardToAdd is now in developmentCards
      *
      * @param cardToAdd Development card to add to the bank
      */
@@ -205,11 +205,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseYearOfPlenty() {
-        if (ownedByGame) {
-            return false;
-        } else {
-            return yearOfPlentyCards.size() > 0;
-        }
+        return !ownedByGame && yearOfPlentyCards.size() > 0;
     }
 
     @Override
@@ -224,11 +220,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseSoldier() {
-        if (ownedByGame) {
-            return false;
-        } else {
-            return (soldierCards.size() > 0);
-        }
+        return !ownedByGame && (soldierCards.size() > 0);
     }
 
     @Override
@@ -243,11 +235,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseMonopoly() {
-        if (ownedByGame) {
-            return false;
-        } else {
-            return (monopolyCards.size() > 0);
-        }
+        return !ownedByGame && (monopolyCards.size() > 0);
     }
 
     @Override
@@ -262,11 +250,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseMonument() {
-        if (ownedByGame) {
-            return false;
-        } else {
-            return (monumentCards.size() > 0);
-        }
+        return !ownedByGame && (monumentCards.size() > 0);
     }
 
     @Override
@@ -281,11 +265,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public boolean canUseRoadBuild() {
-        if (ownedByGame) {
-            return false;
-        } else {
-            return (roadBuildCards.size() > 0);
-        }
+        return !ownedByGame && (roadBuildCards.size() > 0);
     }
 
     @Override
@@ -327,11 +307,11 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     /**
      * Removes one DevelopmentCard from the DevelopmentCardBank and returns it
-     * @pre getOwner() instanceof Game, not Player
-     * @pre size() > 0
+     * (@pre) getOwner() instanceof Game, not Player
+     * (@pre) size() > 0
      *
-     * @post returned DevelopmentCard is no longer in bank
-     * @post new size() == old size() - 1
+     * (@post) returned DevelopmentCard is no longer in bank
+     * (@post) new size() == old size() - 1
      *
      * @return A DevelopmentCard from the DevelopmentCardBank
      */

@@ -1,6 +1,5 @@
 package shared.model.player;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
@@ -9,7 +8,6 @@ import shared.model.bank.*;
 import shared.definitions.CatanColor;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
-import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
@@ -201,7 +199,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     @Override
     public List<ResourceCard> discardCards(List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
         try {
-            List<ResourceCard> discarded = new ArrayList<ResourceCard>();
+            List<ResourceCard> discarded = new ArrayList<>();
             for (Card card : cards) {
                 if (card instanceof ResourceCard) {
                     ResourceCard resourceCard = (ResourceCard) card;
@@ -220,7 +218,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     }
 
     public List<ResourceCard> discardResourceCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
-        List<ResourceCard> discarded = new ArrayList<ResourceCard>();
+        List<ResourceCard> discarded = new ArrayList<>();
         for(ResourceType rt: cards) {
             discarded.add(resourceCardBank.discard(rt));
         }

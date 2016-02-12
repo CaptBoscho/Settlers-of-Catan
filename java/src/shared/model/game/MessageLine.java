@@ -3,7 +3,7 @@ package shared.model.game;
 import com.google.gson.JsonObject;
 
 /**
- * Created by boscho on 2/3/16.
+ * @author Corbin Byers
  */
 public class MessageLine {
 

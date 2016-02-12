@@ -1,6 +1,5 @@
 package shared.model.map.hex;
 
-import com.google.gson.JsonObject;
 import shared.definitions.HexType;
 import shared.locations.HexLocation;
 

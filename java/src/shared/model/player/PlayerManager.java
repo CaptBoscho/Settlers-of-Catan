@@ -10,7 +10,6 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 
 import shared.model.cards.devcards.DevelopmentCard;
-import shared.model.game.trade.TradeType;
 
 import shared.model.cards.resources.ResourceCard;
 
@@ -205,7 +204,7 @@ public class PlayerManager implements IPlayerManager {
 
     public void maritimeTrade(int playerID, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistsException{
         Player player = getPlayerByID(playerID);
-
+        // TODO -
 
 
     }
@@ -351,8 +350,8 @@ public class PlayerManager implements IPlayerManager {
                     rt.add(type);
                 }
                 List<ResourceCard> returned = getPlayerByID(i).discardResourceCards(rt);
-                for(int k=0; k< returned.size(); k++){
-                    addResource(id, returned.get(k));
+                for (ResourceCard aReturned : returned) {
+                    addResource(id, aReturned);
                 }
 
             }
