@@ -12,6 +12,9 @@ public class HexLocation implements JsonSerializable {
 	private int y;
 	
 	public HexLocation(int x, int y) {
+        assert x >= 0;
+        assert y >= 0;
+
 		setX(x);
 		setY(y);
 	}
@@ -22,6 +25,10 @@ public class HexLocation implements JsonSerializable {
      * @param json The JSON being used to construct this object
      */
 	public HexLocation(JsonObject json) {
+        assert json != null;
+        assert json.has("x");
+        assert json.has("y");
+
         x = json.get("x").getAsInt();
 		switch(x) {
 			case -3:
@@ -55,6 +62,8 @@ public class HexLocation implements JsonSerializable {
 	}
 	
 	private void setX(int x) {
+        assert x >= 0;
+
 		this.x = x;
 	}
 	
@@ -63,6 +72,8 @@ public class HexLocation implements JsonSerializable {
 	}
 	
 	private void setY(int y) {
+        assert y >= 0;
+
 		this.y = y;
 	}
 	

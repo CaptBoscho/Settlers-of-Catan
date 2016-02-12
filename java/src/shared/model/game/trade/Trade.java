@@ -16,7 +16,9 @@ public class Trade {
 
     public Trade(TradePackage package1, TradePackage package2) {
         assert package1 != null;
+        assert package1.getUserID() >= 0;
         assert package2 != null;
+        assert package2.getUserID() >= 0;
         assert !package1.equals(package2);
 
         this.package1 = package1;

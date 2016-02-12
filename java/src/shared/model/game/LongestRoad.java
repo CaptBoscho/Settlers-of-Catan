@@ -16,7 +16,7 @@ public class LongestRoad {
     }
 
     public LongestRoad(int playerID) {
-        assert playerID >= 0;
+        assert playerID >= -1;
 
         this.playerID = playerID;
     }

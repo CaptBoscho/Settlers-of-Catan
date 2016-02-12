@@ -81,6 +81,8 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
      * @param json The JSON being used to construct this object
      */
     public DevelopmentCardBank(JsonObject json, boolean ownedByGame) {
+        assert json != null;
+
         this.ownedByGame = ownedByGame;
         if (ownedByGame) {
             developmentCards = new ArrayList<>();
@@ -163,6 +165,8 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
      */
     @Override
     public void addDevCard(DevelopmentCard cardToAdd) throws InvalidTypeException {
+        assert cardToAdd != null;
+
         if (ownedByGame) {
             developmentCards.add(cardToAdd);
         } else {
@@ -396,6 +400,8 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public DevelopmentCard discard(DevCardType type) throws InvalidTypeException {
+        assert type != null;
+
         switch (type) {
             case SOLDIER:
                 return soldierCards.remove(0);

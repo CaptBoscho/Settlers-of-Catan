@@ -233,8 +233,7 @@ public class PlayerManager implements IPlayerManager {
         assert id >= 0;
         assert type != null;
 
-        Player player = getPlayerByID(id);
-        return player.canMaritimeTrade(type);
+        return getPlayerByID(id).canMaritimeTrade(type);
     }
 
 
@@ -324,8 +323,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canUseRoadBuilder(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canUseRoadBuilder();
+        assert id >= 0;
+
+        return getPlayerByID(id).canUseRoadBuilder();
     }
 
     /**
@@ -335,8 +335,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useRoadBuilder(int id) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.useRoadBuilder();
+        assert id >= 0;
+
+        getPlayerByID(id).useRoadBuilder();
     }
 
     /**
@@ -348,8 +349,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canUseSoldier(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canUseSoldier();
+        assert id >= 0;
+
+        return getPlayerByID(id).canUseSoldier();
     }
 
     /**
@@ -359,8 +361,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useSoldier(int id) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.useSoldier();
+        assert id >= 0;
+
+        getPlayerByID(id).useSoldier();
     }
 
 
@@ -384,8 +387,7 @@ public class PlayerManager implements IPlayerManager {
     public boolean canUseMonopoly(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        Player player = getPlayerByID(id);
-        return player.canUseMonopoly();
+        return getPlayerByID(id).canUseMonopoly();
     }
 
     /**
@@ -395,20 +397,22 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useMonopoly(int id, int num, ResourceType type) throws DevCardException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+        assert id >= 0;
+        assert type != null;
+
         Player player = getPlayerByID(id);
         player.useMonopoly();
-        for(int i=1; i<= num; i++){
-            if(i!=id){
+        for(int i = 1; i<= num; i++){
+            if(i != id){
                 int amount = getPlayerByID(i).getNumberOfType(type);
                 List<ResourceType> rt = new ArrayList<>();
-                for(int k=0; k<amount; k++){
+                for(int k = 0; k < amount; k++){
                     rt.add(type);
                 }
                 List<ResourceCard> returned = getPlayerByID(i).discardResourceCards(rt);
                 for (ResourceCard aReturned : returned) {
                     addResource(id, aReturned);
                 }
-
             }
         }
         System.out.println("mono2: " + getPlayerByID(id).howManyofThisCard(type));
@@ -427,8 +431,7 @@ public class PlayerManager implements IPlayerManager {
     public boolean canUseMonument(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        Player player = getPlayerByID(id);
-        return player.canUseMonument();
+        return getPlayerByID(id).canUseMonument();
     }
 
     /**

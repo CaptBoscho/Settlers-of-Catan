@@ -160,6 +160,7 @@ public class TurnTracker {
      * @param numPlayers number of players
      */
     public void setNumPlayers(int numPlayers) {
+        assert numPlayers > 0;
         this.numPlayers = numPlayers;
     }
 

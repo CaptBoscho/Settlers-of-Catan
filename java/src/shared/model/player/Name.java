@@ -35,6 +35,8 @@ public class Name {
      * @return True if the string contains only alpha characters
      */
     private boolean isAlpha(String str) {
+        assert str != null;
+        
         return str.matches("[a-zA-Z]+");
     }
 
@@ -47,6 +49,9 @@ public class Name {
     }
 
     public void setName(String name) throws InvalidNameException {
+        assert name != null;
+        assert name.length() >= 0;
+
         this.name = name;
     }
 }

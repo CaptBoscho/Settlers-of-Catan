@@ -240,7 +240,13 @@ public class ServerTest {
 
     @Test
     public void testBadOfferTrade() {
-        OfferTradeDTO dto = new OfferTradeDTO(2, new Trade(new TradePackage(2, new ArrayList<>()), new TradePackage(3, new ArrayList<>())), 3);
+        ArrayList<ResourceType> list1 = new ArrayList<>();
+        ArrayList<ResourceType> list2 = new ArrayList<>();
+        list1.add(ResourceType.BRICK);
+        list2.add(ResourceType.WOOD);
+        TradePackage tp1 = new TradePackage(2, list1);
+        TradePackage tp2 = new TradePackage(3, list2);
+        OfferTradeDTO dto = new OfferTradeDTO(2, new Trade(tp1, tp2), 3);
         try {
             server.offerTrade(dto);
             fail("MissingUserCookieException should be thrown");

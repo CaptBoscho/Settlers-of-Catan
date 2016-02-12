@@ -87,6 +87,10 @@ public class Map implements IMap, JsonSerializable{
 
     @Override
     public java.util.Map<Integer, List<ResourceType>> getResources(int diceRoll) throws InvalidDiceRollException {
+        assert diceRoll > 0;
+        assert this.chits != null;
+        assert this.robber != null;
+
         if(diceRoll < 2 || diceRoll > 12) {
             throw new InvalidDiceRollException("Dice roll was " + diceRoll);
         }
@@ -110,14 +114,21 @@ public class Map implements IMap, JsonSerializable{
     public boolean canInitiateSettlement(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert vertexLoc.getNormalizedLocation() != null;
+        assert this.vertices != null;
+        assert this.cities != null;
+        assert this.settlements != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
         if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        ArrayList<Vertex> cities = this.cities.get(playerID);
-        if (cities != null) {
+        if (this.cities.get(playerID) != null) {
             return false;
         }
         ArrayList<Vertex> settlements = this.settlements.get(playerID);
@@ -133,6 +144,15 @@ public class Map implements IMap, JsonSerializable{
             InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert vertexLoc.getNormalizedLocation() != null;
+        assert this.vertices != null;
+        assert this.cities != null;
+        assert this.settlements != null;
+        assert this.roads != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -184,7 +204,21 @@ public class Map implements IMap, JsonSerializable{
             throws InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert edgeLoc != null;
+        assert edgeLoc.getDir() != null;
+        assert edgeLoc.getHexLoc() != null;
+        assert edgeLoc.getHexLoc().getX() >= 0;
+        assert edgeLoc.getHexLoc().getY() >= 0;
         assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert vertexLoc.getNormalizedLocation() != null;
+        assert this.vertices != null;
+        assert this.edges != null;
+        assert this.cities != null;
+        assert this.settlements != null;
+        assert this.roads != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -218,6 +252,23 @@ public class Map implements IMap, JsonSerializable{
     public void initiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
             throws StructureException, InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
+        assert edgeLoc != null;
+        assert edgeLoc.getDir() != null;
+        assert edgeLoc.getHexLoc() != null;
+        assert edgeLoc.getHexLoc().getX() >= 0;
+        assert edgeLoc.getHexLoc().getY() >= 0;
+        assert edgeLoc.getNormalizedLocation() != null;
+        assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert vertexLoc.getNormalizedLocation() != null;
+        assert this.edges != null;
+        assert this.vertices != null;
+        assert this.cities != null;
+        assert this.roads != null;
+        assert this.settlements != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -272,6 +323,15 @@ public class Map implements IMap, JsonSerializable{
     public boolean canBuildRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert edgeLoc != null;
+        assert edgeLoc.getDir() != null;
+        assert edgeLoc.getHexLoc() != null;
+        assert edgeLoc.getHexLoc().getX() >= 0;
+        assert edgeLoc.getHexLoc().getY() >= 0;
+        assert edgeLoc.getNormalizedLocation() != null;
+        assert this.edges != null;
+        assert this.cities != null;
+        assert this.roads != null;
+        assert this.settlements != null;
 
         edgeLoc = edgeLoc.getNormalizedLocation();
         Edge edge = edges.get(edgeLoc);
@@ -300,6 +360,15 @@ public class Map implements IMap, JsonSerializable{
     public void buildRoad(int playerID, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert edgeLoc != null;
+        assert edgeLoc.getDir() != null;
+        assert edgeLoc.getHexLoc() != null;
+        assert edgeLoc.getHexLoc().getX() >= 0;
+        assert edgeLoc.getHexLoc().getY() >= 0;
+        assert edgeLoc.getNormalizedLocation() != null;
+        assert this.edges != null;
+        assert this.cities != null;
+        assert this.roads != null;
+        assert this.settlements != null;
 
         edgeLoc = edgeLoc.getNormalizedLocation();
         Edge edge = edges.get(edgeLoc);
@@ -337,6 +406,14 @@ public class Map implements IMap, JsonSerializable{
     public boolean canBuildSettlement(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert vertexLoc.getNormalizedLocation() != null;
+        assert this.vertices != null;
+        assert this.cities != null;
+        assert this.roads != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -367,6 +444,14 @@ public class Map implements IMap, JsonSerializable{
             InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert vertexLoc.getNormalizedLocation() != null;
+        assert this.vertices != null;
+        assert this.cities != null;
+        assert this.roads != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -410,6 +495,14 @@ public class Map implements IMap, JsonSerializable{
     public boolean canBuildCity(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert vertexLoc.getNormalizedLocation() != null;
+        assert this.vertices != null;
+        assert this.cities != null;
+        assert this.roads != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -439,6 +532,14 @@ public class Map implements IMap, JsonSerializable{
             InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+        assert vertexLoc.getHexLoc().getX() >= 0;
+        assert vertexLoc.getHexLoc().getY() >= 0;
+        assert this.vertices != null;
+        assert this.settlements != null;
+        assert this.cities != null;
+        assert this.roads != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         Vertex vertex = vertices.get(vertexLoc);
@@ -486,6 +587,7 @@ public class Map implements IMap, JsonSerializable{
     @Override
     public int getLongestRoadSize(int playerID) {
         assert playerID >= 0 && playerID <= 3;
+        assert this.roads != null;
 
         int size = 0;
         ArrayList<Edge> roads = this.roads.get(playerID);
@@ -516,12 +618,20 @@ public class Map implements IMap, JsonSerializable{
 
     @Override
     public Set<Integer> whoCanGetRobbed() {
+        assert this.robber != null;
+
         HexLocation hexLoc = robber.getLocation();
         return getPlayers(hexLoc);
     }
 
     @Override
     public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
+        assert hexLoc != null;
+        assert hexLoc.getX() >= 0;
+        assert hexLoc.getY() >= 0;
+        assert this.hexes != null;
+        assert this.hexes.size() > 0;
+
         Hex hex = hexes.get(hexLoc);
         if(hex == null || hex.getType() == HexType.WATER) {
             throw new InvalidLocationException("Hex location is not on the map");
@@ -543,6 +653,8 @@ public class Map implements IMap, JsonSerializable{
      ============================================*/
 
     private void makeIslandHexes(JsonArray jsonArray) {
+        assert jsonArray != null;
+
         Gson gson = new Gson();
         for (JsonElement jsonElem : jsonArray) {
             JsonObject json = jsonElem.getAsJsonObject();

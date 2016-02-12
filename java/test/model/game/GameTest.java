@@ -2054,7 +2054,6 @@ public class GameTest {
         ResourceCard two = game.getResourceCard(ResourceType.ORE);
         ResourceCard three = game.getResourceCard(ResourceType.ORE);
         ResourceCard four = game.getResourceCard(ResourceType.ORE);
-        System.out.println("guy: " + guy);
 
         game.giveResource(one, 1);
         game.giveResource(two, 2);
