@@ -30,6 +30,8 @@ public class HexLocation implements JsonSerializable {
         assert json.has("y");
 
         x = json.get("x").getAsInt();
+
+        // TODO - why is this necessary? @joel
 		switch(x) {
 			case -3:
 				y = json.get("y").getAsInt() - 3;
