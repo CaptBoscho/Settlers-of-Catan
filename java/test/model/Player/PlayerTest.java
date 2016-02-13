@@ -28,13 +28,13 @@ public class PlayerTest {
 
     @Before
     public void setUp() throws FailedToRandomizeException {
-        List<Player> players = new ArrayList<>();
+        final List<Player> players = new ArrayList<>();
 
         try {
-            Player one = new Player(0, CatanColor.BLUE, 0, new Name("Hope"));
-            Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
-            Player three = new Player(0, CatanColor.GREEN, 2, new Name("Hanna"));
-            Player four = new Player(0, CatanColor.ORANGE, 3, new Name("Becca"));
+            final Player one = new Player(0, CatanColor.BLUE, 0, new Name("Hope"));
+            final Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
+            final Player three = new Player(0, CatanColor.GREEN, 2, new Name("Hanna"));
+            final Player four = new Player(0, CatanColor.ORANGE, 3, new Name("Becca"));
 
             players.add(one);
             players.add(two);
@@ -55,11 +55,11 @@ public class PlayerTest {
 
     @Test
     public void testCanDiscardCards() throws Exception {
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             assertFalse(p.canDiscardCards());
         }
 
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             for(int i = 0; i < 9; i++){
                 p.addResourceCard(new Brick());
             }
@@ -69,12 +69,12 @@ public class PlayerTest {
 
     @Test
     public void testDiscardCards() throws Exception, InvalidTypeException {
-        List<Card> cards = new ArrayList<>();
+        final List<Card> cards = new ArrayList<>();
         for(int j = 0; j < 4; j++){
             cards.add(new Brick());
         }
 
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             for(int i = 0; i < 8; i++){
                 p.addResourceCard(new Brick());
             }
@@ -87,11 +87,11 @@ public class PlayerTest {
 
     @Test
     public void testCanOfferTrade() throws Exception {
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             assertFalse(p.canOfferTrade());
         }
 
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             for(int i = 0; i < 8; i++){
                 p.addResourceCard(new Brick());
             }
@@ -116,7 +116,7 @@ public class PlayerTest {
 
     @Test
     public void testCanUseYearOfPlenty() throws Exception {
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             assertFalse(p.canUseYearOfPlenty());
         }
 
@@ -140,7 +140,7 @@ public class PlayerTest {
 
     @Test
     public void testCanUseSoldier() throws Exception {
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             assertFalse(p.canUseSoldier());
         }
 
@@ -154,7 +154,7 @@ public class PlayerTest {
 
     @Test
     public void testCanUseMonopoly() throws Exception {
-        for(Player p : pm.getPlayers()) {
+        for(final Player p : pm.getPlayers()) {
             assertFalse(p.canUseMonopoly());
         }
 
@@ -168,7 +168,7 @@ public class PlayerTest {
 
     @Test
     public void testCanUseMonument() throws Exception {
-        for(Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+        for(final Player p : Game.getInstance().getPlayerManager().getPlayers()) {
             assertFalse(p.canUseMonument());
         }
 
@@ -219,7 +219,7 @@ public class PlayerTest {
     @Test
     public void testCanBuildSettlement() throws Exception {
         // no players should be able to build a settlement at first
-        for(Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+        for(final Player p : Game.getInstance().getPlayerManager().getPlayers()) {
             assertFalse(p.canBuildSettlement());
         }
         // give player 0 the resources to build a settlement
@@ -254,14 +254,14 @@ public class PlayerTest {
 
     @Test
     public void testEquals() throws InvalidNameException, InvalidPlayerException {
-        Player playerOne = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
-        Player playerTwo = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
-        Player playerThree = new Player(0, CatanColor.BROWN, 1, new Name("Rick"));
-        Player playerFour = new Player(0, CatanColor.BROWN, 2, new Name("Derek"));
-        Player playerFive = new Player(0, CatanColor.RED, 1, new Name("Derek"));
-        Player playerSix = new Player(100, CatanColor.BROWN, 1, new Name("Derek"));
-        Player playerOneCopy = playerOne;
-        String notAPlayer = "";
+        final Player playerOne = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
+        final Player playerTwo = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
+        final Player playerThree = new Player(0, CatanColor.BROWN, 1, new Name("Rick"));
+        final Player playerFour = new Player(0, CatanColor.BROWN, 2, new Name("Derek"));
+        final Player playerFive = new Player(0, CatanColor.RED, 1, new Name("Derek"));
+        final Player playerSix = new Player(100, CatanColor.BROWN, 1, new Name("Derek"));
+        final Player playerOneCopy = playerOne;
+        final String notAPlayer = "";
 
         assertFalse(playerOne.equals(null));
         assertFalse(playerOne.equals(notAPlayer));

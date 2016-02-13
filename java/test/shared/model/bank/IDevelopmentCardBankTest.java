@@ -24,9 +24,9 @@ public class IDevelopmentCardBankTest {
 
         addOneOfEach();
 
-        int previousSize = developmentCardBank.size();
-        DevelopmentCard developmentCard = developmentCardBank.draw();
-        int afterSize = developmentCardBank.size();
+        final int previousSize = developmentCardBank.size();
+        final DevelopmentCard developmentCard = developmentCardBank.draw();
+        final int afterSize = developmentCardBank.size();
 
         // One card got taken out
         assertTrue(previousSize == afterSize + 1);

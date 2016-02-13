@@ -1824,29 +1824,29 @@ public class GameTest {
     @Before
     public void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
         game = Game.getInstance();
-        List<Player> players = new ArrayList<>();
+        final List<Player> players = new ArrayList<>();
 
-        Player one = new Player(0, CatanColor.BLUE, 1, new Name ("Hope"));
-        Player two = new Player(0, CatanColor.BROWN, 2, new Name("Corbin"));
-        Player three = new Player(0, CatanColor.GREEN, 3, new Name("Hanna"));
-        Player four = new Player(0, CatanColor.ORANGE, 4, new Name("Becca"));
+        final Player one = new Player(0, CatanColor.BLUE, 1, new Name ("Hope"));
+        final Player two = new Player(0, CatanColor.BROWN, 2, new Name("Corbin"));
+        final Player three = new Player(0, CatanColor.GREEN, 3, new Name("Hanna"));
+        final Player four = new Player(0, CatanColor.ORANGE, 4, new Name("Becca"));
 
         players.add(one);
         players.add(two);
         players.add(three);
         players.add(four);
 
-        int first = game.initializeGame(players, true, true, false);
+        final int first = game.initializeGame(players, true, true, false);
 
         assertTrue(first > 0 && first <= 4);
     }
 
     @Test
     public void testInitialization() throws Exception{
-        int current_turn = game.getCurrentTurn();
-        HexLocation hloc = new HexLocation(0,0);
-        VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
-        EdgeLocation eloc = new EdgeLocation(hloc, EdgeDirection.NorthEast);
+        final int current_turn = game.getCurrentTurn();
+        final HexLocation hloc = new HexLocation(0,0);
+        final VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
+        final EdgeLocation eloc = new EdgeLocation(hloc, EdgeDirection.NorthEast);
 
 
         assertTrue(game.canInitiateSettlement(current_turn,vloc));
@@ -1855,34 +1855,34 @@ public class GameTest {
         assertFalse(game.canInitiateRoad(current_turn,vloc,new EdgeLocation(hloc, EdgeDirection.SouthWest)));
         game.initiateRoad(current_turn,vloc,eloc);
 
-        int next = game.getTurnTracker().nextTurn();
+        final int next = game.getTurnTracker().nextTurn();
 
         assertFalse(game.canInitiateSettlement(next, vloc));
     }
 
     @Test
     public void testGetCurrentTurnStartUp() throws Exception{
-        int first = game.getCurrentTurn();
+        final int first = game.getCurrentTurn();
         assertTrue(first == 1);
-        int second = game.getTurnTracker().nextTurn();
+        final int second = game.getTurnTracker().nextTurn();
         assertTrue(second == 2);
-        int third = game.getTurnTracker().nextTurn();
+        final int third = game.getTurnTracker().nextTurn();
         assertTrue(third == 3);
-        int fourth = game.getTurnTracker().nextTurn();
+        final int fourth = game.getTurnTracker().nextTurn();
         assertTrue(fourth == 4);
-        int fifth = game.getTurnTracker().nextTurn();
+        final int fifth = game.getTurnTracker().nextTurn();
         assertTrue(fifth == 3);
 
         game.getTurnTracker().setSetupPhase(false);
-        int sixth = game.getTurnTracker().nextTurn();
+        final int sixth = game.getTurnTracker().nextTurn();
         assertTrue(sixth == 4);
-        int seventh = game.getTurnTracker().nextTurn();
+        final int seventh = game.getTurnTracker().nextTurn();
         assertTrue(seventh == 1);
     }
 
     @Test
     public void testCanRollNumber() {
-        int turn = game.getCurrentTurn();
+        final int turn = game.getCurrentTurn();
         assertTrue(game.canRollNumber(turn));
         game.getTurnTracker().nextPhase();
         assertFalse(game.canRollNumber(turn));
@@ -1890,37 +1890,39 @@ public class GameTest {
 
     @Test
     public void testRollNumber() throws InvalidDiceRollException{
-        int turn = game.getCurrentTurn();
+        final int turn = game.getCurrentTurn();
         game.getTurnTracker().nextPhase();
         game.getTurnTracker().nextPhase();
-        int roll = game.rollNumber(turn);
+        final int roll = game.rollNumber(turn);
         assertTrue(roll > 1);
         assertTrue(roll <= 12);
     }
 
     @Test
     public void testCanOfferTrade() {
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.getTurnTracker().nextPhase();
         assertTrue(game.canOfferTrade(guy));
     }
 
     @Test
     public void testOfferTrade() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException {
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.getTurnTracker().nextPhase();
         int friend = 3;
-        if(guy == 3){friend = 4;}
-        ResourceCard one = game.getResourceCard(ResourceType.BRICK);
-        ResourceCard two = game.getResourceCard(ResourceType.ORE);
-        ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
+        if(guy == 3) {
+            friend = 4;
+        }
+        final ResourceCard one = game.getResourceCard(ResourceType.BRICK);
+        final ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        final ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
 
         game.giveResource(one, guy);
         game.giveResource(two, guy);
         game.giveResource(three, friend);
 
-        List<ResourceType> ones = new ArrayList<>();
-        List<ResourceType> twos = new ArrayList<>();
+        final List<ResourceType> ones = new ArrayList<>();
+        final List<ResourceType> twos = new ArrayList<>();
         ones.add(ResourceType.BRICK);
         ones.add(ResourceType.ORE);
         twos.add(ResourceType.SHEEP);
@@ -1939,7 +1941,7 @@ public class GameTest {
 
     @Test
     public void testCanFinishTurn() {
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.getTurnTracker().nextPhase();
         game.getTurnTracker().nextPhase();
         assertTrue(game.canFinishTurn(guy));
@@ -1947,9 +1949,9 @@ public class GameTest {
 
     @Test
     public void testFinishTurn() {
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.nextPhase();
-        TurnTracker.Phase p = game.getCurrentPhase();
+        final TurnTracker.Phase p = game.getCurrentPhase();
 
         if(p == TurnTracker.Phase.DISCARDING){
             assertTrue(game.canFinishTurn(guy));
@@ -1962,13 +1964,13 @@ public class GameTest {
 
     @Test
     public void testCanBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException{
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.DISCARDING);
         assertFalse(game.canBuyDevelopmentCard(guy));
 
-        ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
-        ResourceCard two = game.getResourceCard(ResourceType.ORE);
-        ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
+        final ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
+        final ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        final ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
 
         game.giveResource(one, guy);
         game.giveResource(two, guy);
@@ -1979,13 +1981,13 @@ public class GameTest {
 
     @Test
     public void testCanUseYearOfPlenty() throws PlayerExistsException, BadCallerException {
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
 
         if(game.numberOfDevCard(guy) == 0){
             assertFalse(game.canUseYearOfPlenty(guy));
         }
-        YearOfPlentyCard card = new YearOfPlentyCard();
+        final YearOfPlentyCard card = new YearOfPlentyCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
         assertTrue(game.canUseYearOfPlenty(guy));
@@ -1998,13 +2000,13 @@ public class GameTest {
 
     @Test
     public void testCanUseRoadBuilder() throws PlayerExistsException, BadCallerException{
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
 
         if(game.numberOfDevCard(guy) == 0){
             assertFalse(game.canUseRoadBuilder(guy));
         }
-        RoadBuildCard card = new RoadBuildCard();
+        final RoadBuildCard card = new RoadBuildCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
         assertTrue(game.canUseRoadBuilder(guy));
@@ -2016,13 +2018,13 @@ public class GameTest {
 
     @Test
     public void testCanUseSoldier() throws PlayerExistsException, BadCallerException{
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
 
         if(game.numberOfDevCard(guy) == 0){
             assertFalse(game.canUseSoldier(guy));
         }
-        SoldierCard card = new SoldierCard();
+        final SoldierCard card = new SoldierCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
         assertTrue(game.canUseSoldier(guy));
@@ -2034,13 +2036,13 @@ public class GameTest {
 
     @Test
     public void testCanUseMonopoly() throws PlayerExistsException, BadCallerException{
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
 
         if(game.numberOfDevCard(guy) == 0){
             assertFalse(game.canUseMonopoly(guy));
         }
-        MonopolyCard card = new MonopolyCard();
+        final MonopolyCard card = new MonopolyCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
         assertTrue(game.canUseMonopoly(guy));
@@ -2048,19 +2050,19 @@ public class GameTest {
 
     @Test
     public void testUseMonopoly() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException, DevCardException, BadCallerException{
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
-        ResourceCard one = game.getResourceCard(ResourceType.ORE);
-        ResourceCard two = game.getResourceCard(ResourceType.ORE);
-        ResourceCard three = game.getResourceCard(ResourceType.ORE);
-        ResourceCard four = game.getResourceCard(ResourceType.ORE);
+        final ResourceCard one = game.getResourceCard(ResourceType.ORE);
+        final ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        final ResourceCard three = game.getResourceCard(ResourceType.ORE);
+        final ResourceCard four = game.getResourceCard(ResourceType.ORE);
 
         game.giveResource(one, 1);
         game.giveResource(two, 2);
         game.giveResource(three, 3);
         game.giveResource(four, 3);
 
-        MonopolyCard card = new MonopolyCard();
+        final MonopolyCard card = new MonopolyCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
 
@@ -2069,13 +2071,13 @@ public class GameTest {
 
     @Test
     public void testCanUseMonument() throws PlayerExistsException, BadCallerException{
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
 
         if(game.numberOfDevCard(guy) == 0){
             assertFalse(game.canUseMonument(guy));
         }
-        MonumentCard card = new MonumentCard();
+        final MonumentCard card = new MonumentCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
         assertTrue(game.canUseMonument(guy));
@@ -2087,26 +2089,24 @@ public class GameTest {
 
     @Test
     public void testBuyDevCard() throws InvalidTypeException, Exception{
-        int guy = game.getCurrentTurn();
+        final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.DISCARDING);
 
-        ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
-        ResourceCard two = game.getResourceCard(ResourceType.ORE);
-        ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
+        final ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
+        final ResourceCard two = game.getResourceCard(ResourceType.ORE);
+        final ResourceCard three = game.getResourceCard(ResourceType.SHEEP);
 
         game.giveResource(one, guy);
         game.giveResource(two, guy);
         game.giveResource(three, guy);
 
         Player p = game.getPlayerManager().getPlayerByID(guy);
-        int sizeold = p.quantityOfDevCards();
+        final int sizeold = p.quantityOfDevCards();
 
         game.buyDevelopmentCard(guy);
         p = game.getPlayerManager().getPlayerByID(guy);
-        int sizenew = p.quantityOfDevCards();
+        final int sizenew = p.quantityOfDevCards();
 
-        System.out.println(sizeold);
-        System.out.println(sizenew);
         assertTrue(sizenew == sizeold + 1);
     }
 }

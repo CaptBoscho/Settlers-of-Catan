@@ -269,7 +269,7 @@ public class MapTest {
                 "      \"y\": -2" +
                 "    }" +
                 "  }";
-        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        final JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
         jsonMap = new Map(jsonObject);
     }
 
@@ -280,20 +280,20 @@ public class MapTest {
 
     @Test
     public void testGetResources() throws Exception {
-        int playerOne = 1;
-        int playerTwo = 2;
-        HexLocation hexLocOneFirst = new HexLocation(0,0);
-        VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
-        EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
-        HexLocation hexLocOneSecond = new HexLocation(0,1);
-        VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.SouthEast);
-        EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.South);
-        HexLocation hexLocTwoFirst = new HexLocation(0,-2);
-        VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
-        EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
-        HexLocation hexLocTwoSecond = new HexLocation(-2,-2);
-        VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.SouthWest);
-        EdgeLocation edgeLocTwoSecond = new EdgeLocation(hexLocTwoSecond, EdgeDirection.South);
+        final int playerOne = 1;
+        final int playerTwo = 2;
+        final HexLocation hexLocOneFirst = new HexLocation(0,0);
+        final VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
+        final EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
+        final HexLocation hexLocOneSecond = new HexLocation(0,1);
+        final VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.SouthEast);
+        final EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.South);
+        final HexLocation hexLocTwoFirst = new HexLocation(0,-2);
+        final VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
+        final HexLocation hexLocTwoSecond = new HexLocation(-2,-2);
+        final VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.SouthWest);
+        final EdgeLocation edgeLocTwoSecond = new EdgeLocation(hexLocTwoSecond, EdgeDirection.South);
         try{
             if(map.canInitiateSettlement(playerOne, vertexLocOneFirst)) {
                 map.initiateSettlement(playerOne, vertexLocOneFirst);
@@ -319,9 +319,9 @@ public class MapTest {
             if(map.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond)) {
                 map.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
             }
-            EdgeLocation newRoad = new EdgeLocation(new HexLocation(-1,-3), EdgeDirection.South);
-            VertexLocation newSettlement = new VertexLocation(new HexLocation(-2,-3), VertexDirection.East);
-            VertexLocation newCity = new VertexLocation(new HexLocation(-1,-2), VertexDirection.NorthWest);
+            final EdgeLocation newRoad = new EdgeLocation(new HexLocation(-1,-3), EdgeDirection.South);
+            final VertexLocation newSettlement = new VertexLocation(new HexLocation(-2,-3), VertexDirection.East);
+            final VertexLocation newCity = new VertexLocation(new HexLocation(-1,-2), VertexDirection.NorthWest);
             if(map.canBuildRoad(playerTwo, newRoad)) {
                 map.buildRoad(playerTwo, newRoad);
             }
@@ -341,7 +341,7 @@ public class MapTest {
             map.moveRobber(new HexLocation(-1,-2));
             resources = map.getResources(8);
             test = new StringBuilder();
-            for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+            for (final java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
                 test.append(entry.getKey()).append("/").append(entry.getValue());
             }
             answer = "1/[WHEAT]";
@@ -391,16 +391,16 @@ public class MapTest {
 
     @Test
     public void testCanInitiateRoad() throws Exception {
-        int playerOne = 1;
-        int playerTwo = 2;
-        HexLocation hexLocOneFirst = new HexLocation(0,0);
-        VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
-        EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
-        HexLocation hexLocOneSecond = new HexLocation(0,0);
-        VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.East);
-        EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.SouthEast);
-        HexLocation hexLocTwoFirst = new HexLocation(-2,-2);
-        EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
+        final int playerOne = 1;
+        final int playerTwo = 2;
+        final HexLocation hexLocOneFirst = new HexLocation(0,0);
+        final VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
+        final EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
+        final HexLocation hexLocOneSecond = new HexLocation(0,0);
+        final VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.East);
+        final EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.SouthEast);
+        final HexLocation hexLocTwoFirst = new HexLocation(-2,-2);
+        final EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
         try {
             map.initiateSettlement(playerOne, vertexLocOneFirst);
             assertFalse(map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneSecond));
@@ -514,20 +514,20 @@ public class MapTest {
     }
 
     private void initializeMap() {
-        int playerOne = 1;
-        int playerTwo = 2;
-        HexLocation hexLocOneFirst = new HexLocation(1,2);
-        VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.NorthWest);
-        EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.North);
-        HexLocation hexLocOneSecond = new HexLocation(0,2);
-        VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.NorthWest);
-        EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.North);
-        HexLocation hexLocTwoFirst = new HexLocation(2,2);
-        VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
-        EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.North);
-        HexLocation hexLocTwoSecond = new HexLocation(3,2);
-        VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.NorthWest);
-        EdgeLocation edgeLocTwoSecond = new EdgeLocation(hexLocTwoSecond, EdgeDirection.NorthWest);
+        final int playerOne = 1;
+        final int playerTwo = 2;
+        final HexLocation hexLocOneFirst = new HexLocation(1,2);
+        final VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.North);
+        final HexLocation hexLocOneSecond = new HexLocation(0,2);
+        final VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.North);
+        final HexLocation hexLocTwoFirst = new HexLocation(2,2);
+        final VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.North);
+        final HexLocation hexLocTwoSecond = new HexLocation(3,2);
+        final VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocTwoSecond = new EdgeLocation(hexLocTwoSecond, EdgeDirection.NorthWest);
         try {
             if (map.canInitiateSettlement(playerOne, vertexLocOneFirst)) {
                 map.initiateSettlement(playerOne, vertexLocOneFirst);

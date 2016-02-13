@@ -42,6 +42,9 @@ public class TurnTracker {
      * @param phase The phase, 0, 1, or 2, of the turn
      */
     public TurnTracker(int turnIndex, int longestRoadIndex, int largestArmyIndex, Phase phase) {
+        assert turnIndex >= 0;
+        assert phase != null;
+
         this.currentTurn = turnIndex;
         this.longestRoad = longestRoadIndex;
         this.largestArmy = largestArmyIndex;
@@ -154,7 +157,11 @@ public class TurnTracker {
         return phase;
     }
 
-    public void setPhase(Phase p){this.phase = p;}
+    public void setPhase(Phase p) {
+        assert p != null;
+
+        this.phase = p;
+    }
     /**
      * Set the number of players
      * @param numPlayers number of players
@@ -197,6 +204,8 @@ public class TurnTracker {
      * @return true if it is the given player's turn, else false
      */
     public boolean isPlayersTurn(int playerID) {
+        assert playerID >= 0;
+
         return playerID == currentTurn;
     }
 
