@@ -341,10 +341,7 @@ public class Map implements IMap, JsonSerializable{
         final ArrayList<Vertex> settlements = this.settlements.get(playerID);
         final ArrayList<Vertex> cities = this.cities.get(playerID);
         final ArrayList<Edge> roads = this.roads.get(playerID);
-        if(roads == null || roads.size() < 2) {
-            return false;
-        }
-        if(settlements == null) {
+        if(roads == null || roads.size() < 2|| settlements == null) {
             return false;
         }
         if(cities == null && settlements.size() < 2) {

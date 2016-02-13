@@ -34,7 +34,7 @@ public class TestRunner {
                 "model.map.MapTest",
                 "model.Player.PlayerManagerTest",
                 "model.Player.PlayerTest",
-                "shared.model.bank.IDevelopmentCardBankTest",
+                "model.bank.IDevelopmentCardBankTest",
         };
 
         org.junit.runner.JUnitCore.main(testClasses);

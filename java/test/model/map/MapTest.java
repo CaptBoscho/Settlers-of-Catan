@@ -279,6 +279,21 @@ public class MapTest {
     }
 
     @Test
+    public void testMoveRobber() {
+        // TODO --
+    }
+
+    @Test
+    public void testWhoCanGetRobbed() {
+        // TODO --
+    }
+
+    @Test
+    public void testGetPortTypes() {
+        // TODO --
+    }
+
+    @Test
     public void testGetResources() throws Exception {
         final int playerOne = 1;
         final int playerTwo = 2;
@@ -360,46 +375,96 @@ public class MapTest {
     }
 
     @Test
+    public void testInitiateSettlement() {
+        // TODO --
+    }
+
+    /**
+     * vertexLocFour       vertexLocThree
+     *              xxxxxxx
+     *             x       x
+     *           x           x
+     *         x     (0,0)     x vertexLocOne
+     *           x           x
+     *             x       x
+     *              xxxxxxx
+     *
+     *
+     * Verify the locations where a player can and cannot play a settlement.
+     *
+     * @throws Exception
+     */
+    @Test
     public void testCanInitiateSettlement() throws Exception {
-        int playerOne = 1;
-        HexLocation hexLocOne = new HexLocation(0,0);
-        VertexLocation vertexLocOne = new VertexLocation(hexLocOne, VertexDirection.East);
-        HexLocation hexLocTwo = new HexLocation(1,1);
-        VertexLocation vertexLocTwo = new VertexLocation(hexLocTwo, VertexDirection.NorthWest);
-        HexLocation hexLocThree = new HexLocation(0,0);
-        VertexLocation vertexLocThree = new VertexLocation(hexLocThree, VertexDirection.NorthEast);
-        HexLocation hexLocFour = new HexLocation(0,0);
-        VertexLocation vertexLocFour = new VertexLocation(hexLocFour, VertexDirection.NorthWest);
+        // the player being used to test this
+        final int playerOne = 1;
+
+        // The vertex on the East corner of hex (0, 0)
+        final HexLocation hexLocOne = new HexLocation(0, 0);
+        final VertexLocation vertexLocOne = new VertexLocation(hexLocOne, VertexDirection.East);
+
+        // the vertex on the NorthWest corner of hex (1, 1)
+        final HexLocation hexLocTwo = new HexLocation(1, 1);
+        final VertexLocation vertexLocTwo = new VertexLocation(hexLocTwo, VertexDirection.NorthWest);
+
+        // the vertex on the NorthEast corner of hex (0, 0)
+        final HexLocation hexLocThree = new HexLocation(0, 0);
+        final VertexLocation vertexLocThree = new VertexLocation(hexLocThree, VertexDirection.NorthEast);
+
+        // the vertex on the NorthWest corner of the hex (0, 0)
+        final HexLocation hexLocFour = new HexLocation(0, 0);
+        final VertexLocation vertexLocFour = new VertexLocation(hexLocFour, VertexDirection.NorthWest);
+
+        // player one should be able to create a settlement on vertexOne
         assertTrue(map.canInitiateSettlement(playerOne, vertexLocOne));
+
+        // actually create the settlement
         map.initiateSettlement(playerOne, vertexLocOne);
+
+        // player one should no longer be able to create a map there
+        assertFalse(map.canInitiateSettlement(playerOne, vertexLocOne));
+
+        // vertex two/three should be untouchable
         assertFalse(map.canInitiateSettlement(playerOne, vertexLocTwo));
         assertFalse(map.canInitiateSettlement(playerOne, vertexLocThree));
+
+        // vertex four should still be able to create a settlement
         assertTrue(map.canInitiateSettlement(playerOne, vertexLocFour));
 
+        // same assertions as above but with the jsonMap
         assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOne));
         jsonMap.initiateSettlement(playerOne, vertexLocOne);
+        assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocOne));
         assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocTwo));
         assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocThree));
         assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocFour));
         jsonMap.canInitiateSettlement(0, vertexLocFour);
+
+        // verify you can't place a settlement on a vertex that doesn't exist
         try{
-            map.canInitiateSettlement(1, new VertexLocation(new HexLocation(3,0), VertexDirection.NorthEast));
+            map.canInitiateSettlement(1, new VertexLocation(new HexLocation(3, 0), VertexDirection.NorthEast));
+            assertTrue(false); // should never reach here
         } catch(InvalidLocationException e) {
             assertTrue(e.getMessage().equals("Vertex location is not on the map"));
         }
     }
 
     @Test
+    public void testInitiateRoad() {
+        // TODO --
+    }
+
+    @Test
     public void testCanInitiateRoad() throws Exception {
         final int playerOne = 1;
         final int playerTwo = 2;
-        final HexLocation hexLocOneFirst = new HexLocation(0,0);
+        final HexLocation hexLocOneFirst = new HexLocation(0, 0);
         final VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
         final EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
-        final HexLocation hexLocOneSecond = new HexLocation(0,0);
+        final HexLocation hexLocOneSecond = new HexLocation(0, 0);
         final VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.East);
         final EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.SouthEast);
-        final HexLocation hexLocTwoFirst = new HexLocation(-2,-2);
+        final HexLocation hexLocTwoFirst = new HexLocation(-2, -2);
         final EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
         try {
             map.initiateSettlement(playerOne, vertexLocOneFirst);
@@ -422,7 +487,7 @@ public class MapTest {
             assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
             assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
         } catch(InvalidLocationException | StructureException e) {
-            System.out.println(e.getMessage());
+            assertTrue(false); // should never reach here
         }
     }
 
@@ -444,6 +509,11 @@ public class MapTest {
         assertFalse(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(-2,-2), EdgeDirection.NorthWest)));
         assertTrue(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(1,2), EdgeDirection.NorthWest)));
         assertTrue(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthEast)));
+    }
+
+    @Test
+    public void testBuildRoad() {
+        // TODO --
     }
 
     @Test
@@ -473,6 +543,11 @@ public class MapTest {
     }
 
     @Test
+    public void testBuildSettlement() {
+        // TODO --
+    }
+
+    @Test
     public void testCanBuildCity() throws Exception {
         initializeMap();
         assertFalse(map.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthEast)));
@@ -488,6 +563,11 @@ public class MapTest {
         assertTrue(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
         jsonMap.buildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest));
         assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
+    }
+
+    @Test
+    public void testBuildCity() {
+        // TODO --
     }
 
     @Test

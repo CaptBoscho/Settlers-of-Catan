@@ -32,6 +32,8 @@ public class LargestArmy {
      * @param id id of the player owning this card (-1 for no owner)
      */
     public void setNewOwner(int id, int soldiers) {
+        assert this.playerID != id;
+
         this.mostSoldiers = soldiers;
         this.playerID = id;
     }

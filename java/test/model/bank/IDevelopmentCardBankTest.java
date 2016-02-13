@@ -1,7 +1,10 @@
-package shared.model.bank;
+package model.bank;
 
 import org.junit.*;
 import shared.exceptions.BadCallerException;
+import shared.model.bank.DevelopmentCardBank;
+import shared.model.bank.IDevelopmentCardBank;
+import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.*;
 
 import static org.junit.Assert.*;

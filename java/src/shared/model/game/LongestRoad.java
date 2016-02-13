@@ -35,6 +35,7 @@ public class LongestRoad {
      */
     public void setOwner(int id, int roadlength) {
         assert id >= 0;
+        assert id != this.playerID;
         assert roadlength > 0;
 
         this.playerID = id;
