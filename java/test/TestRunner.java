@@ -29,36 +29,29 @@ public class TestRunner {
     public static void main(String[] args) {
 
         String[] testClasses = new String[] {
-                "client.networking.ServerTest",
-                "model.game.GameTest",
-                "model.map.MapTest",
-                "model.Player.PlayerManagerTest",
-                "model.Player.PlayerTest",
-                "model.bank.IDevelopmentCardBankTest",
+            "client.networking.ServerTest",
+            "model.bank.IDevelopmentCardBankTest",
+            "model.bank.ResourceCardBankTests",
+            "model.bank.StructureBankTests",
+            "model.game.trade.TradePackageTests",
+            "model.game.trade.TradeTests",
+            "model.game.GameTest",
+            "model.game.LargestArmyTests",
+            "model.game.LongestRoadTests",
+            "model.game.MessageLineTests",
+            "model.game.MessageListTests",
+            "model.game.TurnTrackerTests",
+            "model.locations.HexLocationTests",
+            "model.map.EdgeTests",
+            "model.map.MapTest",
+            "model.map.PortTests",
+            "model.map.RobberTests",
+            "model.map.VertexTests",
+            "model.Player.NameTests",
+            "model.Player.PlayerManagerTest",
+            "model.Player.PlayerTest",
         };
 
         org.junit.runner.JUnitCore.main(testClasses);
     }
-
-    /*public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(TestSuite.class);
-        for (Failure failure : result.getFailures()) {
-            System.out.println(failure.toString());
-        }
-        System.out.println(result.wasSuccessful());
-    }*/
 }
-
-
-
-/*
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        MapTest.class,
-        GameTest.class,
-        ServerTest.class,
-        PlayerTest.class,
-        PlayerManagerTest.class
-})
-class TestSuite {}*/
