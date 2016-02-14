@@ -21,6 +21,7 @@ public class SendChatDTO implements JsonSerializable {
         assert playerId <= 3;
         assert content != null;
         assert content.length() > 0;
+
         this.playerId = playerId;
         this.content = content;
     }

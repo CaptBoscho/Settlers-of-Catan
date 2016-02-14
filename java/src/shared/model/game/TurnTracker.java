@@ -24,6 +24,8 @@ public class TurnTracker {
      * @param index index of the current player
      */
     public TurnTracker(int index) {
+        assert index >= 0;
+
         this.currentTurn = index;
         this.setupPhase = true;
         this.setupRoundOne = true;
@@ -40,6 +42,9 @@ public class TurnTracker {
      * @param phase The phase, 0, 1, or 2, of the turn
      */
     public TurnTracker(int turnIndex, int longestRoadIndex, int largestArmyIndex, Phase phase) {
+        assert turnIndex >= 0;
+        assert phase != null;
+
         this.currentTurn = turnIndex;
         this.longestRoad = longestRoadIndex;
         this.largestArmy = largestArmyIndex;
@@ -152,12 +157,17 @@ public class TurnTracker {
         return phase;
     }
 
-    public void setPhase(Phase p){this.phase = p;}
+    public void setPhase(Phase p) {
+        assert p != null;
+
+        this.phase = p;
+    }
     /**
      * Set the number of players
      * @param numPlayers number of players
      */
     public void setNumPlayers(int numPlayers) {
+        assert numPlayers > 0;
         this.numPlayers = numPlayers;
     }
 
@@ -194,6 +204,8 @@ public class TurnTracker {
      * @return true if it is the given player's turn, else false
      */
     public boolean isPlayersTurn(int playerID) {
+        assert playerID >= 0;
+
         return playerID == currentTurn;
     }
 
@@ -203,7 +215,7 @@ public class TurnTracker {
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("currentTurn", currentTurn);
         //'Rolling' or 'Robbing' or 'Playing' or 'Discarding' or 'FirstRound' or 'SecondRound'
 //        json.addProperty("status", status);

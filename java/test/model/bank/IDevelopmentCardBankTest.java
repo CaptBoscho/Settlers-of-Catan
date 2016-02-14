@@ -1,13 +1,16 @@
-package shared.model.bank;
+package model.bank;
 
 import org.junit.*;
 import shared.exceptions.BadCallerException;
+import shared.model.bank.DevelopmentCardBank;
+import shared.model.bank.IDevelopmentCardBank;
+import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.*;
 
 import static org.junit.Assert.*;
 
 /**
- * Created by Danny on 2/4/16.
+ * @author Danny Harding
  */
 public class IDevelopmentCardBankTest {
     IDevelopmentCardBank developmentCardBank;
@@ -24,9 +27,9 @@ public class IDevelopmentCardBankTest {
 
         addOneOfEach();
 
-        int previousSize = developmentCardBank.size();
-        DevelopmentCard developmentCard = developmentCardBank.draw();
-        int afterSize = developmentCardBank.size();
+        final int previousSize = developmentCardBank.size();
+        final DevelopmentCard developmentCard = developmentCardBank.draw();
+        final int afterSize = developmentCardBank.size();
 
         // One card got taken out
         assertTrue(previousSize == afterSize + 1);

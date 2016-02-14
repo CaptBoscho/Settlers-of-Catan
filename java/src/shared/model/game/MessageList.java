@@ -10,21 +10,25 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by boscho on 2/3/16.
+ * @author Corbin Byers
  */
 public class MessageList {
 
-    private List<MessageLine> chat = new ArrayList<MessageLine>();
+    private List<MessageLine> chat = new ArrayList<>();
 
     public MessageList(){}
 
     public void addMessage(MessageLine m){
+        assert m != null;
+        assert m.getMessage() != null;
+        assert m.getMessage().length() > 0;
+
         chat.add(m);
     }
 
     public void loadJSON(JsonObject js){
        // HashMap<String,Object> result = new ObjectMapper().readValue(js, HashMap.class);
-        chat = new ArrayList<MessageLine>();
+        chat = new ArrayList<>();
 
         Gson gs = new Gson();
         makeMessageLog(gs.fromJson(js.getAsJsonArray("lines"), JsonArray.class));

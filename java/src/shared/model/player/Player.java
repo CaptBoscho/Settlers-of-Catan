@@ -1,6 +1,5 @@
 package shared.model.player;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
@@ -9,7 +8,6 @@ import shared.model.bank.*;
 import shared.definitions.CatanColor;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
-import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
@@ -56,6 +54,8 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param json The JSON being used to construct this object
      */
     public Player(JsonObject json) {
+        assert json != null;
+
         try {
             setColor(json.get("color").getAsString());
             this.name = new Name(json.get("name").getAsString());
@@ -78,6 +78,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     }
 
     private void setColor(String color) throws InvalidColorException {
+        assert color != null;
+        assert color.length() > 0;
+
         switch(color) {
             case "red":
                 this.color = CatanColor.RED;
@@ -108,7 +111,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         }
     }
 
-    private String getColorString() throws InvalidColorException {
+    private String getColorString() {
         switch(color) {
             case RED:
                 return "red";
@@ -126,9 +129,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
                 return "purple";
             case WHITE:
                 return "white";
-            default:
-                throw new InvalidColorException("The given color is invalid");
         }
+        assert false; // we should never reach here
+        return null;
     }
 
     /**
@@ -141,6 +144,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public Player(int points, CatanColor color, int id, Name name) throws InvalidPlayerException {
         assert points >= 0;
         assert name != null;
+        assert color != null;
 
         this.victoryPoints = points;
         this.color = color;
@@ -167,6 +171,15 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public Player(int points, CatanColor color, ResourceCardBank rCrdBnk,
                   DevelopmentCardBank devCrdBnk, StructureBank sBnk,
                   int index, Name name, boolean canMoveRobber, int soldiers) throws InvalidPlayerException {
+        assert color != null;
+        assert rCrdBnk != null;
+        assert devCrdBnk != null;
+        assert sBnk != null;
+        assert name != null;
+        assert points >= 0;
+        assert index >= 0;
+
+        assert soldiers >= 0;
         this.victoryPoints = points;
         this.color = color;
         this.resourceCardBank = rCrdBnk;
@@ -200,8 +213,13 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public List<ResourceCard> discardCards(List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
+        assert cards != null;
+        assert cards.size() > 0;
+        assert this.resourceCardBank != null;
+        assert this.developmentCardBank != null;
+
         try {
-            List<ResourceCard> discarded = new ArrayList<ResourceCard>();
+            List<ResourceCard> discarded = new ArrayList<>();
             for (Card card : cards) {
                 if (card instanceof ResourceCard) {
                     ResourceCard resourceCard = (ResourceCard) card;
@@ -220,7 +238,11 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     }
 
     public List<ResourceCard> discardResourceCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
-        List<ResourceCard> discarded = new ArrayList<ResourceCard>();
+        assert cards != null;
+        assert cards.size() > 0;
+        assert this.resourceCardBank != null;
+
+        final List<ResourceCard> discarded = new ArrayList<>();
         for(ResourceType rt: cards) {
             discarded.add(resourceCardBank.discard(rt));
         }
@@ -229,7 +251,10 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         return discarded;
     }
 
-    public Integer howManyofThisCard(ResourceType t) throws InvalidTypeException{
+    public Integer howManyofThisCard(ResourceType t) throws InvalidTypeException {
+        assert t != null;
+        assert this.resourceCardBank != null;
+
         if(t == ResourceType.SHEEP){return resourceCardBank.getNumberOfSheep();}
         if(t == ResourceType.ORE){return resourceCardBank.getNumberOfOre();}
         if(t == ResourceType.BRICK){return resourceCardBank.getNumberOfBrick();}
@@ -238,7 +263,10 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         throw new InvalidTypeException("not correct resourcetype");
     }
 
-    public Integer getNumberOfType(ResourceType t){
+    public Integer getNumberOfType(ResourceType t) {
+        assert t != null;
+        assert this.resourceCardBank != null;
+
         return resourceCardBank.getNumberOfType(t);
     }
 
@@ -261,6 +289,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canMaritimeTrade(PortType type) {
+        assert type != null;
+        assert this.resourceCardBank != null;
+
         try {
             return resourceCardBank.canMaritimeTrade(type);
         } catch (InsufficientResourcesException | InvalidTypeException e) {
@@ -303,6 +334,8 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseYearOfPlenty() {
+        assert this.developmentCardBank != null;
+
         return !hasPlayedDevCard() && developmentCardBank.canUseYearOfPlenty();
     }
 
@@ -311,10 +344,13 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void useYearOfPlenty() throws DevCardException {
-        if(canUseYearOfPlenty())
+        assert this.developmentCardBank != null;
+
+        if(canUseYearOfPlenty()) {
             developmentCardBank.useYearOfPlenty();
-        else
+        } else {
             throw new DevCardException("Player has already played a Development card this turn!");
+        }
     }
 
     /**
@@ -333,11 +369,14 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void useRoadBuilder() throws DevCardException {
-        if(canUseRoadBuilder())
+        assert this.developmentCardBank != null;
+
+        if(canUseRoadBuilder()) {
             developmentCardBank.useRoadBuild();
             // TODO: 1/30/2016 Add any additional functionality - does the map or the structure bank build the road 
-        else
+        } else {
             throw new DevCardException("Player has already played a Development card this turn!");
+        }
     }
 
     /**
@@ -356,11 +395,13 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void useSoldier() throws DevCardException {
+        assert this.developmentCardBank != null;
+
         if(canUseSoldier()) {
             developmentCardBank.useSoldier();
             setMoveRobber(true);
             this.soldiers++;
-        }else {
+        } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
     }
@@ -382,7 +423,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canUseMonopoly() {
-        return (!hasPlayedDevCard() && developmentCardBank.canUseMonopoly());
+        assert this.developmentCardBank != null;
+
+        return !hasPlayedDevCard() && developmentCardBank.canUseMonopoly();
     }
 
     /**
@@ -390,10 +433,11 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void useMonopoly() throws DevCardException {
-        if(canUseMonopoly())
+        if(canUseMonopoly()) {
             developmentCardBank.useMonopoly();
-        else
+        } else {
             throw new DevCardException("Player has already played a Development card this turn!");
+        }
     }
 
     /**
@@ -416,7 +460,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
             developmentCardBank.useMonument();
             incrementMonuments();
             incrementPoints();
-        }else {
+        } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
     }
@@ -437,13 +481,15 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void placeRobber() throws MoveRobberException {
-        if(canMoveRobber())
+        if(canMoveRobber()) {
             setMoveRobber(false);
-        else
+        } else {
             throw new MoveRobberException("Player cannot move the Robber at this time!");
+        }
     }
 
     public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException{
+        assert this.resourceCardBank != null;
 
         return resourceCardBank.robbed();
     }
@@ -464,6 +510,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void buildRoad() {
+        assert this.resourceCardBank != null;
+        assert this.structureBank != null;
+
         try {
             resourceCardBank.buildRoad();
             structureBank.buildRoad();
@@ -480,6 +529,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildSettlement() {
+        assert this.resourceCardBank != null;
+        assert this.structureBank != null;
+
         return resourceCardBank.canBuildSettlement() && structureBank.canBuildSettlement();
     }
 
@@ -488,6 +540,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void buildSettlement() {
+        assert this.resourceCardBank != null;
+        assert this.structureBank != null;
+
         //Delegate action
         try {
             resourceCardBank.buildSettlement();
@@ -507,6 +562,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public boolean canBuildCity() {
+        assert this.resourceCardBank != null;
+        assert this.structureBank != null;
+
         return resourceCardBank.canBuildCity() && structureBank.canBuildCity();
     }
 
@@ -515,6 +573,9 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     @Override
     public void buildCity() {
+        assert this.resourceCardBank != null;
+        assert this.structureBank != null;
+
         //Delegate action
         try {
             resourceCardBank.buildCity();
@@ -588,7 +649,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         if (!(other instanceof Player))return false;
 
         Player otherPlayer = (Player)other;
-        return otherPlayer._id == this._id;
+        return otherPlayer._id == this._id && otherPlayer.getName().equals(this.name) && otherPlayer.getVictoryPoints() == this.victoryPoints && otherPlayer.getColor() == this.color;
     }
 
     @Override
@@ -612,11 +673,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     public JsonObject toJSON() {
         JsonObject json = new JsonObject();
         json.addProperty("cities", structureBank.getAvailableCities());
-        try {
-            json.addProperty("color", getColorString());
-        } catch (InvalidColorException e) {
-            e.printStackTrace();
-        }
+        json.addProperty("color", getColorString());
         json.addProperty("discarded", discarded);
         json.addProperty("monuments", monuments);
         json.addProperty("name", name.toString());
@@ -637,7 +694,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     //Getters/Setters
     //============================================
 
-    public int get_id() {
+    public int getId() {
         return _id;
     }
 

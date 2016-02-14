@@ -13,6 +13,7 @@ public class ChangeLogLevelDTO implements JsonSerializable {
     public ChangeLogLevelDTO(String logLevel) {
         assert logLevel != null;
         assert logLevel.length() > 0;
+
         this.logLevel = logLevel;
     }
 

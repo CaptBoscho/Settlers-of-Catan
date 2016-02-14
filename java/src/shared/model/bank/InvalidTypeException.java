@@ -1,7 +1,7 @@
 package shared.model.bank;
 
 /**
- * Created by Danny on 2/1/16.
+ * @author Danny Harding
  */
 public class InvalidTypeException extends Throwable {
     public InvalidTypeException(String s) {

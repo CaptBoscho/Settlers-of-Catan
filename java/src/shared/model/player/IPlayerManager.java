@@ -12,7 +12,6 @@ import shared.exceptions.MoveRobberException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
-import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
@@ -20,7 +19,7 @@ import javax.security.sasl.AuthenticationException;
 import java.util.List;
 
 /**
- * Created by corne on 1/30/2016.
+ * @author Kyle Cornelison
  */
 public interface IPlayerManager {
 

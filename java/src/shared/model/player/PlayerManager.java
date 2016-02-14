@@ -10,7 +10,6 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 
 import shared.model.cards.devcards.DevelopmentCard;
-import shared.model.game.trade.TradeType;
 
 import shared.model.cards.resources.ResourceCard;
 
@@ -36,6 +35,10 @@ public class PlayerManager implements IPlayerManager {
     }
 
     public PlayerManager(JsonArray players) {
+        assert players != null;
+        assert players.size() > 0;
+        assert players.size() < 5;
+
         this.players = new ArrayList<>();
         for (int i = 0; i < players.size(); i++) {
             if (!(players.get(i) instanceof JsonNull)) {
@@ -55,9 +58,9 @@ public class PlayerManager implements IPlayerManager {
     public List<Integer> randomizePlayers() throws FailedToRandomizeException {
         if (!this.players.isEmpty()){
             Collections.shuffle(this.players);
-            List<Integer> id_order = new ArrayList<>();
+            final List<Integer> id_order = new ArrayList<>();
             for (Player p : this.players) {
-                id_order.add(p.get_id());
+                id_order.add(p.getId());
             }
             return id_order;
         } else {
@@ -74,6 +77,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean authenticatePlayer(int id) throws AuthenticationException {
+        assert id >= 0;
+
+        // TODO --
         return false;
     }
 
@@ -92,9 +98,12 @@ public class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     public Player getPlayerByID(int id) throws PlayerExistsException {
+        assert id >= 0;
+
         for (Player player : this.players) {
-            if(player.get_id() == id)
+            if(player.getId() == id) {
                 return player;
+            }
         }
 
         throw new PlayerExistsException("Player with id " + id + " doesn't exist!");
@@ -107,6 +116,8 @@ public class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     public Player getPlayerByIndex(int index) throws PlayerExistsException {
+        assert index >= 0;
+
         if(index < this.players.size() && this.players.get(index) != null) {
             return this.players.get(index);
         } else {
@@ -119,7 +130,9 @@ public class PlayerManager implements IPlayerManager {
         return getPlayerByID(playerID).getKnights();}
 
 
-    public void playKnight(int playerID) throws PlayerExistsException{
+    public void playKnight(int playerID) throws PlayerExistsException {
+        assert playerID >= 0;
+
         getPlayerByID(playerID).playKnight();
     }
 
@@ -135,6 +148,8 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canDiscardCards(int id) throws PlayerExistsException {
+        assert id >= 0;
+
         Player player = getPlayerByID(id);
         return player.canDiscardCards();
     }
@@ -147,19 +162,26 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public List<ResourceCard> discardCards(int id, List<Card> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        assert id >= 0;
+        assert cards != null;
+        assert cards.size() > 0;
 
-        Player player = getPlayerByID(id);
-        return player.discardCards(cards);
+        return getPlayerByID(id).discardCards(cards);
     }
 
     public List<ResourceCard> discardResourceType(int id, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        Player player = getPlayerByID(id);
-        return player.discardResourceCards(cards);
+        assert id >= 0;
+        assert cards != null;
+        assert cards.size() > 0;
+
+        return getPlayerByID(id).discardResourceCards(cards);
     }
 
-    public void addResource(int id, ResourceCard rc) throws PlayerExistsException{
-        Player player = getPlayerByID(id);
-        player.addResourceCard(rc);
+    public void addResource(int id, ResourceCard rc) throws PlayerExistsException {
+        assert id >= 0;
+        assert rc != null;
+
+        getPlayerByID(id).addResourceCard(rc);
     }
 
     /**
@@ -171,15 +193,25 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canOfferTrade(int id) throws PlayerExistsException {
+        assert id >= 0;
+
         Player player = getPlayerByID(id);
         return player.canOfferTrade();
     }
 
     public void offerTrade(int one, int two, List<ResourceType> ones, List<ResourceType> twos) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
-        Player player1 = getPlayerByID(one);
-        Player player2 = getPlayerByID(two);
-        List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
-        List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
+        assert one >= 0;
+        assert two >= 0;
+        assert one != two;
+        assert ones != null;
+        assert ones.size() > 0;
+        assert twos != null;
+        assert twos.size() > 0;
+
+        final Player player1 = getPlayerByID(one);
+        final Player player2 = getPlayerByID(two);
+        final List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
+        final List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
         for(ResourceCard rc: discardedOnes){
             player2.addResourceCard(rc);
         }
@@ -198,14 +230,20 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canMaritimeTrade(int id, PortType type) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canMaritimeTrade(type);
+        assert id >= 0;
+        assert type != null;
+
+        return getPlayerByID(id).canMaritimeTrade(type);
     }
 
 
-    public void maritimeTrade(int playerID, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistsException{
-        Player player = getPlayerByID(playerID);
+    public void maritimeTrade(int playerID, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistsException {
+        assert playerID >= 0;
+        assert type != null;
+        assert want != null;
 
+        Player player = getPlayerByID(playerID);
+        // TODO -
 
 
     }
@@ -219,8 +257,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canBuyDevCard(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canBuyDevCard();
+        assert id >= 0;
+
+        return getPlayerByID(id).canBuyDevCard();
     }
 
     /**
@@ -230,16 +269,21 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void buyDevCard(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.buyDevCard();
+        assert id >= 0;
+
+        getPlayerByID(id).buyDevCard();
     }
 
-    public void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException{
-        Player player = getPlayerByID(id);
-        player.addDevCard(dc);
+    public void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException {
+        assert id >= 0;
+        assert dc != null;
+
+        getPlayerByID(id).addDevCard(dc);
     }
 
-    public void moveNewToOld(int id) throws PlayerExistsException, BadCallerException{
+    public void moveNewToOld(int id) throws PlayerExistsException, BadCallerException {
+        assert id >= 0;
+
         getPlayerByID(id).moveNewToOld();
     }
 
@@ -276,8 +320,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canUseRoadBuilder(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canUseRoadBuilder();
+        assert id >= 0;
+
+        return getPlayerByID(id).canUseRoadBuilder();
     }
 
     /**
@@ -287,8 +332,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useRoadBuilder(int id) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.useRoadBuilder();
+        assert id >= 0;
+
+        getPlayerByID(id).useRoadBuilder();
     }
 
     /**
@@ -300,8 +346,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canUseSoldier(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canUseSoldier();
+        assert id >= 0;
+
+        return getPlayerByID(id).canUseSoldier();
     }
 
     /**
@@ -311,14 +358,19 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useSoldier(int id) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.useSoldier();
+        assert id >= 0;
+
+        getPlayerByID(id).useSoldier();
     }
 
 
-    public void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException{
-        getPlayerByID(playerold).loseArmyCard();
-        getPlayerByID(playernew).winArmyCard();
+    public void changeLargestArmyPossession(int playerOld, int playerNew) throws PlayerExistsException {
+        assert playerNew >= 0;
+        assert playerOld >= 0;
+        assert playerNew != playerOld;
+
+        getPlayerByID(playerOld).loseArmyCard();
+        getPlayerByID(playerNew).winArmyCard();
     }
 
     /**
@@ -330,8 +382,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canUseMonopoly(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canUseMonopoly();
+        assert id >= 0;
+
+        return getPlayerByID(id).canUseMonopoly();
     }
 
     /**
@@ -341,20 +394,22 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useMonopoly(int id, int num, ResourceType type) throws DevCardException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+        assert id >= 0;
+        assert type != null;
+
         Player player = getPlayerByID(id);
         player.useMonopoly();
-        for(int i=1; i<= num; i++){
-            if(i!=id){
+        for(int i = 1; i<= num; i++){
+            if(i != id){
                 int amount = getPlayerByID(i).getNumberOfType(type);
                 List<ResourceType> rt = new ArrayList<>();
-                for(int k=0; k<amount; k++){
+                for(int k = 0; k < amount; k++){
                     rt.add(type);
                 }
                 List<ResourceCard> returned = getPlayerByID(i).discardResourceCards(rt);
-                for(int k=0; k< returned.size(); k++){
-                    addResource(id, returned.get(k));
+                for (ResourceCard aReturned : returned) {
+                    addResource(id, aReturned);
                 }
-
             }
         }
         System.out.println("mono2: " + getPlayerByID(id).howManyofThisCard(type));
@@ -371,8 +426,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canUseMonument(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canUseMonument();
+        assert id >= 0;
+
+        return getPlayerByID(id).canUseMonument();
     }
 
     /**
@@ -382,8 +438,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useMonument(int id) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.useMonument();
+        assert id >= 0;
+
+        getPlayerByID(id).useMonument();
     }
 
     /**
@@ -395,8 +452,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canPlaceRobber(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canMoveRobber();
+        assert id >= 0;
+
+        return getPlayerByID(id).canMoveRobber();
     }
 
     /**
@@ -424,8 +482,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canBuildRoad(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canBuildRoad();
+        assert id >= 0;
+
+        return getPlayerByID(id).canBuildRoad();
     }
 
     /**
@@ -435,8 +494,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void buildRoad(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.buildRoad();
+        assert id >= 0;
+
+        getPlayerByID(id).buildRoad();
     }
 
     /**
@@ -448,8 +508,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canBuildSettlement(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canBuildSettlement();
+        assert id >= 0;
+
+        return getPlayerByID(id).canBuildSettlement();
     }
 
     /**
@@ -459,8 +520,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void buildSettlement(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.buildSettlement();
+        assert id >= 0;
+
+        getPlayerByID(id).buildSettlement();
     }
 
     /**
@@ -472,8 +534,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canBuildCity(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        return player.canBuildCity();
+        assert id >= 0;
+
+        return getPlayerByID(id).canBuildCity();
     }
 
     /**
@@ -483,8 +546,9 @@ public class PlayerManager implements IPlayerManager {
      */
     @Override
     public void buildCity(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
-        player.buildCity();
+        assert id >= 0;
+
+        getPlayerByID(id).buildCity();
     }
 
     //Getters/setters

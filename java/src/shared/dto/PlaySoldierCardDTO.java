@@ -20,6 +20,11 @@ public class PlaySoldierCardDTO implements JsonSerializable {
      * @param location    The new location of the robber
      */
     public PlaySoldierCardDTO(int playerIndex, int victimIndex, HexLocation location) {
+        assert playerIndex >= 0;
+        assert victimIndex >= 0;
+        assert playerIndex != victimIndex;
+        assert location != null;
+
         this.playerIndex = playerIndex;
         this.victimIndex = victimIndex;
         this.location = location;

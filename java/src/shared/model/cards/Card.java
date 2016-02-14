@@ -1,7 +1,7 @@
 package shared.model.cards;
 
 /**
- * Created by Danny on 2/4/16.
+ * @author Danny Harding
  */
 public abstract class Card {
 }

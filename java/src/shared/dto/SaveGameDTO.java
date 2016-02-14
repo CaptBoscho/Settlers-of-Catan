@@ -15,6 +15,7 @@ public class SaveGameDTO implements JsonSerializable {
         assert gameId >= 0;
         assert name != null;
         assert name.length() > 0;
+
         this.gameId = gameId;
         this.name = name;
     }

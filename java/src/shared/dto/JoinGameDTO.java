@@ -17,6 +17,7 @@ public class JoinGameDTO implements JsonSerializable {
     public JoinGameDTO(int gameId, CatanColor color) {
         assert gameId >= 0;
         assert color != null;
+
         this.gameId = gameId;
         this.color = color;
     }

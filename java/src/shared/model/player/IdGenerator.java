@@ -3,7 +3,7 @@ package shared.model.player;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by corne on 1/30/2016.
+ * @author Kyle Cornelison
  * Singleton class for generating player IDs
  */
 public class IdGenerator {

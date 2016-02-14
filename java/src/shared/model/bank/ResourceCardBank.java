@@ -4,13 +4,11 @@ import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
-import shared.model.cards.devcards.DevelopmentCard;
-import shared.model.cards.devcards.YearOfPlentyCard;
-import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.*;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A bank owned by either a Player or a game which holds all the owners DevelopmentCards
@@ -140,22 +138,11 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
         if (ownedByGame) {
             throw new Exception("Must specify Resource Type to draw from Game");
         } else {
-            List<ResourceCard> hand = new ArrayList<>();
-            for (ResourceCard brick : bricks) {
-                hand.add(brick);
-            }
-            for (ResourceCard wood : woods) {
-                hand.add(wood);
-            }
-            for (ResourceCard sheep : sheeps) {
-                hand.add(sheep);
-            }
-            for (ResourceCard wheat : wheats) {
-                hand.add(wheat);
-            }
-            for (ResourceCard ore : ores) {
-                hand.add(ore);
-            }
+            List<ResourceCard> hand = bricks.stream().collect(Collectors.toList());
+            hand.addAll(woods.stream().collect(Collectors.toList()));
+            hand.addAll(sheeps.stream().collect(Collectors.toList()));
+            hand.addAll(wheats.stream().collect(Collectors.toList()));
+            hand.addAll(ores.stream().collect(Collectors.toList()));
             return hand.get(new Random().nextInt(hand.size()));
         }
     }
@@ -369,7 +356,7 @@ public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
 
     public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException{
         if(canBeRobbed()){
-            List<ResourceType> content = new ArrayList<ResourceType>();
+            List<ResourceType> content = new ArrayList<>();
             if(getNumberOfBrick()>0){content.add(ResourceType.BRICK);}
             if(getNumberOfOre()>0){content.add(ResourceType.ORE);}
             if(getNumberOfSheep()>0){content.add(ResourceType.SHEEP);}

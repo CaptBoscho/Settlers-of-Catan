@@ -10,6 +10,8 @@ public class Settlement {
     private int playerID;
 
     public Settlement(int playerID) {
+        assert playerID >= 0;
+
         this.playerID = playerID;
     }
 

@@ -42,6 +42,8 @@ public class Facade {
     }
 
     public void joinPlayer(PlayerInfo pi) throws BuildException {
+        assert pi != null;
+
         if (entries.size() >= 4) {
             throw new BuildException("too many players");
         } else {
@@ -51,6 +53,8 @@ public class Facade {
     }
 
     public void leaveQueue(PlayerInfo pi) throws BuildException {
+        assert pi != null;
+
         PlayerInfo removed = entries.remove(pi.getUserName());
         if (removed == null) {
             throw new BuildException("player didn't exist");
@@ -90,6 +94,8 @@ public class Facade {
      * @param playerID The ID of the player asking this
      */
     public boolean myTurn(int playerID) {
+        assert playerID >= 0;
+
         int turn = this.game.getCurrentTurn();
         return playerID == turn;
     }
@@ -104,6 +110,9 @@ public class Facade {
      * @return A boolean indicating if the asking player can build a road
      */
     public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException {
+        assert playerID >= 0;
+        assert edge != null;
+
         return myTurn(playerID) && game.canBuildRoad(playerID, edge);
     }
 
@@ -115,9 +124,11 @@ public class Facade {
      * @throws BuildException
      */
     public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
+        assert playerID >= 0;
+        assert edge != null;
+
         if (canBuildRoad(playerID, edge)) {
             game.buildRoad(playerID, edge);
-
         } else {
             throw new BuildException("Can't build the road");
         }
@@ -190,6 +201,8 @@ public class Facade {
      * @return A boolean value indicating if the asking player can buy a development card
      */
     public boolean canBuyDC(int playerID) throws PlayerExistsException {
+        assert playerID >= 0;
+
         return game.canBuyDevelopmentCard(playerID);
     }
 
@@ -199,7 +212,9 @@ public class Facade {
      * @param playerID
      * @throws BuildException
      */
-    public DevCardType buyDC(int playerID) throws BuildException, PlayerExistsException, Exception {
+    public DevCardType buyDC(int playerID) throws Exception {
+        assert playerID >= 0;
+
         if (canBuyDC(playerID)) {
             return game.buyDevelopmentCard(playerID);
         } else {
@@ -225,6 +240,15 @@ public class Facade {
      * @throws BuildException
      */
     public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        assert playerOneID >= 0;
+        assert playerTwoID >= 0;
+        assert playerOneID != playerTwoID;
+        assert oneCards != null;
+        assert oneCards.size() > 0;
+        assert twoCards != null;
+        assert twoCards.size() > 0;
+        assert !oneCards.equals(twoCards);
+
         if (canTrade(playerOneID)) {
             game.offerTrade(playerOneID, playerTwoID, oneCards,  twoCards);
         } else {
@@ -232,7 +256,10 @@ public class Facade {
         }
     }
 
-    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException{
+    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException {
+        assert playerID >= 0;
+        assert port != null;
+
         if (canTrade(playerID)) {
             Set<PortType> ports = game.getPortTypes(playerID);
             boolean cangame = game.canMaritimeTrade(playerID, port);
@@ -242,6 +269,8 @@ public class Facade {
     }
 
     public Set<PortType> maritimeTradeOptions(int playerID) throws InvalidPlayerException {
+        assert playerID >= 0;
+
         if (canTrade(playerID)) {
             return game.getPortTypes(playerID);
         }
@@ -249,6 +278,9 @@ public class Facade {
     }
 
     public void maritimeTrade(int playerID, PortType port, ResourceType type) throws BuildException, InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+        assert playerID >= 0;
+        assert type != null;
+
         if (!canMaritimeTrade(playerID, port)) {
             throw new BuildException("invalid maritime trade");
         } else {
@@ -264,7 +296,10 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException{
+    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
+        assert playerID >= 0;
+        assert dc != null;
+
         if(myTurn(playerID)){
             if(dc == DevCardType.SOLDIER){return game.canUseSoldier(playerID);}
             if(dc == DevCardType.MONUMENT){return game.canUseMonument(playerID);}

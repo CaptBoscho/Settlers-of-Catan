@@ -17,6 +17,7 @@ public class CreateGameDTO implements JsonSerializable{
 
     public CreateGameDTO(boolean rt, boolean rn, boolean rp, String n) {
         assert n != null;
+
         this.randomTiles = rt;
         this.randomNumbers = rn;
         this.randomPorts = rp;

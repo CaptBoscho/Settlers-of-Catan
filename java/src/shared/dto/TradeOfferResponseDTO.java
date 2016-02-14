@@ -18,6 +18,7 @@ public class TradeOfferResponseDTO implements JsonSerializable {
      */
     public TradeOfferResponseDTO(int playerIndex, boolean willAccept) {
         assert playerIndex >= 0;
+
         this.playerIndex = playerIndex;
         this.willAccept = willAccept;
     }

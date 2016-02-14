@@ -24,6 +24,7 @@ public class OfferTradeDTO implements JsonSerializable {
         assert receiver >= 0;
         assert playerIndex != receiver;
         assert offer != null;
+
         this.playerIndex = playerIndex;
         this.offer = offer;
         this.receiver = receiver;

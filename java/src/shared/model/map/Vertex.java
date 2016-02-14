@@ -1,6 +1,5 @@
 package shared.model.map;
 
-import shared.definitions.*;
 import shared.locations.VertexLocation;
 import shared.model.structures.*;
 
@@ -22,6 +21,12 @@ public class Vertex {
     private Port port;
 
     public Vertex(VertexLocation vertexLoc) {
+        assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+//        assert vertexLoc.getHexLoc().getX() >= 0;
+//        assert vertexLoc.getHexLoc().getY() >= 0;
+
         this.vertexLoc = vertexLoc;
         settlement = null;
         city = null;
@@ -91,6 +96,9 @@ public class Vertex {
      * @param settlement Settlement
      */
     public void buildSettlement(Settlement settlement) {
+        assert settlement != null;
+        assert settlement.getPlayerID() >= 0;
+
         if(canBuildSettlement()) {
             this.settlement = settlement;
         }
@@ -101,6 +109,9 @@ public class Vertex {
      * @param city City
      */
     public void buildCity(City city) {
+        assert city != null;
+        assert city.getPlayerID() >= 0;
+
         if(canBuildCity()) {
             settlement = null;
             this.city = city;
@@ -120,6 +131,9 @@ public class Vertex {
     }
 
     public void setPort(Port port){
+        assert port != null;
+        assert port.getPortType() != null;
+
         this.port = port;
     }
 

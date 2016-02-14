@@ -14,6 +14,9 @@ public class BuildSettlementDTO implements JsonSerializable {
     private boolean free;
 
     public BuildSettlementDTO(int playerIndex, VertexLocation location, boolean free) {
+        assert playerIndex >= 0;
+        assert location != null;
+
         this.playerIndex = playerIndex;
         this.location = location;
         this.free = free;

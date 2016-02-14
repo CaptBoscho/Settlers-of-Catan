@@ -14,6 +14,9 @@ public class BuildRoadDTO implements JsonSerializable {
     private boolean free;
 
     public BuildRoadDTO(int playerIndex, EdgeLocation location, boolean free) {
+        assert playerIndex >= 0;
+        assert location != null;
+
         this.playerIndex = playerIndex;
         this.roadLocation = location;
         this.free = free;

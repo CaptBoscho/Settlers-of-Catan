@@ -12,6 +12,9 @@ public class HexLocation implements JsonSerializable {
 	private int y;
 	
 	public HexLocation(int x, int y) {
+//        assert x >= 0;
+//        assert y >= 0;
+
 		setX(x);
 		setY(y);
 	}
@@ -22,7 +25,13 @@ public class HexLocation implements JsonSerializable {
      * @param json The JSON being used to construct this object
      */
 	public HexLocation(JsonObject json) {
+        assert json != null;
+        assert json.has("x");
+        assert json.has("y");
+
         x = json.get("x").getAsInt();
+
+        // TODO - why is this necessary? @joel
 		switch(x) {
 			case -3:
 				y = json.get("y").getAsInt() - 3;
@@ -55,6 +64,8 @@ public class HexLocation implements JsonSerializable {
 	}
 	
 	private void setX(int x) {
+//        assert x >= 0;
+
 		this.x = x;
 	}
 	
@@ -63,6 +74,8 @@ public class HexLocation implements JsonSerializable {
 	}
 	
 	private void setY(int y) {
+//        assert y >= 0;
+
 		this.y = y;
 	}
 	
@@ -82,19 +95,15 @@ public class HexLocation implements JsonSerializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(getClass() != obj.getClass())
-			return false;
-		HexLocation other = (HexLocation)obj;
-		if(x != other.x)
-			return false;
-		if(y != other.y)
-			return false;
-		return true;
-	}
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        HexLocation other = (HexLocation) obj;
+        return x == other.x && y == other.y;
+    }
 	
 	public HexLocation getNeighborLoc(EdgeDirection dir) {
 		switch (dir) {

@@ -23,10 +23,16 @@ import java.io.UnsupportedEncodingException;
 public class Utils {
 
     public static String buildUrl(String host, int port) {
+        assert host != null;
+        assert host.length() > 0;
+        assert port > 0;
+
         return "http://" + host + ":" + port;
     }
 
     private static String getStringFromHttpResponse(HttpResponse response) {
+        assert response != null;
+
         StringWriter writer = new StringWriter();
         try {
             IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
@@ -37,6 +43,8 @@ public class Utils {
     }
 
     public static String sendPost(String url, JsonObject body) {
+        assert url != null;
+        assert url.length() > 0;
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(url);
@@ -77,6 +85,9 @@ public class Utils {
     }
 
     public static String sendGet(String url) {
+        assert url != null;
+        assert url.length() > 0;
+
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet(url);
         if(UserCookie.getInstance().hasContent()) {

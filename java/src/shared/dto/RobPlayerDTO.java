@@ -18,6 +18,7 @@ public class RobPlayerDTO implements JsonSerializable {
         assert victimIndex >= 0;
         assert playerIndex != victimIndex;
         assert location != null;
+
         this.playerIndex = playerIndex;
         this.victimIndex = victimIndex;
         this.location = location;
