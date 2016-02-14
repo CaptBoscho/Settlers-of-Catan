@@ -12,6 +12,7 @@ import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.resources.ResourceCard;
 
+import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -108,7 +109,7 @@ public interface IGame {
      */
     Integer finishTurn(int playerID) throws Exception;
 
-    TurnTracker.Phase getCurrentPhase();
+    public TurnTracker.Phase getCurrentPhase();
 
     void nextPhase();
 
@@ -301,5 +302,8 @@ public interface IGame {
     public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
+
+
+    public Map getMap();
 
 }

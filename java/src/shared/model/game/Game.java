@@ -924,6 +924,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         return playerManager;
     }
 
+    public Map getMap(){return this.map;}
+
 
     /*======================================================
     * Private - Helper Methods

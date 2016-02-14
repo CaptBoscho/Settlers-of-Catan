@@ -5,6 +5,8 @@ import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
+import shared.model.game.TurnTracker;
+import shared.model.map.*;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.model.player.Name;
@@ -25,41 +27,50 @@ public class Facade {
     private List<Player> players = new ArrayList<>();
     private HashMap<String, PlayerInfo> entries = new HashMap<>();
     private Set<CatanColor> available_colors = new HashSet<>();
+    private static Facade _instance;
 
     /**
      * Constructor initializes map and game values
      */
-    public Facade() {
+    private Facade() {
         this.game = Game.getInstance();
     }
 
+
+    public static Facade instance(){
+        if(_instance == null){
+            _instance = new Facade();
+        }
+        return _instance;
+    }
+
     public Set<CatanColor> canJoin() {
-        if (entries.size() >= 4) {
+        if (this.entries.size() >= 4) {
             return null;
         } else {
-            return available_colors;
+            return this.available_colors;
         }
     }
 
     public void joinPlayer(PlayerInfo pi) throws BuildException {
         assert pi != null;
 
-        if (entries.size() >= 4) {
+        if (this.entries.size() >= 4) {
             throw new BuildException("too many players");
         } else {
-            entries.put(pi.getUserName(), pi);
-            available_colors.remove(pi.getColor());
+            this.entries.put(pi.getUserName(), pi);
+            this.available_colors.remove(pi.getColor());
         }
     }
 
     public void leaveQueue(PlayerInfo pi) throws BuildException {
         assert pi != null;
 
-        PlayerInfo removed = entries.remove(pi.getUserName());
+        PlayerInfo removed = this.entries.remove(pi.getUserName());
         if (removed == null) {
             throw new BuildException("player didn't exist");
         } else {
-            if (!available_colors.add(removed.getColor())) {
+            if (!this.available_colors.add(removed.getColor())) {
                 throw new BuildException("couldn't re-add the color");
             }
         }
@@ -71,17 +82,17 @@ public class Facade {
 
 
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
-        if (entries.size() != 4 && entries.size() != 3) {
+        if (this.entries.size() != 4 && this.entries.size() != 3) {
             throw new BuildException("need 3-4 players to play");
         } else {
             int id = 1;
-            for (String currKey : entries.keySet()) {
-                Name him = new Name(entries.get(currKey).getName());
-                Player p = new Player(0, entries.get(currKey).getColor(), id, him);
-                players.add(p);
+            for (String currKey : this.entries.keySet()) {
+                Name him = new Name(this.entries.get(currKey).getName());
+                Player p = new Player(0, this.entries.get(currKey).getColor(), id, him);
+                this.players.add(p);
                 id++;
             }
-            int firstPlayerID = this.game.initializeGame(players, randomhex, randomchit, randomport);
+            int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
 
 
         }
@@ -113,7 +124,7 @@ public class Facade {
         assert playerID >= 0;
         assert edge != null;
 
-        return myTurn(playerID) && game.canBuildRoad(playerID, edge);
+        return myTurn(playerID) && this.game.canBuildRoad(playerID, edge);
     }
 
     /**
@@ -128,7 +139,7 @@ public class Facade {
         assert edge != null;
 
         if (canBuildRoad(playerID, edge)) {
-            game.buildRoad(playerID, edge);
+            this.game.buildRoad(playerID, edge);
         } else {
             throw new BuildException("Can't build the road");
         }
@@ -144,7 +155,7 @@ public class Facade {
      * @return A boolean indicating if the asking player can build a building
      */
     public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException {
-        return game.canBuildSettlement(playerID, vertex);
+        return this.game.canBuildSettlement(playerID, vertex);
 
     }
 
@@ -157,7 +168,7 @@ public class Facade {
      */
     public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildSettlement(playerID, vertex)) {
-            game.buildSettlement(playerID, vertex);
+            this.game.buildSettlement(playerID, vertex);
         } else {
             throw new BuildException("Can't build the building");
         }
@@ -173,7 +184,7 @@ public class Facade {
      * @return A boolean indicating if the asking player can build a building
      */
     public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException{
-        return game.canBuildCity(playerID, vertex);
+        return this.game.canBuildCity(playerID, vertex);
 
     }
 
@@ -186,7 +197,7 @@ public class Facade {
      */
     public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
         if (canBuildCity(playerID, vertex)) {
-            game.buildCity(playerID, vertex);
+            this.game.buildCity(playerID, vertex);
         } else {
             throw new BuildException("Can't build the building");
         }
@@ -203,7 +214,7 @@ public class Facade {
     public boolean canBuyDC(int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
-        return game.canBuyDevelopmentCard(playerID);
+        return this.game.canBuyDevelopmentCard(playerID);
     }
 
     /**
@@ -216,7 +227,7 @@ public class Facade {
         assert playerID >= 0;
 
         if (canBuyDC(playerID)) {
-            return game.buyDevelopmentCard(playerID);
+            return this.game.buyDevelopmentCard(playerID);
         } else {
             throw new BuildException("Can't buy Develpment Card");
         }
@@ -250,7 +261,7 @@ public class Facade {
         assert !oneCards.equals(twoCards);
 
         if (canTrade(playerOneID)) {
-            game.offerTrade(playerOneID, playerTwoID, oneCards,  twoCards);
+            this.game.offerTrade(playerOneID, playerTwoID, oneCards,  twoCards);
         } else {
             throw new BuildException("Can't complete this trade");
         }
@@ -261,8 +272,8 @@ public class Facade {
         assert port != null;
 
         if (canTrade(playerID)) {
-            Set<PortType> ports = game.getPortTypes(playerID);
-            boolean cangame = game.canMaritimeTrade(playerID, port);
+            Set<PortType> ports = this.game.getPortTypes(playerID);
+            boolean cangame = this.game.canMaritimeTrade(playerID, port);
             return ports.contains(port) && cangame;
         }
         return false;
@@ -272,7 +283,7 @@ public class Facade {
         assert playerID >= 0;
 
         if (canTrade(playerID)) {
-            return game.getPortTypes(playerID);
+            return this.game.getPortTypes(playerID);
         }
         throw new InvalidPlayerException("can't trade");
     }
@@ -284,7 +295,7 @@ public class Facade {
         if (!canMaritimeTrade(playerID, port)) {
             throw new BuildException("invalid maritime trade");
         } else {
-            game.maritimeTrade(playerID, port, type);
+            this.game.maritimeTrade(playerID, port, type);
         }
     }
 
@@ -301,14 +312,18 @@ public class Facade {
         assert dc != null;
 
         if(myTurn(playerID)){
-            if(dc == DevCardType.SOLDIER){return game.canUseSoldier(playerID);}
-            if(dc == DevCardType.MONUMENT){return game.canUseMonument(playerID);}
-            if(dc == DevCardType.ROAD_BUILD){return game.canUseRoadBuilder(playerID);}
-            if(dc == DevCardType.MONOPOLY){return game.canUseMonopoly(playerID);}
-            if(dc == DevCardType.YEAR_OF_PLENTY){return game.canUseYearOfPlenty(playerID);}
+            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
+            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
+            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
+            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
+            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
         }
         return false;
     }
+
+    public shared.model.map.Map getMap(){return this.game.getMap();}
+
+    public TurnTracker.Phase getPhase(){return this.game.getCurrentPhase();}
 
     /**
      * plays the Development Card
