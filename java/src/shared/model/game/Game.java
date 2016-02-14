@@ -749,4 +749,8 @@ public class Game implements IGame, JsonSerializable {
     public JsonObject toJSON() {
         return null;
     }
+
+    public Map getMap() {
+        return map;
+    }
 }

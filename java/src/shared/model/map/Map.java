@@ -520,6 +520,15 @@ public class Map implements IMap, JsonSerializable{
     }
 
     @Override
+    public boolean canMoveRobber(HexLocation hexLoc) throws InvalidLocationException {
+        Hex hex = hexes.get(hexLoc);
+        if(hex == null || hex.getType() == HexType.WATER) {
+            throw new InvalidLocationException("Hex location is not on the map");
+        }
+        return robber.getLocation() != hexLoc;
+    }
+
+    @Override
     public Set<Integer> whoCanGetRobbed() {
         HexLocation hexLoc = robber.getLocation();
         return getPlayers(hexLoc);
@@ -1570,5 +1579,37 @@ public class Map implements IMap, JsonSerializable{
             connectingRoads.add(leftEdgeLoc);
         }
         return connectingRoads;
+    }
+
+    /*===========================================
+                   Getter Methods
+     ============================================*/
+
+    public java.util.Map<HexLocation, Hex> getHexes() {
+        return hexes;
+    }
+
+    public java.util.Map<Integer, ArrayList<HexLocation>> getChits() {
+        return chits;
+    }
+
+    public java.util.Map<VertexLocation, Vertex> getVertices() {
+        return vertices;
+    }
+
+    public java.util.Map<Integer, ArrayList<Edge>> getRoads() {
+        return roads;
+    }
+
+    public java.util.Map<Integer, ArrayList<Vertex>> getSettlements() {
+        return settlements;
+    }
+
+    public java.util.Map<Integer, ArrayList<Vertex>> getCities() {
+        return cities;
+    }
+
+    public Robber getRobber() {
+        return robber;
     }
 }

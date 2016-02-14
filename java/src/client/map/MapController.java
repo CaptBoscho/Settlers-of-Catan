@@ -3,17 +3,25 @@ package client.map;
 import java.util.*;
 
 import shared.definitions.*;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.*;
 import client.base.*;
 import client.data.*;
+import shared.model.game.Game;
+import shared.model.map.Edge;
+import shared.model.map.Map;
+import shared.model.map.Vertex;
+import shared.model.map.hex.Hex;
+import shared.model.player.Player;
 
 
 /**
  * Implementation for the map controller
  */
-public class MapController extends Controller implements IMapController {
+public class MapController extends Controller implements IMapController, Observer {
 	
 	private IRobView robView;
+	private Game game;
 	
 	public MapController(IMapView view, IRobView robView) {
 		super(view);
@@ -31,76 +39,129 @@ public class MapController extends Controller implements IMapController {
 	private void setRobView(IRobView robView) {
 		this.robView = robView;
 	}
+
+    private HexLocation getUIHexLocation(HexLocation hexLoc) {
+        return new HexLocation(hexLoc.getX(), hexLoc.getY()-hexLoc.getX());
+    }
 	
 	protected void initFromModel() {
-		
-		//<temp>
-		
-		Random rand = new Random();
 
-		for (int x = 0; x <= 3; ++x) {
-			
-			int maxY = 3 - x;			
-			for (int y = -3; y <= maxY; ++y) {				
-				int r = rand.nextInt(HexType.values().length);
-				HexType hexType = HexType.values()[r];
-				HexLocation hexLoc = new HexLocation(x, y);
-				getView().addHex(hexLoc, hexType);
-				getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.NorthWest),
-						CatanColor.RED);
-				getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.SouthWest),
-						CatanColor.BLUE);
-				getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.South),
-						CatanColor.ORANGE);
-				getView().placeSettlement(new VertexLocation(hexLoc,  VertexDirection.NorthWest), CatanColor.GREEN);
-				getView().placeCity(new VertexLocation(hexLoc,  VertexDirection.NorthEast), CatanColor.PURPLE);
-			}
-			
-			if (x != 0) {
-				int minY = x - 3;
-				for (int y = minY; y <= 3; ++y) {
-					int r = rand.nextInt(HexType.values().length);
-					HexType hexType = HexType.values()[r];
-					HexLocation hexLoc = new HexLocation(-x, y);
-					getView().addHex(hexLoc, hexType);
-					getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.NorthWest),
-							CatanColor.RED);
-					getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.SouthWest),
-							CatanColor.BLUE);
-					getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.South),
-							CatanColor.ORANGE);
-					getView().placeSettlement(new VertexLocation(hexLoc,  VertexDirection.NorthWest), CatanColor.GREEN);
-					getView().placeCity(new VertexLocation(hexLoc,  VertexDirection.NorthEast), CatanColor.PURPLE);
-				}
-			}
-		}
-		
-		PortType portType = PortType.BRICK;
-		getView().addPort(new EdgeLocation(new HexLocation(0, 3), EdgeDirection.North), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(0, -3), EdgeDirection.South), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(-3, 3), EdgeDirection.NorthEast), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(-3, 0), EdgeDirection.SouthEast), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(3, -3), EdgeDirection.SouthWest), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(3, 0), EdgeDirection.NorthWest), portType);
-		
-		getView().placeRobber(new HexLocation(0, 0));
-		
-		getView().addNumber(new HexLocation(-2, 0), 2);
-		getView().addNumber(new HexLocation(-2, 1), 3);
-		getView().addNumber(new HexLocation(-2, 2), 4);
-		getView().addNumber(new HexLocation(-1, 0), 5);
-		getView().addNumber(new HexLocation(-1, 1), 6);
-		getView().addNumber(new HexLocation(1, -1), 8);
-		getView().addNumber(new HexLocation(1, 0), 9);
-		getView().addNumber(new HexLocation(2, -2), 10);
-		getView().addNumber(new HexLocation(2, -1), 11);
-		getView().addNumber(new HexLocation(2, 0), 12);
-		
-		//</temp>
+        Map map = game.getMap();
+
+        //draw hexes
+        java.util.Map<HexLocation, Hex> hexes = map.getHexes();
+        for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
+            getView().addHex(getUIHexLocation(entry.getKey()), entry.getValue().getType());
+        }
+
+        //draw chits
+        java.util.Map<Integer, ArrayList<HexLocation>> chits = map.getChits();
+        for(java.util.Map.Entry<Integer, ArrayList<HexLocation>> entry : chits.entrySet()) {
+            ArrayList<HexLocation> hexLocList = entry.getValue();
+            for(HexLocation hexLoc : hexLocList) {
+                getView().addNumber(getUIHexLocation(hexLoc), entry.getKey());
+            }
+        }
+
+        //draw ports
+        java.util.Map<VertexLocation, Vertex> vertices = map.getVertices();
+
+        //first port
+        HexLocation hexLoc = new HexLocation(1,-1);
+        PortType portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.North), portType);
+
+        //second port
+        hexLoc = new HexLocation(2,0);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthEast)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthEast), portType);
+
+        //third port
+        hexLoc = new HexLocation(3,2);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthWest), portType);
+
+        //fourth port
+        hexLoc = new HexLocation(2,3);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthWest), portType);
+
+        //fifth port
+        hexLoc = new HexLocation(0,3);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.North), portType);
+
+        //sixth port
+        hexLoc = new HexLocation(-2,1);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthEast)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthEast), portType);
+
+        //seventh port
+        hexLoc = new HexLocation(-3,-1);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthEast)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthEast), portType);
+
+        //eighth port
+        hexLoc = new HexLocation(-2,-2);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthWest), portType);
+
+        //ninth port
+        hexLoc = new HexLocation(-1,-1);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
+        getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.North), portType);
+
+        //draw roads TODO:figure out how to handle this player doesn't exist exception
+        java.util.Map<Integer, ArrayList<Edge>> roads = map.getRoads();
+        for(java.util.Map.Entry<Integer, ArrayList<Edge>> entry : roads.entrySet()) {
+            Player player = new Player();
+            try {
+                player = game.getPlayerManager().getPlayerByID(entry.getKey());
+            } catch (PlayerExistsException e) {
+                System.out.println(e.getMessage());
+            }
+            ArrayList<Edge> roadList = entry.getValue();
+            for(Edge edge : roadList) {
+                getView().placeRoad(new EdgeLocation(getUIHexLocation(edge.getEdgeLoc().getHexLoc()), edge.getEdgeLoc().getDir()), player.getColor());
+            }
+        }
+
+        //draw settlements TODO:figure out how to handle this player doesn't exist exception
+        java.util.Map<Integer, ArrayList<Vertex>> settlements = map.getSettlements();
+        for(java.util.Map.Entry<Integer, ArrayList<Vertex>> entry : settlements.entrySet()) {
+            Player player = new Player();
+            try {
+                player = game.getPlayerManager().getPlayerByID(entry.getKey());
+            } catch (PlayerExistsException e) {
+                System.out.println(e.getMessage());
+            }
+            ArrayList<Vertex> settlementList = entry.getValue();
+            for(Vertex vertex : settlementList) {
+                getView().placeSettlement(new VertexLocation(getUIHexLocation(vertex.getVertexLoc().getHexLoc()), vertex.getVertexLoc().getDir()), player.getColor());
+            }
+        }
+
+        //draw cities TODO:figure out how to handle this player doesn't exist exception
+        java.util.Map<Integer, ArrayList<Vertex>> cities = map.getCities();
+        for(java.util.Map.Entry<Integer, ArrayList<Vertex>> entry : cities.entrySet()) {
+            Player player = new Player();
+            try {
+                player = game.getPlayerManager().getPlayerByID(entry.getKey());
+            } catch (PlayerExistsException e) {
+                System.out.println(e.getMessage());
+            }
+            ArrayList<Vertex> cityList = entry.getValue();
+            for(Vertex vertex : cityList) {
+                getView().placeCity(new VertexLocation(getUIHexLocation(vertex.getVertexLoc().getHexLoc()), vertex.getVertexLoc().getDir()), player.getColor());
+            }
+        }
+
+        //drawRobber
+        getView().placeRobber(getUIHexLocation(map.getRobber().getLocation()));
+
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-		// TODO -- implement
 		return true;
 	}
 
@@ -157,5 +218,10 @@ public class MapController extends Controller implements IMapController {
 	
 	public void robPlayer(RobPlayerInfo victim) {	
 		// TODO -- implement
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
 	}
 }

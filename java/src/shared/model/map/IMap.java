@@ -149,6 +149,14 @@ public interface IMap {
     public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
 
     /**
+     * Informs if the robber can be moved to a hex location
+     * @param hexLoc HexLocation
+     * @return boolean
+     * @throws AlreadyRobbedException Throws exception if the hex location is not on the map
+     */
+    public boolean canMoveRobber(HexLocation hexLoc) throws InvalidLocationException;
+
+    /**
      * Informs who can be robbed at a hex location
      * @return A set of playerID that can be robbed
      */
