@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * Represents the location of an edge on a hex map
  */
-public class EdgeLocation implements JsonSerializable {
+public final class EdgeLocation implements JsonSerializable {
 	
 	private HexLocation hexLoc;
 	private EdgeDirection dir;

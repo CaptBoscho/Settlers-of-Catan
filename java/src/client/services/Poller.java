@@ -11,7 +11,7 @@ import java.util.TimerTask;
  *
  * @author Derek Argueta
  */
-public class Poller {
+public final class Poller {
 
     private final static int DEFAULT_POLL_INTERVAL = 1000;
     private IServer server;

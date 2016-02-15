@@ -20,7 +20,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Derek Argueta
  */
-public class Utils {
+public final class Utils {
 
     public static String buildUrl(String host, int port) {
         assert host != null;
@@ -30,10 +30,10 @@ public class Utils {
         return "http://" + host + ":" + port;
     }
 
-    private static String getStringFromHttpResponse(HttpResponse response) {
+    private static String getStringFromHttpResponse(final HttpResponse response) {
         assert response != null;
 
-        StringWriter writer = new StringWriter();
+        final StringWriter writer = new StringWriter();
         try {
             IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
         } catch (IOException e) {
@@ -42,12 +42,12 @@ public class Utils {
         return writer.toString();
     }
 
-    public static String sendPost(String url, JsonObject body) {
+    public static String sendPost(final String url, JsonObject body) {
         assert url != null;
         assert url.length() > 0;
 
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(url);
+        final HttpClient httpClient = HttpClientBuilder.create().build();
+        final HttpPost post = new HttpPost(url);
 
         if(body != null) {
             StringEntity postingString = null;
@@ -64,12 +64,11 @@ public class Utils {
         }
         try {
             assert httpClient != null;
-            HttpResponse response = httpClient.execute(post);
+            final HttpResponse response = httpClient.execute(post);
             if(response.containsHeader("Set-cookie")) {
-                Header cookieHeader = response.getFirstHeader("Set-cookie");
-                String cookieVal = cookieHeader.getValue();
-                String[] cookies = cookieVal.split(";");
-                for(String cookie : cookies) {
+                final Header cookieHeader = response.getFirstHeader("Set-cookie");
+                final String[] cookies = cookieHeader.getValue().split(";");
+                for(final String cookie : cookies) {
                     if(cookie.startsWith("catan.user")) {
                         UserCookie.getInstance().setCatanUserCookieValue(cookie.substring(cookie.indexOf("=") + 1));
                     } else if(cookie.startsWith("catan.game")) {
@@ -84,18 +83,16 @@ public class Utils {
         return null;
     }
 
-    public static String sendGet(String url) {
+    public static String sendGet(final String url) {
         assert url != null;
         assert url.length() > 0;
 
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        HttpGet get = new HttpGet(url);
+        final HttpGet get = new HttpGet(url);
         if(UserCookie.getInstance().hasContent()) {
             get.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
         }
         try {
-            HttpResponse response = httpClient.execute(get);
-            return Utils.getStringFromHttpResponse(response);
+            return Utils.getStringFromHttpResponse(HttpClientBuilder.create().build().execute(get));
         } catch (IOException e) {
             e.printStackTrace();
         }

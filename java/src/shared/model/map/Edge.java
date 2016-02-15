@@ -9,7 +9,7 @@ import shared.model.structures.Road;
  *
  * @author Joel Bradley
  */
-public class Edge {
+public final class Edge {
 
     private EdgeLocation edgeLoc;
     private Road road;

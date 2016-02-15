@@ -12,7 +12,7 @@ import javax.swing.border.Border;
  * for a new game
  */
 @SuppressWarnings("serial")
-public class NewGameView extends OverlayView implements INewGameView {
+public final class NewGameView extends OverlayView implements INewGameView {
 
     private final int LABEL_TEXT_SIZE = 40;
     private final int BUTTON_TEXT_SIZE = 28;

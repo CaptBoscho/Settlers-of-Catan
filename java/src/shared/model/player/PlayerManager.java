@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author Kyle Cornelison
  */
-public class PlayerManager implements IPlayerManager {
+public final class PlayerManager implements IPlayerManager {
     private List<Player> players;
 
     /**

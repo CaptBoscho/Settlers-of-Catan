@@ -8,7 +8,7 @@ import shared.model.JsonSerializable;
  *
  * @author Danny Harding
  */
-public class StructureBank {
+public final class StructureBank {
     private final int MAX_ROADS = 15;
     private final int MAX_SETTLEMENTS = 5;
     private final int MAX_CITIES = 4;

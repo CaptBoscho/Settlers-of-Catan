@@ -6,7 +6,7 @@ import shared.exceptions.BadJsonException;
 /**
  * Representation of Player Turns
  */
-public class TurnTracker {
+public final class TurnTracker {
     private static final int NUMBER_OF_PHASES = 3;
 
     private boolean setupPhase;

@@ -8,7 +8,7 @@ import shared.locations.HexLocation;
  *
  * @author Joel Bradley
  */
-public class ChitHex extends Hex {
+public final class ChitHex extends Hex {
 
     private int chit;
 

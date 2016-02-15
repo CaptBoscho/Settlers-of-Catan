@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * game class representing a Catan game
  */
-public class Game extends Observable implements IGame, JsonSerializable {
+public final class Game extends Observable implements IGame, JsonSerializable {
 
     private static Game instance;
 

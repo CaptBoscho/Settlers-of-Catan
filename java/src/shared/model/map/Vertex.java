@@ -13,7 +13,7 @@ import shared.model.structures.*;
  *
  * @author Joel Bradley
  */
-public class Vertex {
+public final class Vertex {
 
     private VertexLocation vertexLoc;
     private Settlement settlement;

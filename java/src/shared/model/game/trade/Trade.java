@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Danny Harding
  */
-public class Trade {
+public final class Trade {
     TradePackage package1;
     TradePackage package2;
 

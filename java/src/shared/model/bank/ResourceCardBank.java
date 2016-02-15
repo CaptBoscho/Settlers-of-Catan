@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author Danny Harding
  */
-public class ResourceCardBank implements JsonSerializable, IResourceCardBank {
+public final class ResourceCardBank implements JsonSerializable, IResourceCardBank {
     static final int MAX_NUMBER_BRICK = 15;
     static final int MAX_NUMBER_ORE = 15;
     static final int MAX_NUMBER_SHEEP = 15;

@@ -16,7 +16,7 @@ import client.utils.*;
  * waiting for other players to join their game
  */
 @SuppressWarnings("serial")
-public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView {
+public final class PlayerWaitingView extends OverlayView implements IPlayerWaitingView {
 
 	private final int LABEL_TEXT_SIZE = 40;
 	private final int BUTTON_TEXT_SIZE = 28;

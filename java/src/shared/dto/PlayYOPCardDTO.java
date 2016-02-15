@@ -7,7 +7,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class PlayYOPCardDTO implements JsonSerializable {
+public final class PlayYOPCardDTO implements JsonSerializable {
 
     private int playerIndex;
     private ResourceType resource1;

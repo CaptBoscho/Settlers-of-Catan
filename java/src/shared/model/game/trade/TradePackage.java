@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Danny Harding
  */
-public class TradePackage {
+public final class TradePackage {
     private int playerID;
     private List<ResourceType> resources;
 

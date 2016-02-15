@@ -14,7 +14,7 @@ import java.util.*;
  *
  * @author Danny Harding
  */
-public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBank {
+public final class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBank {
     static final int MAX_SOLDIER_CARDS = 14;
     static final int MAX_MONUMENT_CARDS = 5;
     static final int MAX_MONOPOLY_CARDS = 2;

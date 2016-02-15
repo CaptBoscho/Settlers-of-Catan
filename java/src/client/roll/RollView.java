@@ -19,7 +19,7 @@ import client.base.*;
  * Implementation for the roll view, which allows the user to roll the dice
  */
 @SuppressWarnings("serial")
-public class RollView extends OverlayView implements IRollView {
+public final class RollView extends OverlayView implements IRollView {
 
 	private final int LABEL_TEXT_SIZE = 20;
 	private final int BUTTON_TEXT_SIZE = 28;

@@ -8,7 +8,7 @@ import shared.locations.HexLocation;
  *
  * @author Joel Bradley
  */
-public class Robber {
+public final class Robber {
     private HexLocation hexLoc;
 
     /**

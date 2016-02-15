@@ -26,13 +26,11 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 	private GameInfo[] games;
 	private PlayerInfo localPlayer;
 
-	public JoinGameView()
-	{
+	public JoinGameView() {
 		this.initialize();
 	}
 
-	private void initialize()
-	{
+	private void initialize() {
 		this.initializeView();
 	}
 

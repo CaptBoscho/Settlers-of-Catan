@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * Represents the location of a vertex on a hex map
  */
-public class VertexLocation implements JsonSerializable {
+public final class VertexLocation implements JsonSerializable {
 	
 	private HexLocation hexLoc;
 	private VertexDirection dir;

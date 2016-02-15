@@ -16,7 +16,7 @@ import java.util.*;
  * </ul>
  * 
  */
-public class GameInfo {
+public final class GameInfo {
 	private int id;
 	private String title;
 	private List<PlayerInfo> players;

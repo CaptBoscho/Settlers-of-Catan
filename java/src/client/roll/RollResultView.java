@@ -14,7 +14,7 @@ import client.utils.ImageUtils;
  * Implementation for the roll result view, which displays the result of a roll
  */
 @SuppressWarnings({"serial", "unused"})
-public class RollResultView extends OverlayView implements IRollResultView {
+public final class RollResultView extends OverlayView implements IRollResultView {
 
 	private final int TITLE_TEXT_SIZE = 40;
 	private final int LABEL_TEXT_SIZE = 28;

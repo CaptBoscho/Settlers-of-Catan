@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author Corbin Byers
  */
-public class MessageList {
+public final class MessageList {
 
     private List<MessageLine> chat = new ArrayList<>();
 

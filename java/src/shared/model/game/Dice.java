@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Representation of game dice
  */
-public class Dice {
+public final class Dice {
     private int min;
     private int max;
 

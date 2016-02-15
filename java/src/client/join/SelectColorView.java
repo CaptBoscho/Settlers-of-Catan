@@ -12,7 +12,7 @@ import client.base.*;
  * desired color when they join a game
  */
 @SuppressWarnings("serial")
-public class SelectColorView extends OverlayView implements ISelectColorView {
+public final class SelectColorView extends OverlayView implements ISelectColorView {
 
 	private final int LABEL_TEXT_SIZE = 32;
 	private final int COLOR_BUTTON_TEXT_SIZE = 18;

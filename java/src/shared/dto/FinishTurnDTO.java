@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class FinishTurnDTO implements JsonSerializable {
+public final class FinishTurnDTO implements JsonSerializable {
 
     private int playerIndex;
 

@@ -9,7 +9,7 @@ import shared.locations.VertexLocation;
  *
  * @author Joel Bradley
  */
-public class Port {
+public final class Port {
 
     private PortType portType;
     private VertexLocation vertexLoc;

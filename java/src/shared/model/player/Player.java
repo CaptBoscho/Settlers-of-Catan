@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Kyle Cornelison
  */
-public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Add exceptions when danny is done
+public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Add exceptions when danny is done
     private int _id;
     private Name name;
     private int monuments;
