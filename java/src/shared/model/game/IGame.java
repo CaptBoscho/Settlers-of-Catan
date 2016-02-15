@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import shared.definitions.CatanColor;
 import shared.exceptions.PlayerExistsException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
@@ -116,6 +117,8 @@ public interface IGame {
 
 
     void addObserver(Observer o);
+
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can play Year of Plenty

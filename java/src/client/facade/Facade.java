@@ -56,6 +56,9 @@ public class Facade {
         this.game.addObserver(o);
     }
 
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
+        return this.game.getPlayerColorByID(id);}
+
     public void joinPlayer(PlayerInfo pi) throws BuildException {
         assert pi != null;
 

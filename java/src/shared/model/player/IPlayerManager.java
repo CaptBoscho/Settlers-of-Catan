@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import shared.definitions.CatanColor;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 
@@ -46,6 +47,8 @@ public interface IPlayerManager {
      * @throws PlayerExistsException
      */
     Player getPlayerByID(int id) throws PlayerExistsException;
+
+    CatanColor getPlayerColorByID(int id) throws PlayerExistsException;
 
     /**
      * Gets a player by index

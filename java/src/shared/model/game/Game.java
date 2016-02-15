@@ -2,13 +2,11 @@ package shared.model.game;
 
 import com.google.gson.JsonObject;
 import javafx.beans.*;
-import shared.definitions.PortType;
-import shared.definitions.ResourceType;
+import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
 import shared.model.JsonSerializable;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
-import shared.definitions.DevCardType;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -934,6 +932,9 @@ public class Game extends Observable implements IGame, JsonSerializable{
 
     public Map getMap(){return this.map;}
 
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
+        return this.playerManager.getPlayerColorByID(id);
+    }
 
     /*======================================================
     * Private - Helper Methods
