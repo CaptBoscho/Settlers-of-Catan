@@ -348,6 +348,30 @@ public class Facade {
 
     public TurnTracker.Phase getPhase(){return this.game.getCurrentPhase();}
 
+    public boolean ableToBuildRoad(int id) throws PlayerExistsException{
+        return this.game.ableToBuildRoad(id);
+    }
+
+    public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
+        return this.game.ableToBuildSettlement(id);
+    }
+
+    public boolean ableToBuildCity(int id) throws PlayerExistsException{
+        return this.game.ableToBuildCity(id);
+    }
+
+    public Integer getAvailableRoads(int id) throws PlayerExistsException{
+        return this.game.getAvailableRoads(id);
+    }
+
+    public Integer getAvailableSettlements(int id) throws PlayerExistsException{
+        return this.game.getAvailableSettlements(id);
+    }
+
+    public Integer getAvailableCities(int id) throws PlayerExistsException{
+        return this.game.getAvailableCities(id);
+    }
+
     /**
      * plays the Development Card
      *
