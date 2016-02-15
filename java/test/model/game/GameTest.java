@@ -1862,17 +1862,26 @@ public class GameTest {
 
     @Test
     public void testCanRollNumber() {
+        game.setPhase(TurnTracker.Phase.ROLLING);
         final int turn = game.getCurrentTurn();
         assertTrue(game.canRollNumber(turn));
-        game.getTurnTracker().nextPhase();
+        try {
+            game.getTurnTracker().nextPhase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertFalse(game.canRollNumber(turn));
     }
 
     @Test
     public void testRollNumber() throws InvalidDiceRollException{
         final int turn = game.getCurrentTurn();
-        game.getTurnTracker().nextPhase();
-        game.getTurnTracker().nextPhase();
+        try {
+            game.getTurnTracker().nextPhase();
+            game.getTurnTracker().nextPhase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         final int roll = game.rollNumber(turn);
         assertTrue(roll > 1);
         assertTrue(roll <= 12);
@@ -1881,14 +1890,15 @@ public class GameTest {
     @Test
     public void testCanOfferTrade() {
         final int guy = game.getCurrentTurn();
-        game.getTurnTracker().nextPhase();
+        game.setPhase(TurnTracker.Phase.PLAYING);
         assertTrue(game.canOfferTrade(guy));
     }
 
     @Test
     public void testOfferTrade() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException {
         final int guy = game.getCurrentTurn();
-        game.getTurnTracker().nextPhase();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+
         int friend = 3;
         if(guy == 3) {
             friend = 4;
@@ -1912,6 +1922,8 @@ public class GameTest {
         assertTrue(game.amountOwnedResource(friend, ResourceType.SHEEP) == 1);
 
         game.offerTrade(guy,friend,ones,twos);
+
+        System.out.println(game.amountOwnedResource(friend, ResourceType.BRICK));
 
         assertTrue(game.amountOwnedResource(friend, ResourceType.BRICK) == 1);
         assertTrue(game.amountOwnedResource(friend, ResourceType.ORE) == 1);
