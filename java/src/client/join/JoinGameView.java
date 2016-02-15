@@ -58,7 +58,7 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 
 
 		// This is the header layout
-		JPanel gamePanel = new JPanel();
+		final JPanel gamePanel = new JPanel();
 		gamePanel.setLayout(new GridLayout(0, 4));
 		final JLabel hash = new JLabel("#");
 		labelFont = new Font(labelFont.getFontName(), Font.BOLD, PANEL_TEXT_SIZE);

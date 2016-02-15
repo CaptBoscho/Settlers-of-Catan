@@ -81,6 +81,11 @@ public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView
 		aiButtonPanel.add(Box.createHorizontalGlue());
 		
 		addAiButton = new JButton("Add a computer player");
+		ActionListener actionListener = e -> {
+            if (e.getSource() == addAiButton) {
+                getController().addAI();
+            }
+        };
 		addAiButton.addActionListener(actionListener);
 		FontUtils.setFont(addAiButton, BUTTON_TEXT_SIZE);
 		aiButtonPanel.add(addAiButton);
@@ -95,16 +100,6 @@ public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView
 		this.add(aiPanel, BorderLayout.SOUTH);
 	}
 
-	//listener for the "add AI player" button
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == addAiButton) {			
-				getController().addAI();
-			}
-		}	
-	};
-
 	@Override
 	public IPlayerWaitingController getController() {
 		return (IPlayerWaitingController)super.getController();
@@ -117,8 +112,7 @@ public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView
 		if(value.length == NUMBER_OF_PLAYERS){
 			labelText = "This game is ready to go!";
 			addAiButton.setEnabled(false);
-		}
-		else{
+		} else {
 			labelText = ("Waiting for Players: Need " + (NUMBER_OF_PLAYERS-value.length) + " more");
 			addAiButton.setEnabled(true);
 		}
@@ -167,4 +161,3 @@ public class PlayerWaitingView extends OverlayView implements IPlayerWaitingView
 	}
 
 }
-

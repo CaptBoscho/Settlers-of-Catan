@@ -12,8 +12,7 @@ import javax.swing.border.Border;
  * for a new game
  */
 @SuppressWarnings("serial")
-public class NewGameView extends OverlayView implements INewGameView
-{
+public class NewGameView extends OverlayView implements INewGameView {
 
     private final int LABEL_TEXT_SIZE = 40;
     private final int BUTTON_TEXT_SIZE = 28;
@@ -29,8 +28,7 @@ public class NewGameView extends OverlayView implements INewGameView
     private JCheckBox chkRandHexes = null;
     private JCheckBox chkRandPorts = null;
 
-    public NewGameView()
-    {
+    public NewGameView() {
 
         this.setOpaque(true);
         this.setLayout(new BorderLayout());
@@ -45,6 +43,14 @@ public class NewGameView extends OverlayView implements INewGameView
         this.add(initInternalComponents(), BorderLayout.CENTER);
         
         cancelButton = new JButton("Cancel");
+        ActionListener actionListener = e -> {
+
+            if (e.getSource() == createButton) {
+                getController().createNewGame();
+            } else if (e.getSource() == cancelButton) {
+                getController().cancelCreateNewGame();
+            }
+        };
         cancelButton.addActionListener(actionListener);
         Font buttonFont = cancelButton.getFont();
         buttonFont = buttonFont.deriveFont(buttonFont.getStyle(), BUTTON_TEXT_SIZE);
@@ -61,12 +67,11 @@ public class NewGameView extends OverlayView implements INewGameView
         this.add(buttonPanel, BorderLayout.SOUTH);                
     }
     
-    private JComponent initInternalComponents()
-    {
-        JPanel mainPanel = new JPanel();
+    private JComponent initInternalComponents() {
+        final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
         
-        JLabel lblTitle = new JLabel("Title:");
+        final JLabel lblTitle = new JLabel("Title:");
         txtTitle = new JTextField();
         chkRandNumbers = new JCheckBox("Randomly place Numbers");
         chkRandHexes = new JCheckBox("Randomly place Hexes");
@@ -84,90 +89,59 @@ public class NewGameView extends OverlayView implements INewGameView
         return mainPanel;        
     }
     
-    private Border createBufferBorder()
-    {
+    private Border createBufferBorder() {
         final int BUFFER_SPACE = 7;
-        Border innerBuffer = BorderFactory.createEmptyBorder(BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE);
-        Border outerBuffer = BorderFactory.createEmptyBorder(BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE);
-        Border etching = BorderFactory.createEtchedBorder();
+        final Border innerBuffer = BorderFactory.createEmptyBorder(BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE);
+        final Border outerBuffer = BorderFactory.createEmptyBorder(BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE, BUFFER_SPACE);
+        final Border etching = BorderFactory.createEtchedBorder();
 
-        Border outerCompound = BorderFactory.createCompoundBorder(outerBuffer, etching);
-        Border wholeCompound = BorderFactory.createCompoundBorder(outerCompound, innerBuffer);
+        final Border outerCompound = BorderFactory.createCompoundBorder(outerBuffer, etching);
 
-        return wholeCompound;
+        return BorderFactory.createCompoundBorder(outerCompound, innerBuffer);
     }
 
-    private ActionListener actionListener = new ActionListener()
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-
-            if (e.getSource() == createButton)
-            {
-
-                getController().createNewGame();
-            }
-            else if (e.getSource() == cancelButton)
-            {
-
-                getController().cancelCreateNewGame();
-            }
-        }
-    };
-
     @Override
-    public IJoinGameController getController()
-    {
-
+    public IJoinGameController getController() {
         return (IJoinGameController) super.getController();
     }
 
     @Override
-    public void setTitle(String value)
-    {
+    public void setTitle(String value) {
         this.txtTitle.setText(value);
     }
 
     @Override
-    public String getTitle()
-    {
+    public String getTitle() {
         return txtTitle.getText();
     }
 
     @Override
-    public void setRandomlyPlaceNumbers(boolean value)
-    {
+    public void setRandomlyPlaceNumbers(boolean value) {
         chkRandNumbers.setSelected(value);
     }
 
     @Override
-    public boolean getRandomlyPlaceNumbers()
-    {
+    public boolean getRandomlyPlaceNumbers() {
         return chkRandNumbers.isSelected();
     }
 
     @Override
-    public void setRandomlyPlaceHexes(boolean value)
-    {
+    public void setRandomlyPlaceHexes(boolean value) {
         chkRandHexes.setSelected(value);
     }
 
     @Override
-    public boolean getRandomlyPlaceHexes()
-    {
+    public boolean getRandomlyPlaceHexes() {
         return chkRandHexes.isSelected();
     }
 
     @Override
-    public void setUseRandomPorts(boolean value)
-    {
+    public void setUseRandomPorts(boolean value) {
         chkRandPorts.setSelected(value);
     }
 
     @Override
-    public boolean getUseRandomPorts()
-    {
+    public boolean getUseRandomPorts() {
         return chkRandPorts.isSelected();
     }
 

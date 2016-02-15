@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  */
 public class ServerTest {
 
-    private IServer server = new ServerProxy("localhost", 8081);
+    private IServer server = ServerProxy.getInstance();
 
     private String generateString(Random rng, String characters, int length) {
         final char[] text = new char[length];

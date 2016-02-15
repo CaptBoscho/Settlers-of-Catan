@@ -1,5 +1,13 @@
 
 package client.facade;
+import client.services.IServer;
+import client.services.MissingUserCookieException;
+import client.services.ServerProxy;
+import com.sun.corba.se.spi.activation.Server;
+import shared.dto.BuildCityDTO;
+import shared.dto.BuildRoadDTO;
+import shared.dto.BuildSettlementDTO;
+import shared.dto.BuyDevCardDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
@@ -75,7 +83,7 @@ public class Facade {
             throw new BuildException("need 3-4 players to play");
         } else {
             int id = 1;
-            for (String currKey : entries.keySet()) {
+            for (final String currKey : entries.keySet()) {
                 Name him = new Name(entries.get(currKey).getName());
                 Player p = new Player(0, entries.get(currKey).getColor(), id, him);
                 players.add(p);
@@ -96,8 +104,7 @@ public class Facade {
     public boolean myTurn(int playerID) {
         assert playerID >= 0;
 
-        int turn = this.game.getCurrentTurn();
-        return playerID == turn;
+        return playerID == this.game.getCurrentTurn();
     }
 
     /**
@@ -123,15 +130,13 @@ public class Facade {
      * @param edge
      * @throws BuildException
      */
-    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
+    public void buildRoad(int playerID, EdgeLocation edge) throws MissingUserCookieException {
         assert playerID >= 0;
         assert edge != null;
 
-        if (canBuildRoad(playerID, edge)) {
-            game.buildRoad(playerID, edge);
-        } else {
-            throw new BuildException("Can't build the road");
-        }
+        final BuildRoadDTO dto = new BuildRoadDTO(playerID, edge, false);
+        final ClientModel model = ServerProxy.getInstance().buildRoad(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**
@@ -155,12 +160,10 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
-        if (canBuildSettlement(playerID, vertex)) {
-            game.buildSettlement(playerID, vertex);
-        } else {
-            throw new BuildException("Can't build the building");
-        }
+    public void buildSettlement(int playerID, VertexLocation vertex) throws MissingUserCookieException {
+        final BuildSettlementDTO dto = new BuildSettlementDTO(playerID, vertex, false);
+        final ClientModel model = ServerProxy.getInstance().buildSettlement(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**
@@ -184,12 +187,10 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
-        if (canBuildCity(playerID, vertex)) {
-            game.buildCity(playerID, vertex);
-        } else {
-            throw new BuildException("Can't build the building");
-        }
+    public void buildCity(int playerID, VertexLocation vertex) throws MissingUserCookieException {
+        final BuildCityDTO dto = new BuildCityDTO(playerID, vertex);
+        final ClientModel model = ServerProxy.getInstance().buildCity(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**
@@ -212,14 +213,12 @@ public class Facade {
      * @param playerID
      * @throws BuildException
      */
-    public DevCardType buyDC(int playerID) throws Exception {
+    public void buyDC(int playerID) throws MissingUserCookieException {
         assert playerID >= 0;
 
-        if (canBuyDC(playerID)) {
-            return game.buyDevelopmentCard(playerID);
-        } else {
-            throw new BuildException("Can't buy Develpment Card");
-        }
+        final BuyDevCardDTO dto = new BuyDevCardDTO(playerID);
+        final ClientModel model = ServerProxy.getInstance().buyDevCard(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**

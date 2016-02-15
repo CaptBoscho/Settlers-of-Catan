@@ -1,13 +1,11 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
-import shared.definitions.PortType;
-import shared.definitions.ResourceType;
+import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
 import shared.model.JsonSerializable;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.ResourceCardBank;
-import shared.definitions.DevCardType;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -103,6 +101,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         } catch (BadJsonException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateGame(ClientModel model) {
+        // TODO --
     }
 
     public int getVersion() {
