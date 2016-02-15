@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import shared.definitions.CatanColor;
 import shared.exceptions.PlayerExistsException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
@@ -12,6 +13,7 @@ import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.resources.ResourceCard;
 
+import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -20,6 +22,7 @@ import shared.definitions.ResourceType;
 import javax.annotation.Resource;
 import javax.naming.InsufficientResourcesException;
 import java.util.List;
+import java.util.Observer;
 import java.util.Set;
 
 public interface IGame {
@@ -108,10 +111,14 @@ public interface IGame {
      */
     Integer finishTurn(int playerID) throws Exception;
 
-    TurnTracker.Phase getCurrentPhase();
+    public TurnTracker.Phase getCurrentPhase();
 
     void nextPhase();
 
+
+    void addObserver(Observer o);
+
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can play Year of Plenty
@@ -301,5 +308,8 @@ public interface IGame {
     public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
+
+
+    public Map getMap();
 
 }
