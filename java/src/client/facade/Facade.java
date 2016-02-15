@@ -37,7 +37,7 @@ public class Facade {
     }
 
 
-    public static Facade instance(){
+    public static Facade getInstance(){
         if(_instance == null){
             _instance = new Facade();
         }
@@ -50,6 +50,10 @@ public class Facade {
         } else {
             return this.available_colors;
         }
+    }
+
+    public void addObserver(Observer o){
+        this.game.addObserver(o);
     }
 
     public void joinPlayer(PlayerInfo pi) throws BuildException {

@@ -1,6 +1,7 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
+import javafx.beans.*;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.PlayerExistsException;
@@ -28,11 +29,12 @@ import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
+import java.util.Observable;
 
 /**
  * game class representing a Catan game
  */
-public class Game extends Observable implements IGame, JsonSerializable {
+public class Game extends Observable implements IGame, JsonSerializable{
 
     private static Game instance;
 
@@ -46,6 +48,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
     private DevelopmentCardBank developmentCardBank;
     private int winner;
     private int version;
+
+    private List<Observer> observers = new ArrayList<Observer>();
 
     /**
      * Constructor
@@ -67,6 +71,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         }
 
         return instance;
+    }
+
+    public void addObserver(Observer o){
+        observers.add(o);
     }
 
     public void reset() {

@@ -21,6 +21,7 @@ import shared.definitions.ResourceType;
 import javax.annotation.Resource;
 import javax.naming.InsufficientResourcesException;
 import java.util.List;
+import java.util.Observer;
 import java.util.Set;
 
 public interface IGame {
@@ -113,6 +114,8 @@ public interface IGame {
 
     void nextPhase();
 
+
+    void addObserver(Observer o);
 
     /**
      * Determine if Player can play Year of Plenty
