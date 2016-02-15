@@ -8,7 +8,7 @@ import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 
 /**
- * Created by corne on 2/11/2016.
+ * @author Kyle Cornelison
  *
  * Base class for the state of the Map Controller
  */
