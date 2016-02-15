@@ -182,7 +182,6 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
                     newMonopolyCards.add((MonopolyCard) cardToAdd);
                     break;
                 case YEAR_OF_PLENTY:
-                    System.out.println("here i am");
                     newYearOfPlentyCards.add((YearOfPlentyCard) cardToAdd);
                     break;
                 case ROAD_BUILD:

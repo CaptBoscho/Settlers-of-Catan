@@ -1,14 +1,9 @@
 package client.services;
 
 import com.google.gson.JsonObject;
-import com.sun.deploy.net.URLEncoder;
-import shared.definitions.CatanColor;
-import shared.dto.*;
-import shared.locations.HexLocation;
-import shared.locations.VertexDirection;
-import shared.locations.VertexLocation;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * A playground area to manually test service code
