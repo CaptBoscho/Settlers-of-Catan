@@ -164,7 +164,7 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
      * @param cardToAdd Development card to add to the bank
      */
     @Override
-    public void addDevCard(DevelopmentCard cardToAdd) throws InvalidTypeException {
+    public void addDevCard(final DevelopmentCard cardToAdd) throws InvalidTypeException {
         assert cardToAdd != null;
 
         if (ownedByGame) {

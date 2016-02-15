@@ -47,7 +47,7 @@ public final class UserCookie {
         this.gameCookie = new JsonObject();
     }
 
-    private void setCatanGameCookieValue(String catanGameCookieValue) throws UnsupportedEncodingException {
+    private void setCatanGameCookieValue(final String catanGameCookieValue) throws UnsupportedEncodingException {
         assert catanGameCookieValue != null;
         assert catanGameCookieValue.length() > 0;
 
@@ -55,7 +55,7 @@ public final class UserCookie {
         this.gameCookie = new JsonParser().parse(decodedCookie).getAsJsonObject();
     }
 
-    private void setCatanUserCookieValue(String catanUserCookieValue) throws UnsupportedEncodingException {
+    private void setCatanUserCookieValue(final String catanUserCookieValue) throws UnsupportedEncodingException {
         assert catanUserCookieValue != null;
         assert catanUserCookieValue.length() > 0;
 
@@ -63,7 +63,7 @@ public final class UserCookie {
         this.userCookie = new JsonParser().parse(decodedCookie).getAsJsonObject();
     }
 
-    public void setCookies(String cookieValue) throws UnsupportedEncodingException {
+    public void setCookies(final String cookieValue) throws UnsupportedEncodingException {
         final String[] cookies = cookieValue.split(";");
         for(final String cookie : cookies) {
             if(cookie.startsWith("catan.user")) {
