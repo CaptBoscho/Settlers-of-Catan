@@ -256,4 +256,10 @@ public interface IPlayerManager {
     void buildCity(int id) throws PlayerExistsException;
 
     void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException;
+
+    public Integer getAvailableRoads(int id) throws PlayerExistsException;
+
+    public Integer getAvailableSettlements(int id) throws PlayerExistsException;
+
+    public Integer getAvailableCities(int id)throws PlayerExistsException;
 }

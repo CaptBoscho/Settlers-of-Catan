@@ -787,4 +787,10 @@ public final class Player implements IPlayer,Comparable<Player> { // TODO: 1/30/
     public CatanColor getColor() {
         return color;
     }
+
+    public Integer getAvailableRoads(){return structureBank.getAvailableRoads();}
+
+    public Integer getAvailableSettlements(){return structureBank.getAvailableSettlements();}
+
+    public Integer getAvailableCities(){return structureBank.getAvailableCities();}
 }

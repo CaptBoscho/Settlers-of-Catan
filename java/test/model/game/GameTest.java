@@ -1950,13 +1950,12 @@ public class GameTest {
             assertFalse(game.canFinishTurn(guy));
         }
 
-        assertFalse(game.canFinishTurn(guy));
     }
 
     @Test
     public void testCanBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException{
         final int guy = game.getCurrentTurn();
-        game.setPhase(TurnTracker.Phase.DISCARDING);
+        game.setPhase(TurnTracker.Phase.PLAYING);
         assertFalse(game.canBuyDevelopmentCard(guy));
 
         final ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
