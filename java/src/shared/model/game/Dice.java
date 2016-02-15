@@ -22,7 +22,7 @@ public final class Dice {
      * @param min minimum value the dice can return
      * @param max maximum value the dice can return
      */
-    public Dice(int min, int max) {
+    public Dice(final int min, final int max) {
         assert max > min;
 
         this.min = min;
