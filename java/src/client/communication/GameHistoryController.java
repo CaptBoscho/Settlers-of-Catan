@@ -12,7 +12,7 @@ import shared.definitions.*;
  */
 public class GameHistoryController extends Controller implements IGameHistoryController {
 
-	public GameHistoryController(IGameHistoryView view) {
+	public GameHistoryController(final IGameHistoryView view) {
 		super(view);
 		initFromModel();
 	}

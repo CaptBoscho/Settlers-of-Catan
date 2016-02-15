@@ -19,9 +19,7 @@ public class DiscardController extends Controller implements IDiscardController 
 	 * @param waitView View displayed to notify the user that they are waiting for other players to discard
 	 */
 	public DiscardController(IDiscardView view, IWaitView waitView) {
-		
 		super(view);
-		
 		this.waitView = waitView;
 	}
 
@@ -45,7 +43,6 @@ public class DiscardController extends Controller implements IDiscardController 
 
 	@Override
 	public void discard() {
-		
 		getDiscardView().closeModal();
 	}
 

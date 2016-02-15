@@ -19,7 +19,7 @@ public class Port {
      * @param portType PortType
      * @param vertexLoc VertexLocation
      */
-    public Port(PortType portType, VertexLocation vertexLoc) {
+    public Port(final PortType portType, final VertexLocation vertexLoc) {
         assert portType != null;
         assert vertexLoc != null;
 

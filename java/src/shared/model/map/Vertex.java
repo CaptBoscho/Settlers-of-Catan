@@ -20,7 +20,7 @@ public class Vertex {
     private City city;
     private Port port;
 
-    public Vertex(VertexLocation vertexLoc) {
+    public Vertex(final VertexLocation vertexLoc) {
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
@@ -95,7 +95,7 @@ public class Vertex {
      * Builds a settlement
      * @param settlement Settlement
      */
-    public void buildSettlement(Settlement settlement) {
+    public void buildSettlement(final Settlement settlement) {
         assert settlement != null;
         assert settlement.getPlayerID() >= 0;
 
@@ -108,7 +108,7 @@ public class Vertex {
      * Builds a city and demolishes the settlement
      * @param city City
      */
-    public void buildCity(City city) {
+    public void buildCity(final City city) {
         assert city != null;
         assert city.getPlayerID() >= 0;
 
@@ -130,7 +130,7 @@ public class Vertex {
         return port;
     }
 
-    public void setPort(Port port){
+    public void setPort(final Port port){
         assert port != null;
         assert port.getPortType() != null;
 
