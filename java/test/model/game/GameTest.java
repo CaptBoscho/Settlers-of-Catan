@@ -1922,8 +1922,7 @@ public class GameTest {
     @Test
     public void testCanFinishTurn() {
         final int guy = game.getCurrentTurn();
-        game.getTurnTracker().nextPhase();
-        game.getTurnTracker().nextPhase();
+        game.setPhase(TurnTracker.Phase.PLAYING);
         assertTrue(game.canFinishTurn(guy));
     }
 
@@ -1933,19 +1932,18 @@ public class GameTest {
         game.nextPhase();
         final TurnTracker.Phase p = game.getCurrentPhase();
 
-        if(p == TurnTracker.Phase.DISCARDING){
+        if(p == TurnTracker.Phase.PLAYING){
             assertTrue(game.canFinishTurn(guy));
         } else{
             assertFalse(game.canFinishTurn(guy));
         }
 
-        assertFalse(game.canFinishTurn(guy));
     }
 
     @Test
     public void testCanBuyDevCard() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException{
         final int guy = game.getCurrentTurn();
-        game.setPhase(TurnTracker.Phase.DISCARDING);
+        game.setPhase(TurnTracker.Phase.PLAYING);
         assertFalse(game.canBuyDevelopmentCard(guy));
 
         final ResourceCard one = game.getResourceCard(ResourceType.WHEAT);
