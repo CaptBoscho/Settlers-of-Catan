@@ -8,7 +8,7 @@ import shared.model.JsonSerializable;
  *
  * @author Derek Argueta
  */
-public class AuthDTO implements JsonSerializable{
+public final class AuthDTO implements JsonSerializable{
 
     private String username;
     private String password;

@@ -7,7 +7,7 @@ import shared.exceptions.InvalidNameException;
  *
  * @author Kyle Cornelison
  */
-public class Name {
+public final class Name {
     private String name;
 
     /**

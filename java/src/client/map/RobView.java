@@ -17,7 +17,7 @@ import client.data.*;
  * Implementation for the rob view, which lets the user select a player to rob
  */
 @SuppressWarnings({"serial", "unused"})
-public class RobView extends OverlayView implements IRobView {
+public final class RobView extends OverlayView implements IRobView {
 
 	private final int LABEL_TEXT_SIZE = 40;
 	private final int BORDER_WIDTH = 10;

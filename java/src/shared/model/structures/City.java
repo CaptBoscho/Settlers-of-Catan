@@ -5,7 +5,7 @@ package shared.model.structures;
  *
  * @author Joel Bradley
  */
-public class City {
+public final class City {
 
     private int playerID;
 

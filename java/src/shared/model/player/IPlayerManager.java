@@ -58,7 +58,7 @@ public interface IPlayerManager {
      */
     Player getPlayerByIndex(int index) throws PlayerExistsException;
 
-    Integer getKnights(int playerID) throws PlayerExistsException;
+    int getKnights(int playerID) throws PlayerExistsException;
 
     void playKnight(int playerID) throws PlayerExistsException;
 
@@ -182,7 +182,7 @@ public interface IPlayerManager {
      * Action - Player plays Monopoly
      * @param id ID of the player
      */
-    void useMonopoly(int id, int num, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
+    void useMonopoly(int id, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
     /**
      * Determine if Player can play Monument

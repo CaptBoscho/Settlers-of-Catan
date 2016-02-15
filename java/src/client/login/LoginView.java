@@ -3,24 +3,14 @@ package client.login;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import client.base.*;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -41,7 +31,7 @@ public class LoginView extends OverlayView implements ILoginView {
 
     public static void main(String[] args) {
         final JFrame jf = new JFrame();
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel mainPanel = new JPanel();
         mainPanel.add(new LoginView());
@@ -127,22 +117,14 @@ public class LoginView extends OverlayView implements ILoginView {
         Border etching = BorderFactory.createEtchedBorder();
 
         Border outerCompound = BorderFactory.createCompoundBorder(outerBuffer, etching);
-        Border wholeCompound = BorderFactory.createCompoundBorder(outerCompound, innerBuffer);
 
-        return wholeCompound;
+        return BorderFactory.createCompoundBorder(outerCompound, innerBuffer);
     }
 
-    private ActionListener actionListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            getController().signIn();
-        }
-    };
+    private ActionListener actionListener = e -> getController().signIn();
 
     @Override
     public ILoginController getController() {
-
         return (ILoginController) super.getController();
     }
 
@@ -239,15 +221,7 @@ public class LoginView extends OverlayView implements ILoginView {
         }
 
         private void initEventListeners() {
-            btnSignIn.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    getController().signIn();
-                }
-
-            });
+            btnSignIn.addActionListener(e -> getController().signIn());
         }
     }
 
@@ -333,15 +307,7 @@ public class LoginView extends OverlayView implements ILoginView {
         }
 
         private void initEventListeners() {
-            btnRegister.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    getController().register();
-                }
-
-            });
+            btnRegister.addActionListener(e -> getController().register());
 
             //Code to check if the username length is correct!
             TextFieldValidator usernameValidator = new TextFieldValidator(txtUsername) {
@@ -425,37 +391,32 @@ public class LoginView extends OverlayView implements ILoginView {
         }
 
         @Override
-        public void focusGained(FocusEvent e)
-        {
+        public void focusGained(FocusEvent e) {
             validateInput();
         }
 
         @Override
-        public void focusLost(FocusEvent e)
-        {
+        public void focusLost(FocusEvent e) {
             validateInput();
         }
 
         @Override
-        public void insertUpdate(DocumentEvent e)
-        {
+        public void insertUpdate(DocumentEvent e) {
             validateInput();
         }
 
         @Override
-        public void removeUpdate(DocumentEvent e)
-        {
+        public void removeUpdate(DocumentEvent e) {
             validateInput();
         }
 
         @Override
-        public void changedUpdate(DocumentEvent e)
-        {
+        public void changedUpdate(DocumentEvent e) {
             validateInput();
         }
 
         private void validateInput() {
-            String contents = textFieldValidate.getText();
+            final String contents = textFieldValidate.getText();
             if (validateContents(contents)) {
                 textFieldValidate.setBorder(originalBorder);
             } else {

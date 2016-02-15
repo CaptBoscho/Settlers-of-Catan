@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class PlayMonopolyDTO implements JsonSerializable {
+public final class PlayMonopolyDTO implements JsonSerializable {
 
     private int playerIndex;
     private String resource;

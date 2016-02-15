@@ -6,17 +6,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * @author Corbin Byers
  */
-public class MessageList {
+public final class MessageList {
 
     private List<MessageLine> chat = new ArrayList<>();
-
-    public MessageList(){}
 
     public void addMessage(MessageLine m){
         assert m != null;
@@ -26,7 +23,8 @@ public class MessageList {
         chat.add(m);
     }
 
-    public void loadJSON(JsonObject js){
+    public void loadJSON(JsonObject js) {
+        assert js != null;
        // HashMap<String,Object> result = new ObjectMapper().readValue(js, HashMap.class);
         chat = new ArrayList<>();
 
@@ -34,11 +32,17 @@ public class MessageList {
         makeMessageLog(gs.fromJson(js.getAsJsonArray("lines"), JsonArray.class));
     }
 
-    public void makeMessageLog(JsonArray jarray){
+    private void makeMessageLog(JsonArray jarray) {
+        assert jarray != null;
+
         Gson gs = new Gson();
         for (JsonElement je: jarray){
             JsonObject json = je.getAsJsonObject();
-            MessageLine ml = new MessageLine(gs.fromJson(json.get("line"), JsonObject.class));
+            this.chat.add(new MessageLine(json));
         }
+    }
+
+    public List<MessageLine> getMessages() {
+        return this.chat;
     }
 }

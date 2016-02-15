@@ -30,7 +30,7 @@ public class LogComponent extends JComponent {
 		this.setBackground(Color.white);
 		this.setOpaque(true);
 		
-		Font tmpFont = new JLabel("").getFont();
+		final Font tmpFont = new JLabel("").getFont();
 		font = tmpFont.deriveFont(tmpFont.getStyle(), 24);
 		
 		setEntries(null);
@@ -50,22 +50,21 @@ public class LogComponent extends JComponent {
 	}
 	
 	private void updateSize(int width) {
-		int height = this.getPreferredHeight(width);		
-		Dimension newSize = new Dimension(width, height);
+		final int height = this.getPreferredHeight(width);
+		final Dimension newSize = new Dimension(width, height);
 		this.setPreferredSize(newSize);
 		this.setSize(newSize);
 	}
 	
 	private int getPreferredHeight(int width) {
-		Graphics2D g2 = ImageUtils.DEFAULT_IMAGE.createGraphics();
+		final Graphics2D g2 = ImageUtils.DEFAULT_IMAGE.createGraphics();
 		return draw(g2, width);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D)g;
-		draw(g2, this.getWidth());
+		draw((Graphics2D)g, this.getWidth());
 	}
 	
 	private int draw(Graphics2D g2, int width) {
@@ -77,7 +76,7 @@ public class LogComponent extends JComponent {
 		g2.setFont(font);
 		
 		for (LogEntry entry : entries) {
-			List<String> lines = wrapText(fontContext, entry.getMessage(), width);
+			final List<String> lines = wrapText(fontContext, entry.getMessage(), width);
 			int rectHeight = TOP_MARGIN + BOTTOM_MARGIN + lines.size()
 							 * fontMetrics.getHeight();
 			
@@ -104,11 +103,11 @@ public class LogComponent extends JComponent {
 	}
 	
 	private List<String> wrapText(FontRenderContext context, String text, int width) {
-		int MAX_WIDTH = width - LEFT_MARGIN - RIGHT_MARGIN;
+		final int MAX_WIDTH = width - LEFT_MARGIN - RIGHT_MARGIN;
 		
-		List<String> result = new ArrayList<>();
+		final List<String> result = new ArrayList<>();
 		
-		try(Scanner scanner = new Scanner(text)) {
+		try(final Scanner scanner = new Scanner(text)) {
 			scanner.useDelimiter("\\s+");
 			String line = "";
 			while(scanner.hasNext()) {

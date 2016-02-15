@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class ChangeLogLevelDTO implements JsonSerializable {
+public final class ChangeLogLevelDTO implements JsonSerializable {
 
     private String logLevel;
 

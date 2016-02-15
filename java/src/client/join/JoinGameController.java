@@ -70,56 +70,48 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	}
 	
 	public ISelectColorView getSelectColorView() {
-		
 		return selectColorView;
 	}
+
 	public void setSelectColorView(ISelectColorView selectColorView) {
-		
 		this.selectColorView = selectColorView;
 	}
 	
 	public IMessageView getMessageView() {
-		
 		return messageView;
 	}
+
 	public void setMessageView(IMessageView messageView) {
-		
 		this.messageView = messageView;
 	}
 
 	@Override
 	public void start() {
-		
 		getJoinGameView().showModal();
 	}
 
 	@Override
 	public void startCreateNewGame() {
-		
 		getNewGameView().showModal();
 	}
 
 	@Override
 	public void cancelCreateNewGame() {
-		
 		getNewGameView().closeModal();
 	}
 
 	@Override
 	public void createNewGame() {
-		
 		getNewGameView().closeModal();
 	}
 
 	@Override
 	public void startJoinGame(GameInfo game) {
-
 		getSelectColorView().showModal();
 	}
 
 	@Override
 	public void cancelJoinGame() {
-	
 		getJoinGameView().closeModal();
 	}
 

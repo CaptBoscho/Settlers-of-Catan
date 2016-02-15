@@ -53,6 +53,10 @@ public class MockServer implements IServer {
             + "\"turnTracker\": {\"status\": \"FirstRound\",\"currentTurn\": 0,\"longestRoad\": -1,\"largestArmy\": -1},"
             + "\"winner\": -1,\"version\": 0}";
 
+    public static IServer getInstance() {
+        return new MockServer();
+    }
+
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *

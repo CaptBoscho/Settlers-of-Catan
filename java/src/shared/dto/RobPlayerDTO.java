@@ -7,7 +7,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class RobPlayerDTO implements JsonSerializable {
+public final class RobPlayerDTO implements JsonSerializable {
 
     private int playerIndex;
     private int victimIndex;

@@ -14,17 +14,27 @@ import java.util.List;
  *
  * @author Derek Argueta
  */
-public class ServerProxy implements IServer {
+public final class ServerProxy implements IServer {
     private String host;
     private int port;
+    private static IServer instance = null;
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_PORT = 8081;
 
-    public ServerProxy(String host, int port) {
+    protected ServerProxy(String host, int port) {
         assert host != null;
         assert host.length() > 0;
         assert port > 0;
 
         this.host = host;
         this.port = port;
+    }
+
+    public static IServer getInstance() {
+        if(instance == null) {
+            instance = new ServerProxy(DEFAULT_HOST, DEFAULT_PORT);
+        }
+        return instance;
     }
 
     /**

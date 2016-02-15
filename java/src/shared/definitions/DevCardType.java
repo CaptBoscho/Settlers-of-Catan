@@ -7,4 +7,3 @@ public enum DevCardType {
 	ROAD_BUILD,
 	MONUMENT
 }
-

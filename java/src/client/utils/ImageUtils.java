@@ -6,7 +6,7 @@ import java.io.*;
 
 import javax.imageio.*;
 
-public class ImageUtils {
+public final class ImageUtils {
 	
 	public static BufferedImage DEFAULT_IMAGE = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	

@@ -9,7 +9,7 @@ import shared.model.JsonSerializable;
  *
  * @author Derek Argueta
  */
-public class JoinGameDTO implements JsonSerializable {
+public final class JoinGameDTO implements JsonSerializable {
 
     private int gameId;
     private CatanColor color;

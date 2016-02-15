@@ -5,7 +5,7 @@ package shared.model.structures;
  *
  * @author Joel Bradley
  */
-public class Road {
+public final class Road {
 
     private int playerID;
     private boolean visited;

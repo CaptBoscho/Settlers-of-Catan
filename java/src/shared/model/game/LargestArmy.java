@@ -3,7 +3,7 @@ package shared.model.game;
 /**
  * Representation of Largest Army
  */
-public class LargestArmy {
+public final class LargestArmy {
     private int playerID;
     private static final int pointWorth = 2;
     private int mostSoldiers = 0;

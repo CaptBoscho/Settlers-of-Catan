@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 /**
  * @author Corbin Byers
  */
-public class MessageLine {
+public final class MessageLine {
 
     private String source;
     private String content;

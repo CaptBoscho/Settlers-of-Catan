@@ -42,7 +42,7 @@ public interface IPlayer {
      */
     boolean canOfferTrade();
 
-    Integer howManyofThisCard(ResourceType t)throws InvalidTypeException;
+    Integer howManyOfThisCard(ResourceType t)throws InvalidTypeException;
 
     /**
      * Determine if Player can perform maritime trade
@@ -110,7 +110,7 @@ public interface IPlayer {
     /**
      * Action - Player plays Monopoly
      */
-    void useMonopoly() throws DevCardException;
+    void discardMonopoly() throws DevCardException;
 
     /**
      * Determine if Player can play Monument

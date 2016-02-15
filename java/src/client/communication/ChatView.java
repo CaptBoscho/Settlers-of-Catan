@@ -81,7 +81,7 @@ public class ChatView extends PanelView implements IChatView {
      * Calls the send message function on the registered IChatController.
      */
     private void sendMessage() {
-        String message = chatTextInput.getText();
+        final String message = chatTextInput.getText();
         if (!message.isEmpty()) {
             getController().sendMessage(message);
             

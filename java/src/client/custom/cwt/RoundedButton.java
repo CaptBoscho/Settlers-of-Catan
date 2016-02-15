@@ -1,7 +1,6 @@
 package client.custom.cwt;
 
 import javax.swing.JButton;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
@@ -12,13 +11,11 @@ import java.awt.geom.Rectangle2D;
 public class RoundedButton extends JButton {
 	private static final long serialVersionUID = 3193769590459118040L;   
 	
-	public RoundedButton()
-	{
+	public RoundedButton() {
 		super();
 	}
 	
-	public RoundedButton(String text)
-	{
+	public RoundedButton(final String text) {
 		super(text);
 	}
 	
@@ -46,11 +43,11 @@ public class RoundedButton extends JButton {
 		g2.drawRoundRect(0,0,getWidth(),getHeight(),15,15);  
 		   
 		// Finding size of text so can position in center.  
-		FontRenderContext frc = new FontRenderContext(null, false, false);  
-		Rectangle2D r = getFont().getStringBounds(getText(), frc);  
+		final FontRenderContext frc = new FontRenderContext(null, false, false);
+		final Rectangle2D r = getFont().getStringBounds(getText(), frc);
 		   
-		float xMargin = (float)(getWidth()-r.getWidth())/2;  
-		float yMargin = (float)(getHeight()-getFont().getSize())/2;  
+		final float xMargin = (float)(getWidth() - r.getWidth()) / 2;
+		final float yMargin = (float)(getHeight() - getFont().getSize()) / 2;
 		   
 		// Draw the text in the center  
 		g2.setColor(Color.BLACK);  

@@ -1,6 +1,15 @@
 
 package client.facade;
+import client.services.IServer;
+import client.services.MissingUserCookieException;
+import client.services.ServerProxy;
+import com.sun.corba.se.spi.activation.Server;
+import shared.dto.BuildCityDTO;
+import shared.dto.BuildRoadDTO;
+import shared.dto.BuildSettlementDTO;
+import shared.dto.BuyDevCardDTO;
 import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
@@ -97,6 +106,7 @@ public class Facade {
                 Name him = new Name(this.entries.get(currKey).getName());
                 Player p = new Player(0, this.entries.get(currKey).getColor(), id, him);
                 this.players.add(p);
+
                 id++;
             }
             int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
@@ -114,8 +124,19 @@ public class Facade {
     public boolean myTurn(int playerID) {
         assert playerID >= 0;
 
-        int turn = this.game.getCurrentTurn();
-        return playerID == turn;
+        return playerID == this.game.getCurrentTurn();
+    }
+
+    private HexLocation getServerHexLocation(HexLocation hexLoc){
+        return new HexLocation(hexLoc.getX(), hexLoc.getY()-hexLoc.getX());
+    }
+
+    private EdgeLocation getServerEdgeLocation(EdgeLocation edgeLoc) {
+        return new EdgeLocation(getServerHexLocation(edgeLoc.getHexLoc()), edgeLoc.getDir());
+    }
+
+    private VertexLocation getServerVertexLocation(VertexLocation vertexLoc){
+        return new VertexLocation(getServerHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
     }
 
     /**
@@ -141,15 +162,14 @@ public class Facade {
      * @param edge
      * @throws BuildException
      */
-    public void buildRoad(int playerID, EdgeLocation edge) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
+    public void buildRoad(int playerID, EdgeLocation edge) throws MissingUserCookieException {
         assert playerID >= 0;
         assert edge != null;
 
-        if (canBuildRoad(playerID, edge)) {
-            this.game.buildRoad(playerID, edge);
-        } else {
-            throw new BuildException("Can't build the road");
-        }
+        edge = getServerEdgeLocation(edge);
+        final BuildRoadDTO dto = new BuildRoadDTO(playerID, edge, false);
+        final ClientModel model = ServerProxy.getInstance().buildRoad(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**
@@ -173,12 +193,11 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildSettlement(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
-        if (canBuildSettlement(playerID, vertex)) {
-            this.game.buildSettlement(playerID, vertex);
-        } else {
-            throw new BuildException("Can't build the building");
-        }
+    public void buildSettlement(int playerID, VertexLocation vertex) throws MissingUserCookieException {
+        vertex = getServerVertexLocation(vertex);
+        final BuildSettlementDTO dto = new BuildSettlementDTO(playerID, vertex, false);
+        final ClientModel model = ServerProxy.getInstance().buildSettlement(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**
@@ -202,12 +221,11 @@ public class Facade {
      * @param vertex
      * @throws BuildException
      */
-    public void buildCity(int playerID, VertexLocation vertex) throws BuildException, InvalidLocationException, StructureException, InvalidPlayerException, PlayerExistsException {
-        if (canBuildCity(playerID, vertex)) {
-            this.game.buildCity(playerID, vertex);
-        } else {
-            throw new BuildException("Can't build the building");
-        }
+    public void buildCity(int playerID, VertexLocation vertex) throws MissingUserCookieException {
+        vertex = getServerVertexLocation(vertex);
+        final BuildCityDTO dto = new BuildCityDTO(playerID, vertex);
+        final ClientModel model = ServerProxy.getInstance().buildCity(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**
@@ -230,14 +248,12 @@ public class Facade {
      * @param playerID
      * @throws BuildException
      */
-    public DevCardType buyDC(int playerID) throws Exception {
+    public void buyDC(int playerID) throws MissingUserCookieException {
         assert playerID >= 0;
 
-        if (canBuyDC(playerID)) {
-            return this.game.buyDevelopmentCard(playerID);
-        } else {
-            throw new BuildException("Can't buy Develpment Card");
-        }
+        final BuyDevCardDTO dto = new BuyDevCardDTO(playerID);
+        final ClientModel model = ServerProxy.getInstance().buyDevCard(dto);
+        Game.getInstance().updateGame(model);
     }
 
     /**
