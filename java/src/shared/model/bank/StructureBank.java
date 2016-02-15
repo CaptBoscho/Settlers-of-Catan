@@ -1,7 +1,5 @@
 package shared.model.bank;
 
-import com.google.gson.JsonObject;
-import shared.model.JsonSerializable;
 
 /**
  * A bank owned by a Player which holds a count of the owners remaining structures
@@ -9,13 +7,13 @@ import shared.model.JsonSerializable;
  * @author Danny Harding
  */
 public final class StructureBank {
-    private final int MAX_ROADS = 15;
-    private final int MAX_SETTLEMENTS = 5;
-    private final int MAX_CITIES = 4;
+    private final static int MAX_ROADS = 15;
+    private final static int MAX_SETTLEMENTS = 5;
+    private final static int MAX_CITIES = 4;
 
-    int availableRoads;
-    int availableCities;
-    int availableSettlements;
+    private int availableRoads;
+    private int availableCities;
+    private int availableSettlements;
 
     /**
      * Creates a full structure bank, setting number of available structures to their MAX.
@@ -32,7 +30,7 @@ public final class StructureBank {
      * @param availableSettlements Number of settlements the player has left to play.
      * @param availableCities Number of cities the player has left to play.
      */
-    public StructureBank(int availableRoads, int availableSettlements, int availableCities) {
+    public StructureBank(final int availableRoads, final int availableSettlements, final int availableCities) {
         this.availableRoads = availableRoads;
         this.availableSettlements = availableSettlements;
         this.availableCities = availableCities;
@@ -43,6 +41,8 @@ public final class StructureBank {
     }
 
     public void buildRoad() {
+        assert this.availableRoads > 0;
+
         availableRoads--;
     }
 
@@ -51,6 +51,8 @@ public final class StructureBank {
     }
 
     public void buildSettlement() {
+        assert this.availableSettlements > 0;
+
         availableSettlements--;
     }
 
@@ -59,6 +61,8 @@ public final class StructureBank {
     }
 
     public void buildCity() {
+        assert this.availableCities > 0;
+
         availableCities--;
     }
 

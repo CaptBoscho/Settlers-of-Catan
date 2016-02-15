@@ -291,7 +291,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert t != null;
 
-        return playerManager.getPlayerByID(playerID).howManyofThisCard(t);
+        return playerManager.getPlayerByID(playerID).howManyOfThisCard(t);
     }
 
     /**
