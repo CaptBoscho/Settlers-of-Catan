@@ -243,7 +243,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             map.getResources(roll);
         }
 
-        turnTracker.nextPhase();
+        try {
+            turnTracker.nextPhase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return roll;
     }
 
@@ -315,7 +319,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             final TradePackage two = new TradePackage(playerIDTwo, twocards);
             Trade trade = new Trade(one,two);
 
-            playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards);
+            playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
 
         }
     }
@@ -354,7 +358,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public void nextPhase() {
         assert this.turnTracker != null;
 
-        turnTracker.nextPhase();
+        try {
+            turnTracker.nextPhase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setPhase(TurnTracker.Phase p) {
@@ -630,9 +638,9 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert who != null;
         if(canPlaceRobber(playerRobber) && who.contains(playerRobbed)){
             turnTracker.updateRobber(false);
-            ResourceType treasure = playerManager.placeRobber(playerRobber, playerRobbed);
+            ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
+            return stolenResource;
         }
-
         return null;
     }
 
