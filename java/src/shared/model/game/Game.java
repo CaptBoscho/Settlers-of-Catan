@@ -78,7 +78,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.developmentCardBank = new DevelopmentCardBank(true);
     }
 
-    public void updateGame(JsonObject json) {
+    public void updateGame(final JsonObject json) {
         assert json != null;
         assert json.has("deck");
         assert json.has("map");
@@ -91,7 +91,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
         this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
 
-        JsonObject turnTracker = json.getAsJsonObject("turnTracker");
+        final JsonObject turnTracker = json.getAsJsonObject("turnTracker");
         this.longestRoadCard = new LongestRoad(turnTracker.get("longestRoad").getAsInt());
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = json.get("version").getAsInt();
@@ -541,7 +541,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can play Monopoly
      */
     @Override
-    public boolean canUseMonopoly(int playerID) throws PlayerExistsException {
+    public boolean canUseMonopoly(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
         return playerManager.canUseMonopoly(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
@@ -714,7 +714,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID
      */
     @Override
-    public void buildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
+    public void buildSettlement(final int playerID, final VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
         assert playerID >= 0;
         assert vertex != null;
         assert vertex.getDir() != null;
@@ -731,13 +731,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     /**
-     * checks if the player has the cards to ubild a city
+     * checks if the player has the cards to build a city
      *
      * @param playerID
      * @return
      */
     @Override
-    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
+    public boolean canBuildCity(final int playerID, final VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
         assert playerID >= 0;
         assert vertex != null;
         assert vertex.getDir() != null;
@@ -754,7 +754,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID
      */
     @Override
-    public void buildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
+    public void buildCity(final int playerID, final VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
         assert playerID >= 0;
         assert vertex != null;
         assert vertex.getDir() != null;

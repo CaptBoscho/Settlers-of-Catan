@@ -55,7 +55,7 @@ public interface IPlayerManager {
      */
     Player getPlayerByIndex(int index) throws PlayerExistsException;
 
-    Integer getKnights(int playerID) throws PlayerExistsException;
+    int getKnights(int playerID) throws PlayerExistsException;
 
     void playKnight(int playerID) throws PlayerExistsException;
 

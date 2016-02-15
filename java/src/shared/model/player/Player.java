@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Kyle Cornelison
  */
-public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Add exceptions when danny is done
+public final class Player implements IPlayer,Comparable<Player> { // TODO: 1/30/2016 Add exceptions when danny is done
     private int _id;
     private Name name;
     private int monuments;
@@ -272,7 +272,7 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
         return discarded;
     }
 
-    public Integer howManyofThisCard(ResourceType t) throws InvalidTypeException {
+    public Integer howManyOfThisCard(ResourceType t) throws InvalidTypeException {
         assert t != null;
         assert this.resourceCardBank != null;
 
@@ -637,7 +637,7 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
      * Increments the player's monuments
      * - points are added when the player plays a monument card
      */
-    private void incrementMonuments(){
+    private void incrementMonuments() {
         this.monuments++;
     }
 
@@ -654,10 +654,14 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
         }
     }
 
-    public void playKnight(){this.soldiers++;}
+    public void playKnight() {
+        this.soldiers++;
+    }
 
 
-    public Integer getKnights(){return this.soldiers;}
+    public Integer getKnights() {
+        return this.soldiers;
+    }
 
     /**
      * Adds a resource card to resourceCardBank
@@ -681,7 +685,7 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
     }
 
     @Override
-    public int compareTo(Player otherPlayer) {
+    public int compareTo(final Player otherPlayer) {
         if (this._id > otherPlayer._id) {
             return 1;
         } else if (this._id < otherPlayer._id) {
@@ -699,7 +703,7 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("cities", structureBank.getAvailableCities());
         json.addProperty("color", getColorString());
         json.addProperty("discarded", discarded);
