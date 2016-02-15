@@ -1826,10 +1826,10 @@ public class GameTest {
         game = Game.getInstance();
         final List<Player> players = new ArrayList<>();
 
-        final Player one = new Player(0, CatanColor.BLUE, 1, new Name ("Hope"));
-        final Player two = new Player(0, CatanColor.BROWN, 2, new Name("Corbin"));
-        final Player three = new Player(0, CatanColor.GREEN, 3, new Name("Hanna"));
-        final Player four = new Player(0, CatanColor.ORANGE, 4, new Name("Becca"));
+        final Player one = new Player(0, CatanColor.BLUE, 0, new Name ("Hope"));
+        final Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
+        final Player three = new Player(0, CatanColor.GREEN, 2, new Name("Hanna"));
+        final Player four = new Player(0, CatanColor.ORANGE, 3, new Name("Becca"));
 
         players.add(one);
         players.add(two);
@@ -1838,7 +1838,7 @@ public class GameTest {
 
         final int first = game.initializeGame(players, true, true, false);
 
-        assertTrue(first > 0 && first <= 4);
+        assertTrue(first >= 0 && first < 4);
     }
 
     @Test
@@ -1858,26 +1858,6 @@ public class GameTest {
         final int next = game.getTurnTracker().nextTurn();
 
         assertFalse(game.canInitiateSettlement(next, vloc));
-    }
-
-    @Test
-    public void testGetCurrentTurnStartUp() throws Exception{
-        final int first = game.getCurrentTurn();
-        assertTrue(first == 1);
-        final int second = game.getTurnTracker().nextTurn();
-        assertTrue(second == 2);
-        final int third = game.getTurnTracker().nextTurn();
-        assertTrue(third == 3);
-        final int fourth = game.getTurnTracker().nextTurn();
-        assertTrue(fourth == 4);
-        final int fifth = game.getTurnTracker().nextTurn();
-        assertTrue(fifth == 3);
-
-        game.getTurnTracker().setSetupPhase(false);
-        final int sixth = game.getTurnTracker().nextTurn();
-        assertTrue(sixth == 4);
-        final int seventh = game.getTurnTracker().nextTurn();
-        assertTrue(seventh == 1);
     }
 
     @Test
@@ -1959,7 +1939,7 @@ public class GameTest {
             assertFalse(game.canFinishTurn(guy));
         }
 
-        assertFalse(game.canFinishTurn(guy-1));
+        assertFalse(game.canFinishTurn(guy));
     }
 
     @Test
