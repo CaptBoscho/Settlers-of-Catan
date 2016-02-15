@@ -1,6 +1,7 @@
 package shared.model.player;
 
 import com.google.gson.*;
+import shared.definitions.CatanColor;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
@@ -554,5 +555,10 @@ public final class PlayerManager implements IPlayerManager {
      */
     public List<Player> getPlayers(){
         return this.players;
+    }
+
+    @Override
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException {
+        return getPlayerByID(id).getColor();
     }
 }

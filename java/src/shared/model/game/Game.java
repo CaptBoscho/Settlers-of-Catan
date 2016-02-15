@@ -26,11 +26,14 @@ import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
+import java.util.Observable;
 
 /**
  * game class representing a Catan game
  */
+
 public final class Game extends Observable implements IGame, JsonSerializable {
+
 
     private static Game instance;
 
@@ -44,6 +47,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     private DevelopmentCardBank developmentCardBank;
     private int winner;
     private int version;
+
+    private List<Observer> observers = new ArrayList<Observer>();
 
     /**
      * Constructor
@@ -65,6 +70,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
 
         return instance;
+    }
+
+    public void addObserver(Observer o){
+        observers.add(o);
     }
 
     public void reset() {
@@ -925,6 +934,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return playerManager;
     }
 
+    public Map getMap(){return this.map;}
+
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
+        return this.playerManager.getPlayerColorByID(id);
+    }
 
     /*======================================================
     * Private - Helper Methods
