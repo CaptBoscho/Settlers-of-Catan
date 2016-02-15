@@ -34,7 +34,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
      * Creates a full ResourceCardBank
      * @param ownedByGame A boolean telling if the ResourceCardBank is owned by the Game
      */
-    public ResourceCardBank(boolean ownedByGame) {
+    public ResourceCardBank(final boolean ownedByGame) {
         this.ownedByGame = ownedByGame;
         if (ownedByGame) {
             fillBrick();
@@ -50,7 +50,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
      *
      * @param json The JSON being used to construct this object
      */
-    public ResourceCardBank(JsonObject json, boolean ownedByGame) {
+    public ResourceCardBank(final JsonObject json, final boolean ownedByGame) {
         this.ownedByGame = ownedByGame;
 
         for (int i = 0; i < json.get("brick").getAsInt(); i++) {
@@ -125,7 +125,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
     }
 
     @Override
-    public ResourceCard draw(ResourceType type) throws InvalidTypeException, Exception {
+    public ResourceCard draw(final ResourceType type) throws InvalidTypeException, Exception {
         if (ownedByGame) {
             return removeCard(type);
         } else {
@@ -138,7 +138,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
         if (ownedByGame) {
             throw new Exception("Must specify Resource Type to draw from Game");
         } else {
-            List<ResourceCard> hand = bricks.stream().collect(Collectors.toList());
+            final List<ResourceCard> hand = bricks.stream().collect(Collectors.toList());
             hand.addAll(woods.stream().collect(Collectors.toList()));
             hand.addAll(sheeps.stream().collect(Collectors.toList()));
             hand.addAll(wheats.stream().collect(Collectors.toList()));
@@ -169,7 +169,6 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
 
     public Integer getNumberOfType(ResourceType type){
         int size = 0;
-        System.out.println("here");
         switch (type) {
             case WOOD:
                 size = getNumberOfWood();
@@ -312,7 +311,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
         return (size() > 7);
     }
 
-    private ResourceCard removeCard(ResourceType type) throws InsufficientResourcesException, InvalidTypeException {
+    private ResourceCard removeCard(final ResourceType type) throws InsufficientResourcesException, InvalidTypeException {
         switch (type) {
             case BRICK:
                 if (getNumberOfBrick() > 0) {
@@ -356,15 +355,14 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
 
     public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException{
         if(canBeRobbed()){
-            List<ResourceType> content = new ArrayList<>();
-            if(getNumberOfBrick()>0){content.add(ResourceType.BRICK);}
-            if(getNumberOfOre()>0){content.add(ResourceType.ORE);}
-            if(getNumberOfSheep()>0){content.add(ResourceType.SHEEP);}
-            if(getNumberOfWheat()>0){content.add(ResourceType.WHEAT);}
-            if(getNumberOfWood()>0){content.add(ResourceType.WOOD);}
+            final List<ResourceType> content = new ArrayList<>();
+            if(getNumberOfBrick() > 0){content.add(ResourceType.BRICK);}
+            if(getNumberOfOre() > 0){content.add(ResourceType.ORE);}
+            if(getNumberOfSheep() > 0){content.add(ResourceType.SHEEP);}
+            if(getNumberOfWheat() > 0){content.add(ResourceType.WHEAT);}
+            if(getNumberOfWood() > 0){content.add(ResourceType.WOOD);}
 
-            Random ran = new Random();
-            int card = ran.nextInt(content.size());
+            int card = new Random().nextInt(content.size());
 
             return discard(content.get(card));
         } else {
@@ -379,7 +377,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("brick", getNumberOfBrick());
         json.addProperty("wood", getNumberOfWood());
         json.addProperty("sheep", getNumberOfSheep());
