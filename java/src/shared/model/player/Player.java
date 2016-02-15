@@ -55,6 +55,17 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
      */
     public Player(JsonObject json) {
         assert json != null;
+        assert json.has("playerID");
+        assert json.has("playerIndex");
+        assert json.has("monuments");
+        assert json.has("victoryPoints");
+        assert json.has("discarded");
+        assert json.has("playedDevCard");
+        assert json.has("soldiers");
+        assert json.has("resources");
+        assert json.has("roads");
+        assert json.has("settlements");
+        assert json.has("cities");
 
         try {
             setColor(json.get("color").getAsString());
@@ -212,20 +223,20 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
      * @param cards Cards to be discarded
      */
     @Override
-    public List<ResourceCard> discardCards(List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
+    public List<ResourceCard> discardCards(final List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
         assert cards != null;
         assert cards.size() > 0;
         assert this.resourceCardBank != null;
         assert this.developmentCardBank != null;
 
         try {
-            List<ResourceCard> discarded = new ArrayList<>();
-            for (Card card : cards) {
+            final List<ResourceCard> discarded = new ArrayList<>();
+            for (final Card card : cards) {
                 if (card instanceof ResourceCard) {
-                    ResourceCard resourceCard = (ResourceCard) card;
+                   final  ResourceCard resourceCard = (ResourceCard) card;
                     discarded.add(resourceCardBank.discard(resourceCard.getType()));
                 } else if (card instanceof DevelopmentCard) {
-                    DevelopmentCard developmentCard = (DevelopmentCard) card;
+                    final DevelopmentCard developmentCard = (DevelopmentCard) card;
                     developmentCardBank.discard(developmentCard.getType());
                 }
             }
@@ -237,13 +248,23 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
         return null;
     }
 
-    public List<ResourceCard> discardResourceCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
+    public List<ResourceCard> discardResourceCards(ResourceType rt, int amount) {
+        assert rt != null;
+        try {
+            return this.resourceCardBank.discard(rt, amount);
+        } catch (InvalidTypeException | InsufficientResourcesException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<ResourceCard> discardResourceCards(final List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
         assert cards != null;
         assert cards.size() > 0;
         assert this.resourceCardBank != null;
 
         final List<ResourceCard> discarded = new ArrayList<>();
-        for(ResourceType rt: cards) {
+        for(final ResourceType rt: cards) {
             discarded.add(resourceCardBank.discard(rt));
         }
 
@@ -255,15 +276,22 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
         assert t != null;
         assert this.resourceCardBank != null;
 
-        if(t == ResourceType.SHEEP){return resourceCardBank.getNumberOfSheep();}
-        if(t == ResourceType.ORE){return resourceCardBank.getNumberOfOre();}
-        if(t == ResourceType.BRICK){return resourceCardBank.getNumberOfBrick();}
-        if(t == ResourceType.WOOD){return resourceCardBank.getNumberOfWood();}
-        if(t == ResourceType.WHEAT){return resourceCardBank.getNumberOfWheat();}
+        switch(t) {
+            case SHEEP:
+                return resourceCardBank.getNumberOfSheep();
+            case ORE:
+                return resourceCardBank.getNumberOfOre();
+            case BRICK:
+                return resourceCardBank.getNumberOfBrick();
+            case WOOD:
+                return resourceCardBank.getNumberOfWood();
+            case WHEAT:
+                return resourceCardBank.getNumberOfWheat();
+        }
         throw new InvalidTypeException("not correct resourcetype");
     }
 
-    public Integer getNumberOfType(ResourceType t) {
+    public int getNumberOfType(ResourceType t) {
         assert t != null;
         assert this.resourceCardBank != null;
 
@@ -432,7 +460,7 @@ public final class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2
      * Action - Player plays Monopoly
      */
     @Override
-    public void useMonopoly() throws DevCardException {
+    public void discardMonopoly() throws DevCardException {
         if(canUseMonopoly()) {
             developmentCardBank.useMonopoly();
         } else {

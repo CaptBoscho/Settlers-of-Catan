@@ -203,6 +203,14 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
         return removeCard(type);
     }
 
+    public List<ResourceCard> discard(ResourceType rt, int amount) throws InvalidTypeException, InsufficientResourcesException {
+        List<ResourceCard> discardedCards = new ArrayList<>();
+        for(int i = 0; i < amount; i++) {
+            discardedCards.add(this.removeCard(rt));
+        }
+        return discardedCards;
+    }
+
     @Override
     public boolean canOfferTrade() {
         return size() > 0;

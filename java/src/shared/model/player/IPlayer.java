@@ -110,7 +110,7 @@ public interface IPlayer {
     /**
      * Action - Player plays Monopoly
      */
-    void useMonopoly() throws DevCardException;
+    void discardMonopoly() throws DevCardException;
 
     /**
      * Determine if Player can play Monument

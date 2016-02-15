@@ -523,7 +523,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         if(canUseSoldier(playerID)){
             playerManager.useSoldier(playerID);
             int used = playerManager.getKnights(playerID);
-            if(used >= 3 && used > largestArmyCard.getMostSoldiers()){
+            if(used >= 3 && used > largestArmyCard.getMostSoldiers()) {
                 int oldplayer = largestArmyCard.getOwner();
                 largestArmyCard.setNewOwner(playerID, used);
                 playerManager.changeLargestArmyPossession(oldplayer, playerID);
@@ -541,7 +541,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can play Monopoly
      */
     @Override
-    public boolean canUseMonopoly(int playerID) throws PlayerExistsException{
+    public boolean canUseMonopoly(int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
         return playerManager.canUseMonopoly(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
@@ -554,12 +554,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useMonopoly(int playerID, ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException{
+    public void useMonopoly(final int playerID, final ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException {
         assert playerID >= 0;
         assert type != null;
 
         if(canUseMonopoly(playerID)){
-            playerManager.useMonopoly(playerID, turnTracker.getNumPlayers(), type);
+            playerManager.useMonopoly(playerID, type);
         }
     }
 
@@ -571,7 +571,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can play Monument
      */
     @Override
-    public boolean canUseMonument(int playerID) throws PlayerExistsException {
+    public boolean canUseMonument(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
         return playerManager.canUseMonument(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
@@ -584,7 +584,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useMonument(int playerID) throws PlayerExistsException, DevCardException {
+    public void useMonument(final int playerID) throws PlayerExistsException, DevCardException {
         assert playerID >= 0;
 
         if(canUseMonument(playerID)){
@@ -600,7 +600,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can place the Robber
      */
     @Override
-    public boolean canPlaceRobber(int playerID) {
+    public boolean canPlaceRobber(final int playerID) {
         assert playerID >= 0;
 
         return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber();

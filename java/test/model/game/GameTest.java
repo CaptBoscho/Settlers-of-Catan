@@ -2062,6 +2062,7 @@ public class GameTest {
         game.giveResource(three, 3);
         game.giveResource(four, 3);
 
+        // give the user the monopoly card
         final MonopolyCard card = new MonopolyCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);

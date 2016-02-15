@@ -241,6 +241,11 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
         return !ownedByGame && (monopolyCards.size() > 0);
     }
 
+    /**
+     * Removes the Monopoly card from the user's bank
+     *
+     * @return
+     */
     @Override
     public DevelopmentCard useMonopoly() {
         try {
@@ -456,7 +461,7 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("monopoly", getNumberOfMonopolies());
         json.addProperty("monument", getNumberOfMonuments());
         json.addProperty("roadBuilding", getNumberOfRoadBuilds());
@@ -467,7 +472,7 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
 
     @Override
     public JsonObject newCardsToJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("monopoly", newMonopolyCards.size());
         json.addProperty("monument", newMonumentCards.size());
         json.addProperty("roadBuilding", newRoadBuildCards.size());

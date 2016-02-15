@@ -17,6 +17,7 @@ import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -391,30 +392,29 @@ public final class PlayerManager implements IPlayerManager {
      * Action - Player plays Monopoly
      *
      * @param id ID of the player
+     * @param type The type of the resource that will be used with the Monopoly card
      */
     @Override
-    public void useMonopoly(int id, int num, ResourceType type) throws DevCardException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+    public void useMonopoly(final int id, final ResourceType type) throws DevCardException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         assert id >= 0;
         assert type != null;
 
-        Player player = getPlayerByID(id);
-        player.useMonopoly();
-        for(int i = 1; i<= num; i++){
-            if(i != id){
-                int amount = getPlayerByID(i).getNumberOfType(type);
-                List<ResourceType> rt = new ArrayList<>();
-                for(int k = 0; k < amount; k++){
-                    rt.add(type);
-                }
-                List<ResourceCard> returned = getPlayerByID(i).discardResourceCards(rt);
-                for (ResourceCard aReturned : returned) {
+        Player monopolyUser = getPlayerByID(id);
+        monopolyUser.discardMonopoly();
+        for(final Player player : this.getPlayers()) {
+
+            final int amount = player.getNumberOfType(type);
+
+            // if this player is *not* the player who is playing the Monopoly card
+            if (!monopolyUser.equals(player) && amount > 0) {
+
+                // collect all resources from that player and give it to the calling player
+                for (final ResourceCard aReturned : player.discardResourceCards(type, amount)) {
                     addResource(id, aReturned);
                 }
             }
         }
-        System.out.println("mono2: " + getPlayerByID(id).howManyofThisCard(type));
     }
-
 
 
     /**
