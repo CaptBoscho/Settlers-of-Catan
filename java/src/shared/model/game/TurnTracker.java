@@ -7,7 +7,6 @@ import shared.exceptions.BadJsonException;
  * Representation of Player Turns
  */
 public final class TurnTracker {
-    private static final int NUMBER_OF_PHASES = 3;
 
     private boolean setupPhase;
     private boolean setupRoundOne;
@@ -15,39 +14,29 @@ public final class TurnTracker {
 
     private int currentTurn;
     private Phase phase;
-    private int longestRoad;
-    private int largestArmy;
-    private int numPlayers;
+    private static final int NUM_PLAYERS = 4;
 
     /**
      * Default Constructor
-     * @param index index of the current player
      */
-    public TurnTracker(int index) {
-        assert index >= 0;
+    public TurnTracker() {
 
-        this.currentTurn = index;
+        this.currentTurn = 0;
         this.setupPhase = true;
         this.setupRoundOne = true;
-        this.longestRoad = -1;
-        this.largestArmy = -1;
         this.phase = Phase.ROLLING;
     }
 
     /**
      * Loading Constructor
      * @param turnIndex index of the current player
-     * @param longestRoadIndex index of the player who owns the Longest Road
-     * @param largestArmyIndex index of the player who owns the Largest Army
      * @param phase The phase, 0, 1, or 2, of the turn
      */
-    public TurnTracker(int turnIndex, int longestRoadIndex, int largestArmyIndex, Phase phase) {
+    public TurnTracker(final int turnIndex, final Phase phase) {
         assert turnIndex >= 0;
         assert phase != null;
 
         this.currentTurn = turnIndex;
-        this.longestRoad = longestRoadIndex;
-        this.largestArmy = largestArmyIndex;
         this.phase = phase;
     }
 
@@ -57,6 +46,9 @@ public final class TurnTracker {
      * @param json The JSON being used to build the object
      */
     public TurnTracker(JsonObject json) throws BadJsonException {
+        assert json.has("currentTurn");
+        assert json.has("status");
+
         currentTurn = json.get("currentTurn").getAsInt();
         //'Rolling' or 'Robbing' or 'Playing' or 'Discarding' or 'FirstRound' or 'SecondRound'
         switch (json.get("status").getAsString()) {
@@ -99,8 +91,7 @@ public final class TurnTracker {
             return this.currentTurn;
         }
         this.currentTurn++;
-        this.currentTurn = (this.currentTurn) % numPlayers;
-        if(this.currentTurn == 0){this.currentTurn = numPlayers;}
+        this.currentTurn %= NUM_PLAYERS;
         return this.currentTurn;
     }
 
@@ -112,12 +103,9 @@ public final class TurnTracker {
         return this.currentTurn;
     }
 
-
-
     public boolean isSetupPhase(){
         return this.setupPhase;
     }
-
 
     /**
      * Goes to the next players turn during the setup phase.
@@ -126,11 +114,11 @@ public final class TurnTracker {
      */
     private int nextSetupTurn() throws Exception {
         if (setupPhase && setupRoundOne) {
-            if (currentTurn < getNumPlayers()) {
+            if (currentTurn < NUM_PLAYERS-1) {
                 return currentTurn++;
-            } else if (currentTurn == numPlayers) {
+            } else if (currentTurn == NUM_PLAYERS-1) {
                 setupRoundOne = false;
-                return currentTurn--;
+                return currentTurn;
             } else {
                 throw new Exception("Current setup turn is invalid.  This is broken.");
             }
@@ -162,18 +150,6 @@ public final class TurnTracker {
 
         this.phase = p;
     }
-    /**
-     * Set the number of players
-     * @param numPlayers number of players
-     */
-    public void setNumPlayers(int numPlayers) {
-        assert numPlayers > 0;
-        this.numPlayers = numPlayers;
-    }
-
-    public int getNumPlayers() {
-        return numPlayers;
-    }
 
     public boolean canRoll() {
         return phase == Phase.ROLLING;
@@ -187,11 +163,11 @@ public final class TurnTracker {
         return phase == Phase.DISCARDING;
     }
 
-    public void updateRobber(boolean now){
+    public void updateRobber(final boolean now) {
         this.canUseRobber = now;
     }
 
-    public boolean canUseRobber(){
+    public boolean canUseRobber() {
         return this.canUseRobber;
     }
 
@@ -203,7 +179,7 @@ public final class TurnTracker {
      * @param playerID the playerID to check
      * @return true if it is the given player's turn, else false
      */
-    public boolean isPlayersTurn(int playerID) {
+    public boolean isPlayersTurn(final int playerID) {
         assert playerID >= 0;
 
         return playerID == currentTurn;
@@ -237,5 +213,4 @@ public final class TurnTracker {
             return values()[ordinal() + 1];
         }
     }
-
 }

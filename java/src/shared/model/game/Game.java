@@ -51,7 +51,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     protected Game() {
         this.dice = new Dice(2,12);
         this.map = new Map(false, false, false);
-        this.turnTracker = new TurnTracker(0);
+        this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager(new ArrayList<>());
@@ -70,7 +70,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public void reset() {
         this.dice = new Dice(2,12);
         this.map = new Map(false, false, false);
-        this.turnTracker = new TurnTracker(0);
+        this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
         this.playerManager = new PlayerManager(new ArrayList<>());
@@ -129,8 +129,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(players);
         this.map = new Map(randomhexes, randomchits, randomports);
         //List<Integer> order = this.playerManager.randomizePlayers();
-        turnTracker = new TurnTracker(players.get(0).getId());
-        turnTracker.setNumPlayers(players.size());
+        turnTracker = new TurnTracker();
 
         return turnTracker.getCurrentTurn();
     }
