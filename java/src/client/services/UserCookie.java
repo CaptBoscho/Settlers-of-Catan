@@ -2,6 +2,7 @@ package client.services;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.http.Header;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -46,24 +47,35 @@ public final class UserCookie {
         this.gameCookie = new JsonObject();
     }
 
-    public void setCatanGameCookieValue(String catanGameCookieValue) throws UnsupportedEncodingException {
+    private void setCatanGameCookieValue(String catanGameCookieValue) throws UnsupportedEncodingException {
         assert catanGameCookieValue != null;
         assert catanGameCookieValue.length() > 0;
 
-        String decodedCookie = URLDecoder.decode(catanGameCookieValue, TEXT_ENCODING);
+        final String decodedCookie = URLDecoder.decode(catanGameCookieValue, TEXT_ENCODING);
         this.gameCookie = new JsonParser().parse(decodedCookie).getAsJsonObject();
     }
 
-    public void setCatanUserCookieValue(String catanUserCookieValue) throws UnsupportedEncodingException {
+    private void setCatanUserCookieValue(String catanUserCookieValue) throws UnsupportedEncodingException {
         assert catanUserCookieValue != null;
         assert catanUserCookieValue.length() > 0;
 
-        String decodedCookie = URLDecoder.decode(catanUserCookieValue, TEXT_ENCODING);
+        final String decodedCookie = URLDecoder.decode(catanUserCookieValue, TEXT_ENCODING);
         this.userCookie = new JsonParser().parse(decodedCookie).getAsJsonObject();
     }
 
+    public void setCookies(String cookieValue) throws UnsupportedEncodingException {
+        final String[] cookies = cookieValue.split(";");
+        for(final String cookie : cookies) {
+            if(cookie.startsWith("catan.user")) {
+                this.setCatanUserCookieValue(cookie.substring(cookie.indexOf("=") + 1));
+            } else if(cookie.startsWith("catan.game")) {
+                this.setCatanGameCookieValue(cookie.substring(cookie.indexOf("=") + 1));
+            }
+        }
+    }
+
     public String getUsername() {
-        return this.userCookie.get("name").toString();
+        return this.userCookie.get("name").toString().replaceAll("\"", "");
     }
 
     public int getPlayerId() {

@@ -60,21 +60,18 @@ public final class Utils {
         }
         post.setHeader("Content-type", "application/json");
         if(UserCookie.getInstance().hasContent()) {
-            post.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+            try {
+                post.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         try {
             assert httpClient != null;
             final HttpResponse response = httpClient.execute(post);
             if(response.containsHeader("Set-cookie")) {
                 final Header cookieHeader = response.getFirstHeader("Set-cookie");
-                final String[] cookies = cookieHeader.getValue().split(";");
-                for(final String cookie : cookies) {
-                    if(cookie.startsWith("catan.user")) {
-                        UserCookie.getInstance().setCatanUserCookieValue(cookie.substring(cookie.indexOf("=") + 1));
-                    } else if(cookie.startsWith("catan.game")) {
-                        UserCookie.getInstance().setCatanGameCookieValue(cookie.substring(cookie.indexOf("=") + 1));
-                    }
-                }
+                UserCookie.getInstance().setCookies(cookieHeader.getValue());
             }
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
@@ -89,7 +86,11 @@ public final class Utils {
 
         final HttpGet get = new HttpGet(url);
         if(UserCookie.getInstance().hasContent()) {
-            get.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+            try {
+                get.setHeader("Cookie", UserCookie.getInstance().getCompleteCookieValue());
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         try {
             return Utils.getStringFromHttpResponse(HttpClientBuilder.create().build().execute(get));
