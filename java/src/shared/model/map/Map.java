@@ -146,8 +146,6 @@ public final class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -405,8 +403,6 @@ public final class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;

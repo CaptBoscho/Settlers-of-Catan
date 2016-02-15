@@ -24,8 +24,6 @@ public final class Vertex {
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
 
         this.vertexLoc = vertexLoc;
         settlement = null;
@@ -66,6 +64,8 @@ public final class Vertex {
     }
 
     public int getPlayerID() {
+        if(!this.hasBuilding()) return -1;
+
         int playerID;
         if(hasSettlement()) {
             playerID = settlement.getPlayerID();
@@ -97,11 +97,11 @@ public final class Vertex {
      */
     public void buildSettlement(final Settlement settlement) {
         assert settlement != null;
+        assert this.port == null;
         assert settlement.getPlayerID() >= 0;
+        assert canBuildSettlement(); // code should only call this after verifying canBuildSettlement
 
-        if(canBuildSettlement()) {
-            this.settlement = settlement;
-        }
+        this.settlement = settlement;
     }
 
     /**
@@ -110,12 +110,15 @@ public final class Vertex {
      */
     public void buildCity(final City city) {
         assert city != null;
+        assert this.city == null;
+        assert this.port == null;
+        assert this.settlement != null;
         assert city.getPlayerID() >= 0;
+        assert city.getPlayerID() == this.settlement.getPlayerID();
+        assert canBuildCity(); // code should only call this after verifying canBuildCity
 
-        if(canBuildCity()) {
-            settlement = null;
-            this.city = city;
-        }
+        settlement = null;
+        this.city = city;
     }
 
     /**
