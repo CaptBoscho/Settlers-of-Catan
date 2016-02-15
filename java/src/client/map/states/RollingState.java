@@ -1,7 +1,8 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapControllerState;
+import client.map.MapController;
+import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -12,14 +13,13 @@ import shared.model.game.Game;
  *
  * Represents Rolling Dice State
  */
-public class RollingState extends MapControllerState {
-    private Game gModel;
+public class RollingState extends MapState {
 
     /**
      * Constructor
      */
-    public RollingState(){
-
+    public RollingState(MapController mapController){
+        super(mapController);
     }
 
     /**

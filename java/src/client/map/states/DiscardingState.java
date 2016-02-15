@@ -1,24 +1,24 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
+import client.map.MapController;
+import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.Game;
 
 /**
  * @author Kyle Cornelison
  *
- * Represents Playing a Soldier Card State
+ * Represents Playing State - Default Gameplay State
  */
-public class PlayingSoldierState extends PlayingDevCardState {
-    private Game gModel;
+public class DiscardingState extends MapState {
 
     /**
      * Constructor
      */
-    public PlayingSoldierState(){
-
+    public DiscardingState(MapController mapController){
+        super(mapController);
     }
 
     /**

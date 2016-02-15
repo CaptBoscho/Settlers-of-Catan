@@ -1,24 +1,24 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
+import client.map.MapController;
+import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.Game;
 
 /**
  * @author Kyle Cornelison
  *
  * Represents Setup 2 State
  */
-public class SetupTwoState extends SetupState {
-    private Game gModel;
+public class SetupTwoState extends MapState {
 
     /**
      * Constructor
      */
-    public SetupTwoState(){
-
+    public SetupTwoState(MapController mapController){
+        super(mapController);
     }
 
     /**

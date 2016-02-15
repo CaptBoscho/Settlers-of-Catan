@@ -1,25 +1,24 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapControllerState;
+import client.map.MapController;
+import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.Game;
 
 /**
  * @author Kyle Cornelison
  *
  * Represents Robbing a Player State
  */
-public class RobbingState extends MapControllerState {
-    private Game gModel;
+public class RobbingState extends MapState {
 
     /**
      * Constructor
      */
-    public RobbingState(){
-
+    public RobbingState(MapController mapController){
+        super(mapController);
     }
 
     /**
