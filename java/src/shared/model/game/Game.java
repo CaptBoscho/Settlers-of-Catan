@@ -107,7 +107,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         } catch (BadJsonException e) {
             e.printStackTrace();
         }
-
+        setChanged();
         notifyObservers();
     }
 

@@ -3,19 +3,56 @@ package client.resources;
 import java.util.*;
 
 import client.base.*;
+import shared.model.game.Game;
 
 
 /**
  * Implementation for the resource bar controller
  */
-public class ResourceBarController extends Controller implements IResourceBarController {
+public class ResourceBarController extends Controller implements IResourceBarController, Observer {
 
 	private Map<ResourceBarElement, IAction> elementActions;
+    private Game game = null;
 	
 	public ResourceBarController(IResourceBarView view) {
 		super(view);
 		elementActions = new HashMap<ResourceBarElement, IAction>();
 	}
+
+    /**
+     * this is where my code goes that updates the ResourceElements
+     * @param obs
+     * @param obj
+     */
+	public void update(Observable obs, Object obj){
+        //boolean enableRoad = facade.ableToBuildRoad();
+        //boolean enableSettlement = facade.ableToBuildSettlement();
+        //boolean enableCity = facade.ableToBuildCity();
+
+        //just so it doesn't freak out
+        boolean enableRoad = true;
+        boolean enableCity = false;
+        boolean enableSettlement = true;
+        int citycount = 0;
+        int roadcount = 0;
+        int settlementcount = 0;
+
+        //int roadcount = facade.getAvailableRoads();
+        //int settlementcount = facade.getAvailableSettlements();
+        //int citycount = facade.getAvailableCity();
+
+        ResourceBarElement road = ResourceBarElement.ROAD;
+        ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
+        ResourceBarElement city = ResourceBarElement.CITY;
+
+        getView().setElementEnabled(road, enableRoad);
+        getView().setElementEnabled(settle, enableSettlement);
+        getView().setElementEnabled(city, enableCity);
+
+        getView().setElementAmount(road, roadcount);
+        getView().setElementAmount(settle, settlementcount);
+        getView().setElementAmount(city, citycount);
+    }
 
 	@Override
 	public IResourceBarView getView() {
