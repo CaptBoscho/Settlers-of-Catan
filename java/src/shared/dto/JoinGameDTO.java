@@ -9,7 +9,7 @@ import shared.model.JsonSerializable;
  *
  * @author Derek Argueta
  */
-public class JoinGameDTO implements JsonSerializable {
+public final class JoinGameDTO implements JsonSerializable {
 
     private int gameId;
     private CatanColor color;
@@ -17,6 +17,7 @@ public class JoinGameDTO implements JsonSerializable {
     public JoinGameDTO(int gameId, CatanColor color) {
         assert gameId >= 0;
         assert color != null;
+
         this.gameId = gameId;
         this.color = color;
     }

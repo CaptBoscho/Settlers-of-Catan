@@ -6,12 +6,16 @@ import shared.model.JsonSerializable;
 /**
  * Represents the location of an edge on a hex map
  */
-public class EdgeLocation implements JsonSerializable {
+public final class EdgeLocation implements JsonSerializable {
 	
 	private HexLocation hexLoc;
 	private EdgeDirection dir;
 	
 	public EdgeLocation(HexLocation hexLoc, EdgeDirection dir) {
+        assert hexLoc != null;
+//        assert hexLoc.getX() > 0;
+//        assert hexLoc.getY() > 0;
+        assert dir != null;
 		setHexLoc(hexLoc);
 		setDir(dir);
 	}
@@ -92,8 +96,8 @@ public class EdgeLocation implements JsonSerializable {
 		return dir;
 	}
 	
-	private void setDir(EdgeDirection dir)
-	{
+	private void setDir(EdgeDirection dir) {
+        assert dir != null;
 		this.dir = dir;
 	}
 	
@@ -126,8 +130,7 @@ public class EdgeLocation implements JsonSerializable {
 		if(hexLoc == null) {
 			if(other.hexLoc != null)
 				return false;
-		}
-		else if(!hexLoc.equals(other.hexLoc))
+		} else if(!hexLoc.equals(other.hexLoc))
 			return false;
 		return true;
 	}

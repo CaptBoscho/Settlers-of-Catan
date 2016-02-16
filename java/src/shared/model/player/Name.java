@@ -7,15 +7,8 @@ import shared.exceptions.InvalidNameException;
  *
  * @author Kyle Cornelison
  */
-public class Name {
+public final class Name {
     private String name;
-
-    /**
-     * Default Constructor
-     */
-    public Name(){
-        this.name = null;
-    }
 
     /**
      * Name Constructor
@@ -23,21 +16,14 @@ public class Name {
      * @throws InvalidNameException
      */
     public Name(String name) throws InvalidNameException {
-        if(validate(name))
-            this.name = name;
-        else
-            throw new InvalidNameException("The name entered is invalid!");
-    }
+        assert name != null;
+        assert name.length() > 0;
 
-    /**
-     * Validate name value
-     * @param name Desired value of name
-     */
-    private boolean validate(String name){
-        if(isAlpha(name))
-            return true;
-        else
-            return false;
+        if(isAlpha(name)) {
+            this.name = name;
+        } else {
+            throw new InvalidNameException("The name entered is invalid!");
+        }
     }
 
     //Helper Methods
@@ -49,7 +35,19 @@ public class Name {
      * @return True if the string contains only alpha characters
      */
     private boolean isAlpha(String str) {
+        assert str != null;
+        
         return str.matches("[a-zA-Z]+");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (!(o instanceof Name))return false;
+
+        Name otherName = (Name)o;
+        return this.name.equals(otherName.toString());
     }
 
     //Getters/Setters
@@ -61,6 +59,9 @@ public class Name {
     }
 
     public void setName(String name) throws InvalidNameException {
+        assert name != null;
+        assert name.length() >= 0;
+
         this.name = name;
     }
 }

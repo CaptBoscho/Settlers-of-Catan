@@ -7,7 +7,7 @@ import client.base.*;
 /**
  * "Dev card" controller implementation
  */
-public class DevCardController extends Controller implements IDevCardController {
+public final class DevCardController extends Controller implements IDevCardController {
 
 	private IBuyDevCardView buyCardView;
 	private IAction soldierAction;

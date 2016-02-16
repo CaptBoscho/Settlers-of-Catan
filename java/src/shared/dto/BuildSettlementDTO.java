@@ -7,13 +7,16 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class BuildSettlementDTO implements JsonSerializable {
+public final class BuildSettlementDTO implements JsonSerializable {
 
     private int playerIndex;
     private VertexLocation location;
     private boolean free;
 
     public BuildSettlementDTO(int playerIndex, VertexLocation location, boolean free) {
+        assert playerIndex >= 0;
+        assert location != null;
+
         this.playerIndex = playerIndex;
         this.location = location;
         this.free = free;

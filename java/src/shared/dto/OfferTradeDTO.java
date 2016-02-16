@@ -7,7 +7,7 @@ import shared.model.game.trade.Trade;
 /**
  * @author Derek Argueta
  */
-public class OfferTradeDTO implements JsonSerializable {
+public final class OfferTradeDTO implements JsonSerializable {
 
     private int playerIndex;
     private Trade offer;
@@ -24,6 +24,7 @@ public class OfferTradeDTO implements JsonSerializable {
         assert receiver >= 0;
         assert playerIndex != receiver;
         assert offer != null;
+
         this.playerIndex = playerIndex;
         this.offer = offer;
         this.receiver = receiver;

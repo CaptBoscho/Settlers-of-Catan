@@ -19,7 +19,7 @@ import client.base.*;
  */
 
 @SuppressWarnings("serial")
-public class BuyDevCardView extends OverlayView implements IBuyDevCardView {
+public final class BuyDevCardView extends OverlayView implements IBuyDevCardView {
 	
 	private final int LABEL_TEXT_SIZE = 25;
 	private final int BUTTON_TEXT_SIZE = 20;

@@ -5,11 +5,13 @@ package shared.model.structures;
  *
  * @author Joel Bradley
  */
-public class Settlement {
+public final class Settlement {
 
     private int playerID;
 
     public Settlement(int playerID) {
+        assert playerID >= 0;
+
         this.playerID = playerID;
     }
 

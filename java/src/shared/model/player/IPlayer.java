@@ -9,7 +9,6 @@ import shared.model.bank.InvalidTypeException;
 
 import shared.model.cards.Card;
 import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradeType;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.List;
@@ -43,7 +42,7 @@ public interface IPlayer {
      */
     boolean canOfferTrade();
 
-    Integer howManyofThisCard(ResourceType t)throws InvalidTypeException;
+    Integer howManyOfThisCard(ResourceType t)throws InvalidTypeException;
 
     /**
      * Determine if Player can perform maritime trade
@@ -111,7 +110,7 @@ public interface IPlayer {
     /**
      * Action - Player plays Monopoly
      */
-    void useMonopoly() throws DevCardException;
+    void discardMonopoly() throws DevCardException;
 
     /**
      * Determine if Player can play Monument

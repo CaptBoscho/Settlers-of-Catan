@@ -9,7 +9,7 @@ import shared.locations.VertexLocation;
  *
  * @author Joel Bradley
  */
-public class Port {
+public final class Port {
 
     private PortType portType;
     private VertexLocation vertexLoc;
@@ -19,7 +19,10 @@ public class Port {
      * @param portType PortType
      * @param vertexLoc VertexLocation
      */
-    public Port(PortType portType, VertexLocation vertexLoc) {
+    public Port(final PortType portType, final VertexLocation vertexLoc) {
+        assert portType != null;
+        assert vertexLoc != null;
+
         this.portType = portType;
         this.vertexLoc = vertexLoc;
     }

@@ -7,7 +7,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class RobPlayerDTO implements JsonSerializable {
+public final class RobPlayerDTO implements JsonSerializable {
 
     private int playerIndex;
     private int victimIndex;
@@ -18,6 +18,7 @@ public class RobPlayerDTO implements JsonSerializable {
         assert victimIndex >= 0;
         assert playerIndex != victimIndex;
         assert location != null;
+
         this.playerIndex = playerIndex;
         this.victimIndex = victimIndex;
         this.location = location;

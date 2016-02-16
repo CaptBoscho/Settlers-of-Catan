@@ -9,4 +9,3 @@ public enum HexType {
 	DESERT,
 	WATER
 }
-

@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import shared.definitions.CatanColor;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 
@@ -12,7 +13,6 @@ import shared.exceptions.MoveRobberException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
-import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
@@ -20,7 +20,7 @@ import javax.security.sasl.AuthenticationException;
 import java.util.List;
 
 /**
- * Created by corne on 1/30/2016.
+ * @author Kyle Cornelison
  */
 public interface IPlayerManager {
 
@@ -48,6 +48,8 @@ public interface IPlayerManager {
      */
     Player getPlayerByID(int id) throws PlayerExistsException;
 
+    CatanColor getPlayerColorByID(int id) throws PlayerExistsException;
+
     /**
      * Gets a player by index
      * @param index Index of the player
@@ -56,7 +58,7 @@ public interface IPlayerManager {
      */
     Player getPlayerByIndex(int index) throws PlayerExistsException;
 
-    Integer getKnights(int playerID) throws PlayerExistsException;
+    int getKnights(int playerID) throws PlayerExistsException;
 
     void playKnight(int playerID) throws PlayerExistsException;
 
@@ -180,7 +182,7 @@ public interface IPlayerManager {
      * Action - Player plays Monopoly
      * @param id ID of the player
      */
-    void useMonopoly(int id, int num, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
+    void useMonopoly(int id, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
     /**
      * Determine if Player can play Monument
@@ -254,4 +256,10 @@ public interface IPlayerManager {
     void buildCity(int id) throws PlayerExistsException;
 
     void addDevCard(int id, DevelopmentCard dc) throws PlayerExistsException;
+
+    public Integer getAvailableRoads(int id) throws PlayerExistsException;
+
+    public Integer getAvailableSettlements(int id) throws PlayerExistsException;
+
+    public Integer getAvailableCities(int id)throws PlayerExistsException;
 }

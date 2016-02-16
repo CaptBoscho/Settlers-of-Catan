@@ -6,12 +6,16 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class PlayMonopolyDTO implements JsonSerializable {
+public final class PlayMonopolyDTO implements JsonSerializable {
 
     private int playerIndex;
     private String resource;
 
     public PlayMonopolyDTO(int playerIndex, String resource) {
+        assert playerIndex >= 0;
+        assert resource != null;
+        assert resource.length() > 0;
+
         this.playerIndex = playerIndex;
         this.resource = resource;
     }

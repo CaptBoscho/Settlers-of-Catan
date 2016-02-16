@@ -6,11 +6,13 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class BuyDevCardDTO implements JsonSerializable {
+public final class BuyDevCardDTO implements JsonSerializable {
 
     private int playerIndex;
 
     public BuyDevCardDTO(int playerIndex) {
+        assert playerIndex >= 0;
+
         this.playerIndex = playerIndex;
     }
 

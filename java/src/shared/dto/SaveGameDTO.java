@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class SaveGameDTO implements JsonSerializable {
+public final class SaveGameDTO implements JsonSerializable {
 
     private int gameId;
     private String name;
@@ -15,6 +15,7 @@ public class SaveGameDTO implements JsonSerializable {
         assert gameId >= 0;
         assert name != null;
         assert name.length() > 0;
+
         this.gameId = gameId;
         this.name = name;
     }

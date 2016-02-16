@@ -1,6 +1,5 @@
 package shared.model.map;
 
-import shared.definitions.*;
 import shared.locations.VertexLocation;
 import shared.model.structures.*;
 
@@ -14,14 +13,18 @@ import shared.model.structures.*;
  *
  * @author Joel Bradley
  */
-public class Vertex {
+public final class Vertex {
 
     private VertexLocation vertexLoc;
     private Settlement settlement;
     private City city;
     private Port port;
 
-    public Vertex(VertexLocation vertexLoc) {
+    public Vertex(final VertexLocation vertexLoc) {
+        assert vertexLoc != null;
+        assert vertexLoc.getDir() != null;
+        assert vertexLoc.getHexLoc() != null;
+
         this.vertexLoc = vertexLoc;
         settlement = null;
         city = null;
@@ -61,6 +64,8 @@ public class Vertex {
     }
 
     public int getPlayerID() {
+        if(!this.hasBuilding()) return -1;
+
         int playerID;
         if(hasSettlement()) {
             playerID = settlement.getPlayerID();
@@ -90,21 +95,30 @@ public class Vertex {
      * Builds a settlement
      * @param settlement Settlement
      */
-    public void buildSettlement(Settlement settlement) {
-        if(canBuildSettlement()) {
-            this.settlement = settlement;
-        }
+    public void buildSettlement(final Settlement settlement) {
+        assert settlement != null;
+        assert this.port == null;
+        assert settlement.getPlayerID() >= 0;
+        assert canBuildSettlement(); // code should only call this after verifying canBuildSettlement
+
+        this.settlement = settlement;
     }
 
     /**
      * Builds a city and demolishes the settlement
      * @param city City
      */
-    public void buildCity(City city) {
-        if(canBuildCity()) {
-            settlement = null;
-            this.city = city;
-        }
+    public void buildCity(final City city) {
+        assert city != null;
+        assert this.city == null;
+        assert this.port == null;
+        assert this.settlement != null;
+        assert city.getPlayerID() >= 0;
+        assert city.getPlayerID() == this.settlement.getPlayerID();
+        assert canBuildCity(); // code should only call this after verifying canBuildCity
+
+        settlement = null;
+        this.city = city;
     }
 
     /**
@@ -119,7 +133,10 @@ public class Vertex {
         return port;
     }
 
-    public void setPort(Port port){
+    public void setPort(final Port port){
+        assert port != null;
+        assert port.getPortType() != null;
+
         this.port = port;
     }
 }

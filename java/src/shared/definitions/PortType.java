@@ -8,4 +8,3 @@ public enum PortType {
 	ORE,
 	THREE
 }
-

@@ -22,23 +22,19 @@ public class LogEntry {
 		this.message = message;
 	}
 	
-	public CatanColor getColor()
-	{
+	public CatanColor getColor() {
 		return color;
 	}
 	
-	public void setColor(CatanColor color)
-	{
+	public void setColor(final CatanColor color) {
 		this.color = color;
 	}
 	
-	public String getMessage()
-	{
+	public String getMessage() {
 		return message;
 	}
 	
-	public void setMessage(String message)
-	{
+	public void setMessage(final String message) {
 		this.message = message;
 	}
 }

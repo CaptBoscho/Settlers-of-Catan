@@ -14,13 +14,27 @@ import java.util.List;
  *
  * @author Derek Argueta
  */
-public class ServerProxy implements IServer {
+public final class ServerProxy implements IServer {
     private String host;
     private int port;
+    private static IServer instance = null;
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_PORT = 8081;
 
-    public ServerProxy(String host, int port) {
+    protected ServerProxy(String host, int port) {
+        assert host != null;
+        assert host.length() > 0;
+        assert port > 0;
+
         this.host = host;
         this.port = port;
+    }
+
+    public static IServer getInstance() {
+        if(instance == null) {
+            instance = new ServerProxy(DEFAULT_HOST, DEFAULT_PORT);
+        }
+        return instance;
     }
 
     /**
@@ -32,6 +46,11 @@ public class ServerProxy implements IServer {
     @Override
     public boolean authenticateUser(AuthDTO auth) {
         assert auth != null;
+        assert auth.getUsername() != null;
+        assert auth.toJSON() != null;
+        assert auth.toJSON().has("username");
+        assert auth.toJSON().has("password");
+
         String url = Utils.buildUrl(this.host, this.port) + "/user/login";
         String result = Utils.sendPost(url, auth.toJSON());
         assert result != null;
@@ -47,6 +66,7 @@ public class ServerProxy implements IServer {
     @Override
     public boolean registerUser(AuthDTO auth) {
         assert auth != null;
+
         String url = Utils.buildUrl(this.host, this.port) + "/user/register";
         String result = Utils.sendPost(url, auth.toJSON());
         assert result != null;
@@ -325,6 +345,7 @@ public class ServerProxy implements IServer {
     public ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Year_of_Plenty";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
@@ -575,6 +596,8 @@ public class ServerProxy implements IServer {
     @Override
     public boolean changeLogLevel(ChangeLogLevelDTO dto) {
         assert dto != null;
+        assert dto.toJSON() != null;
+
         String url = Utils.buildUrl(this.host, this.port) + "/util/changeLogLevel";
         String result = Utils.sendPost(url, dto.toJSON());
         return false;

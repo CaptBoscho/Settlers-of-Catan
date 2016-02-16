@@ -9,7 +9,7 @@ import shared.model.structures.Road;
  *
  * @author Joel Bradley
  */
-public class Edge {
+public final class Edge {
 
     private EdgeLocation edgeLoc;
     private Road road;
@@ -18,7 +18,9 @@ public class Edge {
      * Default constructor for an edge
      * @param edgeLoc EdgeLocation
      */
-    public Edge(EdgeLocation edgeLoc){
+    public Edge(EdgeLocation edgeLoc) {
+        assert edgeLoc != null;
+
         this.edgeLoc = edgeLoc;
         road = null;
     }
@@ -36,6 +38,8 @@ public class Edge {
     }
 
     public void setRoad(Road road) {
+        assert road != null;
+
         this.road = road;
     }
 

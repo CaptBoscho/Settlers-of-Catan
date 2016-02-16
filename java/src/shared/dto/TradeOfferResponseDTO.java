@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class TradeOfferResponseDTO implements JsonSerializable {
+public final class TradeOfferResponseDTO implements JsonSerializable {
 
     private int playerIndex;
     private boolean willAccept;
@@ -18,6 +18,7 @@ public class TradeOfferResponseDTO implements JsonSerializable {
      */
     public TradeOfferResponseDTO(int playerIndex, boolean willAccept) {
         assert playerIndex >= 0;
+
         this.playerIndex = playerIndex;
         this.willAccept = willAccept;
     }

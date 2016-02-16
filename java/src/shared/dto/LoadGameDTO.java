@@ -6,13 +6,14 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class LoadGameDTO implements JsonSerializable {
+public final class LoadGameDTO implements JsonSerializable {
 
     private String name;
 
     public LoadGameDTO(String name) {
         assert name != null;
         assert name.length() > 0;
+
         this.name = name;
     }
 

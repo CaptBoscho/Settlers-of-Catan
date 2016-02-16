@@ -6,11 +6,13 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class PlayMonumentDTO implements JsonSerializable {
+public final class PlayMonumentDTO implements JsonSerializable {
 
     private int playerIndex;
 
     public PlayMonumentDTO(int playerIndex) {
+        assert playerIndex >= 0;
+
         this.playerIndex = playerIndex;
     }
 

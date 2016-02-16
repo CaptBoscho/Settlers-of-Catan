@@ -269,7 +269,7 @@ public class MapTest {
                 "      \"y\": -2" +
                 "    }" +
                 "  }";
-        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        final JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
         jsonMap = new Map(jsonObject);
     }
 
@@ -279,49 +279,48 @@ public class MapTest {
     }
 
     @Test
+    public void testMoveRobber() {
+        // TODO --
+    }
+
+    @Test
+    public void testWhoCanGetRobbed() {
+        // TODO --
+    }
+
+    @Test
+    public void testGetPortTypes() {
+        // TODO --
+    }
+
+    @Test
     public void testGetResources() throws Exception {
-        int playerOne = 1;
-        int playerTwo = 2;
-        HexLocation hexLocOneFirst = new HexLocation(0,0);
-        VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
-        EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
-        HexLocation hexLocOneSecond = new HexLocation(0,1);
-        VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.SouthEast);
-        EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.South);
-        HexLocation hexLocTwoFirst = new HexLocation(0,-2);
-        VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
-        EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
-        HexLocation hexLocTwoSecond = new HexLocation(-2,-2);
-        VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.SouthWest);
-        EdgeLocation edgeLocTwoSecond = new EdgeLocation(hexLocTwoSecond, EdgeDirection.South);
+        final int playerOne = 1;
+        final int playerTwo = 2;
+
+        final HexLocation hexLocOneFirst = new HexLocation(0,0);
+        final VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
+
+        final HexLocation hexLocOneSecond = new HexLocation(0,1);
+        final VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.SouthEast);
+
+        final HexLocation hexLocTwoFirst = new HexLocation(0,-2);
+        final VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
+
+        final HexLocation hexLocTwoSecond = new HexLocation(-2,-2);
+        final VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.SouthWest);
         try{
-            if(map.canInitiateSettlement(playerOne, vertexLocOneFirst)) {
-                map.initiateSettlement(playerOne, vertexLocOneFirst);
-            }
-            if(map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst)) {
-                map.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
-            }
-            if(map.canInitiateSettlement(playerTwo, vertexLocTwoFirst)) {
-                map.initiateSettlement(playerTwo, vertexLocTwoFirst);
-            }
-            if(map.canInitiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst)) {
-                map.initiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst);
-            }
-            if(map.canInitiateSettlement(playerTwo, vertexLocTwoSecond)) {
-                map.initiateSettlement(playerTwo, vertexLocTwoSecond);
-            }
-            if(map.canInitiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond)) {
-                map.initiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond);
-            }
-            if(map.canInitiateSettlement(playerOne, vertexLocOneSecond)) {
-                map.initiateSettlement(playerOne, vertexLocOneSecond);
-            }
-            if(map.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond)) {
-                map.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
-            }
-            EdgeLocation newRoad = new EdgeLocation(new HexLocation(-1,-3), EdgeDirection.South);
-            VertexLocation newSettlement = new VertexLocation(new HexLocation(-2,-3), VertexDirection.East);
-            VertexLocation newCity = new VertexLocation(new HexLocation(-1,-2), VertexDirection.NorthWest);
+            assertTrue(map.canInitiateSettlement(playerOne, vertexLocOneFirst));
+            map.initiateSettlement(playerOne, vertexLocOneFirst);
+            assertTrue(map.canInitiateSettlement(playerTwo, vertexLocTwoFirst));
+            map.initiateSettlement(playerTwo, vertexLocTwoFirst);
+            assertTrue(map.canInitiateSettlement(playerTwo, vertexLocTwoSecond));
+            map.initiateSettlement(playerTwo, vertexLocTwoSecond);
+            assertTrue(map.canInitiateSettlement(playerOne, vertexLocOneSecond));
+            map.initiateSettlement(playerOne, vertexLocOneSecond);
+            final EdgeLocation newRoad = new EdgeLocation(new HexLocation(-1,-3), EdgeDirection.South);
+            final VertexLocation newSettlement = new VertexLocation(new HexLocation(-2,-2), VertexDirection.East);
+            final VertexLocation newCity = new VertexLocation(new HexLocation(-1,-2), VertexDirection.NorthWest);
             if(map.canBuildRoad(playerTwo, newRoad)) {
                 map.buildRoad(playerTwo, newRoad);
             }
@@ -336,75 +335,121 @@ public class MapTest {
             for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
                 test.append(entry.getKey()).append("/").append(entry.getValue());
             }
-            String answer = "1/[WHEAT]" + "2/[BRICK, BRICK]";
-            assertTrue(test.toString().equals(answer));
+            String answer = "1/[WHEAT]";
+            assertEquals(answer, test.toString());
             map.moveRobber(new HexLocation(-1,-2));
             resources = map.getResources(8);
             test = new StringBuilder();
-            for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+            for (final java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
                 test.append(entry.getKey()).append("/").append(entry.getValue());
             }
             answer = "1/[WHEAT]";
-            assertTrue(test.toString().equals(answer));
+            assertEquals(answer, test.toString());
 
-        } catch(InvalidPlayerException | InvalidLocationException | StructureException e) {
+        } catch(InvalidLocationException | StructureException e) {
             System.out.println(e.getMessage());
         } catch(InvalidDiceRollException e) {
             assertTrue(e.getMessage().equals("Need to move robber instead of giving resources"));
         }
         try {
-            java.util.Map<Integer, List<ResourceType>> resources = map.getResources(13);
+            map.getResources(13);
         } catch(InvalidDiceRollException e) {
             assertTrue(e.getMessage().equals("Dice roll was 13"));
         }
     }
 
     @Test
-    public void testCanInitiateSettlement() throws Exception {
-        int playerOne = 1;
-        HexLocation hexLocOne = new HexLocation(0,0);
-        VertexLocation vertexLocOne = new VertexLocation(hexLocOne, VertexDirection.East);
-        HexLocation hexLocTwo = new HexLocation(1,1);
-        VertexLocation vertexLocTwo = new VertexLocation(hexLocTwo, VertexDirection.NorthWest);
-        HexLocation hexLocThree = new HexLocation(0,0);
-        VertexLocation vertexLocThree = new VertexLocation(hexLocThree, VertexDirection.NorthEast);
-        HexLocation hexLocFour = new HexLocation(0,0);
-        VertexLocation vertexLocFour = new VertexLocation(hexLocFour, VertexDirection.NorthWest);
-        try {
-            assertTrue(map.canInitiateSettlement(playerOne, vertexLocOne));
-            map.initiateSettlement(playerOne, vertexLocOne);
-            assertFalse(map.canInitiateSettlement(playerOne, vertexLocTwo));
-            assertFalse(map.canInitiateSettlement(playerOne, vertexLocThree));
-            assertTrue(map.canInitiateSettlement(playerOne, vertexLocFour));
+    public void testInitiateSettlement() {
+        // TODO --
+    }
 
-            assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOne));
-            jsonMap.initiateSettlement(playerOne, vertexLocOne);
-            assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocTwo));
-            assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocThree));
-            assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocFour));
-            jsonMap.canInitiateSettlement(0, vertexLocFour);
-        } catch(InvalidPlayerException e) {
-            assertTrue(e.getMessage().equals("PlayerID was 0"));
-        }
+    /**
+     * vertexLocFour       vertexLocThree
+     *              xxxxxxx
+     *             x       x
+     *           x           x
+     *         x     (0,0)     x vertexLocOne
+     *           x           x
+     *             x       x
+     *              xxxxxxx
+     *
+     *
+     * Verify the locations where a player can and cannot play a settlement.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCanInitiateSettlement() throws Exception {
+        // the player being used to test this
+        final int playerOne = 1;
+
+        // The vertex on the East corner of hex (0, 0)
+        final HexLocation hexLocOne = new HexLocation(0, 0);
+        final VertexLocation vertexLocOne = new VertexLocation(hexLocOne, VertexDirection.East);
+
+        // the vertex on the NorthWest corner of hex (1, 1)
+        final HexLocation hexLocTwo = new HexLocation(1, 1);
+        final VertexLocation vertexLocTwo = new VertexLocation(hexLocTwo, VertexDirection.NorthWest);
+
+        // the vertex on the NorthEast corner of hex (0, 0)
+        final HexLocation hexLocThree = new HexLocation(0, 0);
+        final VertexLocation vertexLocThree = new VertexLocation(hexLocThree, VertexDirection.NorthEast);
+
+        // the vertex on the NorthWest corner of the hex (0, 0)
+        final HexLocation hexLocFour = new HexLocation(0, 0);
+        final VertexLocation vertexLocFour = new VertexLocation(hexLocFour, VertexDirection.NorthWest);
+
+        // player one should be able to create a settlement on vertexOne
+        assertTrue(map.canInitiateSettlement(playerOne, vertexLocOne));
+
+        // actually create the settlement
+        map.initiateSettlement(playerOne, vertexLocOne);
+
+        // player one should no longer be able to create a map there
+        assertFalse(map.canInitiateSettlement(playerOne, vertexLocOne));
+
+        // vertex two/three should be untouchable
+        assertFalse(map.canInitiateSettlement(playerOne, vertexLocTwo));
+        assertFalse(map.canInitiateSettlement(playerOne, vertexLocThree));
+
+        // vertex four should still be able to create a settlement
+        assertTrue(map.canInitiateSettlement(playerOne, vertexLocFour));
+
+        // same assertions as above but with the jsonMap
+        assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOne));
+        jsonMap.initiateSettlement(playerOne, vertexLocOne);
+        assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocOne));
+        assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocTwo));
+        assertFalse(jsonMap.canInitiateSettlement(playerOne, vertexLocThree));
+        assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocFour));
+        jsonMap.canInitiateSettlement(0, vertexLocFour);
+
+        // verify you can't place a settlement on a vertex that doesn't exist
         try{
-            map.canInitiateSettlement(1, new VertexLocation(new HexLocation(3,0), VertexDirection.NorthEast));
+            map.canInitiateSettlement(1, new VertexLocation(new HexLocation(3, 0), VertexDirection.NorthEast));
+            assertTrue(false); // should never reach here
         } catch(InvalidLocationException e) {
             assertTrue(e.getMessage().equals("Vertex location is not on the map"));
         }
     }
 
     @Test
+    public void testInitiateRoad() {
+        // TODO --
+    }
+
+    @Test
     public void testCanInitiateRoad() throws Exception {
-        int playerOne = 1;
-        int playerTwo = 2;
-        HexLocation hexLocOneFirst = new HexLocation(0,0);
-        VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
-        EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
-        HexLocation hexLocOneSecond = new HexLocation(0,0);
-        VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.East);
-        EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.SouthEast);
-        HexLocation hexLocTwoFirst = new HexLocation(-2,-2);
-        EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
+        final int playerOne = 1;
+        final int playerTwo = 2;
+        final HexLocation hexLocOneFirst = new HexLocation(0, 0);
+        final VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.West);
+        final EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.NorthWest);
+        final HexLocation hexLocOneSecond = new HexLocation(0, 0);
+        final VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.East);
+        final EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.SouthEast);
+        final HexLocation hexLocTwoFirst = new HexLocation(-2, -2);
+        final EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
         try {
             map.initiateSettlement(playerOne, vertexLocOneFirst);
             assertFalse(map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneSecond));
@@ -425,29 +470,34 @@ public class MapTest {
             assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocTwoFirst, vertexLocOneSecond));
             assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
             assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
-        } catch(InvalidLocationException | InvalidPlayerException | StructureException e) {
-            System.out.println(e.getMessage());
+        } catch(InvalidLocationException | StructureException e) {
+            assertTrue(false); // should never reach here
         }
     }
 
     @Test
     public void testCanBuildRoad() throws Exception {
         initializeMap();
-        assertTrue(map.canBuildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthEast)));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthEast));
+        assertTrue(map.canBuildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthWest)));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthWest));
         assertFalse(map.canBuildRoad(1, new EdgeLocation(new HexLocation(2,1), EdgeDirection.SouthWest)));
         assertFalse(map.canBuildRoad(1, new EdgeLocation(new HexLocation(3,2), EdgeDirection.NorthWest)));
         assertFalse(map.canBuildRoad(1, new EdgeLocation(new HexLocation(-2,-2), EdgeDirection.NorthWest)));
         assertTrue(map.canBuildRoad(1, new EdgeLocation(new HexLocation(1,2), EdgeDirection.NorthWest)));
-        assertTrue(map.canBuildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthEast)));
+        assertTrue(map.canBuildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthWest)));
 
-        assertTrue(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthEast)));
-        jsonMap.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthEast));
+        assertTrue(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthWest)));
+        jsonMap.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.SouthWest));
         assertFalse(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(2,1), EdgeDirection.SouthWest)));
         assertFalse(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(3,2), EdgeDirection.NorthWest)));
         assertFalse(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(-2,-2), EdgeDirection.NorthWest)));
         assertTrue(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(1,2), EdgeDirection.NorthWest)));
-        assertTrue(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthEast)));
+        assertTrue(jsonMap.canBuildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthWest)));
+    }
+
+    @Test
+    public void testBuildRoad() {
+        // TODO --
     }
 
     @Test
@@ -458,10 +508,11 @@ public class MapTest {
         map.buildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthEast));
         assertFalse(map.canBuildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthEast)));
         map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.SouthEast));
-        assertTrue(map.canBuildSettlement(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East)));
-        map.buildSettlement(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East));
-        assertFalse(map.canBuildSettlement(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East)));
-        map.buildCity(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East));
+        assertTrue(map.canBuildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East)));
+        map.buildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East));
+        assertFalse(map.canBuildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East)));
+        assertTrue(map.canBuildCity(1, new VertexLocation(new HexLocation(0, 1), VertexDirection.East)));
+        map.buildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East));
         assertFalse(map.canBuildSettlement(1, new VertexLocation(new HexLocation(1,1), VertexDirection.NorthWest)));
 
         assertFalse(jsonMap.canBuildSettlement(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
@@ -469,119 +520,127 @@ public class MapTest {
         jsonMap.buildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthEast));
         assertFalse(jsonMap.canBuildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthEast)));
         jsonMap.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.SouthEast));
-        assertTrue(jsonMap.canBuildSettlement(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East)));
-        jsonMap.buildSettlement(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East));
-        assertFalse(jsonMap.canBuildSettlement(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East)));
-        jsonMap.buildCity(1, new VertexLocation(new HexLocation(0,0), VertexDirection.East));
+        assertTrue(jsonMap.canBuildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East)));
+        jsonMap.buildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East));
+        assertFalse(jsonMap.canBuildSettlement(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East)));
+        assertTrue(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(0, 1), VertexDirection.East)));
+        jsonMap.buildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East));
         assertFalse(jsonMap.canBuildSettlement(1, new VertexLocation(new HexLocation(1,1), VertexDirection.NorthWest)));
+    }
+
+    @Test
+    public void testBuildSettlement() {
+        // TODO --
     }
 
     @Test
     public void testCanBuildCity() throws Exception {
         initializeMap();
-        assertFalse(map.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthEast)));
-        assertFalse(map.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.East)));
-        assertFalse(map.canBuildCity(2, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
-        assertTrue(map.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
-        map.buildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest));
-        assertFalse(map.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
+        assertFalse(map.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthEast)));
+        assertFalse(map.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East)));
+        assertFalse(map.canBuildCity(2, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest)));
+        assertTrue(map.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest)));
+        map.buildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest));
+        assertFalse(map.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest)));
 
-        assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthEast)));
-        assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.East)));
-        assertFalse(jsonMap.canBuildCity(2, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
-        assertTrue(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
-        jsonMap.buildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest));
-        assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(1,2), VertexDirection.NorthWest)));
+        assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthEast)));
+        assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.East)));
+        assertFalse(jsonMap.canBuildCity(2, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest)));
+        assertTrue(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest)));
+        jsonMap.buildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest));
+        assertFalse(jsonMap.canBuildCity(1, new VertexLocation(new HexLocation(0,1), VertexDirection.NorthWest)));
+    }
+
+    @Test
+    public void testBuildCity() {
+        // TODO --
     }
 
     @Test
     public void testGetLongestRoad() throws Exception {
         initializeMap();
-        assertTrue(1 == map.getLongestRoadSize(1));
-        assertTrue(2 == map.getLongestRoadSize(2));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(2,2), EdgeDirection.NorthWest));
+        assertEquals(1, map.getLongestRoadSize(1));
+        assertEquals(2, map.getLongestRoadSize(2));
+
+        // create a segment of roads that are not connected to 1's original road
+        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.NorthWest));
         map.buildRoad(1, new EdgeLocation(new HexLocation(-1,1), EdgeDirection.NorthEast));
         map.buildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthWest));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.North));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.NorthWest));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.North));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.NorthEast));
-        assertTrue(7 == map.getLongestRoadSize(1));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(1,2), EdgeDirection.NorthWest));
-        assertTrue(10 == map.getLongestRoadSize(1));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.SouthWest));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.NorthWest));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.North));
-        map.buildRoad(1, new EdgeLocation(new HexLocation(0,0), EdgeDirection.NorthEast));
-        map.getLongestRoadSize(1);
-        assertTrue(12 == map.getLongestRoadSize(1));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthEast));
+        assertEquals(4, map.getLongestRoadSize(1));
+
+        // create a separate segment of 3 roads
+        map.buildRoad(1, new EdgeLocation(new HexLocation(-1,0), EdgeDirection.NorthEast));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(-1,0), EdgeDirection.North));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(-1,0), EdgeDirection.NorthWest));
+
+        assertEquals(5, map.getLongestRoadSize(1));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(-2,-1), EdgeDirection.NorthEast));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(-2,-2), EdgeDirection.SouthEast));
+        assertEquals(6, map.getLongestRoadSize(1));
+
+
+        map.buildRoad(1, new EdgeLocation(new HexLocation(-1,-1), EdgeDirection.North));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,-1), EdgeDirection.NorthWest));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,-1), EdgeDirection.North));
+        map.buildRoad(1, new EdgeLocation(new HexLocation(0,-1), EdgeDirection.NorthEast));
+        assertEquals(10, map.getLongestRoadSize(1));
     }
 
     private void initializeMap() {
-        int playerOne = 1;
-        int playerTwo = 2;
-        HexLocation hexLocOneFirst = new HexLocation(1,2);
-        VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.NorthWest);
-        EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.North);
-        HexLocation hexLocOneSecond = new HexLocation(0,2);
-        VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.NorthWest);
-        EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.North);
-        HexLocation hexLocTwoFirst = new HexLocation(2,2);
-        VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
-        EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.North);
-        HexLocation hexLocTwoSecond = new HexLocation(3,2);
-        VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.NorthWest);
-        EdgeLocation edgeLocTwoSecond = new EdgeLocation(hexLocTwoSecond, EdgeDirection.NorthWest);
-        try {
-            if (map.canInitiateSettlement(playerOne, vertexLocOneFirst)) {
-                map.initiateSettlement(playerOne, vertexLocOneFirst);
-            }
-            if (map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst)) {
-                map.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
-            }
-            if (map.canInitiateSettlement(playerTwo, vertexLocTwoFirst)) {
-                map.initiateSettlement(playerTwo, vertexLocTwoFirst);
-            }
-            if (map.canInitiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst)) {
-                map.initiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst);
-            }
-            if (map.canInitiateSettlement(playerTwo, vertexLocTwoSecond)) {
-                map.initiateSettlement(playerTwo, vertexLocTwoSecond);
-            }
-            if (map.canInitiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond)) {
-                map.initiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond);
-            }
-            if (map.canInitiateSettlement(playerOne, vertexLocOneSecond)) {
-                map.initiateSettlement(playerOne, vertexLocOneSecond);
-            }
-            if (map.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond)) {
-                map.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
-            }
+        final int playerOne = 1;
+        final int playerTwo = 2;
 
-            if (jsonMap.canInitiateSettlement(playerOne, vertexLocOneFirst)) {
-                jsonMap.initiateSettlement(playerOne, vertexLocOneFirst);
-            }
-            if (jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst)) {
-                jsonMap.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
-            }
-            if (jsonMap.canInitiateSettlement(playerTwo, vertexLocTwoFirst)) {
-                jsonMap.initiateSettlement(playerTwo, vertexLocTwoFirst);
-            }
-            if (jsonMap.canInitiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst)) {
-                jsonMap.initiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst);
-            }
-            if (jsonMap.canInitiateSettlement(playerTwo, vertexLocTwoSecond)) {
-                jsonMap.initiateSettlement(playerTwo, vertexLocTwoSecond);
-            }
-            if (jsonMap.canInitiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond)) {
-                jsonMap.initiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond);
-            }
-            if (jsonMap.canInitiateSettlement(playerOne, vertexLocOneSecond)) {
-                jsonMap.initiateSettlement(playerOne, vertexLocOneSecond);
-            }
-            if (jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond)) {
-                jsonMap.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
-            }
+        final HexLocation hexLocOneFirst = new HexLocation(0,1);
+        final VertexLocation vertexLocOneFirst = new VertexLocation(hexLocOneFirst, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocOneFirst = new EdgeLocation(hexLocOneFirst, EdgeDirection.North);
+
+        final HexLocation hexLocOneSecond = new HexLocation(-1,1);
+        final VertexLocation vertexLocOneSecond = new VertexLocation(hexLocOneSecond, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocOneSecond = new EdgeLocation(hexLocOneSecond, EdgeDirection.North);
+
+        final HexLocation hexLocTwoFirst = new HexLocation(1,1);
+        final VertexLocation vertexLocTwoFirst = new VertexLocation(hexLocTwoFirst, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.North);
+
+        final HexLocation hexLocTwoSecond = new HexLocation(2,1);
+        final VertexLocation vertexLocTwoSecond = new VertexLocation(hexLocTwoSecond, VertexDirection.NorthWest);
+        final EdgeLocation edgeLocTwoSecond = new EdgeLocation(hexLocTwoSecond, EdgeDirection.NorthWest);
+        try {
+            assertTrue(map.canInitiateSettlement(playerOne, vertexLocOneFirst));
+            map.initiateSettlement(playerOne, vertexLocOneFirst);
+            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
+            map.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
+            assertTrue(map.canInitiateSettlement(playerTwo, vertexLocTwoFirst));
+            map.initiateSettlement(playerTwo, vertexLocTwoFirst);
+            assertTrue(map.canInitiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst));
+            map.initiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst);
+            assertTrue(map.canInitiateSettlement(playerTwo, vertexLocTwoSecond));
+            map.initiateSettlement(playerTwo, vertexLocTwoSecond);
+            assertTrue(map.canInitiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond));
+            map.initiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond);
+            assertTrue(map.canInitiateSettlement(playerOne, vertexLocOneSecond));
+            map.initiateSettlement(playerOne, vertexLocOneSecond);
+            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
+            map.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
+
+
+            assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOneFirst));
+            jsonMap.initiateSettlement(playerOne, vertexLocOneFirst);
+            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
+            jsonMap.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
+            assertTrue(jsonMap.canInitiateSettlement(playerTwo, vertexLocTwoFirst));
+            jsonMap.initiateSettlement(playerTwo, vertexLocTwoFirst);
+            assertTrue(jsonMap.canInitiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst));
+            jsonMap.initiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst);
+            assertTrue(jsonMap.canInitiateSettlement(playerTwo, vertexLocTwoSecond));
+            jsonMap.initiateSettlement(playerTwo, vertexLocTwoSecond);
+            assertTrue(jsonMap.canInitiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond));
+            jsonMap.initiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond);
+            assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOneSecond));
+            jsonMap.initiateSettlement(playerOne, vertexLocOneSecond);
+            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
+            jsonMap.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
         } catch(Exception ignored) {
 
         }

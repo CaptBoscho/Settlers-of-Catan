@@ -13,7 +13,7 @@ import shared.locations.*;
  * Implementation for the map view
  */
 @SuppressWarnings("serial")
-public class MapView extends PanelView implements IMapView {
+public final class MapView extends PanelView implements IMapView {
 	
 	private MapComponent map;
 	private MapOverlay overlay;

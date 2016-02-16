@@ -8,23 +8,24 @@ import shared.model.JsonSerializable;
  *
  * @author Derek Argueta
  */
-public class CreateGameDTO implements JsonSerializable{
+public final class CreateGameDTO implements JsonSerializable{
 
-    private boolean randomTiles;
+    private boolean randomHexes;
     private boolean randomNumbers;
     private boolean randomPorts;
     private String name;
 
-    public CreateGameDTO(boolean rt, boolean rn, boolean rp, String n) {
+    public CreateGameDTO(boolean randomHexes, boolean rn, boolean rp, String n) {
         assert n != null;
-        this.randomTiles = rt;
+
+        this.randomHexes = randomHexes;
         this.randomNumbers = rn;
         this.randomPorts = rp;
         this.name = n;
     }
 
     public boolean isRandomTiles() {
-        return this.randomTiles;
+        return this.randomHexes;
     }
 
     public boolean isRandomNumbers() {
@@ -47,7 +48,7 @@ public class CreateGameDTO implements JsonSerializable{
     @Override
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("randomTiles", this.randomTiles);
+        obj.addProperty("randomTiles", this.randomHexes);
         obj.addProperty("randomNumbers", this.randomNumbers);
         obj.addProperty("randomPorts", this.randomPorts);
         obj.addProperty("name", this.name);

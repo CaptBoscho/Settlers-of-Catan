@@ -8,7 +8,7 @@ import shared.model.JsonSerializable;
  *
  * @author Derek Argueta
  */
-public class AuthDTO implements JsonSerializable{
+public final class AuthDTO implements JsonSerializable{
 
     private String username;
     private String password;
@@ -16,6 +16,9 @@ public class AuthDTO implements JsonSerializable{
     public AuthDTO(String username, String password) {
         assert username != null;
         assert password != null;
+        assert username.length() > 0;
+        assert password.length() > 0;
+
         this.username = username;
         this.password = password;
     }

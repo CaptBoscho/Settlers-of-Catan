@@ -1,16 +1,15 @@
 package shared.model.bank;
 
 import shared.definitions.PortType;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.definitions.ResourceType;
-import shared.model.game.trade.TradeType;
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
+import java.util.List;
 
 /**
- * Created by Danny on 2/1/16.
+ * @author Danny Harding
  */
 public interface IResourceCardBank {
 
@@ -21,6 +20,8 @@ public interface IResourceCardBank {
     ResourceCard draw() throws Exception;
 
     int size();
+
+    List<ResourceCard> discard(ResourceType rt, int amount) throws InvalidTypeException, InsufficientResourcesException;
 
     ResourceCard discard(ResourceType type) throws InsufficientResourcesException, InvalidTypeException;
 
@@ -52,15 +53,15 @@ public interface IResourceCardBank {
 
     ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException;
 
-    public int getNumberOfBrick();
+    int getNumberOfBrick();
 
-    public int getNumberOfOre();
+    int getNumberOfOre();
 
-    public int getNumberOfSheep();
+    int getNumberOfSheep();
 
-    public int getNumberOfWheat();
+    int getNumberOfWheat();
 
-    public int getNumberOfWood();
+    int getNumberOfWood();
 
-    public Integer getNumberOfType(ResourceType type);
+    Integer getNumberOfType(ResourceType type);
 }

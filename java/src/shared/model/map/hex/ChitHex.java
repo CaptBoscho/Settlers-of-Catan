@@ -1,6 +1,5 @@
 package shared.model.map.hex;
 
-import com.google.gson.JsonObject;
 import shared.definitions.HexType;
 import shared.locations.HexLocation;
 
@@ -9,7 +8,7 @@ import shared.locations.HexLocation;
  *
  * @author Joel Bradley
  */
-public class ChitHex extends Hex {
+public final class ChitHex extends Hex {
 
     private int chit;
 
@@ -21,6 +20,8 @@ public class ChitHex extends Hex {
      */
     public ChitHex(HexLocation hexLoc, HexType hexType, int chit) {
         super(hexLoc, hexType);
+
+        assert (chit >= 2 && chit <= 6) || (chit >= 8 && chit <= 12);
         this.chit = chit;
     }
 

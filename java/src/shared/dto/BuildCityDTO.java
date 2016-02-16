@@ -7,7 +7,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class BuildCityDTO implements JsonSerializable {
+public final class BuildCityDTO implements JsonSerializable {
 
     private int playerIndex;
     private VertexLocation location;

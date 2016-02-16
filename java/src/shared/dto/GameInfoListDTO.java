@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author Derek Argueta
  */
-public class GameInfoListDTO implements JsonSerializable {
+public final class GameInfoListDTO implements JsonSerializable {
 
     List<GameInfo> games;
 
@@ -23,13 +23,16 @@ public class GameInfoListDTO implements JsonSerializable {
      * Deserializes a string into a list of gameinfo objects
      * @param json a JSON representation of the games
      */
-    public GameInfoListDTO(String json) {
-        JsonParser parser = new JsonParser();
-        JsonArray obj = parser.parse(json).getAsJsonArray();
+    public GameInfoListDTO(final String json) {
+        assert json != null;
+        assert json.length() > 0;
+
+        final JsonParser parser = new JsonParser();
+        final JsonArray obj = parser.parse(json).getAsJsonArray();
         this.games = new ArrayList<>();
-        for(JsonElement elem : obj) {
-            JsonObject tmp = elem.getAsJsonObject();
-            GameInfo newGame = new GameInfo();
+        for(final JsonElement elem : obj) {
+            final JsonObject tmp = elem.getAsJsonObject();
+            final GameInfo newGame = new GameInfo();
             for(JsonElement playerJson : tmp.get("players").getAsJsonArray()) {
                 JsonObject playerObj = playerJson.getAsJsonObject();
                 PlayerInfo tmpInfo = new PlayerInfo();

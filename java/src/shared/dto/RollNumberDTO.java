@@ -6,12 +6,15 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class RollNumberDTO implements JsonSerializable {
+public final class RollNumberDTO implements JsonSerializable {
 
     private int playerIndex;
     private int numberRolled;
 
     public RollNumberDTO(int playerIndex, int numberRolled) {
+        assert playerIndex >= 0;
+        assert numberRolled > 0;
+
         this.playerIndex = playerIndex;
         this.numberRolled = numberRolled;
     }

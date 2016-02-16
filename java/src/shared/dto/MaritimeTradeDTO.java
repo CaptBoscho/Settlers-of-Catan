@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class MaritimeTradeDTO implements JsonSerializable {
+public final class MaritimeTradeDTO implements JsonSerializable {
 
     private int playerIndex;
     private int ratio;
@@ -21,6 +21,11 @@ public class MaritimeTradeDTO implements JsonSerializable {
      * @param outputResource (<i>optional</i>) What type of resource you're getting
      */
     public MaritimeTradeDTO(int playerIndex, int ratio, String inputResource, String outputResource) {
+        assert playerIndex >= 0;
+        assert inputResource != null;
+        assert outputResource != null;
+        assert !inputResource.equals(outputResource);
+
         this.playerIndex = playerIndex;
         this.ratio = ratio;
         this.inputResource = inputResource;
