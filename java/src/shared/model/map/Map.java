@@ -127,20 +127,13 @@ public final class Map implements IMap, JsonSerializable{
             throw new InvalidLocationException("Vertex location is not on the map");
         }
         if (this.cities.get(playerID) != null) {
-            System.out.println("city player ID is not null!");
             return false;
         }
         final ArrayList<Vertex> settlements = this.settlements.get(playerID);
         if (settlements != null && settlements.size() > 1) {
-            System.out.println("already a settlement here bub");
             return false;
         }
         final ArrayList<Edge> roads = this.roads.get(playerID);
-//        System.out.println("~");
-//        System.out.println(!(roads != null && roads.size() > 1));
-//        System.out.println(!vertex.hasBuilding());
-//        System.out.println(!hasNeighborBuildings(vertexLoc));
-//        System.out.println("~");
         return !(roads != null && roads.size() > 1) && !vertex.hasBuilding() && !hasNeighborBuildings(vertexLoc);
     }
 
