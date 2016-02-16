@@ -1,9 +1,7 @@
 
 package client.facade;
-import client.services.IServer;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
-import com.sun.corba.se.spi.activation.Server;
 import shared.dto.BuildCityDTO;
 import shared.dto.BuildRoadDTO;
 import shared.dto.BuildSettlementDTO;
