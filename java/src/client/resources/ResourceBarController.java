@@ -3,6 +3,9 @@ package client.resources;
 import java.util.*;
 
 import client.base.*;
+import client.facade.Facade;
+import client.services.UserCookie;
+import shared.exceptions.PlayerExistsException;
 import shared.model.game.Game;
 
 
@@ -13,10 +16,13 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 
 	private Map<ResourceBarElement, IAction> elementActions;
     private Game game = null;
+    private Facade facade = Facade.getInstance();
+    private int ID = UserCookie.getInstance().getPlayerId();
 	
 	public ResourceBarController(IResourceBarView view) {
 		super(view);
 		elementActions = new HashMap<ResourceBarElement, IAction>();
+        facade.addObserver(this);
 	}
 
     /**
@@ -25,33 +31,29 @@ public class ResourceBarController extends Controller implements IResourceBarCon
      * @param obj
      */
 	public void update(Observable obs, Object obj){
-        //boolean enableRoad = facade.ableToBuildRoad();
-        //boolean enableSettlement = facade.ableToBuildSettlement();
-        //boolean enableCity = facade.ableToBuildCity();
+        try {
+            boolean enableRoad = facade.ableToBuildRoad(ID);
+            boolean enableSettlement = facade.ableToBuildSettlement(ID);
+            boolean enableCity = facade.ableToBuildCity(ID);
 
-        //just so it doesn't freak out
-        boolean enableRoad = true;
-        boolean enableCity = false;
-        boolean enableSettlement = true;
-        int citycount = 0;
-        int roadcount = 0;
-        int settlementcount = 0;
+            int roadcount = facade.getAvailableRoads(ID);
+            int settlementcount = facade.getAvailableSettlements(ID);
+            int citycount = facade.getAvailableCities(ID);
 
-        //int roadcount = facade.getAvailableRoads();
-        //int settlementcount = facade.getAvailableSettlements();
-        //int citycount = facade.getAvailableCity();
+            ResourceBarElement road = ResourceBarElement.ROAD;
+            ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
+            ResourceBarElement city = ResourceBarElement.CITY;
 
-        ResourceBarElement road = ResourceBarElement.ROAD;
-        ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
-        ResourceBarElement city = ResourceBarElement.CITY;
+            getView().setElementEnabled(road, enableRoad);
+            getView().setElementEnabled(settle, enableSettlement);
+            getView().setElementEnabled(city, enableCity);
 
-        getView().setElementEnabled(road, enableRoad);
-        getView().setElementEnabled(settle, enableSettlement);
-        getView().setElementEnabled(city, enableCity);
-
-        getView().setElementAmount(road, roadcount);
-        getView().setElementAmount(settle, settlementcount);
-        getView().setElementAmount(city, citycount);
+            getView().setElementAmount(road, roadcount);
+            getView().setElementAmount(settle, settlementcount);
+            getView().setElementAmount(city, citycount);
+        } catch(PlayerExistsException e){
+            System.out.println("update function in ResourceBarController");
+        }
     }
 
 	@Override
