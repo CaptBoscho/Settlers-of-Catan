@@ -3,7 +3,6 @@ package client.roll;
 import client.base.*;
 import shared.model.game.Dice;
 
-
 /**
  * Implementation for the roll controller
  */
@@ -21,7 +20,7 @@ public final class RollController extends Controller implements IRollController 
 	public RollController(IRollView view, IRollResultView resultView) {
 		super(view);
 		setResultView(resultView);
-		roller = new Dice(2,12);
+		roller = new Dice(2);
 	}
 	
 	public IRollResultView getResultView() {

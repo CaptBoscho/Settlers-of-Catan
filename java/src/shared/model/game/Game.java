@@ -12,7 +12,6 @@ import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 
-import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
 import shared.model.cards.devcards.DevelopmentCard;
 
@@ -54,7 +53,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * Constructor
      */
     protected Game() {
-        this.dice = new Dice(2,12);
+        this.dice = new Dice(2);
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
@@ -74,7 +73,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
 
     public void reset() {
-        this.dice = new Dice(2,12);
+        this.dice = new Dice(2);
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
@@ -226,7 +225,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * Checks Player turn and phase of turn
      *
      * @param playerID ID of Player performing action
-     * @return True if Player can roll the die
+     * @return True if Player can roll the dice
      */
     @Override
     public boolean canRollNumber(int playerID) {
