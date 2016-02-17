@@ -125,6 +125,8 @@ public class Facade {
         return playerID == this.game.getCurrentTurn();
     }
 
+    public Integer getCurrentTurn(){return this.game.getCurrentTurn();}
+
     private HexLocation getServerHexLocation(HexLocation hexLoc){
         return new HexLocation(hexLoc.getX(), hexLoc.getY()-hexLoc.getX());
     }
