@@ -46,24 +46,22 @@ public interface IMap {
      * Informs if a road can be initiated at an edge location if connected to a vertex location
      * @param playerID int
      * @param edgeLoc EdgeLocation
-     * @param vertexLoc VertexLocation
      * @return boolean
      * @throws InvalidPlayerException Throws exception if playerID is invalid
      * @throws InvalidLocationException Throws exception if Edge/Vertex locaiton is not on the map
      */
-    boolean canInitiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc)
+    boolean canInitiateRoad(int playerID, EdgeLocation edgeLoc)
             throws InvalidPlayerException, InvalidLocationException;
 
     /**
      * Builds a Road in setup phase
      * @param playerID int
      * @param edgeLoc EdgeLocation
-     * @param vertexLoc VertexLocation where the Settlement is that the Road is connected to
      * @throws StructureException Throws exception if the Road can't be built at the EdgeLocation
      * @throws InvalidLocationException Throws exception if vertex/edge location is not on the map
      * @throws InvalidPlayerException Throws exception if playerID is invalid
      */
-    void initiateRoad(int playerID, EdgeLocation edgeLoc, VertexLocation vertexLoc) throws StructureException,
+    void initiateRoad(int playerID, EdgeLocation edgeLoc) throws StructureException,
             InvalidLocationException, InvalidPlayerException;
 
     /**
@@ -147,6 +145,14 @@ public interface IMap {
      * @throws InvalidPlayerException Throws exception if playerID is invalid
      */
     Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
+
+    /**
+     * Informs if the robber can be moved to a hex location
+     * @param hexLoc HexLocation
+     * @return boolean
+     * @throws AlreadyRobbedException Throws exception if the hex location is not on the map
+     */
+    public boolean canMoveRobber(HexLocation hexLoc) throws InvalidLocationException;
 
     /**
      * Informs who can be robbed at a hex location

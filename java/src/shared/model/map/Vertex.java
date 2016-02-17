@@ -139,4 +139,12 @@ public final class Vertex {
 
         this.port = port;
     }
+
+    public VertexLocation getVertexLoc() {
+        return vertexLoc;
+    }
+
+    public void setVertexLoc(VertexLocation vertexLoc) {
+        this.vertexLoc = vertexLoc;
+    }
 }

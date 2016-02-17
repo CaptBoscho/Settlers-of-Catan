@@ -1851,9 +1851,9 @@ public class GameTest {
 
         assertTrue(game.canInitiateSettlement(current_turn,vloc));
         game.initiateSettlement(current_turn,vloc);
-        assertTrue(game.canInitiateRoad(current_turn,vloc,eloc));
-        assertFalse(game.canInitiateRoad(current_turn,vloc,new EdgeLocation(hloc, EdgeDirection.SouthWest)));
-        game.initiateRoad(current_turn,vloc,eloc);
+        assertTrue(game.canInitiateRoad(current_turn,eloc));
+        assertFalse(game.canInitiateRoad(current_turn,new EdgeLocation(hloc, EdgeDirection.SouthWest)));
+        game.initiateRoad(current_turn,eloc);
 
         final int next = game.getTurnTracker().nextTurn();
 

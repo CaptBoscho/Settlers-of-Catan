@@ -1,72 +1,75 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
+import client.map.MapController;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.Game;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
  * Represents Setup 1 State
  */
-public class SetupOneState extends SetupState {
-    private Game gModel;
+public class SetupOneState extends MapState {
 
     /**
      * Constructor
      */
-    public SetupOneState(){
-
+    public SetupOneState(MapController mapController){
+        super(mapController);
     }
 
-    /**
-     * Initializes the state
-     */
     @Override
-    public void initFromModel() {
-        super.initFromModel();
+    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
+        return facade.canInitiateRoad(userCookie.getPlayerId(), edgeLoc);
     }
 
-    /**
-     * Place Road - State Implementation
-     *
-     * @param edgeLoc
-     */
+    @Override
+    public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        return facade.canInitiateSettlement(userCookie.getPlayerId(), vertLoc);
+    }
+
+    @Override
+    public boolean canPlaceCity(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceRobber(HexLocation hexLoc) {
+        hexLoc = getModelHexLocation(hexLoc);
+        return false;
+    }
+
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        super.placeRoad(edgeLoc);
+        if(canPlaceRoad(edgeLoc)) {
+            facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
+        }
     }
 
-    /**
-     * Place Settlement - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        super.placeSettlement(vertLoc);
+        if(canPlaceSettlement(vertLoc)) {
+            facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
+        }
     }
 
-    /**
-     * Place City - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        super.placeCity(vertLoc);
+        if(canPlaceCity(vertLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place Robber - State Implementation
-     *
-     * @param hexLoc
-     */
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        super.placeRobber(hexLoc);
+        if(canPlaceRobber(hexLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
     /**

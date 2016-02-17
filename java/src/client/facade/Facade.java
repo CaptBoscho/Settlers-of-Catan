@@ -95,9 +95,9 @@ public class Facade {
         return entries.size() == 4 || entries.size() == 3;
     }*/
 
-    public boolean canInitiateRoad(int playerID, EdgeLocation edge, VertexLocation vertex){
+    public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
-            return this.game.canInitiateRoad(playerID, vertex, edge);
+            return this.game.canInitiateRoad(playerID,  edge);
         }catch(InvalidLocationException e){
             return false;
         }catch(InvalidPlayerException e){
@@ -105,9 +105,9 @@ public class Facade {
         }
     }
 
-    public void initiateRoad(int playerID, EdgeLocation edge, VertexLocation vertex){
+    public void initiateRoad(int playerID, EdgeLocation edge){
         try {
-            this.game.initiateRoad(playerID, vertex, edge);
+            this.game.initiateRoad(playerID, edge);
         }
         catch(InvalidLocationException e){
 
