@@ -127,6 +127,18 @@ public class Facade {
 
     public Integer getCurrentTurn(){return this.game.getCurrentTurn();}
 
+    public void finishTurn(int playerID){
+        try{
+            this.game.finishTurn(playerID);
+        } catch(Exception e){
+            System.out.println("facade finishTurn");
+        }
+    }
+
+    public boolean canFinishTurn(int playerID){
+        return this.game.canFinishTurn(playerID);
+    }
+
     private HexLocation getServerHexLocation(HexLocation hexLoc){
         return new HexLocation(hexLoc.getX(), hexLoc.getY()-hexLoc.getX());
     }
