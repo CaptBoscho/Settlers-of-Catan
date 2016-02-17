@@ -16,12 +16,13 @@ import java.util.Observer;
  */
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
-	private int id;
+	private int currentPlayerID;
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
 		facade = Facade.getInstance();
-		id = UserCookie.getInstance().getPlayerId();
+        facade.addObserver(this);
+		currentPlayerID = facade.getCurrentTurn();
 		initFromModel();
 	}
 	
@@ -32,19 +33,17 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	@Override
 	public void endTurn() {
-
+//		facade.endTurn(); // TODO: 2/16/2016 Have Corbin implement in facade
+//        getView().updatePlayer();
 	}
 	
 	private void initFromModel() {
 		try {
-			CatanColor currentPlayerColor = facade.getPlayerColorByID(id);
+			CatanColor currentPlayerColor = facade.getPlayerColorByID(currentPlayerID);
+			getView().setLocalPlayerColor(currentPlayerColor);
 		} catch (PlayerExistsException e) {
-			e.printStackTrace();
+//			getView().;
 		}
-
-		//<temp>
-		getView().setLocalPlayerColor();
-		//</temp>
 	}
 
 	/**
