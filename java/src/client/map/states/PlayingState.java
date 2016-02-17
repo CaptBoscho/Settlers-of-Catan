@@ -3,6 +3,7 @@ package client.map.states;
 import client.data.RobPlayerInfo;
 import client.map.MapController;
 import client.services.MissingUserCookieException;
+import shared.definitions.PieceType;
 import shared.exceptions.InvalidLocationException;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
@@ -17,11 +18,14 @@ import shared.locations.VertexLocation;
  */
 public class PlayingState extends MapState {
 
+    private boolean isPlayingRoadBuildingCard;
+
     /**
      * Constructor
      */
     public PlayingState(MapController mapController){
         super(mapController);
+        isPlayingRoadBuildingCard = false;
     }
 
     @Override
@@ -60,7 +64,7 @@ public class PlayingState extends MapState {
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        return facade.canMoveRobber(userCookie.getPlayerId(), hexLoc);
+        return false;
     }
 
     @Override
@@ -92,32 +96,41 @@ public class PlayingState extends MapState {
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        facade.moveRobber(userCookie.getPlayerId(), hexLoc);
+        System.out.println("You're a wizard Harry");
     }
 
-    /**
-     * Play Soldier - State Implementation
-     */
+    @Override
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
+        if(pieceType == PieceType.ROBBER) {
+            return;
+        }
+        try {
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+        } catch (PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void cancelMove() {
+        if(isPlayingRoadBuildingCard) {
+            //TODO: write code to cancel the road building card
+        }
+    }
+
     @Override
     public void playSoldierCard() {
-        super.playSoldierCard();
+        System.out.println("You're a wizard Harry");
     }
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
     @Override
     public void playRoadBuildingCard() {
-        super.playRoadBuildingCard();
+        isPlayingRoadBuildingCard = true;
+        //TODO: write code to implement road building card
     }
 
-    /**
-     * Rob Player - State Implementation
-     *
-     * @param victim
-     */
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        super.robPlayer(victim);
+        System.out.println("You're a wizard Harry");
     }
 }

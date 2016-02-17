@@ -2,6 +2,9 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
+import shared.definitions.CatanColor;
+import shared.definitions.PieceType;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -64,29 +67,38 @@ public class SetupOneState extends MapState {
         System.out.println("You're a wizard Harry");
     }
 
-    /**
-     * Play Soldier - State Implementation
-     */
+    @Override
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
+        if(!isFree || !allowDisconnected) {
+            return;
+        }
+        if(pieceType == PieceType.CITY || pieceType == PieceType.ROBBER) {
+            return;
+        }
+        try {
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
+        } catch (PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void cancelMove() {
+        System.out.println("You're a wizard Harry");
+    }
+
     @Override
     public void playSoldierCard() {
-        super.playSoldierCard();
+        System.out.println("You're a wizard Harry");
     }
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
     @Override
     public void playRoadBuildingCard() {
-        super.playRoadBuildingCard();
+        System.out.println("You're a wizard Harry");
     }
 
-    /**
-     * Rob Player - State Implementation
-     *
-     * @param victim
-     */
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        super.robPlayer(victim);
+        System.out.println("You're a wizard Harry");
     }
 }

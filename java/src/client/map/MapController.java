@@ -128,23 +128,23 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 	
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
-		getView().startDrop(pieceType, CatanColor.ORANGE, true);
+		mapState.startMove(pieceType, isFree, allowDisconnected);
 	}
 	
 	public void cancelMove() {
-		// TODO -- implement
+		mapState.cancelMove();
 	}
 	
 	public void playSoldierCard() {
-		// TODO -- implement
+		mapState.playSoldierCard();
 	}
 	
 	public void playRoadBuildingCard() {
-		// TODO -- implement
+		mapState.playRoadBuildingCard();
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
-		// TODO -- implement
+		mapState.robPlayer(victim);
 	}
 
 	@Override

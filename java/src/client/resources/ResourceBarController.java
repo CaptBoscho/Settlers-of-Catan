@@ -17,12 +17,13 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	private Map<ResourceBarElement, IAction> elementActions;
     private Game game = null;
     private Facade facade = Facade.getInstance();
-    private int ID = UserCookie.getInstance().getPlayerId();
+    private int ID;
 	
 	public ResourceBarController(IResourceBarView view) {
 		super(view);
 		elementActions = new HashMap<ResourceBarElement, IAction>();
         facade.addObserver(this);
+
 	}
 
     /**
@@ -32,6 +33,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
      */
 	public void update(Observable obs, Object obj){
         try {
+            ID  = UserCookie.getInstance().getPlayerId();
             boolean enableRoad = facade.ableToBuildRoad(ID);
             boolean enableSettlement = facade.ableToBuildSettlement(ID);
             boolean enableCity = facade.ableToBuildCity(ID);

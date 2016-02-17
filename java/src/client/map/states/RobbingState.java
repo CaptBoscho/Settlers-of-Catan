@@ -2,6 +2,8 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
+import shared.definitions.PieceType;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -64,29 +66,35 @@ public class RobbingState extends MapState {
         facade.moveRobber(userCookie.getPlayerId(), hexLoc);
     }
 
-    /**
-     * Play Soldier - State Implementation
-     */
+    @Override
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
+        if(pieceType != PieceType.ROBBER) {
+            return;
+        }
+        try {
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
+        } catch (PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void cancelMove() {
+        //TODO: write code on what to do if player quits soldier card
+    }
+
     @Override
     public void playSoldierCard() {
-        super.playSoldierCard();
+        //TODO: write code to implement the soldier card
     }
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
     @Override
     public void playRoadBuildingCard() {
-        super.playRoadBuildingCard();
+        System.out.println("You're a wizard Harry");
     }
 
-    /**
-     * Rob Player - State Implementation
-     *
-     * @param victim
-     */
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        super.robPlayer(victim);
+        //TODO: who is calling this and what do i put here?
     }
 }
