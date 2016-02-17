@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,10 @@ public class Dice {
     public Dice(int diceCount){
         assert diceCount > 0;
 
+        //Init List
+        dice = new ArrayList<Die>();
+
+        //Create diceCount die
         for(int i = 0; i < diceCount; i++){
             dice.add(new Die()); //Ranges will be [1,6] for each die
         }
@@ -32,6 +37,10 @@ public class Dice {
         assert diceCount > 0;
         assert dieMax > dieMin;
 
+        //Init List
+        dice = new ArrayList<Die>();
+
+        //Create diceCount die
         for(int i = 0; i < diceCount; i++){
             dice.add(new Die(dieMin, dieMax));
         }
