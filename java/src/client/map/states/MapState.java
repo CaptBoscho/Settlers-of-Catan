@@ -180,15 +180,9 @@ abstract public class MapState {
 
     abstract public boolean canPlaceRoad(EdgeLocation edgeLoc);
 
-    public boolean canPlaceSettlement(VertexLocation vertLoc) {
-        // TODO -- implement
-        return true;
-    }
+    abstract public boolean canPlaceSettlement(VertexLocation vertLoc);
 
-    public boolean canPlaceCity(VertexLocation vertLoc) {
-        // TODO -- implement
-        return true;
-    }
+    abstract public boolean canPlaceCity(VertexLocation vertLoc);
 
     public boolean canPlaceRobber(HexLocation hexLoc) {
         // TODO -- implement

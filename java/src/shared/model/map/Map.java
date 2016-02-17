@@ -601,7 +601,7 @@ public final class Map implements IMap, JsonSerializable{
         if(hex == null || hex.getType() == HexType.WATER) {
             throw new InvalidLocationException("Hex location is not on the map");
         }
-        return robber.getLocation() != hexLoc;
+        return !robber.getLocation().equals(hexLoc);
     }
 
     @Override

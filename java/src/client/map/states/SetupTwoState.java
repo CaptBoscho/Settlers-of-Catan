@@ -2,13 +2,12 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
-import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
  * Represents Setup 2 State
  */
@@ -21,12 +20,21 @@ public class SetupTwoState extends MapState {
         super(mapController);
     }
 
-    /**
-     * Initializes the state
-     */
     @Override
-    public void initFromModel() {
-        super.initFromModel();
+    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
+        return facade.canInitiateRoad(userCookie.getPlayerId(), edgeLoc);
+    }
+
+    @Override
+    public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        return facade.canInitiateSettlement(userCookie.getPlayerId(), vertLoc);
+    }
+
+    @Override
+    public boolean canPlaceCity(VertexLocation vertLoc) {
+        return false;
     }
 
     /**

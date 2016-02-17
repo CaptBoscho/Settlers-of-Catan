@@ -2,15 +2,14 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
-import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
- * Represents Playing State - Default Gameplay State
+ * Represents Discarding State
  */
 public class DiscardingState extends MapState {
 
@@ -21,12 +20,19 @@ public class DiscardingState extends MapState {
         super(mapController);
     }
 
-    /**
-     * Initializes the state
-     */
     @Override
-    public void initFromModel() {
-        super.initFromModel();
+    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceCity(VertexLocation vertLoc) {
+        return false;
     }
 
     /**

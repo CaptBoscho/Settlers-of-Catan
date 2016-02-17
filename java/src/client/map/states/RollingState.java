@@ -2,14 +2,12 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
-import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.Game;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
  * Represents Rolling Dice State
  */
@@ -22,12 +20,19 @@ public class RollingState extends MapState {
         super(mapController);
     }
 
-    /**
-     * Initializes the state
-     */
     @Override
-    public void initFromModel() {
-        super.initFromModel();
+    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceCity(VertexLocation vertLoc) {
+        return false;
     }
 
     /**

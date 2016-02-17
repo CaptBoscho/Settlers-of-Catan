@@ -10,8 +10,7 @@ import shared.exceptions.PlayerExistsException;
 import shared.locations.*;
 import client.base.*;
 import client.data.*;
-
-import static shared.model.game.TurnTracker.*;
+import shared.model.game.TurnTracker;
 
 
 /**
@@ -34,7 +33,7 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
     public void initialize() {
-        Phase state = facade.getPhase();
+        TurnTracker.Phase state = facade.getPhase();
         switch(state) {
             case SETUPONE:
                 mapState = new SetupOneState(this);

@@ -2,13 +2,15 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
-import client.map.MapState;
+import shared.exceptions.InvalidLocationException;
+import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
  * Represents Playing State - Default Gameplay State
  */
@@ -21,12 +23,37 @@ public class PlayingState extends MapState {
         super(mapController);
     }
 
-    /**
-     * Initializes the state
-     */
     @Override
-    public void initFromModel() {
-        super.initFromModel();
+    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
+        try {
+            return facade.canBuildRoad(userCookie.getPlayerId(), edgeLoc);
+        } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        try {
+            return facade.canBuildSettlement(userCookie.getPlayerId(), vertLoc);
+        } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceCity(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        try {
+            return facade.canBuildCity(userCookie.getPlayerId(), vertLoc);
+        } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 
     /**

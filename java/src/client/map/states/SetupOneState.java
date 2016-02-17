@@ -7,7 +7,7 @@ import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
  * Represents Setup 1 State
  */
@@ -26,11 +26,18 @@ public class SetupOneState extends MapState {
         return facade.canInitiateRoad(userCookie.getPlayerId(), edgeLoc);
     }
 
-    /**
-     * Place Road - State Implementation
-     *
-     * @param edgeLoc
-     */
+    @Override
+    public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        return facade.canInitiateSettlement(userCookie.getPlayerId(), vertLoc);
+    }
+
+    @Override
+    public boolean canPlaceCity(VertexLocation vertLoc) {
+        return false;
+    }
+
+
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
         super.placeRoad(edgeLoc);
