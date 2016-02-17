@@ -1,7 +1,6 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
 import shared.exceptions.BadJsonException;
 
 /**

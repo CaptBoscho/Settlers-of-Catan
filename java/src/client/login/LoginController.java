@@ -81,8 +81,8 @@ public class LoginController extends Controller implements ILoginController {
 	// TODO: add proper error messaging
 	@Override
 	public void register() {
-		final String username = getLoginView().getLoginUsername();
-		final String password = getLoginView().getLoginPassword();
+		final String username = getLoginView().getRegisterUsername();
+		final String password = getLoginView().getRegisterPassword();
 
 		final AuthDTO dto = new AuthDTO(username, password);
 		if(ServerProxy.getInstance().registerUser(dto)) {

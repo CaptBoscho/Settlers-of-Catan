@@ -25,6 +25,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	@Override
 	public void addAI() {
 
+		// TODO --
 		// TEMPORARY
 		getView().closeModal();
 	}

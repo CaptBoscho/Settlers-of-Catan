@@ -68,7 +68,6 @@ public class Catan extends JFrame {
             final LoginController loginController = new LoginController(loginView, loginMessageView);
             loginController.setLoginAction(joinController::start);
             loginView.setController(loginController);
-            loginView.setController(loginController);
 
             loginController.start();
         });
