@@ -5,24 +5,30 @@ import shared.definitions.CatanColor;
 
 public class PlayerInfo{
     private String name;
-    private String uname;
+    int victorypoints;
     private CatanColor color;
+    boolean longestroad;
+    boolean largestarmy;
 
-    public PlayerInfo(String u, String n, CatanColor c){
+    public PlayerInfo(String n, int vp, CatanColor c, boolean lr, boolean la){
         this.name = n;
-        this.uname = u;
+        this.victorypoints = vp;
         this.color = c;
+        this.longestroad = lr;
+        this.largestarmy = la;
     }
 
     public String getName(){
         return this.name;
     }
 
-    public String getUserName(){
-        return this.uname;
-    }
+    public Integer getVictoryPoints(){return this.victorypoints;}
 
     public CatanColor getColor(){
         return this.color;
     }
+
+    public boolean hasLongestRoad(){return this.longestroad;}
+
+    public boolean hasLargestArmy(){return this.largestarmy;}
 }

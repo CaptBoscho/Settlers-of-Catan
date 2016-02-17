@@ -438,6 +438,19 @@ public class Facade {
         }
     }
 
+    //TODO flesh this puppy out
+    public List<PlayerInfo> getPlayers(){
+        List<Player> players = this.game.getPlayers();
+        List<PlayerInfo> playerInfos = new ArrayList<PlayerInfo>();
+
+        for(Player p: players){
+            // get boolean values if the player has the longest road or largest army
+            //PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), )
+        }
+
+        return null;
+    }
+
     /**
      * Facade asks the game who then asks the turn tracker if the
      * player can play a Development Card
