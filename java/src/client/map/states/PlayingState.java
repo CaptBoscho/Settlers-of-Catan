@@ -60,50 +60,40 @@ public class PlayingState extends MapState {
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        //TODO: add this method to the facade
-        //return facade.canMoveRobber(hexLoc);
+        return facade.canMoveRobber(hexLoc);
         return false;
     }
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        if(canPlaceRoad(edgeLoc)) {
-            try {
-                facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
-            } catch (MissingUserCookieException e) {
-                System.out.println(e.getMessage());
-            }
+        try {
+            facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
+        } catch (MissingUserCookieException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        if(canPlaceSettlement(vertLoc)) {
-            try {
-                facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
-            } catch (MissingUserCookieException e) {
-                System.out.println(e.getMessage());
-            }
+        try {
+            facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
+        } catch (MissingUserCookieException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        if(canPlaceCity(vertLoc)) {
-            try {
-                facade.buildCity(userCookie.getPlayerId(), vertLoc);
-            } catch (MissingUserCookieException e) {
-                System.out.println(e.getMessage());
-            }
+        try {
+            facade.buildCity(userCookie.getPlayerId(), vertLoc);
+        } catch (MissingUserCookieException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        if(canPlaceRobber(hexLoc)) {
-            //TODO: add this method to the facade
-            //facade.moveRobber(hexLoc);
-        }
+        facade.moveRobber(hexLoc);
     }
 
     /**

@@ -48,31 +48,22 @@ public class RobbingState extends MapState {
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        if(canPlaceRoad(edgeLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
+        System.out.println("You're a wizard Harry");
     }
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        if(canPlaceSettlement(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
+        System.out.println("You're a wizard Harry");
     }
 
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        if(canPlaceCity(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
+        System.out.println("You're a wizard Harry");
     }
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        if(canPlaceRobber(hexLoc)) {
-            //TODO: add this method to the facade
-            //facade.moveRobber(hexLoc);
-        }
+        facade.moveRobber(hexLoc);
     }
 
     /**

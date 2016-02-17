@@ -46,30 +46,22 @@ public class SetupOneState extends MapState {
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        if(canPlaceRoad(edgeLoc)) {
-            facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
-        }
+        facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
     }
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        if(canPlaceSettlement(vertLoc)) {
-            facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
-        }
+        facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
     }
 
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        if(canPlaceCity(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
+        System.out.println("You're a wizard Harry");
     }
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        if(canPlaceRobber(hexLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
+        System.out.println("You're a wizard Harry");
     }
 
     /**

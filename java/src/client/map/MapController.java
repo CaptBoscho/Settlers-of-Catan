@@ -87,36 +87,44 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
-		mapState.placeRoad(edgeLoc);
-		try {
-			getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
-		} catch (PlayerExistsException e) {
-			System.out.println(e.getMessage());
-		}
+		if(mapState.canPlaceRoad(edgeLoc)) {
+            mapState.placeRoad(edgeLoc);
+            try {
+                getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            } catch (PlayerExistsException e) {
+                System.out.println(e.getMessage());
+            }
+        }
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		mapState.placeSettlement(vertLoc);
-		try {
-			getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
-		} catch (PlayerExistsException e) {
-			System.out.println(e.getMessage());
-		}
+        if(mapState.canPlaceSettlement(vertLoc)) {
+            mapState.placeSettlement(vertLoc);
+            try {
+                getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            } catch (PlayerExistsException e) {
+                System.out.println(e.getMessage());
+            }
+        }
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
-		mapState.placeCity(vertLoc);
-		try {
-			getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
-		} catch (PlayerExistsException e) {
-			System.out.println(e.getMessage());
-		}
+        if(mapState.canPlaceCity(vertLoc)) {
+            mapState.placeCity(vertLoc);
+            try {
+                getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            } catch (PlayerExistsException e) {
+                System.out.println(e.getMessage());
+            }
+        }
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
-		mapState.placeRobber(hexLoc);
-		getView().placeRobber(hexLoc);
-		getRobView().showModal();
+        if(mapState.canPlaceRobber(hexLoc)) {
+            mapState.placeRobber(hexLoc);
+            getView().placeRobber(hexLoc);
+            getRobView().showModal();
+        }
 	}
 	
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
