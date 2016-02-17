@@ -425,8 +425,8 @@ public class Facade {
         return this.game.getAvailableCities(id);
     }
 
-    public boolean canMoveRobber(int id) {
-        return this.game.canPlaceRobber(id);
+    public boolean canMoveRobber(int id, HexLocation hexloc) {
+        return this.game.canPlaceRobber(id, hexloc);
     }
 
     public Set<Integer> moveRobber(int id, HexLocation hexloc){
@@ -439,6 +439,8 @@ public class Facade {
         }
         return null;
     }
+
+    //TODO devcard functions
 
     /**
      * plays the Development Card
