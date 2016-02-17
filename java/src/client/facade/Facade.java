@@ -66,6 +66,7 @@ public class Facade {
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.game.getPlayerColorByID(id);}
 
+    /*
     public void joinPlayer(PlayerInfo pi) throws BuildException {
         assert pi != null;
 
@@ -92,8 +93,48 @@ public class Facade {
 
     public boolean canStartGame() {
         return entries.size() == 4 || entries.size() == 3;
+    }*/
+
+    public boolean canInitiateRoad(int playerID, EdgeLocation edge, VertexLocation vertex){
+        try{
+            return this.game.canInitiateRoad(playerID, vertex, edge);
+        }catch(InvalidLocationException e){
+            return false;
+        }catch(InvalidPlayerException e){
+            return false;
+        }
     }
 
+    public void initiateRoad(int playerID, EdgeLocation edge, VertexLocation vertex){
+        try {
+            this.game.initiateRoad(playerID, vertex, edge);
+        }
+        catch(InvalidLocationException e){
+
+        }catch(InvalidPlayerException e){
+
+        }catch(StructureException e){}
+    }
+
+    public boolean canInitiateSettlement(int pID, VertexLocation vertex){
+        try{
+            return this.game.canInitiateSettlement(pID, vertex);
+        }catch(InvalidLocationException e){
+            return false;
+        }catch(InvalidPlayerException e){
+            return false;
+        }
+    }
+
+    public void initiateSettlement(int pID, VertexLocation vertex){
+        try{
+            this.game.initiateSettlement(pID, vertex);
+        }catch(InvalidLocationException e){
+
+        }catch(InvalidPlayerException e){
+
+        }catch(StructureException e){}
+    }
 
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
         if (this.entries.size() != 4 && this.entries.size() != 3) {
