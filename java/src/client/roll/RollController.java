@@ -9,8 +9,8 @@ import shared.model.game.Dice;
  */
 public final class RollController extends Controller implements IRollController {
 
-	private IRollResultView resultView;
 	private Dice roller;
+	private IRollResultView resultView;
 
 	/**
 	 * RollController constructor
