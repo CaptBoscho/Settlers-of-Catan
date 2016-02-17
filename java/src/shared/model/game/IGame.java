@@ -197,7 +197,7 @@ public interface IGame {
      * @param playerID ID of Player performing action
      * @return True if Player can place the Robber
      */
-    boolean canPlaceRobber(int playerID);
+    boolean canPlaceRobber(int playerID, HexLocation hexloc);
 
     /**
      * Action - Player places the Robber
