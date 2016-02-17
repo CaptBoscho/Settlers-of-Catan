@@ -161,23 +161,21 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
-    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
+    public boolean canInitiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
         assert playerID >= 0;
-        assert vertex != null;
         assert edge != null;
         assert this.turnTracker != null;
         assert this.map != null;
 
-        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerID, edge, vertex);
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerID, edge);
     }
 
-    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
         assert playerID >= 0;
-        assert vertex != null;
         assert edge != null;
         assert this.map != null;
 
-        map.initiateRoad(playerID, edge, vertex);
+        map.initiateRoad(playerID, edge);
     }
 
     /**

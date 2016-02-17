@@ -154,7 +154,7 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 				try {
 					int gameId = Integer.parseInt(e.getActionCommand());
 					GameInfo game = null;
-					for (GameInfo g : games) {
+					for (final GameInfo g : games) {
 						if (g.getId() == gameId) {
 							game = g;
 							break;
