@@ -21,7 +21,7 @@ public final class RollController extends Controller implements IRollController 
 	public RollController(IRollView view, IRollResultView resultView) {
 		super(view);
 		setResultView(resultView);
-		roller = new Dice(2,12); // TODO: 2/16/2016 Make sure this does 2-12 inclusive
+		roller = new Dice(2,12);
 	}
 	
 	public IRollResultView getResultView() {
