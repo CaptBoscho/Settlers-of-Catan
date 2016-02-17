@@ -3,6 +3,7 @@ package client.map.states;
 import client.data.RobPlayerInfo;
 import client.facade.Facade;
 import client.map.MapController;
+import client.services.MissingUserCookieException;
 import client.services.UserCookie;
 import shared.definitions.CatanColor;
 import shared.definitions.PieceType;
@@ -18,7 +19,7 @@ import shared.model.player.Player;
 import java.util.ArrayList;
 
 /**
- * Created by corne on 2/11/2016.
+ * @author Joel Bradley
  *
  * Base class for the state of the Map Controller
  */
@@ -184,42 +185,15 @@ abstract public class MapState {
 
     abstract public boolean canPlaceCity(VertexLocation vertLoc);
 
-    public boolean canPlaceRobber(HexLocation hexLoc) {
-        // TODO -- implement
-        return true;
-    }
+    abstract public boolean canPlaceRobber(HexLocation hexLoc);
 
-    /**
-     * Place Road - State Implementation
-     * @param edgeLoc
-     */
-    public void placeRoad(EdgeLocation edgeLoc) {
-        // TODO -- implement
-    }
+    abstract public void placeRoad(EdgeLocation edgeLoc);
 
-    /**
-     * Place Settlement - State Implementation
-     * @param vertLoc
-     */
-    public void placeSettlement(VertexLocation vertLoc) {
-        // TODO -- implement
-    }
+    abstract public void placeSettlement(VertexLocation vertLoc);
 
-    /**
-     * Place City - State Implementation
-     * @param vertLoc
-     */
-    public void placeCity(VertexLocation vertLoc) {
-        // TODO -- implement
-    }
+    abstract public void placeCity(VertexLocation vertLoc);
 
-    /**
-     * Place Robber - State Implementation
-     * @param hexLoc
-     */
-    public void placeRobber(HexLocation hexLoc) {
-        // TODO -- implement
-    }
+    abstract public void placeRobber(HexLocation hexLoc);
 
     /**
      * Play Soldier - State Implementation

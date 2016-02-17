@@ -34,47 +34,42 @@ public class SetupTwoState extends MapState {
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
-    /**
-     * Place Road - State Implementation
-     *
-     * @param edgeLoc
-     */
+    @Override
+    public boolean canPlaceRobber(HexLocation hexLoc) {
+        hexLoc = getModelHexLocation(hexLoc);
+        return false;
+    }
+
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        super.placeRoad(edgeLoc);
+        if(canPlaceRoad(edgeLoc)) {
+            facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
+        }
     }
 
-    /**
-     * Place Settlement - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        super.placeSettlement(vertLoc);
+        if(canPlaceSettlement(vertLoc)) {
+            facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
+        }
     }
 
-    /**
-     * Place City - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        super.placeCity(vertLoc);
+        if(canPlaceCity(vertLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place Robber - State Implementation
-     *
-     * @param hexLoc
-     */
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        super.placeRobber(hexLoc);
+        if(canPlaceRobber(hexLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
     /**

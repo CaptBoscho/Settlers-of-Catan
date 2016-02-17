@@ -7,7 +7,7 @@ import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
  * Represents Robbing a Player State
  */
@@ -22,57 +22,57 @@ public class RobbingState extends MapState {
 
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
-    /**
-     * Place Road - State Implementation
-     *
-     * @param edgeLoc
-     */
+    @Override
+    public boolean canPlaceRobber(HexLocation hexLoc) {
+        hexLoc = getModelHexLocation(hexLoc);
+        //TODO: add this method to the facade
+        //return facade.canMoveRobber(hexLoc);
+        return false;
+    }
+
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        super.placeRoad(edgeLoc);
+        if(canPlaceRoad(edgeLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place Settlement - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        super.placeSettlement(vertLoc);
+        if(canPlaceSettlement(vertLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place City - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        super.placeCity(vertLoc);
+        if(canPlaceCity(vertLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place Robber - State Implementation
-     *
-     * @param hexLoc
-     */
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        super.placeRobber(hexLoc);
+        if(canPlaceRobber(hexLoc)) {
+            //TODO: add this method to the facade
+            //facade.moveRobber(hexLoc);
+        }
     }
 
     /**

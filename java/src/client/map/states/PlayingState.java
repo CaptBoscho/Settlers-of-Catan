@@ -2,6 +2,7 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
+import client.services.MissingUserCookieException;
 import shared.exceptions.InvalidLocationException;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
@@ -56,44 +57,53 @@ public class PlayingState extends MapState {
         return false;
     }
 
-    /**
-     * Place Road - State Implementation
-     *
-     * @param edgeLoc
-     */
+    @Override
+    public boolean canPlaceRobber(HexLocation hexLoc) {
+        hexLoc = getModelHexLocation(hexLoc);
+        //TODO: add this method to the facade
+        //return facade.canMoveRobber(hexLoc);
+        return false;
+    }
+
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        super.placeRoad(edgeLoc);
+        if(canPlaceRoad(edgeLoc)) {
+            try {
+                facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
+            } catch (MissingUserCookieException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
-    /**
-     * Place Settlement - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        super.placeSettlement(vertLoc);
+        if(canPlaceSettlement(vertLoc)) {
+            try {
+                facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
+            } catch (MissingUserCookieException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
-    /**
-     * Place City - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        super.placeCity(vertLoc);
+        if(canPlaceCity(vertLoc)) {
+            try {
+                facade.buildCity(userCookie.getPlayerId(), vertLoc);
+            } catch (MissingUserCookieException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
-    /**
-     * Place Robber - State Implementation
-     *
-     * @param hexLoc
-     */
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        super.placeRobber(hexLoc);
+        if(canPlaceRobber(hexLoc)) {
+            //TODO: add this method to the facade
+            //facade.moveRobber(hexLoc);
+        }
     }
 
     /**
