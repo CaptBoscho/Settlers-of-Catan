@@ -106,7 +106,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         } catch (BadJsonException e) {
             e.printStackTrace();
         }
-
+        setChanged();
         notifyObservers();
     }
 
@@ -160,23 +160,21 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
-    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
+    public boolean canInitiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
         assert playerID >= 0;
-        assert vertex != null;
         assert edge != null;
         assert this.turnTracker != null;
         assert this.map != null;
 
-        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerID, edge, vertex);
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerID, edge);
     }
 
-    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
         assert playerID >= 0;
-        assert vertex != null;
         assert edge != null;
         assert this.map != null;
 
-        map.initiateRoad(playerID, edge, vertex);
+        map.initiateRoad(playerID, edge);
     }
 
     /**
@@ -614,12 +612,17 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can place the Robber
      */
     @Override
-    public boolean canPlaceRobber(final int playerID) {
+    public boolean canPlaceRobber(final int playerID, HexLocation hexloc) {
         assert playerID >= 0;
+        try {
 
-        return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber();
+            return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
+
+        } catch(InvalidLocationException e){
+            return false;
+        }
+
     }
-
     /**
      * Action - Player places the Robber
      *
@@ -633,6 +636,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return map.moveRobber(hexloc);
     }
 
+    //TODO change robbing to check if the phase in the turntracker is robbing phase
     public ResourceType rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
         assert playerRobbed > 0;
         assert playerRobber > 0;
@@ -643,7 +647,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
         Set<Integer> who = map.whoCanGetRobbed();
         assert who != null;
-        if(canPlaceRobber(playerRobber) && who.contains(playerRobbed)){
+        if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
             turnTracker.updateRobber(false);
             ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
             return stolenResource;

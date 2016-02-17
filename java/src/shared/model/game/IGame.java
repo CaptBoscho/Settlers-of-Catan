@@ -45,11 +45,11 @@ public interface IGame {
     public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException;
 
 
-    public boolean canInitiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException;
+    public boolean canInitiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException;
 
     public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException;
 
-    public void initiateRoad(int playerID, VertexLocation vertex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    public void initiateRoad(int playerID,  EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
 
     /**
      * Determine if Player can discard cards
@@ -197,7 +197,7 @@ public interface IGame {
      * @param playerID ID of Player performing action
      * @return True if Player can place the Robber
      */
-    boolean canPlaceRobber(int playerID);
+    boolean canPlaceRobber(int playerID, HexLocation hexloc);
 
     /**
      * Action - Player places the Robber

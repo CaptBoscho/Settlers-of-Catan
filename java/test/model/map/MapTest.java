@@ -452,24 +452,22 @@ public class MapTest {
         final EdgeLocation edgeLocTwoFirst = new EdgeLocation(hexLocTwoFirst, EdgeDirection.NorthWest);
         try {
             map.initiateSettlement(playerOne, vertexLocOneFirst);
-            assertFalse(map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneSecond));
-            assertFalse(map.canInitiateRoad(playerTwo, edgeLocOneFirst, vertexLocOneFirst));
-            map.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
-            assertFalse(map.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneFirst));
+            assertFalse(map.canInitiateRoad(playerTwo, edgeLocOneFirst));
+            map.initiateRoad(playerOne, edgeLocOneFirst);
+            assertFalse(map.canInitiateRoad(playerOne, edgeLocOneSecond));
             map.initiateSettlement(playerOne, vertexLocOneSecond);
-            assertFalse(map.canInitiateRoad(playerOne, edgeLocTwoFirst, vertexLocOneSecond));
-            assertFalse(map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
-            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
+            assertFalse(map.canInitiateRoad(playerOne, edgeLocTwoFirst));
+            assertFalse(map.canInitiateRoad(playerOne, edgeLocOneFirst));
+            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneSecond));
 
             jsonMap.initiateSettlement(playerOne, vertexLocOneFirst);
-            assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneSecond));
-            assertFalse(jsonMap.canInitiateRoad(playerTwo, edgeLocOneFirst, vertexLocOneFirst));
-            jsonMap.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
-            assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneFirst));
+            assertFalse(jsonMap.canInitiateRoad(playerTwo, edgeLocOneFirst));
+            jsonMap.initiateRoad(playerOne, edgeLocOneFirst);
+            assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond));
             jsonMap.initiateSettlement(playerOne, vertexLocOneSecond);
-            assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocTwoFirst, vertexLocOneSecond));
-            assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
-            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
+            assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocTwoFirst));
+            assertFalse(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst));
+            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond));
         } catch(InvalidLocationException | StructureException e) {
             assertTrue(false); // should never reach here
         }
@@ -609,38 +607,38 @@ public class MapTest {
         try {
             assertTrue(map.canInitiateSettlement(playerOne, vertexLocOneFirst));
             map.initiateSettlement(playerOne, vertexLocOneFirst);
-            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
-            map.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
+            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneFirst));
+            map.initiateRoad(playerOne, edgeLocOneFirst);
             assertTrue(map.canInitiateSettlement(playerTwo, vertexLocTwoFirst));
             map.initiateSettlement(playerTwo, vertexLocTwoFirst);
-            assertTrue(map.canInitiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst));
-            map.initiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst);
+            assertTrue(map.canInitiateRoad(playerTwo, edgeLocTwoFirst));
+            map.initiateRoad(playerTwo, edgeLocTwoFirst);
             assertTrue(map.canInitiateSettlement(playerTwo, vertexLocTwoSecond));
             map.initiateSettlement(playerTwo, vertexLocTwoSecond);
-            assertTrue(map.canInitiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond));
-            map.initiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond);
+            assertTrue(map.canInitiateRoad(playerTwo, edgeLocTwoSecond));
+            map.initiateRoad(playerTwo, edgeLocTwoSecond);
             assertTrue(map.canInitiateSettlement(playerOne, vertexLocOneSecond));
             map.initiateSettlement(playerOne, vertexLocOneSecond);
-            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
-            map.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
+            assertTrue(map.canInitiateRoad(playerOne, edgeLocOneSecond));
+            map.initiateRoad(playerOne, edgeLocOneSecond);
 
 
             assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOneFirst));
             jsonMap.initiateSettlement(playerOne, vertexLocOneFirst);
-            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst));
-            jsonMap.initiateRoad(playerOne, edgeLocOneFirst, vertexLocOneFirst);
+            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneFirst));
+            jsonMap.initiateRoad(playerOne, edgeLocOneFirst);
             assertTrue(jsonMap.canInitiateSettlement(playerTwo, vertexLocTwoFirst));
             jsonMap.initiateSettlement(playerTwo, vertexLocTwoFirst);
-            assertTrue(jsonMap.canInitiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst));
-            jsonMap.initiateRoad(playerTwo, edgeLocTwoFirst, vertexLocTwoFirst);
+            assertTrue(jsonMap.canInitiateRoad(playerTwo, edgeLocTwoFirst));
+            jsonMap.initiateRoad(playerTwo, edgeLocTwoFirst);
             assertTrue(jsonMap.canInitiateSettlement(playerTwo, vertexLocTwoSecond));
             jsonMap.initiateSettlement(playerTwo, vertexLocTwoSecond);
-            assertTrue(jsonMap.canInitiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond));
-            jsonMap.initiateRoad(playerTwo, edgeLocTwoSecond, vertexLocTwoSecond);
+            assertTrue(jsonMap.canInitiateRoad(playerTwo, edgeLocTwoSecond));
+            jsonMap.initiateRoad(playerTwo, edgeLocTwoSecond);
             assertTrue(jsonMap.canInitiateSettlement(playerOne, vertexLocOneSecond));
             jsonMap.initiateSettlement(playerOne, vertexLocOneSecond);
-            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond));
-            jsonMap.initiateRoad(playerOne, edgeLocOneSecond, vertexLocOneSecond);
+            assertTrue(jsonMap.canInitiateRoad(playerOne, edgeLocOneSecond));
+            jsonMap.initiateRoad(playerOne, edgeLocOneSecond);
         } catch(Exception ignored) {
 
         }

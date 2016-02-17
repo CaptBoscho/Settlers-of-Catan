@@ -1,73 +1,75 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapControllerState;
+import client.map.MapController;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.Game;
 
 /**
- * @author Kyle Cornelison
+ * @author Joel Bradley
  *
  * Represents Rolling Dice State
  */
-public class RollingState extends MapControllerState {
-    private Game gModel;
+public class RollingState extends MapState {
 
     /**
      * Constructor
      */
-    public RollingState(){
-
+    public RollingState(MapController mapController){
+        super(mapController);
     }
 
-    /**
-     * Initializes the state
-     */
     @Override
-    public void initFromModel() {
-        super.initFromModel();
+    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
+        return false;
     }
 
-    /**
-     * Place Road - State Implementation
-     *
-     * @param edgeLoc
-     */
+    @Override
+    public boolean canPlaceSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceCity(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceRobber(HexLocation hexLoc) {
+        hexLoc = getModelHexLocation(hexLoc);
+        return false;
+    }
+
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        super.placeRoad(edgeLoc);
+        if(canPlaceRoad(edgeLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place Settlement - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        super.placeSettlement(vertLoc);
+        if(canPlaceSettlement(vertLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place City - State Implementation
-     *
-     * @param vertLoc
-     */
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        super.placeCity(vertLoc);
+        if(canPlaceCity(vertLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
-    /**
-     * Place Robber - State Implementation
-     *
-     * @param hexLoc
-     */
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        super.placeRobber(hexLoc);
+        if(canPlaceRobber(hexLoc)) {
+            System.out.println("You're a wizard Harry");
+        }
     }
 
     /**

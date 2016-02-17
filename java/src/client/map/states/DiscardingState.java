@@ -9,14 +9,14 @@ import shared.locations.VertexLocation;
 /**
  * @author Joel Bradley
  *
- * Represents Robbing a Player State
+ * Represents Discarding State
  */
-public class RobbingState extends MapState {
+public class DiscardingState extends MapState {
 
     /**
      * Constructor
      */
-    public RobbingState(MapController mapController){
+    public DiscardingState(MapController mapController){
         super(mapController);
     }
 
@@ -41,8 +41,6 @@ public class RobbingState extends MapState {
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        //TODO: add this method to the facade
-        //return facade.canMoveRobber(hexLoc);
         return false;
     }
 
@@ -70,8 +68,7 @@ public class RobbingState extends MapState {
     @Override
     public void placeRobber(HexLocation hexLoc) {
         if(canPlaceRobber(hexLoc)) {
-            //TODO: add this method to the facade
-            //facade.moveRobber(hexLoc);
+            System.out.println("You're a wizard Harry");
         }
     }
 
