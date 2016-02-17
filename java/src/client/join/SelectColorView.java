@@ -12,7 +12,7 @@ import client.base.*;
  * desired color when they join a game
  */
 @SuppressWarnings("serial")
-public class SelectColorView extends OverlayView implements ISelectColorView {
+public final class SelectColorView extends OverlayView implements ISelectColorView {
 
 	private final int LABEL_TEXT_SIZE = 32;
 	private final int COLOR_BUTTON_TEXT_SIZE = 18;
@@ -47,6 +47,95 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 		lblTitle.setFont(new java.awt.Font(fontName, 1, LABEL_TEXT_SIZE));
 		
 		btnRed = new JButton("Red");
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (e.getSource() == joinButton) {
+					if (selButton != 0) {
+						getController().joinGame(getSelectedColor());
+					}
+				} else if (e.getSource() == cancelButton) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 0;
+					getController().cancelJoinGame();
+				} else if (e.getSource() == btnOrange) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 1;
+					btnOrange.setForeground(Color.white);
+					btnOrange.setBackground(Color.LIGHT_GRAY);
+					btnOrange.setEnabled(false);
+				} else if (e.getSource() == btnRed) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 2;
+					btnRed.setForeground(Color.white);
+					btnRed.setBackground(Color.LIGHT_GRAY);
+					btnRed.setEnabled(false);
+				} else if (e.getSource() == btnYellow) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 3;
+					btnYellow.setForeground(Color.white);
+					btnYellow.setBackground(Color.LIGHT_GRAY);
+					btnYellow.setEnabled(false);
+				} else if (e.getSource() == btnGreen) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 4;
+					btnGreen.setForeground(Color.white);
+					btnGreen.setBackground(Color.LIGHT_GRAY);
+					btnGreen.setEnabled(false);
+				} else if (e.getSource() == btnPurple) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 5;
+					btnPurple.setForeground(Color.white);
+					btnPurple.setBackground(Color.LIGHT_GRAY);
+					btnPurple.setEnabled(false);
+				} else if (e.getSource() == btnBlue) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 6;
+					btnBlue.setForeground(Color.white);
+					btnBlue.setBackground(Color.LIGHT_GRAY);
+					btnBlue.setEnabled(false);
+				} else if (e.getSource() == btnWhite) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 7;
+					btnWhite.setForeground(Color.white);
+					btnWhite.setBackground(Color.LIGHT_GRAY);
+					btnWhite.setEnabled(false);
+				} else if (e.getSource() == btnBrown) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 8;
+					btnBrown.setForeground(Color.white);
+					btnBrown.setBackground(Color.LIGHT_GRAY);
+					btnBrown.setEnabled(false);
+				} else if (e.getSource() == btnPuce) {
+					if (selButton != 0) {
+						resetButton(selButton);
+					}
+					selButton = 9;
+					btnPuce.setForeground(Color.white);
+					btnPuce.setBackground(Color.LIGHT_GRAY);
+					btnPuce.setEnabled(false);
+				}
+			}
+		};
 		btnRed.addActionListener(actionListener);
 		btnRed.setBackground(CatanColor.RED.getJavaColor());
 		btnRed.setFont(new java.awt.Font(fontName, 1, COLOR_BUTTON_TEXT_SIZE));
@@ -119,10 +208,10 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 		joinButton.setFont(new java.awt.Font(fontName, 0, DIALOG_BUTTON_TEXT_SIZE));
 		joinButton.setOpaque(true);
 		
-		JPanel rootPanel = new JPanel();
+		final JPanel rootPanel = new JPanel();
 		rootPanel.setLayout(new BorderLayout(10, 10));
 		
-		JPanel labelPanel = new JPanel();
+		final JPanel labelPanel = new JPanel();
 		labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.LINE_AXIS));
 		labelPanel.add(Box.createHorizontalGlue());
 		labelPanel.add(lblTitle);
@@ -130,7 +219,7 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 		
 		rootPanel.add(labelPanel, BorderLayout.NORTH);
 			
-		JPanel colorsPanel = new JPanel();
+		final JPanel colorsPanel = new JPanel();
 		colorsPanel.setLayout(new GridBagLayout());
 		
 		addColorButton(colorsPanel, btnRed, 0, 0);
@@ -145,7 +234,7 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 		
 		rootPanel.add(colorsPanel, BorderLayout.CENTER);
 		
-		JPanel buttonPanel = new JPanel();
+		final JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
 		buttonPanel.add(Box.createHorizontalGlue());
 		buttonPanel.add(cancelButton);
@@ -160,8 +249,7 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 	}
 	
 	private void addColorButton(JPanel buttonPanel, JButton button, int x, int y) {
-		
-		GridBagConstraints gbc = new GridBagConstraints();
+		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = x;
 		gbc.gridy = y;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -169,96 +257,6 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 		
 		buttonPanel.add(button, gbc);		
 	}
-
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-			if (e.getSource() == joinButton) {
-				if (selButton != 0) {
-					getController().joinGame(getSelectedColor());
-				}
-			} else if (e.getSource() == cancelButton) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 0;
-				getController().cancelJoinGame();
-			} else if (e.getSource() == btnOrange) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 1;
-				btnOrange.setForeground(Color.white);
-				btnOrange.setBackground(Color.LIGHT_GRAY);
-				btnOrange.setEnabled(false);
-			} else if (e.getSource() == btnRed) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 2;
-				btnRed.setForeground(Color.white);
-				btnRed.setBackground(Color.LIGHT_GRAY);
-				btnRed.setEnabled(false);
-			} else if (e.getSource() == btnYellow) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 3;
-				btnYellow.setForeground(Color.white);
-				btnYellow.setBackground(Color.LIGHT_GRAY);
-				btnYellow.setEnabled(false);
-			} else if (e.getSource() == btnGreen) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 4;
-				btnGreen.setForeground(Color.white);
-				btnGreen.setBackground(Color.LIGHT_GRAY);
-				btnGreen.setEnabled(false);
-			} else if (e.getSource() == btnPurple) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 5;
-				btnPurple.setForeground(Color.white);
-				btnPurple.setBackground(Color.LIGHT_GRAY);
-				btnPurple.setEnabled(false);
-			} else if (e.getSource() == btnBlue) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 6;
-				btnBlue.setForeground(Color.white);
-				btnBlue.setBackground(Color.LIGHT_GRAY);
-				btnBlue.setEnabled(false);
-			} else if (e.getSource() == btnWhite) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 7;
-				btnWhite.setForeground(Color.white);
-				btnWhite.setBackground(Color.LIGHT_GRAY);
-				btnWhite.setEnabled(false);
-			} else if (e.getSource() == btnBrown) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 8;
-				btnBrown.setForeground(Color.white);
-				btnBrown.setBackground(Color.LIGHT_GRAY);
-				btnBrown.setEnabled(false);
-			} else if (e.getSource() == btnPuce) {
-				if (selButton != 0) {
-					resetButton(selButton);
-				}
-				selButton = 9;
-				btnPuce.setForeground(Color.white);
-				btnPuce.setBackground(Color.LIGHT_GRAY);
-				btnPuce.setEnabled(false);
-			}
-		}
-	};
 
 	private void resetButton(int val) {
 		switch (val) {
@@ -314,19 +312,16 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 
 	@Override
 	public IJoinGameController getController() {
-
 		return (IJoinGameController) super.getController();
 	}
 
 	@Override
 	public void setColorEnabled(CatanColor color, boolean enable) {
-
 		getButtonForColor(color).setEnabled(enable);
 	}
 
 	@Override
 	public CatanColor getSelectedColor() {
-
 		return getColorByNumber(selButton);
 	}
 
@@ -385,6 +380,4 @@ public class SelectColorView extends OverlayView implements ISelectColorView {
 			return null;
 		}
 	}
-	
 }
-

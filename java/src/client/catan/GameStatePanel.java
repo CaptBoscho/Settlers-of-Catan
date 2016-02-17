@@ -21,8 +21,8 @@ public class GameStatePanel extends JPanel {
 		
 		button = new JButton();
 		
-		Font font = button.getFont();
-		Font newFont = font.deriveFont(font.getStyle(), 20);
+		final Font font = button.getFont();
+		final Font newFont = font.deriveFont(font.getStyle(), 20);
 		button.setFont(newFont);
 		
 		button.setPreferredSize(new Dimension(400, 50));
@@ -38,19 +38,12 @@ public class GameStatePanel extends JPanel {
 	}
 	
 	public void setButtonAction(final IAction action) {
-		ActionListener[] listeners = button.getActionListeners();
-		for(ActionListener listener : listeners) {
+		final ActionListener[] listeners = button.getActionListeners();
+		for(final ActionListener listener : listeners) {
 			button.removeActionListener(listener);
 		}
 		
-		ActionListener actionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				action.execute();
-			}
-		};
+		ActionListener actionListener = e -> action.execute();
 		button.addActionListener(actionListener);
 	}
 }
-

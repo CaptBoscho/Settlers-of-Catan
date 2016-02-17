@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Kyle Cornelison
  */
-public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Add exceptions when danny is done
+public final class Player implements IPlayer,Comparable<Player> { // TODO: 1/30/2016 Add exceptions when danny is done
     private int _id;
     private Name name;
     private int monuments;
@@ -55,6 +55,17 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      */
     public Player(JsonObject json) {
         assert json != null;
+        assert json.has("playerID");
+        assert json.has("playerIndex");
+        assert json.has("monuments");
+        assert json.has("victoryPoints");
+        assert json.has("discarded");
+        assert json.has("playedDevCard");
+        assert json.has("soldiers");
+        assert json.has("resources");
+        assert json.has("roads");
+        assert json.has("settlements");
+        assert json.has("cities");
 
         try {
             setColor(json.get("color").getAsString());
@@ -212,20 +223,20 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @param cards Cards to be discarded
      */
     @Override
-    public List<ResourceCard> discardCards(List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
+    public List<ResourceCard> discardCards(final List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
         assert cards != null;
         assert cards.size() > 0;
         assert this.resourceCardBank != null;
         assert this.developmentCardBank != null;
 
         try {
-            List<ResourceCard> discarded = new ArrayList<>();
-            for (Card card : cards) {
+            final List<ResourceCard> discarded = new ArrayList<>();
+            for (final Card card : cards) {
                 if (card instanceof ResourceCard) {
-                    ResourceCard resourceCard = (ResourceCard) card;
+                   final  ResourceCard resourceCard = (ResourceCard) card;
                     discarded.add(resourceCardBank.discard(resourceCard.getType()));
                 } else if (card instanceof DevelopmentCard) {
-                    DevelopmentCard developmentCard = (DevelopmentCard) card;
+                    final DevelopmentCard developmentCard = (DevelopmentCard) card;
                     developmentCardBank.discard(developmentCard.getType());
                 }
             }
@@ -237,13 +248,23 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         return null;
     }
 
-    public List<ResourceCard> discardResourceCards(List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
+    public List<ResourceCard> discardResourceCards(ResourceType rt, int amount) {
+        assert rt != null;
+        try {
+            return this.resourceCardBank.discard(rt, amount);
+        } catch (InvalidTypeException | InsufficientResourcesException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<ResourceCard> discardResourceCards(final List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
         assert cards != null;
         assert cards.size() > 0;
         assert this.resourceCardBank != null;
 
         final List<ResourceCard> discarded = new ArrayList<>();
-        for(ResourceType rt: cards) {
+        for(final ResourceType rt: cards) {
             discarded.add(resourceCardBank.discard(rt));
         }
 
@@ -251,19 +272,26 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         return discarded;
     }
 
-    public Integer howManyofThisCard(ResourceType t) throws InvalidTypeException {
+    public Integer howManyOfThisCard(ResourceType t) throws InvalidTypeException {
         assert t != null;
         assert this.resourceCardBank != null;
 
-        if(t == ResourceType.SHEEP){return resourceCardBank.getNumberOfSheep();}
-        if(t == ResourceType.ORE){return resourceCardBank.getNumberOfOre();}
-        if(t == ResourceType.BRICK){return resourceCardBank.getNumberOfBrick();}
-        if(t == ResourceType.WOOD){return resourceCardBank.getNumberOfWood();}
-        if(t == ResourceType.WHEAT){return resourceCardBank.getNumberOfWheat();}
+        switch(t) {
+            case SHEEP:
+                return resourceCardBank.getNumberOfSheep();
+            case ORE:
+                return resourceCardBank.getNumberOfOre();
+            case BRICK:
+                return resourceCardBank.getNumberOfBrick();
+            case WOOD:
+                return resourceCardBank.getNumberOfWood();
+            case WHEAT:
+                return resourceCardBank.getNumberOfWheat();
+        }
         throw new InvalidTypeException("not correct resourcetype");
     }
 
-    public Integer getNumberOfType(ResourceType t) {
+    public int getNumberOfType(ResourceType t) {
         assert t != null;
         assert this.resourceCardBank != null;
 
@@ -432,7 +460,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * Action - Player plays Monopoly
      */
     @Override
-    public void useMonopoly() throws DevCardException {
+    public void discardMonopoly() throws DevCardException {
         if(canUseMonopoly()) {
             developmentCardBank.useMonopoly();
         } else {
@@ -609,7 +637,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * Increments the player's monuments
      * - points are added when the player plays a monument card
      */
-    private void incrementMonuments(){
+    private void incrementMonuments() {
         this.monuments++;
     }
 
@@ -626,10 +654,14 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
         }
     }
 
-    public void playKnight(){this.soldiers++;}
+    public void playKnight() {
+        this.soldiers++;
+    }
 
 
-    public Integer getKnights(){return this.soldiers;}
+    public Integer getKnights() {
+        return this.soldiers;
+    }
 
     /**
      * Adds a resource card to resourceCardBank
@@ -653,7 +685,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
     }
 
     @Override
-    public int compareTo(Player otherPlayer) {
+    public int compareTo(final Player otherPlayer) {
         if (this._id > otherPlayer._id) {
             return 1;
         } else if (this._id < otherPlayer._id) {
@@ -671,7 +703,7 @@ public class Player implements IPlayer,Comparable<Player>{ // TODO: 1/30/2016 Ad
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("cities", structureBank.getAvailableCities());
         json.addProperty("color", getColorString());
         json.addProperty("discarded", discarded);

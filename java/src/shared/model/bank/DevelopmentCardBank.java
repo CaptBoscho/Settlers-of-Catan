@@ -14,7 +14,7 @@ import java.util.*;
  *
  * @author Danny Harding
  */
-public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBank {
+public final class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBank {
     static final int MAX_SOLDIER_CARDS = 14;
     static final int MAX_MONUMENT_CARDS = 5;
     static final int MAX_MONOPOLY_CARDS = 2;
@@ -164,7 +164,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
      * @param cardToAdd Development card to add to the bank
      */
     @Override
-    public void addDevCard(DevelopmentCard cardToAdd) throws InvalidTypeException {
+    public void addDevCard(final DevelopmentCard cardToAdd) throws InvalidTypeException {
         assert cardToAdd != null;
 
         if (ownedByGame) {
@@ -182,7 +182,6 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
                     newMonopolyCards.add((MonopolyCard) cardToAdd);
                     break;
                 case YEAR_OF_PLENTY:
-                    System.out.println("here i am");
                     newYearOfPlentyCards.add((YearOfPlentyCard) cardToAdd);
                     break;
                 case ROAD_BUILD:
@@ -242,6 +241,11 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
         return !ownedByGame && (monopolyCards.size() > 0);
     }
 
+    /**
+     * Removes the Monopoly card from the user's bank
+     *
+     * @return
+     */
     @Override
     public DevelopmentCard useMonopoly() {
         try {
@@ -457,7 +461,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("monopoly", getNumberOfMonopolies());
         json.addProperty("monument", getNumberOfMonuments());
         json.addProperty("roadBuilding", getNumberOfRoadBuilds());
@@ -468,7 +472,7 @@ public class DevelopmentCardBank implements JsonSerializable, IDevelopmentCardBa
 
     @Override
     public JsonObject newCardsToJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("monopoly", newMonopolyCards.size());
         json.addProperty("monument", newMonumentCards.size());
         json.addProperty("roadBuilding", newRoadBuildCards.size());

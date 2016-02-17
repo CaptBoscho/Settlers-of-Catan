@@ -30,12 +30,12 @@ public class PlaceholderTextField extends JTextField {
         super.paintComponent(graphics);
 
         // If we don't have a placeholder or there is text continue
-        if (placeholder.isEmpty() || !getText().isEmpty()) {
+        if(placeholder.isEmpty() || !getText().isEmpty()) {
             return;
         }
 
         // Render the placeholder text
-        Graphics2D g2d = (Graphics2D) graphics;
+        final Graphics2D g2d = (Graphics2D) graphics;
         g2d.setRenderingHint(
             RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON

@@ -6,4 +6,3 @@ public enum PieceType {
 	CITY,
 	ROBBER
 }
-

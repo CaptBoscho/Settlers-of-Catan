@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author Joel Bradley
  */
-public class Map implements IMap, JsonSerializable{
+public final class Map implements IMap, JsonSerializable{
 
     private java.util.Map<HexLocation, Hex> hexes;
     private java.util.Map<EdgeLocation, Edge> edges;
@@ -38,7 +38,7 @@ public class Map implements IMap, JsonSerializable{
     /**
      * Default Constructor that initializes the map
      */
-    public Map(boolean randomHexes, boolean randomChits, boolean randomPorts) {
+    public Map(final boolean randomHexes, final boolean randomChits, final boolean randomPorts) {
         //initialize fields
         hexes = new HashMap<>();
         chits = new HashMap<>();
@@ -59,7 +59,7 @@ public class Map implements IMap, JsonSerializable{
      * Constructor that builds the map from a json blob
      * @param blob JsonObject
      */
-    public Map(JsonObject blob) {
+    public Map(final JsonObject blob) {
         assert blob != null;
 
         final Gson gson = new Gson();
@@ -86,7 +86,7 @@ public class Map implements IMap, JsonSerializable{
      ============================================*/
 
     @Override
-    public java.util.Map<Integer, List<ResourceType>> getResources(int diceRoll) throws InvalidDiceRollException {
+    public java.util.Map<Integer, List<ResourceType>> getResources(final int diceRoll) throws InvalidDiceRollException {
         assert diceRoll > 0;
         assert this.chits != null;
         assert this.robber != null;
@@ -111,7 +111,7 @@ public class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public boolean canInitiateSettlement(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
+    public boolean canInitiateSettlement(final int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
         assert playerID >= 0 && playerID <= 3;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
@@ -146,8 +146,6 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -405,8 +403,6 @@ public class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -796,10 +792,10 @@ public class Map implements IMap, JsonSerializable{
         }
     }
 
-    private void makeRoads(JsonArray jsonArray) {
+    private void makeRoads(final JsonArray jsonArray) {
         assert jsonArray != null;
 
-        for(JsonElement jsonElem : jsonArray) {
+        for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
             final int playerID = json.get("owner").getAsInt() + 1;
             EdgeLocation edgeLoc = new EdgeLocation(json.get("location").getAsJsonObject());
@@ -818,10 +814,10 @@ public class Map implements IMap, JsonSerializable{
         }
     }
 
-    private void makeSettlements(JsonArray jsonArray) {
+    private void makeSettlements(final JsonArray jsonArray) {
         assert jsonArray != null;
 
-        for(JsonElement jsonElem : jsonArray) {
+        for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
             final int playerID = json.get("owner").getAsInt() + 1;
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
@@ -843,10 +839,10 @@ public class Map implements IMap, JsonSerializable{
         }
     }
 
-    private void makeCities(JsonArray jsonArray) {
+    private void makeCities(final JsonArray jsonArray) {
         assert jsonArray != null;
 
-        for(JsonElement jsonElem : jsonArray) {
+        for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
             final int playerID = json.get("owner").getAsInt() + 1;
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());

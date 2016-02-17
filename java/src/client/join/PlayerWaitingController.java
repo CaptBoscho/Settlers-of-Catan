@@ -9,19 +9,16 @@ import client.base.*;
 public class PlayerWaitingController extends Controller implements IPlayerWaitingController {
 
 	public PlayerWaitingController(IPlayerWaitingView view) {
-
 		super(view);
 	}
 
 	@Override
 	public IPlayerWaitingView getView() {
-
 		return (IPlayerWaitingView)super.getView();
 	}
 
 	@Override
 	public void start() {
-
 		getView().showModal();
 	}
 
@@ -33,4 +30,3 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	}
 
 }
-

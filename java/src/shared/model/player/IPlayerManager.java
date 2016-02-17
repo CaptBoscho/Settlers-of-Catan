@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import shared.definitions.CatanColor;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 
@@ -47,6 +48,8 @@ public interface IPlayerManager {
      */
     Player getPlayerByID(int id) throws PlayerExistsException;
 
+    CatanColor getPlayerColorByID(int id) throws PlayerExistsException;
+
     /**
      * Gets a player by index
      * @param index Index of the player
@@ -55,7 +58,7 @@ public interface IPlayerManager {
      */
     Player getPlayerByIndex(int index) throws PlayerExistsException;
 
-    Integer getKnights(int playerID) throws PlayerExistsException;
+    int getKnights(int playerID) throws PlayerExistsException;
 
     void playKnight(int playerID) throws PlayerExistsException;
 
@@ -179,7 +182,7 @@ public interface IPlayerManager {
      * Action - Player plays Monopoly
      * @param id ID of the player
      */
-    void useMonopoly(int id, int num, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
+    void useMonopoly(int id, ResourceType type) throws DevCardException,PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
     /**
      * Determine if Player can play Monument

@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public class MaritimeTradeDTO implements JsonSerializable {
+public final class MaritimeTradeDTO implements JsonSerializable {
 
     private int playerIndex;
     private int ratio;

@@ -3,7 +3,7 @@ package shared.model.game;
 /**
  * Representation of Longest Road Card
  */
-public class LongestRoad {
+public final class LongestRoad {
     private int playerID;
     private static final int pointWorth = 2;
     private int size = 0;

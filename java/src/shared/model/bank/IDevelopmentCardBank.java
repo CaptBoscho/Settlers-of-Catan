@@ -6,43 +6,48 @@ import shared.exceptions.BadCallerException;
 import shared.model.cards.devcards.DevelopmentCard;
 
 /**
- * Created by Danny on 2/1/16.
+ * @author Derek Argueta
  */
 public interface IDevelopmentCardBank {
 
-    public DevelopmentCard draw() throws Exception;
+    DevelopmentCard draw() throws Exception;
 
-    public void addDevCard(DevelopmentCard cardToAdd) throws InvalidTypeException;
+    void addDevCard(DevelopmentCard cardToAdd) throws InvalidTypeException;
 
-    public int size();
+    int size();
 
-    public boolean canUseYearOfPlenty();
+    boolean canUseYearOfPlenty();
 
-    public DevelopmentCard useYearOfPlenty();
+    DevelopmentCard useYearOfPlenty();
 
-    public boolean canUseSoldier();
+    boolean canUseSoldier();
 
-    public DevelopmentCard useSoldier();
+    DevelopmentCard useSoldier();
 
-    public boolean canUseMonopoly();
+    boolean canUseMonopoly();
 
-    public DevelopmentCard useMonopoly();
+    /**
+     * Removes the Monopoly card from the user's bank
+     *
+     * @return
+     */
+    DevelopmentCard useMonopoly();
 
-    public boolean canUseMonument();
+    boolean canUseMonument();
 
-    public DevelopmentCard useMonument();
+    DevelopmentCard useMonument();
 
-    public boolean canUseRoadBuild();
+    boolean canUseRoadBuild();
 
-    public DevelopmentCard useRoadBuild();
+    DevelopmentCard useRoadBuild();
 
-    public void addDevCards(JsonObject DevCards) throws BadCallerException;
+    void addDevCards(JsonObject DevCards) throws BadCallerException;
 
     void moveNewToOld() throws BadCallerException;
 
-    public JsonObject toJSON();
+    JsonObject toJSON();
 
-    public JsonObject newCardsToJSON();
+    JsonObject newCardsToJSON();
 
     DevelopmentCard discard(DevCardType type) throws InvalidTypeException;
 

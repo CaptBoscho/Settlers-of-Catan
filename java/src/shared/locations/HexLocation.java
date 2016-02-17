@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * Represents the location of a hex on a hex map
  */
-public class HexLocation implements JsonSerializable {
+public final class HexLocation implements JsonSerializable {
 	
 	private int x;
 	private int y;

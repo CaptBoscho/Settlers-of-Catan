@@ -6,7 +6,7 @@ import client.base.*;
 /**
  * Implementation for the roll controller
  */
-public class RollController extends Controller implements IRollController {
+public final class RollController extends Controller implements IRollController {
 
 	private IRollResultView resultView;
 

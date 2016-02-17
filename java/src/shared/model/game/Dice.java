@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Representation of game dice
  */
-public class Dice {
+public final class Dice {
     private int min;
     private int max;
 
@@ -22,7 +22,7 @@ public class Dice {
      * @param min minimum value the dice can return
      * @param max maximum value the dice can return
      */
-    public Dice(int min, int max) {
+    public Dice(final int min, final int max) {
         assert max > min;
 
         this.min = min;

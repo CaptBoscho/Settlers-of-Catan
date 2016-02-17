@@ -64,28 +64,28 @@ public class LoginController extends Controller implements ILoginController {
 		getLoginView().showModal();
 	}
 
-	// TODO: Not hard-code host/port, add proper error messaging
+	// TODO: add proper error messaging
 	@Override
 	public void signIn() {
 		final String username = getLoginView().getLoginUsername();
 		final String password = getLoginView().getLoginPassword();
 
-		AuthDTO dto = new AuthDTO(username, password);
-		if(new ServerProxy("localhost", 8081).authenticateUser(dto)) {
+		final AuthDTO dto = new AuthDTO(username, password);
+		if(ServerProxy.getInstance().authenticateUser(dto)) {
 			// If log in succeeded
 			getLoginView().closeModal();
 			loginAction.execute();
 		}
 	}
 
-	// TODO: Not hard-code host/port, add proper error messaging
+	// TODO: add proper error messaging
 	@Override
 	public void register() {
 		final String username = getLoginView().getLoginUsername();
 		final String password = getLoginView().getLoginPassword();
 
-		AuthDTO dto = new AuthDTO(username, password);
-		if(new ServerProxy("localhost", 8081).registerUser(dto)) {
+		final AuthDTO dto = new AuthDTO(username, password);
+		if(ServerProxy.getInstance().registerUser(dto)) {
 			// If register succeeded
 			getLoginView().closeModal();
 			loginAction.execute();
