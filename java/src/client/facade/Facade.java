@@ -425,6 +425,21 @@ public class Facade {
         return this.game.getAvailableCities(id);
     }
 
+    public boolean canMoveRobber(int id) {
+        return this.game.canPlaceRobber(id);
+    }
+
+    public Set<Integer> moveRobber(int id, HexLocation hexloc){
+        try{
+            return this.game.placeRobber(id, hexloc);
+        }catch(AlreadyRobbedException e){
+
+        }catch(InvalidLocationException e){
+
+        }
+        return null;
+    }
+
     /**
      * plays the Development Card
      *
