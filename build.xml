@@ -122,15 +122,29 @@
 			</manifest>
 		</jar>
 	</target>
-	
+
 	<target name="our-client" depends="package" description="compiles, packages, and runs the student client">
+		<java classname="client.main.Catan" fork="yes">
+			<classpath>
+				<path refid="java.lib.classpath"/>
+			</classpath>
+			<classpath>
+				<pathelement location="${java.build}"/>
+			</classpath>
+			<assertions>
+				<enable/>
+			</assertions>
+		</java>
+	</target>
+
+	<!--<target name="our-client" depends="package" description="compiles, packages, and runs the student client">
 		<java jar="${java.dist}/catan-client.jar" dir="${java.dist}" fork="yes">
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
 			<assertions>
 				<enable/>
 			</assertions>
 		</java>
-	</target>
+	</target>-->
 
 	<target name="test" depends="compile, compile-test" description="compiles, packages, and runs the JUnit tests for the project">
 		<java classname="TestRunner" fork="yes">
@@ -139,7 +153,6 @@
 			</classpath>
 			<classpath>
 				<pathelement location="${java.build}"/>
-				<pathelement location="java.build.test"/>
 			</classpath>
 			<assertions>
 				<enable/>
