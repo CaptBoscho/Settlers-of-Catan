@@ -375,28 +375,6 @@ public class Facade {
         }
     }
 
-
-    /**
-     * Facade asks the game who then asks the turn tracker if the
-     * player can play a Development Card
-     *
-     * @param playerID The ID of the player asking this
-     * @return A boolean value indicating if a development card can be played
-     */
-    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
-        assert playerID >= 0;
-        assert dc != null;
-
-        if(myTurn(playerID)){
-            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
-            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
-            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
-            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
-            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
-        }
-        return false;
-    }
-
     public shared.model.map.Map getMap(){return this.game.getMap();}
 
     public TurnTracker.Phase getPhase(){return this.game.getCurrentPhase();}
@@ -441,6 +419,45 @@ public class Facade {
     }
 
     //TODO devcard functions
+
+    public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
+        try {
+
+            if (this.game.canUseSoldier(playerID, hexloc)) {
+                return this.game.useSoldier(playerID, hexloc);
+            }
+            return null;
+        } catch(PlayerExistsException e){
+            return null;
+        } catch(AlreadyRobbedException e){
+            return null;
+        } catch(DevCardException e){
+            return null;
+        } catch(InvalidLocationException e){
+            return null;
+        }
+    }
+
+    /**
+     * Facade asks the game who then asks the turn tracker if the
+     * player can play a Development Card
+     *
+     * @param playerID The ID of the player asking this
+     * @return A boolean value indicating if a development card can be played
+     */
+  /*  public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
+        assert playerID >= 0;
+        assert dc != null;
+
+        if(myTurn(playerID)){
+            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
+            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
+            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
+            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
+            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
+        }
+        return false;
+    }*/
 
     /**
      * plays the Development Card
