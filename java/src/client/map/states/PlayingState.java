@@ -60,8 +60,7 @@ public class PlayingState extends MapState {
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        return facade.canMoveRobber(hexLoc);
-        return false;
+        return facade.canMoveRobber(userCookie.getPlayerId(), hexLoc);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class PlayingState extends MapState {
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        facade.moveRobber(hexLoc);
+        facade.moveRobber(userCookie.getPlayerId(), hexLoc);
     }
 
     /**
