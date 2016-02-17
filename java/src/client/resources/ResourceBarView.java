@@ -410,7 +410,8 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			this.setElementImage(new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB));
 			this.setElementCount(elementCount);
 		}
-		
+
+		//TODO use this guy to set buildings as enabled
 		public ResourceElement(ResourceBarElement type,
 		                       boolean clickable,
 		                       boolean enabled,
@@ -452,7 +453,8 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 		{
 			return this._clickable;
 		}
-		
+
+        //TODO yes!! i found it
 		public void setEnabled(boolean enabled) {
 			this._enabled = enabled;
 			this.update();
@@ -485,7 +487,8 @@ public class ResourceBarView extends PanelView implements IResourceBarView
 			                                   null).filter(image, null);
 			this.update();
 		}
-		
+
+        //TODO found this one too!
 		public void setElementCount(int elementCount) {
 			this._elementCount = elementCount;
 			this.update();

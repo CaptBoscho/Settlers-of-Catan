@@ -3,19 +3,58 @@ package client.resources;
 import java.util.*;
 
 import client.base.*;
+import client.facade.Facade;
+import client.services.UserCookie;
+import shared.exceptions.PlayerExistsException;
+import shared.model.game.Game;
 
 
 /**
  * Implementation for the resource bar controller
  */
-public class ResourceBarController extends Controller implements IResourceBarController {
+public class ResourceBarController extends Controller implements IResourceBarController, Observer {
 
 	private Map<ResourceBarElement, IAction> elementActions;
+    private Game game = null;
+    private Facade facade = Facade.getInstance();
+    private int ID = UserCookie.getInstance().getPlayerId();
 	
 	public ResourceBarController(IResourceBarView view) {
 		super(view);
 		elementActions = new HashMap<ResourceBarElement, IAction>();
+        facade.addObserver(this);
 	}
+
+    /**
+     * this is where my code goes that updates the ResourceElements
+     * @param obs
+     * @param obj
+     */
+	public void update(Observable obs, Object obj){
+        try {
+            boolean enableRoad = facade.ableToBuildRoad(ID);
+            boolean enableSettlement = facade.ableToBuildSettlement(ID);
+            boolean enableCity = facade.ableToBuildCity(ID);
+
+            int roadcount = facade.getAvailableRoads(ID);
+            int settlementcount = facade.getAvailableSettlements(ID);
+            int citycount = facade.getAvailableCities(ID);
+
+            ResourceBarElement road = ResourceBarElement.ROAD;
+            ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
+            ResourceBarElement city = ResourceBarElement.CITY;
+
+            getView().setElementEnabled(road, enableRoad);
+            getView().setElementEnabled(settle, enableSettlement);
+            getView().setElementEnabled(city, enableCity);
+
+            getView().setElementAmount(road, roadcount);
+            getView().setElementAmount(settle, settlementcount);
+            getView().setElementAmount(city, citycount);
+        } catch(PlayerExistsException e){
+            System.out.println("update function in ResourceBarController");
+        }
+    }
 
 	@Override
 	public IResourceBarView getView() {
