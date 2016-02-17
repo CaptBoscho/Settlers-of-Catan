@@ -1,7 +1,9 @@
-package client.map;
+package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.facade.Facade;
+import client.map.MapController;
+import client.services.UserCookie;
 import shared.definitions.CatanColor;
 import shared.definitions.PieceType;
 import shared.definitions.PortType;
@@ -20,16 +22,18 @@ import java.util.ArrayList;
  *
  * Base class for the state of the Map Controller
  */
-public class MapState {
+abstract public class MapState {
 
     protected MapController mapController;
     protected Facade facade;
+    protected UserCookie userCookie;
     /**
      * Constructor
      */
     public MapState(MapController mapController){
         this.mapController = mapController;
         facade = Facade.getInstance();
+        userCookie = UserCookie.getInstance();
         initFromModel();
     }
 
@@ -43,6 +47,18 @@ public class MapState {
 
     protected VertexLocation getUIVertexLocation(VertexLocation vertexLoc) {
         return new VertexLocation(getUIHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
+    }
+
+    protected HexLocation getModelHexLocation(HexLocation hexLoc) {
+        return new HexLocation(hexLoc.getX(), hexLoc.getY()+hexLoc.getX());
+    }
+
+    protected EdgeLocation getModelEdgeLocation(EdgeLocation edgeLoc) {
+        return new EdgeLocation(getModelHexLocation(edgeLoc.getHexLoc()), edgeLoc.getDir());
+    }
+
+    protected VertexLocation getModelVertexLocation(VertexLocation vertexLoc) {
+        return new VertexLocation(getModelHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
     }
 
     /**
@@ -115,33 +131,45 @@ public class MapState {
         portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.North), portType);
 
-        //draw roads TODO:figure out how to handle this player doesn't exist exception
+        //draw roads
         java.util.Map<Integer, ArrayList<Edge>> roads = map.getRoads();
         for(java.util.Map.Entry<Integer, ArrayList<Edge>> entry : roads.entrySet()) {
             ArrayList<Edge> roadList = entry.getValue();
             for(Edge edge : roadList) {
-                mapController.getView().placeRoad(getUIEdgeLocation(edge.getEdgeLoc()),
-                        facade.getPlayerColorByID(entry.getKey()));
+                try {
+                    mapController.getView().placeRoad(getUIEdgeLocation(edge.getEdgeLoc()),
+                            facade.getPlayerColorByID(entry.getKey()));
+                } catch (PlayerExistsException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
 
-        //draw settlements TODO:figure out how to handle this player doesn't exist exception
+        //draw settlements
         java.util.Map<Integer, ArrayList<Vertex>> settlements = map.getSettlements();
         for(java.util.Map.Entry<Integer, ArrayList<Vertex>> entry : settlements.entrySet()) {
             ArrayList<Vertex> settlementList = entry.getValue();
             for(Vertex vertex : settlementList) {
-                mapController.getView().placeSettlement(getUIVertexLocation(vertex.getVertexLoc()),
-                        facade.getPlayerColorByID(entry.getKey()));
+                try {
+                    mapController.getView().placeSettlement(getUIVertexLocation(vertex.getVertexLoc()),
+                            facade.getPlayerColorByID(entry.getKey()));
+                } catch (PlayerExistsException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
 
-        //draw cities TODO:figure out how to handle this player doesn't exist exception
+        //draw cities
         java.util.Map<Integer, ArrayList<Vertex>> cities = map.getCities();
         for(java.util.Map.Entry<Integer, ArrayList<Vertex>> entry : cities.entrySet()) {
             ArrayList<Vertex> cityList = entry.getValue();
             for(Vertex vertex : cityList) {
-                mapController.getView().placeCity(getUIVertexLocation(vertex.getVertexLoc()),
-                        facade.getPlayerColorByID(entry.getKey()));
+                try {
+                    mapController.getView().placeCity(getUIVertexLocation(vertex.getVertexLoc()),
+                            facade.getPlayerColorByID(entry.getKey()));
+                } catch (PlayerExistsException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
 
@@ -150,10 +178,7 @@ public class MapState {
 
     }
 
-    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-        // TODO: implement
-        return true;
-    }
+    abstract public boolean canPlaceRoad(EdgeLocation edgeLoc);
 
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
         // TODO -- implement

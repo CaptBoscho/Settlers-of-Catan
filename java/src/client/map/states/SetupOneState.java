@@ -2,11 +2,9 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
-import client.map.MapState;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.game.Game;
 
 /**
  * @author Kyle Cornelison
@@ -22,12 +20,10 @@ public class SetupOneState extends MapState {
         super(mapController);
     }
 
-    /**
-     * Initializes the state
-     */
     @Override
-    public void initFromModel() {
-        super.initFromModel();
+    public boolean canPlaceRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
+        return facade.canInitiateRoad(userCookie.getPlayerId(), edgeLoc);
     }
 
     /**

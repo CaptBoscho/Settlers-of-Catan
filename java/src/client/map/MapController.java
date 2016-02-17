@@ -6,10 +6,12 @@ import client.facade.Facade;
 import client.map.states.*;
 import client.services.UserCookie;
 import shared.definitions.*;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.*;
 import client.base.*;
 import client.data.*;
-import shared.model.game.TurnTracker;
+
+import static shared.model.game.TurnTracker.*;
 
 
 /**
@@ -20,36 +22,36 @@ public class MapController extends Controller implements IMapController, Observe
 	private IRobView robView;
 	private Facade facade;
     private UserCookie userCookie;
-    private client.map.MapState mapState;
+    private MapState mapState;
 	
 	public MapController(IMapView view, IRobView robView) {
 		super(view);
 		setRobView(robView);
         facade = Facade.getInstance();
-        userCookie.getInstance();
+        userCookie = UserCookie.getInstance();
         facade.addObserver(this);
         initialize();
 	}
 
     public void initialize() {
-        TurnTracker.Phase state = facade.getPhase();
+        Phase state = facade.getPhase();
         switch(state) {
-            case TurnTracker.Phase.SETUPONE:
+            case SETUPONE:
                 mapState = new SetupOneState(this);
                 break;
-            case TurnTracker.Phase.SETUPTWO:
+            case SETUPTWO:
                 mapState = new SetupTwoState(this);
                 break;
-            case TurnTracker.Phase.ROLLING:
+            case ROLLING:
                 mapState = new RollingState(this);
                 break;
-            case TurnTracker.Phase.ROBBING:
+            case ROBBING:
                 mapState = new RobbingState(this);
                 break;
-            case TurnTracker.Phase.PLAYING:
+            case PLAYING:
                 mapState = new PlayingState(this);
                 break;
-            case TurnTracker.Phase.DISCARDING:
+            case DISCARDING:
                 mapState = new DiscardingState(this);
                 break;
             default:
@@ -87,17 +89,29 @@ public class MapController extends Controller implements IMapController, Observe
 
 	public void placeRoad(EdgeLocation edgeLoc) {
 		mapState.placeRoad(edgeLoc);
-		getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerID()));
+		try {
+			getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+		} catch (PlayerExistsException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
 		mapState.placeSettlement(vertLoc);
-		getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerID()));
+		try {
+			getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+		} catch (PlayerExistsException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
 		mapState.placeCity(vertLoc);
-		getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerID()));
+		try {
+			getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+		} catch (PlayerExistsException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
