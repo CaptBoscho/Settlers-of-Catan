@@ -22,6 +22,7 @@ import shared.definitions.ResourceType;
 import javax.annotation.Resource;
 import javax.naming.InsufficientResourcesException;
 import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
@@ -311,5 +312,17 @@ public interface IGame {
 
 
     public Map getMap();
+
+    public boolean ableToBuildSettlement(int id) throws PlayerExistsException;
+
+    public boolean ableToBuildRoad(int id) throws PlayerExistsException;
+
+    public boolean ableToBuildCity(int id) throws PlayerExistsException;
+
+    public Integer getAvailableRoads(int id) throws PlayerExistsException;
+
+    public Integer getAvailableSettlements(int id) throws PlayerExistsException;
+
+    public Integer getAvailableCities(int id) throws PlayerExistsException;
 
 }

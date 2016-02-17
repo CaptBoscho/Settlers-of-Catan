@@ -1,9 +1,13 @@
 package client.join;
 
+import client.services.ServerProxy;
+import client.services.UserCookie;
 import shared.definitions.CatanColor;
 import client.base.*;
 import client.data.*;
 import client.misc.*;
+import shared.dto.CreateGameDTO;
+import shared.dto.JoinGameDTO;
 
 
 /**
@@ -35,7 +39,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	}
 	
 	public IJoinGameView getJoinGameView() {
-		
 		return (IJoinGameView)super.getView();
 	}
 	
@@ -45,7 +48,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @return The action to be executed when the user joins a game
 	 */
 	public IAction getJoinAction() {
-		
 		return joinAction;
 	}
 
@@ -54,18 +56,15 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * 
 	 * @param value The action to be executed when the user joins a game
 	 */
-	public void setJoinAction(IAction value) {	
-		
+	public void setJoinAction(IAction value) {
 		joinAction = value;
 	}
 	
 	public INewGameView getNewGameView() {
-		
 		return newGameView;
 	}
 
 	public void setNewGameView(INewGameView newGameView) {
-		
 		this.newGameView = newGameView;
 	}
 	
@@ -102,7 +101,16 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void createNewGame() {
+        final boolean randomHexes = getNewGameView().getRandomlyPlaceHexes();
+        final boolean randomNumbers = getNewGameView().getRandomlyPlaceNumbers();
+        final boolean randomPorts = getNewGameView().getUseRandomPorts();
+        final String gameName = getNewGameView().getTitle();
+        final CreateGameDTO dto = new CreateGameDTO(randomHexes, randomNumbers, randomPorts, gameName);
+        final GameInfo newGame = ServerProxy.getInstance().createNewGame(dto);
 		getNewGameView().closeModal();
+
+        // TODO - verify this is the required functionality
+        this.startJoinGame(newGame);
 	}
 
 	@Override
@@ -117,7 +125,11 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void joinGame(CatanColor color) {
-		
+        final JoinGameDTO dto = new JoinGameDTO(UserCookie.getInstance().getPlayerId(), color);
+        ServerProxy.getInstance().joinGame(dto);
+
+        // TODO - create/update game instance
+
 		// If join succeeded
 		getSelectColorView().closeModal();
 		getJoinGameView().closeModal();

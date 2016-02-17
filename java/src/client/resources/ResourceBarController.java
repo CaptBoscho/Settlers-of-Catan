@@ -64,6 +64,5 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			action.execute();
 		}
 	}
-
 }
 

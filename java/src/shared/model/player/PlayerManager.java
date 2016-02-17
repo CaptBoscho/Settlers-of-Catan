@@ -561,4 +561,16 @@ public final class PlayerManager implements IPlayerManager {
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException {
         return getPlayerByID(id).getColor();
     }
+
+    public Integer getAvailableRoads(int id) throws PlayerExistsException {
+        return getPlayerByID(id).getAvailableRoads();
+    }
+
+    public Integer getAvailableSettlements(int id) throws PlayerExistsException {
+        return getPlayerByID(id).getAvailableSettlements();
+    }
+
+    public Integer getAvailableCities(int id) throws PlayerExistsException {
+        return getPlayerByID(id).getAvailableCities();
+    }
 }

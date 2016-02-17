@@ -1,9 +1,7 @@
 
 package client.facade;
-import client.services.IServer;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
-import com.sun.corba.se.spi.activation.Server;
 import shared.dto.BuildCityDTO;
 import shared.dto.BuildRoadDTO;
 import shared.dto.BuildSettlementDTO;
@@ -125,6 +123,20 @@ public class Facade {
         assert playerID >= 0;
 
         return playerID == this.game.getCurrentTurn();
+    }
+
+    public Integer getCurrentTurn(){return this.game.getCurrentTurn();}
+
+    public void finishTurn(int playerID){
+        try{
+            this.game.finishTurn(playerID);
+        } catch(Exception e){
+            System.out.println("facade finishTurn");
+        }
+    }
+
+    public boolean canFinishTurn(int playerID){
+        return this.game.canFinishTurn(playerID);
     }
 
     private HexLocation getServerHexLocation(HexLocation hexLoc){
@@ -347,6 +359,30 @@ public class Facade {
     public shared.model.map.Map getMap(){return this.game.getMap();}
 
     public TurnTracker.Phase getPhase(){return this.game.getCurrentPhase();}
+
+    public boolean ableToBuildRoad(int id) throws PlayerExistsException{
+        return this.game.ableToBuildRoad(id);
+    }
+
+    public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
+        return this.game.ableToBuildSettlement(id);
+    }
+
+    public boolean ableToBuildCity(int id) throws PlayerExistsException{
+        return this.game.ableToBuildCity(id);
+    }
+
+    public Integer getAvailableRoads(int id) throws PlayerExistsException{
+        return this.game.getAvailableRoads(id);
+    }
+
+    public Integer getAvailableSettlements(int id) throws PlayerExistsException{
+        return this.game.getAvailableSettlements(id);
+    }
+
+    public Integer getAvailableCities(int id) throws PlayerExistsException{
+        return this.game.getAvailableCities(id);
+    }
 
     /**
      * plays the Development Card
