@@ -1,5 +1,6 @@
 package client.join;
 
+import client.facade.Facade;
 import client.services.ServerProxy;
 import client.services.UserCookie;
 import shared.definitions.CatanColor;
@@ -8,6 +9,9 @@ import client.data.*;
 import client.misc.*;
 import shared.dto.CreateGameDTO;
 import shared.dto.JoinGameDTO;
+import shared.exceptions.PlayerExistsException;
+
+import java.util.List;
 
 
 /**
@@ -30,9 +34,21 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 */
 	public JoinGameController(IJoinGameView view, INewGameView newGameView, 
 								ISelectColorView selectColorView, IMessageView messageView) {
-
 		super(view);
-
+		int playerID = UserCookie.getInstance().getPlayerId();
+		PlayerInfo playerInfo = new PlayerInfo();
+		try {
+			playerInfo.setColor(Facade.getInstance().getPlayerColorByID(playerID));
+			playerInfo.setId(playerID);
+			playerInfo.setName(UserCookie.getInstance().getUsername());
+			playerInfo.setPlayerIndex(playerID);
+		} catch (PlayerExistsException e) {
+			e.printStackTrace();
+		}
+		List<GameInfo> allGames = ServerProxy.getInstance().getAllGames();
+		GameInfo[] gamesArray = new GameInfo[allGames.size()];
+		allGames.toArray(gamesArray); // fill the array
+		view.setGames(gamesArray, playerInfo);
 		setNewGameView(newGameView);
 		setSelectColorView(selectColorView);
 		setMessageView(messageView);
