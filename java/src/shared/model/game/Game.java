@@ -98,7 +98,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
 
         final JsonObject turnTracker = json.getAsJsonObject("turnTracker");
-        this.longestRoadCard = new LongestRoad(turnTracker.get("longestRoad").getAsInt());
+        int longestRoadId = turnTracker.get("longestRoad").getAsInt();
+        if(longestRoadId >= 0) {
+            this.longestRoadCard = new LongestRoad(longestRoadId);
+        }
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
