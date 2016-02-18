@@ -1,5 +1,6 @@
 package client.services;
 
+import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -13,6 +14,8 @@ import java.net.URLEncoder;
 public final class UserCookie {
 
     private static UserCookie instance;
+
+    private PlayerInfo playerInfo;
     private JsonObject userCookie;
     private String gameCookie;
     private static final String TEXT_ENCODING = "UTF-8";
@@ -24,6 +27,7 @@ public final class UserCookie {
             instance = new UserCookie();
             instance.userCookie = new JsonObject();
             instance.gameCookie = "";
+            instance.playerInfo = new PlayerInfo();
         }
 
         return instance;
@@ -74,6 +78,10 @@ public final class UserCookie {
 
     public String getUsername() {
         return this.userCookie.get("name").toString().replaceAll("\"", "");
+    }
+
+    public PlayerInfo getPlayerInfo() {
+        return playerInfo;
     }
 
     public int getPlayerId() {
