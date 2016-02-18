@@ -1923,8 +1923,6 @@ public class GameTest {
 
         game.offerTrade(guy,friend,ones,twos);
 
-        System.out.println(game.amountOwnedResource(friend, ResourceType.BRICK));
-
         assertTrue(game.amountOwnedResource(friend, ResourceType.BRICK) == 1);
         assertTrue(game.amountOwnedResource(friend, ResourceType.ORE) == 1);
         assertTrue(game.amountOwnedResource(guy, ResourceType.SHEEP) == 1);
