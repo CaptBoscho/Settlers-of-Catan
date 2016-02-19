@@ -172,7 +172,7 @@ public class Facade {
         try{
             this.game.finishTurn(playerID);
         } catch(Exception e){
-            System.out.println("facade finishTurn");
+            e.printStackTrace();
         }
     }
 
