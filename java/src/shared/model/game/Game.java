@@ -648,7 +648,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     //TODO change robbing to check if the phase in the turntracker is robbing phase
-    public ResourceType rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
+    public void rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
         assert playerRobbed > 0;
         assert playerRobber > 0;
         assert playerRobbed != playerRobber;
@@ -661,9 +661,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
             turnTracker.updateRobber(false);
             ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
-            return stolenResource;
+           
         }
-        return null;
     }
 
     /**

@@ -425,10 +425,10 @@ public class Facade {
         return null;
     }
 
-    public ResourceType rob(int playerID, RobPlayerInfo victim) {
+    public void rob(int playerID, RobPlayerInfo victim) {
         try {
 
-            return this.game.rob(playerID, victim.getId());
+            this.game.rob(playerID, victim.getId());
 
         } catch(InvalidTypeException e){
 
@@ -439,7 +439,6 @@ public class Facade {
         } catch(MoveRobberException e){
 
         }
-        return null;
     }
     //TODO devcard functions
 
