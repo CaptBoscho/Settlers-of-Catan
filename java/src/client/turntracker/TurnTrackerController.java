@@ -2,30 +2,27 @@ package client.turntracker;
 
 import client.facade.Facade;
 import client.services.UserCookie;
-import org.apache.http.cookie.Cookie;
-import shared.definitions.CatanColor;
+import client.turntracker.states.*;
 import client.base.*;
-import shared.exceptions.PlayerExistsException;
-import shared.model.player.Player;
-
+import shared.model.game.Game;
+import shared.model.game.TurnTracker;
 import java.util.Observable;
 import java.util.Observer;
-
 
 /**
  * Implementation for the turn tracker controller
  */
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
-	private int localPlayerID;
-	private int currentPlayerID;
+    private UserCookie userCookie;
+    private TurnTrackerControllerState state;
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
+        createState(facade.getPhase());
 		facade = Facade.getInstance();
         facade.addObserver(this);
-		currentPlayerID = facade.getCurrentTurn();
-		localPlayerID = UserCookie.getInstance().getPlayerId();
+        userCookie = UserCookie.getInstance();
 		initFromModel();
 	}
 	
@@ -36,21 +33,11 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	@Override
 	public void endTurn() {
-		facade.finishTurn(currentPlayerID);
-		getView().updatePlayer();
+		state.endTurn();
 	}
 	
 	private void initFromModel() {
-		try {
-			CatanColor localPlayerColor = facade.getPlayerColorByID(localPlayerID);
-			getView().setLocalPlayerColor(localPlayerColor);
-
-            for(Player p : facade.getPlayers()){
-                getView().initializePlayer(p.getPlayerIndex(), p.getName().toString(), p.getColor());
-            }
-		} catch (PlayerExistsException e) {
-//			getView().;
-		}
+        state.initFromModel();
 	}
 
 	/**
@@ -64,6 +51,29 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		initFromModel();
+		state.update((Game)o);
 	}
+
+    /**
+     * Creates a new state to model the current game state
+     * @param phase
+     */
+    private void createState(TurnTracker.Phase phase){
+        switch (phase) {
+            case SETUPONE:  state = new SetupOneState();
+                break;
+            case SETUPTWO:  state = new SetupTwoState();
+                break;
+            case ROLLING:  state = new RollingState();
+                break;
+            case PLAYING:  state = new PlayingState();
+                break;
+            case ROBBING:  state = new RobbingState();
+                break;
+            case DISCARDING:  state = new DiscardingState(getView());
+                break;
+            default: state = new PlayingState();
+                break;
+        }
+    }
 }

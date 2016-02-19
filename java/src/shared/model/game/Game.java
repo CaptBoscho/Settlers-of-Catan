@@ -835,6 +835,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return longestRoadCard.getOwner();
     }
 
+
     /**
      * deducts Victory Points from playerIDOld
      * adds Victory Points to playerIDNew
@@ -852,6 +853,43 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerIDNew != playerIDOld;
 
         longestRoadCard.setOwner(playerIDNew, roadSize);
+    }
+
+    /**
+     * returns the value of how many soldiers is the LargestArmy
+     *
+     * @return
+     */
+    @Override
+    public int currentLargestArmySize() {
+        return largestArmyCard.getMostSoldiers();
+    }
+
+    /**
+     * returns the playerID of who owns the current largest army
+     *
+     * @return
+     */
+    @Override
+    public int currentLargestArmyPlayer() {
+        return largestArmyCard.getOwner();
+    }
+
+    /**
+     * deducts Victory Points from playerIDOld
+     * adds Victory Points to playerIDNew
+     * Updates LargestArmy for playerIDNew and armySize
+     * @param playerIDOld
+     * @param playerIDNew
+     * @param armySize
+     */
+    public void newLargestArmy(int playerIDOld, int playerIDNew, int armySize){
+        assert playerIDNew >= 0;
+        assert playerIDOld >= 0;
+        assert armySize >= 0;
+        assert playerIDNew != playerIDOld;
+
+        largestArmyCard.setNewOwner(playerIDNew, armySize);
     }
 
     /**
