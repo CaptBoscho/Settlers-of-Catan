@@ -16,7 +16,7 @@ public final class LongestRoad {
     }
 
     public LongestRoad(int playerID) {
-        assert playerID >= -1;
+        assert playerID >= 0 && playerID <= 3;  // should only assign this to a valid player
 
         this.playerID = playerID;
     }
@@ -30,13 +30,26 @@ public final class LongestRoad {
     }
 
     /**
+     * Update the length of the longest road - for use when the player with the longest road makes that road longer
+     *
+     * @param newRoadSize
+     */
+    public void updateRoadSize(int newRoadSize) {
+        assert newRoadSize > 0;
+        assert newRoadSize > this.size;
+
+        this.size = newRoadSize;
+    }
+
+    /**
      * Set the owner by player id
      * @param id id of the player owning this card (-1 for no owner)
      */
     public void setOwner(int id, int roadlength) {
-        assert id >= 0;
-        assert id != this.playerID;
+        assert id >= 0 && id <= 3;
+        assert id != this.playerID;  // assign to a *different* player
         assert roadlength > 0;
+        assert roadlength > this.size;
 
         this.playerID = id;
         this.size = roadlength;
