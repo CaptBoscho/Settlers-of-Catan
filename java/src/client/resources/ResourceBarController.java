@@ -54,7 +54,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementAmount(settle, settlementcount);
             getView().setElementAmount(city, citycount);
         } catch(PlayerExistsException e){
-            System.out.println("update function in ResourceBarController");
+            e.printStackTrace();
         }
     }
 
