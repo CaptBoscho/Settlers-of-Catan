@@ -380,6 +380,12 @@ public class Facade {
         return this.game.ableToBuildCity(id);
     }
 
+    public boolean ableToBuyDevCard(int id){
+        try {
+            return this.game.canBuyDevelopmentCard(id);
+        }catch(PlayerExistsException e){ return false;}
+    }
+
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
         return this.game.getAvailableRoads(id);
     }
@@ -486,19 +492,12 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-  /*  public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
+    public boolean canPlayDC(int playerID) throws PlayerExistsException {
         assert playerID >= 0;
-        assert dc != null;
-
-        if(myTurn(playerID)){
-            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
-            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
-            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
-            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
-            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
-        }
+        int cards = this.game.numberOfDevCard(playerID);
+        if(cards > 0){return true;}
         return false;
-    }*/
+    }
 
     /**
      * plays the Development Card

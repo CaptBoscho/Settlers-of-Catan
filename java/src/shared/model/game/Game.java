@@ -661,7 +661,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
             turnTracker.updateRobber(false);
             ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
-           
+
         }
     }
 

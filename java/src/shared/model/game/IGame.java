@@ -329,4 +329,5 @@ public interface IGame {
 
     public Integer currentLargestArmyPlayer();
 
+    public Integer numberOfDevCard(int id) throws PlayerExistsException;
 }
