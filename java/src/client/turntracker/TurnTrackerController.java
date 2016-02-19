@@ -6,6 +6,7 @@ import org.apache.http.cookie.Cookie;
 import shared.definitions.CatanColor;
 import client.base.*;
 import shared.exceptions.PlayerExistsException;
+import shared.model.player.Player;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -16,6 +17,7 @@ import java.util.Observer;
  */
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
+	private int localPlayerID;
 	private int currentPlayerID;
 
 	public TurnTrackerController(ITurnTrackerView view) {
@@ -23,6 +25,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		facade = Facade.getInstance();
         facade.addObserver(this);
 		currentPlayerID = facade.getCurrentTurn();
+		localPlayerID = UserCookie.getInstance().getPlayerId();
 		initFromModel();
 	}
 	
@@ -33,14 +36,18 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	@Override
 	public void endTurn() {
-//		facade.endTurn(); // TODO: 2/16/2016 Have Corbin implement in facade
-//        getView().updatePlayer();
+		facade.finishTurn(currentPlayerID);
+		getView().updatePlayer();
 	}
 	
 	private void initFromModel() {
 		try {
-			CatanColor currentPlayerColor = facade.getPlayerColorByID(currentPlayerID);
-			getView().setLocalPlayerColor(currentPlayerColor);
+			CatanColor localPlayerColor = facade.getPlayerColorByID(localPlayerID);
+			getView().setLocalPlayerColor(localPlayerColor);
+
+            for(Player p : facade.getPlayers()){
+                getView().initializePlayer(p.getPlayerIndex(), p.getName().toString(), p.getColor());
+            }
 		} catch (PlayerExistsException e) {
 //			getView().;
 		}
