@@ -980,6 +980,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return this.playerManager.getPlayerColorByID(id);
     }
 
+    public Integer currentLargestArmyPlayer(){
+        return this.largestArmyCard.getOwner();
+    }
+
     public List<Player> getPlayers(){
         return this.playerManager.getPlayers();
     }

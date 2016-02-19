@@ -3,14 +3,14 @@ package client.facade;
 import shared.definitions.CatanColor;
 
 
-public class PlayerInfo{
+public class ModelPlayerInfo{
     private String name;
     int victorypoints;
     private CatanColor color;
     boolean longestroad;
     boolean largestarmy;
 
-    public PlayerInfo(String n, int vp, CatanColor c, boolean lr, boolean la){
+    public ModelPlayerInfo(String n, int vp, CatanColor c, boolean lr, boolean la){
         this.name = n;
         this.victorypoints = vp;
         this.color = c;

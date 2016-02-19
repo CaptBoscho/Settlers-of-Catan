@@ -327,4 +327,6 @@ public interface IGame {
 
     public List<Player> getPlayers();
 
+    public Integer currentLargestArmyPlayer();
+
 }

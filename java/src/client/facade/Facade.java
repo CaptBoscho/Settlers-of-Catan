@@ -32,7 +32,7 @@ public class Facade {
 
     private IGame game;
     private List<Player> players = new ArrayList<>();
-    private HashMap<String, PlayerInfo> entries = new HashMap<>();
+    private HashMap<String, ModelPlayerInfo> entries = new HashMap<>();
     private Set<CatanColor> available_colors = new HashSet<>();
     private static Facade _instance;
 
@@ -136,22 +136,10 @@ public class Facade {
         }catch(StructureException e){}
     }
 
+    //TODO convert this to server
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
-        if (this.entries.size() != 4 && this.entries.size() != 3) {
-            throw new BuildException("need 3-4 players to play");
-        } else {
-            int id = 1;
-            for (String currKey : this.entries.keySet()) {
-                Name him = new Name(this.entries.get(currKey).getName());
-                Player p = new Player(0, this.entries.get(currKey).getColor(), id, him);
-                this.players.add(p);
+        int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
 
-                id++;
-            }
-            int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
-
-
-        }
     }
 
     /**
@@ -439,16 +427,22 @@ public class Facade {
     }
 
     //TODO flesh this puppy out
-    public List<PlayerInfo> getPlayers(){
+    public List<ModelPlayerInfo> getPlayers(){
         List<Player> players = this.game.getPlayers();
-        List<PlayerInfo> playerInfos = new ArrayList<PlayerInfo>();
+        List<ModelPlayerInfo> playerInfos = new ArrayList<ModelPlayerInfo>();
 
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
         for(Player p: players){
-            // get boolean values if the player has the longest road or largest army
-            //PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), )
+            boolean lr = false;
+            boolean la = false;
+            if(longestroad == p.getId()){lr = true;}
+            if(largestarmy == p.getId()){la = true;}
+            ModelPlayerInfo pi = new ModelPlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+            playerInfos.add(pi);
         }
 
-        return null;
+        return playerInfos;
     }
 
     /**
