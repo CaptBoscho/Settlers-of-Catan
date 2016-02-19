@@ -1,5 +1,6 @@
 
 package client.facade;
+import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
 import shared.dto.BuildCityDTO;
@@ -395,9 +396,27 @@ public class Facade {
         return this.game.canPlaceRobber(id, hexloc);
     }
 
-    public Set<Integer> moveRobber(int id, HexLocation hexloc){
+    public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
         try{
-            return this.game.placeRobber(id, hexloc);
+            Set<Integer> ids = this.game.placeRobber(id, hexloc);
+            List<Player> players = this.game.getPlayers();
+            RobPlayerInfo[] robbed = new RobPlayerInfo[4];
+            int i = 0;
+
+            for(Player p: players){
+                if(ids.contains(p.getId())){
+                    RobPlayerInfo rbi = new RobPlayerInfo();
+                    rbi.setColor(p.getColor());
+                    rbi.setId(p.getId());
+                    rbi.setName(p.getName().toString());
+                    rbi.setPlayerIndex(p.getPlayerIndex());
+                    rbi.setNumCards(p.countResources());
+                    robbed[i] = rbi;
+                    i++;
+                }
+            }
+
+            return robbed;
         }catch(AlreadyRobbedException e){
 
         }catch(InvalidLocationException e){
@@ -406,6 +425,22 @@ public class Facade {
         return null;
     }
 
+    public ResourceType rob(int playerID, RobPlayerInfo victim) {
+        try {
+
+            return this.game.rob(playerID, victim.getId());
+
+        } catch(InvalidTypeException e){
+
+        } catch(PlayerExistsException e){
+
+        }catch(InsufficientResourcesException e){
+
+        } catch(MoveRobberException e){
+
+        }
+        return null;
+    }
     //TODO devcard functions
 
     public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
