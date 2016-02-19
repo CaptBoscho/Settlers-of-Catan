@@ -60,19 +60,19 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
      */
     private void createState(TurnTracker.Phase phase){
         switch (phase) {
-            case SETUPONE:  state = new SetupOneState();
+            case SETUPONE:  state = new SetupOneState(getView());
                 break;
-            case SETUPTWO:  state = new SetupTwoState();
+            case SETUPTWO:  state = new SetupTwoState(getView());
                 break;
-            case ROLLING:  state = new RollingState();
+            case ROLLING:  state = new RollingState(getView());
                 break;
-            case PLAYING:  state = new PlayingState();
+            case PLAYING:  state = new PlayingState(getView());
                 break;
-            case ROBBING:  state = new RobbingState();
+            case ROBBING:  state = new RobbingState(getView());
                 break;
             case DISCARDING:  state = new DiscardingState(getView());
                 break;
-            default: state = new PlayingState();
+            default: state = new PlayingState(getView());
                 break;
         }
     }

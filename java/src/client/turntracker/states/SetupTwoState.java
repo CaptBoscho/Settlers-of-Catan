@@ -1,6 +1,8 @@
 package client.turntracker.states;
 
 import client.facade.Facade;
+import client.services.UserCookie;
+import client.turntracker.ITurnTrackerView;
 import client.turntracker.TurnTrackerControllerState;
 import shared.model.game.Game;
 
@@ -11,26 +13,38 @@ import java.util.Observable;
  */
 public class SetupTwoState extends TurnTrackerControllerState {
     private Facade facade;
+    private UserCookie userCookie;
+    private ITurnTrackerView view;
 
     /**
      * Constructor
      */
-    public SetupTwoState(){
+    public SetupTwoState(ITurnTrackerView view){
+        super(view);
+        view = view;
         facade = Facade.getInstance();
+        userCookie = UserCookie.getInstance();
     }
 
     @Override
     public void endTurn() {
-
+        super.endTurn();
     }
 
     @Override
     public void initFromModel() {
+        super.initFromModel();
 
+        //Game State
+        if(facade.getCurrentTurn() == userCookie.getPlayerId()){
+            view.updateGameState("Setup 2", true);
+        }else{
+            view.updateGameState("Waiting for other players to setup",false);
+        }
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        initFromModel();
+    public void update(Game game) {
+        super.update(game);
     }
 }
