@@ -22,12 +22,24 @@ public class MapController extends Controller implements IMapController, Observe
 	private Facade facade;
     private UserCookie userCookie;
     private MapState mapState;
+    private SetupOneState setupOneState;
+    private SetupTwoState setupTwoState;
+    private RollingState rollingState;
+    private DiscardingState discardingState;
+    private RobbingState robbingState;
+    private PlayingState playingState;
 	
 	public MapController(IMapView view, IRobView robView) {
 		super(view);
 		setRobView(robView);
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
+        setupOneState = SetupOneState.getInstance();
+        setupTwoState = SetupTwoState.getInstance();
+        rollingState = RollingState.getInstance();
+        discardingState = DiscardingState.getInstance();
+        robbingState = RobbingState.getInstance();
+        playingState = PlayingState.getInstance();
         facade.addObserver(this);
 	}
 
@@ -35,26 +47,28 @@ public class MapController extends Controller implements IMapController, Observe
         TurnTracker.Phase state = facade.getPhase();
         switch(state) {
             case SETUPONE:
-                mapState = new SetupOneState(this);
+                mapState = setupOneState;
                 break;
             case SETUPTWO:
-                mapState = new SetupTwoState(this);
+                mapState = setupTwoState;
                 break;
             case ROLLING:
-                mapState = new RollingState(this);
+                mapState = rollingState;
                 break;
             case ROBBING:
-                mapState = new RobbingState(this);
+                mapState = robbingState;
                 break;
             case PLAYING:
-                mapState = new PlayingState(this);
+                mapState = playingState;
                 break;
             case DISCARDING:
-                mapState = new DiscardingState(this);
+                mapState = discardingState;
                 break;
             default:
                 break;
         }
+        mapState.setController(this);
+        mapState.initFromModel();
     }
 	
 	public IMapView getView() {

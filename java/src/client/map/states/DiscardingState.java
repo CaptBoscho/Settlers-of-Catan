@@ -15,11 +15,20 @@ import shared.locations.VertexLocation;
  */
 public class DiscardingState extends MapState {
 
+    private static DiscardingState instance;
+
+    public static DiscardingState getInstance(){
+        if(instance == null){
+            instance = new DiscardingState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public DiscardingState(MapController mapController){
-        super(mapController);
+    public DiscardingState(){
+        super();
     }
 
     @Override

@@ -15,11 +15,20 @@ import shared.locations.VertexLocation;
  */
 public class RobbingState extends MapState {
 
+    private static RobbingState instance;
+
+    public static RobbingState getInstance(){
+        if(instance == null){
+            instance = new RobbingState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public RobbingState(MapController mapController){
-        super(mapController);
+    public RobbingState(){
+        super();
     }
 
     @Override

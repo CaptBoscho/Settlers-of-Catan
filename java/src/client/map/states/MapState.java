@@ -31,11 +31,13 @@ abstract public class MapState {
     /**
      * Constructor
      */
-    public MapState(MapController mapController){
-        this.mapController = mapController;
+    public MapState(){
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
-        initFromModel();
+    }
+
+    public void setController(MapController mapController) {
+        this.mapController = mapController;
     }
 
     protected HexLocation getUIHexLocation(HexLocation hexLoc) {
@@ -65,7 +67,7 @@ abstract public class MapState {
     /**
      * Initializes the state
      */
-    protected void initFromModel() {
+    public void initFromModel() {
 
         Map map = facade.getMap();
 

@@ -16,11 +16,20 @@ import shared.locations.VertexLocation;
  */
 public class SetupOneState extends MapState {
 
+    private static SetupOneState instance;
+
+    public static SetupOneState getInstance(){
+        if(instance == null){
+            instance = new SetupOneState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public SetupOneState(MapController mapController){
-        super(mapController);
+    public SetupOneState(){
+        super();
     }
 
     @Override

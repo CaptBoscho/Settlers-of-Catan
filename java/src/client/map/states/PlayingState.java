@@ -18,14 +18,23 @@ import shared.locations.VertexLocation;
  */
 public class PlayingState extends MapState {
 
+    private static PlayingState instance;
+
+    public static PlayingState getInstance(){
+        if(instance == null){
+            instance = new PlayingState();
+        }
+        return instance;
+    }
+
     private boolean isPlayingRoadBuildingCard;
     private EdgeLocation firstRoadBuilding;
 
     /**
      * Constructor
      */
-    public PlayingState(MapController mapController){
-        super(mapController);
+    public PlayingState(){
+        super();
         isPlayingRoadBuildingCard = false;
         firstRoadBuilding = null;
     }

@@ -15,11 +15,20 @@ import shared.locations.VertexLocation;
  */
 public class SetupTwoState extends MapState {
 
+    private static SetupTwoState instance;
+
+    public static SetupTwoState getInstance(){
+        if(instance == null){
+            instance = new SetupTwoState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public SetupTwoState(MapController mapController){
-        super(mapController);
+    public SetupTwoState(){
+        super();
     }
 
     @Override

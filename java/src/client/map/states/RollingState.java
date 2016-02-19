@@ -15,11 +15,20 @@ import shared.locations.VertexLocation;
  */
 public class RollingState extends MapState {
 
+    private static RollingState instance;
+
+    public static RollingState getInstance(){
+        if(instance == null){
+            instance = new RollingState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public RollingState(MapController mapController){
-        super(mapController);
+    public RollingState(){
+        super();
     }
 
     @Override
