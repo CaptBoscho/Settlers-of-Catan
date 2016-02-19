@@ -35,6 +35,7 @@ abstract public class MapState {
         this.mapController = mapController;
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
+        initFromModel();
     }
 
     protected HexLocation getUIHexLocation(HexLocation hexLoc) {

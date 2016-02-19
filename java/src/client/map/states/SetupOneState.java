@@ -37,13 +37,11 @@ public class SetupOneState extends MapState {
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
-        hexLoc = getModelHexLocation(hexLoc);
         return false;
     }
 
@@ -58,14 +56,10 @@ public class SetupOneState extends MapState {
     }
 
     @Override
-    public void placeCity(VertexLocation vertLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeCity(VertexLocation vertLoc){}
 
     @Override
-    public void placeRobber(HexLocation hexLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeRobber(HexLocation hexLoc){}
 
     @Override
     public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
@@ -83,22 +77,14 @@ public class SetupOneState extends MapState {
     }
 
     @Override
-    public void cancelMove() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void cancelMove(){}
 
     @Override
-    public void playSoldierCard() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void playSoldierCard(){}
 
     @Override
-    public void playRoadBuildingCard() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void playRoadBuildingCard(){}
 
     @Override
-    public void robPlayer(RobPlayerInfo victim) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void robPlayer(RobPlayerInfo victim){}
 }

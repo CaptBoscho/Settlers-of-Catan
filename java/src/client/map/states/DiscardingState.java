@@ -24,70 +24,48 @@ public class DiscardingState extends MapState {
 
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-        edgeLoc = getModelEdgeLocation(edgeLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
-        hexLoc = getModelHexLocation(hexLoc);
         return false;
     }
 
     @Override
-    public void placeRoad(EdgeLocation edgeLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeRoad(EdgeLocation edgeLoc){}
 
     @Override
-    public void placeSettlement(VertexLocation vertLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeSettlement(VertexLocation vertLoc){}
 
     @Override
-    public void placeCity(VertexLocation vertLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeCity(VertexLocation vertLoc){}
 
     @Override
-    public void placeRobber(HexLocation hexLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeRobber(HexLocation hexLoc){}
 
     @Override
-    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected){}
 
     @Override
-    public void cancelMove() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void cancelMove(){}
 
     @Override
-    public void playSoldierCard() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void playSoldierCard(){}
 
     @Override
-    public void playRoadBuildingCard() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void playRoadBuildingCard(){}
 
     @Override
-    public void robPlayer(RobPlayerInfo victim) {
-        //TODO: do i write code here?
-    }
+    public void robPlayer(RobPlayerInfo victim){}
 }

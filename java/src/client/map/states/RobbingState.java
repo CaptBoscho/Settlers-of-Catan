@@ -24,19 +24,16 @@ public class RobbingState extends MapState {
 
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-        edgeLoc = getModelEdgeLocation(edgeLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
@@ -47,23 +44,20 @@ public class RobbingState extends MapState {
     }
 
     @Override
-    public void placeRoad(EdgeLocation edgeLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeRoad(EdgeLocation edgeLoc){}
 
     @Override
-    public void placeSettlement(VertexLocation vertLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeSettlement(VertexLocation vertLoc){}
 
     @Override
-    public void placeCity(VertexLocation vertLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeCity(VertexLocation vertLoc){}
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        facade.moveRobber(userCookie.getPlayerId(), hexLoc);
+        mapController.getView().placeRobber(hexLoc);
+        //TODO: facade needs to return RobPlayerInfo[] instead of Set<Integer>
+        //mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerId(), hexLoc));
+        mapController.getRobView().showModal();
     }
 
     @Override
@@ -79,22 +73,23 @@ public class RobbingState extends MapState {
     }
 
     @Override
-    public void cancelMove() {
-        //TODO: write code on what to do if player quits soldier card
-    }
+    public void cancelMove(){}
 
     @Override
     public void playSoldierCard() {
-        //TODO: write code to implement the soldier card
+        try {
+            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+        } catch (PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public void playRoadBuildingCard() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void playRoadBuildingCard(){}
 
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        //TODO: who is calling this and what do i put here?
+        //TODO: facade needs a method where i can pass in a RobPlayerInfo object
+        //facade.rob(victim);
     }
 }

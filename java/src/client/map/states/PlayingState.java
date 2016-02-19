@@ -19,6 +19,7 @@ import shared.locations.VertexLocation;
 public class PlayingState extends MapState {
 
     private boolean isPlayingRoadBuildingCard;
+    private EdgeLocation firstRoadBuilding;
 
     /**
      * Constructor
@@ -26,6 +27,7 @@ public class PlayingState extends MapState {
     public PlayingState(MapController mapController){
         super(mapController);
         isPlayingRoadBuildingCard = false;
+        firstRoadBuilding = null;
     }
 
     @Override
@@ -63,14 +65,21 @@ public class PlayingState extends MapState {
 
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
-        hexLoc = getModelHexLocation(hexLoc);
         return false;
     }
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
+        if(firstRoadBuilding == null) {
+            firstRoadBuilding = edgeLoc;
+        }
         try {
-            facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
+            if(isPlayingRoadBuildingCard) {
+                //TODO: facade needs this method added to guarantee that resources are not deleted
+                //facade.buildRoadPlayingCardRoad(userCookie.getPlayerId(), edgeLoc);
+            } else {
+                facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
+            }
         } catch (MissingUserCookieException e) {
             System.out.println(e.getMessage());
         }
@@ -95,9 +104,7 @@ public class PlayingState extends MapState {
     }
 
     @Override
-    public void placeRobber(HexLocation hexLoc) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void placeRobber(HexLocation hexLoc){}
 
     @Override
     public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
@@ -113,24 +120,27 @@ public class PlayingState extends MapState {
 
     @Override
     public void cancelMove() {
-        if(isPlayingRoadBuildingCard) {
-            //TODO: write code to cancel the road building card
+        if(isPlayingRoadBuildingCard && firstRoadBuilding != null) {
+            //TODO: write code to cancel the road building card.  This will include deleting a road from the server
+            //TODO: if one was already built.  The Map class in the model has a deleteRoad method that can be used.
         }
     }
 
     @Override
-    public void playSoldierCard() {
-        System.out.println("You're a wizard Harry");
-    }
+    public void playSoldierCard(){}
 
     @Override
     public void playRoadBuildingCard() {
         isPlayingRoadBuildingCard = true;
-        //TODO: write code to implement road building card
+        try {
+            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+        } catch (PlayerExistsException e) {
+            System.out.println(e.getMessage());
+        }
+        isPlayingRoadBuildingCard = false;
     }
 
     @Override
-    public void robPlayer(RobPlayerInfo victim) {
-        System.out.println("You're a wizard Harry");
-    }
+    public void robPlayer(RobPlayerInfo victim){}
 }

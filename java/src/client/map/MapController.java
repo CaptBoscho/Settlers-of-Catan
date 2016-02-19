@@ -29,7 +29,6 @@ public class MapController extends Controller implements IMapController, Observe
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
         facade.addObserver(this);
-        initialize();
 	}
 
     public void initialize() {
@@ -62,7 +61,7 @@ public class MapController extends Controller implements IMapController, Observe
 		return (IMapView)super.getView();
 	}
 	
-	private IRobView getRobView() {
+	public IRobView getRobView() {
 		return robView;
 	}
 
@@ -122,8 +121,6 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeRobber(HexLocation hexLoc) {
         if(mapState.canPlaceRobber(hexLoc)) {
             mapState.placeRobber(hexLoc);
-            getView().placeRobber(hexLoc);
-            getRobView().showModal();
         }
 	}
 	
