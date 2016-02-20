@@ -357,6 +357,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public Integer finishTurn(int playerID) throws Exception {
         assert playerID >= 0;
+        try {
+            moveNewToOld(playerID);
+        } catch (BadCallerException e) {
+            e.printStackTrace();
+        }
 
         return turnTracker.nextTurn();
     }

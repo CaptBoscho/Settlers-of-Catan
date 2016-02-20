@@ -37,17 +37,21 @@ public final class DevCardController extends Controller implements IDevCardContr
 		this.buyCardView = buyCardView;
 		this.soldierAction = soldierAction;
 		this.roadAction = roadAction;
-		Game.getInstance().addObserver(this);
+		Facade.getInstance().addObserver(this);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		Facade facade = Facade.getInstance();
-		getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, );
-		getPlayCardView().setCardEnabled(DevCardType.MONUMENT, localPlayer.canUseMonopoly());
-		getPlayCardView().setCardEnabled(DevCardType.ROAD_BUILD, localPlayer.canUseMonopoly());
-		getPlayCardView().setCardEnabled(DevCardType.SOLDIER, localPlayer.canUseMonopoly());
-		getPlayCardView().setCardEnabled(DevCardType.YEAR_OF_PLENTY, localPlayer.canUseMonopoly());
+		int localPlayerID = UserCookie.getInstance().getPlayerId();
+
+		getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, facade.canUseMonopoly(localPlayerID));
+		getPlayCardView().setCardEnabled(DevCardType.MONUMENT, facade.canUseMonument(localPlayerID));
+		getPlayCardView().setCardEnabled(DevCardType.ROAD_BUILD, facade.canUseRoadBuilder(localPlayerID));
+		getPlayCardView().setCardEnabled(DevCardType.SOLDIER, facade.canUseSoldier(localPlayerID));
+		getPlayCardView().setCardEnabled(DevCardType.YEAR_OF_PLENTY, facade.canUseYearOfPlenty(localPlayerID));
+
+		getPlayCardView().
 	}
 
 	public IPlayDevCardView getPlayCardView() {
