@@ -68,35 +68,6 @@ public class Facade {
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.game.getPlayerColorByID(id);}
 
-    /*
-    public void joinPlayer(PlayerInfo pi) throws BuildException {
-        assert pi != null;
-
-        if (this.entries.size() >= 4) {
-            throw new BuildException("too many players");
-        } else {
-            this.entries.put(pi.getUserName(), pi);
-            this.available_colors.remove(pi.getColor());
-        }
-    }
-
-    public void leaveQueue(PlayerInfo pi) throws BuildException {
-        assert pi != null;
-
-        PlayerInfo removed = this.entries.remove(pi.getUserName());
-        if (removed == null) {
-            throw new BuildException("player didn't exist");
-        } else {
-            if (!this.available_colors.add(removed.getColor())) {
-                throw new BuildException("couldn't re-add the color");
-            }
-        }
-    }
-
-    public boolean canStartGame() {
-        return entries.size() == 4 || entries.size() == 3;
-    }*/
-
     public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
             return this.game.canInitiateRoad(playerID,  edge);
@@ -513,6 +484,36 @@ public class Facade {
         assert playerID >= 0;
         int cards = this.game.numberOfDevCard(playerID);
         return cards > 0;
+    }
+
+    public boolean canUseMonopoly(int playerID){
+        try {
+            return this.game.canUseMonopoly(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseRoadBuilder(int playerID){
+        try {
+            return this.game.canUseRoadBuilder(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseMonument(int playerID){
+        try{
+            return this.game.canUseMonument(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseSoldier(int playerID, HexLocation hexloc){
+        try{
+            return this.game.canUseSoldier(playerID, hexloc);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseYearOfPlenty(int playerID){
+        try{
+            return this.game.canUseYearOfPlenty(playerID);
+        }catch(PlayerExistsException e){return false;}
     }
 
     /**
