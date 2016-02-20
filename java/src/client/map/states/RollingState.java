@@ -2,6 +2,8 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
+import shared.definitions.PieceType;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -13,88 +15,66 @@ import shared.locations.VertexLocation;
  */
 public class RollingState extends MapState {
 
+    private static RollingState instance;
+
+    public static RollingState getInstance(){
+        if(instance == null){
+            instance = new RollingState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public RollingState(MapController mapController){
-        super(mapController);
+    public RollingState(){
+        super();
     }
 
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-        edgeLoc = getModelEdgeLocation(edgeLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
-        hexLoc = getModelHexLocation(hexLoc);
         return false;
     }
 
     @Override
-    public void placeRoad(EdgeLocation edgeLoc) {
-        if(canPlaceRoad(edgeLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void placeRoad(EdgeLocation edgeLoc){}
 
     @Override
-    public void placeSettlement(VertexLocation vertLoc) {
-        if(canPlaceSettlement(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void placeSettlement(VertexLocation vertLoc){}
 
     @Override
-    public void placeCity(VertexLocation vertLoc) {
-        if(canPlaceCity(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void placeCity(VertexLocation vertLoc){}
 
     @Override
-    public void placeRobber(HexLocation hexLoc) {
-        if(canPlaceRobber(hexLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void placeRobber(HexLocation hexLoc){}
 
-    /**
-     * Play Soldier - State Implementation
-     */
     @Override
-    public void playSoldierCard() {
-        super.playSoldierCard();
-    }
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected){}
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
     @Override
-    public void playRoadBuildingCard() {
-        super.playRoadBuildingCard();
-    }
+    public void cancelMove(){}
 
-    /**
-     * Rob Player - State Implementation
-     *
-     * @param victim
-     */
     @Override
-    public void robPlayer(RobPlayerInfo victim) {
-        super.robPlayer(victim);
-    }
+    public void playSoldierCard(){}
+
+    @Override
+    public void playRoadBuildingCard(){}
+
+    @Override
+    public void robPlayer(RobPlayerInfo victim){}
 }

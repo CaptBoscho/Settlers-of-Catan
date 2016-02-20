@@ -3,9 +3,7 @@ package client.map.states;
 import client.data.RobPlayerInfo;
 import client.facade.Facade;
 import client.map.MapController;
-import client.services.MissingUserCookieException;
 import client.services.UserCookie;
-import shared.definitions.CatanColor;
 import shared.definitions.PieceType;
 import shared.definitions.PortType;
 import shared.exceptions.PlayerExistsException;
@@ -14,7 +12,6 @@ import shared.model.map.Edge;
 import shared.model.map.Map;
 import shared.model.map.Vertex;
 import shared.model.map.hex.Hex;
-import shared.model.player.Player;
 
 import java.util.ArrayList;
 
@@ -31,11 +28,13 @@ abstract public class MapState {
     /**
      * Constructor
      */
-    public MapState(MapController mapController){
-        this.mapController = mapController;
+    public MapState(){
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
-        //initFromModel();
+    }
+
+    public void setController(MapController mapController) {
+        this.mapController = mapController;
     }
 
     protected HexLocation getUIHexLocation(HexLocation hexLoc) {
@@ -65,7 +64,7 @@ abstract public class MapState {
     /**
      * Initializes the state
      */
-    protected void initFromModel() {
+    public void initFromModel() {
 
         Map map = facade.getMap();
 
@@ -141,7 +140,7 @@ abstract public class MapState {
                     mapController.getView().placeRoad(getUIEdgeLocation(edge.getEdgeLoc()),
                             facade.getPlayerColorByID(entry.getKey()));
                 } catch (PlayerExistsException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -155,7 +154,7 @@ abstract public class MapState {
                     mapController.getView().placeSettlement(getUIVertexLocation(vertex.getVertexLoc()),
                             facade.getPlayerColorByID(entry.getKey()));
                 } catch (PlayerExistsException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -169,7 +168,7 @@ abstract public class MapState {
                     mapController.getView().placeCity(getUIVertexLocation(vertex.getVertexLoc()),
                             facade.getPlayerColorByID(entry.getKey()));
                 } catch (PlayerExistsException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -195,25 +194,13 @@ abstract public class MapState {
 
     abstract public void placeRobber(HexLocation hexLoc);
 
-    /**
-     * Play Soldier - State Implementation
-     */
-    public void playSoldierCard() {
-        // TODO -- implement
-    }
+    abstract public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected);
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
-    public void playRoadBuildingCard() {
-        // TODO -- implement
-    }
+    abstract public void cancelMove();
 
-    /**
-     * Rob Player - State Implementation
-     * @param victim
-     */
-    public void robPlayer(RobPlayerInfo victim) {
-        // TODO -- implement
-    }
+    abstract public void playSoldierCard();
+
+    abstract public void playRoadBuildingCard();
+
+    abstract public void robPlayer(RobPlayerInfo victim);
 }
