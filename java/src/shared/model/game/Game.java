@@ -519,10 +519,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return True if Player can play Soldier
      */
     @Override
-    public boolean canUseSoldier(int playerID) throws PlayerExistsException{
+    public boolean canUseSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException{
         assert playerID >= 0;
 
-        return playerManager.canUseSoldier(playerID)  && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
+        return playerManager.canUseSoldier(playerID)  && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID) && canPlaceRobber(playerID, hexloc);
 
     }
 
@@ -532,13 +532,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useSoldier(int playerID) throws PlayerExistsException, DevCardException {
+    public Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
         assert playerID >= 0;
         assert this.playerManager != null;
         assert this.largestArmyCard != null;
         assert this.turnTracker != null;
 
-        if(canUseSoldier(playerID)){
+        if(canUseSoldier(playerID,hexloc)){
             playerManager.useSoldier(playerID);
             int used = playerManager.getKnights(playerID);
             if(used >= 3 && used > largestArmyCard.getMostSoldiers()) {
@@ -548,7 +548,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             }
 
             turnTracker.updateRobber(true);
+            if(canPlaceRobber(playerID, hexloc)){
+                return placeRobber(playerID, hexloc);
+            }
+            return null;
         }
+        return null;
     }
 
     /**
@@ -643,7 +648,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     //TODO change robbing to check if the phase in the turntracker is robbing phase
-    public ResourceType rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
+    public void rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
         assert playerRobbed > 0;
         assert playerRobber > 0;
         assert playerRobbed != playerRobber;
@@ -656,9 +661,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
             turnTracker.updateRobber(false);
             ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
-            return stolenResource;
+           
         }
-        return null;
     }
 
     /**
@@ -978,6 +982,14 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.playerManager.getPlayerColorByID(id);
+    }
+
+    public Integer currentLargestArmyPlayer(){
+        return this.largestArmyCard.getOwner();
+    }
+
+    public List<Player> getPlayers(){
+        return this.playerManager.getPlayers();
     }
 
     /*======================================================
