@@ -644,7 +644,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert hexloc != null;
 
-        return map.moveRobber(hexloc);
+        return map.moveRobber(playerID, hexloc);
     }
 
     //TODO change robbing to check if the phase in the turntracker is robbing phase
@@ -656,7 +656,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
-        Set<Integer> who = map.whoCanGetRobbed();
+        Set<Integer> who = map.whoCanGetRobbed(playerRobber);
         assert who != null;
         if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
             turnTracker.updateRobber(false);

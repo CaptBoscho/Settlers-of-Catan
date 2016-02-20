@@ -20,6 +20,10 @@ public class PlayerInfo {
 	private int playerIndex;
 	private String name;
 	private CatanColor color;
+    //changed this
+    private int victory;
+    private boolean longestroad;
+    private boolean largestarmy;
 	
 	public PlayerInfo() {
 		setId(-1);
@@ -27,6 +31,17 @@ public class PlayerInfo {
 		setName("");
 		setColor(CatanColor.WHITE);
 	}
+
+    //added this function
+	public PlayerInfo(String n, int vp, CatanColor c, int i, int index, boolean lr, boolean la){
+        this.name = n;
+        this.victory = vp;
+        this.color = c;
+        this.id = i;
+        this.playerIndex = index;
+        this.longestroad = lr;
+        this.largestarmy = la;
+    }
 	
 	public int getId()
 	{
@@ -67,6 +82,19 @@ public class PlayerInfo {
 	{
 		this.color = color;
 	}
+
+    //wrote these things
+    public void setVictory(int vp){this.victory = vp;}
+
+    public int getVictory(){return this.victory;}
+
+    public void setLongestRoad(boolean lr){this.longestroad = lr;}
+
+    public boolean getLongestRoad(){return this.longestroad;}
+
+    public void setLargestArmy(boolean la){this.largestarmy = la;}
+
+    public boolean getLargestArmy(){return this.largestarmy;}
 
 	@Override
 	public int hashCode()

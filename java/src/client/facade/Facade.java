@@ -1,5 +1,6 @@
 
 package client.facade;
+import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
@@ -467,9 +468,9 @@ public class Facade {
     }
 
     //TODO flesh this puppy out
-    public List<ModelPlayerInfo> getPlayers(){
+    public List<PlayerInfo> getPlayers(){
         List<Player> players = this.game.getPlayers();
-        List<ModelPlayerInfo> playerInfos = new ArrayList<ModelPlayerInfo>();
+        List<PlayerInfo> playerInfos = new ArrayList<PlayerInfo>();
 
         int longestroad = this.game.currentLongestRoadPlayer();
         int largestarmy = this.game.currentLargestArmyPlayer();
@@ -478,7 +479,7 @@ public class Facade {
             boolean la = false;
             if(longestroad == p.getId()){lr = true;}
             if(largestarmy == p.getId()){la = true;}
-            ModelPlayerInfo pi = new ModelPlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+            PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
             playerInfos.add(pi);
         }
 
