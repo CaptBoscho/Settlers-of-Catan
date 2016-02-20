@@ -617,7 +617,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         try {
 
-            return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
+            return turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
 
         } catch(InvalidLocationException e){
             return false;
