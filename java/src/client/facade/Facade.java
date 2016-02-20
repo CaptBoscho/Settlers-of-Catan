@@ -472,11 +472,26 @@ public class Facade {
             boolean la = false;
             if(longestroad == p.getId()){lr = true;}
             if(largestarmy == p.getId()){la = true;}
-            ModelPlayerInfo pi = new ModelPlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+            ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
             playerInfos.add(pi);
         }
 
         return playerInfos;
+    }
+
+    public ModelPlayerInfo getWinner() throws GameOverException{
+        Player p = this.game.getWinner();
+
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
+
+        boolean lr = false;
+        boolean la = false;
+        if(longestroad == p.getId()){lr = true;}
+        if(largestarmy == p.getId()){la = true;}
+        ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+
+        return pi;
     }
 
     /**

@@ -210,7 +210,8 @@ public final class TurnTracker {
             public Phase next() {
                 return ROLLING;
             }
-        };
+        },
+        GAMEFINISHED;
 
         public Phase next() {
             return values()[ordinal() + 1];

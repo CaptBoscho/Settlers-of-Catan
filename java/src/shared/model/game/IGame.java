@@ -266,6 +266,30 @@ public interface IGame {
     public void newLongestRoad(int playerIDOld, int playerIDNew, int roadSize);
 
     /**
+     * returns the value of how many soldiers is the LargestArmy
+     *
+     * @return
+     */
+    public int currentLargestArmySize();
+
+    /**
+     * returns the playerID of who owns the current largest army
+     *
+     * @return
+     */
+    public int currentLargestArmyPlayer();
+
+    /**
+     * deducts Victory Points from playerIDOld
+     * adds Victory Points to playerIDNew
+     * Updates LargestArmy for playerIDNew and armySize
+     * @param playerIDOld
+     * @param playerIDNew
+     * @param armySize
+     */
+    public void newLargestArmy(int playerIDOld, int playerIDNew, int armySize);
+
+    /**
      * checks if the player has the cards to buy a DevelopmentCard
      * @param playerID
      * @return
@@ -327,6 +351,5 @@ public interface IGame {
 
     public List<Player> getPlayers();
 
-    public Integer currentLargestArmyPlayer();
-
+    public Player getWinner() throws GameOverException;
 }
