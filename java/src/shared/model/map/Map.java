@@ -258,11 +258,7 @@ public final class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
-//        assert edgeLoc.getHexLoc().getX() >= 0;
-//        assert edgeLoc.getHexLoc().getY() >= 0;
         assert edgeLoc.getNormalizedLocation() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert this.edges != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -272,7 +268,7 @@ public final class Map implements IMap, JsonSerializable{
         edgeLoc = edgeLoc.getNormalizedLocation();
         Edge edge = edges.get(edgeLoc);
         if(edge == null) {
-            throw new InvalidLocationException("Vertex/Edge location is not on the map");
+            throw new InvalidLocationException("Edge location is not on the map");
         }
         ArrayList<Vertex> cities = this.cities.get(playerID);
         if(cities != null) {
@@ -309,8 +305,6 @@ public final class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
-//        assert edgeLoc.getHexLoc().getX() >= 0;
-//        assert edgeLoc.getHexLoc().getY() >= 0;
         assert edgeLoc.getNormalizedLocation() != null;
         assert this.edges != null;
         assert this.cities != null;
@@ -343,8 +337,6 @@ public final class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
-//        assert edgeLoc.getHexLoc().getX() >= 0;
-//        assert edgeLoc.getHexLoc().getY() >= 0;
         assert edgeLoc.getNormalizedLocation() != null;
         assert this.edges != null;
         assert this.cities != null;
@@ -425,8 +417,6 @@ public final class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -476,8 +466,6 @@ public final class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert vertexLoc.getNormalizedLocation() != null;
         assert this.vertices != null;
         assert this.cities != null;
@@ -513,8 +501,6 @@ public final class Map implements IMap, JsonSerializable{
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
-//        assert vertexLoc.getHexLoc().getX() >= 0;
-//        assert vertexLoc.getHexLoc().getY() >= 0;
         assert this.vertices != null;
         assert this.settlements != null;
         assert this.cities != null;
@@ -614,8 +600,6 @@ public final class Map implements IMap, JsonSerializable{
     @Override
     public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         assert hexLoc != null;
-//        assert hexLoc.getX() >= 0;
-//        assert hexLoc.getY() >= 0;
         assert this.hexes != null;
         assert this.hexes.size() > 0;
 
@@ -633,6 +617,32 @@ public final class Map implements IMap, JsonSerializable{
     @Override
     public JsonObject toJSON() {
         return null;
+    }
+
+    public void deleteRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException, StructureException {
+        assert playerID >= 0 && playerID <= 3;
+        assert edgeLoc != null;
+        assert edgeLoc.getDir() != null;
+        assert edgeLoc.getHexLoc() != null;
+        assert edgeLoc.getNormalizedLocation() != null;
+
+        edgeLoc = edgeLoc.getNormalizedLocation();
+        final Edge edge = edges.get(edgeLoc);
+        if(edge == null) {
+            throw new InvalidLocationException("Edge location is not on the map");
+        }
+        if(edge.getRoad() == null) {
+            throw new StructureException("Edge doesn't have a road to delete");
+        } else {
+            edge.setRoad(null);
+            ArrayList<Edge> roads = this.roads.get(playerID);
+            for(Edge road : roads) {
+                if(road.getEdgeLoc().equals(edge.getEdgeLoc())) {
+                    roads.remove(road);
+                }
+            }
+        }
+
     }
 
     /*===========================================

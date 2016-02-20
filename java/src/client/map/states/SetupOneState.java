@@ -2,6 +2,9 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
+import shared.definitions.CatanColor;
+import shared.definitions.PieceType;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -13,11 +16,20 @@ import shared.locations.VertexLocation;
  */
 public class SetupOneState extends MapState {
 
+    private static SetupOneState instance;
+
+    public static SetupOneState getInstance(){
+        if(instance == null){
+            instance = new SetupOneState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public SetupOneState(MapController mapController){
-        super(mapController);
+    public SetupOneState(){
+        super();
     }
 
     @Override
@@ -34,67 +46,54 @@ public class SetupOneState extends MapState {
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
-        hexLoc = getModelHexLocation(hexLoc);
         return false;
     }
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        if(canPlaceRoad(edgeLoc)) {
-            facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
-        }
+        facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
     }
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        if(canPlaceSettlement(vertLoc)) {
-            facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
+        facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
+    }
+
+    @Override
+    public void placeCity(VertexLocation vertLoc){}
+
+    @Override
+    public void placeRobber(HexLocation hexLoc){}
+
+    @Override
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
+        if(!isFree || !allowDisconnected) {
+            return;
+        }
+        if(pieceType == PieceType.CITY || pieceType == PieceType.ROBBER) {
+            return;
+        }
+        try {
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
+        } catch (PlayerExistsException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     @Override
-    public void placeCity(VertexLocation vertLoc) {
-        if(canPlaceCity(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void cancelMove(){}
 
     @Override
-    public void placeRobber(HexLocation hexLoc) {
-        if(canPlaceRobber(hexLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void playSoldierCard(){}
 
-    /**
-     * Play Soldier - State Implementation
-     */
     @Override
-    public void playSoldierCard() {
-        super.playSoldierCard();
-    }
+    public void playRoadBuildingCard(){}
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
     @Override
-    public void playRoadBuildingCard() {
-        super.playRoadBuildingCard();
-    }
-
-    /**
-     * Rob Player - State Implementation
-     *
-     * @param victim
-     */
-    @Override
-    public void robPlayer(RobPlayerInfo victim) {
-        super.robPlayer(victim);
-    }
+    public void robPlayer(RobPlayerInfo victim){}
 }
