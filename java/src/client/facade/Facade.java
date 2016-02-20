@@ -51,14 +51,6 @@ public class Facade {
         return _instance;
     }
 
-    public Set<CatanColor> canJoin() {
-        if (this.entries.size() >= 4) {
-            return null;
-        } else {
-            return this.available_colors;
-        }
-    }
-
     public void addObserver(Observer o){
         this.game.addObserver(o);
     }
@@ -66,34 +58,10 @@ public class Facade {
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.game.getPlayerColorByID(id);}
 
-    /*
-    public void joinPlayer(PlayerInfo pi) throws BuildException {
-        assert pi != null;
+    //TODO talk to server
+    public void joinGame(int playerID){
 
-        if (this.entries.size() >= 4) {
-            throw new BuildException("too many players");
-        } else {
-            this.entries.put(pi.getUserName(), pi);
-            this.available_colors.remove(pi.getColor());
-        }
     }
-
-    public void leaveQueue(PlayerInfo pi) throws BuildException {
-        assert pi != null;
-
-        PlayerInfo removed = this.entries.remove(pi.getUserName());
-        if (removed == null) {
-            throw new BuildException("player didn't exist");
-        } else {
-            if (!this.available_colors.add(removed.getColor())) {
-                throw new BuildException("couldn't re-add the color");
-            }
-        }
-    }
-
-    public boolean canStartGame() {
-        return entries.size() == 4 || entries.size() == 3;
-    }*/
 
     public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
@@ -105,6 +73,7 @@ public class Facade {
         }
     }
 
+    //TODO talk to server
     public void initiateRoad(int playerID, EdgeLocation edge){
         try {
             this.game.initiateRoad(playerID, edge);
@@ -126,6 +95,7 @@ public class Facade {
         }
     }
 
+    //TODO talk to server
     public void initiateSettlement(int pID, VertexLocation vertex){
         try{
             this.game.initiateSettlement(pID, vertex);
@@ -136,22 +106,9 @@ public class Facade {
         }catch(StructureException e){}
     }
 
+    //TODO talk to server, do we need this?
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
-        if (this.entries.size() != 4 && this.entries.size() != 3) {
-            throw new BuildException("need 3-4 players to play");
-        } else {
-            int id = 1;
-            for (String currKey : this.entries.keySet()) {
-                Name him = new Name(this.entries.get(currKey).getName());
-                Player p = new Player(0, this.entries.get(currKey).getColor(), id, him);
-                this.players.add(p);
 
-                id++;
-            }
-            int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
-
-
-        }
     }
 
     /**
@@ -168,6 +125,7 @@ public class Facade {
 
     public Integer getCurrentTurn(){return this.game.getCurrentTurn();}
 
+    //TODO talk to server
     public void finishTurn(int playerID){
         try{
             this.game.finishTurn(playerID);
@@ -326,6 +284,7 @@ public class Facade {
      * @param playerOneID
      * @throws BuildException
      */
+    //TODO talk with server
     public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         assert playerOneID >= 0;
         assert playerTwoID >= 0;
@@ -364,6 +323,7 @@ public class Facade {
         throw new InvalidPlayerException("can't trade");
     }
 
+    //TODO talk to server
     public void maritimeTrade(int playerID, PortType port, ResourceType type) throws BuildException, InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         assert playerID >= 0;
         assert type != null;
@@ -429,6 +389,7 @@ public class Facade {
         return this.game.canPlaceRobber(id, hexloc);
     }
 
+    //TODO talk to server
     public Set<Integer> moveRobber(int id, HexLocation hexloc){
         try{
             return this.game.placeRobber(id, hexloc);
