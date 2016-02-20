@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author Kyle Cornelison
  */
 public final class PlayerManager implements IPlayerManager {
-
+    private static int WINNING_POINTS = 10;
     private List<Player> players;
 
     /**
@@ -572,5 +572,15 @@ public final class PlayerManager implements IPlayerManager {
 
     public Integer getAvailableCities(int id) throws PlayerExistsException {
         return getPlayerByID(id).getAvailableCities();
+    }
+
+    public Player getWinner() throws GameOverException{
+        for(Player player : players){
+            if(player.getVictoryPoints() == WINNING_POINTS){
+                return player;
+            }
+        }
+
+        throw new GameOverException("The game is still in progress.");
     }
 }

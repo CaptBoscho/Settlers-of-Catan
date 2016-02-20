@@ -479,6 +479,21 @@ public class Facade {
         return playerInfos;
     }
 
+    public ModelPlayerInfo getWinner() throws GameOverException{
+        Player p = this.game.getWinner();
+
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
+
+        boolean lr = false;
+        boolean la = false;
+        if(longestroad == p.getId()){lr = true;}
+        if(largestarmy == p.getId()){la = true;}
+        ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+
+        return pi;
+    }
+
     /**
      * Facade asks the game who then asks the turn tracker if the
      * player can play a Development Card

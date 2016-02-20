@@ -1025,6 +1025,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return this.playerManager.getPlayers();
     }
 
+    public Player getWinner() throws GameOverException {
+        return playerManager.getWinner();
+    }
+
     /*======================================================
     * Private - Helper Methods
     * ======================================================*/
