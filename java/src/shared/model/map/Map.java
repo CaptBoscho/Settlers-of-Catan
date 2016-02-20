@@ -605,14 +605,14 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public Set<Integer> whoCanGetRobbed() {
+    public Set<Integer> whoCanGetRobbed(int playerID) {
         assert this.robber != null;
 
         return getPlayers(robber.getLocation());
     }
 
     @Override
-    public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
+    public Set<Integer> moveRobber(int playerID, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         assert hexLoc != null;
 //        assert hexLoc.getX() >= 0;
 //        assert hexLoc.getY() >= 0;

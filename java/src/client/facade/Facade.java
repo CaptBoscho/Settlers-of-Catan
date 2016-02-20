@@ -1,5 +1,6 @@
 
 package client.facade;
+import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
@@ -66,35 +67,6 @@ public class Facade {
 
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.game.getPlayerColorByID(id);}
-
-    /*
-    public void joinPlayer(PlayerInfo pi) throws BuildException {
-        assert pi != null;
-
-        if (this.entries.size() >= 4) {
-            throw new BuildException("too many players");
-        } else {
-            this.entries.put(pi.getUserName(), pi);
-            this.available_colors.remove(pi.getColor());
-        }
-    }
-
-    public void leaveQueue(PlayerInfo pi) throws BuildException {
-        assert pi != null;
-
-        PlayerInfo removed = this.entries.remove(pi.getUserName());
-        if (removed == null) {
-            throw new BuildException("player didn't exist");
-        } else {
-            if (!this.available_colors.add(removed.getColor())) {
-                throw new BuildException("couldn't re-add the color");
-            }
-        }
-    }
-
-    public boolean canStartGame() {
-        return entries.size() == 4 || entries.size() == 3;
-    }*/
 
     public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
@@ -380,6 +352,12 @@ public class Facade {
         return this.game.ableToBuildCity(id);
     }
 
+    public boolean ableToBuyDevCard(int id){
+        try {
+            return this.game.canBuyDevelopmentCard(id);
+        }catch(PlayerExistsException e){ return false;}
+    }
+
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
         return this.game.getAvailableRoads(id);
     }
@@ -461,9 +439,9 @@ public class Facade {
     }
 
     //TODO flesh this puppy out
-    public List<ModelPlayerInfo> getPlayers(){
+    public List<PlayerInfo> getPlayers(){
         List<Player> players = this.game.getPlayers();
-        List<ModelPlayerInfo> playerInfos = new ArrayList<ModelPlayerInfo>();
+        List<PlayerInfo> playerInfos = new ArrayList<>();
 
         int longestroad = this.game.currentLongestRoadPlayer();
         int largestarmy = this.game.currentLargestArmyPlayer();
@@ -472,14 +450,15 @@ public class Facade {
             boolean la = false;
             if(longestroad == p.getId()){lr = true;}
             if(largestarmy == p.getId()){la = true;}
-            ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+            PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
+
             playerInfos.add(pi);
         }
 
         return playerInfos;
     }
 
-    public ModelPlayerInfo getWinner() throws GameOverException{
+    public PlayerInfo getWinner() throws GameOverException{
         Player p = this.game.getWinner();
 
         int longestroad = this.game.currentLongestRoadPlayer();
@@ -489,7 +468,7 @@ public class Facade {
         boolean la = false;
         if(longestroad == p.getId()){lr = true;}
         if(largestarmy == p.getId()){la = true;}
-        ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+        PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
 
         return pi;
     }
@@ -501,19 +480,41 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-  /*  public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
+    public boolean canPlayDC(int playerID) throws PlayerExistsException {
         assert playerID >= 0;
-        assert dc != null;
+        int cards = this.game.numberOfDevCard(playerID);
+        return cards > 0;
+    }
 
-        if(myTurn(playerID)){
-            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
-            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
-            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
-            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
-            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
-        }
-        return false;
-    }*/
+    public boolean canUseMonopoly(int playerID){
+        try {
+            return this.game.canUseMonopoly(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseRoadBuilder(int playerID){
+        try {
+            return this.game.canUseRoadBuilder(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseMonument(int playerID){
+        try{
+            return this.game.canUseMonument(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseSoldier(int playerID, HexLocation hexloc){
+        try{
+            return this.game.canUseSoldier(playerID, hexloc);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseYearOfPlenty(int playerID){
+        try{
+            return this.game.canUseYearOfPlenty(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
 
     /**
      * plays the Development Card

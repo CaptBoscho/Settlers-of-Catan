@@ -1,6 +1,7 @@
 package client.points;
 
 import client.base.*;
+import client.data.PlayerInfo;
 import client.facade.Facade;
 import client.facade.ModelPlayerInfo;
 import client.points.states.GameFinishedState;
@@ -48,7 +49,7 @@ public class PointsController extends Controller implements IPointsController, O
 	}
 
 	private void initFromModel() {
-		for(ModelPlayerInfo playerInfo : facade.getPlayers()){
+		for(PlayerInfo playerInfo : facade.getPlayers()){
             getPointsView().setPoints(playerInfo.getVictoryPoints());
         }
 	}

@@ -1,5 +1,6 @@
 package client.points.states;
 
+import client.data.PlayerInfo;
 import client.facade.Facade;
 import client.facade.ModelPlayerInfo;
 import client.points.IGameFinishedView;
@@ -34,8 +35,8 @@ public class GameFinishedState extends PointsControllerState {
     public void update(){
         try {
             //Get the winner
-            ModelPlayerInfo winner = facade.getWinner();
-            view.setWinner(winner.getName(), winner.getIndex() == userCookie.getPlayerId());
+            PlayerInfo winner = facade.getWinner();
+            view.setWinner(winner.getName(), winner.getPlayerIndex() == userCookie.getPlayerId());
 
             //Show the modal
             if(!view.isModalShowing())
