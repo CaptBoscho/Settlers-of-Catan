@@ -4,19 +4,23 @@ import shared.definitions.CatanColor;
 
 
 public class ModelPlayerInfo{
+    private int id;
     private String name;
-    int victorypoints;
+    private int victorypoints;
     private CatanColor color;
-    boolean longestroad;
-    boolean largestarmy;
+    private boolean longestroad;
+    private boolean largestarmy;
 
-    public ModelPlayerInfo(String n, int vp, CatanColor c, boolean lr, boolean la){
+    public ModelPlayerInfo(int id, String n, int vp, CatanColor c, boolean lr, boolean la){
+        this.id = id;
         this.name = n;
         this.victorypoints = vp;
         this.color = c;
         this.longestroad = lr;
         this.largestarmy = la;
     }
+
+    public int getIndex(){return this.id;}
 
     public String getName(){
         return this.name;
