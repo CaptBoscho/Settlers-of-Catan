@@ -52,11 +52,11 @@ public class TurnTrackerTests {
         assertTrue(t.isSetupPhase());
         assertEquals(0, t.getCurrentTurn());
 
-        System.out.println(t.getPhase());
+//        System.out.println(t.getPhase());
 
         /////// REGULAR GAMEPLAY
         for(int i = 0; i < 100; i++) {
-            System.out.println(t.getPhase());
+//            System.out.println(t.getPhase());
 
             t.nextPhase();
             assertFalse(t.isSetupPhase());

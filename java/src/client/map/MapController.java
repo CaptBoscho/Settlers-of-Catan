@@ -91,7 +91,7 @@ public class MapController extends Controller implements IMapController, Observe
 		try {
 			getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
 		} catch (PlayerExistsException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -100,7 +100,7 @@ public class MapController extends Controller implements IMapController, Observe
 		try {
 			getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
 		} catch (PlayerExistsException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -109,7 +109,7 @@ public class MapController extends Controller implements IMapController, Observe
 		try {
 			getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
 		} catch (PlayerExistsException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

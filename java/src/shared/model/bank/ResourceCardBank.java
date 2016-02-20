@@ -184,7 +184,6 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
                 break;
             case ORE:
                 size = getNumberOfOre();
-                System.out.println("size: " + size);
                 break;
         }
         return size;

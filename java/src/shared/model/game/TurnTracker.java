@@ -189,6 +189,10 @@ public final class TurnTracker {
         return phase == Phase.SETUPONE || phase == Phase.SETUPTWO;
     }
 
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
 
     public enum Phase {
         SETUPONE,
@@ -206,7 +210,8 @@ public final class TurnTracker {
             public Phase next() {
                 return ROLLING;
             }
-        };
+        },
+        GAMEFINISHED;
 
         public Phase next() {
             return values()[ordinal() + 1];

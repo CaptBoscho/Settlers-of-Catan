@@ -155,13 +155,13 @@ public interface IGame {
      * @param playerID ID of Player performing action
      * @return True if Player can play Soldier
      */
-    boolean canUseSoldier(int playerID) throws PlayerExistsException;
+    boolean canUseSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException;
 
     /**
      * Action - Player plays Soldier
      * @param playerID ID of Player performing action
      */
-    void useSoldier(int playerID) throws PlayerExistsException, DevCardException;
+    Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException;
 
     /**
      * Determine if Player can play Monopoly
@@ -205,7 +205,7 @@ public interface IGame {
      */
     Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException;
 
-    ResourceType rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
+    void rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
 
     /**
      * returns boolean value denoting if the player can build a
@@ -264,6 +264,30 @@ public interface IGame {
      * @param roadSize
      */
     public void newLongestRoad(int playerIDOld, int playerIDNew, int roadSize);
+
+    /**
+     * returns the value of how many soldiers is the LargestArmy
+     *
+     * @return
+     */
+    public int currentLargestArmySize();
+
+    /**
+     * returns the playerID of who owns the current largest army
+     *
+     * @return
+     */
+    public int currentLargestArmyPlayer();
+
+    /**
+     * deducts Victory Points from playerIDOld
+     * adds Victory Points to playerIDNew
+     * Updates LargestArmy for playerIDNew and armySize
+     * @param playerIDOld
+     * @param playerIDNew
+     * @param armySize
+     */
+    public void newLargestArmy(int playerIDOld, int playerIDNew, int armySize);
 
     /**
      * checks if the player has the cards to buy a DevelopmentCard
@@ -325,4 +349,9 @@ public interface IGame {
 
     public Integer getAvailableCities(int id) throws PlayerExistsException;
 
+    public List<Player> getPlayers();
+
+    public Integer numberOfDevCard(int id) throws PlayerExistsException;
+
+    public Player getWinner() throws GameOverException;
 }
