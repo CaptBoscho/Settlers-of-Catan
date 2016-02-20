@@ -6,7 +6,10 @@ import javax.swing.*;
 
 import client.base.*;
 import client.data.*;
+import client.facade.Facade;
+import client.services.UserCookie;
 import shared.definitions.*;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.*;
 
 /**
@@ -90,9 +93,8 @@ public final class MapView extends PanelView implements IMapView {
 		
 		@Override
 		public IView getView() {
-            // TODO -- implement
 			assert false;
-			return null;
+            return null;
 		}
 		
 		@Override
@@ -145,7 +147,7 @@ public final class MapView extends PanelView implements IMapView {
 		
 		@Override
 		public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
-			assert false;
+            assert false;
 		}
 		
 		@Override
@@ -156,19 +158,16 @@ public final class MapView extends PanelView implements IMapView {
 		
 		@Override
 		public void playSoldierCard() {
-			// TODO -- implement
 			assert false;
 		}
 		
 		@Override
 		public void playRoadBuildingCard() {
-            // TODO -- implement
 			assert false;
 		}
 		
 		@Override
 		public void robPlayer(RobPlayerInfo victim) {
-            // TODO -- implement
 			assert false;
 		}
 		
@@ -176,6 +175,7 @@ public final class MapView extends PanelView implements IMapView {
 			overlay.cancelDrop();
 			overlay.closeModal();
 		}
+
 	};
 	
 	private static class MapOverlay extends OverlayView {

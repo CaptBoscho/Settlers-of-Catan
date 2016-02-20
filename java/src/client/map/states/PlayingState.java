@@ -3,6 +3,7 @@ package client.map.states;
 import client.data.RobPlayerInfo;
 import client.map.MapController;
 import client.services.MissingUserCookieException;
+import shared.definitions.PieceType;
 import shared.exceptions.InvalidLocationException;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
@@ -17,11 +18,25 @@ import shared.locations.VertexLocation;
  */
 public class PlayingState extends MapState {
 
+    private static PlayingState instance;
+
+    public static PlayingState getInstance(){
+        if(instance == null){
+            instance = new PlayingState();
+        }
+        return instance;
+    }
+
+    private boolean isPlayingRoadBuildingCard;
+    private EdgeLocation firstRoad;
+
     /**
      * Constructor
      */
-    public PlayingState(MapController mapController){
-        super(mapController);
+    public PlayingState(){
+        super();
+        isPlayingRoadBuildingCard = false;
+        firstRoad = null;
     }
 
     @Override
@@ -30,7 +45,7 @@ public class PlayingState extends MapState {
         try {
             return facade.canBuildRoad(userCookie.getPlayerId(), edgeLoc);
         } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -41,7 +56,7 @@ public class PlayingState extends MapState {
         try {
             return facade.canBuildSettlement(userCookie.getPlayerId(), vertLoc);
         } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -52,83 +67,93 @@ public class PlayingState extends MapState {
         try {
             return facade.canBuildCity(userCookie.getPlayerId(), vertLoc);
         } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
 
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
-        hexLoc = getModelHexLocation(hexLoc);
-        //TODO: add this method to the facade
-        //return facade.canMoveRobber(hexLoc);
         return false;
     }
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
-        if(canPlaceRoad(edgeLoc)) {
-            try {
+        try{
+            if(isPlayingRoadBuildingCard && firstRoad == null) {
+                firstRoad = edgeLoc;
+                facade.buildFirstRoad(userCookie.getPlayerId(), edgeLoc);
+            } else if(isPlayingRoadBuildingCard) {
+                facade.playRoadBuildingCard(userCookie.getPlayerId(), firstRoad, edgeLoc);
+            } else {
                 facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
-            } catch (MissingUserCookieException e) {
-                System.out.println(e.getMessage());
             }
+            mapController.getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+        } catch (MissingUserCookieException | PlayerExistsException e) {
+                e.printStackTrace();
         }
     }
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
-        if(canPlaceSettlement(vertLoc)) {
-            try {
-                facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
-            } catch (MissingUserCookieException e) {
-                System.out.println(e.getMessage());
-            }
+        try {
+            facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
+            mapController.getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+        } catch (MissingUserCookieException | PlayerExistsException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void placeCity(VertexLocation vertLoc) {
-        if(canPlaceCity(vertLoc)) {
-            try {
-                facade.buildCity(userCookie.getPlayerId(), vertLoc);
-            } catch (MissingUserCookieException e) {
-                System.out.println(e.getMessage());
-            }
+        try {
+            facade.buildCity(userCookie.getPlayerId(), vertLoc);
+            mapController.getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+        } catch (MissingUserCookieException | PlayerExistsException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void placeRobber(HexLocation hexLoc) {
-        if(canPlaceRobber(hexLoc)) {
-            //TODO: add this method to the facade
-            //facade.moveRobber(hexLoc);
+    public void placeRobber(HexLocation hexLoc){}
+
+    @Override
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
+        if(pieceType == PieceType.ROBBER) {
+            return;
+        }
+        try {
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Play Soldier - State Implementation
-     */
     @Override
-    public void playSoldierCard() {
-        super.playSoldierCard();
+    public void cancelMove() {
+        if(isPlayingRoadBuildingCard && firstRoad != null) {
+            facade.deleteRoad(userCookie.getPlayerId(), firstRoad);
+            facade.cancelRoadBuildingCard(userCookie.getPlayerId());
+            initFromModel();
+        }
     }
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
+    @Override
+    public void playSoldierCard(){}
+
     @Override
     public void playRoadBuildingCard() {
-        super.playRoadBuildingCard();
+        isPlayingRoadBuildingCard = true;
+        try {
+            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        isPlayingRoadBuildingCard = false;
+        firstRoad = null;
     }
 
-    /**
-     * Rob Player - State Implementation
-     *
-     * @param victim
-     */
     @Override
-    public void robPlayer(RobPlayerInfo victim) {
-        super.robPlayer(victim);
-    }
+    public void robPlayer(RobPlayerInfo victim){}
 }

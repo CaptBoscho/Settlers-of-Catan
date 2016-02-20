@@ -22,47 +22,60 @@ public class MapController extends Controller implements IMapController, Observe
 	private Facade facade;
     private UserCookie userCookie;
     private MapState mapState;
+    private SetupOneState setupOneState;
+    private SetupTwoState setupTwoState;
+    private RollingState rollingState;
+    private DiscardingState discardingState;
+    private RobbingState robbingState;
+    private PlayingState playingState;
 	
 	public MapController(IMapView view, IRobView robView) {
 		super(view);
 		setRobView(robView);
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
+        setupOneState = SetupOneState.getInstance();
+        setupTwoState = SetupTwoState.getInstance();
+        rollingState = RollingState.getInstance();
+        discardingState = DiscardingState.getInstance();
+        robbingState = RobbingState.getInstance();
+        playingState = PlayingState.getInstance();
         facade.addObserver(this);
-        initialize();
 	}
 
     public void initialize() {
         TurnTracker.Phase state = facade.getPhase();
         switch(state) {
             case SETUPONE:
-                mapState = new SetupOneState(this);
+                mapState = setupOneState;
                 break;
             case SETUPTWO:
-                mapState = new SetupTwoState(this);
+                mapState = setupTwoState;
                 break;
             case ROLLING:
-                mapState = new RollingState(this);
+                mapState = rollingState;
                 break;
             case ROBBING:
-                mapState = new RobbingState(this);
+                mapState = robbingState;
                 break;
             case PLAYING:
-                mapState = new PlayingState(this);
+                mapState = playingState;
                 break;
             case DISCARDING:
-                mapState = new DiscardingState(this);
+                mapState = discardingState;
                 break;
             default:
                 break;
         }
+        mapState.setController(this);
+        mapState.initFromModel();
     }
 	
 	public IMapView getView() {
 		return (IMapView)super.getView();
 	}
 	
-	private IRobView getRobView() {
+	public IRobView getRobView() {
 		return robView;
 	}
 
@@ -87,56 +100,47 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
-		mapState.placeRoad(edgeLoc);
-		try {
-			getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
-		} catch (PlayerExistsException e) {
-			e.printStackTrace();
-		}
+		if(mapState.canPlaceRoad(edgeLoc)) {
+            mapState.placeRoad(edgeLoc);
+        }
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		mapState.placeSettlement(vertLoc);
-		try {
-			getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
-		} catch (PlayerExistsException e) {
-			e.printStackTrace();
-		}
+        if(mapState.canPlaceSettlement(vertLoc)) {
+            mapState.placeSettlement(vertLoc);
+        }
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
-		mapState.placeCity(vertLoc);
-		try {
-			getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
-		} catch (PlayerExistsException e) {
-			e.printStackTrace();
-		}
+        if(mapState.canPlaceCity(vertLoc)) {
+            mapState.placeCity(vertLoc);
+        }
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
-		mapState.placeRobber(hexLoc);
-		getView().placeRobber(hexLoc);
-		getRobView().showModal();
+        if(mapState.canPlaceRobber(hexLoc)) {
+            mapState.placeRobber(hexLoc);
+        }
 	}
 	
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
-		getView().startDrop(pieceType, CatanColor.ORANGE, true);
+		mapState.startMove(pieceType, isFree, allowDisconnected);
 	}
 	
 	public void cancelMove() {
-		// TODO -- implement
+		mapState.cancelMove();
 	}
 	
 	public void playSoldierCard() {
-		// TODO -- implement
+		mapState.playSoldierCard();
 	}
 	
 	public void playRoadBuildingCard() {
-		// TODO -- implement
+		mapState.playRoadBuildingCard();
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
-		// TODO -- implement
+		mapState.robPlayer(victim);
 	}
 
 	@Override
