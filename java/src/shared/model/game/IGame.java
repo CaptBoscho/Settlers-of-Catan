@@ -155,7 +155,7 @@ public interface IGame {
      * @param playerID ID of Player performing action
      * @return True if Player can play Soldier
      */
-    boolean canUseSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException;
+    boolean canUseSoldier(int playerID) throws PlayerExistsException;
 
     /**
      * Action - Player plays Soldier
