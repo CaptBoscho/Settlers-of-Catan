@@ -1,5 +1,6 @@
 
 package client.facade;
+import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
 import shared.dto.BuildCityDTO;
@@ -32,7 +33,7 @@ public class Facade {
 
     private IGame game;
     private List<Player> players = new ArrayList<>();
-    private HashMap<String, PlayerInfo> entries = new HashMap<>();
+    private HashMap<String, ModelPlayerInfo> entries = new HashMap<>();
     private Set<CatanColor> available_colors = new HashSet<>();
     private static Facade _instance;
 
@@ -136,22 +137,10 @@ public class Facade {
         }catch(StructureException e){}
     }
 
+    //TODO convert this to server
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
-        if (this.entries.size() != 4 && this.entries.size() != 3) {
-            throw new BuildException("need 3-4 players to play");
-        } else {
-            int id = 1;
-            for (String currKey : this.entries.keySet()) {
-                Name him = new Name(this.entries.get(currKey).getName());
-                Player p = new Player(0, this.entries.get(currKey).getColor(), id, him);
-                this.players.add(p);
+        int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
 
-                id++;
-            }
-            int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
-
-
-        }
     }
 
     /**
@@ -375,28 +364,6 @@ public class Facade {
         }
     }
 
-
-    /**
-     * Facade asks the game who then asks the turn tracker if the
-     * player can play a Development Card
-     *
-     * @param playerID The ID of the player asking this
-     * @return A boolean value indicating if a development card can be played
-     */
-    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
-        assert playerID >= 0;
-        assert dc != null;
-
-        if(myTurn(playerID)){
-            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
-            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
-            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
-            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
-            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
-        }
-        return false;
-    }
-
     public shared.model.map.Map getMap(){return this.game.getMap();}
 
     public TurnTracker.Phase getPhase(){return this.game.getCurrentPhase();}
@@ -429,9 +396,27 @@ public class Facade {
         return this.game.canPlaceRobber(id, hexloc);
     }
 
-    public Set<Integer> moveRobber(int id, HexLocation hexloc){
+    public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
         try{
-            return this.game.placeRobber(id, hexloc);
+            Set<Integer> ids = this.game.placeRobber(id, hexloc);
+            List<Player> players = this.game.getPlayers();
+            RobPlayerInfo[] robbed = new RobPlayerInfo[4];
+            int i = 0;
+
+            for(Player p: players){
+                if(ids.contains(p.getId())){
+                    RobPlayerInfo rbi = new RobPlayerInfo();
+                    rbi.setColor(p.getColor());
+                    rbi.setId(p.getId());
+                    rbi.setName(p.getName().toString());
+                    rbi.setPlayerIndex(p.getPlayerIndex());
+                    rbi.setNumCards(p.countResources());
+                    robbed[i] = rbi;
+                    i++;
+                }
+            }
+
+            return robbed;
         }catch(AlreadyRobbedException e){
 
         }catch(InvalidLocationException e){
@@ -440,7 +425,80 @@ public class Facade {
         return null;
     }
 
+    public void rob(int playerID, RobPlayerInfo victim) {
+        try {
+
+            this.game.rob(playerID, victim.getId());
+
+        } catch(InvalidTypeException e){
+
+        } catch(PlayerExistsException e){
+
+        }catch(InsufficientResourcesException e){
+
+        } catch(MoveRobberException e){
+
+        }
+    }
     //TODO devcard functions
+
+    public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
+        try {
+
+            if (this.game.canUseSoldier(playerID, hexloc)) {
+                return this.game.useSoldier(playerID, hexloc);
+            }
+            return null;
+        } catch(PlayerExistsException e){
+            return null;
+        } catch(AlreadyRobbedException e){
+            return null;
+        } catch(DevCardException e){
+            return null;
+        } catch(InvalidLocationException e){
+            return null;
+        }
+    }
+
+    //TODO flesh this puppy out
+    public List<ModelPlayerInfo> getPlayers(){
+        List<Player> players = this.game.getPlayers();
+        List<ModelPlayerInfo> playerInfos = new ArrayList<ModelPlayerInfo>();
+
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
+        for(Player p: players){
+            boolean lr = false;
+            boolean la = false;
+            if(longestroad == p.getId()){lr = true;}
+            if(largestarmy == p.getId()){la = true;}
+            ModelPlayerInfo pi = new ModelPlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+            playerInfos.add(pi);
+        }
+
+        return playerInfos;
+    }
+
+    /**
+     * Facade asks the game who then asks the turn tracker if the
+     * player can play a Development Card
+     *
+     * @param playerID The ID of the player asking this
+     * @return A boolean value indicating if a development card can be played
+     */
+  /*  public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
+        assert playerID >= 0;
+        assert dc != null;
+
+        if(myTurn(playerID)){
+            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
+            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
+            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
+            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
+            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
+        }
+        return false;
+    }*/
 
     /**
      * plays the Development Card

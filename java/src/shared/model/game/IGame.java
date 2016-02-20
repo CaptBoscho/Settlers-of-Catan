@@ -155,13 +155,13 @@ public interface IGame {
      * @param playerID ID of Player performing action
      * @return True if Player can play Soldier
      */
-    boolean canUseSoldier(int playerID) throws PlayerExistsException;
+    boolean canUseSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException;
 
     /**
      * Action - Player plays Soldier
      * @param playerID ID of Player performing action
      */
-    void useSoldier(int playerID) throws PlayerExistsException, DevCardException;
+    Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException;
 
     /**
      * Determine if Player can play Monopoly
@@ -205,7 +205,7 @@ public interface IGame {
      */
     Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException;
 
-    ResourceType rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
+    void rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
 
     /**
      * returns boolean value denoting if the player can build a
@@ -348,5 +348,9 @@ public interface IGame {
     public Integer getAvailableSettlements(int id) throws PlayerExistsException;
 
     public Integer getAvailableCities(int id) throws PlayerExistsException;
+
+    public List<Player> getPlayers();
+
+    public Integer currentLargestArmyPlayer();
 
 }

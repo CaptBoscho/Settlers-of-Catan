@@ -187,4 +187,5 @@ public interface IPlayer {
     Integer quantityOfDevCards();
 
     void moveNewToOld() throws BadCallerException;
+
 }
