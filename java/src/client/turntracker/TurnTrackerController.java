@@ -1,11 +1,16 @@
 package client.turntracker;
 
 import client.facade.Facade;
+import client.facade.ModelPlayerInfo;
 import client.services.UserCookie;
 import client.turntracker.states.*;
 import client.base.*;
+import shared.definitions.CatanColor;
+import shared.exceptions.PlayerExistsException;
 import shared.model.game.Game;
 import shared.model.game.TurnTracker;
+
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,13 +20,15 @@ import java.util.Observer;
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
     private UserCookie userCookie;
+    private List<ModelPlayerInfo> players;
     private TurnTrackerControllerState state;
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
-        createState(facade.getPhase());
+        //createState(facade.getPhase());
 		facade = Facade.getInstance();
         facade.addObserver(this);
+        players = facade.getPlayers();
         userCookie = UserCookie.getInstance();
 		initFromModel();
 	}
@@ -37,6 +44,24 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	}
 	
 	private void initFromModel() {
+        //Set the local player color
+        try {
+            int id = userCookie.getPlayerId();
+            CatanColor locPColor = facade.getPlayerColorByID(id);
+            getView().setLocalPlayerColor(locPColor);
+        } catch (PlayerExistsException e) {
+            //throw new FailedToInitTTrackerException();
+        }
+
+        //Init Players
+        for(ModelPlayerInfo playerInfo : players){
+            getView().initializePlayer(playerInfo.getIndex(), playerInfo.getName(), playerInfo.getColor());
+        }
+
+        //Create the current state
+        createState(facade.getPhase());
+
+        //Call the state's init function
         state.initFromModel();
 	}
 
@@ -51,7 +76,11 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		state.update((Game)o);
+		//initFromModel();
+        //Update the state
+        createState(facade.getPhase());
+		//Call the state's update function
+        state.update();
 	}
 
     /**

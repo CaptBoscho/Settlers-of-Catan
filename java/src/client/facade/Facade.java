@@ -472,7 +472,7 @@ public class Facade {
             boolean la = false;
             if(longestroad == p.getId()){lr = true;}
             if(largestarmy == p.getId()){la = true;}
-            ModelPlayerInfo pi = new ModelPlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+            ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
             playerInfos.add(pi);
         }
 

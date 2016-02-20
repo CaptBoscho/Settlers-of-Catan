@@ -4,15 +4,9 @@ import client.facade.Facade;
 import client.services.UserCookie;
 import client.turntracker.ITurnTrackerView;
 import client.turntracker.TurnTrackerControllerState;
-import shared.definitions.CatanColor;
-import shared.exceptions.PlayerExistsException;
-import shared.model.game.Game;
-import shared.model.player.Player;
-
-import java.util.Observable;
 
 /**
- * Created by corne on 2/18/2016.
+ * Created by Kyle 'TMD' Cornelison on 2/18/2016.
  */
 public class DiscardingState extends TurnTrackerControllerState {
     private Facade facade;
@@ -24,9 +18,9 @@ public class DiscardingState extends TurnTrackerControllerState {
      */
     public DiscardingState(ITurnTrackerView view){
         super(view);
-        view = view;
-        facade = Facade.getInstance();
-        userCookie = UserCookie.getInstance();
+        this.view = view;
+        this.facade = Facade.getInstance();
+        this.userCookie = UserCookie.getInstance();
     }
 
     @Override
@@ -47,7 +41,7 @@ public class DiscardingState extends TurnTrackerControllerState {
     }
 
     @Override
-    public void update(Game game) {
-        super.update(game);
+    public void update() {
+        super.update();
     }
 }

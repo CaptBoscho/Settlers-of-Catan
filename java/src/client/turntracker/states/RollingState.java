@@ -4,12 +4,9 @@ import client.facade.Facade;
 import client.services.UserCookie;
 import client.turntracker.ITurnTrackerView;
 import client.turntracker.TurnTrackerControllerState;
-import shared.model.game.Game;
-
-import java.util.Observable;
 
 /**
- * Created by corne on 2/18/2016.
+ * Created by Kyle 'TMD' Cornelison on 2/18/2016.
  */
 public class RollingState extends TurnTrackerControllerState {
     private Facade facade;
@@ -21,9 +18,9 @@ public class RollingState extends TurnTrackerControllerState {
      */
     public RollingState(ITurnTrackerView view){
         super(view);
-        view = view;
-        facade = Facade.getInstance();
-        userCookie = UserCookie.getInstance();
+        this.view = view;
+        this.facade = Facade.getInstance();
+        this.userCookie = UserCookie.getInstance();
     }
 
     @Override
@@ -44,7 +41,7 @@ public class RollingState extends TurnTrackerControllerState {
     }
 
     @Override
-    public void update(Game game) {
-        super.update(game);
+    public void update() {
+        super.update();
     }
 }

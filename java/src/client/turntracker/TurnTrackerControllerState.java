@@ -2,6 +2,7 @@ package client.turntracker;
 
 import client.data.PlayerInfo;
 import client.facade.Facade;
+import client.facade.ModelPlayerInfo;
 import client.services.UserCookie;
 import com.sun.jna.platform.win32.Netapi32Util;
 import shared.definitions.CatanColor;
@@ -22,7 +23,7 @@ public class TurnTrackerControllerState {
     private Facade facade;
     private UserCookie userCookie;
     private ITurnTrackerView view;
-    private PlayerManager pManager;
+    private List<ModelPlayerInfo> players;
 
     /**
      * Constructor
@@ -31,7 +32,7 @@ public class TurnTrackerControllerState {
         view = view;
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
-        pManager = facade.getPlayerManager();
+        players = facade.getPlayers();
     }
 
     public void endTurn() {
@@ -42,30 +43,15 @@ public class TurnTrackerControllerState {
         }
     }
 
-    public void initFromModel() {
-        //Set the local player color
-        try {
-            int id = userCookie.getPlayerId();
-            CatanColor locPColor = facade.getPlayerColorByID(id);
-            view.setLocalPlayerColor(locPColor);
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
+    public void initFromModel(){}
 
-        //Init Players // TODO: 2/18/2016 Change to match the way Derek changed things 
-        List<Player> players = pManager.getPlayers();
-        for(Player player : players){
-            view.initializePlayer(player.getPlayerIndex(), player.getName().toString(), player.getColor());
-        }
-    }
-
-    public void update(Game game) {
-        List<Player> players = game.getPlayerManager().getPlayers();
-        for(Player player : players){
-            view.updatePlayer(player.getPlayerIndex(), player.getVictoryPoints(),
-                    game.getCurrentTurn() == player.getId(),
-                    game.currentLargestArmyPlayer() == player.getId(),
-                    game.currentLongestRoadPlayer() == player.getId());
+    public void update() {
+        //Update Controller
+        for(ModelPlayerInfo playerInfo : players){
+            view.updatePlayer(playerInfo.getIndex(), playerInfo.getVictoryPoints(),
+                    facade.getCurrentTurn() == playerInfo.getIndex(),
+                    playerInfo.hasLargestArmy(),
+                    playerInfo.hasLongestRoad());
         }
     }
 }

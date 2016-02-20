@@ -350,7 +350,4 @@ public interface IGame {
     public Integer getAvailableCities(int id) throws PlayerExistsException;
 
     public List<Player> getPlayers();
-
-    public Integer currentLargestArmyPlayer();
-
 }
