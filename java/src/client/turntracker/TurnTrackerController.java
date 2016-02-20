@@ -1,5 +1,6 @@
 package client.turntracker;
 
+import client.data.PlayerInfo;
 import client.facade.Facade;
 import client.facade.ModelPlayerInfo;
 import client.services.UserCookie;
@@ -20,7 +21,7 @@ import java.util.Observer;
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
     private UserCookie userCookie;
-    private List<ModelPlayerInfo> players;
+    private List<PlayerInfo> players;
     private TurnTrackerControllerState state;
 
 	public TurnTrackerController(ITurnTrackerView view) {
@@ -30,7 +31,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
         facade.addObserver(this);
         players = facade.getPlayers();
         userCookie = UserCookie.getInstance();
-		initFromModel();
+		//initFromModel();
 	}
 	
 	@Override
@@ -43,7 +44,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		state.endTurn();
 	}
 	
-	private void initFromModel() {
+	public void initFromModel() {
         //Set the local player color
         try {
             int id = userCookie.getPlayerId();
@@ -54,8 +55,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
         }
 
         //Init Players
-        for(ModelPlayerInfo playerInfo : players){
-            getView().initializePlayer(playerInfo.getIndex(), playerInfo.getName(), playerInfo.getColor());
+        for(PlayerInfo playerInfo : players){
+            getView().initializePlayer(playerInfo.getPlayerIndex(), playerInfo.getName(), playerInfo.getColor());
         }
 
         //Create the current state

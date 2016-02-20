@@ -1,5 +1,6 @@
 
 package client.facade;
+import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
@@ -380,6 +381,12 @@ public class Facade {
         return this.game.ableToBuildCity(id);
     }
 
+    public boolean ableToBuyDevCard(int id){
+        try {
+            return this.game.canBuyDevelopmentCard(id);
+        }catch(PlayerExistsException e){ return false;}
+    }
+
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
         return this.game.getAvailableRoads(id);
     }
@@ -461,9 +468,9 @@ public class Facade {
     }
 
     //TODO flesh this puppy out
-    public List<ModelPlayerInfo> getPlayers(){
+    public List<PlayerInfo> getPlayers(){
         List<Player> players = this.game.getPlayers();
-        List<ModelPlayerInfo> playerInfos = new ArrayList<ModelPlayerInfo>();
+        List<PlayerInfo> playerInfos = new ArrayList<>();
 
         int longestroad = this.game.currentLongestRoadPlayer();
         int largestarmy = this.game.currentLargestArmyPlayer();
@@ -472,14 +479,15 @@ public class Facade {
             boolean la = false;
             if(longestroad == p.getId()){lr = true;}
             if(largestarmy == p.getId()){la = true;}
-            ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+            PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
+
             playerInfos.add(pi);
         }
 
         return playerInfos;
     }
 
-    public ModelPlayerInfo getWinner() throws GameOverException{
+    public PlayerInfo getWinner() throws GameOverException{
         Player p = this.game.getWinner();
 
         int longestroad = this.game.currentLongestRoadPlayer();
@@ -489,7 +497,7 @@ public class Facade {
         boolean la = false;
         if(longestroad == p.getId()){lr = true;}
         if(largestarmy == p.getId()){la = true;}
-        ModelPlayerInfo pi = new ModelPlayerInfo(p.getId(), p.getName().toString(), p.getVictoryPoints(), p.getColor(), lr, la);
+        PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
 
         return pi;
     }
@@ -501,19 +509,11 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-  /*  public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
+    public boolean canPlayDC(int playerID) throws PlayerExistsException {
         assert playerID >= 0;
-        assert dc != null;
-
-        if(myTurn(playerID)){
-            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
-            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
-            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
-            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
-            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
-        }
-        return false;
-    }*/
+        int cards = this.game.numberOfDevCard(playerID);
+        return cards > 0;
+    }
 
     /**
      * plays the Development Card

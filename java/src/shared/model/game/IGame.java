@@ -351,5 +351,7 @@ public interface IGame {
 
     public List<Player> getPlayers();
 
+    public Integer numberOfDevCard(int id) throws PlayerExistsException;
+
     public Player getWinner() throws GameOverException;
 }
