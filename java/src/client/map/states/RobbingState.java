@@ -64,8 +64,7 @@ public class RobbingState extends MapState {
     @Override
     public void placeRobber(HexLocation hexLoc) {
         mapController.getView().placeRobber(hexLoc);
-        //TODO: facade needs to return RobPlayerInfo[] instead of Set<Integer>
-        //mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerId(), hexLoc));
+        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerId(), hexLoc));
         mapController.getRobView().showModal();
     }
 
@@ -77,19 +76,21 @@ public class RobbingState extends MapState {
         try {
             mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
         } catch (PlayerExistsException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void cancelMove(){}
+    public void cancelMove(){
+        facade.cancelSoldierCard(userCookie.getPlayerId());
+    }
 
     @Override
     public void playSoldierCard() {
         try {
             mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
         } catch (PlayerExistsException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -98,7 +99,6 @@ public class RobbingState extends MapState {
 
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        //TODO: facade needs a method where i can pass in a RobPlayerInfo object
-        //facade.rob(victim);
+        facade.rob(userCookie.getPlayerId(), victim);
     }
 }

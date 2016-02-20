@@ -3,9 +3,7 @@ package client.map.states;
 import client.data.RobPlayerInfo;
 import client.facade.Facade;
 import client.map.MapController;
-import client.services.MissingUserCookieException;
 import client.services.UserCookie;
-import shared.definitions.CatanColor;
 import shared.definitions.PieceType;
 import shared.definitions.PortType;
 import shared.exceptions.PlayerExistsException;
@@ -14,7 +12,6 @@ import shared.model.map.Edge;
 import shared.model.map.Map;
 import shared.model.map.Vertex;
 import shared.model.map.hex.Hex;
-import shared.model.player.Player;
 
 import java.util.ArrayList;
 
@@ -143,7 +140,7 @@ abstract public class MapState {
                     mapController.getView().placeRoad(getUIEdgeLocation(edge.getEdgeLoc()),
                             facade.getPlayerColorByID(entry.getKey()));
                 } catch (PlayerExistsException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -157,7 +154,7 @@ abstract public class MapState {
                     mapController.getView().placeSettlement(getUIVertexLocation(vertex.getVertexLoc()),
                             facade.getPlayerColorByID(entry.getKey()));
                 } catch (PlayerExistsException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -171,7 +168,7 @@ abstract public class MapState {
                     mapController.getView().placeCity(getUIVertexLocation(vertex.getVertexLoc()),
                             facade.getPlayerColorByID(entry.getKey()));
                 } catch (PlayerExistsException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }

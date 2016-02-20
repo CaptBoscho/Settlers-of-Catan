@@ -56,11 +56,21 @@ public class SetupTwoState extends MapState {
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
         facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
+        try {
+            mapController.getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
         facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
+        try {
+            mapController.getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -80,7 +90,7 @@ public class SetupTwoState extends MapState {
         try {
             mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
         } catch (PlayerExistsException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

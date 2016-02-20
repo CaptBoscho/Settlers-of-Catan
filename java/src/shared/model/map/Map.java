@@ -591,14 +591,13 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public Set<Integer> whoCanGetRobbed() {
+    public Set<Integer> whoCanGetRobbed(int playerID) {
         assert this.robber != null;
-
-        return getPlayers(robber.getLocation());
+        return getPlayers(playerID, robber.getLocation());
     }
 
     @Override
-    public Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
+    public Set<Integer> moveRobber(int playerID, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         assert hexLoc != null;
         assert this.hexes != null;
         assert this.hexes.size() > 0;
@@ -611,7 +610,7 @@ public final class Map implements IMap, JsonSerializable{
             throw new AlreadyRobbedException("Robber cannot remain at the same hex location");
         }
         robber.setLocation(hexLoc);
-        return getPlayers(hexLoc);
+        return getPlayers(playerID, hexLoc);
     }
 
     @Override
@@ -619,6 +618,7 @@ public final class Map implements IMap, JsonSerializable{
         return null;
     }
 
+    @Override
     public void deleteRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException, StructureException {
         assert playerID >= 0 && playerID <= 3;
         assert edgeLoc != null;
@@ -1551,23 +1551,23 @@ public final class Map implements IMap, JsonSerializable{
         return false;
     }
 
-    private HashSet<Integer> getPlayers(HexLocation hexLoc) {
+    private HashSet<Integer> getPlayers(int playerID, HexLocation hexLoc) {
         assert hexLoc != null;
 
         final HashSet<Integer> players = new HashSet<>();
-        getPlayers(players, hexLoc, VertexDirection.NorthWest);
-        getPlayers(players, hexLoc, VertexDirection.NorthEast);
-        getPlayers(players, hexLoc, VertexDirection.East);
-        getPlayers(players, hexLoc, VertexDirection.SouthEast);
-        getPlayers(players, hexLoc, VertexDirection.SouthWest);
-        getPlayers(players, hexLoc, VertexDirection.West);
+        getPlayers(playerID, players, hexLoc, VertexDirection.NorthWest);
+        getPlayers(playerID, players, hexLoc, VertexDirection.NorthEast);
+        getPlayers(playerID, players, hexLoc, VertexDirection.East);
+        getPlayers(playerID, players, hexLoc, VertexDirection.SouthEast);
+        getPlayers(playerID, players, hexLoc, VertexDirection.SouthWest);
+        getPlayers(playerID, players, hexLoc, VertexDirection.West);
         return players;
     }
 
-    private void getPlayers(HashSet<Integer> players, HexLocation hexLoc, VertexDirection vertexDir) {
+    private void getPlayers(int playerID, HashSet<Integer> players, HexLocation hexLoc, VertexDirection vertexDir) {
         final VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir).getNormalizedLocation();
         final Vertex vertex = vertices.get(vertexLoc);
-        if(vertex.hasBuilding()) {
+        if(vertex.hasBuilding() && vertex.getPlayerID() != playerID) {
             players.add(vertex.getPlayerID());
         }
     }
@@ -1618,8 +1618,6 @@ public final class Map implements IMap, JsonSerializable{
         assert edgeLoc != null;
 
         edgeLoc = edgeLoc.getNormalizedLocation();
-
-        // TODO - review two lines below. Why is empty ArrayList being passed?
         ArrayList<EdgeLocation> connectingRoads = new ArrayList<>();
         connectingRoads = getConnectingRoadsForEdge(playerID, edgeLoc, connectingRoads);
         return connectingRoads;
