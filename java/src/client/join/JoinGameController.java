@@ -59,7 +59,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * 
 	 * @param value The action to be executed when the user joins a game
 	 */
-	public void setJoinAction(IAction value) {
+	public void setJoinAction(final IAction value) {
 		joinAction = value;
 	}
 	
@@ -124,6 +124,11 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
+		for(PlayerInfo p : game.getPlayers()) {
+			if(p.getId() != UserCookie.getInstance().getPlayerId()) {
+				getSelectColorView().setColorEnabled(p.getColor(), false);
+			}
+		}
 		getSelectColorView().showModal();
 	}
 

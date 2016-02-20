@@ -38,8 +38,8 @@ public class PlayerInfo {
         assert(name != null);
         assert(victorypoints >=0);
         assert(color != null);
-        assert(identifier >0);
-        assert(index >=0);
+        assert(identifier >= 0);
+        assert(index >= 0);
         assert(index<4);
 
         this.name = name;

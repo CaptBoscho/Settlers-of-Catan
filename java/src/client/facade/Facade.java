@@ -15,10 +15,8 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
-import shared.model.map.*;
 import shared.model.player.Player;
 import shared.definitions.*;
-import shared.model.player.Name;
 import shared.exceptions.*;
 
 import javax.naming.InsufficientResourcesException;

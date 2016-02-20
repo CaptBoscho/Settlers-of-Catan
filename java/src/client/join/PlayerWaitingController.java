@@ -1,6 +1,7 @@
 package client.join;
 
 import client.base.*;
+import shared.model.game.Game;
 
 
 /**
@@ -19,6 +20,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void start() {
+        getView().setPlayers(Game.getInstance().getPlayerInfo());
 		getView().showModal();
 	}
 

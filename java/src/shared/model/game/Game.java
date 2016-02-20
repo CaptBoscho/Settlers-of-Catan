@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
@@ -294,17 +295,30 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @throws InsufficientResourcesException
      * @throws InvalidTypeException
      */
-    public ResourceCard getResourceCard(ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
+    public ResourceCard getResourceCard(final ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
         assert t != null;
 
         return resourceCardBank.discard(t);
     }
 
-    public Integer amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException {
+    public Integer amountOwnedResource(final int playerID, final ResourceType t) throws PlayerExistsException, InvalidTypeException {
         assert playerID >= 0;
         assert t != null;
 
         return playerManager.getPlayerByID(playerID).howManyOfThisCard(t);
+    }
+
+    public PlayerInfo[] getPlayerInfo() {
+        PlayerInfo[] playerinfos = new PlayerInfo[4];
+        for(int i = 0; i < playerinfos.length; i++) {
+            // TODO - can we trash this exception.... so annoying
+            try {
+                playerinfos[i] = this.getPlayerManager().getPlayerByIndex(i).getInfo();
+            } catch (PlayerExistsException e) {
+                e.printStackTrace();
+            }
+        }
+        return playerinfos;
     }
 
     /**
