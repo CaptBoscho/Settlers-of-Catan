@@ -153,6 +153,12 @@ public class Facade {
         return new VertexLocation(getServerHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
     }
 
+    public void buildFirstRoad(int playerID, EdgeLocation edgeloc){
+
+    }
+
+
+
     /**
      * Facade asks if it's the player's turn, then checks the players
      * hand to see if they have enough resources, then asks the map
@@ -423,7 +429,7 @@ public class Facade {
     public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
         try {
 
-            if (this.game.canUseSoldier(playerID, hexloc)) {
+            if (this.game.canUseSoldier(playerID)) {
                 return this.game.useSoldier(playerID, hexloc);
             }
             return null;
@@ -506,7 +512,7 @@ public class Facade {
 
     public boolean canUseSoldier(int playerID, HexLocation hexloc){
         try{
-            return this.game.canUseSoldier(playerID, hexloc);
+            return this.game.canUseSoldier(playerID);
         }catch(PlayerExistsException e){return false;}
     }
 
@@ -516,6 +522,22 @@ public class Facade {
         }catch(PlayerExistsException e){return false;}
     }
 
+    public void cancelSoldierCard(int playerID){
+
+    }
+
+    public void deleteRoad(int playerID, EdgeLocation road){
+
+    }
+
+    public void cancelRoadBuildingCard(int playerID){
+
+    }
+
+    //TODO to server
+    public void playRoadBuildingCard(int playerID, EdgeLocation one, EdgeLocation two){
+
+    }
     /**
      * plays the Development Card
      *
