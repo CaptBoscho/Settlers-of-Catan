@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import client.data.PlayerInfo;
 import com.google.gson.*;
 import shared.definitions.CatanColor;
 import shared.definitions.PortType;
@@ -125,6 +126,17 @@ public final class PlayerManager implements IPlayerManager {
         }
     }
 
+    public void setPlayersFromInfo(final List<PlayerInfo> info) {
+        if(players.size() > 0) {
+            for (int i = 0; i < 4; i++) {
+                players.get(i).setPlayerInfo(info.get(i));
+            }
+        } else {
+            for(final PlayerInfo i : info) {
+                players.add(new Player(i));
+            }
+        }
+    }
 
     public int getKnights(final int playerID) throws PlayerExistsException {
         return getPlayerByID(playerID).getKnights();

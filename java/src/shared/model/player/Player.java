@@ -31,6 +31,15 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     private IDevelopmentCardBank developmentCardBank;
     private PlayerInfo playerInfo;
 
+    public Player(PlayerInfo info) {
+        this.soldiers = 0;
+        this.resourceCardBank = new ResourceCardBank(false);
+        this.developmentCardBank = new DevelopmentCardBank(false);
+        this.structureBank = new StructureBank();
+        this.moveRobber = false;
+        this.playerInfo = info;
+    }
+
     /**
      * Construct a Player object from a JSON blob
      *
@@ -731,5 +740,9 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
 
     public Integer getAvailableCities() {
         return structureBank.getAvailableCities();
+    }
+
+    public void setPlayerInfo(PlayerInfo info) {
+        this.playerInfo = info;
     }
 }

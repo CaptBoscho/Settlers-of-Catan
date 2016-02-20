@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import client.data.GameInfo;
 import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
@@ -37,6 +38,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     private static Game instance;
 
+    private int gameId;
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -62,6 +64,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(new ArrayList<>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
+
     }
 
     public static Game getInstance() {
@@ -319,6 +322,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             }
         }
         return playerinfos;
+    }
+
+    // TODO finish off
+    public void setGameInfo(GameInfo game) {
+        this.gameId = game.getId();
+        playerManager.setPlayersFromInfo(game.getPlayers());
     }
 
     /**

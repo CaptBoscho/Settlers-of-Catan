@@ -10,6 +10,7 @@ import client.misc.*;
 import shared.dto.CreateGameDTO;
 import shared.dto.JoinGameDTO;
 import shared.exceptions.PlayerExistsException;
+import shared.model.game.Game;
 
 import java.util.List;
 
@@ -129,7 +130,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 				getSelectColorView().setColorEnabled(p.getColor(), false);
 			}
 		}
-		getSelectColorView().showModal();
+        Game.getInstance().setGameInfo(game);
+        getSelectColorView().showModal();
 	}
 
 	@Override
