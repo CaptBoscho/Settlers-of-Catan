@@ -337,7 +337,7 @@ public class MapTest {
             }
             String answer = "1/[WHEAT]";
             assertEquals(answer, test.toString());
-            map.moveRobber(new HexLocation(-1,-2));
+            //map.moveRobber(new HexLocation(-1,-2));
             resources = map.getResources(8);
             test = new StringBuilder();
             for (final java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
@@ -347,7 +347,7 @@ public class MapTest {
             assertEquals(answer, test.toString());
 
         } catch(InvalidLocationException | StructureException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         } catch(InvalidDiceRollException e) {
             assertTrue(e.getMessage().equals("Need to move robber instead of giving resources"));
         }

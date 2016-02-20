@@ -54,7 +54,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementAmount(settle, settlementcount);
             getView().setElementAmount(city, citycount);
         } catch(PlayerExistsException e){
-            System.out.println("update function in ResourceBarController");
+            e.printStackTrace();
         }
     }
 
@@ -70,32 +70,51 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	 * @param action The action to be executed
 	 */
 	public void setElementAction(ResourceBarElement element, IAction action) {
-		elementActions.put(element, action);
+
+        elementActions.put(element, action);
 	}
 
 	@Override
 	public void buildRoad() {
-		executeElementAction(ResourceBarElement.ROAD);
+        try {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId()) == true) {
+                executeElementAction(ResourceBarElement.ROAD);
+            }
+        } catch(PlayerExistsException e){}
 	}
 
 	@Override
 	public void buildSettlement() {
-		executeElementAction(ResourceBarElement.SETTLEMENT);
+        try {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId()) == true) {
+                executeElementAction(ResourceBarElement.SETTLEMENT);
+            }
+        } catch(PlayerExistsException e){}
 	}
 
 	@Override
 	public void buildCity() {
-		executeElementAction(ResourceBarElement.CITY);
+        try {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId()) == true) {
+                executeElementAction(ResourceBarElement.CITY);
+            }
+        } catch(PlayerExistsException e){}
 	}
 
 	@Override
 	public void buyCard() {
-		executeElementAction(ResourceBarElement.BUY_CARD);
+        if(facade.ableToBuyDevCard(UserCookie.getInstance().getPlayerId()) == true) {
+            executeElementAction(ResourceBarElement.BUY_CARD);
+        }
 	}
 
 	@Override
 	public void playCard() {
-		executeElementAction(ResourceBarElement.PLAY_CARD);
+        try {
+            if (facade.canPlayDC(UserCookie.getInstance().getPlayerId()) == true) {
+                executeElementAction(ResourceBarElement.PLAY_CARD);
+            }
+        } catch(PlayerExistsException e){}
 	}
 	
 	private void executeElementAction(ResourceBarElement element) {

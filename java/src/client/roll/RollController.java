@@ -1,13 +1,14 @@
 package client.roll;
 
 import client.base.*;
-
+import shared.model.game.Dice;
 
 /**
  * Implementation for the roll controller
  */
 public final class RollController extends Controller implements IRollController {
 
+	private Dice roller;
 	private IRollResultView resultView;
 
 	/**
@@ -19,6 +20,7 @@ public final class RollController extends Controller implements IRollController 
 	public RollController(IRollView view, IRollResultView resultView) {
 		super(view);
 		setResultView(resultView);
+		roller = new Dice(2);
 	}
 	
 	public IRollResultView getResultView() {
@@ -34,8 +36,12 @@ public final class RollController extends Controller implements IRollController 
 	
 	@Override
 	public void rollDice() {
+		//Roll the dice
+		int roll = roller.roll();
+		//Set the result view value - value of dice roll
+		resultView.setRollValue(roll);
+		//Show the modal
 		getResultView().showModal();
 	}
-
 }
 

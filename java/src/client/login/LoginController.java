@@ -9,6 +9,7 @@ import java.util.*;
 import java.lang.reflect.*;
 
 import client.services.ServerProxy;
+import client.services.UserCookie;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import shared.dto.AuthDTO;
@@ -64,6 +65,11 @@ public class LoginController extends Controller implements ILoginController {
 		getLoginView().showModal();
 	}
 
+	private void setLocalPlayerInfo() {
+		UserCookie.getInstance().getPlayerInfo().setName(getLoginView().getLoginUsername());
+		UserCookie.getInstance().getPlayerInfo().setId(UserCookie.getInstance().getPlayerId());
+	}
+
 	// TODO: add proper error messaging
 	@Override
 	public void signIn() {
@@ -73,6 +79,7 @@ public class LoginController extends Controller implements ILoginController {
 		final AuthDTO dto = new AuthDTO(username, password);
 		if(ServerProxy.getInstance().authenticateUser(dto)) {
 			// If log in succeeded
+			setLocalPlayerInfo();
 			getLoginView().closeModal();
 			loginAction.execute();
 		}

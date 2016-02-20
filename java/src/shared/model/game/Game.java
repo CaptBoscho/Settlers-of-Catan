@@ -12,7 +12,6 @@ import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 
-import shared.model.bank.ResourceCardBank;
 import shared.definitions.DevCardType;
 import shared.model.cards.devcards.DevelopmentCard;
 
@@ -54,7 +53,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * Constructor
      */
     protected Game() {
-        this.dice = new Dice(2,12);
+        this.dice = new Dice(2);
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
@@ -74,7 +73,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
 
     public void reset() {
-        this.dice = new Dice(2,12);
+        this.dice = new Dice(2);
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
@@ -97,8 +96,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
         this.resourceCardBank = new ResourceCardBank(json.get("bank").getAsJsonObject(), true);
 
+        // only update if someone actually has the longest road
         final JsonObject turnTracker = json.getAsJsonObject("turnTracker");
-        this.longestRoadCard = new LongestRoad(turnTracker.get("longestRoad").getAsInt());
+        int longestRoadId = turnTracker.get("longestRoad").getAsInt();
+        if(longestRoadId >= 0) {
+            this.longestRoadCard = new LongestRoad(longestRoadId);
+        }
+
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
@@ -224,7 +228,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * Checks Player turn and phase of turn
      *
      * @param playerID ID of Player performing action
-     * @return True if Player can roll the die
+     * @return True if Player can roll the dice
      */
     @Override
     public boolean canRollNumber(int playerID) {
@@ -244,7 +248,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
         int roll = dice.roll();
         if(roll == 7){
-            turnTracker.updateRobber(true);
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
         } else{
             map.getResources(roll);
         }
@@ -517,7 +521,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public boolean canUseSoldier(int playerID) throws PlayerExistsException{
         assert playerID >= 0;
 
-        return playerManager.canUseSoldier(playerID)  && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
+        return playerManager.canUseSoldier(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
 
     }
 
@@ -527,7 +531,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useSoldier(int playerID) throws PlayerExistsException, DevCardException {
+    public Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
         assert playerID >= 0;
         assert this.playerManager != null;
         assert this.largestArmyCard != null;
@@ -542,8 +546,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
                 playerManager.changeLargestArmyPossession(oldplayer, playerID);
             }
 
-            turnTracker.updateRobber(true);
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            if(canPlaceRobber(playerID, hexloc)){
+                return placeRobber(playerID, hexloc);
+            }
+            return null;
         }
+        return null;
     }
 
     /**
@@ -617,7 +626,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         try {
 
-            return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
+            return turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
 
         } catch(InvalidLocationException e){
             return false;
@@ -634,11 +643,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert hexloc != null;
 
-        return map.moveRobber(hexloc);
+        return map.moveRobber(playerID, hexloc);
     }
 
     //TODO change robbing to check if the phase in the turntracker is robbing phase
-    public ResourceType rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
+    public void rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
         assert playerRobbed > 0;
         assert playerRobber > 0;
         assert playerRobbed != playerRobber;
@@ -646,14 +655,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
-        Set<Integer> who = map.whoCanGetRobbed();
+        Set<Integer> who = map.whoCanGetRobbed(playerRobber);
         assert who != null;
         if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
-            turnTracker.updateRobber(false);
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
             ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
-            return stolenResource;
+
         }
-        return null;
     }
 
     /**
@@ -831,6 +839,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return longestRoadCard.getOwner();
     }
 
+
     /**
      * deducts Victory Points from playerIDOld
      * adds Victory Points to playerIDNew
@@ -848,6 +857,43 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerIDNew != playerIDOld;
 
         longestRoadCard.setOwner(playerIDNew, roadSize);
+    }
+
+    /**
+     * returns the value of how many soldiers is the LargestArmy
+     *
+     * @return
+     */
+    @Override
+    public int currentLargestArmySize() {
+        return largestArmyCard.getMostSoldiers();
+    }
+
+    /**
+     * returns the playerID of who owns the current largest army
+     *
+     * @return
+     */
+    @Override
+    public int currentLargestArmyPlayer() {
+        return largestArmyCard.getOwner();
+    }
+
+    /**
+     * deducts Victory Points from playerIDOld
+     * adds Victory Points to playerIDNew
+     * Updates LargestArmy for playerIDNew and armySize
+     * @param playerIDOld
+     * @param playerIDNew
+     * @param armySize
+     */
+    public void newLargestArmy(int playerIDOld, int playerIDNew, int armySize){
+        assert playerIDNew >= 0;
+        assert playerIDOld >= 0;
+        assert armySize >= 0;
+        assert playerIDNew != playerIDOld;
+
+        largestArmyCard.setNewOwner(playerIDNew, armySize);
     }
 
     /**
@@ -973,6 +1019,14 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.playerManager.getPlayerColorByID(id);
+    }
+
+    public List<Player> getPlayers(){
+        return this.playerManager.getPlayers();
+    }
+
+    public Player getWinner() throws GameOverException {
+        return playerManager.getWinner();
     }
 
     /*======================================================
