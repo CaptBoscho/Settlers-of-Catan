@@ -1,13 +1,21 @@
 package client.devcards;
 
+import client.facade.Facade;
+import client.services.MissingUserCookieException;
+import client.services.UserCookie;
+import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import client.base.*;
+import shared.model.game.Game;
+
+import java.util.Observable;
+import java.util.Observer;
 
 
 /**
  * "Dev card" controller implementation
  */
-public final class DevCardController extends Controller implements IDevCardController {
+public final class DevCardController extends Controller implements IDevCardController, Observer {
 
 	private IBuyDevCardView buyCardView;
 	private IAction soldierAction;
@@ -29,6 +37,17 @@ public final class DevCardController extends Controller implements IDevCardContr
 		this.buyCardView = buyCardView;
 		this.soldierAction = soldierAction;
 		this.roadAction = roadAction;
+		Game.getInstance().addObserver(this);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		Facade facade = Facade.getInstance();
+		getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, );
+		getPlayCardView().setCardEnabled(DevCardType.MONUMENT, localPlayer.canUseMonopoly());
+		getPlayCardView().setCardEnabled(DevCardType.ROAD_BUILD, localPlayer.canUseMonopoly());
+		getPlayCardView().setCardEnabled(DevCardType.SOLDIER, localPlayer.canUseMonopoly());
+		getPlayCardView().setCardEnabled(DevCardType.YEAR_OF_PLENTY, localPlayer.canUseMonopoly());
 	}
 
 	public IPlayDevCardView getPlayCardView() {
@@ -51,7 +70,12 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void buyCard() {
-		getBuyCardView().closeModal();
+		try {
+			Facade.getInstance().buyDC(UserCookie.getInstance().getPlayerId());
+			getBuyCardView().closeModal();
+		} catch (MissingUserCookieException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

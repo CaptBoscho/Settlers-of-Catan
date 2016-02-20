@@ -37,22 +37,25 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             boolean enableRoad = facade.ableToBuildRoad(ID);
             boolean enableSettlement = facade.ableToBuildSettlement(ID);
             boolean enableCity = facade.ableToBuildCity(ID);
+			boolean enableBuyDevCard = facade.canBuyDC(ID);
 
-            int roadcount = facade.getAvailableRoads(ID);
-            int settlementcount = facade.getAvailableSettlements(ID);
-            int citycount = facade.getAvailableCities(ID);
+            int roadCount = facade.getAvailableRoads(ID);
+            int settlementCount = facade.getAvailableSettlements(ID);
+            int cityCount = facade.getAvailableCities(ID);
 
             ResourceBarElement road = ResourceBarElement.ROAD;
             ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
             ResourceBarElement city = ResourceBarElement.CITY;
+			ResourceBarElement buyCard = ResourceBarElement.BUY_CARD;
 
             getView().setElementEnabled(road, enableRoad);
             getView().setElementEnabled(settle, enableSettlement);
             getView().setElementEnabled(city, enableCity);
+			getView().setElementEnabled(buyCard, enableBuyDevCard);
 
-            getView().setElementAmount(road, roadcount);
-            getView().setElementAmount(settle, settlementcount);
-            getView().setElementAmount(city, citycount);
+            getView().setElementAmount(road, roadCount);
+            getView().setElementAmount(settle, settlementCount);
+            getView().setElementAmount(city, cityCount);
         } catch(PlayerExistsException e){
             e.printStackTrace();
         }
