@@ -29,6 +29,9 @@ public class PlayerInfo {
 		setPlayerIndex(-1);
 		setName("");
 		setColor(CatanColor.WHITE);
+        this.longestroad = false;
+        this.largestarmy = false;
+        victory = 0;
 	}
 
 	public PlayerInfo(String name, int victorypoints, CatanColor color, int identifier, int index, boolean longestRoad, boolean largestArmy){
@@ -89,17 +92,17 @@ public class PlayerInfo {
 	}
 
     //wrote these things
-    public void setVictory(int vp){this.victory = vp;}
+    public void setVictoryPoints(int vp){this.victory = vp;}
 
-    public int getVictory(){return this.victory;}
+    public int getVictoryPoints(){return this.victory;}
 
     public void setLongestRoad(boolean lr){this.longestroad = lr;}
 
-    public boolean getLongestRoad(){return this.longestroad;}
+    public boolean hasLongestRoad(){return this.longestroad;}
 
     public void setLargestArmy(boolean la){this.largestarmy = la;}
 
-    public boolean getLargestArmy(){return this.largestarmy;}
+    public boolean hasLargestArmy(){return this.largestarmy;}
 
 	@Override
 	public int hashCode()
