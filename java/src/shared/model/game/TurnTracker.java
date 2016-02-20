@@ -146,14 +146,10 @@ public final class TurnTracker {
         return phase == Phase.PLAYING;
     }
 
+    public boolean canRob(){return phase == Phase.PLAYING;}
+
     public boolean canDiscard() {
         return phase == Phase.DISCARDING;
-    }
-
-    public void updateRobber(boolean robbing) {
-        if (robbing) {
-            phase = Phase.ROBBING;
-        }
     }
 
     public boolean canUseRobber() {
@@ -210,7 +206,8 @@ public final class TurnTracker {
             public Phase next() {
                 return ROLLING;
             }
-        };
+        },
+        GAMEFINISHED;
 
         public Phase next() {
             return values()[ordinal() + 1];

@@ -1,5 +1,7 @@
 
 package client.facade;
+import client.data.PlayerInfo;
+import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
 import shared.dto.BuildCityDTO;
@@ -32,7 +34,7 @@ public class Facade {
 
     private IGame game;
     private List<Player> players = new ArrayList<>();
-    private HashMap<String, PlayerInfo> entries = new HashMap<>();
+    private HashMap<String, ModelPlayerInfo> entries = new HashMap<>();
     private Set<CatanColor> available_colors = new HashSet<>();
     private static Facade _instance;
 
@@ -65,35 +67,6 @@ public class Facade {
 
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.game.getPlayerColorByID(id);}
-
-    /*
-    public void joinPlayer(PlayerInfo pi) throws BuildException {
-        assert pi != null;
-
-        if (this.entries.size() >= 4) {
-            throw new BuildException("too many players");
-        } else {
-            this.entries.put(pi.getUserName(), pi);
-            this.available_colors.remove(pi.getColor());
-        }
-    }
-
-    public void leaveQueue(PlayerInfo pi) throws BuildException {
-        assert pi != null;
-
-        PlayerInfo removed = this.entries.remove(pi.getUserName());
-        if (removed == null) {
-            throw new BuildException("player didn't exist");
-        } else {
-            if (!this.available_colors.add(removed.getColor())) {
-                throw new BuildException("couldn't re-add the color");
-            }
-        }
-    }
-
-    public boolean canStartGame() {
-        return entries.size() == 4 || entries.size() == 3;
-    }*/
 
     public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
@@ -136,22 +109,10 @@ public class Facade {
         }catch(StructureException e){}
     }
 
+    //TODO convert this to server
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
-        if (this.entries.size() != 4 && this.entries.size() != 3) {
-            throw new BuildException("need 3-4 players to play");
-        } else {
-            int id = 1;
-            for (String currKey : this.entries.keySet()) {
-                Name him = new Name(this.entries.get(currKey).getName());
-                Player p = new Player(0, this.entries.get(currKey).getColor(), id, him);
-                this.players.add(p);
+        int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
 
-                id++;
-            }
-            int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
-
-
-        }
     }
 
     /**
@@ -191,6 +152,12 @@ public class Facade {
     private VertexLocation getServerVertexLocation(VertexLocation vertexLoc){
         return new VertexLocation(getServerHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
     }
+
+    public void buildFirstRoad(int playerID, EdgeLocation edgeloc){
+
+    }
+
+
 
     /**
      * Facade asks if it's the player's turn, then checks the players
@@ -375,28 +342,6 @@ public class Facade {
         }
     }
 
-
-    /**
-     * Facade asks the game who then asks the turn tracker if the
-     * player can play a Development Card
-     *
-     * @param playerID The ID of the player asking this
-     * @return A boolean value indicating if a development card can be played
-     */
-    public boolean canPlayDC(int playerID, DevCardType dc) throws PlayerExistsException {
-        assert playerID >= 0;
-        assert dc != null;
-
-        if(myTurn(playerID)){
-            if(dc == DevCardType.SOLDIER){return this.game.canUseSoldier(playerID);}
-            if(dc == DevCardType.MONUMENT){return this.game.canUseMonument(playerID);}
-            if(dc == DevCardType.ROAD_BUILD){return this.game.canUseRoadBuilder(playerID);}
-            if(dc == DevCardType.MONOPOLY){return this.game.canUseMonopoly(playerID);}
-            if(dc == DevCardType.YEAR_OF_PLENTY){return this.game.canUseYearOfPlenty(playerID);}
-        }
-        return false;
-    }
-
     public shared.model.map.Map getMap(){return this.game.getMap();}
 
     public TurnTracker.Phase getPhase(){return this.game.getCurrentPhase();}
@@ -411,6 +356,12 @@ public class Facade {
 
     public boolean ableToBuildCity(int id) throws PlayerExistsException{
         return this.game.ableToBuildCity(id);
+    }
+
+    public boolean ableToBuyDevCard(int id){
+        try {
+            return this.game.canBuyDevelopmentCard(id);
+        }catch(PlayerExistsException e){ return false;}
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
@@ -429,9 +380,27 @@ public class Facade {
         return this.game.canPlaceRobber(id, hexloc);
     }
 
-    public Set<Integer> moveRobber(int id, HexLocation hexloc){
+    public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
         try{
-            return this.game.placeRobber(id, hexloc);
+            Set<Integer> ids = this.game.placeRobber(id, hexloc);
+            List<Player> players = this.game.getPlayers();
+            RobPlayerInfo[] robbed = new RobPlayerInfo[4];
+            int i = 0;
+
+            for(Player p: players){
+                if(ids.contains(p.getId())){
+                    RobPlayerInfo rbi = new RobPlayerInfo();
+                    rbi.setColor(p.getColor());
+                    rbi.setId(p.getId());
+                    rbi.setName(p.getName().toString());
+                    rbi.setPlayerIndex(p.getPlayerIndex());
+                    rbi.setNumCards(p.countResources());
+                    robbed[i] = rbi;
+                    i++;
+                }
+            }
+
+            return robbed;
         }catch(AlreadyRobbedException e){
 
         }catch(InvalidLocationException e){
@@ -440,8 +409,135 @@ public class Facade {
         return null;
     }
 
+    public void rob(int playerID, RobPlayerInfo victim) {
+        try {
+
+            this.game.rob(playerID, victim.getId());
+
+        } catch(InvalidTypeException e){
+
+        } catch(PlayerExistsException e){
+
+        }catch(InsufficientResourcesException e){
+
+        } catch(MoveRobberException e){
+
+        }
+    }
     //TODO devcard functions
 
+    public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
+        try {
+
+            if (this.game.canUseSoldier(playerID)) {
+                return this.game.useSoldier(playerID, hexloc);
+            }
+            return null;
+        } catch(PlayerExistsException e){
+            return null;
+        } catch(AlreadyRobbedException e){
+            return null;
+        } catch(DevCardException e){
+            return null;
+        } catch(InvalidLocationException e){
+            return null;
+        }
+    }
+
+    //TODO flesh this puppy out
+    public List<PlayerInfo> getPlayers(){
+        List<Player> players = this.game.getPlayers();
+        List<PlayerInfo> playerInfos = new ArrayList<>();
+
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
+        for(Player p: players){
+            boolean lr = false;
+            boolean la = false;
+            if(longestroad == p.getId()){lr = true;}
+            if(largestarmy == p.getId()){la = true;}
+            PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
+
+            playerInfos.add(pi);
+        }
+
+        return playerInfos;
+    }
+
+    public PlayerInfo getWinner() throws GameOverException{
+        Player p = this.game.getWinner();
+
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
+
+        boolean lr = false;
+        boolean la = false;
+        if(longestroad == p.getId()){lr = true;}
+        if(largestarmy == p.getId()){la = true;}
+        PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
+
+        return pi;
+    }
+
+    /**
+     * Facade asks the game who then asks the turn tracker if the
+     * player can play a Development Card
+     *
+     * @param playerID The ID of the player asking this
+     * @return A boolean value indicating if a development card can be played
+     */
+    public boolean canPlayDC(int playerID) throws PlayerExistsException {
+        assert playerID >= 0;
+        int cards = this.game.numberOfDevCard(playerID);
+        return cards > 0;
+    }
+
+    public boolean canUseMonopoly(int playerID){
+        try {
+            return this.game.canUseMonopoly(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseRoadBuilder(int playerID){
+        try {
+            return this.game.canUseRoadBuilder(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseMonument(int playerID){
+        try{
+            return this.game.canUseMonument(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseSoldier(int playerID, HexLocation hexloc){
+        try{
+            return this.game.canUseSoldier(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public boolean canUseYearOfPlenty(int playerID){
+        try{
+            return this.game.canUseYearOfPlenty(playerID);
+        }catch(PlayerExistsException e){return false;}
+    }
+
+    public void cancelSoldierCard(int playerID){
+
+    }
+
+    public void deleteRoad(int playerID, EdgeLocation road){
+
+    }
+
+    public void cancelRoadBuildingCard(int playerID){
+
+    }
+
+    //TODO to server
+    public void playRoadBuildingCard(int playerID, EdgeLocation one, EdgeLocation two){
+
+    }
     /**
      * plays the Development Card
      *

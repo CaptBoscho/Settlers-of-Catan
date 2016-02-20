@@ -262,4 +262,6 @@ public interface IPlayerManager {
     public Integer getAvailableSettlements(int id) throws PlayerExistsException;
 
     public Integer getAvailableCities(int id)throws PlayerExistsException;
+
+    public Player getWinner() throws GameOverException;
 }

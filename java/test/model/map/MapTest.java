@@ -337,7 +337,7 @@ public class MapTest {
             }
             String answer = "1/[WHEAT]";
             assertEquals(answer, test.toString());
-            map.moveRobber(new HexLocation(-1,-2));
+            //map.moveRobber(new HexLocation(-1,-2));
             resources = map.getResources(8);
             test = new StringBuilder();
             for (final java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {

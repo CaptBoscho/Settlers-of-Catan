@@ -17,16 +17,39 @@ import shared.definitions.*;
 public class PlayerInfo {
 	
 	private int id;
-	private int playerIndex;
-	private String name;
-	private CatanColor color;
+    private int playerIndex;
+    private String name;
+    private CatanColor color;
+    private int victory;
+    private boolean longestroad;
+    private boolean largestarmy;
 	
 	public PlayerInfo() {
 		setId(-1);
 		setPlayerIndex(-1);
 		setName("");
 		setColor(CatanColor.WHITE);
+        this.longestroad = false;
+        this.largestarmy = false;
+        victory = 0;
 	}
+
+	public PlayerInfo(String name, int victorypoints, CatanColor color, int identifier, int index, boolean longestRoad, boolean largestArmy){
+        assert(name != null);
+        assert(victorypoints >=0);
+        assert(color != null);
+        assert(identifier >0);
+        assert(index >=0);
+        assert(index<4);
+
+        this.name = name;
+        this.victory = victorypoints;
+        this.color = color;
+        this.id = identifier;
+        this.playerIndex = index;
+        this.longestroad = longestRoad;
+        this.largestarmy = largestArmy;
+    }
 	
 	public int getId()
 	{
@@ -67,6 +90,19 @@ public class PlayerInfo {
 	{
 		this.color = color;
 	}
+
+    //wrote these things
+    public void setVictoryPoints(int vp){this.victory = vp;}
+
+    public int getVictoryPoints(){return this.victory;}
+
+    public void setLongestRoad(boolean lr){this.longestroad = lr;}
+
+    public boolean hasLongestRoad(){return this.longestroad;}
+
+    public void setLargestArmy(boolean la){this.largestarmy = la;}
+
+    public boolean hasLargestArmy(){return this.largestarmy;}
 
 	@Override
 	public int hashCode()
