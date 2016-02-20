@@ -470,7 +470,7 @@ public class Facade {
     //TODO flesh this puppy out
     public List<PlayerInfo> getPlayers(){
         List<Player> players = this.game.getPlayers();
-        List<PlayerInfo> playerInfos = new ArrayList<PlayerInfo>();
+        List<PlayerInfo> playerInfos = new ArrayList<>();
 
         int longestroad = this.game.currentLongestRoadPlayer();
         int largestarmy = this.game.currentLargestArmyPlayer();
@@ -496,8 +496,7 @@ public class Facade {
     public boolean canPlayDC(int playerID) throws PlayerExistsException {
         assert playerID >= 0;
         int cards = this.game.numberOfDevCard(playerID);
-        if(cards > 0){return true;}
-        return false;
+        return cards > 0;
     }
 
     /**

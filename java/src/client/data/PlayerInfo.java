@@ -17,10 +17,9 @@ import shared.definitions.*;
 public class PlayerInfo {
 	
 	private int id;
-	private int playerIndex;
-	private String name;
-	private CatanColor color;
-    //changed this
+    private int playerIndex;
+    private String name;
+    private CatanColor color;
     private int victory;
     private boolean longestroad;
     private boolean largestarmy;
@@ -32,15 +31,21 @@ public class PlayerInfo {
 		setColor(CatanColor.WHITE);
 	}
 
-    //added this function
-	public PlayerInfo(String n, int vp, CatanColor c, int i, int index, boolean lr, boolean la){
-        this.name = n;
-        this.victory = vp;
-        this.color = c;
-        this.id = i;
+	public PlayerInfo(String name, int victorypoints, CatanColor color, int identifier, int index, boolean longestRoad, boolean largestArmy){
+        assert(name != null);
+        assert(victorypoints >=0);
+        assert(color != null);
+        assert(identifier >0);
+        assert(index >=0);
+        assert(index<4);
+
+        this.name = name;
+        this.victory = victorypoints;
+        this.color = color;
+        this.id = identifier;
         this.playerIndex = index;
-        this.longestroad = lr;
-        this.largestarmy = la;
+        this.longestroad = longestRoad;
+        this.largestarmy = largestArmy;
     }
 	
 	public int getId()
