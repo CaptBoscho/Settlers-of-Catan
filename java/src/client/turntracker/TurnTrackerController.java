@@ -26,12 +26,11 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
-        //createState(facade.getPhase());
 		facade = Facade.getInstance();
         facade.addObserver(this);
         players = facade.getPlayers();
         userCookie = UserCookie.getInstance();
-		//initFromModel();
+		initFromModel();
 	}
 	
 	@Override

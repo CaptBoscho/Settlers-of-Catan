@@ -29,7 +29,7 @@ public class TurnTrackerControllerState {
      * Constructor
      */
     public TurnTrackerControllerState(ITurnTrackerView view){
-        view = view;
+        this.view = view;
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
         players = facade.getPlayers();
