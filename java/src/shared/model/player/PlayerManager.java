@@ -122,7 +122,7 @@ public final class PlayerManager implements IPlayerManager {
         }
     }
 
-    public void addPlayer(Player p) {
+    public void addPlayer(final Player p) {
         this.players.add(p);
     }
 
@@ -131,7 +131,7 @@ public final class PlayerManager implements IPlayerManager {
     }
 
 
-    public void playKnight(int playerID) throws PlayerExistsException {
+    public void playKnight(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
         getPlayerByID(playerID).playKnight();

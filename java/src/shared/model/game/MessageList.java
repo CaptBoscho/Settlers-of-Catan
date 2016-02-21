@@ -15,7 +15,7 @@ public final class MessageList {
 
     private List<MessageLine> chat = new ArrayList<>();
 
-    public void addMessage(MessageLine m){
+    public void addMessage(MessageLine m) {
         assert m != null;
         assert m.getMessage() != null;
         assert m.getMessage().length() > 0;
@@ -35,7 +35,6 @@ public final class MessageList {
     private void makeMessageLog(JsonArray jarray) {
         assert jarray != null;
 
-        Gson gs = new Gson();
         for (JsonElement je: jarray){
             JsonObject json = je.getAsJsonObject();
             this.chat.add(new MessageLine(json));

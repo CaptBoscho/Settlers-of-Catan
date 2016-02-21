@@ -30,7 +30,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
         facade.addObserver(this);
         players = facade.getPlayers();
         userCookie = UserCookie.getInstance();
-		initFromModel();
+//		initFromModel();
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		//initFromModel();
+		initFromModel();
         //Update the state
         createState(facade.getPhase());
 		//Call the state's update function
