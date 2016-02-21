@@ -1,6 +1,9 @@
 package client.join;
 
 import client.base.*;
+import client.data.PlayerInfo;
+import client.facade.Facade;
+import shared.model.game.Game;
 
 
 /**
@@ -19,6 +22,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void start() {
+        getView().setPlayers(Facade.getInstance().getPlayers().toArray(new PlayerInfo[4]));
 		getView().showModal();
 	}
 

@@ -1,5 +1,7 @@
 package shared.model.game;
 
+import client.data.GameInfo;
+import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
@@ -36,6 +38,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     private static Game instance;
 
+    private int gameId;
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -61,6 +64,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(new ArrayList<>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
+
     }
 
     public static Game getInstance() {
@@ -294,13 +298,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @throws InsufficientResourcesException
      * @throws InvalidTypeException
      */
-    public ResourceCard getResourceCard(ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
+    public ResourceCard getResourceCard(final ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
         assert t != null;
 
         return resourceCardBank.discard(t);
     }
 
-    public Integer amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException {
+    public Integer amountOwnedResource(final int playerID, final ResourceType t) throws PlayerExistsException, InvalidTypeException {
         assert playerID >= 0;
         assert t != null;
 

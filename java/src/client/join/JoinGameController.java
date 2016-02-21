@@ -10,6 +10,7 @@ import client.misc.*;
 import shared.dto.CreateGameDTO;
 import shared.dto.JoinGameDTO;
 import shared.exceptions.PlayerExistsException;
+import shared.model.game.Game;
 
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * 
 	 * @param value The action to be executed when the user joins a game
 	 */
-	public void setJoinAction(IAction value) {
+	public void setJoinAction(final IAction value) {
 		joinAction = value;
 	}
 	
@@ -124,7 +125,13 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
-		getSelectColorView().showModal();
+		for(PlayerInfo p : game.getPlayers()) {
+			if(p.getId() != UserCookie.getInstance().getPlayerId()) {
+				getSelectColorView().setColorEnabled(p.getColor(), false);
+			}
+		}
+        Facade.getInstance().setGameInfo(game);
+        getSelectColorView().showModal();
 	}
 
 	@Override
