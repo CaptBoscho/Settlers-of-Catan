@@ -52,10 +52,6 @@ public final class PlayerManager implements IPlayerManager {
         }
     }
 
-    public void addPlayer(Player player) {
-        this.players.add(player);
-    }
-
     /**
      * Randomize player order (turn order)
      * @throws FailedToRandomizeException
@@ -126,16 +122,8 @@ public final class PlayerManager implements IPlayerManager {
         }
     }
 
-    public void setPlayersFromInfo(final List<PlayerInfo> info) {
-        if(players.size() > 0) {
-            for (int i = 0; i < 4; i++) {
-                players.get(i).setPlayerInfo(info.get(i));
-            }
-        } else {
-            for(final PlayerInfo i : info) {
-                players.add(new Player(i));
-            }
-        }
+    public void addPlayer(Player p) {
+        this.players.add(p);
     }
 
     public int getKnights(final int playerID) throws PlayerExistsException {

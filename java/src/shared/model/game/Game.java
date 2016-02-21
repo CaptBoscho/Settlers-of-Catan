@@ -311,25 +311,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return playerManager.getPlayerByID(playerID).howManyOfThisCard(t);
     }
 
-    public PlayerInfo[] getPlayerInfo() {
-        PlayerInfo[] playerinfos = new PlayerInfo[4];
-        for(int i = 0; i < playerinfos.length; i++) {
-            // TODO - can we trash this exception.... so annoying
-            try {
-                playerinfos[i] = this.getPlayerManager().getPlayerByIndex(i).getInfo();
-            } catch (PlayerExistsException e) {
-                e.printStackTrace();
-            }
-        }
-        return playerinfos;
-    }
-
-    // TODO finish off
-    public void setGameInfo(GameInfo game) {
-        this.gameId = game.getId();
-        playerManager.setPlayersFromInfo(game.getPlayers());
-    }
-
     /**
      * Action - Player offers trade
      *

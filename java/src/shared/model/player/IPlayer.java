@@ -188,6 +188,4 @@ public interface IPlayer {
 
     void moveNewToOld() throws BadCallerException;
 
-    PlayerInfo getInfo();
-
 }

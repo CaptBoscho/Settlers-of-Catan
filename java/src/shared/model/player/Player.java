@@ -1,6 +1,5 @@
 package shared.model.player;
 
-import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
@@ -21,6 +20,12 @@ import java.util.List;
  * @author Kyle Cornelison
  */
 public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30/2016 Add exceptions when danny is done
+
+    String name;
+    int playerId;
+    CatanColor color;
+    int playerIndex;
+    int victoryPoints;
     private int monuments;
     private int soldiers;
     private boolean discarded;
@@ -29,16 +34,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     private StructureBank structureBank;
     private IResourceCardBank resourceCardBank;
     private IDevelopmentCardBank developmentCardBank;
-    private PlayerInfo playerInfo;
-
-    public Player(PlayerInfo info) {
-        this.soldiers = 0;
-        this.resourceCardBank = new ResourceCardBank(false);
-        this.developmentCardBank = new DevelopmentCardBank(false);
-        this.structureBank = new StructureBank();
-        this.moveRobber = false;
-        this.playerInfo = info;
-    }
 
     /**
      * Construct a Player object from a JSON blob
@@ -59,14 +54,11 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         assert json.has("settlements");
         assert json.has("cities");
 
-        final String name = json.get("name").getAsString();
-        final int playerId = json.get("playerID").getAsInt();
-        final int playerIndex = json.get("playerIndex").getAsInt();
-        final String color = json.get("color").getAsString();
-        final int victoryPoints = json.get("victoryPoints").getAsInt();
-
-        // TODO - last bools should come from JSON
-        this.playerInfo = new PlayerInfo(name, victoryPoints, CatanColor.translateFromString(color), playerId, playerIndex, false, false);
+        this.name = json.get("name").getAsString();
+        this.playerId = json.get("playerID").getAsInt();
+        this.playerIndex = json.get("playerIndex").getAsInt();
+        this.color = CatanColor.translateFromString(json.get("color").getAsString());
+        this.victoryPoints = json.get("victoryPoints").getAsInt();
 
         try {
             this.developmentCardBank = new DevelopmentCardBank(json.getAsJsonObject("oldDevCards"), false);
@@ -82,40 +74,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
 
         this.resourceCardBank = new ResourceCardBank(json.getAsJsonObject("resources"), false);
         this.structureBank = new StructureBank(json.get("roads").getAsInt(), json.get("settlements").getAsInt(), json.get("cities").getAsInt());
-    }
-
-    private void setColor(final String color) throws InvalidColorException {
-        assert color != null;
-        assert color.length() > 0;
-
-        switch(color) {
-            case "red":
-                this.playerInfo.setColor(CatanColor.RED);
-                break;
-            case "blue":
-                this.playerInfo.setColor(CatanColor.BLUE);
-                break;
-            case "green":
-                this.playerInfo.setColor(CatanColor.GREEN);
-                break;
-            case "brown":
-                this.playerInfo.setColor(CatanColor.BROWN);
-                break;
-            case "orange":
-                this.playerInfo.setColor(CatanColor.ORANGE);
-                break;
-            case "puce":
-                this.playerInfo.setColor(CatanColor.PUCE);
-                break;
-            case "purple":
-                this.playerInfo.setColor(CatanColor.PURPLE);
-                break;
-            case "white":
-                this.playerInfo.setColor(CatanColor.WHITE);
-                break;
-            default:
-                throw new InvalidColorException("The given color is invalid");
-        }
     }
 
     /**
@@ -136,7 +94,11 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         this.developmentCardBank = new DevelopmentCardBank(false);
         this.structureBank = new StructureBank();
         this.moveRobber = false;
-        this.playerInfo = new PlayerInfo(name, points, color, id, playerIndex, false, false);
+        this.name = name;
+        this.victoryPoints = points;
+        this.color = color;
+        this.playerId = id;
+        this.playerIndex = playerIndex;
     }
 
     //IPlayer Interface Methods - Can Do & Do
@@ -567,7 +529,7 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
      * @param increment Number of points to add to the player's score
      */
     private void incrementPoints(int increment) {
-        this.playerInfo.setVictoryPoints(this.getVictoryPoints() + increment);
+        this.victoryPoints += increment;
     }
 
     /**
@@ -664,16 +626,11 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     //============================================
 
     public int getId() {
-        return this.playerInfo.getId();
+        return this.playerId;
     }
 
     public String getName() {
-        return this.playerInfo.getName();
-    }
-
-    @Override
-    public PlayerInfo getInfo() {
-        return this.playerInfo;
+        return this.name;
     }
 
     public IDevelopmentCardBank getDevelopmentCardBank(){return developmentCardBank;}
@@ -707,11 +664,11 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     }
 
     public int getPlayerIndex() {
-        return this.playerInfo.getPlayerIndex();
+        return this.playerIndex;
     }
 
-    public void setPlayerIndex(int playerIndex) {
-        this.playerInfo.setPlayerIndex(playerIndex);
+    public void setPlayerIndex(final int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public boolean hasPlayedDevCard() {
@@ -723,11 +680,11 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     }
 
     public int getVictoryPoints() {
-        return this.playerInfo.getVictoryPoints();
+        return this.victoryPoints;
     }
 
     public CatanColor getColor() {
-        return this.playerInfo.getColor();
+        return this.color;
     }
 
     public Integer getAvailableRoads() {
@@ -740,9 +697,5 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
 
     public Integer getAvailableCities() {
         return structureBank.getAvailableCities();
-    }
-
-    public void setPlayerInfo(PlayerInfo info) {
-        this.playerInfo = info;
     }
 }

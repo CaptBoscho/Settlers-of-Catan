@@ -1,5 +1,6 @@
 
 package client.facade;
+import client.data.GameInfo;
 import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
@@ -435,13 +436,7 @@ public class Facade {
 
             this.game.rob(playerID, victim.getId());
 
-        } catch(InvalidTypeException e){
-
-        } catch(PlayerExistsException e){
-
-        }catch(InsufficientResourcesException e){
-
-        } catch(MoveRobberException e){
+        } catch(InvalidTypeException | MoveRobberException | InsufficientResourcesException | PlayerExistsException ignored){
 
         }
     }
@@ -466,7 +461,7 @@ public class Facade {
     }
 
     //TODO flesh this puppy out
-    public List<PlayerInfo> getPlayers(){
+    public List<PlayerInfo> getPlayers() {
         List<Player> players = this.game.getPlayers();
         List<PlayerInfo> playerInfos = new ArrayList<>();
 
@@ -477,12 +472,34 @@ public class Facade {
             boolean la = false;
             if(longestroad == p.getId()){lr = true;}
             if(largestarmy == p.getId()){la = true;}
-            PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
-
+            PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
             playerInfos.add(pi);
         }
 
         return playerInfos;
+    }
+
+    public void setGameInfo(GameInfo game) {
+        if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
+            for (int i = 0; i < 4; i++) {
+                PlayerInfo info = game.getPlayers().get(i);
+                players.get(i).setPlayerIndex(info.getPlayerIndex());
+                // TODO -- add rest
+            }
+        } else {
+            for(PlayerInfo info : game.getPlayers()) {
+                int playerId = info.getId();
+                int playerIndex = info.getPlayerIndex();
+                String name = info.getName();
+                CatanColor color = info.getColor();
+                int points = info.getVictoryPoints();
+                try {
+                    Game.getInstance().getPlayerManager().addPlayer(new Player(points, color, playerId, playerIndex, name));
+                } catch (InvalidPlayerException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public PlayerInfo getWinner() throws GameOverException{
