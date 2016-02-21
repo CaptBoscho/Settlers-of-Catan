@@ -120,7 +120,13 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getNewGameView().closeModal();
 
         // TODO - verify this is the required functionality
-        this.startJoinGame(newGame);
+        List<GameInfo> allGames = ServerProxy.getInstance().getAllGames();
+        GameInfo[] gamesArray = new GameInfo[allGames.size()];
+        allGames.toArray(gamesArray);
+        getJoinGameView().setGames(gamesArray, UserCookie.getInstance().getPlayerInfo());
+        setNewGameView(newGameView);
+
+        getJoinGameView().showModal();
 	}
 
 	@Override
