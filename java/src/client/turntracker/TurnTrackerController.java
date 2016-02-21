@@ -101,6 +101,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
                 break;
             case DISCARDING:  state = new DiscardingState(getView());
                 break;
+            case GAMEFINISHED:  state = new GameFinishedState(getView());
+                break;
             default: state = new PlayingState(getView());
                 break;
         }
