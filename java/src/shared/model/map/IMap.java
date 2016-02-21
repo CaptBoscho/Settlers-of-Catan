@@ -152,13 +152,13 @@ public interface IMap {
      * @return boolean
      * @throws AlreadyRobbedException Throws exception if the hex location is not on the map
      */
-    public boolean canMoveRobber(HexLocation hexLoc) throws InvalidLocationException;
+    boolean canMoveRobber(HexLocation hexLoc) throws InvalidLocationException;
 
     /**
      * Informs who can be robbed at a hex location
      * @return A set of playerID that can be robbed
      */
-    Set<Integer> whoCanGetRobbed();
+    Set<Integer> whoCanGetRobbed(int playerID);
 
     /**
      * Moves the Robber to a new hex location
@@ -167,6 +167,15 @@ public interface IMap {
      * @throws AlreadyRobbedException Throws exception if Robber is moved to where it is already at
      * @throws InvalidLocationException Throws exception if vertex location is not on the map
      */
-    Set<Integer> moveRobber(HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException;
+    Set<Integer> moveRobber(int playerID, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException;
+
+    /**
+     * Deletes a road if a player cancels in the middle of the play road building card
+     * @param playerID int
+     * @param edgeLoc EdgeLocation
+     * @throws InvalidLocationException throws exception if edge locaiton is not on the map
+     * @throws StructureException throws exception if edge location doesn't have a road to delete
+     */
+    void deleteRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException, StructureException;
 
 }

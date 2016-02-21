@@ -23,7 +23,7 @@ public class TurnTrackerControllerState {
     private Facade facade;
     private UserCookie userCookie;
     private ITurnTrackerView view;
-    private List<ModelPlayerInfo> players;
+    private List<PlayerInfo> players;
 
     /**
      * Constructor
@@ -47,9 +47,9 @@ public class TurnTrackerControllerState {
 
     public void update() {
         //Update Controller
-        for(ModelPlayerInfo playerInfo : players){
-            view.updatePlayer(playerInfo.getIndex(), playerInfo.getVictoryPoints(),
-                    facade.getCurrentTurn() == playerInfo.getIndex(),
+        for(PlayerInfo playerInfo : players){
+            view.updatePlayer(playerInfo.getPlayerIndex(), playerInfo.getVictoryPoints(),
+                    facade.getCurrentTurn() == playerInfo.getPlayerIndex(),
                     playerInfo.hasLargestArmy(),
                     playerInfo.hasLongestRoad());
         }

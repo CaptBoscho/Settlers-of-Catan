@@ -2,6 +2,8 @@ package client.map.states;
 
 import client.data.RobPlayerInfo;
 import client.map.MapController;
+import shared.definitions.PieceType;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -13,91 +15,90 @@ import shared.locations.VertexLocation;
  */
 public class RobbingState extends MapState {
 
+    private static RobbingState instance;
+
+    public static RobbingState getInstance(){
+        if(instance == null){
+            instance = new RobbingState();
+        }
+        return instance;
+    }
+
     /**
      * Constructor
      */
-    public RobbingState(MapController mapController){
-        super(mapController);
+    public RobbingState(){
+        super();
     }
 
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-        edgeLoc = getModelEdgeLocation(edgeLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceCity(VertexLocation vertLoc) {
-        vertLoc = getModelVertexLocation(vertLoc);
         return false;
     }
 
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        //TODO: add this method to the facade
-        //return facade.canMoveRobber(hexLoc);
-        return false;
+        return facade.canMoveRobber(userCookie.getPlayerId(), hexLoc);
     }
 
     @Override
-    public void placeRoad(EdgeLocation edgeLoc) {
-        if(canPlaceRoad(edgeLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void placeRoad(EdgeLocation edgeLoc){}
 
     @Override
-    public void placeSettlement(VertexLocation vertLoc) {
-        if(canPlaceSettlement(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void placeSettlement(VertexLocation vertLoc){}
 
     @Override
-    public void placeCity(VertexLocation vertLoc) {
-        if(canPlaceCity(vertLoc)) {
-            System.out.println("You're a wizard Harry");
-        }
-    }
+    public void placeCity(VertexLocation vertLoc){}
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        if(canPlaceRobber(hexLoc)) {
-            //TODO: add this method to the facade
-            //facade.moveRobber(hexLoc);
+        mapController.getView().placeRobber(hexLoc);
+        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerId(), hexLoc));
+        mapController.getRobView().showModal();
+    }
+
+    @Override
+    public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
+        if(pieceType != PieceType.ROBBER) {
+            return;
+        }
+        try {
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Play Soldier - State Implementation
-     */
+    @Override
+    public void cancelMove(){
+        facade.cancelSoldierCard(userCookie.getPlayerId());
+    }
+
     @Override
     public void playSoldierCard() {
-        super.playSoldierCard();
+        try {
+            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * Play RoadBuilding - State Implementation
-     */
     @Override
-    public void playRoadBuildingCard() {
-        super.playRoadBuildingCard();
-    }
+    public void playRoadBuildingCard(){}
 
-    /**
-     * Rob Player - State Implementation
-     *
-     * @param victim
-     */
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        super.robPlayer(victim);
+        facade.rob(userCookie.getPlayerId(), victim);
     }
 }
