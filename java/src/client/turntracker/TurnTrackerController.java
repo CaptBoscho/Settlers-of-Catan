@@ -26,12 +26,11 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
-        //createState(facade.getPhase());
 		facade = Facade.getInstance();
         facade.addObserver(this);
         players = facade.getPlayers();
         userCookie = UserCookie.getInstance();
-		//initFromModel();
+		initFromModel();
 	}
 	
 	@Override
@@ -101,6 +100,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
             case ROBBING:  state = new RobbingState(getView());
                 break;
             case DISCARDING:  state = new DiscardingState(getView());
+                break;
+            case GAMEFINISHED:  state = new GameFinishedState(getView());
                 break;
             default: state = new PlayingState(getView());
                 break;
