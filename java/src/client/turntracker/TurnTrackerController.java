@@ -30,7 +30,6 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		super(view);
 		facade = Facade.getInstance();
         facade.addObserver(this);
-        players = facade.getPlayers();
         userCookie = UserCookie.getInstance();
 	}
 	
@@ -45,6 +44,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	}
 	
 	public void initFromModel() {
+        players = facade.getPlayers();
         //Set the local player color
         try {
             int id = userCookie.getPlayerId();
@@ -55,7 +55,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
         }
 
         //Init Players
-        for(PlayerInfo playerInfo : players){
+        for(PlayerInfo playerInfo : players) {
             getView().initializePlayer(playerInfo.getPlayerIndex(), playerInfo.getName(), playerInfo.getColor());
         }
 
@@ -79,7 +79,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-//		initFromModel();
+		initFromModel();
         //Update the state
         createState(facade.getPhase());
 		//Call the state's update function

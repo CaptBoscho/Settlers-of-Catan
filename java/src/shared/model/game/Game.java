@@ -1,7 +1,5 @@
 package shared.model.game;
 
-import client.data.GameInfo;
-import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
@@ -56,6 +54,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * Constructor
      */
     protected Game() {
+        this.version = -1;
         this.dice = new Dice(2);
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
@@ -1041,6 +1040,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public Player getWinner() throws GameOverException {
         return playerManager.getWinner();
+    }
+
+    public Player getPlayerById(int id) throws PlayerExistsException {
+        return playerManager.getPlayerByID(id);
     }
 
     /*======================================================
