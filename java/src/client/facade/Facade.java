@@ -504,10 +504,13 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-    public boolean canPlayDC(int playerID) throws PlayerExistsException {
+    public boolean canPlayDC(int playerID){
         assert playerID >= 0;
-        int cards = this.game.numberOfDevCard(playerID);
-        return cards > 0;
+        try {
+            int cards = this.game.numberOfDevCard(playerID);
+            return cards > 0;
+        }catch(PlayerExistsException e){return false;}
+
     }
 
     public boolean canUseMonopoly(int playerID){
@@ -550,6 +553,13 @@ public class Facade {
 
     public void cancelRoadBuildingCard(int playerID){
 
+    }
+
+    public int getAmountOfResource(int playerID, ResourceType resource){
+        try {
+            return this.game.amountOwnedResource(playerID, resource);
+        } catch(PlayerExistsException e){return 0;}
+        catch(InvalidTypeException e) {return 0;}
     }
 
     //TODO to server
