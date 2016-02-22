@@ -1,5 +1,6 @@
 
 package client.facade;
+import client.data.GameInfo;
 import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
@@ -15,10 +16,8 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
-import shared.model.map.*;
 import shared.model.player.Player;
 import shared.definitions.*;
-import shared.model.player.Name;
 import shared.exceptions.*;
 
 import javax.naming.InsufficientResourcesException;
@@ -53,20 +52,17 @@ public class Facade {
         return _instance;
     }
 
-    public Set<CatanColor> canJoin() {
-        if (this.entries.size() >= 4) {
-            return null;
-        } else {
-            return this.available_colors;
-        }
-    }
-
     public void addObserver(Observer o){
         this.game.addObserver(o);
     }
 
     public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
         return this.game.getPlayerColorByID(id);}
+
+    //TODO talk to server
+    public void joinGame(int playerID){
+
+    }
 
     public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
@@ -78,6 +74,7 @@ public class Facade {
         }
     }
 
+    //TODO talk to server
     public void initiateRoad(int playerID, EdgeLocation edge){
         try {
             this.game.initiateRoad(playerID, edge);
@@ -99,6 +96,7 @@ public class Facade {
         }
     }
 
+    //TODO talk to server
     public void initiateSettlement(int pID, VertexLocation vertex){
         try{
             this.game.initiateSettlement(pID, vertex);
@@ -109,9 +107,8 @@ public class Facade {
         }catch(StructureException e){}
     }
 
-    //TODO convert this to server
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
-        int firstPlayerID = this.game.initializeGame(this.players, randomhex, randomchit, randomport);
+
 
     }
 
@@ -129,6 +126,7 @@ public class Facade {
 
     public Integer getCurrentTurn(){return this.game.getCurrentTurn();}
 
+    //TODO talk to server
     public void finishTurn(int playerID){
         try{
             this.game.finishTurn(playerID);
@@ -293,6 +291,7 @@ public class Facade {
      * @param playerOneID
      * @throws BuildException
      */
+    //TODO talk with server
     public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         assert playerOneID >= 0;
         assert playerTwoID >= 0;
@@ -331,6 +330,7 @@ public class Facade {
         throw new InvalidPlayerException("can't trade");
     }
 
+    //TODO talk to server
     public void maritimeTrade(int playerID, PortType port, ResourceType type) throws BuildException, InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         assert playerID >= 0;
         assert type != null;
@@ -380,6 +380,8 @@ public class Facade {
         return this.game.canPlaceRobber(id, hexloc);
     }
 
+    //TODO talk to server
+
     public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
         try{
             Set<Integer> ids = this.game.placeRobber(id, hexloc);
@@ -414,13 +416,7 @@ public class Facade {
 
             this.game.rob(playerID, victim.getId());
 
-        } catch(InvalidTypeException e){
-
-        } catch(PlayerExistsException e){
-
-        }catch(InsufficientResourcesException e){
-
-        } catch(MoveRobberException e){
+        } catch(InvalidTypeException | MoveRobberException | InsufficientResourcesException | PlayerExistsException ignored){
 
         }
     }
@@ -445,7 +441,7 @@ public class Facade {
     }
 
     //TODO flesh this puppy out
-    public List<PlayerInfo> getPlayers(){
+    public List<PlayerInfo> getPlayers() {
         List<Player> players = this.game.getPlayers();
         List<PlayerInfo> playerInfos = new ArrayList<>();
 
@@ -456,12 +452,34 @@ public class Facade {
             boolean la = false;
             if(longestroad == p.getId()){lr = true;}
             if(largestarmy == p.getId()){la = true;}
-            PlayerInfo pi = new PlayerInfo(p.getName().toString(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
-
+            PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
             playerInfos.add(pi);
         }
 
         return playerInfos;
+    }
+
+    public void setGameInfo(GameInfo game) {
+        if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
+            for (int i = 0; i < 4; i++) {
+                PlayerInfo info = game.getPlayers().get(i);
+                players.get(i).setPlayerIndex(info.getPlayerIndex());
+                // TODO -- add rest
+            }
+        } else {
+            for(PlayerInfo info : game.getPlayers()) {
+                int playerId = info.getId();
+                int playerIndex = info.getPlayerIndex();
+                String name = info.getName();
+                CatanColor color = info.getColor();
+                int points = info.getVictoryPoints();
+                try {
+                    Game.getInstance().getPlayerManager().addPlayer(new Player(points, color, playerId, playerIndex, name));
+                } catch (InvalidPlayerException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public PlayerInfo getWinner() throws GameOverException{
@@ -486,10 +504,13 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-    public boolean canPlayDC(int playerID) throws PlayerExistsException {
+    public boolean canPlayDC(int playerID){
         assert playerID >= 0;
-        int cards = this.game.numberOfDevCard(playerID);
-        return cards > 0;
+        try {
+            int cards = this.game.numberOfDevCard(playerID);
+            return cards > 0;
+        }catch(PlayerExistsException e){return false;}
+
     }
 
     public boolean canUseMonopoly(int playerID){
@@ -532,6 +553,13 @@ public class Facade {
 
     public void cancelRoadBuildingCard(int playerID){
 
+    }
+
+    public int getAmountOfResource(int playerID, ResourceType resource){
+        try {
+            return this.game.amountOwnedResource(playerID, resource);
+        } catch(PlayerExistsException e){return 0;}
+        catch(InvalidTypeException e) {return 0;}
     }
 
     //TODO to server

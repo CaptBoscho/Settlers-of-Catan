@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import client.data.PlayerInfo;
 import com.google.gson.*;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
@@ -50,10 +51,6 @@ public final class PlayerManager implements IPlayerManager {
                 addPlayer(new Player((JsonObject) players.get(i)));
             }
         }
-    }
-
-    public void addPlayer(Player player) {
-        this.players.add(player);
     }
 
     /**
@@ -126,13 +123,16 @@ public final class PlayerManager implements IPlayerManager {
         }
     }
 
+    public void addPlayer(final Player p) {
+        this.players.add(p);
+    }
 
     public int getKnights(final int playerID) throws PlayerExistsException {
         return getPlayerByID(playerID).getKnights();
     }
 
 
-    public void playKnight(int playerID) throws PlayerExistsException {
+    public void playKnight(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
         getPlayerByID(playerID).playKnight();

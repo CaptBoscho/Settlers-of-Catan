@@ -5,6 +5,7 @@ import java.util.*;
 import client.base.*;
 import client.facade.Facade;
 import client.services.UserCookie;
+import shared.definitions.ResourceType;
 import shared.exceptions.PlayerExistsException;
 import shared.model.game.Game;
 
@@ -17,9 +18,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	private Map<ResourceBarElement, IAction> elementActions;
     private Game game = null;
     private Facade facade = Facade.getInstance();
-    private int ID;
-	
-	public ResourceBarController(IResourceBarView view) {
+
+    public ResourceBarController(IResourceBarView view) {
 		super(view);
 		elementActions = new HashMap<ResourceBarElement, IAction>();
         facade.addObserver(this);
@@ -33,7 +33,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
      */
 	public void update(Observable obs, Object obj){
         try {
-            ID  = UserCookie.getInstance().getPlayerId();
+            int ID = UserCookie.getInstance().getPlayerId();
             boolean enableRoad = facade.ableToBuildRoad(ID);
             boolean enableSettlement = facade.ableToBuildSettlement(ID);
             boolean enableCity = facade.ableToBuildCity(ID);
@@ -42,6 +42,11 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             int roadCount = facade.getAvailableRoads(ID);
             int settlementCount = facade.getAvailableSettlements(ID);
             int cityCount = facade.getAvailableCities(ID);
+            int brickCount = facade.getAmountOfResource(ID, ResourceType.BRICK);
+            int woodCount = facade.getAmountOfResource(ID, ResourceType.WOOD);
+            int wheatCount = facade.getAmountOfResource(ID, ResourceType.WHEAT);
+            int sheepCount = facade.getAmountOfResource(ID, ResourceType.SHEEP);
+            int oreCount = facade.getAmountOfResource(ID, ResourceType.ORE);
 
             ResourceBarElement road = ResourceBarElement.ROAD;
             ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
@@ -56,6 +61,15 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementAmount(road, roadCount);
             getView().setElementAmount(settle, settlementCount);
             getView().setElementAmount(city, cityCount);
+            getView().setElementAmount(ResourceBarElement.WOOD, woodCount);
+            getView().setElementAmount(ResourceBarElement.BRICK, brickCount);
+            getView().setElementAmount(ResourceBarElement.WHEAT, wheatCount);
+            getView().setElementAmount(ResourceBarElement.SHEEP, sheepCount);
+            getView().setElementAmount(ResourceBarElement.ORE, oreCount);
+
+            getView().setElementEnabled(ResourceBarElement.BUY_CARD, facade.canBuyDC(ID));
+            getView().setElementEnabled(ResourceBarElement.PLAY_CARD, facade.canPlayDC(ID));
+
         } catch(PlayerExistsException e){
             e.printStackTrace();
         }
@@ -80,44 +94,50 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildRoad() {
         try {
-            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId()) == true) {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.ROAD);
             }
-        } catch(PlayerExistsException e){}
+        } catch(PlayerExistsException e){
+            e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void buildSettlement() {
         try {
-            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId()) == true) {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.SETTLEMENT);
             }
-        } catch(PlayerExistsException e){}
+        } catch(PlayerExistsException e){
+            e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void buildCity() {
         try {
-            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId()) == true) {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.CITY);
             }
-        } catch(PlayerExistsException e){}
+        } catch(PlayerExistsException e){
+            e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void buyCard() {
-        if(facade.ableToBuyDevCard(UserCookie.getInstance().getPlayerId()) == true) {
+        if(facade.ableToBuyDevCard(UserCookie.getInstance().getPlayerId())) {
             executeElementAction(ResourceBarElement.BUY_CARD);
         }
 	}
 
 	@Override
 	public void playCard() {
-        try {
-            if (facade.canPlayDC(UserCookie.getInstance().getPlayerId()) == true) {
-                executeElementAction(ResourceBarElement.PLAY_CARD);
-            }
-        } catch(PlayerExistsException e){}
+
+        if (facade.canPlayDC(UserCookie.getInstance().getPlayerId())) {
+            executeElementAction(ResourceBarElement.PLAY_CARD);
+        }
+
 	}
 	
 	private void executeElementAction(ResourceBarElement element) {

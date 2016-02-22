@@ -3,6 +3,8 @@ package client.turntracker;
 import client.data.PlayerInfo;
 import client.facade.Facade;
 import client.facade.ModelPlayerInfo;
+import client.services.Poller;
+import client.services.ServerProxy;
 import client.services.UserCookie;
 import client.turntracker.states.*;
 import client.base.*;
@@ -26,12 +28,10 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
-        //createState(facade.getPhase());
 		facade = Facade.getInstance();
         facade.addObserver(this);
         players = facade.getPlayers();
         userCookie = UserCookie.getInstance();
-		//initFromModel();
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
             CatanColor locPColor = facade.getPlayerColorByID(id);
             getView().setLocalPlayerColor(locPColor);
         } catch (PlayerExistsException e) {
-            //throw new FailedToInitTTrackerException();
+            e.printStackTrace();
         }
 
         //Init Players
@@ -64,6 +64,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
         //Call the state's init function
         state.initFromModel();
+
+        new Poller(ServerProxy.getInstance()).start();
 	}
 
 	/**
@@ -77,7 +79,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		//initFromModel();
+//		initFromModel();
         //Update the state
         createState(facade.getPhase());
 		//Call the state's update function
@@ -101,6 +103,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
             case ROBBING:  state = new RobbingState(getView());
                 break;
             case DISCARDING:  state = new DiscardingState(getView());
+                break;
+            case GAMEFINISHED:  state = new GameFinishedState(getView());
                 break;
             default: state = new PlayingState(getView());
                 break;
