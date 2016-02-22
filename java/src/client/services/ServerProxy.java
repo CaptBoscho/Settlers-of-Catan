@@ -156,7 +156,7 @@ public final class ServerProxy implements IServer {
      */
     @Override
     public ClientModel getCurrentModel(int version) throws MissingUserCookieException {
-        assert version >= 0;
+//        assert version >= 0;
         String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
         String result = Utils.sendGet(url);
         assert result != null;

@@ -37,14 +37,14 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
         // START GAMEEE
         try {
-            ServerProxy.getInstance().getCurrentModel(0);
+            ServerProxy.getInstance().getCurrentModel(Game.getInstance().getVersion());
         } catch (MissingUserCookieException e) {
             e.printStackTrace();
         }
-        ITurnTrackerView view = new TurnTrackerView(new TitlePanel(), new GameStatePanel());
-        TurnTrackerController turnTrackerController = new TurnTrackerController(view);
-        view.setController(turnTrackerController);
-        turnTrackerController.initFromModel();
+//        ITurnTrackerView view = new TurnTrackerView(new TitlePanel(), new GameStatePanel());
+//        TurnTrackerController turnTrackerController = new TurnTrackerController(view);
+//        view.setController(turnTrackerController);
+//        turnTrackerController.initFromModel();
 	}
 
 	@Override
