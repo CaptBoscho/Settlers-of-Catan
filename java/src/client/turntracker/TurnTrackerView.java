@@ -1,6 +1,7 @@
 package client.turntracker;
 
 import java.awt.*;
+import java.util.Arrays;
 
 import javax.swing.*;
 
@@ -104,8 +105,7 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 	}
 
 	@Override
-	public void updatePlayer(int playerIndex, int points, boolean highlight,
-			boolean largestArmy, boolean longestRoad) {
+	public void updatePlayer(int playerIndex, int points, boolean highlight, boolean largestArmy, boolean longestRoad) {
 		playerArmy[playerIndex].setVisible(largestArmy);
 		playerRoad[playerIndex].setVisible(longestRoad);
 		playerPoints[playerIndex].setText(String.format("%d", points));
