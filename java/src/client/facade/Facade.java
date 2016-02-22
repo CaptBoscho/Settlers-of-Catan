@@ -510,7 +510,7 @@ public class Facade {
         }catch(PlayerExistsException e){return false;}
     }
 
-    public boolean canUseSoldier(int playerID, HexLocation hexloc){
+    public boolean canUseSoldier(int playerID){
         try{
             return this.game.canUseSoldier(playerID);
         }catch(PlayerExistsException e){return false;}
@@ -537,6 +537,16 @@ public class Facade {
     //TODO to server
     public void playRoadBuildingCard(int playerID, EdgeLocation one, EdgeLocation two){
 
+    }
+
+    /**
+     * Gets the number of devCards of a given type owned by a given player
+     * @param type The DevCardType to check
+     * @param playerID the ID of the player to check
+     * @return The number of DevelopmentCards of type 'type' owned by player of ID 'playerID'.
+     */
+    public int getNumberDevCards(DevCardType type, int playerID) {
+        return game.getNumberDevCards(type, playerID);
     }
     /**
      * plays the Development Card

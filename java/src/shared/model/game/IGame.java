@@ -354,4 +354,6 @@ public interface IGame {
     public Integer numberOfDevCard(int id) throws PlayerExistsException;
 
     public Player getWinner() throws GameOverException;
+
+    int getNumberDevCards(DevCardType type, int playerID);
 }

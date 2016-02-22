@@ -52,4 +52,6 @@ public interface IDevelopmentCardBank {
     DevelopmentCard discard(DevCardType type) throws InvalidTypeException;
 
     void empty();
+
+    int getNumberOfDevCardsByType(DevCardType type);
 }

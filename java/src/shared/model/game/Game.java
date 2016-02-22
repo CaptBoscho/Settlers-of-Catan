@@ -1034,6 +1034,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return playerManager.getWinner();
     }
 
+    @Override
+    public int getNumberDevCards(DevCardType type, int playerID) {
+        return playerManager.getNumberDevCards(type, playerID);
+    }
+
     /*======================================================
     * Private - Helper Methods
     * ======================================================*/

@@ -45,13 +45,19 @@ public final class DevCardController extends Controller implements IDevCardContr
 		Facade facade = Facade.getInstance();
 		int localPlayerID = UserCookie.getInstance().getPlayerId();
 
+		// enable buttons to play specific devCard types
 		getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, facade.canUseMonopoly(localPlayerID));
 		getPlayCardView().setCardEnabled(DevCardType.MONUMENT, facade.canUseMonument(localPlayerID));
 		getPlayCardView().setCardEnabled(DevCardType.ROAD_BUILD, facade.canUseRoadBuilder(localPlayerID));
 		getPlayCardView().setCardEnabled(DevCardType.SOLDIER, facade.canUseSoldier(localPlayerID));
 		getPlayCardView().setCardEnabled(DevCardType.YEAR_OF_PLENTY, facade.canUseYearOfPlenty(localPlayerID));
 
-		getPlayCardView().
+		// set amounts of each dev card type in the playCardView
+		getPlayCardView().setCardAmount(DevCardType.MONOPOLY, facade.getNumberDevCards(DevCardType.MONOPOLY, localPlayerID));
+		getPlayCardView().setCardAmount(DevCardType.MONUMENT, facade.getNumberDevCards(DevCardType.MONUMENT, localPlayerID));
+		getPlayCardView().setCardAmount(DevCardType.ROAD_BUILD, facade.getNumberDevCards(DevCardType.ROAD_BUILD, localPlayerID));
+		getPlayCardView().setCardAmount(DevCardType.SOLDIER, facade.getNumberDevCards(DevCardType.SOLDIER, localPlayerID));
+		getPlayCardView().setCardAmount(DevCardType.YEAR_OF_PLENTY, facade.getNumberDevCards(DevCardType.YEAR_OF_PLENTY, localPlayerID));
 	}
 
 	public IPlayDevCardView getPlayCardView() {
@@ -94,12 +100,12 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
-		
+		//todo make facade.playMonopolyCard
 	}
 
 	@Override
 	public void playMonumentCard() {
-		
+		//todo make facade.playMonumentCard
 	}
 
 	@Override

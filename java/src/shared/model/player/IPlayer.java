@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.BadCallerException;
@@ -188,4 +189,5 @@ public interface IPlayer {
 
     void moveNewToOld() throws BadCallerException;
 
+    int getNumberOfDevCardsByType(DevCardType type);
 }
