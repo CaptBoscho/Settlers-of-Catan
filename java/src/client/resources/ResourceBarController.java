@@ -5,6 +5,7 @@ import java.util.*;
 import client.base.*;
 import client.facade.Facade;
 import client.services.UserCookie;
+import shared.definitions.ResourceType;
 import shared.exceptions.PlayerExistsException;
 import shared.model.game.Game;
 
@@ -41,6 +42,11 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             int roadcount = facade.getAvailableRoads(ID);
             int settlementcount = facade.getAvailableSettlements(ID);
             int citycount = facade.getAvailableCities(ID);
+            int brickcount = facade.getAmountOfResource(ID, ResourceType.BRICK);
+            int woodcount = facade.getAmountOfResource(ID, ResourceType.WOOD);
+            int wheatcount = facade.getAmountOfResource(ID, ResourceType.WHEAT);
+            int sheepcount = facade.getAmountOfResource(ID, ResourceType.SHEEP);
+            int orecount = facade.getAmountOfResource(ID, ResourceType.ORE);
 
             ResourceBarElement road = ResourceBarElement.ROAD;
             ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
@@ -53,6 +59,15 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementAmount(road, roadcount);
             getView().setElementAmount(settle, settlementcount);
             getView().setElementAmount(city, citycount);
+            getView().setElementAmount(ResourceBarElement.WOOD, woodcount);
+            getView().setElementAmount(ResourceBarElement.BRICK, brickcount);
+            getView().setElementAmount(ResourceBarElement.WHEAT, wheatcount);
+            getView().setElementAmount(ResourceBarElement.SHEEP, sheepcount);
+            getView().setElementAmount(ResourceBarElement.ORE, orecount);
+
+            getView().setElementEnabled(ResourceBarElement.BUY_CARD, facade.canBuyDC(ID));
+            getView().setElementEnabled(ResourceBarElement.PLAY_CARD, facade.canPlayDC(ID));
+
         } catch(PlayerExistsException e){
             e.printStackTrace();
         }
@@ -110,11 +125,11 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 
 	@Override
 	public void playCard() {
-        try {
-            if (facade.canPlayDC(UserCookie.getInstance().getPlayerId()) == true) {
-                executeElementAction(ResourceBarElement.PLAY_CARD);
-            }
-        } catch(PlayerExistsException e){}
+
+        if (facade.canPlayDC(UserCookie.getInstance().getPlayerId()) == true) {
+            executeElementAction(ResourceBarElement.PLAY_CARD);
+        }
+
 	}
 	
 	private void executeElementAction(ResourceBarElement element) {

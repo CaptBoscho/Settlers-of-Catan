@@ -354,4 +354,6 @@ public interface IGame {
     public Integer numberOfDevCard(int id) throws PlayerExistsException;
 
     public Player getWinner() throws GameOverException;
+
+    public int amountOwnedResource(int playerID, ResourceType t)throws PlayerExistsException, InvalidTypeException;
 }

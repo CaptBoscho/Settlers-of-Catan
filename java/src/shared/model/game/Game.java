@@ -303,7 +303,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return resourceCardBank.discard(t);
     }
 
-    public Integer amountOwnedResource(final int playerID, final ResourceType t) throws PlayerExistsException, InvalidTypeException {
+    public int amountOwnedResource(final int playerID, final ResourceType t) throws PlayerExistsException, InvalidTypeException {
         assert playerID >= 0;
         assert t != null;
 
