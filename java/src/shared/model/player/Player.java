@@ -54,8 +54,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         assert json.has("settlements");
         assert json.has("cities");
 
-        System.out.println("roflcopter");
-
         this.name = json.get("name").getAsString();
         this.playerId = json.get("playerID").getAsInt();
         this.playerIndex = json.get("playerIndex").getAsInt();

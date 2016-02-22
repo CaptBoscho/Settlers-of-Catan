@@ -127,7 +127,7 @@ abstract public class MapState {
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthWest), portType);
 
         //ninth port
-        hexLoc = new HexLocation(-1,-1);
+        hexLoc = new HexLocation(-1,-2);
         portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.North), portType);
 

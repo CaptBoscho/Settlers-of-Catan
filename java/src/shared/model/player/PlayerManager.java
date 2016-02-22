@@ -123,7 +123,6 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     public void addPlayer(final Player p) {
-        System.out.println("plz wat u doin");
         this.players.add(p);
     }
 
