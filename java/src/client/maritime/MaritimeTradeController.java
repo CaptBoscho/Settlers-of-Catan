@@ -22,6 +22,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		setTradeOverlay(tradeOverlay);
 
 		this.facade = Facade.getInstance();
+		facade.addObserver(this);
 
 		createState(facade.getPhase());
 		state.initFromModel();

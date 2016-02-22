@@ -42,6 +42,10 @@ public final class RollController extends Controller implements IRollController 
 	
 	@Override
 	public void rollDice() {
+		//Display the roll view
+		getRollView().setMessage("Roll the dice!");
+		getRollView().showModal();
+
 		//Roll the dice
 		int roll = roller.roll();
 
