@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import client.data.PlayerInfo;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.BadCallerException;
@@ -14,7 +15,7 @@ import javax.naming.InsufficientResourcesException;
 import java.util.List;
 
 /**
- * Created by corne on 1/30/2016.
+ * @author Kyle Cornelison
  * Player Interface - has required method stubs
  */
 public interface IPlayer {
@@ -174,7 +175,6 @@ public interface IPlayer {
 
 
     void playKnight();
-
 
     Integer getKnights();
 

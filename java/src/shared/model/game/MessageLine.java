@@ -10,7 +10,7 @@ public final class MessageLine {
     private String source;
     private String content;
 
-    public MessageLine(String person, String c) {
+    public MessageLine(final String person, final String c) {
         assert person != null;
         assert person.length() > 0;
         assert c != null;

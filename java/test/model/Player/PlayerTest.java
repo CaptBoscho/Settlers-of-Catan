@@ -11,7 +11,6 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.resources.*;
 import shared.model.game.Game;
-import shared.model.player.Name;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
 
@@ -31,10 +30,10 @@ public class PlayerTest {
         final List<Player> players = new ArrayList<>();
 
         try {
-            final Player one = new Player(0, CatanColor.BLUE, 0, new Name("Hope"));
-            final Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
-            final Player three = new Player(0, CatanColor.GREEN, 2, new Name("Hanna"));
-            final Player four = new Player(0, CatanColor.ORANGE, 3, new Name("Becca"));
+            final Player one = new Player(0, CatanColor.BLUE, 0, 0, "Hope");
+            final Player two = new Player(0, CatanColor.BROWN, 1, 1, "Corbin");
+            final Player three = new Player(0, CatanColor.GREEN, 2, 2, "Hanna");
+            final Player four = new Player(0, CatanColor.ORANGE, 3, 3, "Becca");
 
             players.add(one);
             players.add(two);
@@ -254,12 +253,12 @@ public class PlayerTest {
 
     @Test
     public void testEquals() throws InvalidNameException, InvalidPlayerException {
-        final Player playerOne = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
-        final Player playerTwo = new Player(0, CatanColor.BROWN, 1, new Name("Derek"));
-        final Player playerThree = new Player(0, CatanColor.BROWN, 1, new Name("Rick"));
-        final Player playerFour = new Player(0, CatanColor.BROWN, 2, new Name("Derek"));
-        final Player playerFive = new Player(0, CatanColor.RED, 1, new Name("Derek"));
-        final Player playerSix = new Player(100, CatanColor.BROWN, 1, new Name("Derek"));
+        final Player playerOne = new Player(0, CatanColor.BROWN, 1, 0, "Derek");
+        final Player playerTwo = new Player(0, CatanColor.BROWN, 1, 0, "Derek");
+        final Player playerThree = new Player(0, CatanColor.BROWN, 1, 0, "Rick");
+        final Player playerFour = new Player(0, CatanColor.BROWN, 2, 0, "Derek");
+        final Player playerFive = new Player(0, CatanColor.RED, 1, 0, "Derek");
+        final Player playerSix = new Player(100, CatanColor.BROWN, 1, 0, "Derek");
         final Player playerOneCopy = playerOne;
         final String notAPlayer = "";
 

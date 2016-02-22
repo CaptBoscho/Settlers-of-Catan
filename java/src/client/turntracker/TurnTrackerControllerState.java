@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Created by corne on 2/16/2016.
+ * @author Kyle Cornelison
  *
  * Base class for TurnTracker Controller States
  */
@@ -43,7 +43,9 @@ public class TurnTrackerControllerState {
         }
     }
 
-    public void initFromModel(){}
+    public void initFromModel() {
+
+    }
 
     public void update() {
         //Update Controller
