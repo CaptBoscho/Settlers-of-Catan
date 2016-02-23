@@ -120,9 +120,11 @@ public interface IGame {
 
     void addObserver(Observer o);
 
-    public PlayerManager getPlayerManager();
+    PlayerManager getPlayerManager();
 
-    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
+    int getId();
+
+    CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can play Year of Plenty
