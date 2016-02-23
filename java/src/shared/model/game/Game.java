@@ -1019,7 +1019,14 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
+    public void setId(int id) {
+        this.gameId = id;
+    }
 
+    @Override
+    public int getId() {
+        return this.gameId;
+    }
 
     public Set<PortType> getPortTypes(int playerID) {
         assert playerID >= 0;

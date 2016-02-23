@@ -162,6 +162,12 @@ public final class ServerProxy implements IServer {
         assert result != null;
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing");
+        } else if(result.contains("catan.game HTTP cookie is missing")) {
+            try {
+                throw new Exception("catan.game HTTP cookie is missing");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if(result.contains("true")) {
             // already have latest model, don't update anything

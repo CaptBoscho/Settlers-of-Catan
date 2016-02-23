@@ -462,7 +462,12 @@ public class Facade {
         return playerInfos;
     }
 
+    public int getGameId() {
+        return this.game.getId();
+    }
+
     public void setGameInfo(GameInfo game) {
+        Game.getInstance().setId(game.getId());
         if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
             for (int i = 0; i < 4; i++) {
                 PlayerInfo info = game.getPlayers().get(i);
