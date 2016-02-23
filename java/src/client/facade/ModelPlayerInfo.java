@@ -20,7 +20,7 @@ public class ModelPlayerInfo{
         this.largestarmy = la;
     }
 
-    public int getIndex(){return this.id;}
+    public int getId(){return this.id;}
 
     public String getName(){
         return this.name;
