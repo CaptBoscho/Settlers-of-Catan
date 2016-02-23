@@ -44,12 +44,11 @@ public class TurnTrackerControllerState {
     }
 
     public void initFromModel() {
-
     }
 
     public void update() {
         //Update Controller
-        for(PlayerInfo playerInfo : players){
+        for(PlayerInfo playerInfo : players) {
             view.updatePlayer(playerInfo.getPlayerIndex(), playerInfo.getVictoryPoints(),
                     facade.getCurrentTurn() == playerInfo.getPlayerIndex(),
                     playerInfo.hasLargestArmy(),

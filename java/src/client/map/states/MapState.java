@@ -87,14 +87,14 @@ abstract public class MapState {
         java.util.Map<VertexLocation, Vertex> vertices = map.getVertices();
 
         //first port
-        HexLocation hexLoc = new HexLocation(1,-1);
-        PortType portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
-        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.North), portType);
+        HexLocation hexLoc = new HexLocation(1,-2);
+        PortType portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.SouthWest).getNormalizedLocation()).getPort().getPortType();
+        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.South), portType);
 
         //second port
-        hexLoc = new HexLocation(2,0);
-        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthEast)).getPort().getPortType();
-        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthEast), portType);
+        hexLoc = new HexLocation(3,0);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.West).getNormalizedLocation()).getPort().getPortType();
+        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.SouthWest), portType);
 
         //third port
         hexLoc = new HexLocation(3,2);
@@ -122,14 +122,14 @@ abstract public class MapState {
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthEast), portType);
 
         //eighth port
-        hexLoc = new HexLocation(-2,-2);
-        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
-        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.NorthWest), portType);
+        hexLoc = new HexLocation(-3,-3);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.East).getNormalizedLocation()).getPort().getPortType();
+        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.SouthEast), portType);
 
         //ninth port
-        hexLoc = new HexLocation(-1,-1);
-        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.NorthWest)).getPort().getPortType();
-        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.North), portType);
+        hexLoc = new HexLocation(-1,-3);
+        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.SouthEast).getNormalizedLocation()).getPort().getPortType();
+        mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.South), portType);
 
         //draw roads
         java.util.Map<Integer, ArrayList<Edge>> roads = map.getRoads();
@@ -138,7 +138,7 @@ abstract public class MapState {
             for(Edge edge : roadList) {
                 try {
                     mapController.getView().placeRoad(getUIEdgeLocation(edge.getEdgeLoc()),
-                            facade.getPlayerColorByID(entry.getKey()));
+                            facade.getPlayerColorByIndex(entry.getKey()));
                 } catch (PlayerExistsException e) {
                     e.printStackTrace();
                 }
@@ -152,7 +152,7 @@ abstract public class MapState {
             for(Vertex vertex : settlementList) {
                 try {
                     mapController.getView().placeSettlement(getUIVertexLocation(vertex.getVertexLoc()),
-                            facade.getPlayerColorByID(entry.getKey()));
+                            facade.getPlayerColorByIndex(entry.getKey()));
                 } catch (PlayerExistsException e) {
                     e.printStackTrace();
                 }
@@ -166,7 +166,7 @@ abstract public class MapState {
             for(Vertex vertex : cityList) {
                 try {
                     mapController.getView().placeCity(getUIVertexLocation(vertex.getVertexLoc()),
-                            facade.getPlayerColorByID(entry.getKey()));
+                            facade.getPlayerColorByIndex(entry.getKey()));
                 } catch (PlayerExistsException e) {
                     e.printStackTrace();
                 }

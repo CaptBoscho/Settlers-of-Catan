@@ -115,18 +115,14 @@ public class JoinGameController extends Controller implements IJoinGameControlle
         final boolean randomNumbers = getNewGameView().getRandomlyPlaceNumbers();
         final boolean randomPorts = getNewGameView().getUseRandomPorts();
         final String gameName = getNewGameView().getTitle();
-        final CreateGameDTO dto = new CreateGameDTO(randomHexes, randomNumbers, randomPorts, gameName);
-        final GameInfo newGame = ServerProxy.getInstance().createNewGame(dto);
+        final CreateGameDTO createGameDTO = new CreateGameDTO(randomHexes, randomNumbers, randomPorts, gameName);
+        final GameInfo newGame = ServerProxy.getInstance().createNewGame(createGameDTO);
 		getNewGameView().closeModal();
 
-        // TODO - verify this is the required functionality
-        List<GameInfo> allGames = ServerProxy.getInstance().getAllGames();
-        GameInfo[] gamesArray = new GameInfo[allGames.size()];
-        allGames.toArray(gamesArray);
-        getJoinGameView().setGames(gamesArray, UserCookie.getInstance().getPlayerInfo());
-        setNewGameView(newGameView);
+		JoinGameDTO joinGameDTO = new JoinGameDTO(newGame.getId(), CatanColor.WHITE);
+		ServerProxy.getInstance().joinGame(joinGameDTO);
 
-        getJoinGameView().showModal();
+        start();
 	}
 
 	@Override

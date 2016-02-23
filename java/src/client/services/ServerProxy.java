@@ -156,17 +156,24 @@ public final class ServerProxy implements IServer {
      */
     @Override
     public ClientModel getCurrentModel(int version) throws MissingUserCookieException {
-        assert version >= 0;
+//        assert version >= 0;
         String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
         String result = Utils.sendGet(url);
         assert result != null;
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing");
+        } else if(result.contains("catan.game HTTP cookie is missing")) {
+            try {
+                throw new Exception("catan.game HTTP cookie is missing");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if(result.contains("true")) {
             // already have latest model, don't update anything
             return null;
         }
+        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
