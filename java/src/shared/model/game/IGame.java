@@ -18,6 +18,7 @@ import shared.model.player.Player;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
+import shared.model.player.PlayerManager;
 
 import javax.annotation.Resource;
 import javax.naming.InsufficientResourcesException;
@@ -119,7 +120,11 @@ public interface IGame {
 
     void addObserver(Observer o);
 
-    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException;
+    PlayerManager getPlayerManager();
+
+    int getId();
+
+    CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can play Year of Plenty

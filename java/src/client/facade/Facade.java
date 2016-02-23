@@ -56,8 +56,13 @@ public class Facade {
         this.game.addObserver(o);
     }
 
-    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
-        return this.game.getPlayerColorByID(id);}
+    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
+        return this.game.getPlayerColorByIndex(id);
+    }
+
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException {
+        return this.game.getPlayerColorByIndex(this.game.getPlayerManager().getPlayerByID(id).getPlayerIndex());
+    }
 
     //TODO talk to server
     public void joinGame(int playerID){
@@ -459,7 +464,12 @@ public class Facade {
         return playerInfos;
     }
 
+    public int getGameId() {
+        return this.game.getId();
+    }
+
     public void setGameInfo(GameInfo game) {
+        Game.getInstance().setId(game.getId());
         if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
             for (int i = 0; i < 4; i++) {
                 PlayerInfo info = game.getPlayers().get(i);

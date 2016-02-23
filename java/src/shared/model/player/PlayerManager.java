@@ -107,19 +107,21 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     /**
-     * Gets a player by index
+     * Gets a player by game index
      * @param index Index of the player
      * @return Player at index
      * @throws PlayerExistsException
      */
     public Player getPlayerByIndex(final int index) throws PlayerExistsException {
-        assert index >= 0;
+        assert index >= 0 && index < 4;
 
-        if(index < this.players.size() && this.players.get(index) != null) {
-            return this.players.get(index);
-        } else {
-            throw new PlayerExistsException("The player at index " + index + " doesn't exist!");
+        for (final Player player : this.players) {
+            if(player.getPlayerIndex() == index) {
+                return player;
+            }
         }
+
+        throw new PlayerExistsException("The player at index " + index + " doesn't exist!");
     }
 
     public void addPlayer(final Player p) {
@@ -558,8 +560,8 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     @Override
-    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException {
-        return getPlayerByID(id).getColor();
+    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
+        return getPlayerByIndex(id).getColor();
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException {

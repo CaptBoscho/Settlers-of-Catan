@@ -97,7 +97,6 @@ public final class Vertex {
      */
     public void buildSettlement(final Settlement settlement) {
         assert settlement != null;
-        assert this.port == null;
         assert settlement.getPlayerID() >= 0;
         assert canBuildSettlement(); // code should only call this after verifying canBuildSettlement
 
@@ -111,7 +110,6 @@ public final class Vertex {
     public void buildCity(final City city) {
         assert city != null;
         assert this.city == null;
-        assert this.port == null;
         assert this.settlement != null;
         assert city.getPlayerID() >= 0;
         assert city.getPlayerID() == this.settlement.getPlayerID();
