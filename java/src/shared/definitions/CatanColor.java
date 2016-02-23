@@ -38,6 +38,8 @@ public enum CatanColor {
                 return CatanColor.PURPLE;
             case "white":
                 return CatanColor.WHITE;
+            case "yellow":
+                return CatanColor.YELLOW;
         }
 
         return null;

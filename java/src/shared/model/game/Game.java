@@ -1038,8 +1038,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return this.map;
     }
 
-    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
-        return this.playerManager.getPlayerColorByIndex(id);
+    public CatanColor getPlayerColorByIndex(int index) throws PlayerExistsException {
+        return this.playerManager.getPlayerColorByIndex(index);
     }
 
     public List<Player> getPlayers() {

@@ -399,7 +399,7 @@ public class Facade {
                     RobPlayerInfo rbi = new RobPlayerInfo();
                     rbi.setColor(p.getColor());
                     rbi.setId(p.getId());
-                    rbi.setName(p.getName().toString());
+                    rbi.setName(p.getName());
                     rbi.setPlayerIndex(p.getPlayerIndex());
                     rbi.setNumCards(p.countResources());
                     robbed[i] = rbi;
@@ -408,9 +408,7 @@ public class Facade {
             }
 
             return robbed;
-        }catch(AlreadyRobbedException e){
-
-        }catch(InvalidLocationException e){
+        } catch(AlreadyRobbedException | InvalidLocationException ignored) {
 
         }
         return null;
