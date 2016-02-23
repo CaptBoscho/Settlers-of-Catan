@@ -37,9 +37,9 @@ public class PlayerInfo {
 	public PlayerInfo(String name, int victorypoints, CatanColor color, int identifier, int index, boolean longestRoad, boolean largestArmy){
         assert(name != null);
         assert(victorypoints >=0);
-        assert(color != null);
+        //assert(color != null);
         assert(identifier >= 0);
-        assert(index >= 0);
+        //assert(index >= 0);
         assert(index<4);
 
         this.name = name;

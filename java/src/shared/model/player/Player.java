@@ -87,7 +87,7 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     public Player(int points, CatanColor color, int id, int playerIndex, String name) throws InvalidPlayerException {
         assert points >= 0;
         assert name != null;
-        assert color != null;
+        //assert color != null;
 
         this.soldiers = 0;
         this.resourceCardBank = new ResourceCardBank(false);
