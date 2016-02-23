@@ -1042,6 +1042,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return playerManager.getWinner();
     }
 
+    public Player getPlayerById(int id) throws PlayerExistsException {
+        return playerManager.getPlayerByID(id);
+    }
+
     /*======================================================
     * Private - Helper Methods
     * ======================================================*/
