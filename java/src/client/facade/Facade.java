@@ -589,6 +589,26 @@ public class Facade {
             e.printStackTrace();
         }
     }
+
+    public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
+        int index = game.getLocalPlayerIndex();
+        PlayYOPCardDTO dto = new PlayYOPCardDTO(index, resource1, resource2);
+        try {
+            ServerProxy.getInstance().playYearOfPlentyCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playMonumentCard() {
+        int index = game.getLocalPlayerIndex();
+        PlayMonumentDTO dto = new PlayMonumentDTO(index);
+        try {
+            ServerProxy.getInstance().playMonumentCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * plays the Development Card
      *

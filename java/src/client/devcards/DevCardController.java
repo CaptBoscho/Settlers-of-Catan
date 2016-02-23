@@ -105,7 +105,7 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playMonumentCard() {
-		//todo make facade.playMonumentCard
+		Facade.getInstance().playMonumentCard();
 	}
 
 	@Override
@@ -120,6 +120,6 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
-		
+		Facade.getInstance().playYearOfPlentyCard(resource1, resource2);
 	}
 }
