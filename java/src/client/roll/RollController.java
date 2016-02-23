@@ -45,6 +45,7 @@ public final class RollController extends Controller implements IRollController 
 		//Roll the dice
 		int roll = roller.roll();
 
+
 		//Tell the server
 		try {
 			server.rollNumber(new RollNumberDTO(userCookie.getPlayerId(), roll));

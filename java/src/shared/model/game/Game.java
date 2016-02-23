@@ -694,15 +694,18 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
-        return(playerManager.canBuildRoad(id) && turnTracker.canPlay());
+        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
+        return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
     }
 
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
-        return(playerManager.canBuildSettlement(id) && turnTracker.canPlay());
+        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
+        return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
     public boolean ableToBuildCity(int id) throws PlayerExistsException{
-        return(playerManager.canBuildCity(id) && turnTracker.canPlay());
+        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
+        return(playerManager.canBuildCity(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
