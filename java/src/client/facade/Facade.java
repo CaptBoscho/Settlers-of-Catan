@@ -481,16 +481,7 @@ public class Facade {
             }
         }
     }
-
-<<<<<<< HEAD
-    public int getPlayerIndexByID(int playerId) throws PlayerExistsException {
-        Player p = game.getPlayerById(playerId);
-        game.getPlayerById(playerId).getPlayerIndex()
-        return p.getPlayerIndex();
-    }
-
-=======
->>>>>>> refs/remotes/origin/master
+    
     public PlayerInfo getWinner() throws GameOverException{
         Player p = this.game.getWinner();
 
