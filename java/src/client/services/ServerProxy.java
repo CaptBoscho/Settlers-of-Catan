@@ -173,7 +173,6 @@ public final class ServerProxy implements IServer {
             // already have latest model, don't update anything
             return null;
         }
-        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
