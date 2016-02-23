@@ -94,7 +94,7 @@ public final class ServerProxy implements IServer {
      * @return A new game object
      */
     @Override
-    public GameInfo createNewGame(CreateGameDTO dto) {
+    public GameInfo createNewGame(final CreateGameDTO dto) {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/create";
         String result = Utils.sendPost(url, dto.toJSON());
@@ -109,7 +109,7 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to join a game
      */
     @Override
-    public String joinGame(JoinGameDTO dto) {
+    public String joinGame(final JoinGameDTO dto) {
         assert dto != null;
         assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/games/join";
@@ -124,11 +124,11 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to save a game
      */
     @Override
-    public boolean saveGame(SaveGameDTO dto) {
+    public boolean saveGame(final SaveGameDTO dto) {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/games/save";
-        String result = Utils.sendPost(url, dto.toJSON());
+        final String url = Utils.buildUrl(this.host, this.port) + "/games/save";
+        final String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
         return result.equals("Success");
     }
@@ -142,8 +142,8 @@ public final class ServerProxy implements IServer {
     public boolean loadGame(LoadGameDTO dto) {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/games/load";
-        String result = Utils.sendPost(url, dto.toJSON());
+        final String url = Utils.buildUrl(this.host, this.port) + "/games/load";
+        final String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
         return result.equals("Success");
     }
@@ -156,7 +156,7 @@ public final class ServerProxy implements IServer {
      */
     @Override
     public ClientModel getCurrentModel(int version) throws MissingUserCookieException {
-        assert version >= 0;
+//        assert version >= 0;
         String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
         String result = Utils.sendGet(url);
         assert result != null;

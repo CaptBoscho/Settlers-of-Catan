@@ -47,7 +47,6 @@ public class TestRunner {
             "model.map.PortTests",
             "model.map.RobberTests",
             "model.map.VertexTests",
-            "model.Player.NameTests",
             "model.Player.PlayerManagerTest",
             "model.Player.PlayerTest",
         };

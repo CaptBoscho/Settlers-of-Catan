@@ -12,7 +12,6 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.*;
 import shared.model.cards.resources.*;
-import shared.model.player.Name;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
 
@@ -32,10 +31,10 @@ public class PlayerManagerTest {
         final List<Player> players = new ArrayList<>();
 
         try {
-            final Player one = new Player(0, CatanColor.BLUE, 0, new Name("Hope"));
-            final Player two = new Player(0, CatanColor.BROWN, 1, new Name("Corbin"));
-            final Player three = new Player(0, CatanColor.GREEN, 2, new Name("Hanna"));
-            final Player four = new Player(0, CatanColor.ORANGE, 3, new Name("Becca"));
+            final Player one = new Player(0, CatanColor.BLUE, 0, 0, "Hope");
+            final Player two = new Player(0, CatanColor.BROWN, 1, 1, "Corbin");
+            final Player three = new Player(0, CatanColor.GREEN, 2, 2, "Hanna");
+            final Player four = new Player(0, CatanColor.ORANGE, 3, 3, "Becca");
 
             players.add(one);
             players.add(two);

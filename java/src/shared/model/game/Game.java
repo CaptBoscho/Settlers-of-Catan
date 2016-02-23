@@ -36,6 +36,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     private static Game instance;
 
+    private int gameId;
     private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
@@ -53,6 +54,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * Constructor
      */
     protected Game() {
+        this.version = -1;
         this.dice = new Dice(2);
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
@@ -61,6 +63,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(new ArrayList<>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
+
     }
 
     public static Game getInstance() {
@@ -247,9 +250,9 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
 
         int roll = dice.roll();
-        if(roll == 7){
+        if(roll == 7) {
             turnTracker.setPhase(TurnTracker.Phase.ROBBING);
-        } else{
+        } else {
             map.getResources(roll);
         }
 
@@ -294,13 +297,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @throws InsufficientResourcesException
      * @throws InvalidTypeException
      */
-    public ResourceCard getResourceCard(ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
+    public ResourceCard getResourceCard(final ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
         assert t != null;
 
         return resourceCardBank.discard(t);
     }
 
-    public Integer amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException {
+    public int amountOwnedResource(final int playerID, final ResourceType t) throws PlayerExistsException, InvalidTypeException {
         assert playerID >= 0;
         assert t != null;
 
@@ -327,6 +330,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         if(canOfferTrade(playerIDOne)){
             final TradePackage one = new TradePackage(playerIDOne,onecards);
             final TradePackage two = new TradePackage(playerIDTwo, twocards);
+
+            // TODO - why is this trade object unused?
             Trade trade = new Trade(one,two);
 
             playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
@@ -388,7 +393,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return
      */
     @Override
-    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistsException {
+    public boolean canBuyDevelopmentCard(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
         assert this.playerManager != null;
         assert this.turnTracker != null;
@@ -429,7 +434,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return getCurrentTurn() == playerID && playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
     }
 
-    public void addDevCard(DevelopmentCard dc, int playerID) throws PlayerExistsException {
+    public void addDevCard(final DevelopmentCard dc, final int playerID) throws PlayerExistsException {
         assert dc != null;
         assert playerID >= 0;
         assert this.playerManager != null;
@@ -437,7 +442,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         playerManager.getPlayerByID(playerID).addDevCard(dc);
     }
 
-    public Integer numberOfDevCard(int playerID) throws PlayerExistsException {
+    public Integer numberOfDevCard(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
         assert this.playerManager != null;
 
@@ -462,7 +467,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert want1 != null;
         assert want2 != null;
 
-        if(canUseYearOfPlenty(playerID)){
+        if(canUseYearOfPlenty(playerID)) {
             playerManager.useYearOfPlenty(playerID);
             ResourceCard rc1 = resourceCardBank.discard(want1);
             ResourceCard rc2 = resourceCardBank.discard(want2);
@@ -537,17 +542,17 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.largestArmyCard != null;
         assert this.turnTracker != null;
 
-        if(canUseSoldier(playerID)){
+        if(canUseSoldier(playerID)) {
             playerManager.useSoldier(playerID);
             int used = playerManager.getKnights(playerID);
             if(used >= 3 && used > largestArmyCard.getMostSoldiers()) {
-                int oldplayer = largestArmyCard.getOwner();
+                final int oldPlayer = largestArmyCard.getOwner();
                 largestArmyCard.setNewOwner(playerID, used);
-                playerManager.changeLargestArmyPossession(oldplayer, playerID);
+                playerManager.changeLargestArmyPossession(oldPlayer, playerID);
             }
 
             turnTracker.setPhase(TurnTracker.Phase.ROBBING);
-            if(canPlaceRobber(playerID, hexloc)){
+            if(canPlaceRobber(playerID, hexloc)) {
                 return placeRobber(playerID, hexloc);
             }
             return null;
@@ -580,7 +585,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert type != null;
 
-        if(canUseMonopoly(playerID)){
+        if(canUseMonopoly(playerID)) {
             playerManager.useMonopoly(playerID, type);
         }
     }
@@ -727,7 +732,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
         assert this.longestRoadCard != null;
 
-        if(canBuildRoad(playerID, edge)){
+        if(canBuildRoad(playerID, edge)) {
             map.buildRoad(playerID, edge);
             playerManager.buildRoad(playerID);
             //check to update longest road
@@ -775,7 +780,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.map != null;
         assert this.playerManager != null;
 
-        if(canBuildSettlement(playerID, vertex)){
+        if(canBuildSettlement(playerID, vertex)) {
             map.buildSettlement(playerID, vertex);
             playerManager.buildSettlement(playerID);
         }
@@ -813,7 +818,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert vertex.getHexLoc().getX() >= 0;
         assert vertex.getHexLoc().getY() >= 0;
 
-        if(canBuildCity(playerID, vertex)){
+        if(canBuildCity(playerID, vertex)) {
             map.buildCity(playerID, vertex);
             playerManager.buildCity(playerID);
         }
@@ -945,21 +950,27 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
         if(canMaritimeTrade(playerID, port)){
             List<ResourceType> cards = new ArrayList<>();
-            if(port == PortType.BRICK) {
-                cards.add(ResourceType.BRICK);
-                cards.add(ResourceType.BRICK);
-            } else if(port == PortType.ORE) {
-                cards.add(ResourceType.ORE);
-                cards.add(ResourceType.ORE);
-            } else if(port == PortType.SHEEP) {
-                cards.add(ResourceType.SHEEP);
-                cards.add(ResourceType.SHEEP);
-            } else if(port == PortType.WHEAT) {
-                cards.add(ResourceType.WHEAT);
-                cards.add(ResourceType.WHEAT);
-            } else if(port == PortType.WOOD) {
-                cards.add(ResourceType.WOOD);
-                cards.add(ResourceType.WOOD);
+            switch(port) {
+                case BRICK:
+                    cards.add(ResourceType.BRICK);
+                    cards.add(ResourceType.BRICK);
+                    break;
+                case ORE:
+                    cards.add(ResourceType.ORE);
+                    cards.add(ResourceType.ORE);
+                    break;
+                case SHEEP:
+                    cards.add(ResourceType.SHEEP);
+                    cards.add(ResourceType.SHEEP);
+                    break;
+                case WHEAT:
+                    cards.add(ResourceType.WHEAT);
+                    cards.add(ResourceType.WHEAT);
+                    break;
+                case WOOD:
+                    cards.add(ResourceType.WOOD);
+                    cards.add(ResourceType.WOOD);
+                    break;
             }
             final List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
             assert discarded != null;
@@ -986,7 +997,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
                 final List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
 
-                for(ResourceCard rc: discarded) {
+                for(final ResourceCard rc: discarded) {
                     resourceCardBank.addResource(rc);
                 }
 
@@ -1011,17 +1022,19 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return turnTracker;
     }
 
-    public PlayerManager getPlayerManager(){
+    public PlayerManager getPlayerManager() {
         return playerManager;
     }
 
-    public Map getMap(){return this.map;}
+    public Map getMap() {
+        return this.map;
+    }
 
-    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException{
+    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException {
         return this.playerManager.getPlayerColorByID(id);
     }
 
-    public List<Player> getPlayers(){
+    public List<Player> getPlayers() {
         return this.playerManager.getPlayers();
     }
 

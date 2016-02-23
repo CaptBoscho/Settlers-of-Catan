@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Created by corne on 2/16/2016.
+ * @author Kyle Cornelison
  *
  * Base class for TurnTracker Controller States
  */
@@ -29,7 +29,7 @@ public class TurnTrackerControllerState {
      * Constructor
      */
     public TurnTrackerControllerState(ITurnTrackerView view){
-        view = view;
+        this.view = view;
         facade = Facade.getInstance();
         userCookie = UserCookie.getInstance();
         players = facade.getPlayers();
@@ -43,11 +43,12 @@ public class TurnTrackerControllerState {
         }
     }
 
-    public void initFromModel(){}
+    public void initFromModel() {
+    }
 
     public void update() {
         //Update Controller
-        for(PlayerInfo playerInfo : players){
+        for(PlayerInfo playerInfo : players) {
             view.updatePlayer(playerInfo.getPlayerIndex(), playerInfo.getVictoryPoints(),
                     facade.getCurrentTurn() == playerInfo.getPlayerIndex(),
                     playerInfo.hasLargestArmy(),
