@@ -138,7 +138,7 @@ abstract public class MapState {
             for(Edge edge : roadList) {
                 try {
                     mapController.getView().placeRoad(getUIEdgeLocation(edge.getEdgeLoc()),
-                            facade.getPlayerColorByID(entry.getKey()));
+                            facade.getPlayerColorByIndex(entry.getKey()-1));
                 } catch (PlayerExistsException e) {
                     e.printStackTrace();
                 }
@@ -152,7 +152,7 @@ abstract public class MapState {
             for(Vertex vertex : settlementList) {
                 try {
                     mapController.getView().placeSettlement(getUIVertexLocation(vertex.getVertexLoc()),
-                            facade.getPlayerColorByID(entry.getKey()));
+                            facade.getPlayerColorByIndex(entry.getKey()-1));
                 } catch (PlayerExistsException e) {
                     e.printStackTrace();
                 }
@@ -166,7 +166,7 @@ abstract public class MapState {
             for(Vertex vertex : cityList) {
                 try {
                     mapController.getView().placeCity(getUIVertexLocation(vertex.getVertexLoc()),
-                            facade.getPlayerColorByID(entry.getKey()));
+                            facade.getPlayerColorByIndex(entry.getKey()-1));
                 } catch (PlayerExistsException e) {
                     e.printStackTrace();
                 }
