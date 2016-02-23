@@ -49,7 +49,7 @@ public interface IPlayerManager {
      */
     Player getPlayerByID(int id) throws PlayerExistsException;
 
-    CatanColor getPlayerColorByID(int id) throws PlayerExistsException;
+    CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
 
     /**
      * Gets a player by index
