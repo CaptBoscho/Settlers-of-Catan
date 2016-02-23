@@ -310,6 +310,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return playerManager.getPlayerByID(playerID).howManyOfThisCard(t);
     }
 
+    @Override
+    public int getLocalPlayerIndex() {
+        return playerManager.getLocalPlayerIndex();
+    }
+
     /**
      * Action - Player offers trade
      *

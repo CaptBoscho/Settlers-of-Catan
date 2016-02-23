@@ -38,6 +38,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             boolean enableSettlement = facade.ableToBuildSettlement(ID);
             boolean enableCity = facade.ableToBuildCity(ID);
 			boolean enableBuyDevCard = facade.canBuyDC(ID);
+            boolean enablePlayCard = facade.canPlayDC(ID);
 
             int roadCount = facade.getAvailableRoads(ID);
             int settlementCount = facade.getAvailableSettlements(ID);
@@ -52,11 +53,13 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
             ResourceBarElement city = ResourceBarElement.CITY;
 			ResourceBarElement buyCard = ResourceBarElement.BUY_CARD;
+            ResourceBarElement playCard = ResourceBarElement.PLAY_CARD;
 
             getView().setElementEnabled(road, enableRoad);
             getView().setElementEnabled(settle, enableSettlement);
             getView().setElementEnabled(city, enableCity);
 			getView().setElementEnabled(buyCard, enableBuyDevCard);
+            getView().setElementEnabled(playCard, enablePlayCard);
 
             getView().setElementAmount(road, roadCount);
             getView().setElementAmount(settle, settlementCount);
@@ -66,9 +69,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementAmount(ResourceBarElement.WHEAT, wheatCount);
             getView().setElementAmount(ResourceBarElement.SHEEP, sheepCount);
             getView().setElementAmount(ResourceBarElement.ORE, oreCount);
-
-            getView().setElementEnabled(ResourceBarElement.BUY_CARD, facade.canBuyDC(ID));
-            getView().setElementEnabled(ResourceBarElement.PLAY_CARD, facade.canPlayDC(ID));
 
         } catch(PlayerExistsException e){
             e.printStackTrace();

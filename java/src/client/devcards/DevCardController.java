@@ -100,7 +100,7 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
-		//todo make facade.playMonopolyCard
+		Facade.getInstance().playMonopolyCard(resource);
 	}
 
 	@Override

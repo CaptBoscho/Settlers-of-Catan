@@ -5,10 +5,8 @@ import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
-import shared.dto.BuildCityDTO;
-import shared.dto.BuildRoadDTO;
-import shared.dto.BuildSettlementDTO;
-import shared.dto.BuyDevCardDTO;
+import client.services.UserCookie;
+import shared.dto.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -575,6 +573,16 @@ public class Facade {
      */
     public int getNumberDevCards(DevCardType type, int playerID) {
         return game.getNumberDevCards(type, playerID);
+    }
+
+    public void playMonopolyCard(ResourceType resource) {
+        int index = game.getLocalPlayerIndex();
+        PlayMonopolyDTO dto = new PlayMonopolyDTO(index, resource.toString());
+        try {
+            ServerProxy.getInstance().playMonopolyCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
     }
     /**
      * plays the Development Card

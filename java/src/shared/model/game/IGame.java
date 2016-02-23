@@ -358,4 +358,6 @@ public interface IGame {
     int getNumberDevCards(DevCardType type, int playerID);
 
     public int amountOwnedResource(int playerID, ResourceType t)throws PlayerExistsException, InvalidTypeException;
+
+    int getLocalPlayerIndex();
 }
