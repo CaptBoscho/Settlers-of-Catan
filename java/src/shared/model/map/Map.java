@@ -793,7 +793,7 @@ public final class Map implements IMap, JsonSerializable{
 
         for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final int playerID = json.get("owner").getAsInt() + 1;
+            final int playerID = json.get("owner").getAsInt();
             EdgeLocation edgeLoc = new EdgeLocation(json.get("location").getAsJsonObject());
             edgeLoc = edgeLoc.getNormalizedLocation();
             final Edge edge = edges.get(edgeLoc);
@@ -815,7 +815,7 @@ public final class Map implements IMap, JsonSerializable{
 
         for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final int playerID = json.get("owner").getAsInt() + 1;
+            final int playerID = json.get("owner").getAsInt();
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
             vertexLoc = vertexLoc.getNormalizedLocation();
             final Vertex vertex = vertices.get(vertexLoc);
@@ -840,7 +840,7 @@ public final class Map implements IMap, JsonSerializable{
 
         for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final int playerID = json.get("owner").getAsInt() + 1;
+            final int playerID = json.get("owner").getAsInt();
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
             vertexLoc = vertexLoc.getNormalizedLocation();
             final Vertex vertex = vertices.get(vertexLoc);
