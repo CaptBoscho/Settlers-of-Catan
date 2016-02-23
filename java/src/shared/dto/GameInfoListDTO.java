@@ -35,13 +35,13 @@ public final class GameInfoListDTO implements JsonSerializable {
             final GameInfo newGame = new GameInfo();
             for(JsonElement playerJson : tmp.get("players").getAsJsonArray()) {
                 JsonObject playerObj = playerJson.getAsJsonObject();
-                PlayerInfo tmpInfo = new PlayerInfo();
                 if(playerObj.has("id")) {
+                    PlayerInfo tmpInfo = new PlayerInfo();
                     tmpInfo.setId(playerObj.get("id").getAsInt());
                     tmpInfo.setColor(CatanColor.translateFromString(playerObj.get("color").getAsString()));
                     tmpInfo.setName(playerObj.get("name").getAsString());
+                    newGame.addPlayer(tmpInfo);
                 }
-                newGame.addPlayer(tmpInfo);
             }
             newGame.setId(tmp.get("id").getAsInt());
             newGame.setTitle(tmp.get("title").getAsString());
