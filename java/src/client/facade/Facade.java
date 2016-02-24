@@ -156,10 +156,6 @@ public class Facade {
         return new VertexLocation(getServerHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
     }
 
-    public void buildFirstRoad(int playerID, EdgeLocation edgeloc){
-
-    }
-
 
 
     /**
@@ -423,8 +419,8 @@ public class Facade {
 
         }
     }
-    //TODO devcard functions
 
+    //TODO talk to server
     public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
         try {
 
@@ -556,17 +552,30 @@ public class Facade {
         }catch(PlayerExistsException e){return false;}
     }
 
+
+    public void buildFirstRoad(int playerID, EdgeLocation edgeloc){
+        this.game.buildFirstRoad(playerID, edgeloc);
+    }
+
+    //TODO talk to server
     public void cancelSoldierCard(int playerID){
-
+        this.game.cancelSoldierCard(playerID);
     }
 
+    /**
+     * DO NOT TALK TO SERVER ON THIS METHOD.
+     * @param playerID
+     * @param road
+     */
     public void deleteRoad(int playerID, EdgeLocation road){
-
+        this.game.deleteRoad(playerID, road);
     }
 
+    //TODO talk to server
     public void cancelRoadBuildingCard(int playerID){
-
+        this.game.cancelRoadBuildingCard(playerID);
     }
+
 
     public int getAmountOfResource(int playerID, ResourceType resource){
         try {
@@ -577,7 +586,13 @@ public class Facade {
 
     //TODO to server
     public void playRoadBuildingCard(int playerID, EdgeLocation one, EdgeLocation two){
-
+        try {
+            this.game.useRoadBuilder(playerID, one, two);
+        }catch(DevCardException e){}
+        catch(InvalidLocationException e){}
+        catch(StructureException e){}
+        catch(InvalidPlayerException e){}
+        catch(PlayerExistsException e){}
     }
     /**
      * plays the Development Card

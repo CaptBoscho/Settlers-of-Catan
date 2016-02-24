@@ -362,5 +362,13 @@ public interface IGame {
 
     public int amountOwnedResource(int playerID, ResourceType t)throws PlayerExistsException, InvalidTypeException;
 
+    public void buildFirstRoad(int playerID, EdgeLocation hexloc);
+
+    public void cancelSoldierCard(int playerID);
+
+    public void deleteRoad(int playerID, EdgeLocation edge);
+
+    public void cancelRoadBuildingCard(int playerID);
+
     public Player getPlayerById(int id) throws PlayerExistsException;
 }
