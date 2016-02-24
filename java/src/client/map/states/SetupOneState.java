@@ -59,7 +59,7 @@ public class SetupOneState extends MapState {
         edgeLoc = getModelEdgeLocation(edgeLoc);
         facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
         try {
-            mapController.getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class SetupOneState extends MapState {
         vertLoc = getModelVertexLocation(vertLoc);
         facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
         try {
-            mapController.getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
