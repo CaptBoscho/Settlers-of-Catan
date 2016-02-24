@@ -483,7 +483,7 @@ public class Facade {
         if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
             for (int i = 0; i < 4; i++) {
                 PlayerInfo info = game.getPlayers().get(i);
-                players.get(i).setPlayerIndex(info.getPlayerIndex());
+                Game.getInstance().getPlayerManager().getPlayers().get(i).setPlayerIndex(info.getPlayerIndex());
                 // TODO -- add rest
             }
         } else {

@@ -23,7 +23,6 @@ import java.util.Observer;
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
     private UserCookie userCookie;
-    private List<PlayerInfo> players;
     private TurnTrackerControllerState state;
 
 	public TurnTrackerController(ITurnTrackerView view) {
@@ -44,28 +43,14 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	}
 	
 	public void initFromModel() {
-        players = facade.getPlayers();
         //Set the local player color
-        try {
-            int id = userCookie.getPlayerId();
-            CatanColor locPColor = facade.getPlayerColorByID(id);
-            getView().setLocalPlayerColor(locPColor);
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
+        CatanColor locColor = userCookie.getPlayerInfo().getColor();
+        getView().setLocalPlayerColor(locColor);
 
-        //Init Players
-        for(PlayerInfo playerInfo : players) {
+        //Initialize Players
+        for(PlayerInfo playerInfo : facade.getPlayers()) {
             getView().initializePlayer(playerInfo.getPlayerIndex(), playerInfo.getName(), playerInfo.getColor());
         }
-
-        //Create the current state
-        createState(facade.getPhase());
-
-        //Call the state's init function
-        state.initFromModel();
-
-        new Poller(ServerProxy.getInstance()).start();
 	}
 
 	/**

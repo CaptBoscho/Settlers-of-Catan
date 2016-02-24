@@ -344,7 +344,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
-
     /**
      * Determine if Player can finish their turn
      * Checks Player turn and phase
