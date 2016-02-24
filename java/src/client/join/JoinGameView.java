@@ -160,6 +160,8 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 							break;
 						}
 					}
+					System.out.println("joining game " + game.getId());
+					System.out.println("players in game " + game.getPlayers());
 					getController().startJoinGame(game);
 				} catch (NumberFormatException ex) {
 					ex.printStackTrace();
