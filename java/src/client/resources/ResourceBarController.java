@@ -18,9 +18,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	private Map<ResourceBarElement, IAction> elementActions;
     private Game game = null;
     private Facade facade = Facade.getInstance();
-    private int ID;
-	
-	public ResourceBarController(IResourceBarView view) {
+
+    public ResourceBarController(IResourceBarView view) {
 		super(view);
 		elementActions = new HashMap<ResourceBarElement, IAction>();
         facade.addObserver(this);
@@ -34,39 +33,42 @@ public class ResourceBarController extends Controller implements IResourceBarCon
      */
 	public void update(Observable obs, Object obj){
         try {
-            ID  = UserCookie.getInstance().getPlayerId();
+            int ID = UserCookie.getInstance().getPlayerId();
             boolean enableRoad = facade.ableToBuildRoad(ID);
             boolean enableSettlement = facade.ableToBuildSettlement(ID);
             boolean enableCity = facade.ableToBuildCity(ID);
+			boolean enableBuyDevCard = facade.canBuyDC(ID);
+            boolean enablePlayCard = facade.canPlayDC(ID);
 
-            int roadcount = facade.getAvailableRoads(ID);
-            int settlementcount = facade.getAvailableSettlements(ID);
-            int citycount = facade.getAvailableCities(ID);
-            int brickcount = facade.getAmountOfResource(ID, ResourceType.BRICK);
-            int woodcount = facade.getAmountOfResource(ID, ResourceType.WOOD);
-            int wheatcount = facade.getAmountOfResource(ID, ResourceType.WHEAT);
-            int sheepcount = facade.getAmountOfResource(ID, ResourceType.SHEEP);
-            int orecount = facade.getAmountOfResource(ID, ResourceType.ORE);
+            int roadCount = facade.getAvailableRoads(ID);
+            int settlementCount = facade.getAvailableSettlements(ID);
+            int cityCount = facade.getAvailableCities(ID);
+            int brickCount = facade.getAmountOfResource(ID, ResourceType.BRICK);
+            int woodCount = facade.getAmountOfResource(ID, ResourceType.WOOD);
+            int wheatCount = facade.getAmountOfResource(ID, ResourceType.WHEAT);
+            int sheepCount = facade.getAmountOfResource(ID, ResourceType.SHEEP);
+            int oreCount = facade.getAmountOfResource(ID, ResourceType.ORE);
 
             ResourceBarElement road = ResourceBarElement.ROAD;
             ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
             ResourceBarElement city = ResourceBarElement.CITY;
+			ResourceBarElement buyCard = ResourceBarElement.BUY_CARD;
+            ResourceBarElement playCard = ResourceBarElement.PLAY_CARD;
 
             getView().setElementEnabled(road, enableRoad);
             getView().setElementEnabled(settle, enableSettlement);
             getView().setElementEnabled(city, enableCity);
+			getView().setElementEnabled(buyCard, enableBuyDevCard);
+            getView().setElementEnabled(playCard, enablePlayCard);
 
-            getView().setElementAmount(road, roadcount);
-            getView().setElementAmount(settle, settlementcount);
-            getView().setElementAmount(city, citycount);
-            getView().setElementAmount(ResourceBarElement.WOOD, woodcount);
-            getView().setElementAmount(ResourceBarElement.BRICK, brickcount);
-            getView().setElementAmount(ResourceBarElement.WHEAT, wheatcount);
-            getView().setElementAmount(ResourceBarElement.SHEEP, sheepcount);
-            getView().setElementAmount(ResourceBarElement.ORE, orecount);
-
-            getView().setElementEnabled(ResourceBarElement.BUY_CARD, facade.canBuyDC(ID));
-            getView().setElementEnabled(ResourceBarElement.PLAY_CARD, facade.canPlayDC(ID));
+            getView().setElementAmount(road, roadCount);
+            getView().setElementAmount(settle, settlementCount);
+            getView().setElementAmount(city, cityCount);
+            getView().setElementAmount(ResourceBarElement.WOOD, woodCount);
+            getView().setElementAmount(ResourceBarElement.BRICK, brickCount);
+            getView().setElementAmount(ResourceBarElement.WHEAT, wheatCount);
+            getView().setElementAmount(ResourceBarElement.SHEEP, sheepCount);
+            getView().setElementAmount(ResourceBarElement.ORE, oreCount);
 
         } catch(PlayerExistsException e){
             e.printStackTrace();
@@ -92,33 +94,39 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildRoad() {
         try {
-            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId()) == true) {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.ROAD);
             }
-        } catch(PlayerExistsException e){}
+        } catch(PlayerExistsException e){
+            e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void buildSettlement() {
         try {
-            if (facade.ableToBuildSettlement(UserCookie.getInstance().getPlayerId()) == true) {
+            if (facade.ableToBuildSettlement(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.SETTLEMENT);
             }
-        } catch(PlayerExistsException e){}
+        } catch(PlayerExistsException e){
+            e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void buildCity() {
         try {
-            if (facade.ableToBuildCity(UserCookie.getInstance().getPlayerId()) == true) {
+            if (facade.ableToBuildCity(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.CITY);
             }
-        } catch(PlayerExistsException e){}
+        } catch(PlayerExistsException e){
+            e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void buyCard() {
-        if(facade.ableToBuyDevCard(UserCookie.getInstance().getPlayerId()) == true) {
+        if(facade.ableToBuyDevCard(UserCookie.getInstance().getPlayerId())) {
             executeElementAction(ResourceBarElement.BUY_CARD);
         }
 	}
@@ -126,7 +134,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void playCard() {
 
-        if (facade.canPlayDC(UserCookie.getInstance().getPlayerId()) == true) {
+        if (facade.canPlayDC(UserCookie.getInstance().getPlayerId())) {
             executeElementAction(ResourceBarElement.PLAY_CARD);
         }
 

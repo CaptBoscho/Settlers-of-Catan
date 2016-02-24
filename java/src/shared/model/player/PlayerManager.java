@@ -1,8 +1,10 @@
 package shared.model.player;
 
 import client.data.PlayerInfo;
+import client.services.UserCookie;
 import com.google.gson.*;
 import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
@@ -584,5 +586,25 @@ public final class PlayerManager implements IPlayerManager {
         }
 
         throw new GameOverException("The game is still in progress.");
+    }
+
+    @Override
+    public int getNumberDevCards(DevCardType type, int playerID) {
+        try {
+            return getPlayerByID(playerID).getNumberOfDevCardsByType(type);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getLocalPlayerIndex() {
+        int localPlayerID = UserCookie.getInstance().getPlayerId();
+        try {
+            return getPlayerByID(localPlayerID).getPlayerIndex();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

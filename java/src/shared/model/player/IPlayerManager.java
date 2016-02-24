@@ -1,6 +1,7 @@
 package shared.model.player;
 
 import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 
@@ -264,4 +265,6 @@ public interface IPlayerManager {
     public Integer getAvailableCities(int id)throws PlayerExistsException;
 
     public Player getWinner() throws GameOverException;
+
+    int getNumberDevCards(DevCardType type, int playerID);
 }

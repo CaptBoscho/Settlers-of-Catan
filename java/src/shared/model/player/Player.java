@@ -1,6 +1,7 @@
 package shared.model.player;
 
 import com.google.gson.JsonObject;
+import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
@@ -252,6 +253,11 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
 
 
     public void moveNewToOld() throws BadCallerException{ developmentCardBank.moveNewToOld();}
+
+    @Override
+    public int getNumberOfDevCardsByType(DevCardType type) {
+        return developmentCardBank.getNumberOfDevCardsByType(type);
+    }
 
     /**
      * Determine if Player can play Year of Plenty
