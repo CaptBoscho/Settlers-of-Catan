@@ -692,6 +692,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
+        if(getAvailableSettlements(id) == 5 && getAvailableCities(id) == 4){return false;}
         return(playerManager.canBuildRoad(id) && turnTracker.canPlay());
     }
 
