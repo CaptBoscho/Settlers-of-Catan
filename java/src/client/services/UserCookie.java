@@ -87,4 +87,8 @@ public final class UserCookie {
     public int getPlayerId() {
         return this.userCookie.get("playerID").getAsInt();
     }
+
+    public int getPlayerIndex() {
+        return playerInfo.getPlayerIndex();
+    }
 }
