@@ -5,10 +5,7 @@ import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
-import shared.dto.BuildCityDTO;
-import shared.dto.BuildRoadDTO;
-import shared.dto.BuildSettlementDTO;
-import shared.dto.BuyDevCardDTO;
+import shared.dto.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -82,13 +79,11 @@ public class Facade {
     //TODO talk to server
     public void initiateRoad(int playerID, EdgeLocation edge){
         try {
-            this.game.initiateRoad(playerID, edge);
-        }
-        catch(InvalidLocationException e){
-
-        }catch(InvalidPlayerException e){
-
-        }catch(StructureException e){}
+            edge = getServerEdgeLocation(edge);
+            final BuildRoadDTO road = new BuildRoadDTO(playerID, edge, true);
+            final ClientModel model = ServerProxy.getInstance().buildRoad(road);
+            Game.getInstance().updateGame(model);
+        } catch(MissingUserCookieException e){}
     }
 
     public boolean canInitiateSettlement(int pID, VertexLocation vertex){
@@ -103,13 +98,12 @@ public class Facade {
 
     //TODO talk to server
     public void initiateSettlement(int pID, VertexLocation vertex){
-        try{
-            this.game.initiateSettlement(pID, vertex);
-        }catch(InvalidLocationException e){
-
-        }catch(InvalidPlayerException e){
-
-        }catch(StructureException e){}
+        try {
+            vertex = getServerVertexLocation(vertex);
+            final BuildSettlementDTO set = new BuildSettlementDTO(pID, vertex, true);
+            final ClientModel model = ServerProxy.getInstance().buildSettlement(set);
+            Game.getInstance().updateGame(model);
+        } catch(MissingUserCookieException e){}
     }
 
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
@@ -133,11 +127,11 @@ public class Facade {
 
     //TODO talk to server
     public void finishTurn(int playerID){
-        try{
-            this.game.finishTurn(playerID);
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+        try {
+            FinishTurnDTO finish = new FinishTurnDTO(playerID);
+            final ClientModel model = ServerProxy.getInstance().finishTurn(finish);
+            Game.getInstance().updateGame(model);
+        } catch(MissingUserCookieException e){}
     }
 
     public boolean canFinishTurn(int playerID){
@@ -540,7 +534,7 @@ public class Facade {
         }catch(PlayerExistsException e){return false;}
     }
 
-    public boolean canUseSoldier(int playerID, HexLocation hexloc){
+    public boolean canUseSoldier(int playerID){
         try{
             return this.game.canUseSoldier(playerID);
         }catch(PlayerExistsException e){return false;}
@@ -593,6 +587,46 @@ public class Facade {
         catch(StructureException e){}
         catch(InvalidPlayerException e){}
         catch(PlayerExistsException e){}
+    }
+
+    /**
+     * Gets the number of devCards of a given type owned by a given player
+     * @param type The DevCardType to check
+     * @param playerID the ID of the player to check
+     * @return The number of DevelopmentCards of type 'type' owned by player of ID 'playerID'.
+     */
+    public int getNumberDevCards(DevCardType type, int playerID) {
+        return game.getNumberDevCards(type, playerID);
+    }
+
+    public void playMonopolyCard(ResourceType resource) {
+        int index = game.getLocalPlayerIndex();
+        PlayMonopolyDTO dto = new PlayMonopolyDTO(index, resource.toString());
+        try {
+            ServerProxy.getInstance().playMonopolyCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
+        int index = game.getLocalPlayerIndex();
+        PlayYOPCardDTO dto = new PlayYOPCardDTO(index, resource1, resource2);
+        try {
+            ServerProxy.getInstance().playYearOfPlentyCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playMonumentCard() {
+        int index = game.getLocalPlayerIndex();
+        PlayMonumentDTO dto = new PlayMonumentDTO(index);
+        try {
+            ServerProxy.getInstance().playMonumentCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
     }
     /**
      * plays the Development Card

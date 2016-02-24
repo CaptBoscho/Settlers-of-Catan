@@ -19,4 +19,24 @@ public enum EdgeDirection {
 	{
 		return opposite;
 	}
+
+	@Override
+	public String toString() {
+		switch (this) {
+			case North:
+				return "N";
+			case NorthWest:
+				return "NW";
+			case NorthEast:
+				return "NE";
+			case South:
+				return "S";
+			case SouthEast:
+				return "SE";
+			case SouthWest:
+				return "SW";
+			default:
+				return "";
+		}
+	}
 }

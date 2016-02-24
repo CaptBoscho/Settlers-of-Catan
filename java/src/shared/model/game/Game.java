@@ -312,6 +312,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return playerManager.getPlayerByID(playerID).howManyOfThisCard(t);
     }
 
+    @Override
+    public int getLocalPlayerIndex() {
+        return playerManager.getLocalPlayerIndex();
+    }
+
     /**
      * Action - Player offers trade
      *
@@ -364,6 +369,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public Integer finishTurn(int playerID) throws Exception {
         assert playerID >= 0;
+        try {
+            moveNewToOld(playerID);
+        } catch (BadCallerException e) {
+            e.printStackTrace();
+        }
 
         return turnTracker.nextTurn();
     }
@@ -694,8 +704,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
+        if(getAvailableSettlements(id) == 5 && getAvailableCities(id) == 4){return false;}
+
         if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
         return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
+
     }
 
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
@@ -1053,6 +1066,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public Player getWinner() throws GameOverException {
         return playerManager.getWinner();
+    }
+
+    @Override
+    public int getNumberDevCards(DevCardType type, int playerID) {
+        return playerManager.getNumberDevCards(type, playerID);
     }
 
     public void buildFirstRoad(int playerID, EdgeLocation hexloc){
