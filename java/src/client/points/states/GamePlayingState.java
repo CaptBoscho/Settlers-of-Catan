@@ -13,9 +13,8 @@ import client.services.UserCookie;
  * Represents PointsController State of Game Playing
  */
 public class GamePlayingState extends PointsControllerState {
-    private Facade facade;
-    private UserCookie userCookie;
     private IPointsView view;
+    private UserCookie userCookie;
 
     /**
      * Constructor
@@ -23,7 +22,6 @@ public class GamePlayingState extends PointsControllerState {
      */
     public GamePlayingState(IPointsView view){
         this.view = view;
-        this.facade = Facade.getInstance();
         this.userCookie = UserCookie.getInstance();
     }
 
@@ -32,8 +30,6 @@ public class GamePlayingState extends PointsControllerState {
 
     @Override
     public void update(){
-        for(PlayerInfo playerInfo : facade.getPlayers()){
-            view.setPoints(playerInfo.getVictoryPoints());
-        }
+        view.setPoints(userCookie.getPlayerInfo().getVictoryPoints());
     }
 }
