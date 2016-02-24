@@ -63,6 +63,7 @@ public class RobbingState extends MapState {
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
+        hexLoc = getModelHexLocation(hexLoc);
         mapController.getView().placeRobber(hexLoc);
         mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerId(), hexLoc));
         mapController.getRobView().showModal();
@@ -81,9 +82,7 @@ public class RobbingState extends MapState {
     }
 
     @Override
-    public void cancelMove(){
-        facade.cancelSoldierCard(userCookie.getPlayerId());
-    }
+    public void cancelMove(){}
 
     @Override
     public void playSoldierCard() {
