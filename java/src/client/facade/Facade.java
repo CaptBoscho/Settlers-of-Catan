@@ -423,8 +423,8 @@ public class Facade {
 
         }
     }
-    //TODO devcard functions
 
+    //TODO talk to server
     public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
         try {
 
