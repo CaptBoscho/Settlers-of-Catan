@@ -30,8 +30,6 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		facade = Facade.getInstance();
         facade.addObserver(this);
         userCookie = UserCookie.getInstance();
-
-        new Poller(ServerProxy.getInstance()).start();
 	}
 	
 	@Override
