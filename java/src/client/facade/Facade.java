@@ -452,6 +452,32 @@ public class Facade {
         return playerInfos;
     }
 
+    public PlayerInfo[] getOtherPlayers(int id){
+        List<Player> players = this.game.getPlayers();
+        PlayerInfo[] playerInfos = new PlayerInfo[3];
+
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
+        int i =0;
+        for(Player p: players){
+            if(p.getId() != id) {
+                boolean lr = false;
+                boolean la = false;
+                if (longestroad == p.getId()) {
+                    lr = true;
+                }
+                if (largestarmy == p.getId()) {
+                    la = true;
+                }
+                PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
+                playerInfos[i] =pi;
+                i++;
+            }
+        }
+
+        return playerInfos;
+    }
+
     public int getGameId() {
         return this.game.getId();
     }

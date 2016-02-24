@@ -358,7 +358,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public boolean canFinishTurn(int playerID) {
         assert playerID >= 0;
 
-        return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
+        return turnTracker.isPlayersTurn(playerID);
     }
 
     /** 
