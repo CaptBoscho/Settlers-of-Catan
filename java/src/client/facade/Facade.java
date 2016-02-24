@@ -534,7 +534,7 @@ public class Facade {
         }catch(PlayerExistsException e){return false;}
     }
 
-    public boolean canUseSoldier(int playerID, HexLocation hexloc){
+    public boolean canUseSoldier(int playerID){
         try{
             return this.game.canUseSoldier(playerID);
         }catch(PlayerExistsException e){return false;}
@@ -581,6 +581,46 @@ public class Facade {
     //TODO to server
     public void playRoadBuildingCard(int playerID, EdgeLocation one, EdgeLocation two){
         
+    }
+
+    /**
+     * Gets the number of devCards of a given type owned by a given player
+     * @param type The DevCardType to check
+     * @param playerID the ID of the player to check
+     * @return The number of DevelopmentCards of type 'type' owned by player of ID 'playerID'.
+     */
+    public int getNumberDevCards(DevCardType type, int playerID) {
+        return game.getNumberDevCards(type, playerID);
+    }
+
+    public void playMonopolyCard(ResourceType resource) {
+        int index = game.getLocalPlayerIndex();
+        PlayMonopolyDTO dto = new PlayMonopolyDTO(index, resource.toString());
+        try {
+            ServerProxy.getInstance().playMonopolyCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
+        int index = game.getLocalPlayerIndex();
+        PlayYOPCardDTO dto = new PlayYOPCardDTO(index, resource1, resource2);
+        try {
+            ServerProxy.getInstance().playYearOfPlentyCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playMonumentCard() {
+        int index = game.getLocalPlayerIndex();
+        PlayMonumentDTO dto = new PlayMonumentDTO(index);
+        try {
+            ServerProxy.getInstance().playMonumentCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
     }
     /**
      * plays the Development Card

@@ -360,7 +360,11 @@ public interface IGame {
 
     public Player getWinner() throws GameOverException;
 
+    int getNumberDevCards(DevCardType type, int playerID);
+
     public int amountOwnedResource(int playerID, ResourceType t)throws PlayerExistsException, InvalidTypeException;
+
+    int getLocalPlayerIndex();
 
     public void buildFirstRoad(int playerID, EdgeLocation hexloc);
 

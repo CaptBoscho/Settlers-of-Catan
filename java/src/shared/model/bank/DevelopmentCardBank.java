@@ -432,6 +432,23 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
     }
 
     @Override
+    public int getNumberOfDevCardsByType(DevCardType type) {
+        switch (type) {
+            case MONOPOLY:
+                return newMonopolyCards.size() + monopolyCards.size();
+            case MONUMENT:
+                return newMonumentCards.size() + monumentCards.size();
+            case ROAD_BUILD:
+                return newRoadBuildCards.size() + roadBuildCards.size();
+            case SOLDIER:
+                return newSoldierCards.size() + soldierCards.size();
+            case YEAR_OF_PLENTY:
+                return  newYearOfPlentyCards.size() + yearOfPlentyCards.size();
+        }
+        return -1;
+    }
+
+    @Override
     public void moveNewToOld() throws BadCallerException {
         if (!ownedByGame) {
             while (newSoldierCards.size() > 0) {
