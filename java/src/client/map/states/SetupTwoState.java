@@ -55,6 +55,7 @@ public class SetupTwoState extends MapState {
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
         facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
         try {
             mapController.getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
@@ -65,6 +66,7 @@ public class SetupTwoState extends MapState {
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
         facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
         try {
             mapController.getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));

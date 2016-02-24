@@ -6,7 +6,6 @@ import client.facade.Facade;
 import client.map.states.*;
 import client.services.UserCookie;
 import shared.definitions.*;
-import shared.exceptions.PlayerExistsException;
 import shared.locations.*;
 import client.base.*;
 import client.data.*;
