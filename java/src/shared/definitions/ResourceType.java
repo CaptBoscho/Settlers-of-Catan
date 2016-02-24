@@ -5,10 +5,5 @@ public enum ResourceType {
 	BRICK,
 	SHEEP,
 	WHEAT,
-	ORE;
-
-	@Override
-	public String toString() {
-		return super.toString().toLowerCase();
-	}
+	ORE
 }
