@@ -117,6 +117,7 @@ public final class PlayerManager implements IPlayerManager {
     public Player getPlayerByIndex(final int index) throws PlayerExistsException {
         assert index >= 0 && index < 4;
 
+        System.out.println("Index: " + index);
         for (final Player player : this.players) {
             if(player.getPlayerIndex() == index) {
                 return player;

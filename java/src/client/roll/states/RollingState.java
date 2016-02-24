@@ -31,6 +31,8 @@ public class RollingState extends RollControllerState {
 
     @Override
     public void update() {
-        super.update();
+        try {
+            super.update();
+        } catch(PlayerExistsException e){}
     }
 }

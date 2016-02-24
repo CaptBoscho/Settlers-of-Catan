@@ -74,7 +74,7 @@ public class RobbingState extends MapState {
             return;
         }
         try {
-            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), false);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -86,7 +86,7 @@ public class RobbingState extends MapState {
     @Override
     public void playSoldierCard() {
         try {
-            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), true);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }

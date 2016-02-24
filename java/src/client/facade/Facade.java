@@ -456,13 +456,13 @@ public class Facade {
         int largestarmy = this.game.currentLargestArmyPlayer();
         int i =0;
         for(Player p: players){
-            if(p.getId() != id) {
+            if(p.getPlayerIndex() != id) {
                 boolean lr = false;
                 boolean la = false;
-                if (longestroad == p.getId()) {
+                if (longestroad == p.getPlayerIndex()) {
                     lr = true;
                 }
-                if (largestarmy == p.getId()) {
+                if (largestarmy == p.getPlayerIndex()) {
                     la = true;
                 }
                 PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
