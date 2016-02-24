@@ -123,6 +123,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				sendsheep++;
 				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sendsheep < sheepcount, true);
 				break;
+			case ORE:
+				sendore++;
+				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, sendore< orecount, true);
 
 		}
 	}
