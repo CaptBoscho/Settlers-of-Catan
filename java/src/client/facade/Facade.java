@@ -615,8 +615,7 @@ public class Facade {
         return game.getNumberDevCards(type, playerID);
     }
 
-    public void playMonopolyCard(ResourceType resource) {
-        int index = game.getLocalPlayerIndex();
+    public void playMonopolyCard(int index, ResourceType resource) {
         PlayMonopolyDTO dto = new PlayMonopolyDTO(index, resource.toString());
         try {
             ServerProxy.getInstance().playMonopolyCard(dto);
@@ -625,8 +624,7 @@ public class Facade {
         }
     }
 
-    public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
-        int index = game.getLocalPlayerIndex();
+    public void playYearOfPlentyCard(int index, ResourceType resource1, ResourceType resource2) {
         PlayYOPCardDTO dto = new PlayYOPCardDTO(index, resource1, resource2);
         try {
             ServerProxy.getInstance().playYearOfPlentyCard(dto);
@@ -635,8 +633,7 @@ public class Facade {
         }
     }
 
-    public void playMonumentCard() {
-        int index = game.getLocalPlayerIndex();
+    public void playMonumentCard(int index) {
         PlayMonumentDTO dto = new PlayMonumentDTO(index);
         try {
             ServerProxy.getInstance().playMonumentCard(dto);
