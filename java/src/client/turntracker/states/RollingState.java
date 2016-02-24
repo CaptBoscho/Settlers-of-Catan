@@ -1,6 +1,7 @@
 package client.turntracker.states;
 
 import client.facade.Facade;
+import client.roll.RollController;
 import client.services.UserCookie;
 import client.turntracker.ITurnTrackerView;
 import client.turntracker.TurnTrackerControllerState;
@@ -34,7 +35,7 @@ public class RollingState extends TurnTrackerControllerState {
 
         //Game State
         if(facade.getCurrentTurn() == userCookie.getPlayerId()){
-            view.updateGameState("Roll Dice", true);
+            view.updateGameState("Rolling Dice", false);
         }else{
             view.updateGameState("Waiting for other players...",false);
         }
