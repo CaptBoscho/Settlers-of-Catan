@@ -1,18 +1,24 @@
 package client.domestic;
 
+import client.facade.Facade;
+import client.services.UserCookie;
 import shared.definitions.*;
 import client.base.*;
 import client.misc.*;
+
+import java.util.Observable;
+import java.util.Observer;
 
 
 /**
  * Domestic trade controller implementation
  */
-public class DomesticTradeController extends Controller implements IDomesticTradeController {
+public class DomesticTradeController extends Controller implements IDomesticTradeController, Observer {
 
 	private IDomesticTradeOverlay tradeOverlay;
 	private IWaitView waitOverlay;
 	private IAcceptTradeOverlay acceptOverlay;
+	private Facade facade;
 
 	/**
 	 * DomesticTradeController constructor
@@ -30,6 +36,12 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setTradeOverlay(tradeOverlay);
 		setWaitOverlay(waitOverlay);
 		setAcceptOverlay(acceptOverlay);
+		facade = Facade.getInstance();
+		facade.addObserver(this);
+	}
+
+	public void update(Observable obs, Object obj){
+		getTradeView().enableDomesticTrade(facade.canTrade(UserCookie.getInstance().getPlayerId()));
 	}
 	
 	public IDomesticTradeView getTradeView() {
