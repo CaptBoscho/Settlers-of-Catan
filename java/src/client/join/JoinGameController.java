@@ -9,8 +9,6 @@ import client.data.*;
 import client.misc.*;
 import shared.dto.CreateGameDTO;
 import shared.dto.JoinGameDTO;
-import shared.exceptions.PlayerExistsException;
-import shared.model.game.Game;
 
 import java.util.List;
 

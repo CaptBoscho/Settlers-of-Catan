@@ -562,8 +562,8 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     @Override
-    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
-        return getPlayerByIndex(id).getColor();
+    public CatanColor getPlayerColorByIndex(int index) throws PlayerExistsException {
+        return getPlayerByIndex(index).getColor();
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException {

@@ -15,6 +15,8 @@ import shared.model.bank.InvalidTypeException;
 import shared.definitions.DevCardType;
 import shared.model.cards.devcards.DevelopmentCard;
 
+import shared.model.cards.devcards.RoadBuildCard;
+import shared.model.cards.devcards.SoldierCard;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
@@ -702,15 +704,18 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
-        return(playerManager.canBuildRoad(id) && turnTracker.canPlay());
+        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
+        return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
     }
 
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
-        return(playerManager.canBuildSettlement(id) && turnTracker.canPlay());
+        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
+        return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
     public boolean ableToBuildCity(int id) throws PlayerExistsException{
-        return(playerManager.canBuildCity(id) && turnTracker.canPlay());
+        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
+        return(playerManager.canBuildCity(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
@@ -1048,8 +1053,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return this.map;
     }
 
-    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
-        return this.playerManager.getPlayerColorByIndex(id);
+    public CatanColor getPlayerColorByIndex(int index) throws PlayerExistsException {
+        return this.playerManager.getPlayerColorByIndex(index);
     }
 
     public List<Player> getPlayers() {
@@ -1063,6 +1068,43 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public int getNumberDevCards(DevCardType type, int playerID) {
         return playerManager.getNumberDevCards(type, playerID);
+    }
+
+    public void buildFirstRoad(int playerID, EdgeLocation hexloc){
+        if(!this.turnTracker.isPlayersTurn(playerID)){return;}
+        if(!this.turnTracker.canPlay()){return;}
+        try {
+            this.map.buildRoad(playerID, hexloc);
+        }catch(InvalidLocationException e){}
+        catch(StructureException e){}
+    }
+
+    public void cancelSoldierCard(int playerID){
+        try {
+            SoldierCard sc = new SoldierCard();
+            this.playerManager.addDevCard(playerID, sc);
+        }catch(PlayerExistsException e){}
+    }
+
+    public void deleteRoad(int playerID, EdgeLocation edge){
+        if(!this.turnTracker.isPlayersTurn(playerID)){return;}
+        if(!this.turnTracker.canPlay()){return;}
+        try {
+            this.map.deleteRoad(playerID, edge);
+        }catch(InvalidLocationException e){}
+        catch(StructureException e){}
+    }
+
+    public void cancelRoadBuildingCard(int playerID) {
+        try {
+            RoadBuildCard rbc = new RoadBuildCard();
+            this.playerManager.addDevCard(playerID, rbc);
+        } catch (PlayerExistsException e) {
+        }
+    }
+
+    public Player getPlayerById(int id) throws PlayerExistsException {
+        return playerManager.getPlayerByID(id);
     }
 
     /*======================================================

@@ -105,7 +105,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildSettlement() {
         try {
-            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId())) {
+            if (facade.ableToBuildSettlement(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.SETTLEMENT);
             }
         } catch(PlayerExistsException e){
@@ -116,7 +116,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildCity() {
         try {
-            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId())) {
+            if (facade.ableToBuildCity(UserCookie.getInstance().getPlayerId())) {
                 executeElementAction(ResourceBarElement.CITY);
             }
         } catch(PlayerExistsException e){
