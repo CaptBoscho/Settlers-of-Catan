@@ -14,6 +14,7 @@ import org.apache.http.Header;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 /**
  * Common networking utility functions

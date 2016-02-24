@@ -1014,7 +1014,14 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
+    public void setId(int id) {
+        this.gameId = id;
+    }
 
+    @Override
+    public int getId() {
+        return this.gameId;
+    }
 
     public Set<PortType> getPortTypes(int playerID) {
         assert playerID >= 0;
@@ -1036,8 +1043,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return this.map;
     }
 
-    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
-        return this.playerManager.getPlayerColorByIndex(id);
+    public CatanColor getPlayerColorByIndex(int index) throws PlayerExistsException {
+        return this.playerManager.getPlayerColorByIndex(index);
     }
 
     public List<Player> getPlayers() {
@@ -1073,11 +1080,16 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         catch(StructureException e){}
     }
 
-    public void cancelRoadBuildingCard(int playerID){
+    public void cancelRoadBuildingCard(int playerID) {
         try {
             RoadBuildCard rbc = new RoadBuildCard();
             this.playerManager.addDevCard(playerID, rbc);
-        }catch(PlayerExistsException e){}
+        } catch (PlayerExistsException e) {
+        }
+    }
+
+    public Player getPlayerById(int id) throws PlayerExistsException {
+        return playerManager.getPlayerByID(id);
     }
 
     /*======================================================

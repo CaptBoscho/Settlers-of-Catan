@@ -9,8 +9,6 @@ import client.data.*;
 import client.misc.*;
 import shared.dto.CreateGameDTO;
 import shared.dto.JoinGameDTO;
-import shared.exceptions.PlayerExistsException;
-import shared.model.game.Game;
 
 import java.util.List;
 
@@ -143,7 +141,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void joinGame(CatanColor color) {
-        final JoinGameDTO dto = new JoinGameDTO(UserCookie.getInstance().getPlayerId(), color);
+        final JoinGameDTO dto = new JoinGameDTO(Facade.getInstance().getGameId(), color);
         ServerProxy.getInstance().joinGame(dto);
 
         // TODO - create/update game instance

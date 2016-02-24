@@ -34,7 +34,7 @@ public class PlayingState extends TurnTrackerControllerState{
 
         //Game State
         if(facade.getCurrentTurn() == userCookie.getPlayerId()){
-            view.updateGameState("Playing", true);
+            view.updateGameState("End Turn", true);
         }else{
             view.updateGameState("Waiting for other players...",false);
         }

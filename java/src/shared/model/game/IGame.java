@@ -120,9 +120,11 @@ public interface IGame {
 
     void addObserver(Observer o);
 
-    public PlayerManager getPlayerManager();
+    PlayerManager getPlayerManager();
 
-    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
+    int getId();
+
+    CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
 
     /**
      * Determine if Player can play Year of Plenty
@@ -367,4 +369,6 @@ public interface IGame {
     public void deleteRoad(int playerID, EdgeLocation edge);
 
     public void cancelRoadBuildingCard(int playerID);
+
+    public Player getPlayerById(int id) throws PlayerExistsException;
 }

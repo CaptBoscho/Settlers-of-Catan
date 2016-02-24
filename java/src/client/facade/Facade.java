@@ -395,7 +395,7 @@ public class Facade {
                     RobPlayerInfo rbi = new RobPlayerInfo();
                     rbi.setColor(p.getColor());
                     rbi.setId(p.getId());
-                    rbi.setName(p.getName().toString());
+                    rbi.setName(p.getName());
                     rbi.setPlayerIndex(p.getPlayerIndex());
                     rbi.setNumCards(p.countResources());
                     robbed[i] = rbi;
@@ -404,9 +404,7 @@ public class Facade {
             }
 
             return robbed;
-        }catch(AlreadyRobbedException e){
-
-        }catch(InvalidLocationException e){
+        } catch(AlreadyRobbedException | InvalidLocationException ignored) {
 
         }
         return null;
@@ -421,8 +419,8 @@ public class Facade {
 
         }
     }
-    //TODO devcard functions
 
+    //TODO talk to server
     public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
         try {
 
@@ -460,7 +458,12 @@ public class Facade {
         return playerInfos;
     }
 
+    public int getGameId() {
+        return this.game.getId();
+    }
+
     public void setGameInfo(GameInfo game) {
+        Game.getInstance().setId(game.getId());
         if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
             for (int i = 0; i < 4; i++) {
                 PlayerInfo info = game.getPlayers().get(i);
@@ -481,6 +484,11 @@ public class Facade {
                 }
             }
         }
+    }
+
+    public int getPlayerIndexByID(int playerId) throws PlayerExistsException {
+        Player p = game.getPlayerById(playerId);
+        return p.getPlayerIndex();
     }
 
     public PlayerInfo getWinner() throws GameOverException{
