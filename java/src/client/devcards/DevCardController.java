@@ -6,7 +6,6 @@ import client.services.UserCookie;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import client.base.*;
-import shared.model.game.Game;
 
 import java.util.Observable;
 import java.util.Observer;

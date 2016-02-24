@@ -5,7 +5,6 @@ import client.data.PlayerInfo;
 import client.data.RobPlayerInfo;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
-import client.services.UserCookie;
 import shared.dto.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -80,13 +79,11 @@ public class Facade {
     //TODO talk to server
     public void initiateRoad(int playerID, EdgeLocation edge){
         try {
-            this.game.initiateRoad(playerID, edge);
-        }
-        catch(InvalidLocationException e){
-
-        }catch(InvalidPlayerException e){
-
-        }catch(StructureException e){}
+            edge = getServerEdgeLocation(edge);
+            final BuildRoadDTO road = new BuildRoadDTO(playerID, edge, true);
+            final ClientModel model = ServerProxy.getInstance().buildRoad(road);
+            Game.getInstance().updateGame(model);
+        } catch(MissingUserCookieException e){}
     }
 
     public boolean canInitiateSettlement(int pID, VertexLocation vertex){
@@ -101,13 +98,12 @@ public class Facade {
 
     //TODO talk to server
     public void initiateSettlement(int pID, VertexLocation vertex){
-        try{
-            this.game.initiateSettlement(pID, vertex);
-        }catch(InvalidLocationException e){
-
-        }catch(InvalidPlayerException e){
-
-        }catch(StructureException e){}
+        try {
+            vertex = getServerVertexLocation(vertex);
+            final BuildSettlementDTO set = new BuildSettlementDTO(pID, vertex, true);
+            final ClientModel model = ServerProxy.getInstance().buildSettlement(set);
+            Game.getInstance().updateGame(model);
+        } catch(MissingUserCookieException e){}
     }
 
     public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
@@ -131,11 +127,11 @@ public class Facade {
 
     //TODO talk to server
     public void finishTurn(int playerID){
-        try{
-            this.game.finishTurn(playerID);
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+        try {
+            FinishTurnDTO finish = new FinishTurnDTO(playerID);
+            final ClientModel model = ServerProxy.getInstance().finishTurn(finish);
+            Game.getInstance().updateGame(model);
+        } catch(MissingUserCookieException e){}
     }
 
     public boolean canFinishTurn(int playerID){
