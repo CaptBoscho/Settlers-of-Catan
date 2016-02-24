@@ -3,6 +3,8 @@ package client.services;
 import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import shared.exceptions.PlayerExistsException;
+import shared.model.game.Game;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -89,6 +91,11 @@ public final class UserCookie {
     }
 
     public int getPlayerIndex() {
-        return playerInfo.getPlayerIndex();
+        try {
+            return Game.getInstance().getPlayerById(this.getPlayerId()).getPlayerIndex();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }
