@@ -34,7 +34,7 @@ public class RobbingState extends TurnTrackerControllerState{
 
         //Game State
         if(facade.getCurrentTurn() == userCookie.getPlayerId()){
-            view.updateGameState("Rob player", true);
+            view.updateGameState("Rob player", false);
         }else{
             view.updateGameState("Waiting for other players...",false);
         }
