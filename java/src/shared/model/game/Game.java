@@ -156,10 +156,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert vertex != null;
         assert this.turnTracker != null;
         assert this.map != null;
-        try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return turnTracker.isPlayersTurn(index) && turnTracker.isSetupPhase() && map.canInitiateSettlement(playerID, vertex);
-        } catch(PlayerExistsException e){return false;}
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateSettlement(playerID, vertex);
+
     }
 
     public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
@@ -178,10 +176,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
         assert this.map != null;
 
-        try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return turnTracker.isPlayersTurn(index) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerID, edge);
-        } catch(PlayerExistsException e){return false;}
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerID, edge);
     }
 
     public void initiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
@@ -244,10 +239,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public boolean canRollNumber(int playerID) {
         assert playerID >= 0;
 
-        try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return turnTracker.isPlayersTurn(index) && turnTracker.canRoll();
-        }catch(PlayerExistsException e){return false;}
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.canRoll();
+
     }
 
 
@@ -286,10 +279,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public boolean canOfferTrade(int playerID) {
         assert playerID >= 0;
 
-        try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return turnTracker.canPlay() && turnTracker.isPlayersTurn(index);
-        }catch(PlayerExistsException e){return false;}
+        return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**
@@ -321,13 +311,9 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert t != null;
 
-        return playerManager.getPlayerByID(playerID).howManyOfThisCard(t);
+        return playerManager.getPlayerByIndex(playerID).howManyOfThisCard(t);
     }
 
-    @Override
-    public int getLocalPlayerIndex() {
-        return playerManager.getLocalPlayerIndex();
-    }
 
     /**
      * Action - Player offers trade
@@ -370,10 +356,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public boolean canFinishTurn(int playerID) {
         assert playerID >= 0;
 
-        try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return turnTracker.isPlayersTurn(index);
-        } catch(PlayerExistsException e){return false;}
+        return turnTracker.isPlayersTurn(playerID);
     }
 
     /** 
@@ -425,10 +408,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
-        try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(index) && turnTracker.canPlay();
-        }catch(PlayerExistsException e){return false;}
+        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
+
     }
 
         /**
@@ -461,9 +442,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
-
-        int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-        return getCurrentTurn() == index && playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
+        return getCurrentTurn() == playerID && playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
     }
 
     public void addDevCard(final DevelopmentCard dc, final int playerID) throws PlayerExistsException {
@@ -471,14 +450,14 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert this.playerManager != null;
 
-        playerManager.getPlayerByID(playerID).addDevCard(dc);
+        playerManager.getPlayerByIndex(playerID).addDevCard(dc);
     }
 
     public Integer numberOfDevCard(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
         assert this.playerManager != null;
 
-        return playerManager.getPlayerByID(playerID).quantityOfDevCards();
+        return playerManager.getPlayerByIndex(playerID).quantityOfDevCards();
     }
 
     public void moveNewToOld(int playerID) throws PlayerExistsException, BadCallerException {
@@ -518,8 +497,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseRoadBuilder(int playerID) throws PlayerExistsException {
         assert playerID >= 0;
-        int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-        return playerManager.canUseRoadBuilder(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(index);
+        return playerManager.canUseRoadBuilder(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
 
     }
 
@@ -558,8 +536,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseSoldier(int playerID) throws PlayerExistsException{
         assert playerID >= 0;
-        int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-        return playerManager.canUseSoldier(playerID) && turnTracker.isPlayersTurn(index) && turnTracker.canPlay();
+        return playerManager.canUseSoldier(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
 
     }
 
@@ -603,8 +580,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseMonopoly(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
-        int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-        return playerManager.canUseMonopoly(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(index);
+        return playerManager.canUseMonopoly(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
 
     }
 
@@ -633,8 +609,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseMonument(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
-        int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-        return playerManager.canUseMonument(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(index);
+        return playerManager.canUseMonument(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
 
     }
 
@@ -663,12 +638,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public boolean canPlaceRobber(final int playerID, HexLocation hexloc) {
         assert playerID >= 0;
         try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return turnTracker.isPlayersTurn(index) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
+            return turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
 
         } catch(InvalidLocationException e){
-            return false;
-        }catch(PlayerExistsException e){return false;}
+            return false;}
 
     }
     /**
@@ -680,8 +653,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException {
         assert playerID >= 0;
         assert hexloc != null;
-
         return map.moveRobber(playerID, hexloc);
+
     }
 
     //TODO change robbing to check if the phase in the turntracker is robbing phase
@@ -695,8 +668,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
         Set<Integer> who = map.whoCanGetRobbed(playerRobber);
         assert who != null;
-        int index = playerManager.getPlayerByID(playerRobber).getPlayerIndex();
-        if(turnTracker.canPlay() && turnTracker.isPlayersTurn(index) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
+        if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
             turnTracker.setPhase(TurnTracker.Phase.ROBBING); //TODO look at this statement
             ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
 
@@ -719,52 +691,48 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert edge.getHexLoc().getY() >= 0;
         assert edge.getDir() != null;
 
-        int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-        return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(index));
+        return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID));
        // }
        // return false;
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
-        int index = playerManager.getPlayerByID(id).getPlayerIndex();
         if(turnTracker.isSetupPhaseOne()) {
             if (getAvailableSettlements(id) != 4  && getAvailableCities(id) == 4) {
                 return false;
             }
             if(getAvailableSettlements(id)==4 && getAvailableRoads(id) == 14){return false;}
-            return turnTracker.isPlayersTurn(index);
+            return turnTracker.isPlayersTurn(id);
         } else if(turnTracker.isSetupPhaseTwo()){
             if (getAvailableSettlements(id) != 3 && getAvailableCities(id) != 4){
                 return false;
             }
             if(getAvailableSettlements(id) ==4 && getAvailableRoads(id) == 13){return false;}
-            return turnTracker.isPlayersTurn(index);
+            return turnTracker.isPlayersTurn(id);
         }
         if(getAvailableRoads(id) == 0){return false;}
-        return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(index);
+        return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
     }
 
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
-        int index = playerManager.getPlayerByID(id).getPlayerIndex();
         if(turnTracker.isSetupPhaseOne()){
             if(getAvailableSettlements(id) !=5){return false;}
 
-            return turnTracker.isPlayersTurn(index);
+            return turnTracker.isPlayersTurn(id);
         }else if(turnTracker.isSetupPhaseTwo()){
             if(getAvailableSettlements(id) != 4){return false;}
-            return turnTracker.isPlayersTurn(index);
+            return turnTracker.isPlayersTurn(id);
         }
         if(getAvailableSettlements(id) == 0){return false;}
-        return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(index));
+        return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
     public boolean ableToBuildCity(int id) throws PlayerExistsException{
-        int index = playerManager.getPlayerByID(id).getPlayerIndex();
         if(getAvailableSettlements(id) == 5){return false;}
         if(turnTracker.isSetupPhase()){return false;}
         if(getAvailableCities(id) == 0){return false;}
-        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(index);}
-        return(playerManager.canBuildCity(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(index));
+        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
+        return(playerManager.canBuildCity(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
@@ -975,12 +943,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canTrade(int playerID) {
         assert playerID >= 0;
-        try {
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            return turnTracker.isPlayersTurn(index) && turnTracker.canPlay();
-        }catch(PlayerExistsException e){return false;}
+        return turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
     }
-
     /**
      * checks if that player has the card needed for that port's trade
      *
@@ -1124,14 +1088,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public void buildFirstRoad(int playerID, EdgeLocation hexloc){
         try{
-        int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-        if(!this.turnTracker.isPlayersTurn(index)){return;}
+        if(!this.turnTracker.isPlayersTurn(playerID)){return;}
         if(!this.turnTracker.canPlay()){return;}
 
             this.map.buildRoad(playerID, hexloc);
         }catch(InvalidLocationException e){}
         catch(StructureException e){}
-        catch(PlayerExistsException e){}
     }
 
     public void cancelSoldierCard(int playerID){
@@ -1143,14 +1105,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public void deleteRoad(int playerID, EdgeLocation edge){
         try{
-            int index = playerManager.getPlayerByID(playerID).getPlayerIndex();
-            if(!this.turnTracker.isPlayersTurn(index)){return;}
+            if(!this.turnTracker.isPlayersTurn(playerID)){return;}
             if(!this.turnTracker.canPlay()){return;}
 
             this.map.deleteRoad(playerID, edge);
         }catch(InvalidLocationException e){}
         catch(StructureException e){}
-        catch(PlayerExistsException e){}
     }
 
     public void cancelRoadBuildingCard(int playerID) {

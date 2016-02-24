@@ -131,14 +131,14 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     public int getKnights(final int playerID) throws PlayerExistsException {
-        return getPlayerByID(playerID).getKnights();
+        return getPlayerByIndex(playerID).getKnights();
     }
 
 
     public void playKnight(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
-        getPlayerByID(playerID).playKnight();
+        getPlayerByIndex(playerID).playKnight();
     }
 
     //Can Do & Do
@@ -155,7 +155,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canDiscardCards(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canDiscardCards();
+        return getPlayerByIndex(id).canDiscardCards();
     }
 
     /**
@@ -178,14 +178,14 @@ public final class PlayerManager implements IPlayerManager {
         assert cards != null;
         assert cards.size() > 0;
 
-        return getPlayerByID(id).discardResourceCards(cards);
+        return getPlayerByIndex(id).discardResourceCards(cards);
     }
 
     public void addResource(final int id, final ResourceCard rc) throws PlayerExistsException {
         assert id >= 0;
         assert rc != null;
 
-        getPlayerByID(id).addResourceCard(rc);
+        getPlayerByIndex(id).addResourceCard(rc);
     }
 
     /**
@@ -199,7 +199,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canOfferTrade(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canOfferTrade();
+        return getPlayerByIndex(id).canOfferTrade();
     }
 
     public void offerTrade(final int one, final int two, final List<ResourceType> ones, final List<ResourceType> twos) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
@@ -211,8 +211,8 @@ public final class PlayerManager implements IPlayerManager {
         assert twos != null;
         assert twos.size() > 0;
 
-        final Player player1 = getPlayerByID(one);
-        final Player player2 = getPlayerByID(two);
+        final Player player1 = getPlayerByIndex(one);
+        final Player player2 = getPlayerByIndex(two);
         final List<ResourceCard> discardedOnes = player1.discardResourceCards(ones);
         final List<ResourceCard> discardedTwos = player2.discardResourceCards(twos);
         discardedOnes.forEach(player2::addResourceCard);
@@ -232,7 +232,7 @@ public final class PlayerManager implements IPlayerManager {
         assert id >= 0;
         assert type != null;
 
-        return getPlayerByID(id).canMaritimeTrade(type);
+        return getPlayerByIndex(id).canMaritimeTrade(type);
     }
 
 
@@ -241,7 +241,7 @@ public final class PlayerManager implements IPlayerManager {
         assert type != null;
         assert want != null;
 
-        Player player = getPlayerByID(playerID);
+        Player player = getPlayerByIndex(playerID);
         // TODO -
 
 
@@ -258,7 +258,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canBuyDevCard(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canBuyDevCard();
+        return getPlayerByIndex(id).canBuyDevCard();
     }
 
     /**
@@ -270,20 +270,20 @@ public final class PlayerManager implements IPlayerManager {
     public void buyDevCard(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        getPlayerByID(id).buyDevCard();
+        getPlayerByIndex(id).buyDevCard();
     }
 
     public void addDevCard(final int id, final DevelopmentCard dc) throws PlayerExistsException {
         assert id >= 0;
         assert dc != null;
 
-        getPlayerByID(id).addDevCard(dc);
+        getPlayerByIndex(id).addDevCard(dc);
     }
 
     public void moveNewToOld(final int id) throws PlayerExistsException, BadCallerException {
         assert id >= 0;
 
-        getPlayerByID(id).moveNewToOld();
+        getPlayerByIndex(id).moveNewToOld();
     }
 
     /**
@@ -295,7 +295,7 @@ public final class PlayerManager implements IPlayerManager {
      */
     @Override
     public boolean canUseYearOfPlenty(int id) throws PlayerExistsException {
-        Player player = getPlayerByID(id);
+        Player player = getPlayerByIndex(id);
         return player.canUseYearOfPlenty();
     }
 
@@ -306,7 +306,7 @@ public final class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useYearOfPlenty(final int id) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByID(id);
+        Player player = getPlayerByIndex(id);
         player.useYearOfPlenty();
     }
 
@@ -321,7 +321,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canUseRoadBuilder(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canUseRoadBuilder();
+        return getPlayerByIndex(id).canUseRoadBuilder();
     }
 
     /**
@@ -333,7 +333,7 @@ public final class PlayerManager implements IPlayerManager {
     public void useRoadBuilder(final int id) throws DevCardException, PlayerExistsException {
         assert id >= 0;
 
-        getPlayerByID(id).useRoadBuilder();
+        getPlayerByIndex(id).useRoadBuilder();
     }
 
     /**
@@ -347,7 +347,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canUseSoldier(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canUseSoldier();
+        return getPlayerByIndex(id).canUseSoldier();
     }
 
     /**
@@ -359,7 +359,7 @@ public final class PlayerManager implements IPlayerManager {
     public void useSoldier(final int id) throws DevCardException, PlayerExistsException {
         assert id >= 0;
 
-        getPlayerByID(id).useSoldier();
+        getPlayerByIndex(id).useSoldier();
     }
 
 
@@ -368,8 +368,8 @@ public final class PlayerManager implements IPlayerManager {
         assert playerOld >= 0;
         assert playerNew != playerOld;
 
-        getPlayerByID(playerOld).loseArmyCard();
-        getPlayerByID(playerNew).winArmyCard();
+        getPlayerByIndex(playerOld).loseArmyCard();
+        getPlayerByIndex(playerNew).winArmyCard();
     }
 
     /**
@@ -383,7 +383,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canUseMonopoly(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canUseMonopoly();
+        return getPlayerByIndex(id).canUseMonopoly();
     }
 
     /**
@@ -399,7 +399,7 @@ public final class PlayerManager implements IPlayerManager {
         assert id >= 0;
         assert type != null;
 
-        Player monopolyUser = getPlayerByID(id);
+        Player monopolyUser = getPlayerByIndex(id);
         monopolyUser.discardMonopoly();
         for(final Player player : this.getPlayers()) {
 
@@ -428,7 +428,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canUseMonument(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canUseMonument();
+        return getPlayerByIndex(id).canUseMonument();
     }
 
     /**
@@ -440,7 +440,7 @@ public final class PlayerManager implements IPlayerManager {
     public void useMonument(final int id) throws DevCardException, PlayerExistsException {
         assert id >= 0;
 
-        getPlayerByID(id).useMonument();
+        getPlayerByIndex(id).useMonument();
     }
 
     /**
@@ -454,7 +454,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canPlaceRobber(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canMoveRobber();
+        return getPlayerByIndex(id).canMoveRobber();
     }
 
     /**
@@ -464,8 +464,8 @@ public final class PlayerManager implements IPlayerManager {
      */
     @Override
     public ResourceType placeRobber(int robber, int robbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        Player player = getPlayerByID(robber);
-        Player two = getPlayerByID(robbed);
+        Player player = getPlayerByIndex(robber);
+        Player two = getPlayerByIndex(robbed);
 
         player.placeRobber();
         ResourceCard treasure = two.robbed();
@@ -484,7 +484,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canBuildRoad(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canBuildRoad();
+        return getPlayerByIndex(id).canBuildRoad();
     }
 
     /**
@@ -496,7 +496,7 @@ public final class PlayerManager implements IPlayerManager {
     public void buildRoad(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        getPlayerByID(id).buildRoad();
+        getPlayerByIndex(id).buildRoad();
     }
 
     /**
@@ -510,7 +510,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canBuildSettlement(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canBuildSettlement();
+        return getPlayerByIndex(id).canBuildSettlement();
     }
 
     /**
@@ -522,7 +522,7 @@ public final class PlayerManager implements IPlayerManager {
     public void buildSettlement(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        getPlayerByID(id).buildSettlement();
+        getPlayerByIndex(id).buildSettlement();
     }
 
     /**
@@ -536,7 +536,7 @@ public final class PlayerManager implements IPlayerManager {
     public boolean canBuildCity(int id) throws PlayerExistsException {
         assert id >= 0;
 
-        return getPlayerByID(id).canBuildCity();
+        return getPlayerByIndex(id).canBuildCity();
     }
 
     /**
@@ -548,7 +548,7 @@ public final class PlayerManager implements IPlayerManager {
     public void buildCity(final int id) throws PlayerExistsException {
         assert id >= 0;
 
-        getPlayerByID(id).buildCity();
+        getPlayerByIndex(id).buildCity();
     }
 
     //Getters/setters
@@ -567,15 +567,15 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException {
-        return getPlayerByID(id).getAvailableRoads();
+        return getPlayerByIndex(id).getAvailableRoads();
     }
 
     public Integer getAvailableSettlements(int id) throws PlayerExistsException {
-        return getPlayerByID(id).getAvailableSettlements();
+        return getPlayerByIndex(id).getAvailableSettlements();
     }
 
     public Integer getAvailableCities(int id) throws PlayerExistsException {
-        return getPlayerByID(id).getAvailableCities();
+        return getPlayerByIndex(id).getAvailableCities();
     }
 
     public Player getWinner() throws GameOverException{
@@ -591,17 +591,7 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public int getNumberDevCards(DevCardType type, int playerID) {
         try {
-            return getPlayerByID(playerID).getNumberOfDevCardsByType(type);
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public int getLocalPlayerIndex() {
-        int localPlayerID = UserCookie.getInstance().getPlayerId();
-        try {
-            return getPlayerByID(localPlayerID).getPlayerIndex();
+            return getPlayerByIndex(playerID).getNumberOfDevCardsByType(type);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }

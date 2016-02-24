@@ -59,10 +59,6 @@ public class Facade {
         return this.game.getPlayerColorByIndex(id);
     }
 
-    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException {
-        return this.game.getPlayerColorByIndex(this.game.getPlayerManager().getPlayerByID(id).getPlayerIndex());
-    }
-
     public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
             return this.game.canInitiateRoad(playerID,  edge);

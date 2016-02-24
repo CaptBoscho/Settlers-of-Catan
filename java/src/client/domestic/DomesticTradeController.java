@@ -53,14 +53,14 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	}
 
 	public void update(Observable obs, Object obj){
-		getTradeView().enableDomesticTrade(facade.canTrade(UserCookie.getInstance().getPlayerId()));
-		woodcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerId(), ResourceType.WOOD);
-		brickcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerId(), ResourceType.BRICK);
-		sheepcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerId(), ResourceType.SHEEP);
-		wheatcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerId(), ResourceType.WHEAT);
-		orecount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerId(), ResourceType.ORE);
+		getTradeView().enableDomesticTrade(facade.canTrade(UserCookie.getInstance().getPlayerInfo().getPlayerIndex()));
+		woodcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerInfo().getPlayerIndex(), ResourceType.WOOD);
+		brickcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerInfo().getPlayerIndex(), ResourceType.BRICK);
+		sheepcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerInfo().getPlayerIndex(), ResourceType.SHEEP);
+		wheatcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerInfo().getPlayerIndex(), ResourceType.WHEAT);
+		orecount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerInfo().getPlayerIndex(), ResourceType.ORE);
 
-		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerId()));
+		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerInfo().getPlayerIndex()));
 	}
 	
 	public IDomesticTradeView getTradeView() {
