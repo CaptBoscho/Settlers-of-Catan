@@ -79,6 +79,7 @@ public class PlayingState extends MapState {
 
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
+        edgeLoc = getModelEdgeLocation(edgeLoc);
         try{
             if(isPlayingRoadBuildingCard && firstRoad == null) {
                 firstRoad = edgeLoc;
@@ -88,7 +89,7 @@ public class PlayingState extends MapState {
             } else {
                 facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
             }
-            mapController.getView().placeRoad(edgeLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
                 e.printStackTrace();
         }
@@ -96,9 +97,10 @@ public class PlayingState extends MapState {
 
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
         try {
             facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
-            mapController.getView().placeSettlement(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -106,9 +108,10 @@ public class PlayingState extends MapState {
 
     @Override
     public void placeCity(VertexLocation vertLoc) {
+        vertLoc = getModelVertexLocation(vertLoc);
         try {
             facade.buildCity(userCookie.getPlayerId(), vertLoc);
-            mapController.getView().placeCity(vertLoc, facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeCity(getUIVertexLocation(vertLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
             e.printStackTrace();
         }
