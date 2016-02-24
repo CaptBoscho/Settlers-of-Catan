@@ -705,6 +705,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
         if(getAvailableSettlements(id) == 5 && getAvailableCities(id) == 4){return false;}
+        if(getAvailableRoads(id) == 0){return false;}
 
         if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
         return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
@@ -712,11 +713,14 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
+        if(getAvailableSettlements(id) == 0){return false;}
         if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
         return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
     public boolean ableToBuildCity(int id) throws PlayerExistsException{
+        if(getAvailableSettlements(id) == 5){return false;}
+        if(getAvailableCities(id) == 0){return false;}
         if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
         return(playerManager.canBuildCity(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
