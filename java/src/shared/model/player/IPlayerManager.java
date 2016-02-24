@@ -9,7 +9,6 @@ import shared.exceptions.*;
 import shared.model.bank.InvalidTypeException;
 
 import shared.exceptions.DevCardException;
-import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.MoveRobberException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
@@ -27,12 +26,6 @@ public interface IPlayerManager {
 
     //Manager Methods
     //==========================================================
-    /**
-     * Randomize player order (turn order)
-     * @throws FailedToRandomizeException
-     */
-    List<Integer> randomizePlayers() throws FailedToRandomizeException;
-
     /**
      * Authenticates a player
      * @param id ID of the player

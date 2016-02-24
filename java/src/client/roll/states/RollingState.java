@@ -30,7 +30,7 @@ public class RollingState extends RollControllerState {
     }
 
     @Override
-    public void update() {
+    public void update() throws PlayerExistsException {
         super.update();
     }
 }

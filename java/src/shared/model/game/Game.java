@@ -136,7 +136,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param players
      * @return Id of first player
      */
-    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) throws FailedToRandomizeException {
+    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) {
         assert players != null;
         assert this.playerManager != null;
         assert this.map != null;
@@ -145,7 +145,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         //Add players to PlayerManager
         this.playerManager = new PlayerManager(players);
         this.map = new Map(randomhexes, randomchits, randomports);
-        //List<Integer> order = this.playerManager.randomizePlayers();
         turnTracker = new TurnTracker();
 
         return turnTracker.getCurrentTurn();
@@ -1107,22 +1106,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public Player getPlayerById(int id) throws PlayerExistsException {
         return playerManager.getPlayerByID(id);
-    }
-
-    /*======================================================
-    * Private - Helper Methods
-    * ======================================================*/
-    /**
-     * Randomize the players' turn order
-     */
-    private void randomizePlayers() {
-        assert this.playerManager != null;
-
-        try{
-            playerManager.randomizePlayers();
-        } catch(Exception e) {
-            //throw new
-        }
     }
 
     @Override

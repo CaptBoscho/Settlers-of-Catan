@@ -38,9 +38,6 @@ public class RollControllerState {
         Dice roller = new Dice(2);
         //Roll the dice
         int roll = roller.roll();
-
-        //Tell the facade
-        // TODO: 2/24/2016 Ask corbin if the facade needs to be told as well
         
         //Tell the server
         int id = userCookie.getPlayerId();

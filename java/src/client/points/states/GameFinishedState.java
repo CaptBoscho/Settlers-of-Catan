@@ -36,7 +36,7 @@ public class GameFinishedState extends PointsControllerState {
         try {
             //Get the winner
             PlayerInfo winner = facade.getWinner();
-            view.setWinner(winner.getName(), winner.getPlayerIndex() == userCookie.getPlayerId());
+            view.setWinner(winner.getName(), winner.getPlayerIndex() == userCookie.getPlayerInfo().getPlayerIndex());
 
             //Show the modal
             if(!view.isModalShowing())
