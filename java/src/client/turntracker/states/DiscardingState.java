@@ -34,7 +34,7 @@ public class DiscardingState extends TurnTrackerControllerState {
 
         //Game State
         if(facade.getCurrentTurn() == userCookie.getPlayerId()){
-            view.updateGameState("Discard", true);
+            view.updateGameState("Discarding", false);
         }else{
             view.updateGameState("Waiting for other players to discard",false);
         }
