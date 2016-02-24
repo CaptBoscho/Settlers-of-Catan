@@ -704,17 +704,31 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
-        if(getAvailableSettlements(id) == 5 && getAvailableCities(id) == 4){return false;}
+        if(turnTracker.isSetupPhaseOne()) {
+            if (getAvailableSettlements(id) != 4  && getAvailableCities(id) == 4) {
+                return false;
+            }
+            return turnTracker.isPlayersTurn(id);
+        } else if(turnTracker.isSetupPhaseTwo()){
+            if (getAvailableSettlements(id) != 3 && getAvailableCities(id) == 4){
+                return false;
+            }
+            return turnTracker.isPlayersTurn(id);
+        }
         if(getAvailableRoads(id) == 0){return false;}
 
-        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
         return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
-
     }
 
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
+        if(turnTracker.isSetupPhaseOne()){
+            if(getAvailableSettlements(id) !=5){return false;}
+            return turnTracker.isPlayersTurn(id);
+        }else if(turnTracker.isSetupPhaseTwo()){
+            if(getAvailableSettlements(id) != 4){return false;}
+            return turnTracker.isPlayersTurn(id);
+        }
         if(getAvailableSettlements(id) == 0){return false;}
-        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
         return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
 
