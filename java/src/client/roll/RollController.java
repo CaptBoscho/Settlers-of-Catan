@@ -6,11 +6,15 @@ import client.services.*;
 import shared.dto.RollNumberDTO;
 import shared.exceptions.PlayerExistsException;
 import shared.model.game.Dice;
+import shared.model.game.TurnTracker;
+
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Implementation for the roll controller
  */
-public final class RollController extends Controller implements IRollController {
+public final class RollController extends Controller implements IRollController, Observer {
 
 	private Dice roller;
     private Facade facade;
@@ -29,6 +33,7 @@ public final class RollController extends Controller implements IRollController 
 		setResultView(resultView);
 		roller = new Dice(2);
         facade = Facade.getInstance();
+		facade.addObserver(this);
 		server = ServerProxy.getInstance();
 		userCookie = UserCookie.getInstance();
 	}
@@ -67,6 +72,26 @@ public final class RollController extends Controller implements IRollController 
 		resultView.setRollValue(roll);
 		//Show the modal
 		getResultView().showModal();
+	}
+
+	/**
+	 * This method is called whenever the observed object is changed. An
+	 * application calls an <tt>Observable</tt> object's
+	 * <code>notifyObservers</code> method to have all the object's
+	 * observers notified of the change.
+	 *
+	 * @param o   the observable object.
+	 * @param arg an argument passed to the <code>notifyObservers</code>
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+        // TODO: 2/23/2016 Use state pattern here
+        if(facade.getPhase() == TurnTracker.Phase.ROLLING){
+            if(facade.getCurrentTurn() == userCookie.getPlayerId()) {
+                getRollView().setMessage("Roll the dice");
+                getRollView().showModal();
+            }
+        }
 	}
 }
 
