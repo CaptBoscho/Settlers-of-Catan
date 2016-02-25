@@ -44,7 +44,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	
 	public void initFromModel() {
         //Set the local player color
-        CatanColor locColor = userCookie.getPlayerInfo().getColor();
+        CatanColor locColor = userCookie.getColor();
         getView().setLocalPlayerColor(locColor);
 
         //Initialize Players

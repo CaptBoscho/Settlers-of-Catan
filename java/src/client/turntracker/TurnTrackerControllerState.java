@@ -39,7 +39,7 @@ public class TurnTrackerControllerState {
 
     public void endTurn() {
         //Inform the model
-        int index = userCookie.getPlayerInfo().getPlayerIndex();
+        int index = userCookie.getPlayerIndex();
         facade.finishTurn(index);
     }
 
