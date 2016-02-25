@@ -63,16 +63,16 @@ public final class Vertex {
         return city;
     }
 
-    public int getPlayerID() {
+    public int getPlayerIndex() {
         if(!this.hasBuilding()) return -1;
 
-        int playerID;
+        int playerIndex;
         if(hasSettlement()) {
-            playerID = settlement.getPlayerID();
+            playerIndex = settlement.getPlayerIndex();
         } else {
-            playerID = city.getPlayerID();
+            playerIndex = city.getPlayerIndex();
         }
-        return playerID;
+        return playerIndex;
     }
 
     /**
@@ -97,7 +97,7 @@ public final class Vertex {
      */
     public void buildSettlement(final Settlement settlement) {
         assert settlement != null;
-        assert settlement.getPlayerID() >= 0;
+        assert settlement.getPlayerIndex() >= 0;
         assert canBuildSettlement(); // code should only call this after verifying canBuildSettlement
 
         this.settlement = settlement;
@@ -111,8 +111,8 @@ public final class Vertex {
         assert city != null;
         assert this.city == null;
         assert this.settlement != null;
-        assert city.getPlayerID() >= 0;
-        assert city.getPlayerID() == this.settlement.getPlayerID();
+        assert city.getPlayerIndex() >= 0;
+        assert city.getPlayerIndex() == this.settlement.getPlayerIndex();
         assert canBuildCity(); // code should only call this after verifying canBuildCity
 
         settlement = null;

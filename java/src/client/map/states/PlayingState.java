@@ -1,7 +1,6 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapController;
 import client.services.MissingUserCookieException;
 import shared.definitions.PieceType;
 import shared.exceptions.InvalidLocationException;
@@ -43,7 +42,7 @@ public class PlayingState extends MapState {
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
         edgeLoc = getModelEdgeLocation(edgeLoc);
         try {
-            return facade.canBuildRoad(userCookie.getPlayerId(), edgeLoc);
+            return facade.canBuildRoad(userCookie.getPlayerIndex(), edgeLoc);
         } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -54,7 +53,7 @@ public class PlayingState extends MapState {
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
         try {
-            return facade.canBuildSettlement(userCookie.getPlayerId(), vertLoc);
+            return facade.canBuildSettlement(userCookie.getPlayerIndex(), vertLoc);
         } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -65,7 +64,7 @@ public class PlayingState extends MapState {
     public boolean canPlaceCity(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
         try {
-            return facade.canBuildCity(userCookie.getPlayerId(), vertLoc);
+            return facade.canBuildCity(userCookie.getPlayerIndex(), vertLoc);
         } catch (InvalidLocationException | InvalidPlayerException | PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -83,11 +82,11 @@ public class PlayingState extends MapState {
         try{
             if(isPlayingRoadBuildingCard && firstRoad == null) {
                 firstRoad = edgeLoc;
-                facade.buildFirstRoad(userCookie.getPlayerId(), edgeLoc);
+                facade.buildFirstRoad(userCookie.getPlayerIndex(), edgeLoc);
             } else if(isPlayingRoadBuildingCard) {
-                facade.playRoadBuildingCard(userCookie.getPlayerId(), firstRoad, edgeLoc);
+                facade.playRoadBuildingCard(userCookie.getPlayerIndex(), firstRoad, edgeLoc);
             } else {
-                facade.buildRoad(userCookie.getPlayerId(), edgeLoc);
+                facade.buildRoad(userCookie.getPlayerIndex(), edgeLoc);
             }
             mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
@@ -135,8 +134,8 @@ public class PlayingState extends MapState {
     @Override
     public void cancelMove() {
         if(isPlayingRoadBuildingCard && firstRoad != null) {
-            facade.deleteRoad(userCookie.getPlayerId(), firstRoad);
-            facade.cancelRoadBuildingCard(userCookie.getPlayerId());
+            facade.deleteRoad(userCookie.getPlayerIndex(), firstRoad);
+            facade.cancelRoadBuildingCard(userCookie.getPlayerIndex());
             initFromModel();
         }
     }

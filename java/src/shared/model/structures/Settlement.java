@@ -7,15 +7,15 @@ package shared.model.structures;
  */
 public final class Settlement {
 
-    private int playerID;
+    private int playerIndex;
 
-    public Settlement(int playerID) {
-        assert playerID >= 0;
+    public Settlement(int playerIndex) {
+        assert playerIndex >= 0;
 
-        this.playerID = playerID;
+        this.playerIndex = playerIndex;
     }
 
-    public int getPlayerID() {
-        return playerID;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 }
