@@ -33,7 +33,7 @@ public class SetupTwoState extends TurnTrackerControllerState {
         super.initFromModel();
 
         //Game State
-        if(facade.getCurrentTurn() == userCookie.getPlayerInfo().getPlayerIndex()){
+        if(facade.getCurrentTurn() == userCookie.getPlayerIndex()){
             view.updateGameState("Setup 2 - end placement", true);
         }else{
             view.updateGameState("Waiting for other players to setup",false);

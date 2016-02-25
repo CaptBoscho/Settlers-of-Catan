@@ -99,12 +99,12 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
-		Facade.getInstance().playMonopolyCard(resource);
+		Facade.getInstance().playMonopolyCard(UserCookie.getInstance().getPlayerIndex(),resource);
 	}
 
 	@Override
 	public void playMonumentCard() {
-		Facade.getInstance().playMonumentCard();
+		Facade.getInstance().playMonumentCard(UserCookie.getInstance().getPlayerIndex());
 	}
 
 	@Override
@@ -119,6 +119,6 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
-		Facade.getInstance().playYearOfPlentyCard(resource1, resource2);
+		Facade.getInstance().playYearOfPlentyCard(UserCookie.getInstance().getPlayerIndex(), resource1, resource2);
 	}
 }

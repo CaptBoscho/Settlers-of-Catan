@@ -33,7 +33,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
      */
 	public void update(Observable obs, Object obj){
         try {
-            int ID = UserCookie.getInstance().getPlayerId();
+            int ID = UserCookie.getInstance().getPlayerIndex();
+            System.out.println("RBC: " + ID);
             boolean enableRoad = facade.ableToBuildRoad(ID);
             boolean enableSettlement = facade.ableToBuildSettlement(ID);
             boolean enableCity = facade.ableToBuildCity(ID);
@@ -105,7 +106,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildSettlement() {
         try {
-            if (facade.ableToBuildSettlement(UserCookie.getInstance().getPlayerId())) {
+            if (facade.ableToBuildSettlement(UserCookie.getInstance().getPlayerIndex())) {
                 executeElementAction(ResourceBarElement.SETTLEMENT);
             }
         } catch(PlayerExistsException e){
@@ -116,7 +117,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildCity() {
         try {
-            if (facade.ableToBuildCity(UserCookie.getInstance().getPlayerId())) {
+            if (facade.ableToBuildCity(UserCookie.getInstance().getPlayerIndex())) {
                 executeElementAction(ResourceBarElement.CITY);
             }
         } catch(PlayerExistsException e){
@@ -126,7 +127,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 
 	@Override
 	public void buyCard() {
-        if(facade.ableToBuyDevCard(UserCookie.getInstance().getPlayerId())) {
+        if(facade.ableToBuyDevCard(UserCookie.getInstance().getPlayerIndex())) {
             executeElementAction(ResourceBarElement.BUY_CARD);
         }
 	}
@@ -134,7 +135,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void playCard() {
 
-        if (facade.canPlayDC(UserCookie.getInstance().getPlayerId())) {
+        if (facade.canPlayDC(UserCookie.getInstance().getPlayerIndex())) {
             executeElementAction(ResourceBarElement.PLAY_CARD);
         }
 

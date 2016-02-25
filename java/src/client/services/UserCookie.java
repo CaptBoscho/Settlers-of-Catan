@@ -3,6 +3,9 @@ package client.services;
 import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import shared.definitions.CatanColor;
+
 import shared.exceptions.PlayerExistsException;
 import shared.model.game.Game;
 
@@ -82,10 +85,6 @@ public final class UserCookie {
         return this.userCookie.get("name").toString().replaceAll("\"", "");
     }
 
-    public PlayerInfo getPlayerInfo() {
-        return playerInfo;
-    }
-
     public int getPlayerId() {
         return this.userCookie.get("playerID").getAsInt();
     }
@@ -97,5 +96,21 @@ public final class UserCookie {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public void setName(String loginUsername) {
+        this.playerInfo.setName(loginUsername);
+    }
+
+    public void setId(int id) {
+        this.playerInfo.setId(id);
+    }
+
+    public CatanColor getColor() {
+        return this.playerInfo.getColor();
+    }
+
+    public PlayerInfo getPlayerInfo() {
+        return this.playerInfo;
     }
 }
