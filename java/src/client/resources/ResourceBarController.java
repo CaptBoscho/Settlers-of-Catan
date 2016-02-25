@@ -94,7 +94,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildRoad() {
         try {
-            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerId())) {
+            if (facade.ableToBuildRoad(UserCookie.getInstance().getPlayerIndex())) {
                 executeElementAction(ResourceBarElement.ROAD);
             }
         } catch(PlayerExistsException e){
