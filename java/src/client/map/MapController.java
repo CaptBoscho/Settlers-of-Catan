@@ -68,6 +68,9 @@ public class MapController extends Controller implements IMapController, Observe
         }
         mapState.setController(this);
         mapState.initFromModel();
+        if(state == TurnTracker.Phase.ROBBING && facade.getCurrentTurn() == userCookie.getPlayerIndex()) {
+            mapState.startMove(PieceType.ROBBER, true, true);
+        }
     }
 	
 	public IMapView getView() {

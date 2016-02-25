@@ -380,11 +380,11 @@ public class Facade {
         try{
             Set<Integer> ids = this.game.placeRobber(id, hexloc);
             List<Player> players = this.game.getPlayers();
-            RobPlayerInfo[] robbed = new RobPlayerInfo[4];
+            RobPlayerInfo[] robbed = new RobPlayerInfo[ids.size()];
             int i = 0;
 
             for(Player p: players){
-                if(ids.contains(p.getId())){
+                if(ids.contains(p.getPlayerIndex())){
                     RobPlayerInfo rbi = new RobPlayerInfo();
                     rbi.setColor(p.getColor());
                     rbi.setId(p.getId());
@@ -403,13 +403,13 @@ public class Facade {
         return null;
     }
 
-    public void rob(int playerID, RobPlayerInfo victim) {
+    public void rob(int playerID, RobPlayerInfo victim, HexLocation hexLoc) {
         try {
-
-            this.game.rob(playerID, victim.getId());
-
-        } catch(InvalidTypeException | MoveRobberException | InsufficientResourcesException | PlayerExistsException ignored){
-
+            RobPlayerDTO dto = new RobPlayerDTO(playerID, victim.getPlayerIndex(), hexLoc);
+            ServerProxy.getInstance().robPlayer(dto);
+        }
+        catch(MissingUserCookieException e){
+            e.printStackTrace();
         }
     }
 
