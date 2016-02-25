@@ -1,8 +1,6 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapController;
-import shared.definitions.CatanColor;
 import shared.definitions.PieceType;
 import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
@@ -35,13 +33,13 @@ public class SetupOneState extends MapState {
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
         edgeLoc = getModelEdgeLocation(edgeLoc);
-        return facade.canInitiateRoad(userCookie.getPlayerId(), edgeLoc);
+        return facade.canInitiateRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
-        return facade.canInitiateSettlement(userCookie.getPlayerId(), vertLoc);
+        return facade.canInitiateSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
     }
 
     @Override
@@ -57,9 +55,9 @@ public class SetupOneState extends MapState {
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
         edgeLoc = getModelEdgeLocation(edgeLoc);
-        facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
+        facade.initiateRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
         try {
-            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByIndex(userCookie.getPlayerId()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -68,9 +66,9 @@ public class SetupOneState extends MapState {
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
-        facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
+        facade.initiateSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
         try {
-            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerId()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }

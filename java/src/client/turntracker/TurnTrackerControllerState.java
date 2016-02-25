@@ -45,16 +45,6 @@ public class TurnTrackerControllerState {
         if(canFinishTurn){
             //Inform the client
             facade.finishTurn(id);
-
-            //Inform the server
-            try {
-                FinishTurnDTO finishTurnDTO = new FinishTurnDTO(facade.getPlayerIndexByID(id));
-                server.finishTurn(finishTurnDTO);
-            } catch (PlayerExistsException e) {
-                e.printStackTrace();
-            } catch (MissingUserCookieException e) {
-                e.printStackTrace();
-            }
         }
     }
 

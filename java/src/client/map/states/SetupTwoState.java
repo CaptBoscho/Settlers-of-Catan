@@ -34,13 +34,13 @@ public class SetupTwoState extends MapState {
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
         edgeLoc = getModelEdgeLocation(edgeLoc);
-        return facade.canInitiateRoad(userCookie.getPlayerId(), edgeLoc);
+        return facade.canInitiateRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
-        return facade.canInitiateSettlement(userCookie.getPlayerId(), vertLoc);
+        return facade.canInitiateSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
     }
 
     @Override
@@ -56,9 +56,9 @@ public class SetupTwoState extends MapState {
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
         edgeLoc = getModelEdgeLocation(edgeLoc);
-        facade.initiateRoad(userCookie.getPlayerId(), edgeLoc);
+        facade.initiateRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
         try {
-            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByIndex(userCookie.getPlayerId()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -67,9 +67,9 @@ public class SetupTwoState extends MapState {
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
-        facade.initiateSettlement(userCookie.getPlayerId(), vertLoc);
+        facade.initiateSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
         try {
-            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerId()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -90,7 +90,7 @@ public class SetupTwoState extends MapState {
             return;
         }
         try {
-            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByIndex(userCookie.getPlayerId()), false);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }

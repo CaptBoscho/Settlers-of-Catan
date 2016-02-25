@@ -61,6 +61,10 @@ public class Facade {
         return this.game.getPlayerColorByIndex(this.game.getPlayerManager().getPlayerByID(id).getPlayerIndex());
     }
 
+    public int getLocalPlayerIndex() {
+        return this.game.getLocalPlayerIndex();
+    }
+
     //TODO talk to server
     public void joinGame(int playerID){
 

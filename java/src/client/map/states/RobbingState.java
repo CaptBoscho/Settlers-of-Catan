@@ -1,7 +1,6 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapController;
 import shared.definitions.PieceType;
 import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
@@ -49,7 +48,7 @@ public class RobbingState extends MapState {
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        return facade.canMoveRobber(userCookie.getPlayerId(), hexLoc);
+        return facade.canMoveRobber(userCookie.getPlayerInfo().getPlayerIndex(), hexLoc);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class RobbingState extends MapState {
     @Override
     public void placeRobber(HexLocation hexLoc) {
         mapController.getView().placeRobber(hexLoc);
-        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerId(), getModelHexLocation(hexLoc)));
+        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerInfo().getPlayerIndex(), getModelHexLocation(hexLoc)));
         mapController.getRobView().showModal();
     }
 
@@ -74,7 +73,7 @@ public class RobbingState extends MapState {
             return;
         }
         try {
-            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), false);
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByIndex(userCookie.getPlayerId()), false);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -86,7 +85,7 @@ public class RobbingState extends MapState {
     @Override
     public void playSoldierCard() {
         try {
-            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByIndex(userCookie.getPlayerId()), true);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -97,6 +96,6 @@ public class RobbingState extends MapState {
 
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        facade.rob(userCookie.getPlayerId(), victim);
+        facade.rob(userCookie.getPlayerInfo().getPlayerIndex(), victim);
     }
 }
