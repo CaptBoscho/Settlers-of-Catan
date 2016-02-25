@@ -48,7 +48,7 @@ public class RobbingState extends MapState {
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        return facade.canMoveRobber(userCookie.getPlayerInfo().getPlayerIndex(), hexLoc);
+        return facade.canMoveRobber(userCookie.getPlayerIndex(), hexLoc);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class RobbingState extends MapState {
     @Override
     public void placeRobber(HexLocation hexLoc) {
         mapController.getView().placeRobber(hexLoc);
-        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerInfo().getPlayerIndex(), getModelHexLocation(hexLoc)));
+        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerIndex(), getModelHexLocation(hexLoc)));
         mapController.getRobView().showModal();
     }
 
@@ -96,6 +96,6 @@ public class RobbingState extends MapState {
 
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        facade.rob(userCookie.getPlayerInfo().getPlayerIndex(), victim);
+        facade.rob(userCookie.getPlayerIndex(), victim);
     }
 }

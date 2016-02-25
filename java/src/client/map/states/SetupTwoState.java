@@ -34,13 +34,13 @@ public class SetupTwoState extends MapState {
     @Override
     public boolean canPlaceRoad(EdgeLocation edgeLoc) {
         edgeLoc = getModelEdgeLocation(edgeLoc);
-        return facade.canInitiateRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
+        return facade.canInitiateRoad(userCookie.getPlayerIndex(), edgeLoc);
     }
 
     @Override
     public boolean canPlaceSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
-        return facade.canInitiateSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
+        return facade.canInitiateSettlement(userCookie.getPlayerIndex(), vertLoc);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SetupTwoState extends MapState {
     @Override
     public void placeRoad(EdgeLocation edgeLoc) {
         edgeLoc = getModelEdgeLocation(edgeLoc);
-        facade.initiateRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
+        facade.initiateRoad(userCookie.getPlayerIndex(), edgeLoc);
         try {
             mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (PlayerExistsException e) {
@@ -67,7 +67,7 @@ public class SetupTwoState extends MapState {
     @Override
     public void placeSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
-        facade.initiateSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
+        facade.initiateSettlement(userCookie.getPlayerIndex(), vertLoc);
         try {
             mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (PlayerExistsException e) {
@@ -83,9 +83,6 @@ public class SetupTwoState extends MapState {
 
     @Override
     public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
-        if(!isFree || !allowDisconnected) {
-            return;
-        }
         if(pieceType == PieceType.CITY || pieceType == PieceType.ROBBER) {
             return;
         }
