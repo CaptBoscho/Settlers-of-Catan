@@ -109,7 +109,7 @@ public class PlayingState extends MapState {
     public void placeCity(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
         try {
-            facade.buildCity(userCookie.getPlayerId(), vertLoc);
+            facade.buildCity(userCookie.getPlayerIndex(), vertLoc);
             mapController.getView().placeCity(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
             e.printStackTrace();

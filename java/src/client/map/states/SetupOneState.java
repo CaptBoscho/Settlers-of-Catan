@@ -72,6 +72,7 @@ public class SetupOneState extends MapState {
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
+        this.startMove(PieceType.ROAD, true, true);
     }
 
     @Override
