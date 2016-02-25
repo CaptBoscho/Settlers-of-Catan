@@ -34,7 +34,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void update(Observable obs, Object obj){
         try {
             int ID = UserCookie.getInstance().getPlayerIndex();
-            System.out.println("RBC: " + ID);
             boolean enableRoad = facade.ableToBuildRoad(ID);
             boolean enableSettlement = facade.ableToBuildSettlement(ID);
             boolean enableCity = facade.ableToBuildCity(ID);
