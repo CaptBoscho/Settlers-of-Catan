@@ -34,7 +34,7 @@ public interface IGame {
      * @param players
      * @return
      */
-    public int initializeGame(List<Player> players, boolean randomhex, boolean randomchits, boolean randomports) throws FailedToRandomizeException;
+    public int initializeGame(List<Player> players, boolean randomhex, boolean randomchits, boolean randomports);
 
     /**
      * returns the playerID for whose turn it is
