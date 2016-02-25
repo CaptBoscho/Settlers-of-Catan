@@ -34,7 +34,7 @@ public class RollingState extends TurnTrackerControllerState {
         super.initFromModel();
 
         //Game State
-        if(facade.getCurrentTurn() == userCookie.getPlayerId()){
+        if(facade.getCurrentTurn() == userCookie.getPlayerIndex()){
             view.updateGameState("Rolling Dice", false);
         }else{
             view.updateGameState("Waiting for other players...",false);

@@ -88,7 +88,7 @@ public class PlayingState extends MapState {
             } else {
                 facade.buildRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
             }
-            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
+            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
                 e.printStackTrace();
         }
@@ -98,8 +98,8 @@ public class PlayingState extends MapState {
     public void placeSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
         try {
-            facade.buildSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
-            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
+            facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
+            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -109,8 +109,8 @@ public class PlayingState extends MapState {
     public void placeCity(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
         try {
-            facade.buildCity(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
-            mapController.getView().placeCity(getUIVertexLocation(vertLoc), facade.getPlayerColorByID(userCookie.getPlayerId()));
+            facade.buildCity(userCookie.getPlayerId(), vertLoc);
+            mapController.getView().placeCity(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -125,7 +125,7 @@ public class PlayingState extends MapState {
             return;
         }
         try {
-            mapController.getView().startDrop(pieceType, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), true);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -147,8 +147,8 @@ public class PlayingState extends MapState {
     public void playRoadBuildingCard() {
         isPlayingRoadBuildingCard = true;
         try {
-            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
-            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByID(userCookie.getPlayerId()), true);
+            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), true);
+            mapController.getView().startDrop(PieceType.ROAD, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), true);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }

@@ -3,7 +3,8 @@ package client.roll;
 import client.base.*;
 import client.facade.Facade;
 import client.services.*;
-import shared.dto.RollNumberDTO;
+import client.roll.states.*;
+import shared.exceptions.InvalidStateActionException;
 import shared.exceptions.PlayerExistsException;
 import shared.model.game.Dice;
 import shared.model.game.TurnTracker;
@@ -21,6 +22,7 @@ public final class RollController extends Controller implements IRollController,
 	private IServer server;
 	private UserCookie userCookie;
 	private IRollResultView resultView;
+    private RollControllerState state;
 
 	/**
 	 * RollController constructor
@@ -36,6 +38,8 @@ public final class RollController extends Controller implements IRollController,
 		facade.addObserver(this);
 		server = ServerProxy.getInstance();
 		userCookie = UserCookie.getInstance();
+
+        createState(facade.getPhase());
 	}
 	
 	public IRollResultView getResultView() {
@@ -51,28 +55,18 @@ public final class RollController extends Controller implements IRollController,
 	
 	@Override
 	public void rollDice() {
-		//Roll the dice
-		int roll = roller.roll();
-
-		//Tell the server
-		try {
-            int id = userCookie.getPlayerId();
-            int index = facade.getPlayerIndexByID(id);
-            RollNumberDTO rollDTO = new RollNumberDTO(index, roll);
-			server.rollNumber(rollDTO);
-		} catch (MissingUserCookieException e) {
-			getRollView().setMessage("Error Rolling");
-		} catch (CommandExecutionFailed commandExecutionFailed) {
-			getRollView().setMessage("Error Rolling");
-		} catch (PlayerExistsException e) {
-            getRollView().setMessage("Error Rolling");
+        try {
+            state.rollDice();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        } catch (CommandExecutionFailed commandExecutionFailed) {
+            commandExecutionFailed.printStackTrace();
+        } catch (InvalidStateActionException e) {
+            e.printStackTrace();
         }
-
-        //Set the result view value - value of dice roll
-		resultView.setRollValue(roll);
-		//Show the modal
-		getResultView().showModal();
-	}
+    }
 
 	/**
 	 * This method is called whenever the observed object is changed. An
@@ -85,13 +79,28 @@ public final class RollController extends Controller implements IRollController,
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-        // TODO: 2/23/2016 Use state pattern here
-        if(facade.getPhase() == TurnTracker.Phase.ROLLING){
-            if(facade.getCurrentTurn() == userCookie.getPlayerId()) {
-                getRollView().setMessage("Roll the dice");
-                getRollView().showModal();
-            }
+        //Update the state
+        createState(facade.getPhase());
+
+        //Call state.update
+        try {
+            state.update();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
         }
-	}
+    }
+
+    /**
+     * Create controller state
+     * @param phase
+     */
+    public void createState(TurnTracker.Phase phase){
+        switch (phase) {
+            case ROLLING:  state = new RollingState(getRollView(), getResultView());
+                break;
+            default: state = new OtherStates(getRollView(), getResultView());
+                break;
+        }
+    }
 }
 

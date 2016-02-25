@@ -25,7 +25,6 @@ import java.util.Observable;
  */
 public class TurnTrackerControllerState {
     private Facade facade;
-    private IServer server;
     private UserCookie userCookie;
     private ITurnTrackerView view;
 
@@ -35,17 +34,13 @@ public class TurnTrackerControllerState {
     public TurnTrackerControllerState(ITurnTrackerView view){
         this.view = view;
         facade = Facade.getInstance();
-        server = ServerProxy.getInstance();
         userCookie = UserCookie.getInstance();
     }
 
     public void endTurn() {
-        int id = userCookie.getPlayerId();
-        boolean canFinishTurn = facade.canFinishTurn(id);
-        if(canFinishTurn){
-            //Inform the client
-            facade.finishTurn(id);
-        }
+        //Inform the model
+        int index = userCookie.getPlayerIndex();
+        facade.finishTurn(index);
     }
 
     public void initFromModel() {
@@ -56,8 +51,7 @@ public class TurnTrackerControllerState {
         for(PlayerInfo playerInfo : facade.getPlayers()) {
             view.updatePlayer(playerInfo.getPlayerIndex(), playerInfo.getVictoryPoints(),
                     facade.getCurrentTurn() == playerInfo.getPlayerIndex(),
-                    playerInfo.hasLargestArmy(),
-                    playerInfo.hasLongestRoad());
+                    playerInfo.hasLargestArmy(), playerInfo.hasLongestRoad());
         }
     }
 }

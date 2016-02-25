@@ -42,21 +42,21 @@ public final class DevCardController extends Controller implements IDevCardContr
 	@Override
 	public void update(Observable o, Object arg) {
 		Facade facade = Facade.getInstance();
-		int localPlayerID = UserCookie.getInstance().getPlayerId();
+		int localPlayerIndex = UserCookie.getInstance().getPlayerIndex();
 
 		// enable buttons to play specific devCard types
-		getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, facade.canUseMonopoly(localPlayerID));
-		getPlayCardView().setCardEnabled(DevCardType.MONUMENT, facade.canUseMonument(localPlayerID));
-		getPlayCardView().setCardEnabled(DevCardType.ROAD_BUILD, facade.canUseRoadBuilder(localPlayerID));
-		getPlayCardView().setCardEnabled(DevCardType.SOLDIER, facade.canUseSoldier(localPlayerID));
-		getPlayCardView().setCardEnabled(DevCardType.YEAR_OF_PLENTY, facade.canUseYearOfPlenty(localPlayerID));
+		getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, facade.canUseMonopoly(localPlayerIndex));
+		getPlayCardView().setCardEnabled(DevCardType.MONUMENT, facade.canUseMonument(localPlayerIndex));
+		getPlayCardView().setCardEnabled(DevCardType.ROAD_BUILD, facade.canUseRoadBuilder(localPlayerIndex));
+		getPlayCardView().setCardEnabled(DevCardType.SOLDIER, facade.canUseSoldier(localPlayerIndex));
+		getPlayCardView().setCardEnabled(DevCardType.YEAR_OF_PLENTY, facade.canUseYearOfPlenty(localPlayerIndex));
 
 		// set amounts of each dev card type in the playCardView
-		getPlayCardView().setCardAmount(DevCardType.MONOPOLY, facade.getNumberDevCards(DevCardType.MONOPOLY, localPlayerID));
-		getPlayCardView().setCardAmount(DevCardType.MONUMENT, facade.getNumberDevCards(DevCardType.MONUMENT, localPlayerID));
-		getPlayCardView().setCardAmount(DevCardType.ROAD_BUILD, facade.getNumberDevCards(DevCardType.ROAD_BUILD, localPlayerID));
-		getPlayCardView().setCardAmount(DevCardType.SOLDIER, facade.getNumberDevCards(DevCardType.SOLDIER, localPlayerID));
-		getPlayCardView().setCardAmount(DevCardType.YEAR_OF_PLENTY, facade.getNumberDevCards(DevCardType.YEAR_OF_PLENTY, localPlayerID));
+		getPlayCardView().setCardAmount(DevCardType.MONOPOLY, facade.getNumberDevCards(DevCardType.MONOPOLY, localPlayerIndex));
+		getPlayCardView().setCardAmount(DevCardType.MONUMENT, facade.getNumberDevCards(DevCardType.MONUMENT, localPlayerIndex));
+		getPlayCardView().setCardAmount(DevCardType.ROAD_BUILD, facade.getNumberDevCards(DevCardType.ROAD_BUILD, localPlayerIndex));
+		getPlayCardView().setCardAmount(DevCardType.SOLDIER, facade.getNumberDevCards(DevCardType.SOLDIER, localPlayerIndex));
+		getPlayCardView().setCardAmount(DevCardType.YEAR_OF_PLENTY, facade.getNumberDevCards(DevCardType.YEAR_OF_PLENTY, localPlayerIndex));
 	}
 
 	public IPlayDevCardView getPlayCardView() {
@@ -80,7 +80,7 @@ public final class DevCardController extends Controller implements IDevCardContr
 	@Override
 	public void buyCard() {
 		try {
-			Facade.getInstance().buyDC(UserCookie.getInstance().getPlayerId());
+			Facade.getInstance().buyDC(UserCookie.getInstance().getPlayerIndex());
 			getBuyCardView().closeModal();
 		} catch (MissingUserCookieException e) {
 			e.printStackTrace();
@@ -99,12 +99,12 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
-		Facade.getInstance().playMonopolyCard(resource);
+		Facade.getInstance().playMonopolyCard(UserCookie.getInstance().getPlayerIndex(),resource);
 	}
 
 	@Override
 	public void playMonumentCard() {
-		Facade.getInstance().playMonumentCard();
+		Facade.getInstance().playMonumentCard(UserCookie.getInstance().getPlayerIndex());
 	}
 
 	@Override
@@ -119,6 +119,6 @@ public final class DevCardController extends Controller implements IDevCardContr
 
 	@Override
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
-		Facade.getInstance().playYearOfPlentyCard(resource1, resource2);
+		Facade.getInstance().playYearOfPlentyCard(UserCookie.getInstance().getPlayerIndex(), resource1, resource2);
 	}
 }

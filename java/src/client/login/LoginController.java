@@ -66,8 +66,8 @@ public class LoginController extends Controller implements ILoginController {
 	}
 
 	private void setLocalPlayerInfo() {
-		UserCookie.getInstance().getPlayerInfo().setName(getLoginView().getLoginUsername());
-		UserCookie.getInstance().getPlayerInfo().setId(UserCookie.getInstance().getPlayerId());
+		UserCookie.getInstance().setName(getLoginView().getLoginUsername());
+		UserCookie.getInstance().setId(UserCookie.getInstance().getPlayerId());
 	}
 
 	// TODO: add proper error messaging

@@ -13,6 +13,8 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
+import shared.model.game.trade.Trade;
+import shared.model.game.trade.TradePackage;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.exceptions.*;
@@ -57,19 +59,6 @@ public class Facade {
         return this.game.getPlayerColorByIndex(id);
     }
 
-    public CatanColor getPlayerColorByID(int id) throws PlayerExistsException {
-        return this.game.getPlayerColorByIndex(this.game.getPlayerManager().getPlayerByID(id).getPlayerIndex());
-    }
-
-    public int getLocalPlayerIndex() {
-        return this.game.getLocalPlayerIndex();
-    }
-
-    //TODO talk to server
-    public void joinGame(int playerID){
-
-    }
-
     public boolean canInitiateRoad(int playerID, EdgeLocation edge){
         try{
             return this.game.canInitiateRoad(playerID,  edge);
@@ -85,8 +74,7 @@ public class Facade {
         try {
             edge = getServerEdgeLocation(edge);
             final BuildRoadDTO road = new BuildRoadDTO(playerID, edge, true);
-            final ClientModel model = ServerProxy.getInstance().buildRoad(road);
-            Game.getInstance().updateGame(model);
+            ServerProxy.getInstance().buildRoad(road);
         } catch(MissingUserCookieException e){}
     }
 
@@ -105,14 +93,8 @@ public class Facade {
         try {
             vertex = getServerVertexLocation(vertex);
             final BuildSettlementDTO set = new BuildSettlementDTO(pID, vertex, true);
-            final ClientModel model = ServerProxy.getInstance().buildSettlement(set);
-            Game.getInstance().updateGame(model);
+            ServerProxy.getInstance().buildSettlement(set);
         } catch(MissingUserCookieException e){}
-    }
-
-    public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
-
-
     }
 
     /**
@@ -133,8 +115,7 @@ public class Facade {
     public void finishTurn(int playerID){
         try {
             FinishTurnDTO finish = new FinishTurnDTO(playerID);
-            final ClientModel model = ServerProxy.getInstance().finishTurn(finish);
-            Game.getInstance().updateGame(model);
+            ServerProxy.getInstance().finishTurn(finish);
         } catch(MissingUserCookieException e){}
     }
 
@@ -185,8 +166,8 @@ public class Facade {
 
         edge = getServerEdgeLocation(edge);
         final BuildRoadDTO dto = new BuildRoadDTO(playerID, edge, false);
-        final ClientModel model = ServerProxy.getInstance().buildRoad(dto);
-        Game.getInstance().updateGame(model);
+        ServerProxy.getInstance().buildRoad(dto);
+
     }
 
     /**
@@ -213,8 +194,7 @@ public class Facade {
     public void buildSettlement(int playerID, VertexLocation vertex) throws MissingUserCookieException {
         vertex = getServerVertexLocation(vertex);
         final BuildSettlementDTO dto = new BuildSettlementDTO(playerID, vertex, false);
-        final ClientModel model = ServerProxy.getInstance().buildSettlement(dto);
-        Game.getInstance().updateGame(model);
+        ServerProxy.getInstance().buildSettlement(dto);
     }
 
     /**
@@ -241,8 +221,7 @@ public class Facade {
     public void buildCity(int playerID, VertexLocation vertex) throws MissingUserCookieException {
         vertex = getServerVertexLocation(vertex);
         final BuildCityDTO dto = new BuildCityDTO(playerID, vertex);
-        final ClientModel model = ServerProxy.getInstance().buildCity(dto);
-        Game.getInstance().updateGame(model);
+        ServerProxy.getInstance().buildCity(dto);
     }
 
     /**
@@ -269,8 +248,7 @@ public class Facade {
         assert playerID >= 0;
 
         final BuyDevCardDTO dto = new BuyDevCardDTO(playerID);
-        final ClientModel model = ServerProxy.getInstance().buyDevCard(dto);
-        Game.getInstance().updateGame(model);
+        ServerProxy.getInstance().buyDevCard(dto);
     }
 
     /**
@@ -301,11 +279,13 @@ public class Facade {
         assert twoCards.size() > 0;
         assert !oneCards.equals(twoCards);
 
-        if (canTrade(playerOneID)) {
-            this.game.offerTrade(playerOneID, playerTwoID, oneCards,  twoCards);
-        } else {
-            throw new BuildException("Can't complete this trade");
-        }
+        TradePackage one = new TradePackage(playerOneID, oneCards);
+        TradePackage two = new TradePackage(playerTwoID, twoCards);
+        Trade t = new Trade(one, two);
+        try {
+            final OfferTradeDTO trade = new OfferTradeDTO(playerOneID, t, playerTwoID);
+            ServerProxy.getInstance().offerTrade(trade);
+        } catch(MissingUserCookieException e) {}
     }
 
     public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException {
@@ -330,15 +310,24 @@ public class Facade {
     }
 
     //TODO talk to server
-    public void maritimeTrade(int playerID, PortType port, ResourceType type) throws BuildException, InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+    public void maritimeTrade(int playerID, PortType port, ResourceType want, ResourceType give) throws BuildException, InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         assert playerID >= 0;
-        assert type != null;
+        assert want != null;
+        int ratio = 2;
 
-        if (!canMaritimeTrade(playerID, port)) {
-            throw new BuildException("invalid maritime trade");
-        } else {
-            this.game.maritimeTrade(playerID, port, type);
-        }
+        if(port == PortType.THREE){ratio = 3;}
+        else if(port == PortType.BRICK){assert give == ResourceType.BRICK;}
+        else if(port == PortType.ORE){assert give == ResourceType.ORE;}
+        else if(port == PortType.WHEAT){assert give == ResourceType.WHEAT;}
+        else if(port == PortType.WOOD){assert give == ResourceType.WOOD;}
+        else if(port == PortType.SHEEP){assert give == ResourceType.SHEEP;}
+
+        try {
+            MaritimeTradeDTO dto = new MaritimeTradeDTO(playerID, ratio, give.toString(), want.toString());
+            ServerProxy.getInstance().maritimeTrade(dto);
+        }catch(MissingUserCookieException e){}
+
+
     }
 
     public shared.model.map.Map getMap(){return this.game.getMap();}
@@ -380,6 +369,12 @@ public class Facade {
     }
 
     //TODO talk to server
+    public void useRobber(int robber, HexLocation hexloc, int robbed){
+        try {
+            RobPlayerDTO dto = new RobPlayerDTO(robber, robbed, hexloc);
+            ServerProxy.getInstance().robPlayer(dto);
+        } catch(MissingUserCookieException e){}
+    }
 
     public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
         try{
@@ -419,20 +414,17 @@ public class Facade {
     }
 
     //TODO talk to server
-    public Set<Integer> playSoldier(int playerID, HexLocation hexloc){
-        try {
+    public Set<Integer> playSoldier(int playerID, HexLocation hexloc, int robbed){
+        try{
 
             if (this.game.canUseSoldier(playerID)) {
-                return this.game.useSoldier(playerID, hexloc);
+                RobPlayerDTO dto = new RobPlayerDTO(playerID, robbed, hexloc);
+                ServerProxy.getInstance().robPlayer(dto);
             }
             return null;
         } catch(PlayerExistsException e){
             return null;
-        } catch(AlreadyRobbedException e){
-            return null;
-        } catch(DevCardException e){
-            return null;
-        } catch(InvalidLocationException e){
+        } catch(MissingUserCookieException e){
             return null;
         }
     }
@@ -456,6 +448,32 @@ public class Facade {
         return playerInfos;
     }
 
+    public PlayerInfo[] getOtherPlayers(int id){
+        List<Player> players = this.game.getPlayers();
+        PlayerInfo[] playerInfos = new PlayerInfo[3];
+
+        int longestroad = this.game.currentLongestRoadPlayer();
+        int largestarmy = this.game.currentLargestArmyPlayer();
+        int i =0;
+        for(Player p: players){
+            if(p.getPlayerIndex() != id) {
+                boolean lr = false;
+                boolean la = false;
+                if (longestroad == p.getPlayerIndex()) {
+                    lr = true;
+                }
+                if (largestarmy == p.getPlayerIndex()) {
+                    la = true;
+                }
+                PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
+                playerInfos[i] =pi;
+                i++;
+            }
+        }
+
+        return playerInfos;
+    }
+
     public int getGameId() {
         return this.game.getId();
     }
@@ -465,7 +483,7 @@ public class Facade {
         if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
             for (int i = 0; i < 4; i++) {
                 PlayerInfo info = game.getPlayers().get(i);
-                players.get(i).setPlayerIndex(info.getPlayerIndex());
+                Game.getInstance().getPlayerManager().getPlayers().get(i).setPlayerIndex(info.getPlayerIndex());
                 // TODO -- add rest
             }
         } else {
@@ -584,13 +602,7 @@ public class Facade {
 
     //TODO to server
     public void playRoadBuildingCard(int playerID, EdgeLocation one, EdgeLocation two){
-        try {
-            this.game.useRoadBuilder(playerID, one, two);
-        }catch(DevCardException e){}
-        catch(InvalidLocationException e){}
-        catch(StructureException e){}
-        catch(InvalidPlayerException e){}
-        catch(PlayerExistsException e){}
+        
     }
 
     /**
@@ -603,8 +615,7 @@ public class Facade {
         return game.getNumberDevCards(type, playerID);
     }
 
-    public void playMonopolyCard(ResourceType resource) {
-        int index = game.getLocalPlayerIndex();
+    public void playMonopolyCard(int index, ResourceType resource) {
         PlayMonopolyDTO dto = new PlayMonopolyDTO(index, resource.toString());
         try {
             ServerProxy.getInstance().playMonopolyCard(dto);
@@ -613,8 +624,7 @@ public class Facade {
         }
     }
 
-    public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
-        int index = game.getLocalPlayerIndex();
+    public void playYearOfPlentyCard(int index, ResourceType resource1, ResourceType resource2) {
         PlayYOPCardDTO dto = new PlayYOPCardDTO(index, resource1, resource2);
         try {
             ServerProxy.getInstance().playYearOfPlentyCard(dto);
@@ -623,8 +633,7 @@ public class Facade {
         }
     }
 
-    public void playMonumentCard() {
-        int index = game.getLocalPlayerIndex();
+    public void playMonumentCard(int index) {
         PlayMonumentDTO dto = new PlayMonumentDTO(index);
         try {
             ServerProxy.getInstance().playMonumentCard(dto);

@@ -58,7 +58,7 @@ public class SetupTwoState extends MapState {
         edgeLoc = getModelEdgeLocation(edgeLoc);
         facade.initiateRoad(userCookie.getPlayerInfo().getPlayerIndex(), edgeLoc);
         try {
-            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByIndex(userCookie.getPlayerId()));
+            mapController.getView().placeRoad(getUIEdgeLocation(edgeLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,7 @@ public class SetupTwoState extends MapState {
         vertLoc = getModelVertexLocation(vertLoc);
         facade.initiateSettlement(userCookie.getPlayerInfo().getPlayerIndex(), vertLoc);
         try {
-            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerId()));
+            mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
@@ -90,7 +90,7 @@ public class SetupTwoState extends MapState {
             return;
         }
         try {
-            mapController.getView().startDrop(pieceType, facade.getPlayerColorByIndex(userCookie.getPlayerId()), false);
+            mapController.getView().startDrop(pieceType, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), false);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
