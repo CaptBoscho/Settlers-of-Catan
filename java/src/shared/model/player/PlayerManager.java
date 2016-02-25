@@ -55,19 +55,6 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     /**
-     * Randomize player order (turn order)
-     * @throws FailedToRandomizeException
-     */
-    public List<Integer> randomizePlayers() throws FailedToRandomizeException {
-        if (!this.players.isEmpty()){
-            Collections.shuffle(this.players);
-            return this.players.stream().map(Player::getId).collect(Collectors.toList());
-        } else {
-            throw new FailedToRandomizeException("There are no players to shuffle");
-        }
-    }
-
-    /**
      * Authenticates a player
      *
      * @param id ID of the player

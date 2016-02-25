@@ -106,7 +106,7 @@ public class Facade {
         } catch(MissingUserCookieException e){}
     }
 
-    public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException, FailedToRandomizeException {
+    public void initializeGame(boolean randomhex, boolean randomchit, boolean randomport) throws BuildException, InvalidNameException, InvalidPlayerException {
 
 
     }
