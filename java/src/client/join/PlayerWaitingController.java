@@ -7,6 +7,7 @@ import client.data.PlayerInfo;
 import client.facade.Facade;
 import client.map.*;
 import client.services.MissingUserCookieException;
+import client.services.Poller;
 import client.services.ServerProxy;
 import client.turntracker.ITurnTrackerView;
 import client.turntracker.TurnTrackerController;
@@ -41,10 +42,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
         } catch (MissingUserCookieException e) {
             e.printStackTrace();
         }
-//        ITurnTrackerView view = new TurnTrackerView(new TitlePanel(), new GameStatePanel());
-//        TurnTrackerController turnTrackerController = new TurnTrackerController(view);
-//        view.setController(turnTrackerController);
-//        turnTrackerController.initFromModel();
+		new Poller(ServerProxy.getInstance()).start();
 	}
 
 	@Override

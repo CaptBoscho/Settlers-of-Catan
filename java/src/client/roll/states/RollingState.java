@@ -33,6 +33,8 @@ public class RollingState extends RollControllerState {
     public void update() {
         try {
             super.update();
-        } catch(PlayerExistsException e){}
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
     }
 }
