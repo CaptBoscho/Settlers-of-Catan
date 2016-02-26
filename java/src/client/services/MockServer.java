@@ -277,7 +277,7 @@ public class MockServer implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel playRoadBuildingCard(BuildRoadDTO dto) {
+    public ClientModel playRoadBuildingCard(RoadBuildingDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
         return new ClientModel(obj);
