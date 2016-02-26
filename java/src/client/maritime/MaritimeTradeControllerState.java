@@ -38,7 +38,7 @@ public class MaritimeTradeControllerState {
     }
 
     public void initFromModel(){
-        if(facade.getCurrentTurn()== userCookie.getPlayerId()){
+        if(facade.getCurrentTurn()== userCookie.getPlayerIndex()){
             view.enableMaritimeTrade(true);
         }
         else{
@@ -56,7 +56,7 @@ public class MaritimeTradeControllerState {
      */
     public void makeTrade() {
         try {
-            server.maritimeTrade(new MaritimeTradeDTO(userCookie.getPlayerId(), 4,
+            server.maritimeTrade(new MaritimeTradeDTO(userCookie.getPlayerIndex(), 4,
                     getResource.toString(), giveResource.toString()));
         } catch (MissingUserCookieException e) {
             this.overlay.setStateMessage("Trade failed");

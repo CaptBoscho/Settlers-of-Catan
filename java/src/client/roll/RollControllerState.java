@@ -43,8 +43,7 @@ public class RollControllerState {
         // TODO: 2/24/2016 Ask corbin if the facade needs to be told as well
         
         //Tell the server
-        int id = userCookie.getPlayerId();
-        int index = facade.getPlayerIndexByID(id);
+        int index = userCookie.getPlayerIndex();
         RollNumberDTO rollDTO = new RollNumberDTO(index, roll);
         server.rollNumber(rollDTO);
 
@@ -55,8 +54,8 @@ public class RollControllerState {
     }
 
     public void update() throws PlayerExistsException {
-        int id = userCookie.getPlayerId();
-        if(facade.getCurrentTurn() == facade.getPlayerIndexByID(id)) {
+        int index = userCookie.getPlayerIndex();
+        if(facade.getCurrentTurn() == index) {
             rollView.setMessage("Roll the dice");
             rollView.showModal();
         }

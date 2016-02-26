@@ -30,7 +30,6 @@ public class PlayingState extends MapState {
     private boolean isPlayingRoadBuildingCard;
     private EdgeLocation firstRoad;
     private HexLocation robbingLoc;
-    private MapComponent map;
 
     /**
      * Constructor
@@ -40,7 +39,6 @@ public class PlayingState extends MapState {
         isPlayingRoadBuildingCard = false;
         firstRoad = null;
         robbingLoc = null;
-        map = null;
     }
 
     @Override
@@ -110,7 +108,7 @@ public class PlayingState extends MapState {
     public void placeSettlement(VertexLocation vertLoc) {
         vertLoc = getModelVertexLocation(vertLoc);
         try {
-            facade.buildSettlement(userCookie.getPlayerId(), vertLoc);
+            facade.buildSettlement(userCookie.getPlayerIndex(), vertLoc);
             mapController.getView().placeSettlement(getUIVertexLocation(vertLoc), facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
         } catch (MissingUserCookieException | PlayerExistsException e) {
             e.printStackTrace();
