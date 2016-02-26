@@ -37,7 +37,7 @@ public class RollControllerState {
         //Create a dice object
         Dice roller = new Dice(2);
         //Roll the dice
-        int roll = 7;
+        int roll = roller.roll();
 
         //Tell the facade
         // TODO: 2/24/2016 Ask corbin if the facade needs to be told as well
