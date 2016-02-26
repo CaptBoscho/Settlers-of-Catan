@@ -38,8 +38,6 @@ public final class Edge {
     }
 
     public void setRoad(Road road) {
-        assert road != null;
-
         this.road = road;
     }
 

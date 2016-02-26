@@ -370,7 +370,7 @@ public final class ServerProxy implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel playRoadBuildingCard(BuildRoadDTO dto) throws MissingUserCookieException {
+    public ClientModel playRoadBuildingCard(RoadBuildingDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/moves/Road_Building";

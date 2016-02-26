@@ -153,7 +153,7 @@ public final class TurnTracker {
     }
 
     public boolean canUseRobber() {
-        return phase == Phase.ROBBING;
+        return phase == Phase.ROBBING || phase == Phase.PLAYING;
     }
 
     /**

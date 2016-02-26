@@ -69,13 +69,17 @@ public class RobbingState extends MapState {
         hexLoc = getModelHexLocation(hexLoc);
         mapController.getView().placeRobber(robbingLoc);
         RobPlayerInfo[] rpi = facade.moveRobber(userCookie.getPlayerIndex(), hexLoc);
-        if(rpi != null && rpi.length > 0) {
+        if(rpi != null && rpi.length > 1) {
             mapController.getRobView().setPlayers(rpi);
             mapController.getRobView().showModal();
         } else {
-            RobPlayerInfo self = new RobPlayerInfo();
-            self.setPlayerIndex(userCookie.getPlayerIndex());
-            robPlayer(self);
+            RobPlayerInfo victim = new RobPlayerInfo();
+            if(rpi.length == 1) {
+                victim.setPlayerIndex(rpi[0].getPlayerIndex());
+            } else {
+                victim.setPlayerIndex(userCookie.getPlayerIndex());
+            }
+            robPlayer(victim);
         }
     }
 
@@ -95,13 +99,7 @@ public class RobbingState extends MapState {
     public void cancelMove(){}
 
     @Override
-    public void playSoldierCard() {
-        try {
-            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), true);
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
-    }
+    public void playSoldierCard() {}
 
     @Override
     public void playRoadBuildingCard(){}
