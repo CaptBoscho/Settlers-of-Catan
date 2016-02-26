@@ -1821,7 +1821,7 @@ public class GameTest {
     private Game game;
 
     @Before
-    public void testInitializeGame() throws InvalidNameException, InvalidPlayerException, FailedToRandomizeException{
+    public void testInitializeGame() throws InvalidNameException, InvalidPlayerException {
         game = Game.getInstance();
         final List<Player> players = new ArrayList<>();
 
