@@ -67,6 +67,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		initFromModel();
         //Update the state
         createState(facade.getPhase());
+        //Init the state
+        state.initFromModel();
 		//Call the state's update function
         state.update();
 	}

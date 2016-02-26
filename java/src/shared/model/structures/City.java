@@ -7,15 +7,15 @@ package shared.model.structures;
  */
 public final class City {
 
-    private int playerID;
+    private int playerIndex;
 
-    public City(int playerID) {
-        assert playerID >= 0;
+    public City(int playerIndex) {
+        assert playerIndex >= 0;
 
-        this.playerID = playerID;
+        this.playerIndex = playerIndex;
     }
 
-    public int getPlayerID() {
-        return playerID;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 }

@@ -22,8 +22,6 @@ public class Hex {
      */
     public Hex(HexLocation hexLoc, HexType hexType) {
         assert hexLoc != null;
-//        assert hexLoc.getX() >= 0;
-//        assert hexLoc.getY() >= 0;
         assert hexType != null;
 
         this.hexLoc = hexLoc;

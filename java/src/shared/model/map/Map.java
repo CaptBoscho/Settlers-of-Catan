@@ -111,8 +111,8 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public boolean canInitiateSettlement(final int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+    public boolean canInitiateSettlement(final int playerIndex, VertexLocation vertexLoc) throws InvalidLocationException {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
@@ -126,21 +126,21 @@ public final class Map implements IMap, JsonSerializable{
         if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        if (this.cities.get(playerID) != null) {
+        if (this.cities.get(playerIndex) != null) {
             return false;
         }
-        final ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        final ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
         if (settlements != null && settlements.size() > 1) {
             return false;
         }
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         return !(roads != null && roads.size() > 1) && !vertex.hasBuilding() && !hasNeighborBuildings(vertexLoc);
     }
 
     @Override
-    public List<ResourceType> initiateSettlement(int playerID, VertexLocation vertexLoc) throws StructureException,
+    public List<ResourceType> initiateSettlement(int playerIndex, VertexLocation vertexLoc) throws StructureException,
             InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
@@ -155,15 +155,15 @@ public final class Map implements IMap, JsonSerializable{
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        final ArrayList<Vertex> cities = this.cities.get(playerID);
+        final ArrayList<Vertex> cities = this.cities.get(playerIndex);
         if(cities != null) {
             throw new StructureException("Map is already initialized");
         }
-        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
         if(settlements != null && settlements.size() > 1) {
             throw new StructureException("Map is already initialized");
         }
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads != null && roads.size() > 1) {
             throw new StructureException("Map is already initialized");
         }
@@ -173,17 +173,17 @@ public final class Map implements IMap, JsonSerializable{
         if(hasNeighborBuildings(vertexLoc)) {
             throw new StructureException("Vertex location has a neighboring building");
         }
-        final Settlement settlement = new Settlement(playerID);
+        final Settlement settlement = new Settlement(playerIndex);
         vertex.buildSettlement(settlement);
         if(vertex.hasPort()) {
-            addPort(playerID, vertex);
+            addPort(playerIndex, vertex);
         }
-        settlements = this.settlements.get(playerID);
+        settlements = this.settlements.get(playerIndex);
         final List<ResourceType> resources = new ArrayList<>();
         if(settlements == null) {
             settlements = new ArrayList<>();
             settlements.add(vertex);
-            this.settlements.put(playerID, settlements);
+            this.settlements.put(playerIndex, settlements);
         } else {
             settlements.add(vertex);
             if(vertexLoc.getDir() == VertexDirection.NorthWest) {
@@ -196,9 +196,9 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public boolean canInitiateRoad(int playerID, EdgeLocation edgeLoc)
+    public boolean canInitiateRoad(int playerIndex, EdgeLocation edgeLoc)
             throws InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
@@ -230,20 +230,20 @@ public final class Map implements IMap, JsonSerializable{
         if (edge == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerIndex);
         if (cities != null) {
             return false;
         }
-        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
         if (settlements == null || settlements.size() > 2) {
             return false;
         }
-        ArrayList<Edge> roads = this.roads.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerIndex);
         if (roads != null && roads.size() > 1) {
             return false;
         }
         for(Vertex vertex : possibleVertices) {
-            if(vertex.hasSettlement() && vertex.getPlayerID() == playerID && !vertexHasConnectingRoad(playerID,
+            if(vertex.hasSettlement() && vertex.getPlayerIndex() == playerIndex && !vertexHasConnectingRoad(playerIndex,
                     vertex.getVertexLoc()) && !edge.hasRoad()) {
                 return true;
             }
@@ -252,9 +252,9 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public void initiateRoad(int playerID, EdgeLocation edgeLoc)
+    public void initiateRoad(int playerIndex, EdgeLocation edgeLoc)
             throws StructureException, InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
@@ -270,29 +270,29 @@ public final class Map implements IMap, JsonSerializable{
         if(edge == null) {
             throw new InvalidLocationException("Edge location is not on the map");
         }
-        ArrayList<Vertex> cities = this.cities.get(playerID);
+        ArrayList<Vertex> cities = this.cities.get(playerIndex);
         if(cities != null) {
             throw new StructureException("Map is already initialized");
         }
-        ArrayList<Vertex> settlements = this.settlements.get(playerID);
+        ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
         if(settlements == null) {
             throw new StructureException("Settlement needs to be built first");
         }
         if(settlements.size() > 2) {
             throw new StructureException("Map is already initialized");
         }
-        ArrayList<Edge> roads = this.roads.get(playerID);
+        ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads != null && roads.size() > 1) {
             throw new StructureException("Map is already initialized");
         }
-        if(canInitiateRoad(playerID, edgeLoc)) {
-            final Road road = new Road(playerID);
+        if(canInitiateRoad(playerIndex, edgeLoc)) {
+            final Road road = new Road(playerIndex);
             edge.setRoad(road);
-            roads = this.roads.get(playerID);
+            roads = this.roads.get(playerIndex);
             if(roads == null) {
                 roads = new ArrayList<>();
                 roads.add(edge);
-                this.roads.put(playerID, roads);
+                this.roads.put(playerIndex, roads);
             } else {
                 roads.add(edge);
             }
@@ -300,8 +300,8 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public boolean canBuildRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+    public boolean canBuildRoad(int playerIndex, EdgeLocation edgeLoc) throws InvalidLocationException {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
@@ -316,9 +316,9 @@ public final class Map implements IMap, JsonSerializable{
         if (edge == null) {
             throw new InvalidLocationException("Edge location is not on the map");
         }
-        final ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        final ArrayList<Vertex> cities = this.cities.get(playerID);
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        final ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
+        final ArrayList<Vertex> cities = this.cities.get(playerIndex);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads == null || roads.size() < 2|| settlements == null) {
             return false;
         }
@@ -328,12 +328,12 @@ public final class Map implements IMap, JsonSerializable{
         if(cities != null && (cities.size() + settlements.size()) < 2) {
             return false;
         }
-        return !edge.hasRoad() && edgeHasConnectingRoad(playerID, edgeLoc);
+        return !edge.hasRoad() && edgeHasConnectingRoad(playerIndex, edgeLoc);
     }
 
     @Override
-    public void buildRoad(int playerID, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+    public void buildRoad(int playerIndex, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
@@ -348,9 +348,9 @@ public final class Map implements IMap, JsonSerializable{
         if(edge == null) {
             throw new InvalidLocationException("Edge location is not on the map");
         }
-        final ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        final ArrayList<Vertex> cities = this.cities.get(playerID);
-        ArrayList<Edge> roads = this.roads.get(playerID);
+        final ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
+        final ArrayList<Vertex> cities = this.cities.get(playerIndex);
+        ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads == null || roads.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
@@ -366,18 +366,18 @@ public final class Map implements IMap, JsonSerializable{
         if(edge.hasRoad()) {
             throw new StructureException("Edge already has a Road");
         }
-        if(!edgeHasConnectingRoad(playerID, edgeLoc)) {
+        if(!edgeHasConnectingRoad(playerIndex, edgeLoc)) {
             throw new StructureException("Road must be connected to existing Road");
         }
-        final Road road = new Road(playerID);
+        final Road road = new Road(playerIndex);
         edge.setRoad(road);
-        roads = this.roads.get(playerID);
+        roads = this.roads.get(playerIndex);
         roads.add(edge);
     }
 
     @Override
-    public boolean canBuildSettlement(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+    public boolean canBuildSettlement(int playerIndex, VertexLocation vertexLoc) throws InvalidLocationException {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
@@ -391,9 +391,9 @@ public final class Map implements IMap, JsonSerializable{
         if (vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        final ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        final ArrayList<Vertex> cities = this.cities.get(playerID);
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        final ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
+        final ArrayList<Vertex> cities = this.cities.get(playerIndex);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads == null || roads.size() < 2) {
             return false;
         }
@@ -407,13 +407,13 @@ public final class Map implements IMap, JsonSerializable{
             return false;
         }
         return vertex.canBuildSettlement() && !hasNeighborBuildings(vertexLoc) &&
-                vertexHasConnectingRoad(playerID, vertexLoc);
+                vertexHasConnectingRoad(playerIndex, vertexLoc);
     }
 
     @Override
-    public void buildSettlement(int playerID, VertexLocation vertexLoc) throws StructureException,
+    public void buildSettlement(int playerIndex, VertexLocation vertexLoc) throws StructureException,
             InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
@@ -427,9 +427,9 @@ public final class Map implements IMap, JsonSerializable{
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        final ArrayList<Vertex> cities = this.cities.get(playerID);
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
+        final ArrayList<Vertex> cities = this.cities.get(playerIndex);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads == null || roads.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
@@ -448,21 +448,21 @@ public final class Map implements IMap, JsonSerializable{
         if(hasNeighborBuildings(vertexLoc)) {
             throw new StructureException("Vertex location has a neighboring building");
         }
-        if(!vertexHasConnectingRoad(playerID, vertexLoc)) {
+        if(!vertexHasConnectingRoad(playerIndex, vertexLoc)) {
             throw new StructureException("Vertex location has no connecting road");
         }
-        final Settlement settlement = new Settlement(playerID);
+        final Settlement settlement = new Settlement(playerIndex);
         vertex.buildSettlement(settlement);
         if(vertex.hasPort()) {
-            addPort(playerID, vertex);
+            addPort(playerIndex, vertex);
         }
-        settlements = this.settlements.get(playerID);
+        settlements = this.settlements.get(playerIndex);
         settlements.add(vertex);
     }
 
     @Override
-    public boolean canBuildCity(int playerID, VertexLocation vertexLoc) throws InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+    public boolean canBuildCity(int playerIndex, VertexLocation vertexLoc) throws InvalidLocationException {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
@@ -476,9 +476,9 @@ public final class Map implements IMap, JsonSerializable{
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        final ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        final ArrayList<Vertex> cities = this.cities.get(playerID);
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        final ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
+        final ArrayList<Vertex> cities = this.cities.get(playerIndex);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads == null || roads.size() < 2) {
             return false;
         }
@@ -491,13 +491,13 @@ public final class Map implements IMap, JsonSerializable{
         if(cities != null && (cities.size() + settlements.size()) < 2) {
             return false;
         }
-        return vertex.canBuildCity() && vertex.getPlayerID() == playerID && !vertex.hasCity();
+        return vertex.canBuildCity() && vertex.getPlayerIndex() == playerIndex && !vertex.hasCity();
     }
 
     @Override
-    public void buildCity(int playerID, VertexLocation vertexLoc) throws StructureException,
+    public void buildCity(int playerIndex, VertexLocation vertexLoc) throws StructureException,
             InvalidLocationException {
-        assert playerID >= 0 && playerID <= 3;
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert vertexLoc.getDir() != null;
         assert vertexLoc.getHexLoc() != null;
@@ -511,9 +511,9 @@ public final class Map implements IMap, JsonSerializable{
         if(vertex == null) {
             throw new InvalidLocationException("Vertex location is not on the map");
         }
-        ArrayList<Vertex> settlements = this.settlements.get(playerID);
-        ArrayList<Vertex> cities = this.cities.get(playerID);
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
+        ArrayList<Vertex> cities = this.cities.get(playerIndex);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads == null || roads.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
@@ -529,38 +529,38 @@ public final class Map implements IMap, JsonSerializable{
         if(!vertex.canBuildCity()) {
             throw new StructureException("A settlement needs to be built first");
         }
-        if(vertex.getPlayerID() != playerID) {
+        if(vertex.getPlayerIndex() != playerIndex) {
             throw new StructureException("The settlement doesn't belong to the player");
         }
         if(vertex.hasCity()) {
             throw new StructureException("The vertex location already has a city");
         }
-        settlements = this.settlements.get(playerID);
+        settlements = this.settlements.get(playerIndex);
         settlements.remove(vertex);
-        final City city = new City(playerID);
+        final City city = new City(playerIndex);
         vertex.buildCity(city);
-        cities = this.cities.get(playerID);
+        cities = this.cities.get(playerIndex);
         if(cities == null) {
             cities = new ArrayList<>();
             cities.add(vertex);
-            this.cities.put(playerID, cities);
+            this.cities.put(playerIndex, cities);
         } else {
             cities.add(vertex);
         }
     }
 
     @Override
-    public int getLongestRoadSize(int playerID) {
-        assert playerID >= 0 && playerID <= 3;
+    public int getLongestRoadSize(int playerIndex) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert this.roads != null;
 
         int size = 0;
-        final ArrayList<Edge> roads = this.roads.get(playerID);
+        final ArrayList<Edge> roads = this.roads.get(playerIndex);
         if(roads != null) {
             for(Edge edge : roads) {
                 refreshRoads(roads);
                 final ArrayList<EdgeLocation> oldConnectingRoads = new ArrayList<>();
-                final int newSize = getLongestRoadSize(0, playerID, edge.getEdgeLoc(), oldConnectingRoads);
+                final int newSize = getLongestRoadSize(0, playerIndex, edge.getEdgeLoc(), oldConnectingRoads);
                 if(newSize > size) {
                     size = newSize;
                 }
@@ -570,11 +570,11 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public Set<PortType> getPortTypes(int playerID) {
-        assert playerID >= 0 && playerID <= 3;
+    public Set<PortType> getPortTypes(int playerIndex) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
         final Set<PortType> portTypes = new HashSet<>();
-        final ArrayList<Port> ports = this.ports.get(playerID);
+        final ArrayList<Port> ports = this.ports.get(playerIndex);
         if(ports != null) {
             portTypes.addAll(ports.stream().map(Port::getPortType).collect(Collectors.toList()));
         }
@@ -591,13 +591,13 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public Set<Integer> whoCanGetRobbed(int playerID) {
+    public Set<Integer> whoCanGetRobbed(int playerIndex) {
         assert this.robber != null;
-        return getPlayers(playerID, robber.getLocation());
+        return getPlayers(playerIndex, robber.getLocation());
     }
 
     @Override
-    public Set<Integer> moveRobber(int playerID, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
+    public Set<Integer> moveRobber(int playerIndex, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         assert hexLoc != null;
         assert this.hexes != null;
         assert this.hexes.size() > 0;
@@ -610,7 +610,7 @@ public final class Map implements IMap, JsonSerializable{
             throw new AlreadyRobbedException("Robber cannot remain at the same hex location");
         }
         robber.setLocation(hexLoc);
-        return getPlayers(playerID, hexLoc);
+        return getPlayers(playerIndex, hexLoc);
     }
 
     @Override
@@ -619,8 +619,8 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     @Override
-    public void deleteRoad(int playerID, EdgeLocation edgeLoc) throws InvalidLocationException, StructureException {
-        assert playerID >= 0 && playerID <= 3;
+    public void deleteRoad(int playerIndex, EdgeLocation edgeLoc) throws InvalidLocationException, StructureException {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
         assert edgeLoc.getHexLoc() != null;
@@ -635,7 +635,7 @@ public final class Map implements IMap, JsonSerializable{
             throw new StructureException("Edge doesn't have a road to delete");
         } else {
             edge.setRoad(null);
-            ArrayList<Edge> roads = this.roads.get(playerID);
+            ArrayList<Edge> roads = this.roads.get(playerIndex);
             for(Edge road : roads) {
                 if(road.getEdgeLoc().equals(edge.getEdgeLoc())) {
                     roads.remove(road);
@@ -793,17 +793,17 @@ public final class Map implements IMap, JsonSerializable{
 
         for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final int playerID = json.get("owner").getAsInt();
+            final int playerIndex = json.get("owner").getAsInt();
             EdgeLocation edgeLoc = new EdgeLocation(json.get("location").getAsJsonObject());
             edgeLoc = edgeLoc.getNormalizedLocation();
             final Edge edge = edges.get(edgeLoc);
-            final Road road = new Road(playerID);
+            final Road road = new Road(playerIndex);
             edge.setRoad(road);
-            ArrayList<Edge> roads = this.roads.get(playerID);
+            ArrayList<Edge> roads = this.roads.get(playerIndex);
             if(roads == null) {
                 roads = new ArrayList<>();
                 roads.add(edge);
-                this.roads.put(playerID, roads);
+                this.roads.put(playerIndex, roads);
             } else {
                 roads.add(edge);
             }
@@ -815,20 +815,20 @@ public final class Map implements IMap, JsonSerializable{
 
         for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final int playerID = json.get("owner").getAsInt();
+            final int playerIndex = json.get("owner").getAsInt();
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
             vertexLoc = vertexLoc.getNormalizedLocation();
             final Vertex vertex = vertices.get(vertexLoc);
-            final Settlement settlement = new Settlement(playerID);
+            final Settlement settlement = new Settlement(playerIndex);
             vertex.buildSettlement(settlement);
             if(vertex.hasPort()) {
-                addPort(playerID, vertex);
+                addPort(playerIndex, vertex);
             }
-            ArrayList<Vertex> settlements = this.settlements.get(playerID);
+            ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
             if(settlements == null) {
                 settlements = new ArrayList<>();
                 settlements.add(vertex);
-                this.settlements.put(playerID, settlements);
+                this.settlements.put(playerIndex, settlements);
             } else {
                 settlements.add(vertex);
             }
@@ -840,22 +840,22 @@ public final class Map implements IMap, JsonSerializable{
 
         for(final JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final int playerID = json.get("owner").getAsInt();
+            final int playerIndex = json.get("owner").getAsInt();
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
             vertexLoc = vertexLoc.getNormalizedLocation();
             final Vertex vertex = vertices.get(vertexLoc);
-            final Settlement settlement = new Settlement(playerID);
+            final Settlement settlement = new Settlement(playerIndex);
             vertex.buildSettlement(settlement);
             if(vertex.hasPort()) {
-                addPort(playerID, vertex);
+                addPort(playerIndex, vertex);
             }
-            final City city = new City(playerID);
+            final City city = new City(playerIndex);
             vertex.buildCity(city);
-            ArrayList<Vertex> cities = this.cities.get(playerID);
+            ArrayList<Vertex> cities = this.cities.get(playerIndex);
             if(cities == null) {
                 cities = new ArrayList<>();
                 cities.add(vertex);
-                this.cities.put(playerID, cities);
+                this.cities.put(playerIndex, cities);
             } else {
                 cities.add(vertex);
             }
@@ -1256,15 +1256,15 @@ public final class Map implements IMap, JsonSerializable{
         final VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir).getNormalizedLocation();
         final Vertex vertex = vertices.get(vertexLoc);
         if(vertex.hasBuilding()) {
-            final int playerID = vertex.getPlayerID();
-            List<ResourceType> resources = resourceMap.get(playerID);
+            final int playerIndex = vertex.getPlayerIndex();
+            List<ResourceType> resources = resourceMap.get(playerIndex);
             if(resources == null) {
                 resources = new ArrayList<>();
                 resources.add(resourceType);
                 if(vertex.hasCity()) {
                     resources.add(resourceType);
                 }
-                resourceMap.put(playerID, resources);
+                resourceMap.put(playerIndex, resources);
             } else {
                 resources.add(resourceType);
                 if(vertex.hasCity()) {
@@ -1321,15 +1321,15 @@ public final class Map implements IMap, JsonSerializable{
         return left != null && left.hasBuilding();
     }
 
-    private void addPort(int playerID, Vertex vertex) {
-        assert playerID >= 0 && playerID <= 3;
+    private void addPort(int playerIndex, Vertex vertex) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
         if(vertex.hasPort()) {
-            ArrayList<Port> ports = this.ports.get(playerID);
+            ArrayList<Port> ports = this.ports.get(playerIndex);
             if(ports == null) {
                 ports = new ArrayList<>();
                 ports.add(vertex.getPort());
-                this.ports.put(playerID, ports);
+                this.ports.put(playerIndex, ports);
             } else {
                 ports.add(vertex.getPort());
             }
@@ -1397,56 +1397,56 @@ public final class Map implements IMap, JsonSerializable{
         return null;
     }
 
-    private boolean vertexHasConnectingRoad(int playerID, VertexLocation vertexLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean vertexHasConnectingRoad(int playerIndex, VertexLocation vertexLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         if(vertexLoc.getDir() == VertexDirection.NorthWest) {
-            return vertexHasConnectingRoadNorthWest(playerID, vertexLoc);
+            return vertexHasConnectingRoadNorthWest(playerIndex, vertexLoc);
         } else {
-            return vertexHasConnectingRoadNorthEast(playerID, vertexLoc);
+            return vertexHasConnectingRoadNorthEast(playerIndex, vertexLoc);
         }
     }
 
-    private boolean vertexHasConnectingRoadNorthWest(int playerID, VertexLocation vertexLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean vertexHasConnectingRoadNorthWest(int playerIndex, VertexLocation vertexLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
 
         final HexLocation upperLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthWest);
         final EdgeLocation upperLeftEdgeLoc = new EdgeLocation(upperLeftHexLoc, EdgeDirection.NorthEast);
         final Edge upperLeft = edges.get(upperLeftEdgeLoc);
-        if(upperLeft != null && upperLeft.hasRoad() && upperLeft.getRoad().getPlayerID() == playerID) {
+        if(upperLeft != null && upperLeft.hasRoad() && upperLeft.getRoad().getPlayerIndex() == playerIndex) {
             return true;
         }
         final EdgeLocation lowerLeftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.NorthWest);
         final Edge lowerLeft = edges.get(lowerLeftEdgeLoc);
-        if(lowerLeft != null && lowerLeft.hasRoad() && lowerLeft.getRoad().getPlayerID() == playerID) {
+        if(lowerLeft != null && lowerLeft.hasRoad() && lowerLeft.getRoad().getPlayerIndex() == playerIndex) {
             return true;
         }
         final EdgeLocation rightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
         final Edge right = edges.get(rightEdgeLoc);
-        return right != null && right.hasRoad() && right.getRoad().getPlayerID() == playerID;
+        return right != null && right.hasRoad() && right.getRoad().getPlayerIndex() == playerIndex;
     }
 
-    private boolean vertexHasConnectingRoadNorthEast(int playerID, VertexLocation vertexLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean vertexHasConnectingRoadNorthEast(int playerIndex, VertexLocation vertexLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
 
         final HexLocation upperRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthEast);
         final EdgeLocation upperRightEdgeLoc = new EdgeLocation(upperRightHexLoc, EdgeDirection.NorthWest);
         final Edge upperRight = edges.get(upperRightEdgeLoc);
-        if(upperRight != null && upperRight.hasRoad() && upperRight.getRoad().getPlayerID() == playerID) {
+        if(upperRight != null && upperRight.hasRoad() && upperRight.getRoad().getPlayerIndex() == playerIndex) {
             return true;
         }
         final EdgeLocation lowerRightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.NorthEast);
         final Edge lowerRight = edges.get(lowerRightEdgeLoc);
-        if(lowerRight != null && lowerRight.hasRoad() && lowerRight.getRoad().getPlayerID() == playerID) {
+        if(lowerRight != null && lowerRight.hasRoad() && lowerRight.getRoad().getPlayerIndex() == playerIndex) {
             return true;
         }
         final EdgeLocation leftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
         final Edge left = edges.get(leftEdgeLoc);
-        return left != null && left.hasRoad() && left.getRoad().getPlayerID() == playerID;
+        return left != null && left.hasRoad() && left.getRoad().getPlayerIndex() == playerIndex;
     }
 
     private boolean edgeConnectedToVertex(EdgeLocation edgeLoc, VertexLocation vertexLoc) {
@@ -1490,59 +1490,59 @@ public final class Map implements IMap, JsonSerializable{
         return leftEdgeLoc.equals(edgeLoc);
     }
 
-    private boolean edgeHasConnectingRoad(int playerID, EdgeLocation edgeLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean edgeHasConnectingRoad(int playerIndex, EdgeLocation edgeLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
         edgeLoc = edgeLoc.getNormalizedLocation();
         if(edgeLoc.getDir() == EdgeDirection.NorthWest) {
-            return edgeHasConnectingRoadNorthWest(playerID, edgeLoc);
+            return edgeHasConnectingRoadNorthWest(playerIndex, edgeLoc);
         } else if(edgeLoc.getDir() == EdgeDirection.North) {
-            return edgeHasConnectingRoadNorth(playerID, edgeLoc);
+            return edgeHasConnectingRoadNorth(playerIndex, edgeLoc);
         } else {
-            return edgeHasConnectingRoadNorthEast(playerID, edgeLoc);
+            return edgeHasConnectingRoadNorthEast(playerIndex, edgeLoc);
         }
     }
 
-    private boolean edgeHasConnectingRoadNorthWest(int playerID, EdgeLocation edgeLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean edgeHasConnectingRoadNorthWest(int playerIndex, EdgeLocation edgeLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
         final HexLocation lowerLeftHexLoc = edgeLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthWest);
         final VertexLocation lowerLeftVertexLoc = new VertexLocation(lowerLeftHexLoc, VertexDirection.NorthEast);
         final VertexLocation upperRightVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthWest);
-        return edgeHasConnectingRoad(playerID, lowerLeftVertexLoc, upperRightVertexLoc);
+        return edgeHasConnectingRoad(playerIndex, lowerLeftVertexLoc, upperRightVertexLoc);
     }
 
-    private boolean edgeHasConnectingRoadNorth(int playerID, EdgeLocation edgeLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean edgeHasConnectingRoadNorth(int playerIndex, EdgeLocation edgeLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
         final VertexLocation leftVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthWest);
         final VertexLocation rightVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthEast);
-        return edgeHasConnectingRoad(playerID, leftVertexLoc, rightVertexLoc);
+        return edgeHasConnectingRoad(playerIndex, leftVertexLoc, rightVertexLoc);
     }
 
-    private boolean edgeHasConnectingRoadNorthEast(int playerID, EdgeLocation edgeLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean edgeHasConnectingRoadNorthEast(int playerIndex, EdgeLocation edgeLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
         final HexLocation lowerRightHexLoc = edgeLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthEast);
         final VertexLocation lowerRightVertexLoc = new VertexLocation(lowerRightHexLoc, VertexDirection.NorthWest);
         final VertexLocation upperLeftVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthEast);
-        return edgeHasConnectingRoad(playerID, lowerRightVertexLoc, upperLeftVertexLoc);
+        return edgeHasConnectingRoad(playerIndex, lowerRightVertexLoc, upperLeftVertexLoc);
     }
 
-    private boolean edgeHasConnectingRoad(int playerID, VertexLocation vertexLocOne, VertexLocation vertexLocTwo) {
-        assert playerID >= 0 && playerID <= 3;
+    private boolean edgeHasConnectingRoad(int playerIndex, VertexLocation vertexLocOne, VertexLocation vertexLocTwo) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
-        if(vertexHasConnectingRoad(playerID, vertexLocOne)) {
+        if(vertexHasConnectingRoad(playerIndex, vertexLocOne)) {
             final Vertex vertex = vertices.get(vertexLocOne);
-            if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
+            if(vertex != null && vertex.hasBuilding() && vertex.getPlayerIndex() == playerIndex) {
                 return true;
             } else if(vertex != null && !vertex.hasBuilding()) {
                 return true;
             }
         }
-        if(vertexHasConnectingRoad(playerID, vertexLocTwo)) {
+        if(vertexHasConnectingRoad(playerIndex, vertexLocTwo)) {
             final Vertex vertex = vertices.get(vertexLocTwo);
-            if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
+            if(vertex != null && vertex.hasBuilding() && vertex.getPlayerIndex() == playerIndex) {
                 return true;
             } else if(vertex != null && !vertex.hasBuilding()) {
                 return true;
@@ -1551,24 +1551,24 @@ public final class Map implements IMap, JsonSerializable{
         return false;
     }
 
-    private HashSet<Integer> getPlayers(int playerID, HexLocation hexLoc) {
+    private HashSet<Integer> getPlayers(int playerIndex, HexLocation hexLoc) {
         assert hexLoc != null;
 
         final HashSet<Integer> players = new HashSet<>();
-        getPlayers(playerID, players, hexLoc, VertexDirection.NorthWest);
-        getPlayers(playerID, players, hexLoc, VertexDirection.NorthEast);
-        getPlayers(playerID, players, hexLoc, VertexDirection.East);
-        getPlayers(playerID, players, hexLoc, VertexDirection.SouthEast);
-        getPlayers(playerID, players, hexLoc, VertexDirection.SouthWest);
-        getPlayers(playerID, players, hexLoc, VertexDirection.West);
+        getPlayers(playerIndex, players, hexLoc, VertexDirection.NorthWest);
+        getPlayers(playerIndex, players, hexLoc, VertexDirection.NorthEast);
+        getPlayers(playerIndex, players, hexLoc, VertexDirection.East);
+        getPlayers(playerIndex, players, hexLoc, VertexDirection.SouthEast);
+        getPlayers(playerIndex, players, hexLoc, VertexDirection.SouthWest);
+        getPlayers(playerIndex, players, hexLoc, VertexDirection.West);
         return players;
     }
 
-    private void getPlayers(int playerID, HashSet<Integer> players, HexLocation hexLoc, VertexDirection vertexDir) {
+    private void getPlayers(int playerIndex, HashSet<Integer> players, HexLocation hexLoc, VertexDirection vertexDir) {
         final VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir).getNormalizedLocation();
         final Vertex vertex = vertices.get(vertexLoc);
-        if(vertex.hasBuilding() && vertex.getPlayerID() != playerID) {
-            players.add(vertex.getPlayerID());
+        if(vertex.hasBuilding() && vertex.getPlayerIndex() != playerIndex) {
+            players.add(vertex.getPlayerIndex());
         }
     }
 
@@ -1579,8 +1579,8 @@ public final class Map implements IMap, JsonSerializable{
         }
     }
 
-    private int getLongestRoadSize(int size, int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> oldConnectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private int getLongestRoadSize(int size, int playerIndex, EdgeLocation edgeLoc, ArrayList<EdgeLocation> oldConnectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert oldConnectingRoads != null;
 
@@ -1591,11 +1591,11 @@ public final class Map implements IMap, JsonSerializable{
         } else {
             edge.getRoad().setVisited(true);
             size++;
-            final ArrayList<EdgeLocation> connectingRoads = getConnectingRoads(playerID, edgeLoc);
+            final ArrayList<EdgeLocation> connectingRoads = getConnectingRoads(playerIndex, edgeLoc);
             int oldSize = size;
             for(EdgeLocation road : connectingRoads) {
                 if(!oldConnectedToNew(oldConnectingRoads, road)) {
-                    int newSize = getLongestRoadSize(oldSize, playerID, road, connectingRoads);
+                    int newSize = getLongestRoadSize(oldSize, playerIndex, road, connectingRoads);
                     if (newSize > size) {
                         size = newSize;
                     }
@@ -1613,142 +1613,142 @@ public final class Map implements IMap, JsonSerializable{
         return oldConnectingRoads.contains(road);
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoads(int playerID, EdgeLocation edgeLoc) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoads(int playerIndex, EdgeLocation edgeLoc) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
 
         edgeLoc = edgeLoc.getNormalizedLocation();
         ArrayList<EdgeLocation> connectingRoads = new ArrayList<>();
-        connectingRoads = getConnectingRoadsForEdge(playerID, edgeLoc, connectingRoads);
+        connectingRoads = getConnectingRoadsForEdge(playerIndex, edgeLoc, connectingRoads);
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForEdge(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdge(int playerIndex, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert connectingRoads != null;
 
         edgeLoc = edgeLoc.getNormalizedLocation();
         if(edgeLoc.getDir() == EdgeDirection.NorthWest) {
-            connectingRoads = getConnectingRoadsForEdgeNorthWest(playerID, edgeLoc, connectingRoads);
+            connectingRoads = getConnectingRoadsForEdgeNorthWest(playerIndex, edgeLoc, connectingRoads);
         } else if(edgeLoc.getDir() == EdgeDirection.North) {
-            connectingRoads = getConnectingRoadsForEdgeNorth(playerID, edgeLoc, connectingRoads);
+            connectingRoads = getConnectingRoadsForEdgeNorth(playerIndex, edgeLoc, connectingRoads);
         } else {
-            connectingRoads = getConnectingRoadsForEdgeNorthEast(playerID, edgeLoc, connectingRoads);
+            connectingRoads = getConnectingRoadsForEdgeNorthEast(playerIndex, edgeLoc, connectingRoads);
         }
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorthWest(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorthWest(int playerIndex, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
 
         final HexLocation lowerLeftHexLoc = edgeLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthWest);
         final VertexLocation lowerLeftVertexLoc = new VertexLocation(lowerLeftHexLoc, VertexDirection.NorthEast);
         final VertexLocation upperRightVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthWest);
-        connectingRoads = getConnectingRoadsForEdge(playerID, lowerLeftVertexLoc, upperRightVertexLoc, connectingRoads);
+        connectingRoads = getConnectingRoadsForEdge(playerIndex, lowerLeftVertexLoc, upperRightVertexLoc, connectingRoads);
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorth(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorth(int playerIndex, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
 
         final VertexLocation leftVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthWest);
         final VertexLocation rightVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthEast);
-        connectingRoads = getConnectingRoadsForEdge(playerID, leftVertexLoc, rightVertexLoc, connectingRoads);
+        connectingRoads = getConnectingRoadsForEdge(playerIndex, leftVertexLoc, rightVertexLoc, connectingRoads);
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorthEast(int playerID, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdgeNorthEast(int playerIndex, EdgeLocation edgeLoc, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
 
         final HexLocation lowerRightHexLoc = edgeLoc.getHexLoc().getNeighborLoc(EdgeDirection.SouthEast);
         final VertexLocation lowerRightVertexLoc = new VertexLocation(lowerRightHexLoc, VertexDirection.NorthWest);
         final VertexLocation upperLeftVertexLoc = new VertexLocation(edgeLoc.getHexLoc(), VertexDirection.NorthEast);
-        connectingRoads =  getConnectingRoadsForEdge(playerID, lowerRightVertexLoc, upperLeftVertexLoc, connectingRoads);
+        connectingRoads =  getConnectingRoadsForEdge(playerIndex, lowerRightVertexLoc, upperLeftVertexLoc, connectingRoads);
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForEdge(int playerID, VertexLocation vertexLocOne, VertexLocation vertexLocTwo, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForEdge(int playerIndex, VertexLocation vertexLocOne, VertexLocation vertexLocTwo, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLocOne != null;
         assert vertexLocTwo != null;
         assert connectingRoads != null;
         assert !vertexLocOne.equals(vertexLocTwo);
 
         Vertex vertex = vertices.get(vertexLocOne);
-        if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
-            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocOne, connectingRoads);
+        if(vertex != null && vertex.hasBuilding() && vertex.getPlayerIndex() == playerIndex) {
+            connectingRoads = getConnectingRoadsForVertex(playerIndex, vertexLocOne, connectingRoads);
         } else if(vertex != null && !vertex.hasBuilding()) {
-            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocOne, connectingRoads);
+            connectingRoads = getConnectingRoadsForVertex(playerIndex, vertexLocOne, connectingRoads);
         }
         vertex = vertices.get(vertexLocTwo);
-        if(vertex != null && vertex.hasBuilding() && vertex.getPlayerID() == playerID) {
-            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocTwo, connectingRoads);
+        if(vertex != null && vertex.hasBuilding() && vertex.getPlayerIndex() == playerIndex) {
+            connectingRoads = getConnectingRoadsForVertex(playerIndex, vertexLocTwo, connectingRoads);
         } else if(vertex != null && !vertex.hasBuilding()) {
-            connectingRoads = getConnectingRoadsForVertex(playerID, vertexLocTwo, connectingRoads);
+            connectingRoads = getConnectingRoadsForVertex(playerIndex, vertexLocTwo, connectingRoads);
         }
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForVertex(int playerID, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForVertex(int playerIndex, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert connectingRoads != null;
 
         vertexLoc = vertexLoc.getNormalizedLocation();
         if(vertexLoc.getDir() == VertexDirection.NorthWest) {
-            connectingRoads = getConnectingRoadsForVertexNorthWest(playerID, vertexLoc, connectingRoads);
+            connectingRoads = getConnectingRoadsForVertexNorthWest(playerIndex, vertexLoc, connectingRoads);
         } else {
-            connectingRoads = getConnectingRoadsForVertexNorthEast(playerID, vertexLoc, connectingRoads);
+            connectingRoads = getConnectingRoadsForVertexNorthEast(playerIndex, vertexLoc, connectingRoads);
         }
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForVertexNorthWest(int playerID, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForVertexNorthWest(int playerIndex, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert connectingRoads != null;
 
         final HexLocation upperLeftHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthWest);
         final EdgeLocation upperLeftEdgeLoc = new EdgeLocation(upperLeftHexLoc, EdgeDirection.NorthEast);
         final Edge upperLeft = edges.get(upperLeftEdgeLoc);
-        if(upperLeft != null && upperLeft.hasRoad() && upperLeft.getRoad().getPlayerID() == playerID) {
+        if(upperLeft != null && upperLeft.hasRoad() && upperLeft.getRoad().getPlayerIndex() == playerIndex) {
             connectingRoads.add(upperLeftEdgeLoc);
         }
         final EdgeLocation lowerLeftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.NorthWest);
         final Edge lowerLeft = edges.get(lowerLeftEdgeLoc);
-        if(lowerLeft != null && lowerLeft.hasRoad() && lowerLeft.getRoad().getPlayerID() == playerID) {
+        if(lowerLeft != null && lowerLeft.hasRoad() && lowerLeft.getRoad().getPlayerIndex() == playerIndex) {
             connectingRoads.add(lowerLeftEdgeLoc);
         }
         final EdgeLocation rightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
         final Edge right = edges.get(rightEdgeLoc);
-        if(right != null && right.hasRoad() && right.getRoad().getPlayerID() == playerID) {
+        if(right != null && right.hasRoad() && right.getRoad().getPlayerIndex() == playerIndex) {
             connectingRoads.add(rightEdgeLoc);
         }
         return connectingRoads;
     }
 
-    private ArrayList<EdgeLocation> getConnectingRoadsForVertexNorthEast(int playerID, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
-        assert playerID >= 0 && playerID <= 3;
+    private ArrayList<EdgeLocation> getConnectingRoadsForVertexNorthEast(int playerIndex, VertexLocation vertexLoc, ArrayList<EdgeLocation> connectingRoads) {
+        assert playerIndex >= 0 && playerIndex <= 3;
         assert vertexLoc != null;
         assert connectingRoads != null;
 
         final HexLocation upperRightHexLoc = vertexLoc.getHexLoc().getNeighborLoc(EdgeDirection.NorthEast);
         final EdgeLocation upperRightEdgeLoc = new EdgeLocation(upperRightHexLoc, EdgeDirection.NorthWest);
         final Edge upperRight = edges.get(upperRightEdgeLoc);
-        if(upperRight != null && upperRight.hasRoad() && upperRight.getRoad().getPlayerID() == playerID) {
+        if(upperRight != null && upperRight.hasRoad() && upperRight.getRoad().getPlayerIndex() == playerIndex) {
             connectingRoads.add(upperRightEdgeLoc);
         }
         final EdgeLocation lowerRightEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.NorthEast);
         final Edge lowerRight = edges.get(lowerRightEdgeLoc);
-        if(lowerRight != null && lowerRight.hasRoad() && lowerRight.getRoad().getPlayerID() == playerID) {
+        if(lowerRight != null && lowerRight.hasRoad() && lowerRight.getRoad().getPlayerIndex() == playerIndex) {
             connectingRoads.add(lowerRightEdgeLoc);
         }
         final EdgeLocation leftEdgeLoc = new EdgeLocation(vertexLoc.getHexLoc(), EdgeDirection.North);
         final Edge left = edges.get(leftEdgeLoc);
-        if(left != null && left.hasRoad() && left.getRoad().getPlayerID() == playerID) {
+        if(left != null && left.hasRoad() && left.getRoad().getPlayerIndex() == playerIndex) {
             connectingRoads.add(leftEdgeLoc);
         }
         return connectingRoads;

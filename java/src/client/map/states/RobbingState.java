@@ -1,7 +1,6 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapController;
 import shared.definitions.PieceType;
 import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
@@ -24,11 +23,14 @@ public class RobbingState extends MapState {
         return instance;
     }
 
+    private HexLocation robbingLoc;
+
     /**
      * Constructor
      */
     public RobbingState(){
         super();
+        robbingLoc = null;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class RobbingState extends MapState {
     @Override
     public boolean canPlaceRobber(HexLocation hexLoc) {
         hexLoc = getModelHexLocation(hexLoc);
-        return facade.canMoveRobber(userCookie.getPlayerId(), hexLoc);
+        return facade.canMoveRobber(userCookie.getPlayerIndex(), hexLoc);
     }
 
     @Override
@@ -63,9 +65,18 @@ public class RobbingState extends MapState {
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        mapController.getView().placeRobber(hexLoc);
-        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerId(), getModelHexLocation(hexLoc)));
-        mapController.getRobView().showModal();
+        robbingLoc = hexLoc;
+        hexLoc = getModelHexLocation(hexLoc);
+        mapController.getView().placeRobber(robbingLoc);
+        RobPlayerInfo[] rpi = facade.moveRobber(userCookie.getPlayerIndex(), hexLoc);
+        if(rpi != null && rpi.length > 0) {
+            mapController.getRobView().setPlayers(rpi);
+            mapController.getRobView().showModal();
+        } else {
+            RobPlayerInfo self = new RobPlayerInfo();
+            self.setPlayerIndex(userCookie.getPlayerIndex());
+            robPlayer(self);
+        }
     }
 
     @Override
@@ -97,6 +108,7 @@ public class RobbingState extends MapState {
 
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        facade.rob(userCookie.getPlayerId(), victim);
+        facade.rob(userCookie.getPlayerIndex(), victim, robbingLoc);
+        robbingLoc = null;
     }
 }

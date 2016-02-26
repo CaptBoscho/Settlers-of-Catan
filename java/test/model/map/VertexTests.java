@@ -30,7 +30,7 @@ public class VertexTests {
         assertNull(v.getCity());
         assertNull(v.getPort());
         assertNull(v.getSettlement());
-        assertEquals(-1, v.getPlayerID());
+        assertEquals(-1, v.getPlayerIndex());
 
         // since it's empty, it should be buildable
         assertTrue(v.canBuildSettlement());
@@ -44,7 +44,7 @@ public class VertexTests {
         Vertex v = new Vertex(new VertexLocation(new HexLocation(2, 2), VertexDirection.SouthEast));
         v.buildSettlement(new Settlement(3));
 
-        assertEquals(3, v.getPlayerID());
+        assertEquals(3, v.getPlayerIndex());
 
         assertTrue(v.hasSettlement());
         assertFalse(v.canBuildSettlement());
@@ -60,7 +60,7 @@ public class VertexTests {
         v.buildSettlement(new Settlement(3));
         v.buildCity(new City(3));
 
-        assertEquals(3, v.getPlayerID());
+        assertEquals(3, v.getPlayerIndex());
 
         // should switch from settlement to city
         assertFalse(v.hasSettlement());
@@ -94,7 +94,7 @@ public class VertexTests {
         Vertex v = new Vertex(new VertexLocation(new HexLocation(2, 2), VertexDirection.SouthEast));
         v.setPort(new Port(PortType.THREE, new VertexLocation(new HexLocation(2, 2), VertexDirection.SouthEast)));
 
-        assertEquals(-1, v.getPlayerID()); // vertex is owned by no-one
+        assertEquals(-1, v.getPlayerIndex()); // vertex is owned by no-one
         assertTrue(v.hasPort());
         assertNotNull(v.getPort());
     }

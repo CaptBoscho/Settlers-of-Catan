@@ -7,18 +7,18 @@ package shared.model.structures;
  */
 public final class Road {
 
-    private int playerID;
+    private int playerIndex;
     private boolean visited;
 
-    public Road(int playerID) {
-        assert playerID >= 0;
+    public Road(int playerIndex) {
+        assert playerIndex >= 0;
 
-        this.playerID = playerID;
+        this.playerIndex = playerIndex;
         visited = false;
     }
 
-    public int getPlayerID() {
-        return playerID;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
     public boolean isVisited() {
