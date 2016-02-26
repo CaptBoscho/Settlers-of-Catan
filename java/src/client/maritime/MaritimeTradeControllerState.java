@@ -5,8 +5,12 @@ import client.services.IServer;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
 import client.services.UserCookie;
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.dto.MaritimeTradeDTO;
+import shared.exceptions.InvalidPlayerException;
+
+import java.util.Set;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 2/20/2016.
@@ -14,6 +18,10 @@ import shared.dto.MaritimeTradeDTO;
  * Base class for MaritimeTrade Controller State
  */
 public class MaritimeTradeControllerState {
+    private final static int RESOURCE_PORT_TRADE = 2;
+    private final static int GENERIC_PORT_TRADE = 3;
+    private final static int DEFAULT_TRADE = 4;
+
     private IMaritimeTradeView view;
     private IMaritimeTradeOverlay overlay;
     private ResourceType getResource;
@@ -38,7 +46,10 @@ public class MaritimeTradeControllerState {
     }
 
     public void initFromModel(){
-        if(facade.getCurrentTurn()== userCookie.getPlayerId()){
+        int index = userCookie.getPlayerIndex();
+
+        //Enable/Disable button based on user's turn
+        if(facade.getCurrentTurn() == index){
             view.enableMaritimeTrade(true);
         }
         else{
@@ -55,10 +66,14 @@ public class MaritimeTradeControllerState {
      * Make (finalize) an existing maritime trade
      */
     public void makeTrade() {
+        int index = userCookie.getPlayerIndex();
+
         try {
-            server.maritimeTrade(new MaritimeTradeDTO(userCookie.getPlayerId(), 4,
+            server.maritimeTrade(new MaritimeTradeDTO(index, getTradeRatio(),
                     getResource.toString(), giveResource.toString()));
         } catch (MissingUserCookieException e) {
+            this.overlay.setStateMessage("Trade failed");
+        } catch (InvalidPlayerException e) {
             this.overlay.setStateMessage("Trade failed");
         }
     }
@@ -106,5 +121,28 @@ public class MaritimeTradeControllerState {
      */
     public void update() {
         initFromModel();
+    }
+
+    //Helper Methods
+    private int getTradeRatio() throws InvalidPlayerException {
+        int index = userCookie.getPlayerIndex();
+        Set<PortType> ports = facade.maritimeTradeOptions(index);
+
+        //Check for Resource Ports
+        for (PortType port : ports) {
+            if(port.toString() == giveResource.toString()){
+                return RESOURCE_PORT_TRADE;
+            }
+        }
+
+        //Check for 3-1 Ports
+        for (PortType port : ports) {
+            if(port == PortType.THREE){
+                return GENERIC_PORT_TRADE;
+            }
+        }
+
+        //Last use default of 4-1
+        return DEFAULT_TRADE;
     }
 }

@@ -20,11 +20,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public MaritimeTradeController(IMaritimeTradeView tradeView, IMaritimeTradeOverlay tradeOverlay) {
 		super(tradeView);
 		setTradeOverlay(tradeOverlay);
+        tradeView.enableMaritimeTrade(false);
 
 		this.facade = Facade.getInstance();
-
-		createState(facade.getPhase());
-		state.initFromModel();
 	}
 	
 	public IMaritimeTradeView getTradeView() {
@@ -88,8 +86,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
+		//Update the state
 		createState(facade.getPhase());
-		state.update();
+		//Initialize the state
+		state.initFromModel();
 	}
 
 	/**
