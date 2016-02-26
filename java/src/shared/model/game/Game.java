@@ -510,19 +510,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert edge1 != null;
         assert edge1.getHexLoc() != null;
-        assert edge1.getHexLoc().getX() >= 0;
-        assert edge1.getHexLoc().getY() >= 0;
         assert edge2 != null;
         assert edge2.getHexLoc() != null;
-        assert edge2.getHexLoc().getX() >= 0;
-        assert edge2.getHexLoc().getY() >= 0;
         assert !edge1.equals(edge2);
 
-        if(canUseRoadBuilder(playerID)){
-            playerManager.useRoadBuilder(playerID);
-            buildRoad(playerID, edge1);
-            buildRoad(playerID, edge2);
-        }
+        playerManager.useRoadBuilder(playerID);
+        buildRoad(playerID, edge1);
+        buildRoad(playerID, edge2);
     }
 
     /**
@@ -674,9 +668,19 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
+    @Override
+    public boolean canPlaceRoadBuildingCard(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
+        assert playerID >= 0;
+        assert edge != null;
+        assert edge.getHexLoc() != null;
+        assert edge.getDir() != null;
+
+        return (map.canBuildRoad(playerID, edge));
+    }
+
     /**
      * returns boolean value denoting if the player can build a
-     * road (just checks cards really)
+     * road
      *
      * @param playerID
      * @return
@@ -689,8 +693,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert edge.getDir() != null;
 
         return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID));
-       // }
-       // return false;
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
@@ -1095,8 +1097,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             if(!this.turnTracker.canPlay()){return;}
 
             this.map.deleteRoad(playerID, edge);
-        }catch(InvalidLocationException e){}
-        catch(StructureException e){}
+        }catch(InvalidLocationException e){
+            e.printStackTrace();
+        }
+        catch(StructureException e){
+            e.printStackTrace();
+        }
     }
 
     public void cancelRoadBuildingCard(int playerID) {

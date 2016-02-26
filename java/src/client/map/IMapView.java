@@ -48,6 +48,16 @@ public interface IMapView extends IView {
 	 *            The road's color
 	 */
 	void placeRoad(EdgeLocation edgeLoc, CatanColor color);
+
+	/**
+	 * This method deletes a road on the map.
+	 *
+	 * @param edgeLoc
+	 *            The road's location
+	 * @param color
+	 *            The road's color
+	 */
+	void deleteRoad(EdgeLocation edgeLoc, CatanColor color);
 	
 	/**
 	 * This method places a settlement on the map.

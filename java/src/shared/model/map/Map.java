@@ -633,16 +633,14 @@ public final class Map implements IMap, JsonSerializable{
         }
         if(edge.getRoad() == null) {
             throw new StructureException("Edge doesn't have a road to delete");
-        } else {
-            edge.setRoad(null);
-            ArrayList<Edge> roads = this.roads.get(playerIndex);
-            for(Edge road : roads) {
-                if(road.getEdgeLoc().equals(edge.getEdgeLoc())) {
-                    roads.remove(road);
-                }
+        }
+        edge.setRoad(null);
+        ArrayList<Edge> roads = this.roads.get(playerIndex);
+        for(int i=0; i<roads.size(); i++) {
+            if (roads.get(i).getEdgeLoc().equals(edge.getEdgeLoc())) {
+                roads.remove(i);
             }
         }
-
     }
 
     /*===========================================

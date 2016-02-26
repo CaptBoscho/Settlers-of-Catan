@@ -436,6 +436,11 @@ public class MapComponent extends JComponent {
 		roads.put(edgeLoc.getNormalizedLocation(), color);
 		this.repaint();
 	}
+
+	public void deleteRoad(EdgeLocation edgeLoc, CatanColor color) {
+        roads.remove(edgeLoc);
+        this.repaint();
+    }
 	
 	public void placeSettlement(VertexLocation vertLoc, CatanColor color) {
 		final VertexLocation normVertLoc = vertLoc.getNormalizedLocation();

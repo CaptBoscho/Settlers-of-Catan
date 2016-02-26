@@ -213,6 +213,17 @@ public interface IGame {
     void rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
 
     /**
+     * Checks to see if a road can be built on the map for the road building card
+     * @param playerID int
+     * @param edge EdgeLocation
+     * @return boolean
+     * @throws InvalidPlayerException
+     * @throws InvalidLocationException
+     * @throws PlayerExistsException
+     */
+    boolean canPlaceRoadBuildingCard(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
+
+    /**
      * returns boolean value denoting if the player can build a
      * road (just checks cards really)
      * @param playerID
