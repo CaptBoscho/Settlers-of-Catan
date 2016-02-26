@@ -6,10 +6,7 @@ import javax.swing.*;
 
 import client.base.*;
 import client.data.*;
-import client.facade.Facade;
-import client.services.UserCookie;
 import shared.definitions.*;
-import shared.exceptions.PlayerExistsException;
 import shared.locations.*;
 
 /**
@@ -62,6 +59,11 @@ public final class MapView extends PanelView implements IMapView {
 	{
 		map.placeRoad(edgeLoc, color);
 	}
+
+    @Override
+    public void deleteRoad(EdgeLocation edgeLoc, CatanColor color) {
+        map.deleteRoad(edgeLoc, color);
+    }
 	
 	@Override
 	public void placeSettlement(VertexLocation vertLoc, CatanColor color)

@@ -368,23 +368,15 @@ public class Facade {
         return this.game.canPlaceRobber(id, hexloc);
     }
 
-    //TODO talk to server
-    public void useRobber(int robber, HexLocation hexloc, int robbed){
-        try {
-            RobPlayerDTO dto = new RobPlayerDTO(robber, robbed, hexloc);
-            ServerProxy.getInstance().robPlayer(dto);
-        } catch(MissingUserCookieException e){}
-    }
-
     public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
         try{
             Set<Integer> ids = this.game.placeRobber(id, hexloc);
             List<Player> players = this.game.getPlayers();
-            RobPlayerInfo[] robbed = new RobPlayerInfo[4];
+            RobPlayerInfo[] robbed = new RobPlayerInfo[ids.size()];
             int i = 0;
 
             for(Player p: players){
-                if(ids.contains(p.getId())){
+                if(ids.contains(p.getPlayerIndex())){
                     RobPlayerInfo rbi = new RobPlayerInfo();
                     rbi.setColor(p.getColor());
                     rbi.setId(p.getId());
@@ -403,17 +395,16 @@ public class Facade {
         return null;
     }
 
-    public void rob(int playerID, RobPlayerInfo victim) {
+    public void rob(int playerID, RobPlayerInfo victim, HexLocation hexLoc) {
         try {
-
-            this.game.rob(playerID, victim.getId());
-
-        } catch(InvalidTypeException | MoveRobberException | InsufficientResourcesException | PlayerExistsException ignored){
-
+            RobPlayerDTO dto = new RobPlayerDTO(playerID, victim.getPlayerIndex(), hexLoc);
+            ServerProxy.getInstance().robPlayer(dto);
+        }
+        catch(MissingUserCookieException e){
+            e.printStackTrace();
         }
     }
 
-    //TODO talk to server
     public Set<Integer> playSoldier(int playerID, HexLocation hexloc, int robbed){
         try{
 
@@ -544,6 +535,15 @@ public class Facade {
         }catch(PlayerExistsException e){return false;}
     }
 
+    public boolean canPlaceRoadBuildingCard(int playerIndex, EdgeLocation edgeLoc){
+        try {
+            return this.game.canPlaceRoadBuildingCard(playerIndex, edgeLoc);
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean canUseRoadBuilder(int playerID){
         try {
             return this.game.canUseRoadBuilder(playerID);
@@ -573,11 +573,6 @@ public class Facade {
         this.game.buildFirstRoad(playerID, edgeloc);
     }
 
-    //TODO talk to server
-    public void cancelSoldierCard(int playerID){
-        this.game.cancelSoldierCard(playerID);
-    }
-
     /**
      * DO NOT TALK TO SERVER ON THIS METHOD.
      * @param playerID
@@ -585,11 +580,6 @@ public class Facade {
      */
     public void deleteRoad(int playerID, EdgeLocation road){
         this.game.deleteRoad(playerID, road);
-    }
-
-    //TODO talk to server
-    public void cancelRoadBuildingCard(int playerID){
-        this.game.cancelRoadBuildingCard(playerID);
     }
 
 
@@ -601,8 +591,15 @@ public class Facade {
     }
 
     //TODO to server
-    public void playRoadBuildingCard(int playerID, EdgeLocation one, EdgeLocation two){
-        
+    public void playRoadBuildingCard(int playerIndex, EdgeLocation one, EdgeLocation two){
+        one = getServerEdgeLocation(one);
+        two = getServerEdgeLocation(two);
+        RoadBuildingDTO dto = new RoadBuildingDTO(playerIndex, one, two);
+        try {
+            ServerProxy.getInstance().playRoadBuildingCard(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

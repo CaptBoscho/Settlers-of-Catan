@@ -163,7 +163,7 @@ public class ServerTest {
 
     @Test
     public void testBadPlayRoadBuildingCard() {
-        final BuildRoadDTO dto = new BuildRoadDTO(2, new EdgeLocation(new HexLocation(3, 4), EdgeDirection.South), true);
+        final RoadBuildingDTO dto = new RoadBuildingDTO(2, new EdgeLocation(new HexLocation(3, 4), EdgeDirection.South), new EdgeLocation(new HexLocation(3, 4), EdgeDirection.North));
         try {
             server.playRoadBuildingCard(dto);
             fail("MissingUserCookieException should be thrown");

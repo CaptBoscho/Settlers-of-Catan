@@ -23,11 +23,14 @@ public class RobbingState extends MapState {
         return instance;
     }
 
+    private HexLocation robbingLoc;
+
     /**
      * Constructor
      */
     public RobbingState(){
         super();
+        robbingLoc = null;
     }
 
     @Override
@@ -62,9 +65,22 @@ public class RobbingState extends MapState {
 
     @Override
     public void placeRobber(HexLocation hexLoc) {
-        mapController.getView().placeRobber(hexLoc);
-        mapController.getRobView().setPlayers(facade.moveRobber(userCookie.getPlayerIndex(), getModelHexLocation(hexLoc)));
-        mapController.getRobView().showModal();
+        robbingLoc = hexLoc;
+        hexLoc = getModelHexLocation(hexLoc);
+        mapController.getView().placeRobber(robbingLoc);
+        RobPlayerInfo[] rpi = facade.moveRobber(userCookie.getPlayerIndex(), hexLoc);
+        if(rpi != null && rpi.length > 1) {
+            mapController.getRobView().setPlayers(rpi);
+            mapController.getRobView().showModal();
+        } else {
+            RobPlayerInfo victim = new RobPlayerInfo();
+            if(rpi.length == 1) {
+                victim.setPlayerIndex(rpi[0].getPlayerIndex());
+            } else {
+                victim.setPlayerIndex(userCookie.getPlayerIndex());
+            }
+            robPlayer(victim);
+        }
     }
 
     @Override
@@ -83,19 +99,14 @@ public class RobbingState extends MapState {
     public void cancelMove(){}
 
     @Override
-    public void playSoldierCard() {
-        try {
-            mapController.getView().startDrop(PieceType.ROBBER, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), true);
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
-    }
+    public void playSoldierCard() {}
 
     @Override
     public void playRoadBuildingCard(){}
 
     @Override
     public void robPlayer(RobPlayerInfo victim) {
-        facade.rob(userCookie.getPlayerIndex(), victim);
+        facade.rob(userCookie.getPlayerIndex(), victim, robbingLoc);
+        robbingLoc = null;
     }
 }

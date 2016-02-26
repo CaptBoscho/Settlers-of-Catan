@@ -27,6 +27,9 @@ public class MapController extends Controller implements IMapController, Observe
     private DiscardingState discardingState;
     private RobbingState robbingState;
     private PlayingState playingState;
+    private boolean firstRound;
+    private boolean secondRound;
+    private boolean robbingRound;
 	
 	public MapController(IMapView view, IRobView robView) {
 		super(view);
@@ -40,6 +43,9 @@ public class MapController extends Controller implements IMapController, Observe
         robbingState = RobbingState.getInstance();
         playingState = PlayingState.getInstance();
         facade.addObserver(this);
+        firstRound = true;
+        secondRound = true;
+        robbingRound = true;
 	}
 
     public void initialize() {
@@ -68,6 +74,21 @@ public class MapController extends Controller implements IMapController, Observe
         }
         mapState.setController(this);
         mapState.initFromModel();
+        if(facade.getCurrentTurn() != userCookie.getPlayerIndex()) {
+            robbingRound = true;
+            firstRound = true;
+            secondRound = true;
+        }
+        if(state == TurnTracker.Phase.ROBBING && facade.getCurrentTurn() == userCookie.getPlayerIndex() && robbingRound) {
+            mapState.startMove(PieceType.ROBBER, true, true);
+            robbingRound = false;
+        } else if(state == TurnTracker.Phase.SETUPONE && facade.getCurrentTurn() == userCookie.getPlayerIndex() && firstRound) {
+            mapState.startMove(PieceType.SETTLEMENT, true, true);
+            firstRound = false;
+        } else if(state == TurnTracker.Phase.SETUPTWO && facade.getCurrentTurn() == userCookie.getPlayerIndex() && secondRound) {
+            mapState.startMove(PieceType.SETTLEMENT, true, true);
+            secondRound = false;
+        }
     }
 	
 	public IMapView getView() {

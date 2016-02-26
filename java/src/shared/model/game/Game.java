@@ -136,7 +136,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param players
      * @return Id of first player
      */
-    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) throws FailedToRandomizeException {
+    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) {
         assert players != null;
         assert this.playerManager != null;
         assert this.map != null;
@@ -510,15 +510,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert edge1 != null;
         assert edge1.getHexLoc() != null;
-        assert edge1.getHexLoc().getX() >= 0;
-        assert edge1.getHexLoc().getY() >= 0;
         assert edge2 != null;
         assert edge2.getHexLoc() != null;
-        assert edge2.getHexLoc().getX() >= 0;
-        assert edge2.getHexLoc().getY() >= 0;
         assert !edge1.equals(edge2);
 
-        if(canUseRoadBuilder(playerID)){
+        if(canUseRoadBuilder(playerID)) {
             playerManager.useRoadBuilder(playerID);
             buildRoad(playerID, edge1);
             buildRoad(playerID, edge2);
@@ -674,9 +670,19 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
+    @Override
+    public boolean canPlaceRoadBuildingCard(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
+        assert playerID >= 0;
+        assert edge != null;
+        assert edge.getHexLoc() != null;
+        assert edge.getDir() != null;
+
+        return (map.canBuildRoad(playerID, edge));
+    }
+
     /**
      * returns boolean value denoting if the player can build a
-     * road (just checks cards really)
+     * road
      *
      * @param playerID
      * @return
@@ -686,13 +692,9 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert edge != null;
         assert edge.getHexLoc() != null;
-        assert edge.getHexLoc().getX() >= 0;
-        assert edge.getHexLoc().getY() >= 0;
         assert edge.getDir() != null;
 
         return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID));
-       // }
-       // return false;
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
@@ -755,8 +757,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert edge != null;
         assert edge.getHexLoc() != null;
-        assert edge.getHexLoc().getX() >= 0;
-        assert edge.getHexLoc().getY() >= 0;
         assert edge.getDir() != null;
         assert this.map != null;
         assert this.playerManager != null;
@@ -785,8 +785,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert vertex != null;
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
-        assert vertex.getHexLoc().getX() >= 0;
-        assert vertex.getHexLoc().getY() >= 0;
         assert this.map != null;
         assert this.playerManager != null;
         assert this.turnTracker != null;
@@ -806,8 +804,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert vertex != null;
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
-        assert vertex.getHexLoc().getX() >= 0;
-        assert vertex.getHexLoc().getY() >= 0;
         assert this.map != null;
         assert this.playerManager != null;
 
@@ -829,8 +825,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert vertex != null;
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
-        assert vertex.getHexLoc().getX() >= 0;
-        assert vertex.getHexLoc().getY() >= 0;
 
         return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID) && turnTracker.canPlay(); //&& turnTracker.canBuild(playerID);
     }
@@ -846,8 +840,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert vertex != null;
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
-        assert vertex.getHexLoc().getX() >= 0;
-        assert vertex.getHexLoc().getY() >= 0;
 
         if(canBuildCity(playerID, vertex)) {
             map.buildCity(playerID, vertex);
@@ -1107,8 +1099,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             if(!this.turnTracker.canPlay()){return;}
 
             this.map.deleteRoad(playerID, edge);
-        }catch(InvalidLocationException e){}
-        catch(StructureException e){}
+        }catch(InvalidLocationException e){
+            e.printStackTrace();
+        }
+        catch(StructureException e){
+            e.printStackTrace();
+        }
     }
 
     public void cancelRoadBuildingCard(int playerID) {
@@ -1121,22 +1117,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public Player getPlayerById(int id) throws PlayerExistsException {
         return playerManager.getPlayerByID(id);
-    }
-
-    /*======================================================
-    * Private - Helper Methods
-    * ======================================================*/
-    /**
-     * Randomize the players' turn order
-     */
-    private void randomizePlayers() {
-        assert this.playerManager != null;
-
-        try{
-            playerManager.randomizePlayers();
-        } catch(Exception e) {
-            //throw new
-        }
     }
 
     @Override

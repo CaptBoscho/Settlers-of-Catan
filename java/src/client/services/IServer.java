@@ -166,7 +166,7 @@ public interface IServer {
      * @param dto The transport object that contains the information required to play the Road Building card
      * @return The current state of the game
      */
-    public ClientModel playRoadBuildingCard(BuildRoadDTO dto) throws MissingUserCookieException;
+    public ClientModel playRoadBuildingCard(RoadBuildingDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob

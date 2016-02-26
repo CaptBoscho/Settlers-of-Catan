@@ -34,7 +34,7 @@ public interface IGame {
      * @param players
      * @return
      */
-    public int initializeGame(List<Player> players, boolean randomhex, boolean randomchits, boolean randomports) throws FailedToRandomizeException;
+    public int initializeGame(List<Player> players, boolean randomhex, boolean randomchits, boolean randomports);
 
     /**
      * returns the playerID for whose turn it is
@@ -211,6 +211,17 @@ public interface IGame {
     Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException;
 
     void rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
+
+    /**
+     * Checks to see if a road can be built on the map for the road building card
+     * @param playerID int
+     * @param edge EdgeLocation
+     * @return boolean
+     * @throws InvalidPlayerException
+     * @throws InvalidLocationException
+     * @throws PlayerExistsException
+     */
+    boolean canPlaceRoadBuildingCard(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
 
     /**
      * returns boolean value denoting if the player can build a
