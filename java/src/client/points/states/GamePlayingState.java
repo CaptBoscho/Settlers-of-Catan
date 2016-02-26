@@ -32,8 +32,8 @@ public class GamePlayingState extends PointsControllerState {
 
     @Override
     public void update(){
-        for(PlayerInfo playerInfo : facade.getPlayers()){
-            view.setPoints(playerInfo.getVictoryPoints());
-        }
+        PlayerInfo playerInfo = userCookie.getPlayerInfo();
+        int vicPoints = playerInfo.getVictoryPoints();
+        view.setPoints(vicPoints);
     }
 }
