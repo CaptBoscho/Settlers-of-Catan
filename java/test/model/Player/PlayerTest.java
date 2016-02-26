@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
-import shared.exceptions.FailedToRandomizeException;
 import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.InvalidTypeException;
@@ -26,7 +25,7 @@ public class PlayerTest {
     private PlayerManager pm;
 
     @Before
-    public void setUp() throws FailedToRandomizeException {
+    public void setUp() {
         final List<Player> players = new ArrayList<>();
 
         try {
