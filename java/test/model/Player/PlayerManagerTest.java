@@ -53,24 +53,6 @@ public class PlayerManagerTest {
     }
 
     @Test
-    public void testRandomizePlayers() throws Exception {
-        final List<Player> players = new ArrayList<>(pm.getPlayers());
-
-        int counter = 0;
-        while(!wasShuffled(players)){
-            pm.randomizePlayers();
-            counter++;
-
-            //Just making sure we don't loop forever
-            if(counter == 9)
-                break;
-        }
-
-        //Make sure we didn't just exit because it wasn't shuffling
-        assertTrue(counter != 9);
-    }
-
-    @Test
     public void testGetPlayerByID() throws Exception {
         final Player p1 = pm.getPlayerByIndex(0);
         assertEquals(p1, pm.getPlayerByID(p1.getId()));
