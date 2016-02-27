@@ -32,6 +32,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private int sendwheat = 0;
 	private int sendore = 0;
 
+	private int receivewood = 0;
+	private int receivebrick = 0;
+	private int receivesheep = 0;
+	private int receivewheat = 0;
+	private int receiveore = 0;
+
+	//False means sending, true means receiving
+	private boolean woodStatus = false;
+	private boolean brickStatus = false;
+	private boolean sheepStatus = false;
+	private boolean wheatStatus = false;
+	private boolean oreStatus = false;
+
+	private int tradePartner = -1;
+
 	/**
 	 * DomesticTradeController constructor
 	 * 
@@ -60,7 +75,27 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		wheatcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerIndex(), ResourceType.WHEAT);
 		orecount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerIndex(), ResourceType.ORE);
 
-		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
+		sendwood =0;
+		sendbrick = 0;
+		sendsheep = 0;
+		sendwheat = 0;
+		sendore = 0;
+
+		receivewood = 0;
+		receivebrick = 0;
+		receivesheep = 0;
+		receivewheat = 0;
+		receiveore = 0;
+
+		woodStatus = false;
+		brickStatus = false;
+		sheepStatus = false;
+		wheatStatus = false;
+		oreStatus = false;
+
+		tradePartner = -1;
+
+		getTradeOverlay().setTradeEnabled(false);
 	}
 	
 	public IDomesticTradeView getTradeView() {
@@ -95,41 +130,120 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void startTrade() {
 
+		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
 		getTradeOverlay().showModal();
 		getTradeOverlay().setPlayerSelectionEnabled(true);
 	}
 
 	@Override
 	public void decreaseResourceAmount(ResourceType resource) {
-
+		switch(resource){
+			case BRICK:
+				if(brickStatus){
+					receivebrick--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, true, receivebrick > 0);
+				}else {
+					sendbrick--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, sendbrick < brickcount, sendbrick > 0);
+				}
+				break;
+			case WOOD:
+				if(woodStatus){
+					receivewood--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, true, receivewood > 0);
+				}else {
+					sendwood--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, sendwood < woodcount, sendwood > 0);
+				}
+				break;
+			case WHEAT:
+				if(wheatStatus){
+					receivewheat--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, true, receivewheat > 0);
+				}else {
+					sendwheat--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, sendwheat < wheatcount, sendwheat > 0);
+				}
+				break;
+			case SHEEP:
+				if(sheepStatus){
+					receivesheep--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, true, receivesheep > 0);
+				}else {
+					sendsheep--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sendsheep < sheepcount, sendsheep > 0);
+				}
+				break;
+			case ORE:
+				if(oreStatus){
+					receiveore--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, true, receiveore > 0);
+				} else {
+					sendore--;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, sendore < orecount, sendore > 0);
+				}
+		}
+		if((sendbrick+sendwood+sendsheep+sendwheat+sendore > 0) && (receivebrick+receivewood+receiveore+receivesheep+receivewheat > 0) && tradePartner != -1){
+			getTradeOverlay().setTradeEnabled(true);
+		}else{getTradeOverlay().setTradeEnabled(false);}
 	}
 
 	@Override
 	public void increaseResourceAmount(ResourceType resource) {
 		switch(resource){
 			case BRICK:
-				sendbrick++;
-				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, sendbrick < brickcount, true);
+				if(brickStatus) {
+					receivebrick++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, true, receivebrick > 0);
+				}
+				else{
+					sendbrick++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, sendbrick < brickcount, true);
+				}
 				break;
 			case WOOD:
-				sendwood++;
-				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, sendwood < woodcount, true);
+				if(woodStatus){
+					receivewood++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, true, receivewood > 0);
+				}else {
+					sendwood++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, sendwood < woodcount, true);
+				}
 				break;
 			case WHEAT:
-				sendwheat++;
-				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, sendwheat < wheatcount, true);
+				if(wheatStatus){
+					receivewheat++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, true, receivewheat > 0);
+				}else {
+					sendwheat++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, sendwheat < wheatcount, true);
+				}
 				break;
 			case SHEEP:
-				sendsheep++;
-				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sendsheep < sheepcount, true);
+				if(sheepStatus){
+					receivesheep++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, true, receivesheep > 0);
+				}else {
+					sendsheep++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sendsheep < sheepcount, true);
+				}
 				break;
 			case ORE:
-				sendore++;
-				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, sendore< orecount, true);
+				if(oreStatus){
+					receiveore++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, true, receiveore > 0);
+				}else {
+					sendore++;
+					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, sendore < orecount, true);
+				}
 
+		}
+		if((sendbrick+sendwood+sendsheep+sendwheat+sendore > 0) && (receivebrick+receivewood+receiveore+receivesheep+receivewheat > 0) && tradePartner != -1){
+			getTradeOverlay().setTradeEnabled(true);
 		}
 	}
 
+	///TODO create trade object
 	@Override
 	public void sendTradeOffer() {
 
@@ -139,30 +253,70 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
-
+		tradePartner = playerIndex;
+		if((sendbrick+sendwood+sendsheep+sendwheat+sendore > 0) && (receivebrick+receivewood+receiveore+receivesheep+receivewheat > 0)){
+			getTradeOverlay().setTradeEnabled(true);
+		}
 	}
 
 	@Override
 	public void setResourceToReceive(ResourceType resource) {
+		switch(resource){
+			case BRICK:
+				brickStatus = true;
+				receivebrick = 0;
+				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, true, false);
+				break;
+			case WOOD:
+				woodStatus = true;
+				receivewood = 0;
+				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
+				break;
+			case WHEAT:
+				wheatStatus = true;
+				receivewheat = 0;
+				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, true, false);
+				break;
+			case SHEEP:
+				sheepStatus = true;
+				receivesheep = 0;
+				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, true, false);
+				break;
+			case ORE:
+				oreStatus = true;
+				receiveore = 0;
+				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, true, false);
+				break;
 
+		}
 	}
 
 	@Override
 	public void setResourceToSend(ResourceType resource) {
 		switch(resource){
 			case BRICK:
+				brickStatus = false;
+				sendbrick = 0;
 				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, brickcount > 0, false);
 				break;
 			case WOOD:
+				woodStatus = false;
+				sendwood = 0;
 				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, woodcount > 0 , false);
 				break;
 			case WHEAT:
+				wheatStatus = false;
+				sendwheat = 0;
 				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, wheatcount > 0 , false);
 				break;
 			case SHEEP:
+				sheepStatus = false;
+				sendsheep = 0;
 				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sheepcount > 0 , false);
 				break;
 			case ORE:
+				oreStatus = false;
+				sendore = 0;
 				getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, orecount > 0 , false);
 				break;
 
