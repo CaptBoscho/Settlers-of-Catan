@@ -440,11 +440,11 @@ public class Facade {
 
     public PlayerInfo[] getOtherPlayers(int id){
         List<Player> players = this.game.getPlayers();
-        PlayerInfo[] playerInfos = new PlayerInfo[3];
+        PlayerInfo[] playerInfos = new PlayerInfo[players.size()-1];
 
         int longestroad = this.game.currentLongestRoadPlayer();
         int largestarmy = this.game.currentLargestArmyPlayer();
-        int i =0;
+        int i = 0;
         for(Player p: players){
             if(p.getPlayerIndex() != id) {
                 boolean lr = false;
