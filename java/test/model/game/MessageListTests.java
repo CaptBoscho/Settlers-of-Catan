@@ -40,8 +40,7 @@ public class MessageListTests {
             arr.add(tmp);
         }
         obj.add("lines", arr);
-        MessageList list = new MessageList();
-        list.loadJSON(obj);
+        MessageList list = new MessageList(obj);
         assertEquals(10, list.getMessages().size());
     }
 }
