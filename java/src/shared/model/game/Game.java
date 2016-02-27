@@ -48,6 +48,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     private PlayerManager playerManager;
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
+    private Trade currentOffer;
     private int winner;
     private int version;
 
@@ -112,6 +113,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
+        if(json.has("tradeOffer")) {
+            this.currentOffer = new Trade(json.get("tradeOffer").getAsJsonObject());
+        }else{
+            this.currentOffer = new Trade();
+        }
         try {
             this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
         } catch (BadJsonException e) {
@@ -920,6 +926,22 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         return turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
     }
+
+    public boolean isTradeActive(){return this.currentOffer.isActive();}
+
+    public int getTradeReceiver(){return this.currentOffer.getReceiver();}
+
+    public int getTradeSender(){return this.currentOffer.getSender();}
+
+    public int getTradeBrick(){return this.currentOffer.getBrick();}
+
+    public int getTradeWood(){return this.currentOffer.getWood();}
+
+    public int getTradeSheep(){return this.currentOffer.getSheep();}
+
+    public int getTradeWheat(){return this.currentOffer.getWheat();}
+
+    public int getTradeOre(){return this.currentOffer.getOre();}
     /**
      * checks if that player has the card needed for that port's trade
      *
