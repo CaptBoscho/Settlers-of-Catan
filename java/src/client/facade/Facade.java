@@ -405,17 +405,16 @@ public class Facade {
         }
     }
 
-    public Set<Integer> playSoldier(int playerID, HexLocation hexloc, int robbed){
+    public void playSoldier(int playerIndex, HexLocation hexloc, int robbed){
         try{
-            if (this.game.canUseSoldier(playerID)) {
-                PlaySoldierCardDTO dto = new PlaySoldierCardDTO(playerID, robbed, hexloc);
+            if (this.game.canUseSoldier(playerIndex)) {
+                PlaySoldierCardDTO dto = new PlaySoldierCardDTO(playerIndex, robbed, hexloc);
                 ServerProxy.getInstance().playSoldierCard(dto);
             }
-            return null;
         } catch(PlayerExistsException e){
-            return null;
+            e.printStackTrace();
         } catch(MissingUserCookieException e){
-            return null;
+            e.printStackTrace();
         }
     }
 
@@ -637,7 +636,7 @@ public class Facade {
             e.printStackTrace();
         }
     }
-
+    
     public boolean canDiscard(int playerIndex) {
         try {
             return this.game.canDiscardCards(playerIndex);
@@ -663,6 +662,10 @@ public class Facade {
         } catch (MissingUserCookieException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getNumberOfSoldiers(int playerIndex) {
+        return game.getNumberOfSoldiers(playerIndex);
     }
 
     /**
