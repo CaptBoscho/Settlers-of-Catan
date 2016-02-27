@@ -636,7 +636,7 @@ public class Facade {
             e.printStackTrace();
         }
     }
-    
+
     public boolean canDiscard(int playerIndex) {
         try {
             return this.game.canDiscardCards(playerIndex);
@@ -666,6 +666,10 @@ public class Facade {
 
     public int getNumberOfSoldiers(int playerIndex) {
         return game.getNumberOfSoldiers(playerIndex);
+    }
+
+    public boolean hasDiscarded(int playerIndex) {
+        return this.game.hasDiscarded(playerIndex);
     }
 
     /**
