@@ -98,15 +98,6 @@ public final class UserCookie {
         return -1;
     }
 
-    public int getVictoryPoints(){
-        try {
-            return Game.getInstance().getPlayerById(this.getPlayerId()).getVictoryPoints();
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
     public void setName(String loginUsername) {
         this.playerInfo.setName(loginUsername);
     }
