@@ -10,6 +10,7 @@ import shared.definitions.ResourceType;
 import shared.dto.MaritimeTradeDTO;
 import shared.exceptions.InvalidPlayerException;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -60,7 +61,10 @@ public class MaritimeTradeControllerState {
     /**
      * Start a new maritime trade
      */
-    public void startTrade() {}
+    public void startTrade() {
+        overlay.showGiveOptions(null);
+        overlay.showModal();
+    }
 
     /**
      * Make (finalize) an existing maritime trade
@@ -76,6 +80,8 @@ public class MaritimeTradeControllerState {
         } catch (InvalidPlayerException e) {
             this.overlay.setStateMessage("Trade failed");
         }
+
+        overlay.closeModal();
     }
 
     /**
@@ -84,6 +90,8 @@ public class MaritimeTradeControllerState {
     public void cancelTrade() {
         unsetGetValue();
         unsetGiveValue();
+        overlay.reset();
+        overlay.closeModal();
     }
 
     /**
@@ -92,6 +100,7 @@ public class MaritimeTradeControllerState {
      */
     public void setGetResource(ResourceType resource) {
         this.getResource = resource;
+        overlay.selectGetOption(resource, 1);
     }
 
     /**
@@ -100,6 +109,12 @@ public class MaritimeTradeControllerState {
      */
     public void setGiveResource(ResourceType resource) {
         this.giveResource = resource;
+        try {
+            overlay.selectGiveOption(resource, getTradeRatio());
+        } catch (InvalidPlayerException e) {
+            overlay.selectGetOption(resource, DEFAULT_TRADE);
+        }
+        overlay.showGetOptions(null);
     }
 
     /**
@@ -107,6 +122,7 @@ public class MaritimeTradeControllerState {
      */
     public void unsetGetValue() {
         this.getResource = null;
+
     }
 
     /**
@@ -130,7 +146,7 @@ public class MaritimeTradeControllerState {
 
         //Check for Resource Ports
         for (PortType port : ports) {
-            if(port.toString() == giveResource.toString()){
+            if(port.toString().equals(giveResource.toString())){
                 return RESOURCE_PORT_TRADE;
             }
         }

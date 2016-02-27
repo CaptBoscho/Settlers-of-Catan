@@ -41,19 +41,16 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	@Override
 	public void startTrade() {
 		state.startTrade();
-		getTradeOverlay().showModal();
 	}
 
 	@Override
 	public void makeTrade() {
 		state.makeTrade();
-		getTradeOverlay().closeModal();
 	}
 
 	@Override
 	public void cancelTrade() {
 		state.cancelTrade();
-		getTradeOverlay().closeModal();
 	}
 
 	@Override
