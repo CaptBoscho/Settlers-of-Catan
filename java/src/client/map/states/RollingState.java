@@ -25,7 +25,7 @@ public class RollingState extends MapState {
     /**
      * Constructor
      */
-    public RollingState(){
+    private RollingState(){
         super();
     }
 

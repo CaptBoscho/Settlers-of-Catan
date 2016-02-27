@@ -27,7 +27,7 @@ public class DiscardingState extends MapState {
     /**
      * Constructor
      */
-    public DiscardingState(){
+    private DiscardingState(){
         super();
     }
 
