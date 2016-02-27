@@ -12,6 +12,7 @@ import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
+import shared.model.game.MessageList;
 import shared.model.game.TurnTracker;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
@@ -672,22 +673,11 @@ public class Facade {
         return this.game.hasDiscarded(playerIndex);
     }
 
-    /**
-     * plays the Development Card
-     *
-     * @param playerID
-     * @param dc
-     * @throws BuildException
-     */
-    /*public void playDC(int playerID, DevCardType dc, EdgeLocation edge1, EdgeLocation edge2) throws BuildException, PlayerExistsException, DevCardException {
-        if (canPlayDC(playerID, dc)) {
-            if(dc == DevCardType.SOLDIER){game.useSoldier(playerID);}
-            else if(dc == DevCardType.MONUMENT){game.useMonument(playerID);}
-            else if(dc == DevCardType.ROAD_BUILD){game.useRoadBuilder(playerID);}
-            else if(dc == DevCardType.MONOPOLY){game.useMonopoly(playerID);}
-            else if(dc == DevCardType.YEAR_OF_PLENTY){game.useYearOfPlenty(playerID);}
-        } else {
-            throw new BuildException("can't play this Develpment Card");
-        }
-    }*/
+    public MessageList getLog() {
+        return this.game.getLog();
+    }
+
+    public CatanColor getPlayerColorByName(String player) {
+        return this.game.getPlayerColorByName(player);
+    }
 }

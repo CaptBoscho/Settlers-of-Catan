@@ -390,4 +390,8 @@ public interface IGame {
     int getNumberOfSoldiers(int playerIndex);
 
     boolean hasDiscarded(int playerIndex);
+
+    MessageList getLog();
+
+    CatanColor getPlayerColorByName(String player);
 }

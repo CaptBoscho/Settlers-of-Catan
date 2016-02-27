@@ -264,4 +264,8 @@ public interface IPlayerManager {
     int getNumberOfSoldiers(int playerIndex);
 
     boolean hasDiscarded(int playerIndex);
+
+    Player getPlayerByName(String name) throws PlayerExistsException;
+
+    CatanColor getPlayerColorByName(String name);
 }
