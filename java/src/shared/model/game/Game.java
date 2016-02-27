@@ -514,9 +514,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert edge2.getHexLoc() != null;
         assert !edge1.equals(edge2);
 
-        playerManager.useRoadBuilder(playerID);
-        buildRoad(playerID, edge1);
-        buildRoad(playerID, edge2);
+        if(canUseRoadBuilder(playerID)) {
+            playerManager.useRoadBuilder(playerID);
+            buildRoad(playerID, edge1);
+            buildRoad(playerID, edge2);
+        }
     }
 
     /**
