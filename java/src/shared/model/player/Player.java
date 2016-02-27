@@ -114,7 +114,12 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
      */
     @Override
     public boolean canDiscardCards() {
-        return resourceCardBank.canDiscardCards(); // TODO: 1/30/2016 What is this one supposed to do??? Discard on 7???
+        return resourceCardBank.canDiscardCards();
+    }
+
+    @Override
+    public int getNumberResourceCards() {
+        return resourceCardBank.size();
     }
 
     /**
@@ -563,11 +568,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         this.soldiers++;
     }
 
-
-    public Integer getKnights() {
-        return this.soldiers;
-    }
-
     /**
      * Adds a resource card to resourceCardBank
      *
@@ -703,5 +703,9 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
 
     public Integer getAvailableCities() {
         return structureBank.getAvailableCities();
+    }
+
+    public int getSoldiers() {
+        return soldiers;
     }
 }

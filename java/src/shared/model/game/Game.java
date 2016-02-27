@@ -212,7 +212,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
 
         return playerManager.canDiscardCards(playerID);
+    }
 
+    @Override
+    public int getNumberResourceCards(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+
+        return playerManager.getNumberResourceCards(playerIndex);
     }
 
     /**
@@ -538,27 +544,27 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     /**
      * Action - Player plays Soldier
      *
-     * @param playerID ID of Player performing action
+     * @param playerIndex ID of Player performing action
      */
     @Override
-    public Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
-        assert playerID >= 0;
+    public Set<Integer> useSoldier(int playerIndex, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
+        assert playerIndex >= 0;
         assert this.playerManager != null;
         assert this.largestArmyCard != null;
         assert this.turnTracker != null;
 
-        if(canUseSoldier(playerID)) {
-            playerManager.useSoldier(playerID);
-            int used = playerManager.getKnights(playerID);
+        if(canUseSoldier(playerIndex)) {
+            playerManager.useSoldier(playerIndex);
+            int used = playerManager.getNumberOfSoldiers(playerIndex);
             if(used >= 3 && used > largestArmyCard.getMostSoldiers()) {
                 final int oldPlayer = largestArmyCard.getOwner();
-                largestArmyCard.setNewOwner(playerID, used);
-                playerManager.changeLargestArmyPossession(oldPlayer, playerID);
+                largestArmyCard.setNewOwner(playerIndex, used);
+                playerManager.changeLargestArmyPossession(oldPlayer, playerIndex);
             }
 
             turnTracker.setPhase(TurnTracker.Phase.ROBBING);
-            if(canPlaceRobber(playerID, hexloc)) {
-                return placeRobber(playerID, hexloc);
+            if(canPlaceRobber(playerIndex, hexloc)) {
+                return placeRobber(playerIndex, hexloc);
             }
             return null;
         }
@@ -632,12 +638,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canPlaceRobber(final int playerID, HexLocation hexloc) {
         assert playerID >= 0;
-        try {
             return turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
-
-        } catch(InvalidLocationException e){
-            return false;}
-
     }
     /**
      * Action - Player places the Robber
@@ -1100,6 +1101,16 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public Player getPlayerById(int id) throws PlayerExistsException {
         return playerManager.getPlayerByID(id);
+    }
+
+    @Override
+    public int getNumberOfSoldiers(int playerIndex) {
+        return playerManager.getNumberOfSoldiers(playerIndex);
+    }
+
+    @Override
+    public boolean hasDiscarded(int playerIndex) {
+        return playerManager.hasDiscarded(playerIndex);
     }
 
     @Override

@@ -117,11 +117,6 @@ public final class PlayerManager implements IPlayerManager {
         this.players.add(p);
     }
 
-    public int getKnights(final int playerID) throws PlayerExistsException {
-        return getPlayerByIndex(playerID).getKnights();
-    }
-
-
     public void playKnight(final int playerID) throws PlayerExistsException {
         assert playerID >= 0;
 
@@ -143,6 +138,13 @@ public final class PlayerManager implements IPlayerManager {
         assert id >= 0;
 
         return getPlayerByIndex(id).canDiscardCards();
+    }
+
+    @Override
+    public int getNumberResourceCards(final int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+
+        return getPlayerByIndex(playerIndex).getNumberResourceCards();
     }
 
     /**
@@ -583,5 +585,25 @@ public final class PlayerManager implements IPlayerManager {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    @Override
+    public int getNumberOfSoldiers(int playerIndex) {
+        try {
+            return getPlayerByIndex(playerIndex).getSoldiers();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
+    public boolean hasDiscarded(int playerIndex) {
+        try {
+            return getPlayerByIndex(playerIndex).hasDiscarded();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

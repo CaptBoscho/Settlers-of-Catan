@@ -169,7 +169,7 @@ public final class ServerProxy implements IServer {
                 e.printStackTrace();
             }
         }
-        if(result.contains("true")) {
+        if(result.equals("\"true\"")) {
             // already have latest model, don't update anything
             return null;
         }

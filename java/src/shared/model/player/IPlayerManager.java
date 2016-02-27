@@ -52,8 +52,6 @@ public interface IPlayerManager {
      */
     Player getPlayerByIndex(int index) throws PlayerExistsException;
 
-    int getKnights(int playerID) throws PlayerExistsException;
-
     void playKnight(int playerID) throws PlayerExistsException;
 
     void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException;
@@ -71,6 +69,8 @@ public interface IPlayerManager {
      * @return True if Player can discard cards
      */
     boolean canDiscardCards(int id) throws PlayerExistsException;
+
+    int getNumberResourceCards(int playerIndex) throws PlayerExistsException;
 
     /**
      * Action - Player discards cards
@@ -260,4 +260,8 @@ public interface IPlayerManager {
     public Player getWinner() throws GameOverException;
 
     int getNumberDevCards(DevCardType type, int playerID);
+
+    int getNumberOfSoldiers(int playerIndex);
+
+    boolean hasDiscarded(int playerIndex);
 }

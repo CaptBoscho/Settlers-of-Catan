@@ -28,7 +28,7 @@ public class RobbingState extends MapState {
     /**
      * Constructor
      */
-    public RobbingState(){
+    private RobbingState(){
         super();
         robbingLoc = null;
     }

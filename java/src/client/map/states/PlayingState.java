@@ -34,7 +34,7 @@ public class PlayingState extends MapState {
     /**
      * Constructor
      */
-    public PlayingState(){
+    private PlayingState(){
         super();
         isPlayingRoadBuildingCard = false;
         firstRoad = null;
