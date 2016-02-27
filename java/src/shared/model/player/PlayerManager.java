@@ -596,4 +596,14 @@ public final class PlayerManager implements IPlayerManager {
         }
         return -1;
     }
+
+    @Override
+    public boolean hasDiscarded(int playerIndex) {
+        try {
+            return getPlayerByIndex(playerIndex).hasDiscarded();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

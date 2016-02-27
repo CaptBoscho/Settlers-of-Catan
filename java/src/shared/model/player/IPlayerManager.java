@@ -262,4 +262,6 @@ public interface IPlayerManager {
     int getNumberDevCards(DevCardType type, int playerID);
 
     int getNumberOfSoldiers(int playerIndex);
+
+    boolean hasDiscarded(int playerIndex);
 }

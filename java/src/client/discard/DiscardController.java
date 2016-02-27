@@ -19,7 +19,6 @@ public class DiscardController extends Controller implements IDiscardController,
 	private IWaitView waitView;
 	private Facade facade;
     private UserCookie userCookie;
-    private boolean canDiscard;
 
     private final ResourceType brick = ResourceType.BRICK;
     private final ResourceType ore = ResourceType.ORE;
@@ -53,7 +52,6 @@ public class DiscardController extends Controller implements IDiscardController,
         userCookie = UserCookie.getInstance();
 		facade = Facade.getInstance();
 		facade.addObserver(this);
-        canDiscard = true;
 	}
 
 	public IDiscardView getDiscardView() {
@@ -79,7 +77,7 @@ public class DiscardController extends Controller implements IDiscardController,
             remainingWheat = facade.getAmountOfResource(userCookie.getPlayerIndex(), wheat);
             remainingWood = facade.getAmountOfResource(userCookie.getPlayerIndex(), wood);
             discarding = totalRemainingCards / 2;
-            if(facade.canDiscard(userCookie.getPlayerIndex())) {
+            if(facade.canDiscard(userCookie.getPlayerIndex()) && !facade.hasDiscarded(userCookie.getPlayerIndex())) {
                 getDiscardView().setDiscardButtonEnabled(false);
                 getDiscardView().setResourceAmountChangeEnabled(brick, remainingBrick > 0, false);
                 getDiscardView().setResourceAmountChangeEnabled(ore, remainingOre > 0, false);

@@ -388,4 +388,6 @@ public interface IGame {
     public Player getPlayerById(int id) throws PlayerExistsException;
 
     int getNumberOfSoldiers(int playerIndex);
+
+    boolean hasDiscarded(int playerIndex);
 }
