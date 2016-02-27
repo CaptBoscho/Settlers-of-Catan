@@ -148,7 +148,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				}
 				break;
 			case WOOD:
-				if(brickStatus){
+				if(woodStatus){
 					receivewood--;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, true, receivewood > 0);
 				}else {
