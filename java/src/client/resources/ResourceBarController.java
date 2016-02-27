@@ -33,21 +33,22 @@ public class ResourceBarController extends Controller implements IResourceBarCon
      */
 	public void update(Observable obs, Object obj){
         try {
-            int ID = UserCookie.getInstance().getPlayerIndex();
-            boolean enableRoad = facade.ableToBuildRoad(ID);
-            boolean enableSettlement = facade.ableToBuildSettlement(ID);
-            boolean enableCity = facade.ableToBuildCity(ID);
-			boolean enableBuyDevCard = facade.canBuyDC(ID);
-            boolean enablePlayCard = facade.canPlayDC(ID);
+            int playerIndex = UserCookie.getInstance().getPlayerIndex();
+            boolean enableRoad = facade.ableToBuildRoad(playerIndex);
+            boolean enableSettlement = facade.ableToBuildSettlement(playerIndex);
+            boolean enableCity = facade.ableToBuildCity(playerIndex);
+			boolean enableBuyDevCard = facade.canBuyDC(playerIndex);
+            boolean enablePlayCard = facade.canPlayDC(playerIndex);
 
-            int roadCount = facade.getAvailableRoads(ID);
-            int settlementCount = facade.getAvailableSettlements(ID);
-            int cityCount = facade.getAvailableCities(ID);
-            int brickCount = facade.getAmountOfResource(ID, ResourceType.BRICK);
-            int woodCount = facade.getAmountOfResource(ID, ResourceType.WOOD);
-            int wheatCount = facade.getAmountOfResource(ID, ResourceType.WHEAT);
-            int sheepCount = facade.getAmountOfResource(ID, ResourceType.SHEEP);
-            int oreCount = facade.getAmountOfResource(ID, ResourceType.ORE);
+            int roadCount = facade.getAvailableRoads(playerIndex);
+            int settlementCount = facade.getAvailableSettlements(playerIndex);
+            int cityCount = facade.getAvailableCities(playerIndex);
+            int brickCount = facade.getAmountOfResource(playerIndex, ResourceType.BRICK);
+            int woodCount = facade.getAmountOfResource(playerIndex, ResourceType.WOOD);
+            int wheatCount = facade.getAmountOfResource(playerIndex, ResourceType.WHEAT);
+            int sheepCount = facade.getAmountOfResource(playerIndex, ResourceType.SHEEP);
+            int oreCount = facade.getAmountOfResource(playerIndex, ResourceType.ORE);
+            int soldierCount = facade.getNumberOfSoldiers(playerIndex);
 
             ResourceBarElement road = ResourceBarElement.ROAD;
             ResourceBarElement settle = ResourceBarElement.SETTLEMENT;
@@ -69,6 +70,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementAmount(ResourceBarElement.WHEAT, wheatCount);
             getView().setElementAmount(ResourceBarElement.SHEEP, sheepCount);
             getView().setElementAmount(ResourceBarElement.ORE, oreCount);
+
+            getView().setElementAmount(ResourceBarElement.SOLDIERS, soldierCount);
 
         } catch(PlayerExistsException e){
             e.printStackTrace();

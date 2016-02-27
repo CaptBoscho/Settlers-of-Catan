@@ -52,8 +52,6 @@ public interface IPlayerManager {
      */
     Player getPlayerByIndex(int index) throws PlayerExistsException;
 
-    int getKnights(int playerID) throws PlayerExistsException;
-
     void playKnight(int playerID) throws PlayerExistsException;
 
     void changeLargestArmyPossession(int playerold, int playernew) throws PlayerExistsException;
@@ -260,4 +258,6 @@ public interface IPlayerManager {
     public Player getWinner() throws GameOverException;
 
     int getNumberDevCards(DevCardType type, int playerID);
+
+    int getNumberOfSoldiers(int playerIndex);
 }
