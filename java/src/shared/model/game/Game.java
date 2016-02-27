@@ -1,6 +1,7 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
+import org.apache.http.client.cache.Resource;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
 import shared.model.JsonSerializable;
@@ -1101,6 +1102,16 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
     public Player getPlayerById(int id) throws PlayerExistsException {
         return playerManager.getPlayerByID(id);
+    }
+
+    public HashMap<ResourceType,Integer> getBankResources(){
+        HashMap<ResourceType, Integer> resources = new HashMap<>();
+        resources.put(ResourceType.BRICK,this.resourceCardBank.getNumberOfBrick());
+        resources.put(ResourceType.WOOD, this.resourceCardBank.getNumberOfWood());
+        resources.put(ResourceType.ORE, this.resourceCardBank.getNumberOfOre());
+        resources.put(ResourceType.WHEAT, this.resourceCardBank.getNumberOfWheat());
+        resources.put(ResourceType.SHEEP, this.resourceCardBank.getNumberOfSheep());
+        return resources;
     }
 
     @Override
