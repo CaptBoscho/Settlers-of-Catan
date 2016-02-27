@@ -27,7 +27,7 @@ public class SetupTwoState extends MapState {
     /**
      * Constructor
      */
-    public SetupTwoState(){
+    private SetupTwoState(){
         super();
     }
 

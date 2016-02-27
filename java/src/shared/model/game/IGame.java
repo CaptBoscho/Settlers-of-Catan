@@ -373,6 +373,8 @@ public interface IGame {
 
     int getNumberDevCards(DevCardType type, int playerID);
 
+    int getNumberResourceCards(int playerIndex) throws PlayerExistsException;
+
     public int amountOwnedResource(int playerID, ResourceType t)throws PlayerExistsException, InvalidTypeException;
 
     public void buildFirstRoad(int playerID, EdgeLocation hexloc);

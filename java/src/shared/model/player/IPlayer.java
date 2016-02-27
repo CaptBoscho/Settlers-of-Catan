@@ -6,6 +6,7 @@ import shared.definitions.ResourceType;
 import shared.exceptions.BadCallerException;
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
+import shared.exceptions.PlayerExistsException;
 import shared.model.bank.InvalidTypeException;
 
 import shared.model.cards.Card;
@@ -27,6 +28,8 @@ public interface IPlayer {
      * @return True if Player can discard cards
      */
     boolean canDiscardCards();
+
+    int getNumberResourceCards();
 
     /**
      * Action - Player discards cards

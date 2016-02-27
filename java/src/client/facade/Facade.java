@@ -407,7 +407,6 @@ public class Facade {
 
     public void playSoldier(int playerIndex, HexLocation hexloc, int robbed){
         try{
-
             if (this.game.canUseSoldier(playerIndex)) {
                 PlaySoldierCardDTO dto = new PlaySoldierCardDTO(playerIndex, robbed, hexloc);
                 ServerProxy.getInstance().playSoldierCard(dto);
@@ -637,10 +636,38 @@ public class Facade {
             e.printStackTrace();
         }
     }
+    
+    public boolean canDiscard(int playerIndex) {
+        try {
+            return this.game.canDiscardCards(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getNumberResourceCards(int playerIndex) {
+        try {
+            return this.game.getNumberResourceCards(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void discard(int playerIndex, int brick, int ore, int sheep, int wheat, int wood) {
+        DiscardCardsDTO dto = new DiscardCardsDTO(playerIndex, brick, ore, sheep, wheat, wood);
+        try {
+            ServerProxy.getInstance().discardCards(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
 
     public int getNumberOfSoldiers(int playerIndex) {
         return game.getNumberOfSoldiers(playerIndex);
     }
+
     /**
      * plays the Development Card
      *

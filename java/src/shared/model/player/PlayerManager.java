@@ -140,6 +140,13 @@ public final class PlayerManager implements IPlayerManager {
         return getPlayerByIndex(id).canDiscardCards();
     }
 
+    @Override
+    public int getNumberResourceCards(final int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+
+        return getPlayerByIndex(playerIndex).getNumberResourceCards();
+    }
+
     /**
      * Action - Player discards cards
      *

@@ -425,12 +425,7 @@ public class MapTest {
         jsonMap.canInitiateSettlement(0, vertexLocFour);
 
         // verify you can't place a settlement on a vertex that doesn't exist
-        try{
-            map.canInitiateSettlement(1, new VertexLocation(new HexLocation(3, 0), VertexDirection.NorthEast));
-            assertTrue(false); // should never reach here
-        } catch(InvalidLocationException e) {
-            assertTrue(e.getMessage().equals("Vertex location is not on the map"));
-        }
+        assertFalse(map.canInitiateSettlement(1, new VertexLocation(new HexLocation(3, 0), VertexDirection.NorthEast)));
     }
 
     @Test
