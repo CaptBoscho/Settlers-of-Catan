@@ -680,4 +680,15 @@ public class Facade {
     public CatanColor getPlayerColorByName(String player) {
         return this.game.getPlayerColorByName(player);
     }
+
+    /**
+     * returns the Hashmap where the key is the resourcetype
+     * and the Integer is how many of that resource the bank
+     * has.
+     * @return
+     */
+    public HashMap<ResourceType, Integer> getBankResources(){
+        return this.game.getBankResources();
+    }
+
 }
