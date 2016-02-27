@@ -33,8 +33,8 @@ public final class PlayYOPCardDTO implements JsonSerializable {
         JsonObject obj = new JsonObject();
         obj.addProperty("type", "Year_of_Plenty");
         obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("resource1", this.resource1.toString());
-        obj.addProperty("resource2", this.resource2.toString());
+        obj.addProperty("resource1", this.resource1.toString().toLowerCase());
+        obj.addProperty("resource2", this.resource2.toString().toLowerCase());
         return obj;
     }
 }
