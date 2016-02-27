@@ -19,7 +19,6 @@ public class DiscardController extends Controller implements IDiscardController,
 	private IWaitView waitView;
 	private Facade facade;
     private UserCookie userCookie;
-    private boolean canDiscard;
 
     private final ResourceType brick = ResourceType.BRICK;
     private final ResourceType ore = ResourceType.ORE;
@@ -53,7 +52,6 @@ public class DiscardController extends Controller implements IDiscardController,
         userCookie = UserCookie.getInstance();
 		facade = Facade.getInstance();
 		facade.addObserver(this);
-        canDiscard = true;
 	}
 
 	public IDiscardView getDiscardView() {
@@ -79,48 +77,52 @@ public class DiscardController extends Controller implements IDiscardController,
             remainingWheat = facade.getAmountOfResource(userCookie.getPlayerIndex(), wheat);
             remainingWood = facade.getAmountOfResource(userCookie.getPlayerIndex(), wood);
             discarding = totalRemainingCards / 2;
-            if(facade.canDiscard(userCookie.getPlayerIndex())) {
-                getDiscardView().setDiscardButtonEnabled(false);
-                getDiscardView().setResourceAmountChangeEnabled(brick, remainingBrick > 0, false);
-                getDiscardView().setResourceAmountChangeEnabled(ore, remainingOre > 0, false);
-                getDiscardView().setResourceAmountChangeEnabled(sheep, remainingSheep > 0, false);
-                getDiscardView().setResourceAmountChangeEnabled(wheat, remainingWheat > 0, false);
-                getDiscardView().setResourceAmountChangeEnabled(wood, remainingWood > 0, false);
-                getDiscardView().setResourceDiscardAmount(brick, 0);
-                getDiscardView().setResourceDiscardAmount(ore, 0);
-                getDiscardView().setResourceDiscardAmount(sheep, 0);
-                getDiscardView().setResourceDiscardAmount(wheat, 0);
-                getDiscardView().setResourceDiscardAmount(wood, 0);
-                if(discarding < remainingBrick) {
-                    getDiscardView().setResourceMaxAmount(brick, discarding);
-                } else {
-                    getDiscardView().setResourceMaxAmount(brick, remainingBrick);
+            if(facade.canDiscard(userCookie.getPlayerIndex()) && !facade.hasDiscarded(userCookie.getPlayerIndex())) {
+                if(!getDiscardView().isModalShowing()){
+                    getDiscardView().setDiscardButtonEnabled(false);
+                    getDiscardView().setResourceAmountChangeEnabled(brick, remainingBrick > 0, false);
+                    getDiscardView().setResourceAmountChangeEnabled(ore, remainingOre > 0, false);
+                    getDiscardView().setResourceAmountChangeEnabled(sheep, remainingSheep > 0, false);
+                    getDiscardView().setResourceAmountChangeEnabled(wheat, remainingWheat > 0, false);
+                    getDiscardView().setResourceAmountChangeEnabled(wood, remainingWood > 0, false);
+                    getDiscardView().setResourceDiscardAmount(brick, 0);
+                    getDiscardView().setResourceDiscardAmount(ore, 0);
+                    getDiscardView().setResourceDiscardAmount(sheep, 0);
+                    getDiscardView().setResourceDiscardAmount(wheat, 0);
+                    getDiscardView().setResourceDiscardAmount(wood, 0);
+                    if (discarding < remainingBrick) {
+                        getDiscardView().setResourceMaxAmount(brick, discarding);
+                    } else {
+                        getDiscardView().setResourceMaxAmount(brick, remainingBrick);
+                    }
+                    if (discarding < remainingOre) {
+                        getDiscardView().setResourceMaxAmount(ore, discarding);
+                    } else {
+                        getDiscardView().setResourceMaxAmount(ore, remainingOre);
+                    }
+                    if (discarding < remainingSheep) {
+                        getDiscardView().setResourceMaxAmount(sheep, discarding);
+                    } else {
+                        getDiscardView().setResourceMaxAmount(sheep, remainingSheep);
+                    }
+                    if (discarding < remainingWheat) {
+                        getDiscardView().setResourceMaxAmount(wheat, discarding);
+                    } else {
+                        getDiscardView().setResourceMaxAmount(wheat, remainingWheat);
+                    }
+                    if (discarding < remainingWood) {
+                        getDiscardView().setResourceMaxAmount(wood, discarding);
+                    } else {
+                        getDiscardView().setResourceMaxAmount(wood, remainingWood);
+                    }
+                    getDiscardView().setStateMessage("0/" + discarding);
+                    getDiscardView().showModal();
                 }
-                if(discarding < remainingOre) {
-                    getDiscardView().setResourceMaxAmount(ore, discarding);
-                } else {
-                    getDiscardView().setResourceMaxAmount(ore, remainingOre);
-                }
-                if(discarding < remainingSheep) {
-                    getDiscardView().setResourceMaxAmount(sheep, discarding);
-                } else {
-                    getDiscardView().setResourceMaxAmount(sheep, remainingSheep);
-                }
-                if(discarding < remainingWheat) {
-                    getDiscardView().setResourceMaxAmount(wheat, discarding);
-                } else {
-                    getDiscardView().setResourceMaxAmount(wheat, remainingWheat);
-                }
-                if(discarding < remainingWood) {
-                    getDiscardView().setResourceMaxAmount(wood, discarding);
-                } else {
-                    getDiscardView().setResourceMaxAmount(wood, remainingWood);
-                }
-                getDiscardView().setStateMessage("0/" + discarding);
-                getDiscardView().showModal();
             } else {
-                getWaitView().setMessage("Chill while others discard...");
-                getWaitView().showModal();
+                if(!getWaitView().isModalShowing()) {
+                    getWaitView().setMessage("Chill while others discard...");
+                    getWaitView().showModal();
+                }
             }
         } else {
             if(getWaitView().isModalShowing()) {

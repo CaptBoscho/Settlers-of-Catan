@@ -1126,6 +1126,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     @Override
+    public boolean hasDiscarded(int playerIndex) {
+        return playerManager.hasDiscarded(playerIndex);
+    }
+
+    @Override
     public JsonObject toJSON() {
         return null;
     }
