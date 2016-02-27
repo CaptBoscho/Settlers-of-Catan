@@ -22,10 +22,7 @@ import shared.model.player.PlayerManager;
 
 import javax.annotation.Resource;
 import javax.naming.InsufficientResourcesException;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 
 public interface IGame {
 
@@ -390,4 +387,6 @@ public interface IGame {
     int getNumberOfSoldiers(int playerIndex);
 
     boolean hasDiscarded(int playerIndex);
+
+    public HashMap<ResourceType, Integer> getBankResources();
 }
