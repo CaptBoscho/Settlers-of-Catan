@@ -388,5 +388,11 @@ public interface IGame {
 
     boolean hasDiscarded(int playerIndex);
 
+    MessageList getLog();
+
+    CatanColor getPlayerColorByName(String player);
+
     public HashMap<ResourceType, Integer> getBankResources();
+
+    MessageList getChat();
 }

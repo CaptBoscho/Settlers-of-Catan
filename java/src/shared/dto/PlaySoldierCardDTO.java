@@ -22,7 +22,6 @@ public final class PlaySoldierCardDTO implements JsonSerializable {
     public PlaySoldierCardDTO(int playerIndex, int victimIndex, HexLocation location) {
         assert playerIndex >= 0;
         assert victimIndex >= 0;
-        assert playerIndex != victimIndex;
         assert location != null;
 
         this.playerIndex = playerIndex;
