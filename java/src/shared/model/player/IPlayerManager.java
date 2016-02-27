@@ -70,6 +70,8 @@ public interface IPlayerManager {
      */
     boolean canDiscardCards(int id) throws PlayerExistsException;
 
+    int getNumberResourceCards(int playerIndex) throws PlayerExistsException;
+
     /**
      * Action - Player discards cards
      * @param id ID of the player
