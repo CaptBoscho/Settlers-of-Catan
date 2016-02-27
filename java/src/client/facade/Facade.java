@@ -637,6 +637,34 @@ public class Facade {
             e.printStackTrace();
         }
     }
+
+    public boolean canDiscard(int playerIndex) {
+        try {
+            return this.game.canDiscardCards(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getNumberResourceCards(int playerIndex) {
+        try {
+            return this.game.getNumberResourceCards(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void discard(int playerIndex, int brick, int ore, int sheep, int wheat, int wood) {
+        DiscardCardsDTO dto = new DiscardCardsDTO(playerIndex, brick, ore, sheep, wheat, wood);
+        try {
+            ServerProxy.getInstance().discardCards(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * plays the Development Card
      *

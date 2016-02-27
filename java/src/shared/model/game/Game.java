@@ -212,7 +212,13 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
 
         return playerManager.canDiscardCards(playerID);
+    }
 
+    @Override
+    public int getNumberResourceCards(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+
+        return playerManager.getNumberResourceCards(playerIndex);
     }
 
     /**
@@ -632,12 +638,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canPlaceRobber(final int playerID, HexLocation hexloc) {
         assert playerID >= 0;
-        try {
             return turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
-
-        } catch(InvalidLocationException e){
-            return false;}
-
     }
     /**
      * Action - Player places the Robber

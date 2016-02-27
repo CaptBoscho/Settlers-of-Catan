@@ -114,7 +114,12 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
      */
     @Override
     public boolean canDiscardCards() {
-        return resourceCardBank.canDiscardCards(); // TODO: 1/30/2016 What is this one supposed to do??? Discard on 7???
+        return resourceCardBank.canDiscardCards();
+    }
+
+    @Override
+    public int getNumberResourceCards() {
+        return resourceCardBank.size();
     }
 
     /**
