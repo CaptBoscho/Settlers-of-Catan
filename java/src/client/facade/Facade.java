@@ -407,10 +407,9 @@ public class Facade {
 
     public Set<Integer> playSoldier(int playerID, HexLocation hexloc, int robbed){
         try{
-
             if (this.game.canUseSoldier(playerID)) {
-                RobPlayerDTO dto = new RobPlayerDTO(playerID, robbed, hexloc);
-                ServerProxy.getInstance().robPlayer(dto);
+                PlaySoldierCardDTO dto = new PlaySoldierCardDTO(playerID, robbed, hexloc);
+                ServerProxy.getInstance().playSoldierCard(dto);
             }
             return null;
         } catch(PlayerExistsException e){
