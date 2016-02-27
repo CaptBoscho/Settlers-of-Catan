@@ -384,4 +384,6 @@ public interface IGame {
     public void cancelRoadBuildingCard(int playerID);
 
     public Player getPlayerById(int id) throws PlayerExistsException;
+
+    int getNumberOfSoldiers(int playerIndex);
 }
