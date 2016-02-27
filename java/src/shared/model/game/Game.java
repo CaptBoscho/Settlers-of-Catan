@@ -1120,6 +1120,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     @Override
+    public Player getPlayerByIndex(int playerIndex) throws PlayerExistsException {
+        return playerManager.getPlayerByIndex(playerIndex);
+    }
+
+    @Override
     public JsonObject toJSON() {
         return null;
     }

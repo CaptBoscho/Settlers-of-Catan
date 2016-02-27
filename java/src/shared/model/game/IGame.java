@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import client.facade.Facade;
 import shared.definitions.CatanColor;
 import shared.exceptions.PlayerExistsException;
 import shared.exceptions.PlayerExistsException;
@@ -384,4 +385,6 @@ public interface IGame {
     public void cancelRoadBuildingCard(int playerID);
 
     public Player getPlayerById(int id) throws PlayerExistsException;
+
+    Player getPlayerByIndex(int playerIndex) throws PlayerExistsException;
 }

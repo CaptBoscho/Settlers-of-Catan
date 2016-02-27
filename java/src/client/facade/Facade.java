@@ -638,6 +638,15 @@ public class Facade {
             e.printStackTrace();
         }
     }
+
+    public int getVictoryPoints(int playerIndex) {
+        try {
+            return game.getPlayerByIndex(playerIndex).getVictoryPoints();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
     /**
      * plays the Development Card
      *
