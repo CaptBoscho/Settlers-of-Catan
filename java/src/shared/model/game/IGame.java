@@ -389,4 +389,6 @@ public interface IGame {
     boolean hasDiscarded(int playerIndex);
 
     public HashMap<ResourceType, Integer> getBankResources();
+
+    public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException;
 }

@@ -1131,6 +1131,16 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return resources;
     }
 
+    public HashMap<ResourceType,Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
+        HashMap<ResourceType, Integer> resources = new HashMap<>();
+        resources.put(ResourceType.BRICK,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfBrick());
+        resources.put(ResourceType.WOOD,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfWood());
+        resources.put(ResourceType.ORE,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfOre());
+        resources.put(ResourceType.WHEAT,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfWheat());
+        resources.put(ResourceType.SHEEP,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfSheep());
+        return resources;
+    }
+
     @Override
     public int getNumberOfSoldiers(int playerIndex) {
         return playerManager.getNumberOfSoldiers(playerIndex);

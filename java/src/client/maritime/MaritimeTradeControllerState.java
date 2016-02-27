@@ -9,8 +9,11 @@ import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.dto.MaritimeTradeDTO;
 import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.PlayerExistsException;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -50,6 +53,7 @@ public class MaritimeTradeControllerState {
         int index = userCookie.getPlayerIndex();
 
         //Enable/Disable button based on user's turn
+
         if(facade.getCurrentTurn() == index){
             view.enableMaritimeTrade(true);
         }
@@ -62,7 +66,36 @@ public class MaritimeTradeControllerState {
      * Start a new maritime trade
      */
     public void startTrade() {
-        overlay.showGiveOptions(null);
+        int pIndex = userCookie.getPlayerIndex();
+
+        //Setting up give options
+        Map<ResourceType, Integer> give = null;
+        try {
+            give = facade.getPlayerResources(pIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        List<ResourceType> giveOp = new ArrayList<>();
+
+        for(Map.Entry<ResourceType, Integer> entry : give.entrySet()){
+            int ratio = 0;
+
+            try {
+                ratio = getTradeRatio(entry.getKey());
+            } catch (InvalidPlayerException e) {
+                ratio = DEFAULT_TRADE;
+            }
+            System.out.println("count: " + entry.getValue() + " ratio: " + ratio);
+            if(entry.getValue() >= ratio){
+                giveOp.add(entry.getKey());
+            }
+        }
+
+        ResourceType[] giveOptions = giveOp.toArray(new ResourceType[giveOp.size()]);
+
+        overlay.setTradeEnabled(false);
+        overlay.setCancelEnabled(true);
+        overlay.showGiveOptions(giveOptions);
         overlay.showModal();
     }
 
@@ -101,6 +134,7 @@ public class MaritimeTradeControllerState {
     public void setGetResource(ResourceType resource) {
         this.getResource = resource;
         overlay.selectGetOption(resource, 1);
+        overlay.setTradeEnabled(true);
     }
 
     /**
@@ -114,7 +148,21 @@ public class MaritimeTradeControllerState {
         } catch (InvalidPlayerException e) {
             overlay.selectGetOption(resource, DEFAULT_TRADE);
         }
-        overlay.showGetOptions(null);
+
+        //Setting up get options
+        Map<ResourceType, Integer> get = facade.getBankResources();
+
+        List<ResourceType> getOp = new ArrayList<>();
+
+        for(Map.Entry<ResourceType, Integer> entry : get.entrySet()){
+            if(entry.getValue() > 0){
+                getOp.add(entry.getKey());
+            }
+        }
+
+        ResourceType[] getOptions = getOp.toArray(new ResourceType[getOp.size()]);
+
+        overlay.showGetOptions(getOptions);
     }
 
     /**
@@ -122,7 +170,7 @@ public class MaritimeTradeControllerState {
      */
     public void unsetGetValue() {
         this.getResource = null;
-
+        overlay.reset();
     }
 
     /**
@@ -130,6 +178,7 @@ public class MaritimeTradeControllerState {
      */
     public void unsetGiveValue() {
         this.giveResource = null;
+        overlay.reset();
     }
 
     /**
@@ -140,13 +189,13 @@ public class MaritimeTradeControllerState {
     }
 
     //Helper Methods
-    private int getTradeRatio() throws InvalidPlayerException {
+    private int getTradeRatio(ResourceType type) throws InvalidPlayerException {
         int index = userCookie.getPlayerIndex();
         Set<PortType> ports = facade.maritimeTradeOptions(index);
 
         //Check for Resource Ports
         for (PortType port : ports) {
-            if(port.toString().equals(giveResource.toString())){
+            if(port.toString().equals(type.toString())){
                 return RESOURCE_PORT_TRADE;
             }
         }
@@ -160,5 +209,9 @@ public class MaritimeTradeControllerState {
 
         //Last use default of 4-1
         return DEFAULT_TRADE;
+    }
+
+    private int getTradeRatio() throws InvalidPlayerException {
+        return getTradeRatio(giveResource);
     }
 }

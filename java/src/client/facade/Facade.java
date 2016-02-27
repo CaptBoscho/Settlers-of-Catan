@@ -497,6 +497,35 @@ public class Facade {
         return p.getPlayerIndex();
     }
 
+//    public List<ResourceType> getPlayerResources(int pIndex){
+//        List<ResourceType> resourceTypes = new ArrayList<>();
+//        PlayerManager pm = game.getPlayerManager();
+//        try {
+//            Player player = pm.getPlayerByIndex(pIndex);
+//
+//            //Resource Types
+//            if(player.getNumberOfType(ResourceType.BRICK) > 0){
+//                resourceTypes.add(ResourceType.BRICK);
+//            }
+//            if(player.getNumberOfType(ResourceType.WOOD) > 0){
+//                resourceTypes.add(ResourceType.WOOD);
+//            }
+//            if(player.getNumberOfType(ResourceType.WHEAT) > 0){
+//                resourceTypes.add(ResourceType.WHEAT);
+//            }
+//            if(player.getNumberOfType(ResourceType.SHEEP) > 0){
+//                resourceTypes.add(ResourceType.SHEEP);
+//            }
+//            if(player.getNumberOfType(ResourceType.ORE) > 0){
+//                resourceTypes.add(ResourceType.ORE);
+//            }
+//        } catch (PlayerExistsException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return resourceTypes;
+//    }
+
     public int getVictoryPoints(int pIndex) {
         PlayerManager pm = game.getPlayerManager();
         Player player = null;
@@ -692,6 +721,16 @@ public class Facade {
      */
     public HashMap<ResourceType, Integer> getBankResources(){
         return this.game.getBankResources();
+    }
+
+    /**
+     * returns the Hashmap where the key is the resourcetype
+     * and the Integer is how many of that resource the Player
+     * bank has.
+     * @return
+     */
+    public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
+        return this.game.getPlayerResources(pIndex);
     }
 
     /**
