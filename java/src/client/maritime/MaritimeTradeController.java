@@ -23,6 +23,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
         tradeView.enableMaritimeTrade(false);
 
 		this.facade = Facade.getInstance();
+		facade.addObserver(this);
 	}
 	
 	public IMaritimeTradeView getTradeView() {
