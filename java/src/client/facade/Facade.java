@@ -18,6 +18,7 @@ import shared.model.game.trade.TradePackage;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.exceptions.*;
+import shared.model.player.PlayerManager;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
@@ -494,6 +495,17 @@ public class Facade {
     public int getPlayerIndexByID(int playerId) throws PlayerExistsException {
         Player p = game.getPlayerById(playerId);
         return p.getPlayerIndex();
+    }
+
+    public int getVictoryPoints(int pIndex) {
+        PlayerManager pm = game.getPlayerManager();
+        Player player = null;
+        try {
+            player = pm.getPlayerByIndex(pIndex);
+            return player.getVictoryPoints();
+        } catch (PlayerExistsException e) {
+            return -1;
+        }
     }
 
     public PlayerInfo getWinner() throws GameOverException{
