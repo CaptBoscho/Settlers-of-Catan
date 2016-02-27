@@ -1142,6 +1142,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     @Override
+    public MessageList getChat() {
+        return this.chat;
+    }
+
+    @Override
     public CatanColor getPlayerColorByName(String player) {
         assert player != null;
         return playerManager.getPlayerColorByName(player);

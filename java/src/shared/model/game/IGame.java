@@ -394,4 +394,5 @@ public interface IGame {
 
     public HashMap<ResourceType, Integer> getBankResources();
 
+    MessageList getChat();
 }

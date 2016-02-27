@@ -691,4 +691,16 @@ public class Facade {
         return this.game.getBankResources();
     }
 
+    public void sendChat(int playerIndex, String message) {
+        SendChatDTO dto = new SendChatDTO(playerIndex, message);
+        try {
+            ServerProxy.getInstance().sendChat(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public MessageList getChat() {
+        return this.game.getChat();
+    }
 }
