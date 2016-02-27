@@ -176,8 +176,6 @@ public interface IPlayer {
 
     void playKnight();
 
-    Integer getKnights();
-
     void loseArmyCard();
 
     void winArmyCard();
