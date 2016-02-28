@@ -47,7 +47,6 @@ public class PointsController extends Controller implements IPointsController, O
 
 	private void initFromModel() {
 		int points = facade.getPoints(userCookie.getPlayerIndex());
-        assert points <= 10;
         assert points >= 0;
         getPointsView().setPoints(points);
 
