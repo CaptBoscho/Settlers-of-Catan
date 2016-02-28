@@ -606,4 +606,28 @@ public final class PlayerManager implements IPlayerManager {
         }
         return false;
     }
+
+    @Override
+    public Player getPlayerByName(final String name) throws PlayerExistsException {
+        assert name != null;
+
+        for (final Player player : this.players) {
+            if(player.getName().equals(name)) {
+                return player;
+            }
+        }
+
+        throw new PlayerExistsException("Player with name " + name + " doesn't exist!");
+    }
+
+    @Override
+    public CatanColor getPlayerColorByName(final String name){
+        assert name != null;
+        try {
+            return getPlayerByName(name).getColor();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -12,6 +12,7 @@ import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
+import shared.model.game.MessageList;
 import shared.model.game.TurnTracker;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
@@ -463,11 +464,11 @@ public class Facade {
 
     public PlayerInfo[] getOtherPlayers(int id){
         List<Player> players = this.game.getPlayers();
-        PlayerInfo[] playerInfos = new PlayerInfo[3];
+        PlayerInfo[] playerInfos = new PlayerInfo[players.size()-1];
 
         int longestroad = this.game.currentLongestRoadPlayer();
         int largestarmy = this.game.currentLargestArmyPlayer();
-        int i =0;
+        int i = 0;
         for(Player p: players){
             if(p.getPlayerIndex() != id) {
                 boolean lr = false;
@@ -696,6 +697,14 @@ public class Facade {
         return this.game.hasDiscarded(playerIndex);
     }
 
+    public MessageList getLog() {
+        return this.game.getLog();
+    }
+
+    public CatanColor getPlayerColorByName(String player) {
+        return this.game.getPlayerColorByName(player);
+    }
+
     /**
      * returns the Hashmap where the key is the resourcetype
      * and the Integer is how many of that resource the bank
@@ -706,22 +715,16 @@ public class Facade {
         return this.game.getBankResources();
     }
 
-    /**
-     * plays the Development Card
-     *
-     * @param playerID
-     * @param dc
-     * @throws BuildException
-     */
-    /*public void playDC(int playerID, DevCardType dc, EdgeLocation edge1, EdgeLocation edge2) throws BuildException, PlayerExistsException, DevCardException {
-        if (canPlayDC(playerID, dc)) {
-            if(dc == DevCardType.SOLDIER){game.useSoldier(playerID);}
-            else if(dc == DevCardType.MONUMENT){game.useMonument(playerID);}
-            else if(dc == DevCardType.ROAD_BUILD){game.useRoadBuilder(playerID);}
-            else if(dc == DevCardType.MONOPOLY){game.useMonopoly(playerID);}
-            else if(dc == DevCardType.YEAR_OF_PLENTY){game.useYearOfPlenty(playerID);}
-        } else {
-            throw new BuildException("can't play this Develpment Card");
+    public void sendChat(int playerIndex, String message) {
+        SendChatDTO dto = new SendChatDTO(playerIndex, message);
+        try {
+            ServerProxy.getInstance().sendChat(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
         }
-    }*/
+    }
+
+    public MessageList getChat() {
+        return this.game.getChat();
+    }
 }
