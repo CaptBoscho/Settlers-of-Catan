@@ -107,9 +107,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				createAccept();
 			}
 		}else{
-			getWaitOverlay().closeModal();
-			getTradeOverlay().closeModal();
-			getAcceptOverlay().closeModal();
+			if(getWaitOverlay().isModalShowing()){getWaitOverlay().closeModal();}
+			if(getTradeOverlay().isModalShowing()){getTradeOverlay().closeModal();}
+			if(getAcceptOverlay().isModalShowing()){getAcceptOverlay().closeModal();}
 		}
 	}
 	
@@ -150,7 +150,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		int ore = facade.getTradeOre();
 		int me = UserCookie.getInstance().getPlayerIndex();
 
-		if(brick > 0 && brick <= brickcount){
+		if(brick > 0){
 			getAcceptOverlay().addGetResource(ResourceType.BRICK, brick);
 		}else if(brick < 0 || brick > brickcount){
 			brick = brick * -1;
@@ -160,7 +160,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			}
 		}
 
-		if(wood > 0 && wood <= woodcount){
+		if(wood > 0){
 			getAcceptOverlay().addGetResource(ResourceType.WOOD, wood);
 		}else if(wood < 0 || wood > woodcount){
 			wood = wood * -1;
@@ -170,34 +170,44 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			}
 		}
 
-		if(sheep > 0 && sheep <= sheepcount){
+		if(sheep > 0){
 			getAcceptOverlay().addGetResource(ResourceType.SHEEP, sheep);
-		}else if(sheep < 0 || sheep > sheepcount){
+		}else if(sheep < 0){
 			sheep = sheep * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.SHEEP, sheep);
 			if(facade.getAmountOfResource(me, ResourceType.SHEEP) <= 0){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
+		}else if(sheep > sheepcount){
+			getAcceptOverlay().addGiveResource(ResourceType.SHEEP, sheep);
+			getAcceptOverlay().setAcceptEnabled(false);
 		}
 
-		if(wheat > 0 && wheat <= wheatcount){
+		if(wheat > 0){
 			getAcceptOverlay().addGetResource(ResourceType.WHEAT, wheat);
-		}else if(wheat < 0 || wheat > wheatcount){
+		}else if(wheat < 0){
 			wheat = wheat * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.WHEAT, wheat);
 			if(facade.getAmountOfResource(me, ResourceType.WHEAT) <= 0){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
+		}else if(wheat > wheatcount){
+			getAcceptOverlay().addGiveResource(ResourceType.WHEAT, wheat);
+			getAcceptOverlay().setAcceptEnabled(false);
 		}
 
-		if(ore > 0 && ore <= orecount){
+
+		if(ore > 0){
 			getAcceptOverlay().addGetResource(ResourceType.ORE, ore);
-		}else if(ore < 0 || ore > orecount){
+		}else if(ore < 0){
 			ore = ore * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.ORE, ore);
 			if(facade.getAmountOfResource(me, ResourceType.ORE) <= 0){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
+		}else if(ore > orecount){
+			getAcceptOverlay().addGiveResource(ResourceType.ORE, ore);
+			getAcceptOverlay().setAcceptEnabled(false);
 		}
 
 		getAcceptOverlay().showModal();
