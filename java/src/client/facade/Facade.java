@@ -12,13 +12,13 @@ import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.IGame;
+import shared.model.game.MessageList;
 import shared.model.game.TurnTracker;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.exceptions.*;
-import shared.model.player.PlayerManager;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
@@ -270,7 +270,7 @@ public class Facade {
      * @throws BuildException
      */
     //TODO talk with server
-    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) {
         assert playerOneID >= 0;
         assert playerTwoID >= 0;
         assert playerOneID != playerTwoID;
@@ -280,6 +280,7 @@ public class Facade {
         assert twoCards.size() > 0;
         assert !oneCards.equals(twoCards);
 
+
         TradePackage one = new TradePackage(playerOneID, oneCards);
         TradePackage two = new TradePackage(playerTwoID, twoCards);
         Trade t = new Trade(one, two);
@@ -288,6 +289,29 @@ public class Facade {
             ServerProxy.getInstance().offerTrade(trade);
         } catch(MissingUserCookieException e) {}
     }
+
+    public void answerTrade(int playerIndex, boolean answer){
+        try {
+            final TradeOfferResponseDTO dto = new TradeOfferResponseDTO(playerIndex, answer);
+            ServerProxy.getInstance().respondToTradeOffer(dto);
+        }catch(MissingUserCookieException e){}
+    }
+
+    public int getTradeReceiver(){return this.game.getTradeReceiver();}
+
+    public boolean isTradeActive(){return this.game.isTradeActive();}
+
+    public int getTradeSender(){return this.game.getTradeSender();}
+
+    public int getTradeBrick(){return this.game.getTradeBrick();}
+
+    public int getTradeWood(){return this.game.getTradeWood();}
+
+    public int getTradeSheep(){return this.game.getTradeSheep();}
+
+    public int getTradeWheat(){return this.game.getTradeWheat();}
+
+    public int getTradeOre(){return this.game.getTradeOre();}
 
     public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException {
         assert playerID >= 0;
@@ -440,11 +464,11 @@ public class Facade {
 
     public PlayerInfo[] getOtherPlayers(int id){
         List<Player> players = this.game.getPlayers();
-        PlayerInfo[] playerInfos = new PlayerInfo[3];
+        PlayerInfo[] playerInfos = new PlayerInfo[players.size()-1];
 
         int longestroad = this.game.currentLongestRoadPlayer();
         int largestarmy = this.game.currentLargestArmyPlayer();
-        int i =0;
+        int i = 0;
         for(Player p: players){
             if(p.getPlayerIndex() != id) {
                 boolean lr = false;
@@ -495,46 +519,6 @@ public class Facade {
     public int getPlayerIndexByID(int playerId) throws PlayerExistsException {
         Player p = game.getPlayerById(playerId);
         return p.getPlayerIndex();
-    }
-
-//    public List<ResourceType> getPlayerResources(int pIndex){
-//        List<ResourceType> resourceTypes = new ArrayList<>();
-//        PlayerManager pm = game.getPlayerManager();
-//        try {
-//            Player player = pm.getPlayerByIndex(pIndex);
-//
-//            //Resource Types
-//            if(player.getNumberOfType(ResourceType.BRICK) > 0){
-//                resourceTypes.add(ResourceType.BRICK);
-//            }
-//            if(player.getNumberOfType(ResourceType.WOOD) > 0){
-//                resourceTypes.add(ResourceType.WOOD);
-//            }
-//            if(player.getNumberOfType(ResourceType.WHEAT) > 0){
-//                resourceTypes.add(ResourceType.WHEAT);
-//            }
-//            if(player.getNumberOfType(ResourceType.SHEEP) > 0){
-//                resourceTypes.add(ResourceType.SHEEP);
-//            }
-//            if(player.getNumberOfType(ResourceType.ORE) > 0){
-//                resourceTypes.add(ResourceType.ORE);
-//            }
-//        } catch (PlayerExistsException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return resourceTypes;
-//    }
-
-    public int getVictoryPoints(int pIndex) {
-        PlayerManager pm = game.getPlayerManager();
-        Player player = null;
-        try {
-            player = pm.getPlayerByIndex(pIndex);
-            return player.getVictoryPoints();
-        } catch (PlayerExistsException e) {
-            return -1;
-        }
     }
 
     public PlayerInfo getWinner() throws GameOverException{
@@ -713,6 +697,14 @@ public class Facade {
         return this.game.hasDiscarded(playerIndex);
     }
 
+    public MessageList getLog() {
+        return this.game.getLog();
+    }
+
+    public CatanColor getPlayerColorByName(String player) {
+        return this.game.getPlayerColorByName(player);
+    }
+
     /**
      * returns the Hashmap where the key is the resourcetype
      * and the Integer is how many of that resource the bank
@@ -733,22 +725,16 @@ public class Facade {
         return this.game.getPlayerResources(pIndex);
     }
 
-    /**
-     * plays the Development Card
-     *
-     * @param playerID
-     * @param dc
-     * @throws BuildException
-     */
-    /*public void playDC(int playerID, DevCardType dc, EdgeLocation edge1, EdgeLocation edge2) throws BuildException, PlayerExistsException, DevCardException {
-        if (canPlayDC(playerID, dc)) {
-            if(dc == DevCardType.SOLDIER){game.useSoldier(playerID);}
-            else if(dc == DevCardType.MONUMENT){game.useMonument(playerID);}
-            else if(dc == DevCardType.ROAD_BUILD){game.useRoadBuilder(playerID);}
-            else if(dc == DevCardType.MONOPOLY){game.useMonopoly(playerID);}
-            else if(dc == DevCardType.YEAR_OF_PLENTY){game.useYearOfPlenty(playerID);}
-        } else {
-            throw new BuildException("can't play this Develpment Card");
+    public void sendChat(int playerIndex, String message) {
+        SendChatDTO dto = new SendChatDTO(playerIndex, message);
+        try {
+            ServerProxy.getInstance().sendChat(dto);
+        } catch (MissingUserCookieException e) {
+            e.printStackTrace();
         }
-    }*/
+    }
+
+    public MessageList getChat() {
+        return this.game.getChat();
+    }
 }

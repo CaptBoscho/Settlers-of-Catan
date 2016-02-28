@@ -48,6 +48,9 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     private PlayerManager playerManager;
     private ResourceCardBank resourceCardBank;
     private DevelopmentCardBank developmentCardBank;
+    private Trade currentOffer;
+    private MessageList chat;
+    private MessageList log;
     private int winner;
     private int version;
 
@@ -66,7 +69,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.playerManager = new PlayerManager(new ArrayList<>());
         this.resourceCardBank = new ResourceCardBank(true);
         this.developmentCardBank = new DevelopmentCardBank(true);
-
+        this.chat = new MessageList();
+        this.log = new MessageList();
     }
 
     public static Game getInstance() {
@@ -77,18 +81,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         return instance;
     }
 
-
-    public void reset() {
-        this.dice = new Dice(2);
-        this.map = new Map(false, false, false);
-        this.turnTracker = new TurnTracker();
-        this.longestRoadCard = new LongestRoad();
-        this.largestArmyCard = new LargestArmy();
-        this.playerManager = new PlayerManager(new ArrayList<>());
-        this.resourceCardBank = new ResourceCardBank(true);
-        this.developmentCardBank = new DevelopmentCardBank(true);
-    }
-
     public void updateGame(final JsonObject json) {
         assert json != null;
         assert json.has("deck");
@@ -96,6 +88,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert json.has("players");
         assert json.has("bank");
         assert json.has("turnTracker");
+        assert json.has("chat");
+        assert json.has("log");
 
         this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
         this.map = new Map(json.get("map").getAsJsonObject());
@@ -112,11 +106,18 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
+        if(json.has("tradeOffer")) {
+            this.currentOffer = new Trade(json.get("tradeOffer").getAsJsonObject());
+        }else{
+            this.currentOffer = new Trade();
+        }
         try {
             this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
         } catch (BadJsonException e) {
             e.printStackTrace();
         }
+        this.chat = new MessageList(json.get("chat").getAsJsonObject());
+        this.log = new MessageList(json.get("log").getAsJsonObject());
         setChanged();
         notifyObservers();
     }
@@ -700,31 +701,14 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public boolean ableToBuildRoad(int id) throws PlayerExistsException{
-        if(turnTracker.isSetupPhaseOne()) {
-            if (getAvailableSettlements(id) != 4  && getAvailableCities(id) == 4) {
-                return false;
-            }
-            if(getAvailableSettlements(id)==4 && getAvailableRoads(id) == 14){return false;}
-            return turnTracker.isPlayersTurn(id);
-        } else if(turnTracker.isSetupPhaseTwo()){
-            if (getAvailableSettlements(id) != 3 && getAvailableCities(id) == 4){
-                return false;
-            }
-            if(getAvailableSettlements(id) ==4 && getAvailableRoads(id) == 13){return false;}
-            return turnTracker.isPlayersTurn(id);
-        }
+        if(turnTracker.isSetupPhase()){return false;}
         if(getAvailableRoads(id) == 0){return false;}
         return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
     }
 
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
-        if(turnTracker.isSetupPhaseOne()){
-            if(getAvailableSettlements(id) !=5){return false;}
-            return turnTracker.isPlayersTurn(id);
-        }else if(turnTracker.isSetupPhaseTwo()){
-            if(getAvailableSettlements(id) != 4){return false;}
-            return turnTracker.isPlayersTurn(id);
-        }
+        if(turnTracker.isSetupPhase()){return false;}
+
         if(getAvailableSettlements(id) == 0){return false;}
         return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
     }
@@ -937,6 +921,22 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         return turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
     }
+
+    public boolean isTradeActive(){return this.currentOffer.isActive();}
+
+    public int getTradeReceiver(){return this.currentOffer.getReceiver();}
+
+    public int getTradeSender(){return this.currentOffer.getSender();}
+
+    public int getTradeBrick(){return this.currentOffer.getBrick();}
+
+    public int getTradeWood(){return this.currentOffer.getWood();}
+
+    public int getTradeSheep(){return this.currentOffer.getSheep();}
+
+    public int getTradeWheat(){return this.currentOffer.getWheat();}
+
+    public int getTradeOre(){return this.currentOffer.getOre();}
     /**
      * checks if that player has the card needed for that port's trade
      *
@@ -1149,6 +1149,22 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean hasDiscarded(int playerIndex) {
         return playerManager.hasDiscarded(playerIndex);
+    }
+
+    @Override
+    public MessageList getLog() {
+        return this.log;
+    }
+
+    @Override
+    public MessageList getChat() {
+        return this.chat;
+    }
+
+    @Override
+    public CatanColor getPlayerColorByName(String player) {
+        assert player != null;
+        return playerManager.getPlayerColorByName(player);
     }
 
     @Override

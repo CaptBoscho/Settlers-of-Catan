@@ -1,11 +1,12 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
+import shared.model.JsonSerializable;
 
 /**
  * @author Corbin Byers
  */
-public final class MessageLine {
+public final class MessageLine implements JsonSerializable {
 
     private String source;
     private String content;
@@ -20,7 +21,7 @@ public final class MessageLine {
         content = c;
     }
 
-    public MessageLine(JsonObject jo){
+    public MessageLine(JsonObject jo) {
         assert jo != null;
         assert jo.has("message");
         assert jo.has("source");
@@ -35,5 +36,10 @@ public final class MessageLine {
 
     public String getMessage(){
         return content;
+    }
+
+    @Override
+    public JsonObject toJSON() {
+        return null;
     }
 }

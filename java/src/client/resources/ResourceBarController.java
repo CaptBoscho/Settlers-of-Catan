@@ -38,7 +38,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             boolean enableSettlement = facade.ableToBuildSettlement(playerIndex);
             boolean enableCity = facade.ableToBuildCity(playerIndex);
 			boolean enableBuyDevCard = facade.canBuyDC(playerIndex);
-            boolean enablePlayCard = facade.canPlayDC(playerIndex);
+            boolean enablePlayDevCard = facade.canPlayDC(playerIndex);
 
             int roadCount = facade.getAvailableRoads(playerIndex);
             int settlementCount = facade.getAvailableSettlements(playerIndex);
@@ -60,7 +60,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementEnabled(settle, enableSettlement);
             getView().setElementEnabled(city, enableCity);
 			getView().setElementEnabled(buyCard, enableBuyDevCard);
-            getView().setElementEnabled(playCard, enablePlayCard);
+            getView().setElementEnabled(playCard, enablePlayDevCard);
 
             getView().setElementAmount(road, roadCount);
             getView().setElementAmount(settle, settlementCount);
