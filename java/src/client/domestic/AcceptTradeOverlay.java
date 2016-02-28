@@ -141,7 +141,7 @@ public class AcceptTradeOverlay extends OverlayView implements IAcceptTradeOverl
 			contentPanel.add(offering_component,offering_component_gbc);
 		}
 		//The Image
-		final Image i = ImageUtils.loadImage("images/resources/"+resource+".png");
+		final Image i = ImageUtils.loadImage("images/resources/"+resource.toString().toLowerCase()+".png");
 		final ImageIcon ii = new ImageIcon(i.getScaledInstance(50, 50, 0));
 
 		//The Number (and image)

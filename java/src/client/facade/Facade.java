@@ -270,7 +270,7 @@ public class Facade {
      * @throws BuildException
      */
     //TODO talk with server
-    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) throws BuildException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) {
         assert playerOneID >= 0;
         assert playerTwoID >= 0;
         assert playerOneID != playerTwoID;
@@ -280,6 +280,7 @@ public class Facade {
         assert twoCards.size() > 0;
         assert !oneCards.equals(twoCards);
 
+
         TradePackage one = new TradePackage(playerOneID, oneCards);
         TradePackage two = new TradePackage(playerTwoID, twoCards);
         Trade t = new Trade(one, two);
@@ -288,6 +289,29 @@ public class Facade {
             ServerProxy.getInstance().offerTrade(trade);
         } catch(MissingUserCookieException e) {}
     }
+
+    public void answerTrade(int playerIndex, boolean answer){
+        try {
+            final TradeOfferResponseDTO dto = new TradeOfferResponseDTO(playerIndex, answer);
+            ServerProxy.getInstance().respondToTradeOffer(dto);
+        }catch(MissingUserCookieException e){}
+    }
+
+    public int getTradeReceiver(){return this.game.getTradeReceiver();}
+
+    public boolean isTradeActive(){return this.game.isTradeActive();}
+
+    public int getTradeSender(){return this.game.getTradeSender();}
+
+    public int getTradeBrick(){return this.game.getTradeBrick();}
+
+    public int getTradeWood(){return this.game.getTradeWood();}
+
+    public int getTradeSheep(){return this.game.getTradeSheep();}
+
+    public int getTradeWheat(){return this.game.getTradeWheat();}
+
+    public int getTradeOre(){return this.game.getTradeOre();}
 
     public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException {
         assert playerID >= 0;
