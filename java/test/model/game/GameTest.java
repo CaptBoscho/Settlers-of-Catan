@@ -1941,7 +1941,7 @@ public class GameTest {
         game.nextPhase();
         final TurnTracker.Phase p = game.getCurrentPhase();
 
-        if(p == TurnTracker.Phase.PLAYING){
+        if(p == TurnTracker.Phase.PLAYING || p == TurnTracker.Phase.SETUPONE || p == TurnTracker.Phase.SETUPTWO){
             assertTrue(game.canFinishTurn(guy));
         } else{
             assertFalse(game.canFinishTurn(guy));
