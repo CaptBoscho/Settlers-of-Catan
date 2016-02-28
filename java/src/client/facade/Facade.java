@@ -289,6 +289,13 @@ public class Facade {
         } catch(MissingUserCookieException e) {}
     }
 
+    public void answerTrade(int playerIndex, boolean answer){
+        try {
+            final TradeOfferResponseDTO dto = new TradeOfferResponseDTO(playerIndex, answer);
+            ServerProxy.getInstance().respondToTradeOffer(dto);
+        }catch(MissingUserCookieException e){}
+    }
+
     public int getTradeReceiver(){return this.game.getTradeReceiver();}
 
     public boolean isTradeActive(){return this.game.isTradeActive();}
