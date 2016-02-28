@@ -26,4 +26,6 @@ public interface ISelectColorView extends IOverlayView {
 	 * @return The color selected by the user
 	 */
 	CatanColor getSelectedColor();
+
+	void resetButton(int val);
 }

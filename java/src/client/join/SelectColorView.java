@@ -254,7 +254,7 @@ public final class SelectColorView extends OverlayView implements ISelectColorVi
 		buttonPanel.add(button, gbc);		
 	}
 
-	private void resetButton(int val) {
+	public void resetButton(int val) {
 		switch (val) {
 		case 0:
 			break;

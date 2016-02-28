@@ -68,4 +68,14 @@ public final class GameInfo {
     public String toString() {
         return this.title;
     }
+
+	@Override
+	public boolean equals(Object o) {
+		if(o == null || (getClass() != o.getClass())) {
+			return false;
+		} else {
+			GameInfo other = (GameInfo)o;
+			return this.getId() == other.getId() && this.getTitle().equals(other.getTitle());
+		}
+	}
 }

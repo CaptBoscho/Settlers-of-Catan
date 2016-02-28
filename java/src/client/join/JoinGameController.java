@@ -1,6 +1,7 @@
 package client.join;
 
 import client.facade.Facade;
+import client.services.Poller;
 import client.services.ServerProxy;
 import client.services.UserCookie;
 import shared.definitions.CatanColor;
@@ -10,7 +11,9 @@ import client.misc.*;
 import shared.dto.CreateGameDTO;
 import shared.dto.JoinGameDTO;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 
 /**
@@ -22,6 +25,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	private ISelectColorView selectColorView;
 	private IMessageView messageView;
 	private IAction joinAction;
+	private Poller poller;
 	
 	/**
 	 * JoinGameController constructor
@@ -94,11 +98,23 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getJoinGameView().setGames(gamesArray, UserCookie.getInstance().getPlayerInfo());
 		setNewGameView(newGameView);
 
+		poller = new Poller(ServerProxy.getInstance());
+		poller.setPollingFunction(() -> {
+			List<GameInfo> games = ServerProxy.getInstance().getAllGames();
+			GameInfo[] gamesArr = new GameInfo[games.size()];
+			games.toArray(gamesArr);
+			getJoinGameView().setGames(gamesArr, UserCookie.getInstance().getPlayerInfo());
+			setNewGameView(newGameView);
+			return null;
+		});
+		poller.start();
+
 		getJoinGameView().showModal();
 	}
 
 	@Override
 	public void startCreateNewGame() {
+		if(poller != null) poller.stop();
 		getNewGameView().showModal();
 	}
 
@@ -125,17 +141,17 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
-		for(PlayerInfo p : game.getPlayers()) {
-			if(p.getId() != UserCookie.getInstance().getPlayerId()) {
-				getSelectColorView().setColorEnabled(p.getColor(), false);
-			}
-		}
+		game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
+			getSelectColorView().setColorEnabled(p.getColor(), false);
+		});
+
         Facade.getInstance().setGameInfo(game);
         getSelectColorView().showModal();
 	}
 
 	@Override
 	public void cancelJoinGame() {
+		poller.stop();
 		getJoinGameView().closeModal();
 	}
 
@@ -143,8 +159,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	public void joinGame(CatanColor color) {
         final JoinGameDTO dto = new JoinGameDTO(Facade.getInstance().getGameId(), color);
         ServerProxy.getInstance().joinGame(dto);
-
-        // TODO - create/update game instance
 
 		// If join succeeded
 		getSelectColorView().closeModal();

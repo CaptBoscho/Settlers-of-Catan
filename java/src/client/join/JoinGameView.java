@@ -2,6 +2,7 @@ package client.join;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 
 import javax.swing.*;
 
@@ -34,6 +35,9 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 	}
 
 	private void initializeView() {
+		this.removeAll();
+//		this.updateUI();
+		System.out.println("starting view initialize");
 		this.setOpaque(true);
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
@@ -80,6 +84,7 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 				tmp1.setFont(labelFont);
 				gamePanel.add(tmp1);
 				final JLabel tmp2 = new JLabel(game.getTitle());
+				System.out.println("found game " + game.getTitle());
 				tmp2.setFont(labelFont);
 				gamePanel.add(tmp2);
 				String players = String.valueOf(game.getPlayers().size()) + "/4 : ";
@@ -122,6 +127,8 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		buttonPanel.add(createButton);
 		this.add(buttonPanel, BorderLayout.SOUTH);
+		this.updateUI();
+		System.out.println("finishing initialize");
 	}
 
 	@Override
@@ -131,10 +138,12 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 
 	@Override
 	public void setGames(GameInfo[] games, PlayerInfo localPlayer) {
-		this.games = games;
-		this.localPlayer = localPlayer;
-		this.removeAll();
-		this.initialize();
+		if(!Arrays.equals(this.games, games)) {
+			this.games = games;
+			this.localPlayer = localPlayer;
+			this.removeAll();
+			this.initialize();
+		}
 	}
 	
 	private ActionListener actionListener = new ActionListener() {

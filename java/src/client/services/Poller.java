@@ -5,6 +5,7 @@ import shared.model.game.Game;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
 
 /**
  * The poller keeps the client updated with the game information via long-polling.
@@ -16,6 +17,9 @@ public final class Poller {
     private final static int DEFAULT_POLL_INTERVAL = 200;
     private IServer server;
     private Timer poller;
+    private int timeout;
+
+    Callable<Void> pollingFunction;
 
     /**
      * Construct a poller instance using the given server
@@ -23,6 +27,16 @@ public final class Poller {
      */
     public Poller(IServer server) {
         this.server = server;
+        timeout = DEFAULT_POLL_INTERVAL;
+        this.pollingFunction = null;
+    }
+
+    public void setPollingFunction(Callable<Void> pollingFunction) {
+        this.pollingFunction = pollingFunction;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 
     /**
@@ -38,13 +52,21 @@ public final class Poller {
         poller.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                try {
-                    server.getCurrentModel(Game.getInstance().getVersion());
-                } catch (MissingUserCookieException e) {
-                    e.printStackTrace();
+                if(pollingFunction == null) {
+                    try {
+                        server.getCurrentModel(Game.getInstance().getVersion());
+                    } catch (MissingUserCookieException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        pollingFunction.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }, 0, DEFAULT_POLL_INTERVAL);
+        }, 0, this.timeout);
     }
 
     /**
