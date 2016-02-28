@@ -152,10 +152,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 		if(brick > 0){
 			getAcceptOverlay().addGetResource(ResourceType.BRICK, brick);
-		}else if(brick < 0 || brick > brickcount){
+		}else if(brick < 0){
 			brick = brick * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.BRICK, brick);
-			if(facade.getAmountOfResource(me,ResourceType.BRICK) <= 0){
+			if(facade.getAmountOfResource(me,ResourceType.BRICK) < brick){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
 		}
@@ -165,7 +165,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}else if(wood < 0 || wood > woodcount){
 			wood = wood * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.WOOD, wood);
-			if(facade.getAmountOfResource(me, ResourceType.WOOD) <= 0){
+			if(facade.getAmountOfResource(me, ResourceType.WOOD) < wood){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
 		}
@@ -175,12 +175,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}else if(sheep < 0){
 			sheep = sheep * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.SHEEP, sheep);
-			if(facade.getAmountOfResource(me, ResourceType.SHEEP) <= 0){
+			if(facade.getAmountOfResource(me, ResourceType.SHEEP) < sheep){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
-		}else if(sheep > sheepcount){
-			getAcceptOverlay().addGiveResource(ResourceType.SHEEP, sheep);
-			getAcceptOverlay().setAcceptEnabled(false);
 		}
 
 		if(wheat > 0){
@@ -188,12 +185,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}else if(wheat < 0){
 			wheat = wheat * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.WHEAT, wheat);
-			if(facade.getAmountOfResource(me, ResourceType.WHEAT) <= 0){
+			if(facade.getAmountOfResource(me, ResourceType.WHEAT) < wheat){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
-		}else if(wheat > wheatcount){
-			getAcceptOverlay().addGiveResource(ResourceType.WHEAT, wheat);
-			getAcceptOverlay().setAcceptEnabled(false);
 		}
 
 
@@ -202,14 +196,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}else if(ore < 0){
 			ore = ore * -1;
 			getAcceptOverlay().addGiveResource(ResourceType.ORE, ore);
-			if(facade.getAmountOfResource(me, ResourceType.ORE) <= 0){
+			if(facade.getAmountOfResource(me, ResourceType.ORE) < ore){
 				getAcceptOverlay().setAcceptEnabled(false);
 			}
-		}else if(ore > orecount){
-			getAcceptOverlay().addGiveResource(ResourceType.ORE, ore);
-			getAcceptOverlay().setAcceptEnabled(false);
 		}
-
 		getAcceptOverlay().showModal();
 	}
 
