@@ -6,6 +6,7 @@ import client.services.IServer;
 import client.services.MissingUserCookieException;
 import client.services.ServerProxy;
 import client.services.UserCookie;
+import org.apache.http.client.cache.Resource;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.dto.MaritimeTradeDTO;
@@ -68,34 +69,7 @@ public class MaritimeTradeControllerState {
      * Start a new maritime trade
      */
     public void startTrade() {
-        int pIndex = userCookie.getPlayerIndex();
-
-        //Setting up give options
-        Map<ResourceType, Integer> give = null;
-        try {
-            give = facade.getPlayerResources(pIndex);
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
-        List<ResourceType> giveOp = new ArrayList<>();
-
-        for(Map.Entry<ResourceType, Integer> entry : give.entrySet()){
-            int ratio = 0;
-
-            try {
-                ratio = getTradeRatio(entry.getKey());
-                System.out.println("Good try: " + entry.getKey());
-            } catch (InvalidPlayerException e) {
-                ratio = DEFAULT_TRADE;
-                System.out.println("Bad try: using default");
-            }
-            System.out.println("count: " + entry.getValue() + " ratio: " + ratio);
-            if(entry.getValue() >= ratio){
-                giveOp.add(entry.getKey());
-            }
-        }
-
-        ResourceType[] giveOptions = giveOp.toArray(new ResourceType[giveOp.size()]);
+        ResourceType[] giveOptions = buildGiveOptions();
 
         overlay.setTradeEnabled(false);
         overlay.setCancelEnabled(true);
@@ -114,18 +88,9 @@ public class MaritimeTradeControllerState {
         } catch (InvalidPlayerException e) {
             e.printStackTrace();
         }
-//        try {
-//            server.maritimeTrade(new MaritimeTradeDTO(index, getTradeRatio(),
-//                    getResource.toString(), giveResource.toString()));
-//        } catch (MissingUserCookieException e) {
-//            this.overlay.setStateMessage("Trade failed");
-//        } catch (InvalidPlayerException e) {
-//            this.overlay.setStateMessage("Trade failed");
-//        }
-//
-//        facade.maritimeTrade();
 
         overlay.closeModal();
+        overlay.reset();
     }
 
     /**
@@ -160,19 +125,7 @@ public class MaritimeTradeControllerState {
             overlay.selectGetOption(resource, DEFAULT_TRADE);
         }
 
-        //Setting up get options
-        Map<ResourceType, Integer> get = facade.getBankResources();
-
-        List<ResourceType> getOp = new ArrayList<>();
-
-        for(Map.Entry<ResourceType, Integer> entry : get.entrySet()){
-            if(entry.getValue() > 0){
-                getOp.add(entry.getKey());
-            }
-        }
-
-        ResourceType[] getOptions = getOp.toArray(new ResourceType[getOp.size()]);
-
+        ResourceType[] getOptions = buildGetOptions();
         overlay.showGetOptions(getOptions);
     }
 
@@ -181,7 +134,10 @@ public class MaritimeTradeControllerState {
      */
     public void unsetGetValue() {
         this.getResource = null;
-        overlay.reset();
+        ResourceType[] getOptions = buildGetOptions();
+
+        overlay.showGetOptions(getOptions);
+        overlay.setTradeEnabled(false);
     }
 
     /**
@@ -189,7 +145,12 @@ public class MaritimeTradeControllerState {
      */
     public void unsetGiveValue() {
         this.giveResource = null;
-        overlay.reset();
+        ResourceType[] giveOptions = buildGiveOptions();
+
+        overlay.hideGetOptions();
+        overlay.showGiveOptions(giveOptions);
+        overlay.setTradeEnabled(false);
+
     }
 
     /**
@@ -204,12 +165,8 @@ public class MaritimeTradeControllerState {
         int index = userCookie.getPlayerIndex();
         Set<PortType> ports = facade.maritimeTradeOptions(index);
 
-        System.out.println("ports: " + ports.toString());
-
         //Check for Resource Ports
         for (PortType port : ports) {
-            System.out.println("Port: " + port.toString());
-            System.out.println("Resource: " + type.toString());//port.toString().equals(type.toString()));
             if(port.toString().equals(type.toString())){
                 return RESOURCE_PORT_TRADE;
             }
@@ -228,5 +185,59 @@ public class MaritimeTradeControllerState {
 
     private int getTradeRatio() throws InvalidPlayerException {
         return getTradeRatio(giveResource);
+    }
+
+    private ResourceType[] buildGiveOptions(){
+        //Get the player index
+        int pIndex = userCookie.getPlayerIndex();
+
+        //Get the player's resources (Type and Count)
+        Map<ResourceType, Integer> give = null;
+        try {
+            give = facade.getPlayerResources(pIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+
+        //List to hold resource types that can be traded away
+        List<ResourceType> giveOptions = new ArrayList<>();
+        //Calculate which resources can be traded away
+        for(Map.Entry<ResourceType, Integer> entry : give.entrySet()){
+            //Init ratio
+            int ratio = 0;
+
+            //Calculate the trade ratio
+            try {
+                ratio = getTradeRatio(entry.getKey());
+            } catch (InvalidPlayerException e) {
+                ratio = DEFAULT_TRADE;
+            }
+
+            //If the number of resources (for the type) is >= trade ratio
+            //then add the resource type to the list of resources that can be traded away
+            if(entry.getValue() >= ratio){
+                giveOptions.add(entry.getKey());
+            }
+        }
+
+        //Convert the list to an array to be sent to the overlay
+        return giveOptions.toArray(new ResourceType[giveOptions.size()]);
+    }
+
+    private ResourceType[] buildGetOptions(){
+        //Get the bank's resources (Type and Count)
+        Map<ResourceType, Integer> get = facade.getBankResources();
+
+        //List to hold the resource types that can be traded for
+        List<ResourceType> getOptions = new ArrayList<>();
+        //Calculate which resources can be traded for
+        for(Map.Entry<ResourceType, Integer> entry : get.entrySet()){
+            if(entry.getValue() > 0){
+                getOptions.add(entry.getKey());
+            }
+        }
+
+        //Convert the list to an array to be sent to the overlay
+        return getOptions.toArray(new ResourceType[getOptions.size()]);
     }
 }
