@@ -1,5 +1,6 @@
 package client.maritime;
 
+import client.facade.BuildException;
 import client.facade.Facade;
 import client.services.IServer;
 import client.services.MissingUserCookieException;
@@ -10,7 +11,9 @@ import shared.definitions.ResourceType;
 import shared.dto.MaritimeTradeDTO;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
+import shared.model.bank.InvalidTypeException;
 
+import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +56,6 @@ public class MaritimeTradeControllerState {
         int index = userCookie.getPlayerIndex();
 
         //Enable/Disable button based on user's turn
-
         if(facade.getCurrentTurn() == index){
             view.enableMaritimeTrade(true);
         }
@@ -82,8 +84,10 @@ public class MaritimeTradeControllerState {
 
             try {
                 ratio = getTradeRatio(entry.getKey());
+                System.out.println("Good try: " + entry.getKey());
             } catch (InvalidPlayerException e) {
                 ratio = DEFAULT_TRADE;
+                System.out.println("Bad try: using default");
             }
             System.out.println("count: " + entry.getValue() + " ratio: " + ratio);
             if(entry.getValue() >= ratio){
@@ -106,13 +110,20 @@ public class MaritimeTradeControllerState {
         int index = userCookie.getPlayerIndex();
 
         try {
-            server.maritimeTrade(new MaritimeTradeDTO(index, getTradeRatio(),
-                    getResource.toString(), giveResource.toString()));
-        } catch (MissingUserCookieException e) {
-            this.overlay.setStateMessage("Trade failed");
+            facade.maritimeTrade(index, getTradeRatio(), getResource, giveResource);
         } catch (InvalidPlayerException e) {
-            this.overlay.setStateMessage("Trade failed");
+            e.printStackTrace();
         }
+//        try {
+//            server.maritimeTrade(new MaritimeTradeDTO(index, getTradeRatio(),
+//                    getResource.toString(), giveResource.toString()));
+//        } catch (MissingUserCookieException e) {
+//            this.overlay.setStateMessage("Trade failed");
+//        } catch (InvalidPlayerException e) {
+//            this.overlay.setStateMessage("Trade failed");
+//        }
+//
+//        facade.maritimeTrade();
 
         overlay.closeModal();
     }
@@ -193,8 +204,12 @@ public class MaritimeTradeControllerState {
         int index = userCookie.getPlayerIndex();
         Set<PortType> ports = facade.maritimeTradeOptions(index);
 
+        System.out.println("ports: " + ports.toString());
+
         //Check for Resource Ports
         for (PortType port : ports) {
+            System.out.println("Port: " + port.toString());
+            System.out.println("Resource: " + type.toString());//port.toString().equals(type.toString()));
             if(port.toString().equals(type.toString())){
                 return RESOURCE_PORT_TRADE;
             }

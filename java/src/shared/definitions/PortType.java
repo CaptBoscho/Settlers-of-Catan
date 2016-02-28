@@ -6,5 +6,10 @@ public enum PortType {
 	SHEEP,
 	WHEAT,
 	ORE,
-	THREE
+	THREE;
+
+	@Override
+	public String toString(){
+		return name().toLowerCase();
+	}
 }
