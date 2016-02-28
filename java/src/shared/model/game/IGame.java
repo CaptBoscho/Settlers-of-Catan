@@ -412,7 +412,9 @@ public interface IGame {
 
     int getPoints(int playerIndex) throws PlayerExistsException;
 
-    int getWinnerIndex();
+    int getWinnerId();
 
     String getPlayerNameByIndex(int playerIndex) throws PlayerExistsException;
+
+    int getPlayerIdByIndex(int playerIndex) throws PlayerExistsException;
 }

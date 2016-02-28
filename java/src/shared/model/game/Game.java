@@ -1156,22 +1156,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public int getPoints(int playerIndex) throws PlayerExistsException {
         Player player = playerManager.getPlayerByIndex(playerIndex);
         int totalPoints = 0;
-        totalPoints += 5 - player.getAvailableSettlements();
-        totalPoints += 4 - player.getAvailableCities();
-        int longestRoad = this.currentLongestRoadPlayer();
-        int largestArmy = this.currentLargestArmyPlayer();
-        if(longestRoad == playerIndex) {
-            totalPoints += 2;
-        }
-        if(largestArmy == playerIndex) {
-            totalPoints += 2;
-        }
         totalPoints += player.getVictoryPoints();
         return totalPoints;
     }
 
     @Override
-    public int getWinnerIndex() {
+    public int getWinnerId() {
         return this.winner;
     }
 
@@ -1184,6 +1174,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     public CatanColor getPlayerColorByName(String player) {
         assert player != null;
         return playerManager.getPlayerColorByName(player);
+    }
+
+    @Override
+    public int getPlayerIdByIndex(int playerIndex) throws PlayerExistsException {
+        return playerManager.getPlayerByIndex(playerIndex).getId();
     }
 
     @Override

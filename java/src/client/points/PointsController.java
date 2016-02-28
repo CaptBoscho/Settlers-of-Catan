@@ -51,10 +51,10 @@ public class PointsController extends Controller implements IPointsController, O
         assert points >= 0;
         getPointsView().setPoints(points);
 
-        int winner = facade.getWinnerIndex();
-        if(winner != -1 && facade.getPhase() == TurnTracker.Phase.GAMEFINISHED) {
-            boolean isWinner = winner == userCookie.getPlayerIndex();
-            getFinishedView().setWinner(facade.getPlayerNameByIndex(winner), isWinner);
+        int winner = facade.getWinnerId();
+        if(winner != -1) {
+            boolean isWinner = winner == facade.getPlayerIdByIndex(userCookie.getPlayerIndex());
+            getFinishedView().setWinner(facade.getPlayerNameByIndex(facade.getPlayerIndexByID(winner)), isWinner);
             getFinishedView().showModal();
         }
 	}

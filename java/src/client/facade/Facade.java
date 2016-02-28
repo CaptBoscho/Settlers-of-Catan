@@ -516,8 +516,13 @@ public class Facade {
         }
     }
 
-    public int getPlayerIndexByID(int playerId) throws PlayerExistsException {
-        Player p = game.getPlayerById(playerId);
+    public int getPlayerIndexByID(int playerId) {
+        Player p = null;
+        try {
+            p = game.getPlayerById(playerId);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
         return p.getPlayerIndex();
     }
 
@@ -740,8 +745,8 @@ public class Facade {
         return -1;
     }
 
-    public int getWinnerIndex() {
-        return this.game.getWinnerIndex();
+    public int getWinnerId() {
+        return this.game.getWinnerId();
     }
 
     public String getPlayerNameByIndex(int playerIndex) {
@@ -751,5 +756,14 @@ public class Facade {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int getPlayerIdByIndex(int playerIndex) {
+        try {
+            return this.game.getPlayerIdByIndex(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }
