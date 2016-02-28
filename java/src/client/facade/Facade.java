@@ -521,7 +521,7 @@ public class Facade {
         return p.getPlayerIndex();
     }
 
-    public PlayerInfo getWinner() throws GameOverException{
+    public PlayerInfo getWinner() throws GameOverException {
         Player p = this.game.getWinner();
 
         int longestroad = this.game.currentLongestRoadPlayer();
@@ -726,5 +726,30 @@ public class Facade {
 
     public MessageList getChat() {
         return this.game.getChat();
+    }
+
+    public int getPoints(int playerIndex) {
+        assert playerIndex >=0;
+        assert playerIndex <=3;
+
+        try {
+            return this.game.getPoints(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getWinnerIndex() {
+        return this.game.getWinnerIndex();
+    }
+
+    public String getPlayerNameByIndex(int playerIndex) {
+        try {
+            return this.game.getPlayerNameByIndex(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -98,9 +98,9 @@ public final class Game extends Observable implements IGame, JsonSerializable {
 
         // only update if someone actually has the longest road
         final JsonObject turnTracker = json.getAsJsonObject("turnTracker");
-        int longestRoadId = turnTracker.get("longestRoad").getAsInt();
-        if(longestRoadId >= 0) {
-            this.longestRoadCard = new LongestRoad(longestRoadId);
+        int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
+        if(longestRoadIndex >= 0) {
+            this.longestRoadCard = new LongestRoad(longestRoadIndex);
         }
 
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
@@ -118,6 +118,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         }
         this.chat = new MessageList(json.get("chat").getAsJsonObject());
         this.log = new MessageList(json.get("log").getAsJsonObject());
+        this.winner = json.get("winner").getAsInt();
         setChanged();
         notifyObservers();
     }
@@ -1149,6 +1150,34 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public MessageList getChat() {
         return this.chat;
+    }
+
+    @Override
+    public int getPoints(int playerIndex) throws PlayerExistsException {
+        Player player = playerManager.getPlayerByIndex(playerIndex);
+        int totalPoints = 0;
+        totalPoints += 5 - player.getAvailableSettlements();
+        totalPoints += 4 - player.getAvailableCities();
+        int longestRoad = this.currentLongestRoadPlayer();
+        int largestArmy = this.currentLargestArmyPlayer();
+        if(longestRoad == playerIndex) {
+            totalPoints += 2;
+        }
+        if(largestArmy == playerIndex) {
+            totalPoints += 2;
+        }
+        totalPoints += player.getVictoryPoints();
+        return totalPoints;
+    }
+
+    @Override
+    public int getWinnerIndex() {
+        return this.winner;
+    }
+
+    @Override
+    public String getPlayerNameByIndex(int playerIndex) throws PlayerExistsException {
+        return playerManager.getPlayerByIndex(playerIndex).getName();
     }
 
     @Override
