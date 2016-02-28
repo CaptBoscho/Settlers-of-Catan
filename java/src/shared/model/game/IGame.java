@@ -325,7 +325,21 @@ public interface IGame {
      */
     public boolean canTrade(int playerID);
 
+    public boolean isTradeActive();
 
+    public int getTradeReceiver();
+
+    public int getTradeSender();
+
+    public int getTradeBrick();
+
+    public int getTradeWood();
+
+    public int getTradeSheep();
+
+    public int getTradeWheat();
+
+    public int getTradeOre();
 
     /**
      * checks if that player has the card needed for that port's trade
