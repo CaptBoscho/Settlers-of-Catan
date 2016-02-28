@@ -98,6 +98,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 		tradePartner = -1;
 
+
 		getTradeOverlay().setTradeEnabled(false);
 
 		if(facade.isTradeActive()){
@@ -206,9 +207,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void startTrade() {
 
-		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
 		getTradeOverlay().showModal();
 		getTradeOverlay().setPlayerSelectionEnabled(true);
+		getTradeOverlay().setResourceSelectionEnabled(true);
+		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
 	}
 
 	@Override
@@ -340,7 +342,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
-	///TODO create trade object
 	@Override
 	public void sendTradeOffer() {
 		List<ResourceType> sending = new ArrayList<>();
@@ -360,6 +361,29 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		facade.tradeWithPlayer(UserCookie.getInstance().getPlayerIndex(), tradePartner, sending, receiving);
 		getTradeOverlay().closeModal();
 		getWaitOverlay().showModal();
+
+		sendwood =0;
+		sendbrick = 0;
+		sendsheep = 0;
+		sendwheat = 0;
+		sendore = 0;
+
+		receivewood = 0;
+		receivebrick = 0;
+		receivesheep = 0;
+		receivewheat = 0;
+		receiveore = 0;
+
+		woodStatus = false;
+		brickStatus = false;
+		sheepStatus = false;
+		wheatStatus = false;
+		oreStatus = false;
+
+		tradePartner = -1;
+		getTradeOverlay().setPlayerSelectionEnabled(false);
+
+		getTradeOverlay().setTradeEnabled(false);
 	}
 
 	@Override
@@ -484,6 +508,44 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void cancelTrade() {
 
 		getTradeOverlay().closeModal();
+		getTradeOverlay().setPlayerSelectionEnabled(false);
+
+		sendwood =0;
+		sendbrick = 0;
+		sendsheep = 0;
+		sendwheat = 0;
+		sendore = 0;
+
+		receivewood = 0;
+		receivebrick = 0;
+		receivesheep = 0;
+		receivewheat = 0;
+		receiveore = 0;
+
+		woodStatus = false;
+		brickStatus = false;
+		sheepStatus = false;
+		wheatStatus = false;
+		oreStatus = false;
+
+		tradePartner = -1;
+
+		getTradeOverlay().setTradeEnabled(false);
+
+		getTradeOverlay().setResourceAmount(ResourceType.BRICK, "0");
+		getTradeOverlay().setResourceAmount(ResourceType.WOOD, "0");
+		getTradeOverlay().setResourceAmount(ResourceType.WHEAT, "0");
+		getTradeOverlay().setResourceAmount(ResourceType.ORE, "0");
+		getTradeOverlay().setResourceAmount(ResourceType.SHEEP, "0");
+
+		getTradeOverlay().unSetResource(ResourceType.BRICK);
+		getTradeOverlay().unSetResource(ResourceType.WOOD);
+		getTradeOverlay().unSetResource(ResourceType.WHEAT);
+		getTradeOverlay().unSetResource(ResourceType.SHEEP);
+
+		getTradeOverlay().unSetResource(ResourceType.ORE);
+		getTradeOverlay().setResourceSelectionEnabled(false);
+		getTradeOverlay().setStateMessage("Select player to trade with");
 	}
 
 	@Override
