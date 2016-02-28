@@ -453,8 +453,8 @@ public class Facade {
         for(Player p: players){
             boolean lr = false;
             boolean la = false;
-            if(longestroad == p.getId()){lr = true;}
-            if(largestarmy == p.getId()){la = true;}
+            if(longestroad == p.getPlayerIndex()){lr = true;}
+            if(largestarmy == p.getPlayerIndex()){la = true;}
             PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
             playerInfos.add(pi);
         }
@@ -765,5 +765,13 @@ public class Facade {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public int hasLargestRoad() {
+        return this.game.currentLargestArmyPlayer();
+    }
+
+    public int hasLongestRoad() {
+        return this.game.currentLongestRoadPlayer();
     }
 }
