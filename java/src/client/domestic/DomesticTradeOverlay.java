@@ -319,6 +319,7 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 
 	@Override
 	public void setPlayers(PlayerInfo[] value) {
+		if(this.players != null){return;}
 		
 		for (int i = 0; i < value.length; i++) {
 			
@@ -391,6 +392,8 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 	public void setCancelEnabled(boolean enabled) {
 		this.cancelButton.setEnabled(enabled);
 	}
+
+	public void unSetResource(ResourceType resourceType){upDownPanelByResourceType.get(resourceType).setVisible(false);}
 
 }
 
