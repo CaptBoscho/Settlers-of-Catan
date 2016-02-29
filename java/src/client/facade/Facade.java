@@ -502,8 +502,9 @@ public class Facade {
                     } catch (InvalidPlayerException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    Game.getInstance().getPlayerManager().getPlayers().get(i).setPlayerIndex(info.getPlayerIndex());
                 }
-                Game.getInstance().getPlayerManager().getPlayers().get(i).setPlayerIndex(info.getPlayerIndex());
                 // TODO -- add rest
             }
         } else {
