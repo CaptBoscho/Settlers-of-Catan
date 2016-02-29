@@ -6,6 +6,7 @@ import client.facade.Facade;
 import client.facade.ModelPlayerInfo;
 import client.points.states.GameFinishedState;
 import client.points.states.GamePlayingState;
+import client.services.UserCookie;
 import client.turntracker.states.*;
 import shared.model.game.Game;
 import shared.model.game.TurnTracker;
@@ -31,10 +32,10 @@ public class PointsController extends Controller implements IPointsController, O
 	 */
 	public PointsController(IPointsView view, IGameFinishedView finishedView) {
 		super(view);
-		this.facade = Facade.getInstance();
 		setFinishedView(finishedView);
-        createState(facade.getPhase());
-		initFromModel();
+
+		this.facade = Facade.getInstance();
+		this.facade.addObserver(this);
 	}
 	
 	public IPointsView getPointsView() {
@@ -48,12 +49,6 @@ public class PointsController extends Controller implements IPointsController, O
 		this.finishedView = finishedView;
 	}
 
-	private void initFromModel() {
-		for(PlayerInfo playerInfo : facade.getPlayers()){
-            getPointsView().setPoints(playerInfo.getVictoryPoints());
-        }
-	}
-
 	/**
 	 * This method is called whenever the observed object is changed. An
 	 * application calls an <tt>Observable</tt> object's
@@ -65,6 +60,9 @@ public class PointsController extends Controller implements IPointsController, O
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
+        //Update the state
+        createState(facade.getPhase());
+        //Call the state's update function
         state.update();
 	}
 

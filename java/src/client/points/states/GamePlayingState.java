@@ -1,8 +1,6 @@
 package client.points.states;
 
-import client.data.PlayerInfo;
 import client.facade.Facade;
-import client.facade.ModelPlayerInfo;
 import client.points.IPointsView;
 import client.points.PointsControllerState;
 import client.services.UserCookie;
@@ -31,9 +29,9 @@ public class GamePlayingState extends PointsControllerState {
     public void initFromModel(){}
 
     @Override
-    public void update(){
-        for(PlayerInfo playerInfo : facade.getPlayers()){
-            view.setPoints(playerInfo.getVictoryPoints());
-        }
+    public void update() {
+        int pIndex = userCookie.getPlayerIndex();
+        int vicPoints = facade.getVictoryPoints(pIndex);
+        view.setPoints(vicPoints);
     }
 }

@@ -8,14 +8,10 @@ import client.facade.Facade;
  * Base class for PointsController States
  */
 public class PointsControllerState {
-    private Facade facade;
-
     /**
      * Constructor
      */
-    public PointsControllerState(){
-        facade = Facade.getInstance();
-    }
+    public PointsControllerState(){}
 
     public void initFromModel(){}
 

@@ -562,12 +562,14 @@ public final class ServerProxy implements IServer {
     public ClientModel maritimeTrade(MaritimeTradeDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+        System.out.println("tojson: " + dto.toJSON());
         String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
+        System.out.println("Result: " + result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Game.getInstance().updateGame(obj);
         return new ClientModel(obj);

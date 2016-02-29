@@ -408,5 +408,7 @@ public interface IGame {
 
     public HashMap<ResourceType, Integer> getBankResources();
 
+    public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException;
+
     MessageList getChat();
 }
