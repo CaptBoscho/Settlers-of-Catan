@@ -51,7 +51,9 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
             PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
             Facade.getInstance().getPlayers().toArray(infoArr);
             getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
-            getView().showModal();
+            if(!getView().isModalShowing()) {
+                getView().showModal();
+            }
             p.setPlayerWaitingPolling();
         } else {
             p.setModelPolling();

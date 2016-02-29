@@ -84,10 +84,11 @@ public class OverlayView extends PanelView implements IOverlayView {
 	 * Hides the top-most overlay
 	 */
 	public void closeModal() {
-		assert overlayStack.size() > 0;
-		assert window.getGlassPane() == overlayStack.peek().getOverlayPanel();
+//		assert overlayStack.size() > 0;
 		
 		if(overlayStack.size() > 0) {
+			assert window.getGlassPane() == overlayStack.peek().getOverlayPanel();
+
 			overlayStack.pop().getOverlayPanel().setVisible(false);
 			
 			if(overlayStack.size() > 0) {
