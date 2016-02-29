@@ -411,4 +411,12 @@ public interface IGame {
     public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException;
 
     MessageList getChat();
+
+    int getPoints(int playerIndex) throws PlayerExistsException;
+
+    int getWinnerId();
+
+    String getPlayerNameByIndex(int playerIndex) throws PlayerExistsException;
+
+    int getPlayerIdByIndex(int playerIndex) throws PlayerExistsException;
 }

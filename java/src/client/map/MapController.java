@@ -95,7 +95,7 @@ public class MapController extends Controller implements IMapController, Observe
             } else if(facade.getMap().getRoads().get(userCookie.getPlayerIndex()).size() == 1){
                 mapState.startMove(PieceType.ROAD, true, true);
             }
-            firstRound = false;
+            secondRound = false;
         }
     }
 	

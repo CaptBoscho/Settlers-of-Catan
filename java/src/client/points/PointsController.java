@@ -1,15 +1,8 @@
 package client.points;
 
 import client.base.*;
-import client.data.PlayerInfo;
 import client.facade.Facade;
-import client.facade.ModelPlayerInfo;
-import client.points.states.GameFinishedState;
-import client.points.states.GamePlayingState;
 import client.services.UserCookie;
-import client.turntracker.states.*;
-import shared.model.game.Game;
-import shared.model.game.TurnTracker;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -22,7 +15,7 @@ public class PointsController extends Controller implements IPointsController, O
 
 	private IGameFinishedView finishedView;
 	private Facade facade;
-    private PointsControllerState state;
+    private UserCookie userCookie;
 	
 	/**
 	 * PointsController constructor
@@ -32,10 +25,10 @@ public class PointsController extends Controller implements IPointsController, O
 	 */
 	public PointsController(IPointsView view, IGameFinishedView finishedView) {
 		super(view);
-		setFinishedView(finishedView);
-
 		this.facade = Facade.getInstance();
-		this.facade.addObserver(this);
+        this.userCookie = UserCookie.getInstance();
+        setFinishedView(finishedView);
+        facade.addObserver(this);
 	}
 	
 	public IPointsView getPointsView() {
@@ -45,8 +38,22 @@ public class PointsController extends Controller implements IPointsController, O
 	public IGameFinishedView getFinishedView() {
 		return finishedView;
 	}
+
 	public void setFinishedView(IGameFinishedView finishedView) {
 		this.finishedView = finishedView;
+	}
+
+	private void initFromModel() {
+		int points = facade.getPoints(userCookie.getPlayerIndex());
+        assert points >= 0;
+        getPointsView().setPoints(points);
+
+        int winner = facade.getWinnerId();
+        if(winner != -1) {
+            boolean isWinner = winner == facade.getPlayerIdByIndex(userCookie.getPlayerIndex());
+            getFinishedView().setWinner(facade.getPlayerNameByIndex(facade.getPlayerIndexByID(winner)), isWinner);
+            getFinishedView().showModal();
+        }
 	}
 
 	/**
@@ -60,19 +67,7 @@ public class PointsController extends Controller implements IPointsController, O
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-        //Update the state
-        createState(facade.getPhase());
-        //Call the state's update function
-        state.update();
+        initFromModel();
 	}
-
-    private void createState(TurnTracker.Phase phase){
-        switch (phase) {
-            case GAMEFINISHED:  state = new GameFinishedState(getFinishedView());
-                break;
-            default: state = new GamePlayingState(getPointsView());
-                break;
-        }
-    }
 }
 

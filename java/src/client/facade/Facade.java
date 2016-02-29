@@ -442,8 +442,8 @@ public class Facade {
         for(Player p: players){
             boolean lr = false;
             boolean la = false;
-            if(longestroad == p.getId()){lr = true;}
-            if(largestarmy == p.getId()){la = true;}
+            if(longestroad == p.getPlayerIndex()){lr = true;}
+            if(largestarmy == p.getPlayerIndex()){la = true;}
             PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
             playerInfos.add(pi);
         }
@@ -505,12 +505,17 @@ public class Facade {
         }
     }
 
-    public int getPlayerIndexByID(int playerId) throws PlayerExistsException {
-        Player p = game.getPlayerById(playerId);
+    public int getPlayerIndexByID(int playerId) {
+        Player p = null;
+        try {
+            p = game.getPlayerById(playerId);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
         return p.getPlayerIndex();
     }
 
-    public PlayerInfo getWinner() throws GameOverException{
+    public PlayerInfo getWinner() throws GameOverException {
         Player p = this.game.getWinner();
 
         int longestroad = this.game.currentLongestRoadPlayer();
@@ -736,5 +741,47 @@ public class Facade {
 
     public MessageList getChat() {
         return this.game.getChat();
+    }
+
+    public int getPoints(int playerIndex) {
+        assert playerIndex >=0;
+        assert playerIndex <=3;
+
+        try {
+            return this.game.getPoints(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getWinnerId() {
+        return this.game.getWinnerId();
+    }
+
+    public String getPlayerNameByIndex(int playerIndex) {
+        try {
+            return this.game.getPlayerNameByIndex(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getPlayerIdByIndex(int playerIndex) {
+        try {
+            return this.game.getPlayerIdByIndex(playerIndex);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int hasLargestRoad() {
+        return this.game.currentLargestArmyPlayer();
+    }
+
+    public int hasLongestRoad() {
+        return this.game.currentLongestRoadPlayer();
     }
 }
