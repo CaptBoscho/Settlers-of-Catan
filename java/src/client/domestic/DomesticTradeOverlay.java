@@ -317,9 +317,11 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 		this.setPlayers(this.players);
 	}
 
+	public PlayerInfo[] getPlayers(){return this.players;}
+
 	@Override
 	public void setPlayers(PlayerInfo[] value) {
-		if(this.players != null){return;}
+		//if(this.players != null){return;}
 		
 		for (int i = 0; i < value.length; i++) {
 			

@@ -101,6 +101,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 		getTradeOverlay().setTradeEnabled(false);
 
+		if(getTradeOverlay().getPlayers()==null) {
+			getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
+		}
+
 		if(facade.isTradeActive()){
 			if(facade.getTradeSender() == UserCookie.getInstance().getPlayerIndex()){
 				getWaitOverlay().showModal();
@@ -210,7 +214,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getTradeOverlay().showModal();
 		getTradeOverlay().setPlayerSelectionEnabled(true);
 		getTradeOverlay().setResourceSelectionEnabled(true);
-		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
 	}
 
 	@Override
@@ -508,8 +511,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void cancelTrade() {
 
 		getTradeOverlay().closeModal();
-		getTradeOverlay().setPlayerSelectionEnabled(false);
-
+		//getTradeOverlay().setPlayerSelectionEnabled(false);
+		getTradeOverlay().reset();
 		sendwood =0;
 		sendbrick = 0;
 		sendsheep = 0;
@@ -544,7 +547,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getTradeOverlay().unSetResource(ResourceType.SHEEP);
 
 		getTradeOverlay().unSetResource(ResourceType.ORE);
-		getTradeOverlay().setResourceSelectionEnabled(false);
+		//getTradeOverlay().setResourceSelectionEnabled(false);
 		getTradeOverlay().setStateMessage("Select player to trade with");
 	}
 
