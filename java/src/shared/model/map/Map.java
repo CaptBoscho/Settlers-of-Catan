@@ -318,13 +318,16 @@ public final class Map implements IMap, JsonSerializable{
         final ArrayList<Vertex> settlements = this.settlements.get(playerIndex);
         final ArrayList<Vertex> cities = this.cities.get(playerIndex);
         final ArrayList<Edge> roads = this.roads.get(playerIndex);
-        if(roads == null || roads.size() < 2|| settlements == null) {
+        if(roads == null || roads.size() < 2) {
+            return false;
+        }
+        if(settlements == null && cities == null) {
             return false;
         }
         if(cities == null && settlements.size() < 2) {
             return false;
         }
-        if(cities != null && (cities.size() + settlements.size()) < 2) {
+        if(settlements == null && cities.size() < 2) {
             return false;
         }
         return !edge.hasRoad() && edgeHasConnectingRoad(playerIndex, edgeLoc);
@@ -353,13 +356,13 @@ public final class Map implements IMap, JsonSerializable{
         if(roads == null || roads.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
-        if(settlements == null) {
+        if(settlements == null && cities == null) {
             throw new StructureException("Map is not initialized");
         }
         if(cities == null && settlements.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
-        if(cities != null && (cities.size() + settlements.size()) < 2) {
+        if(settlements == null && cities.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
         if(edge.hasRoad()) {
@@ -370,8 +373,13 @@ public final class Map implements IMap, JsonSerializable{
         }
         final Road road = new Road(playerIndex);
         edge.setRoad(road);
-        roads = this.roads.get(playerIndex);
-        roads.add(edge);
+        if(roads == null) {
+            roads = new ArrayList<>();
+            roads.add(edge);
+            this.roads.put(playerIndex, roads);
+        } else {
+            roads.add(edge);
+        }
     }
 
     @Override
@@ -396,13 +404,13 @@ public final class Map implements IMap, JsonSerializable{
         if(roads == null || roads.size() < 2) {
             return false;
         }
-        if(settlements == null) {
+        if(settlements == null && cities == null) {
             return false;
         }
         if(cities == null && settlements.size() < 2) {
             return false;
         }
-        if(cities != null && (cities.size() + settlements.size()) < 2) {
+        if(settlements == null && cities.size() < 2) {
             return false;
         }
         return vertex.canBuildSettlement() && !hasNeighborBuildings(vertexLoc) &&
@@ -432,13 +440,13 @@ public final class Map implements IMap, JsonSerializable{
         if(roads == null || roads.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
-        if(settlements == null) {
+        if(settlements == null && cities == null) {
             throw new StructureException("Map is not initialized");
         }
         if(cities == null && settlements.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
-        if(cities != null && (cities.size() + settlements.size()) < 2) {
+        if(settlements == null && cities.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
         if(!vertex.canBuildSettlement()) {
@@ -455,8 +463,13 @@ public final class Map implements IMap, JsonSerializable{
         if(vertex.hasPort()) {
             addPort(playerIndex, vertex);
         }
-        settlements = this.settlements.get(playerIndex);
-        settlements.add(vertex);
+        if(settlements == null) {
+            settlements = new ArrayList<>();
+            settlements.add(vertex);
+            this.settlements.put(playerIndex, settlements);
+        } else {
+            settlements.add(vertex);
+        }
     }
 
     @Override
@@ -481,13 +494,13 @@ public final class Map implements IMap, JsonSerializable{
         if(roads == null || roads.size() < 2) {
             return false;
         }
-        if(settlements == null) {
+        if(settlements == null && cities == null) {
             return false;
         }
         if(cities == null && settlements.size() < 2) {
             return false;
         }
-        if(cities != null && (cities.size() + settlements.size()) < 2) {
+        if(settlements == null && cities.size() < 2) {
             return false;
         }
         return vertex.canBuildCity() && vertex.getPlayerIndex() == playerIndex && !vertex.hasCity();
@@ -516,13 +529,13 @@ public final class Map implements IMap, JsonSerializable{
         if(roads == null || roads.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
-        if(settlements == null) {
+        if(settlements == null && cities == null) {
             throw new StructureException("Map is not initialized");
         }
         if(cities == null && settlements.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
-        if(cities != null && (cities.size() + settlements.size()) < 2) {
+        if(settlements == null && cities.size() < 2) {
             throw new StructureException("Map is not initialized");
         }
         if(!vertex.canBuildCity()) {
@@ -534,11 +547,12 @@ public final class Map implements IMap, JsonSerializable{
         if(vertex.hasCity()) {
             throw new StructureException("The vertex location already has a city");
         }
-        settlements = this.settlements.get(playerIndex);
         settlements.remove(vertex);
         final City city = new City(playerIndex);
         vertex.buildCity(city);
-        cities = this.cities.get(playerIndex);
+        if(vertex.hasPort()) {
+            addPort(playerIndex, vertex);
+        }
         if(cities == null) {
             cities = new ArrayList<>();
             cities.add(vertex);

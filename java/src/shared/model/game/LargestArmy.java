@@ -4,7 +4,7 @@ package shared.model.game;
  * Representation of Largest Army
  */
 public final class LargestArmy {
-    private int playerID;
+    private int playerIndex;
     private static final int pointWorth = 2;
     private int mostSoldiers = 0;
 
@@ -12,11 +12,11 @@ public final class LargestArmy {
      * Default Constructor
      */
     public LargestArmy() {
-        this.playerID = -1;
+        this.playerIndex = -1;
     }
 
-    public LargestArmy(int playerID) {
-        this.playerID = playerID;
+    public LargestArmy(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     /**
@@ -24,18 +24,18 @@ public final class LargestArmy {
      * @return owner of the card by id
      */
     public int getOwner() {
-        return this.playerID;
+        return this.playerIndex;
     }
 
     /**
-     * Set the owner by player id
-     * @param id id of the player owning this card (-1 for no owner)
+     * Set the owner by player index
+     * @param index index of the player owning this card (-1 for no owner)
      */
-    public void setNewOwner(int id, int soldiers) {
-        assert this.playerID != id;
+    public void setNewOwner(int index, int soldiers) {
+        assert this.playerIndex != index;
 
         this.mostSoldiers = soldiers;
-        this.playerID = id;
+        this.playerIndex = index;
     }
 
     /**

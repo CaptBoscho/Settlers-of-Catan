@@ -5,8 +5,6 @@ import client.maritime.IMaritimeTradeOverlay;
 import client.maritime.IMaritimeTradeView;
 import client.maritime.MaritimeTradeControllerState;
 import client.services.UserCookie;
-import client.turntracker.ITurnTrackerView;
-import client.turntracker.TurnTrackerControllerState;
 import shared.definitions.ResourceType;
 
 /**

@@ -2,15 +2,9 @@ package client.turntracker;
 
 import client.data.PlayerInfo;
 import client.facade.Facade;
-import client.facade.ModelPlayerInfo;
-import client.services.Poller;
-import client.services.ServerProxy;
 import client.services.UserCookie;
-import client.turntracker.states.*;
 import client.base.*;
-import shared.definitions.CatanColor;
 import shared.exceptions.PlayerExistsException;
-import shared.model.game.Game;
 import shared.model.game.TurnTracker;
 
 import java.util.List;
@@ -23,13 +17,14 @@ import java.util.Observer;
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
     private UserCookie userCookie;
-    private TurnTrackerControllerState state;
+    boolean joining;
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
 		facade = Facade.getInstance();
         facade.addObserver(this);
         userCookie = UserCookie.getInstance();
+        joining = true;
 	}
 	
 	@Override
@@ -39,19 +34,53 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	@Override
 	public void endTurn() {
-		state.endTurn();
+        facade.finishTurn(userCookie.getPlayerIndex());
 	}
 	
 	public void initFromModel() {
-        //Set the local player color
-        CatanColor locColor = userCookie.getColor();
-        getView().setLocalPlayerColor(locColor);
-
-        //Initialize Players
-        for(PlayerInfo playerInfo : facade.getPlayers()) {
-            getView().initializePlayer(playerInfo.getPlayerIndex(), playerInfo.getName(), playerInfo.getColor());
+        try {
+            getView().setLocalPlayerColor(facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
+            List<PlayerInfo> players = facade.getPlayers();
+            for(PlayerInfo player : players) {
+                if(joining) {
+                    getView().initializePlayer(player.getPlayerIndex(), player.getName(), player.getColor());
+                } else {
+                    getView().updatePlayer(player.getPlayerIndex(), player.getName(), player.getVictoryPoints(), player.getPlayerIndex() == facade.getCurrentTurn(), player.hasLargestArmy(), player.hasLongestRoad(), player.getColor());
+                }
+            }
+            joining = false;
+            int winner = facade.getWinnerId();
+            if(winner != -1) {
+                getView().updateGameState("Game Over", false);
+            } else {
+                TurnTracker.Phase state = facade.getPhase();
+                switch (state) {
+                    case SETUPONE:
+                        getView().updateGameState("Setup Phase One", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        break;
+                    case SETUPTWO:
+                        getView().updateGameState("Setup Phase Two", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        break;
+                    case ROLLING:
+                        getView().updateGameState("Rolling", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        break;
+                    case ROBBING:
+                        getView().updateGameState("Robbing", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        break;
+                    case PLAYING:
+                        getView().updateGameState("Playing", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        break;
+                    case DISCARDING:
+                        getView().updateGameState("Discarding", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
         }
-	}
+    }
 
 	/**
 	 * This method is called whenever the observed object is changed. An
@@ -65,36 +94,5 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void update(Observable o, Object arg) {
 		initFromModel();
-        //Update the state
-        createState(facade.getPhase());
-        //Init the state
-        state.initFromModel();
-		//Call the state's update function
-        state.update();
 	}
-
-    /**
-     * Creates a new state to model the current game state
-     * @param phase
-     */
-    private void createState(TurnTracker.Phase phase){
-        switch (phase) {
-            case SETUPONE:  state = new SetupOneState(getView());
-                break;
-            case SETUPTWO:  state = new SetupTwoState(getView());
-                break;
-            case ROLLING:  state = new RollingState(getView());
-                break;
-            case PLAYING:  state = new PlayingState(getView());
-                break;
-            case ROBBING:  state = new RobbingState(getView());
-                break;
-            case DISCARDING:  state = new DiscardingState(getView());
-                break;
-            case GAMEFINISHED:  state = new GameFinishedState(getView());
-                break;
-            default: state = new PlayingState(getView());
-                break;
-        }
-    }
 }
