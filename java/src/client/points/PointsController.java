@@ -1,10 +1,8 @@
 package client.points;
 
 import client.base.*;
-import client.data.PlayerInfo;
 import client.facade.Facade;
 import client.services.UserCookie;
-import shared.model.game.TurnTracker;
 
 import java.util.Observable;
 import java.util.Observer;

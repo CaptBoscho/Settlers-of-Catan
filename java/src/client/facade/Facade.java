@@ -19,6 +19,7 @@ import shared.model.game.trade.TradePackage;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.exceptions.*;
+import shared.model.player.PlayerManager;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
@@ -313,16 +314,9 @@ public class Facade {
 
     public int getTradeOre(){return this.game.getTradeOre();}
 
-    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException {
-        assert playerID >= 0;
-        assert port != null;
-
-        if (canTrade(playerID)) {
-            Set<PortType> ports = this.game.getPortTypes(playerID);
-            boolean cangame = this.game.canMaritimeTrade(playerID, port);
-            return ports.contains(port) && cangame;
-        }
-        return false;
+    public boolean canMaritimeTrade(int pIndex) {
+        assert pIndex >= 0;
+        return canTrade(pIndex);
     }
 
     public Set<PortType> maritimeTradeOptions(int playerID) throws InvalidPlayerException {
@@ -334,25 +328,20 @@ public class Facade {
         throw new InvalidPlayerException("can't trade");
     }
 
-    //TODO talk to server
-    public void maritimeTrade(int playerID, PortType port, ResourceType want, ResourceType give) throws BuildException, InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
-        assert playerID >= 0;
-        assert want != null;
-        int ratio = 2;
+    public void maritimeTrade(int pIndex, int ratio, ResourceType get, ResourceType give) {
+        assert pIndex >= 0;
+        assert ratio > 0;
+        assert get != null;
+        assert give != null;
 
-        if(port == PortType.THREE){ratio = 3;}
-        else if(port == PortType.BRICK){assert give == ResourceType.BRICK;}
-        else if(port == PortType.ORE){assert give == ResourceType.ORE;}
-        else if(port == PortType.WHEAT){assert give == ResourceType.WHEAT;}
-        else if(port == PortType.WOOD){assert give == ResourceType.WOOD;}
-        else if(port == PortType.SHEEP){assert give == ResourceType.SHEEP;}
-
-        try {
-            MaritimeTradeDTO dto = new MaritimeTradeDTO(playerID, ratio, give.toString(), want.toString());
-            ServerProxy.getInstance().maritimeTrade(dto);
-        }catch(MissingUserCookieException e){}
-
-
+        if(canMaritimeTrade(pIndex)){
+            try {
+                MaritimeTradeDTO dto = new MaritimeTradeDTO(pIndex, ratio, give.toString(), get.toString());
+                ServerProxy.getInstance().maritimeTrade(dto);
+            }catch(MissingUserCookieException e){
+                return;
+            }
+        }
     }
 
     public shared.model.map.Map getMap(){return this.game.getMap();}
@@ -718,6 +707,27 @@ public class Facade {
      */
     public HashMap<ResourceType, Integer> getBankResources(){
         return this.game.getBankResources();
+    }
+
+    /**
+     * returns the Hashmap where the key is the resourcetype
+     * and the Integer is how many of that resource the Player
+     * bank has.
+     * @return
+     */
+    public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
+        return this.game.getPlayerResources(pIndex);
+    }
+
+    public int getVictoryPoints(int pIndex) {
+        PlayerManager pm = game.getPlayerManager();
+        Player player = null;
+        try {
+            player = pm.getPlayerByIndex(pIndex);
+            return player.getVictoryPoints();
+        } catch (PlayerExistsException e) {
+            return -1;
+        }
     }
 
     public void sendChat(int playerIndex, String message) {
