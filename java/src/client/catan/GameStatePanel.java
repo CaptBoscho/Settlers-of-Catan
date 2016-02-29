@@ -1,7 +1,6 @@
 package client.catan;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
@@ -12,14 +11,14 @@ import client.base.IAction;
 @SuppressWarnings("serial")
 public class GameStatePanel extends JPanel {
 
-	private JButton button;
+	private MyButton button;
 	
 	public GameStatePanel() {
 		this.setLayout(new FlowLayout());
 		this.setBackground(Color.white);
 		this.setOpaque(true);
 		
-		button = new JButton();
+		button = new MyButton();
 		
 		final Font font = button.getFont();
 		final Font newFont = font.deriveFont(font.getStyle(), 20);
@@ -29,12 +28,15 @@ public class GameStatePanel extends JPanel {
 		
 		this.add(button);
 		
-		updateGameState("Waiting for other Players", false);
+		updateGameState("Waiting for other Players", false, Color.white);
 	}
 	
-	public void updateGameState(String stateMessage, boolean enable) {
+	public void updateGameState(String stateMessage, boolean enable, Color color) {
+		button.setBackground(color);
 		button.setText(stateMessage);
 		button.setEnabled(enable);
+		button.setColor(color);
+		button.repaint();
 	}
 	
 	public void setButtonAction(final IAction action) {
@@ -45,5 +47,31 @@ public class GameStatePanel extends JPanel {
 		
 		ActionListener actionListener = e -> action.execute();
 		button.addActionListener(actionListener);
+	}
+
+	class MyButton extends JButton {
+
+		private Color color;
+
+		public MyButton() {
+			super();
+			super.setContentAreaFilled(false);
+		}
+
+		public void setColor(Color color) {
+			this.color = color;
+			this.setBackground(color);
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			g.setColor(this.color);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			super.paintComponent(g);
+		}
+
+		@Override
+		public void setContentAreaFilled(boolean b) {
+		}
 	}
 }
