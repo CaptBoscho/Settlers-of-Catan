@@ -538,6 +538,4 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getAcceptOverlay().closeModal();
 		facade.answerTrade(UserCookie.getInstance().getPlayerIndex(), willAccept);
 	}
-
 }
-

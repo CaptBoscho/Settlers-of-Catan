@@ -125,11 +125,9 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
-		for(PlayerInfo p : game.getPlayers()) {
-			if(p.getId() != UserCookie.getInstance().getPlayerId()) {
-				getSelectColorView().setColorEnabled(p.getColor(), false);
-			}
-		}
+		game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
+			getSelectColorView().setColorEnabled(p.getColor(), false);
+		});
         Facade.getInstance().setGameInfo(game);
         getSelectColorView().showModal();
 	}

@@ -1,20 +1,12 @@
 package client.maritime;
 
-import client.facade.BuildException;
 import client.facade.Facade;
-import client.services.IServer;
-import client.services.MissingUserCookieException;
-import client.services.ServerProxy;
 import client.services.UserCookie;
-import org.apache.http.client.cache.Resource;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
-import shared.dto.MaritimeTradeDTO;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
-import shared.model.bank.InvalidTypeException;
 
-import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +26,6 @@ public class MaritimeTradeControllerState {
     private IMaritimeTradeOverlay overlay;
     private ResourceType getResource;
     private ResourceType giveResource;
-    private IServer server;
     private Facade facade;
     private UserCookie userCookie;
 
@@ -47,7 +38,6 @@ public class MaritimeTradeControllerState {
         this.overlay = overlay;
 
         this.userCookie = UserCookie.getInstance();
-        this.server = ServerProxy.getInstance();
         this.facade = Facade.getInstance();
         this.getResource = null;
         this.giveResource = null;
@@ -57,12 +47,7 @@ public class MaritimeTradeControllerState {
         int index = userCookie.getPlayerIndex();
 
         //Enable/Disable button based on user's turn
-        if(facade.getCurrentTurn() == index){
-            view.enableMaritimeTrade(true);
-        }
-        else{
-            view.enableMaritimeTrade(false);
-        }
+        view.enableMaritimeTrade(facade.getCurrentTurn() == index);
     }
 
     /**
