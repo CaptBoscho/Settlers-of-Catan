@@ -31,8 +31,8 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void start() {
-        if(Facade.getInstance().getPlayers().size() > 4) {
-            getView().setPlayers(Facade.getInstance().getPlayers().toArray(new PlayerInfo[4]));
+        if(Facade.getInstance().getPlayers().size() < 4) {
+            getView().setPlayers(Facade.getInstance().getPlayers().toArray(Facade.getInstance().getOtherPlayers(-1)));
             getView().showModal();
         }
 
