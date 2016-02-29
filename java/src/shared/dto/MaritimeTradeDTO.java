@@ -24,7 +24,6 @@ public final class MaritimeTradeDTO implements JsonSerializable {
         assert playerIndex >= 0;
         assert inputResource != null;
         assert outputResource != null;
-        assert !inputResource.equals(outputResource);
 
         this.playerIndex = playerIndex;
         this.ratio = ratio;
