@@ -16,6 +16,8 @@ public interface IServer {
 
     //////////////// authentication services /////////////////////
 
+    void configure(String host, int port);
+
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *
@@ -111,6 +113,8 @@ public interface IServer {
      * @return A list of the supported AI types represented as arbitrary strings
      */
     List<String> getAITypes();
+
+
 
     /////////////////////// move services /////////////////////
 

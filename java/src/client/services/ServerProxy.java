@@ -33,6 +33,12 @@ public final class ServerProxy implements IServer {
         this.port = port;
     }
 
+    @Override
+    public void configure(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
     public static IServer getInstance() {
         if(instance == null) {
             instance = new ServerProxy(DEFAULT_HOST, DEFAULT_PORT);

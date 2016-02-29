@@ -90,32 +90,13 @@ public class DiscardController extends Controller implements IDiscardController,
                     getDiscardView().setResourceDiscardAmount(sheep, 0);
                     getDiscardView().setResourceDiscardAmount(wheat, 0);
                     getDiscardView().setResourceDiscardAmount(wood, 0);
-                    if (discarding < remainingBrick) {
-                        getDiscardView().setResourceMaxAmount(brick, discarding);
-                    } else {
-                        getDiscardView().setResourceMaxAmount(brick, remainingBrick);
-                    }
-                    if (discarding < remainingOre) {
-                        getDiscardView().setResourceMaxAmount(ore, discarding);
-                    } else {
-                        getDiscardView().setResourceMaxAmount(ore, remainingOre);
-                    }
-                    if (discarding < remainingSheep) {
-                        getDiscardView().setResourceMaxAmount(sheep, discarding);
-                    } else {
-                        getDiscardView().setResourceMaxAmount(sheep, remainingSheep);
-                    }
-                    if (discarding < remainingWheat) {
-                        getDiscardView().setResourceMaxAmount(wheat, discarding);
-                    } else {
-                        getDiscardView().setResourceMaxAmount(wheat, remainingWheat);
-                    }
-                    if (discarding < remainingWood) {
-                        getDiscardView().setResourceMaxAmount(wood, discarding);
-                    } else {
-                        getDiscardView().setResourceMaxAmount(wood, remainingWood);
-                    }
-                    getDiscardView().setStateMessage("0/" + discarding);
+
+                    getDiscardView().setResourceMaxAmount(brick, remainingBrick);
+                    getDiscardView().setResourceMaxAmount(ore, remainingOre);
+                    getDiscardView().setResourceMaxAmount(sheep, remainingSheep);
+                    getDiscardView().setResourceMaxAmount(wheat, remainingWheat);
+                    getDiscardView().setResourceMaxAmount(wood, remainingWood);
+                    getDiscardView().setStateMessage("Discard: 0/" + discarding);
                     getDiscardView().showModal();
                 }
             } else {

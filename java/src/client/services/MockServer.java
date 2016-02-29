@@ -57,6 +57,11 @@ public class MockServer implements IServer {
         return new MockServer();
     }
 
+    @Override
+    public void configure(String host, int port) {
+        
+    }
+
     /**
      * Validates the player's credentials, and logs them in to the server (i.e., sets their catan.user HTTP cookie)
      *

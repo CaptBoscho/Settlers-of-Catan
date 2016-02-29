@@ -70,6 +70,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void update(Observable obs, Object obj){
 		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
 		getTradeView().enableDomesticTrade(facade.canTrade(UserCookie.getInstance().getPlayerIndex()));
+		if (facade.getWinnerId() != -1) {
+			getTradeView().enableDomesticTrade(false);
+		}
 
 		// get the amount of resources available to the current user
 		woodcount = facade.getAmountOfResource(UserCookie.getInstance().getPlayerIndex(), ResourceType.WOOD);
