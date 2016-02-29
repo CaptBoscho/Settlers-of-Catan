@@ -93,6 +93,8 @@ public interface IDomesticTradeOverlay extends IOverlayView {
 	void setCancelEnabled(boolean enabled);
 
 	public void unSetResource(ResourceType resourceType);
+
+	public PlayerInfo[] getPlayers();
 	
 }
 
