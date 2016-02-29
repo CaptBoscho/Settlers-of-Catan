@@ -6,10 +6,7 @@ import shared.definitions.*;
 import client.base.*;
 import client.misc.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 
 /**
@@ -22,6 +19,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private IAcceptTradeOverlay acceptOverlay;
 	private Facade facade;
 
+	private HashMap<ResourceType, Integer> sendingResources;
 	// TODO - excessive use of primitives. It would be smarter to utilize a map
 
 	private int woodcount = 0;
@@ -199,7 +197,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			}
 		}
 
-
 		if(ore > 0) {
 			getAcceptOverlay().addGetResource(ResourceType.ORE, ore);
 		} else if(ore < 0) {
@@ -290,8 +287,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				if(brickStatus) {
 					receivebrick++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, receivebrick<20, receivebrick > 0);
-				}
-				else{
+				} else{
 					sendbrick++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, sendbrick < brickcount, true);
 				}
@@ -300,7 +296,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				if(woodStatus){
 					receivewood++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, receivewood<20, receivewood > 0);
-				}else {
+				} else {
 					sendwood++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, sendwood < woodcount, true);
 				}
@@ -309,7 +305,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				if(wheatStatus){
 					receivewheat++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, receivewheat<20, receivewheat > 0);
-				}else {
+				} else {
 					sendwheat++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, sendwheat < wheatcount, true);
 				}
@@ -318,7 +314,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				if(sheepStatus){
 					receivesheep++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, receivesheep<20, receivesheep > 0);
-				}else {
+				} else {
 					sendsheep++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sendsheep < sheepcount, true);
 				}
@@ -327,7 +323,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				if(oreStatus){
 					receiveore++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, receiveore <20, receiveore > 0);
-				}else {
+				} else {
 					sendore++;
 					getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, sendore < orecount, true);
 				}
@@ -368,7 +364,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getTradeOverlay().closeModal();
 		getWaitOverlay().showModal();
 
-		sendwood =0;
+		sendwood = 0;
 		sendbrick = 0;
 		sendsheep = 0;
 		sendwheat = 0;
@@ -503,7 +499,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getTradeOverlay().closeModal();
 		getTradeOverlay().setPlayerSelectionEnabled(false);
 
-		sendwood =0;
+		sendwood = 0;
 		sendbrick = 0;
 		sendsheep = 0;
 		sendwheat = 0;
