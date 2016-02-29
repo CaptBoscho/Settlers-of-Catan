@@ -55,7 +55,9 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
             p.setPlayerWaitingPolling();
         } else {
             p.setModelPolling();
-            getView().closeModal();
+            if(getView().isModalShowing()) {
+                getView().closeModal();
+            }
         }
         p.start();
 	}
@@ -89,7 +91,9 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
                 getView().showModal();
             } else {
                 Poller.getInstance().setModelPolling();
-                getView().closeModal();
+                if(getView().isModalShowing()) {
+                    getView().closeModal();
+                }
             }
         }
     }

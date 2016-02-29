@@ -26,6 +26,8 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 	private Image longestRoadImage;
 	private Image largestArmyImage;
 
+	private JPanel [] indicatorPanels;
+
 	private final int NUM_PLAYERS = 4;
 	private final int FONT_SIZE = 13;
 	
@@ -43,7 +45,8 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 			playerPanel[i] = new JPanel();
 			this.add(playerPanel[i]);
 		}
-		
+
+		indicatorPanels = new JPanel[NUM_PLAYERS];
 		playerPoints = new JLabel[NUM_PLAYERS];
 		playerRoad = new JLabel[NUM_PLAYERS];
 		playerArmy = new JLabel[NUM_PLAYERS];
@@ -81,6 +84,7 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 		playerPanel[playerIndex].add(name, BorderLayout.WEST);
 		
 		JPanel indicatorPanel = new JPanel();
+		indicatorPanels[playerIndex] = indicatorPanel;
 		indicatorPanel.setBackground(playerColor.getJavaColor());
 		playerPanel[playerIndex].add(indicatorPanel, BorderLayout.CENTER);
 		
@@ -113,6 +117,8 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 			playerPanel[playerIndex].setBorder(BorderFactory.createLineBorder(new Color(0,0,0), 3));
 		else
 			playerPanel[playerIndex].setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		playerPanel[playerIndex].setBackground(playerColor.getJavaColor());
+		indicatorPanels[playerIndex].setBackground(playerColor.getJavaColor());
 	}
 
 	@Override
