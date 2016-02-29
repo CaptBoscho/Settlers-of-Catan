@@ -1,11 +1,14 @@
 package client.services;
 
 import client.data.GameInfo;
+import client.facade.Facade;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
 import shared.dto.*;
 import shared.model.game.Game;
+import shared.model.player.Player;
+import shared.model.player.PlayerManager;
 
 import java.util.List;
 
@@ -156,7 +159,6 @@ public final class ServerProxy implements IServer {
      */
     @Override
     public ClientModel getCurrentModel(int version) throws MissingUserCookieException {
-//        assert version >= 0;
         String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
         String result = Utils.sendGet(url);
         assert result != null;
@@ -176,6 +178,26 @@ public final class ServerProxy implements IServer {
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Game.getInstance().updateGame(obj);
         return new ClientModel(obj);
+    }
+
+    public void getLatestPlayers() throws MissingUserCookieException {
+        String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=-1";
+        String result = Utils.sendGet(url);
+        assert result != null;
+        if(result.contains("The catan.user HTTP cookie is missing.")) {
+            throw new MissingUserCookieException("The catan.user HTTP cookie is missing");
+        } else if(result.contains("catan.game HTTP cookie is missing")) {
+            try {
+                throw new Exception("catan.game HTTP cookie is missing");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        PlayerManager tmp = new PlayerManager(obj.getAsJsonArray("players"));
+        if(!tmp.equals(Game.getInstance().getPlayerManager())) {
+            Game.getInstance().setPlayerManager(new PlayerManager(obj.getAsJsonArray("players")));
+        }
     }
 
     /**
@@ -562,14 +584,12 @@ public final class ServerProxy implements IServer {
     public ClientModel maritimeTrade(MaritimeTradeDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        System.out.println("tojson: " + dto.toJSON());
         String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
-        System.out.println("Result: " + result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Game.getInstance().updateGame(obj);
         return new ClientModel(obj);

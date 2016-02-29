@@ -140,7 +140,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	@Override
 	public void joinGame(CatanColor color) {
         final JoinGameDTO dto = new JoinGameDTO(Facade.getInstance().getGameId(), color);
-        ServerProxy.getInstance().joinGame(dto);
+		ServerProxy.getInstance().joinGame(dto);
 
         // TODO - create/update game instance
 

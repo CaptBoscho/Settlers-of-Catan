@@ -80,6 +80,11 @@ public class MockServer implements IServer {
         return true;
     }
 
+    @Override
+    public void getLatestPlayers() {
+
+    }
+
     /**
      * Get a list of all games in progress with a GET request
      *

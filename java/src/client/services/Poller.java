@@ -16,6 +16,7 @@ public final class Poller {
     private final static int DEFAULT_POLL_INTERVAL = 200;
     private IServer server;
     private Timer poller;
+    private int state = -1;
 
     /**
      * Construct a poller instance using the given server
@@ -34,12 +35,23 @@ public final class Poller {
     }
 
     public void start() {
+
+        // don't do anything if the poller is already started
+        if(poller != null) return;
+
         poller = new Timer(true);
         poller.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 try {
-                    server.getCurrentModel(Game.getInstance().getVersion());
+                    switch(state) {
+                        case 1:
+                            server.getCurrentModel(Game.getInstance().getVersion());
+                            break;
+                        case 2:
+                            server.getLatestPlayers();
+                            break;
+                    }
                 } catch (MissingUserCookieException e) {
                     e.printStackTrace();
                 }
@@ -53,5 +65,17 @@ public final class Poller {
     public void stop() {
         poller.cancel();
         poller = null;
+    }
+
+    public void setModelPolling() {
+        this.state = 1;
+    }
+
+    public void setPlayerWaitingPolling() {
+        this.state = 2;
+    }
+
+    public void setListGamePolling() {
+        this.state = 3;
     }
 }

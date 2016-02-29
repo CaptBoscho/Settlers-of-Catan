@@ -47,11 +47,11 @@ public final class PlayerWaitingView extends OverlayView implements IPlayerWaiti
 		this.add(center, BorderLayout.CENTER);	
 		
 		//create the AI panel for the bottom of the pane
-		final JPanel aiPanel = new JPanel();
+		JPanel aiPanel = new JPanel();
 		aiPanel.setLayout(new BoxLayout(aiPanel, BoxLayout.Y_AXIS));
 		
 		//create the AI type panel
-		final JPanel aiTypePanel = new JPanel();
+		JPanel aiTypePanel = new JPanel();
 		aiTypePanel.setLayout(new BoxLayout(aiTypePanel, BoxLayout.X_AXIS));
 		
 		aiTypePanel.add(Box.createHorizontalGlue());
@@ -73,7 +73,7 @@ public final class PlayerWaitingView extends OverlayView implements IPlayerWaiti
 		aiPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		
 		//create the AI button panel
-		final JPanel aiButtonPanel = new JPanel();
+		JPanel aiButtonPanel = new JPanel();
 		aiButtonPanel.setLayout(new BoxLayout(aiButtonPanel, BoxLayout.X_AXIS));
 				
 		aiButtonPanel.add(Box.createHorizontalGlue());
@@ -117,23 +117,25 @@ public final class PlayerWaitingView extends OverlayView implements IPlayerWaiti
 		
 		//the center panel contains the individual player panels
 		center.removeAll();
+
+		System.out.println("setting " + value.length + " players");
 		
 		//build an individual player panel and add it to the center panel
 		for(int i = 0; i < value.length; i++){
-			final String builtString = (i+1) + " " + value[i].getName();
-			final JPanel playerPanel = new JPanel();
+			String builtString = (i+1) + " " + value[i].getName();
+			JPanel playerPanel = new JPanel();
 			playerPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); //left justify the text in the panel
 			playerPanel.setPreferredSize(new Dimension(200,50));
 			playerPanel.setBackground(value[i].getColor().getJavaColor()); //set the background color of the player
-			final JLabel playerLabel = new JLabel(builtString, SwingConstants.LEFT); //justify the text left
+			JLabel playerLabel = new JLabel(builtString, SwingConstants.LEFT); //justify the text left
 			FontUtils.setFont(playerLabel, LABEL_TEXT_SIZE);
 			playerPanel.add(playerLabel);
 			center.add(playerPanel);
 			
 			//add space between player panels
-			final Dimension minSize = new Dimension(5, 10);
-			final Dimension prefSize = new Dimension(5, 10);
-			final Dimension maxSize = new Dimension(Short.MAX_VALUE, 10);
+			Dimension minSize = new Dimension(5, 10);
+			Dimension prefSize = new Dimension(5, 10);
+			Dimension maxSize = new Dimension(Short.MAX_VALUE, 10);
 			center.add(new Box.Filler(minSize, prefSize, maxSize));			
 		}
 	}

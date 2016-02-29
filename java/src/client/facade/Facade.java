@@ -479,7 +479,7 @@ public class Facade {
                 boolean lr = longestroad == p.getPlayerIndex();
                 boolean la = largestarmy == p.getPlayerIndex();
                 PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
-                playerInfos[i] =pi;
+                playerInfos[i] = pi;
                 i++;
             }
         }

@@ -123,10 +123,6 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         notifyObservers();
     }
 
-    public void updateGame(ClientModel model) {
-        // TODO --
-    }
-
     public int getVersion() {
         return this.version;
     }
@@ -1085,15 +1081,18 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         if(!this.turnTracker.canPlay()){return;}
 
             this.map.buildRoad(playerID, hexloc);
-        }catch(InvalidLocationException e){}
-        catch(StructureException e){}
+        } catch(InvalidLocationException | StructureException e) {
+            e.printStackTrace();
+        }
     }
 
     public void cancelSoldierCard(int playerID){
         try {
             SoldierCard sc = new SoldierCard();
             this.playerManager.addDevCard(playerID, sc);
-        }catch(PlayerExistsException e){}
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteRoad(int playerID, EdgeLocation edge){
@@ -1102,10 +1101,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             if(!this.turnTracker.canPlay()){return;}
 
             this.map.deleteRoad(playerID, edge);
-        }catch(InvalidLocationException e){
-            e.printStackTrace();
-        }
-        catch(StructureException e){
+        } catch(InvalidLocationException | StructureException e) {
             e.printStackTrace();
         }
     }
@@ -1115,6 +1111,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             RoadBuildCard rbc = new RoadBuildCard();
             this.playerManager.addDevCard(playerID, rbc);
         } catch (PlayerExistsException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1140,6 +1137,12 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         resources.put(ResourceType.WHEAT,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfWheat());
         resources.put(ResourceType.SHEEP,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfSheep());
         return resources;
+    }
+
+    public void setPlayerManager(PlayerManager playerManager) {
+        this.playerManager = playerManager;
+        setChanged();
+        this.notifyObservers();
     }
 
     @Override

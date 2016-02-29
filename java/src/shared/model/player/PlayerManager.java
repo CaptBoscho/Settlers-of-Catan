@@ -621,6 +621,25 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        } else {
+            PlayerManager other = (PlayerManager)o;
+            if(this.players.size() != other.getPlayers().size()) {
+                return false;
+            } else {
+                for(int i = 0; i < this.players.size(); i++) {
+                    if(!this.players.get(i).equals(other.getPlayers().get(i))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
     public CatanColor getPlayerColorByName(final String name){
         assert name != null;
         try {

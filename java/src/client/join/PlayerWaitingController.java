@@ -14,11 +14,15 @@ import client.turntracker.TurnTrackerController;
 import client.turntracker.TurnTrackerView;
 import shared.model.game.Game;
 
+import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
+
 
 /**
  * Implementation for the player waiting controller
  */
-public class PlayerWaitingController extends Controller implements IPlayerWaitingController {
+public class PlayerWaitingController extends Controller implements IPlayerWaitingController, Observer {
 
 	public PlayerWaitingController(IPlayerWaitingView view) {
 		super(view);
@@ -31,10 +35,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void start() {
-        if(Facade.getInstance().getPlayers().size() < 4) {
-            getView().setPlayers(Facade.getInstance().getPlayers().toArray(Facade.getInstance().getOtherPlayers(-1)));
-            getView().showModal();
-        }
+        Facade.getInstance().addObserver(this);
 
         // START GAMEEE
         try {
@@ -42,7 +43,18 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
         } catch (MissingUserCookieException e) {
             e.printStackTrace();
         }
-		new Poller(ServerProxy.getInstance()).start();
+
+        // show waiting screen if there are not 4 players joined
+        if(Facade.getInstance().getPlayers().size() < 4) {
+            PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
+            Facade.getInstance().getPlayers().toArray(infoArr);
+            getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
+            getView().showModal();
+            System.out.println("showing waiting");
+        }
+        Poller p = new Poller(ServerProxy.getInstance());
+		p.setPlayerWaitingPolling();
+        p.start();
 	}
 
 	@Override
@@ -53,4 +65,26 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 		getView().closeModal();
 	}
 
+    /**
+     * This method is called whenever the observed object is changed. An
+     * application calls an <tt>Observable</tt> object's
+     * <code>notifyObservers</code> method to have all the object's
+     * observers notified of the change.
+     *
+     * @param o   the observable object.
+     * @param arg an argument passed to the <code>notifyObservers</code>
+     */
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println("updated called");
+        if(getView().isModalShowing()) {
+            PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
+            Facade.getInstance().getPlayers().toArray(infoArr);
+            getView().closeModal();
+            if(infoArr.length < 4) {
+                getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
+                getView().showModal();
+            }
+        }
+    }
 }
