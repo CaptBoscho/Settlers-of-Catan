@@ -88,6 +88,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		createState(facade.getPhase());
 		//Initialize the state
 		state.initFromModel();
+		if (facade.getWinnerId() != -1) {
+			getTradeView().enableMaritimeTrade(false);
+		}
 	}
 
 	/**

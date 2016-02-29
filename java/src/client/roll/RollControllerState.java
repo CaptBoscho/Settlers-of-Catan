@@ -9,6 +9,8 @@ import shared.model.game.Dice;
 import shared.model.game.TurnTracker;
 
 import java.util.Observable;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 2/24/2016.
@@ -58,6 +60,23 @@ public class RollControllerState {
         if(facade.getCurrentTurn() == index) {
             rollView.setMessage("Roll the dice");
             rollView.showModal();
+
+            Timer timer = new Timer();
+            int fourSeconds = 4 * 1000;
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (rollView.isModalShowing()) {
+                        try {
+                            rollView.closeModal();
+                            rollDice();
+                        } catch (PlayerExistsException | MissingUserCookieException | InvalidStateActionException | CommandExecutionFailed e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, fourSeconds);
         }
     }
 }
