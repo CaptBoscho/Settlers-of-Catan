@@ -19,9 +19,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private IAcceptTradeOverlay acceptOverlay;
 	private Facade facade;
 
-	private HashMap<ResourceType, Integer> sendingResources;
-	// TODO - excessive use of primitives. It would be smarter to utilize a map
-
 	private int woodcount = 0;
 	private int brickcount = 0;
 	private int sheepcount = 0;
@@ -49,6 +46,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	private int tradePartner = -1;
 
+	private boolean settingUp;
+
 
 	/**
 	 * DomesticTradeController constructor
@@ -68,9 +67,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setAcceptOverlay(acceptOverlay);
 		facade = Facade.getInstance();
 		facade.addObserver(this);
+		settingUp = true;
 	}
 
 	public void update(Observable obs, Object obj){
+		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
 		getTradeView().enableDomesticTrade(facade.canTrade(UserCookie.getInstance().getPlayerIndex()));
 
 		// get the amount of resources available to the current user
@@ -211,10 +212,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void startTrade() {
-		getTradeOverlay().showModal();
+		getTradeOverlay().reset();
+		update(null, null);
 		getTradeOverlay().setPlayerSelectionEnabled(true);
 		getTradeOverlay().setResourceSelectionEnabled(true);
-		getTradeOverlay().setPlayers(facade.getOtherPlayers(UserCookie.getInstance().getPlayerIndex()));
+		getTradeOverlay().showModal();
 	}
 
 	@Override
@@ -383,9 +385,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		oreStatus = false;
 
 		tradePartner = -1;
-		getTradeOverlay().setPlayerSelectionEnabled(false);
-
-		getTradeOverlay().setTradeEnabled(false);
 	}
 
 	@Override
@@ -495,7 +494,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void cancelTrade() {
-
 		getTradeOverlay().closeModal();
 		getTradeOverlay().setPlayerSelectionEnabled(false);
 
@@ -540,6 +538,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void acceptTrade(boolean willAccept) {
 		getAcceptOverlay().closeModal();
+		getAcceptOverlay().reset();
 		facade.answerTrade(UserCookie.getInstance().getPlayerIndex(), willAccept);
 	}
 }
