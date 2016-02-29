@@ -81,7 +81,6 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
      */
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("updated called");
         if(getView().isModalShowing()) {
             PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
             Facade.getInstance().getPlayers().toArray(infoArr);
@@ -91,9 +90,9 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
                 getView().showModal();
             } else {
                 Poller.getInstance().setModelPolling();
-                if(getView().isModalShowing()) {
+//                if(getView().isModalShowing())
                     getView().closeModal();
-                }
+//                }
             }
         }
     }
