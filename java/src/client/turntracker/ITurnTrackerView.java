@@ -3,6 +3,8 @@ package client.turntracker;
 import client.base.*;
 import shared.definitions.*;
 
+import java.awt.*;
+
 /**
  * Interface for the turn tracker view, which displays whose turn it is, and
  * what state the game is in
@@ -55,5 +57,5 @@ public interface ITurnTrackerView extends IView {
 	 * @param enable
 	 *            Whether or not the game state button should be enabled
 	 */
-	void updateGameState(String stateMessage, boolean enable);
+	void updateGameState(String stateMessage, boolean enable, Color color);
 }

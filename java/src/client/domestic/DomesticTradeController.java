@@ -46,8 +46,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	private int tradePartner = -1;
 
-	private boolean settingUp;
-
 
 	/**
 	 * DomesticTradeController constructor
@@ -67,7 +65,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setAcceptOverlay(acceptOverlay);
 		facade = Facade.getInstance();
 		facade.addObserver(this);
-		settingUp = true;
 	}
 
 	public void update(Observable obs, Object obj){
@@ -114,11 +111,12 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				getWaitOverlay().closeModal();
 			}
 			if(getTradeOverlay().isModalShowing()) {
-				getTradeOverlay().closeModal();
+				cancelTrade();
 			}
 			if(getAcceptOverlay().isModalShowing()) {
 				getAcceptOverlay().closeModal();
 			}
+
 		}
 	}
 	
