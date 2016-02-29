@@ -56,6 +56,7 @@ public final class SelectColorView extends OverlayView implements ISelectColorVi
                 if (selButton != 0) {
                     resetButton(selButton);
                 }
+				for(int i = 1; i < 10; i++) resetButton(i);
                 selButton = 0;
                 getController().cancelJoinGame();
             } else if (e.getSource() == btnOrange) {
