@@ -494,8 +494,15 @@ public class Facade {
     public void setGameInfo(GameInfo game) {
         Game.getInstance().setId(game.getId());
         if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < game.getPlayers().size(); i++) {
                 PlayerInfo info = game.getPlayers().get(i);
+                if(i >= Game.getInstance().getPlayers().size()) {
+                    try {
+                        Game.getInstance().getPlayerManager().addPlayer(new Player(info.getVictoryPoints(), info.getColor(), info.getId(), info.getPlayerIndex(), info.getName()));
+                    } catch (InvalidPlayerException e) {
+                        e.printStackTrace();
+                    }
+                }
                 Game.getInstance().getPlayerManager().getPlayers().get(i).setPlayerIndex(info.getPlayerIndex());
                 // TODO -- add rest
             }

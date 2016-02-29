@@ -44,16 +44,18 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
             e.printStackTrace();
         }
 
+        Poller p = Poller.getInstance();
+
         // show waiting screen if there are not 4 players joined
         if(Facade.getInstance().getPlayers().size() < 4) {
             PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
             Facade.getInstance().getPlayers().toArray(infoArr);
             getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
             getView().showModal();
-            System.out.println("showing waiting");
+            p.setPlayerWaitingPolling();
+        } else {
+            p.setModelPolling();
         }
-        Poller p = new Poller(ServerProxy.getInstance());
-		p.setPlayerWaitingPolling();
         p.start();
 	}
 
@@ -84,6 +86,8 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
             if(infoArr.length < 4) {
                 getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
                 getView().showModal();
+            } else {
+                Poller.getInstance().setModelPolling();
             }
         }
     }

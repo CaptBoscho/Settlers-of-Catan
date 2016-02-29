@@ -108,7 +108,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.winner = json.get("winner").getAsInt();
         if(json.has("tradeOffer")) {
             this.currentOffer = new Trade(json.get("tradeOffer").getAsJsonObject());
-        }else{
+        } else {
             this.currentOffer = new Trade();
         }
         try {

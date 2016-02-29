@@ -125,6 +125,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
+		assert game != null;
+
 		game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
 			getSelectColorView().setColorEnabled(p.getColor(), false);
 		});
@@ -139,6 +141,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void joinGame(CatanColor color) {
+		assert color != null;
+
         final JoinGameDTO dto = new JoinGameDTO(Facade.getInstance().getGameId(), color);
 		ServerProxy.getInstance().joinGame(dto);
 
