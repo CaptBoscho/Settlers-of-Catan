@@ -106,21 +106,19 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 
 	@Override
 	public void updatePlayer(int playerIndex, String playerName, int points, boolean highlight, boolean largestArmy, boolean longestRoad, CatanColor playerColor) {
-		this.remove(playerPanel[playerIndex]);
-		playerPanel[playerIndex] = new JPanel();
-		this.add(playerPanel[playerIndex]);
-		playerPanel[playerIndex].setLayout(new BorderLayout());
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
 
 		JLabel name = new JLabel(playerName);
 		name.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
 		Font labelFont = name.getFont();
 		labelFont = labelFont.deriveFont(Font.BOLD, FONT_SIZE);
 		name.setFont(labelFont);
-		playerPanel[playerIndex].add(name, BorderLayout.WEST);
+		panel.add(name, BorderLayout.WEST);
 
 		JPanel indicatorPanel = new JPanel();
 		indicatorPanel.setBackground(playerColor.getJavaColor());
-		playerPanel[playerIndex].add(indicatorPanel, BorderLayout.CENTER);
+		panel.add(indicatorPanel, BorderLayout.CENTER);
 
 		playerArmy[playerIndex] = new JLabel();
 		playerArmy[playerIndex].setIcon(new ImageIcon(largestArmyImage));
@@ -135,14 +133,17 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 		playerPoints[playerIndex] = new JLabel(String.format("%d", points));
 		playerPoints[playerIndex].setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
 		playerPoints[playerIndex].setFont(labelFont);
-		playerPanel[playerIndex].add(playerPoints[playerIndex], BorderLayout.EAST);
+		panel.add(playerPoints[playerIndex], BorderLayout.EAST);
 
-		playerPanel[playerIndex].setBackground(playerColor.getJavaColor());
+		panel.setBackground(playerColor.getJavaColor());
 
 		if(highlight)
-			playerPanel[playerIndex].setBorder(BorderFactory.createLineBorder(new Color(0,0,0), 3));
+			panel.setBorder(BorderFactory.createLineBorder(new Color(0,0,0), 3));
 		else
-			playerPanel[playerIndex].setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+			panel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		this.remove(playerPanel[playerIndex]);
+		playerPanel[playerIndex] = panel;
+		this.add(playerPanel[playerIndex]);
 		this.updateUI();
 	}
 
