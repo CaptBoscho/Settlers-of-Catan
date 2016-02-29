@@ -61,6 +61,7 @@ public class SetupOneState extends MapState {
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
+        facade.finishTurn(userCookie.getPlayerIndex());
     }
 
     @Override
