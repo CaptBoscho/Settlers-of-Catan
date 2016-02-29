@@ -123,8 +123,12 @@
 		</jar>
 	</target>
 
+	<property name="host" value="localhost"/>
+	<property name="port" value="8081"/>
 	<target name="our-client" depends="package" description="compiles, packages, and runs the student client">
 		<java classname="client.main.Catan" fork="yes">
+			<arg value="${host}"/>
+			<arg value="${port}"/>
 			<classpath>
 				<path refid="java.lib.classpath"/>
 			</classpath>

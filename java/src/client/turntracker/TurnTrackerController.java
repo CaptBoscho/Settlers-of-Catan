@@ -58,22 +58,22 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
                 TurnTracker.Phase state = facade.getPhase();
                 switch (state) {
                     case SETUPONE:
-                        getView().updateGameState("Setup Phase One", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        getView().updateGameState("Setup Phase One", false);
                         break;
                     case SETUPTWO:
-                        getView().updateGameState("Setup Phase Two", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        getView().updateGameState("Setup Phase Two", false);
                         break;
                     case ROLLING:
-                        getView().updateGameState("Rolling", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        getView().updateGameState("Rolling", false);
                         break;
                     case ROBBING:
-                        getView().updateGameState("Robbing", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        getView().updateGameState("Robbing", false);
                         break;
                     case PLAYING:
-                        getView().updateGameState("Playing", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        getView().updateGameState("End Turn", facade.getCurrentTurn() == userCookie.getPlayerIndex());
                         break;
                     case DISCARDING:
-                        getView().updateGameState("Discarding", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        getView().updateGameState("Discarding", false);
                         break;
                     default:
                         break;
