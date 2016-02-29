@@ -43,7 +43,7 @@ public class Catan extends JFrame {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-        
+
         if(args.length == 2) {
             String host = args[0];
             int port = Integer.parseInt(args[1]);
