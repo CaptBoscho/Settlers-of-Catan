@@ -6,6 +6,9 @@ import client.catan.*;
 import client.login.*;
 import client.join.*;
 import client.misc.*;
+import client.services.ServerProxy;
+
+import java.util.Arrays;
 
 /**
  * Main entry point for the Catan program
@@ -40,6 +43,12 @@ public class Catan extends JFrame {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+        
+        if(args.length == 2) {
+            String host = args[0];
+            int port = Integer.parseInt(args[1]);
+            ServerProxy.getInstance().configure(host, port);
+        }
 		
 		SwingUtilities.invokeLater(() -> {
             new Catan();
