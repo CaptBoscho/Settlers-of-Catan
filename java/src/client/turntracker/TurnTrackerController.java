@@ -41,14 +41,16 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
         try {
             getView().setLocalPlayerColor(facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
             List<PlayerInfo> players = facade.getPlayers();
-            for(PlayerInfo player : players) {
-                if(joining) {
-                    getView().initializePlayer(player.getPlayerIndex(), player.getName(), player.getColor());
-                } else {
-                    getView().updatePlayer(player.getPlayerIndex(), player.getName(), player.getVictoryPoints(), player.getPlayerIndex() == facade.getCurrentTurn(), player.hasLargestArmy(), player.hasLongestRoad(), player.getColor());
+            if(players.size() == 4) {
+                for (PlayerInfo player : players) {
+                    if (joining) {
+                        getView().initializePlayer(player.getPlayerIndex(), player.getName(), player.getColor());
+                    } else {
+                        getView().updatePlayer(player.getPlayerIndex(), player.getName(), player.getVictoryPoints(), player.getPlayerIndex() == facade.getCurrentTurn(), player.hasLargestArmy(), player.hasLongestRoad(), player.getColor());
+                    }
                 }
+                joining = false;
             }
-            joining = false;
             int winner = facade.getWinnerId();
             if(winner != -1) {
                 getView().updateGameState("Game Over", false);
