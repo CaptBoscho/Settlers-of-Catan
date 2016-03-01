@@ -1,8 +1,10 @@
 package client.services;
 
 
+import client.data.GameInfo;
 import shared.model.game.Game;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,6 +63,9 @@ public final class Poller {
                         case 2:
                             server.getLatestPlayers();
                             break;
+                        case 3:
+                            List<GameInfo> games = server.getAllGames();
+
                     }
                 } catch (MissingUserCookieException e) {
                     e.printStackTrace();

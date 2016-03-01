@@ -66,6 +66,19 @@
 		</javadoc>
    </target>
 
+    <!-- Group all dependencies into a big dependency-all.jar -->
+    <target name="copy-dependencies">
+
+        <mkdir dir="${java.dist}/lib" />
+
+        <jar jarfile="${java.dist}/lib/dependencies-all.jar">
+            <zipgroupfileset dir="${java.lib}">
+                <include name="**/*.jar" />
+            </zipgroupfileset>
+        </jar>
+
+    </target>
+
   	<property name="java.dir" location="java"/>
 	<property name="java.src" location="${java.dir}/src"/>
 	<property name="java.images" location="${java.dir}/images"/>
@@ -94,7 +107,7 @@
 		</javac>
 	</target>
 
-	<target name="package" depends="compile" description="package the jar file" >
+	<target name="package" depends="compile, copy-dependencies" description="package the jar file" >
 		<mkdir dir="${java.dist}/lib"/>
 		<copy todir="${java.dist}/lib">
 			<fileset dir="${java.lib}">
@@ -113,6 +126,8 @@
 				<attribute name="Class-Path" 
 					value="lib/gson-2.2.4.jar" />
 			</manifest>
+            <zipfileset src="${java.dist}/lib/dependencies-all.jar"
+                        excludes="META-INF/*.SF" />
 		</jar>
  		<jar jarfile="${java.dist}/catan-server.jar" basedir="${java.build}">
 			<manifest>
