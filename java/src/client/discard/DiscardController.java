@@ -80,11 +80,13 @@ public class DiscardController extends Controller implements IDiscardController,
             if(facade.canDiscard(userCookie.getPlayerIndex()) && !facade.hasDiscarded(userCookie.getPlayerIndex())) {
                 if(!getDiscardView().isModalShowing()){
                     getDiscardView().setDiscardButtonEnabled(false);
+
                     getDiscardView().setResourceAmountChangeEnabled(brick, remainingBrick > 0, false);
                     getDiscardView().setResourceAmountChangeEnabled(ore, remainingOre > 0, false);
                     getDiscardView().setResourceAmountChangeEnabled(sheep, remainingSheep > 0, false);
                     getDiscardView().setResourceAmountChangeEnabled(wheat, remainingWheat > 0, false);
                     getDiscardView().setResourceAmountChangeEnabled(wood, remainingWood > 0, false);
+
                     getDiscardView().setResourceDiscardAmount(brick, 0);
                     getDiscardView().setResourceDiscardAmount(ore, 0);
                     getDiscardView().setResourceDiscardAmount(sheep, 0);
@@ -97,6 +99,7 @@ public class DiscardController extends Controller implements IDiscardController,
                     getDiscardView().setResourceMaxAmount(wheat, remainingWheat);
                     getDiscardView().setResourceMaxAmount(wood, remainingWood);
                     getDiscardView().setStateMessage("Discard: 0/" + discarding);
+
                     getDiscardView().showModal();
                 }
             } else {
@@ -209,7 +212,8 @@ public class DiscardController extends Controller implements IDiscardController,
 	@Override
 	public void discard() {
         getDiscardView().closeModal();
-        facade.discard(userCookie.getPlayerIndex(), discardedBrick, discardedOre, discardedSheep, discardedWheat, discardedWood);
+        facade.discard(userCookie.getPlayerIndex(),
+                discardedBrick, discardedOre, discardedSheep, discardedWheat, discardedWood);
 	}
 
 	@Override
