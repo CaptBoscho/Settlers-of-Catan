@@ -88,12 +88,14 @@ abstract public class MapState {
 
         //first port
         HexLocation hexLoc = new HexLocation(1,-2);
-        PortType portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.SouthWest).getNormalizedLocation()).getPort().getPortType();
+        PortType portType = vertices.get(
+                new VertexLocation(hexLoc, VertexDirection.SouthWest).getNormalizedLocation()).getPort().getPortType();
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.South), portType);
 
         //second port
         hexLoc = new HexLocation(3,0);
-        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.West).getNormalizedLocation()).getPort().getPortType();
+        portType = vertices.get(
+                new VertexLocation(hexLoc, VertexDirection.West).getNormalizedLocation()).getPort().getPortType();
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.SouthWest), portType);
 
         //third port
@@ -123,12 +125,14 @@ abstract public class MapState {
 
         //eighth port
         hexLoc = new HexLocation(-3,-3);
-        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.East).getNormalizedLocation()).getPort().getPortType();
+        portType = vertices.get(
+                new VertexLocation(hexLoc, VertexDirection.East).getNormalizedLocation()).getPort().getPortType();
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.SouthEast), portType);
 
         //ninth port
         hexLoc = new HexLocation(-1,-3);
-        portType = vertices.get(new VertexLocation(hexLoc, VertexDirection.SouthEast).getNormalizedLocation()).getPort().getPortType();
+        portType = vertices.get(
+                new VertexLocation(hexLoc, VertexDirection.SouthEast).getNormalizedLocation()).getPort().getPortType();
         mapController.getView().addPort(new EdgeLocation(getUIHexLocation(hexLoc), EdgeDirection.South), portType);
 
         //draw roads

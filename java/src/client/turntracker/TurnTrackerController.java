@@ -48,7 +48,9 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
                     if (joining) {
                         getView().initializePlayer(player.getPlayerIndex(), player.getName(), player.getColor());
                     } else {
-                        getView().updatePlayer(player.getPlayerIndex(), player.getName(), player.getVictoryPoints(), player.getPlayerIndex() == facade.getCurrentTurn(), player.hasLargestArmy(), player.hasLongestRoad(), player.getColor());
+                        getView().updatePlayer(player.getPlayerIndex(), player.getName(), player.getVictoryPoints(),
+                                player.getPlayerIndex() == facade.getCurrentTurn(), player.hasLargestArmy(),
+                                player.hasLongestRoad(), player.getColor());
                     }
                 }
                 joining = false;

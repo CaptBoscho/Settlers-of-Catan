@@ -89,7 +89,8 @@ public class RobbingState extends MapState {
             return;
         }
         try {
-            mapController.getView().startDrop(pieceType, facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), false);
+            mapController.getView().startDrop(pieceType,
+                    facade.getPlayerColorByIndex(userCookie.getPlayerIndex()), false);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }

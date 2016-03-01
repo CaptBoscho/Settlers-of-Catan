@@ -83,14 +83,16 @@ public class MapController extends Controller implements IMapController, Observe
         if(state == TurnTracker.Phase.ROBBING && facade.getCurrentTurn() == userCookie.getPlayerIndex() && robbingRound) {
             mapState.startMove(PieceType.ROBBER, true, true);
             robbingRound = false;
-        } else if(state == TurnTracker.Phase.SETUPONE && facade.getCurrentTurn() == userCookie.getPlayerIndex() && firstRound && totalPlayers == 4) {
+        } else if(state == TurnTracker.Phase.SETUPONE && facade.getCurrentTurn() == userCookie.getPlayerIndex() &&
+                firstRound && totalPlayers == 4) {
             if(facade.getMap().getSettlements().get(userCookie.getPlayerIndex()) == null) {
                 mapState.startMove(PieceType.SETTLEMENT, true, true);
             } else if(facade.getMap().getRoads().get(userCookie.getPlayerIndex()) == null){
                 mapState.startMove(PieceType.ROAD, true, true);
             }
             firstRound = false;
-        } else if(state == TurnTracker.Phase.SETUPTWO && facade.getCurrentTurn() == userCookie.getPlayerIndex() && secondRound) {
+        } else if(state == TurnTracker.Phase.SETUPTWO && facade.getCurrentTurn() == userCookie.getPlayerIndex() &&
+                secondRound) {
             if(facade.getMap().getSettlements().get(userCookie.getPlayerIndex()).size() == 1) {
                 mapState.startMove(PieceType.SETTLEMENT, true, true);
             } else if(facade.getMap().getRoads().get(userCookie.getPlayerIndex()).size() == 1){
