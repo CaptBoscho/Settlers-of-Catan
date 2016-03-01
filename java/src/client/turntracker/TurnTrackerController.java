@@ -72,7 +72,12 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
                         getView().updateGameState("Robbing", false, color.getJavaColor());
                         break;
                     case PLAYING:
-                        getView().updateGameState("End Turn", facade.getCurrentTurn() == userCookie.getPlayerIndex(), color.getJavaColor());
+                        boolean isPlaying = facade.getCurrentTurn() == userCookie.getPlayerIndex();
+                        if(isPlaying) {
+                            getView().updateGameState("End Turn", isPlaying, color.getJavaColor());
+                        } else {
+                            getView().updateGameState("Just Chill", isPlaying, color.getJavaColor());
+                        }
                         break;
                     case DISCARDING:
                         getView().updateGameState("Discarding", false, color.getJavaColor());
