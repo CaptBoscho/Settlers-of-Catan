@@ -72,6 +72,14 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 
             getView().setElementAmount(ResourceBarElement.SOLDIERS, soldierCount);
 
+            if (facade.getWinnerId() != -1) {
+                getView().setElementEnabled(road, false);
+                getView().setElementEnabled(settle, false);
+                getView().setElementEnabled(city, false);
+                getView().setElementEnabled(buyCard, false);
+                getView().setElementEnabled(playCard, false);
+            }
+
         } catch(PlayerExistsException e){
             e.printStackTrace();
         }
