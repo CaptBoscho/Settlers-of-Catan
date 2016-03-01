@@ -4,6 +4,7 @@ import client.data.PlayerInfo;
 import client.facade.Facade;
 import client.services.UserCookie;
 import client.base.*;
+import shared.definitions.CatanColor;
 import shared.exceptions.PlayerExistsException;
 import shared.model.game.TurnTracker;
 
@@ -39,7 +40,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	
 	public void initFromModel() {
         try {
-            getView().setLocalPlayerColor(facade.getPlayerColorByIndex(userCookie.getPlayerIndex()));
+            CatanColor color = facade.getPlayerColorByIndex(userCookie.getPlayerIndex());
+            getView().setLocalPlayerColor(color);
             List<PlayerInfo> players = facade.getPlayers();
             if(players.size() == 4) {
                 for (PlayerInfo player : players) {
@@ -53,27 +55,32 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
             }
             int winner = facade.getWinnerId();
             if(winner != -1) {
-                getView().updateGameState("Game Over", false);
+                getView().updateGameState("Game Over", false, color.getJavaColor());
             } else {
                 TurnTracker.Phase state = facade.getPhase();
                 switch (state) {
                     case SETUPONE:
-                        getView().updateGameState("Setup Phase One", false);
+                        getView().updateGameState("Setup Phase One", false, color.getJavaColor());
                         break;
                     case SETUPTWO:
-                        getView().updateGameState("Setup Phase Two", false);
+                        getView().updateGameState("Setup Phase Two", false, color.getJavaColor());
                         break;
                     case ROLLING:
-                        getView().updateGameState("Rolling", false);
+                        getView().updateGameState("Rolling", false, color.getJavaColor());
                         break;
                     case ROBBING:
-                        getView().updateGameState("Robbing", false);
+                        getView().updateGameState("Robbing", false, color.getJavaColor());
                         break;
                     case PLAYING:
-                        getView().updateGameState("End Turn", facade.getCurrentTurn() == userCookie.getPlayerIndex());
+                        boolean isPlaying = facade.getCurrentTurn() == userCookie.getPlayerIndex();
+                        if(isPlaying) {
+                            getView().updateGameState("End Turn", isPlaying, color.getJavaColor());
+                        } else {
+                            getView().updateGameState("Just Chill", isPlaying, color.getJavaColor());
+                        }
                         break;
                     case DISCARDING:
-                        getView().updateGameState("Discarding", false);
+                        getView().updateGameState("Discarding", false, color.getJavaColor());
                         break;
                     default:
                         break;
