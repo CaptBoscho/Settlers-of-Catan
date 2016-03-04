@@ -411,8 +411,10 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert playerID >= 0;
         assert this.playerManager != null;
         assert this.turnTracker != null;
-
-        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
+        int amount_left = developmentCardBank.getNumberOfDevCardsByType(DevCardType.MONOPOLY) + developmentCardBank.getNumberOfDevCardsByType(DevCardType.SOLDIER) +
+                developmentCardBank.getNumberOfDevCardsByType(DevCardType.ROAD_BUILD) + developmentCardBank.getNumberOfDevCardsByType(DevCardType.MONUMENT) +
+                developmentCardBank.getNumberOfDevCardsByType(DevCardType.YEAR_OF_PLENTY);
+        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay() && amount_left > 0;
 
     }
 
