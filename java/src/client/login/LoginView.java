@@ -313,22 +313,7 @@ public class LoginView extends OverlayView implements ILoginView {
             TextFieldValidator usernameValidator = new TextFieldValidator(txtUsername) {
                 @Override
                 public boolean validateContents(String username) {
-                    final int MIN_UNAME_LENGTH = 3;
-                    final int MAX_UNAME_LENGTH = 7;
-
-                    if (username.length() < MIN_UNAME_LENGTH
-                            || username.length() > MAX_UNAME_LENGTH) {
-                        return false;
-                    } else {
-                        for (char c : username.toCharArray()) {
-                            if (!Character.isLetterOrDigit(c)
-                                    && c != '_' && c != '-') {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
+                    return LoginController.validateUsername(username);
                 }
 
             };
@@ -337,19 +322,7 @@ public class LoginView extends OverlayView implements ILoginView {
 
                 @Override
                 public boolean validateContents(String input) {
-                    final int MIN_PASS_LENGTH = 5;
-                    if (input.length() < MIN_PASS_LENGTH) {
-                        return false;
-                    } else {
-                        for (char c : input.toCharArray()) {
-                            if (!Character.isLetterOrDigit(c)
-                                    && c != '_' && c != '-') {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
+                    return LoginController.validatePassword(input);
                 }
 
             };
