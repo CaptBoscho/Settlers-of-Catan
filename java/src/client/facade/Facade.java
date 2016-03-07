@@ -430,7 +430,12 @@ public class Facade {
     }
 
     public void rob(int playerID, RobPlayerInfo victim, HexLocation hexLoc) {
-        RobPlayerDTO dto = new RobPlayerDTO(playerID, victim.getPlayerIndex(), hexLoc);
+        RobPlayerDTO dto;
+        if(getNumberResourceCards(victim.getPlayerIndex()) == 0) {
+            dto = new RobPlayerDTO(playerID, playerID, hexLoc);
+        } else {
+            dto = new RobPlayerDTO(playerID, victim.getPlayerIndex(), hexLoc);
+        }
         try {
             ServerProxy.getInstance().robPlayer(dto);
         }

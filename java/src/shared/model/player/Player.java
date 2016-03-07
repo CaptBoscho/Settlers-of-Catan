@@ -299,7 +299,7 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
      */
     @Override
     public boolean canUseRoadBuilder() {
-        return (!hasPlayedDevCard() && developmentCardBank.canUseRoadBuild());
+        return (!hasPlayedDevCard() && developmentCardBank.canUseRoadBuild()) && structureBank.getAvailableRoads() > 1;
     }
 
     /**

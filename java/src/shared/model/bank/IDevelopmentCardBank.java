@@ -26,11 +26,6 @@ public interface IDevelopmentCardBank {
 
     boolean canUseMonopoly();
 
-    /**
-     * Removes the Monopoly card from the user's bank
-     *
-     * @return
-     */
     DevelopmentCard useMonopoly();
 
     boolean canUseMonument();

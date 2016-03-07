@@ -412,8 +412,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
-        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
-
+        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay() && developmentCardBank.size() > 0;
     }
 
         /**
