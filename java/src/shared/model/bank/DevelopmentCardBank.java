@@ -328,7 +328,11 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
         if (!ownedByGame) {
             throw new Exception("Can't call draw on DevelopmentCardBank owned by Player!");
         } else {
-            return developmentCards.remove(0);
+            if (size() > 0) {
+                return developmentCards.remove(0);
+            } else {
+                throw new Exception("No more available Development Cards in the bank.");
+            }
         }
     }
 

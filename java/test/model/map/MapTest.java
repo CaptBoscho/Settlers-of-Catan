@@ -335,7 +335,7 @@ public class MapTest {
             for (java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
                 test.append(entry.getKey()).append("/").append(entry.getValue());
             }
-            String answer = "1/[WHEAT]";
+            String answer = "1/[wheat]";
             assertEquals(answer, test.toString());
             //map.moveRobber(new HexLocation(-1,-2));
             resources = map.getResources(8);
@@ -343,7 +343,7 @@ public class MapTest {
             for (final java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
                 test.append(entry.getKey()).append("/").append(entry.getValue());
             }
-            answer = "1/[WHEAT]";
+            answer = "1/[wheat]";
             assertEquals(answer, test.toString());
 
         } catch(InvalidLocationException | StructureException e) {
