@@ -58,7 +58,10 @@ public class ResourceBarController extends Controller implements IResourceBarCon
             getView().setElementEnabled(road, enableRoad);
             getView().setElementEnabled(settle, enableSettlement);
             getView().setElementEnabled(city, enableCity);
-			getView().setElementEnabled(buyCard, enableBuyDevCard);
+
+            getView().setElementEnabled(buyCard, enableBuyDevCard);
+            
+
             getView().setElementEnabled(playCard, enablePlayDevCard);
 
             getView().setElementAmount(road, roadCount);

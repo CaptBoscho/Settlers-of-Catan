@@ -114,6 +114,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				getWaitOverlay().closeModal();
 			}
 			if(getTradeOverlay().isModalShowing()) {
+				getTradeOverlay().closeModal();
 				cancelTrade();
 			}
 			if(getAcceptOverlay().isModalShowing()) {
