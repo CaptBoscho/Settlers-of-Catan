@@ -1,20 +1,14 @@
 package client.join;
 
 import client.base.*;
-import client.catan.GameStatePanel;
-import client.catan.TitlePanel;
 import client.data.PlayerInfo;
 import client.facade.Facade;
-import client.map.*;
+import client.misc.MessageView;
 import client.services.MissingUserCookieException;
 import client.services.Poller;
 import client.services.ServerProxy;
-import client.turntracker.ITurnTrackerView;
-import client.turntracker.TurnTrackerController;
-import client.turntracker.TurnTrackerView;
 import shared.model.game.Game;
 
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -66,10 +60,11 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void addAI() {
-
-		// TODO --
-		// TEMPORARY
-		getView().closeModal();
+        //// TODO: 3/7/16 implement add AI
+        MessageView messageView = new MessageView();
+        messageView.setTitle("Broken Button");
+        messageView.setMessage("This button doesn't actually do anything.  Wait for 4 human players to join.");
+        messageView.showModal();
 	}
 
     /**
