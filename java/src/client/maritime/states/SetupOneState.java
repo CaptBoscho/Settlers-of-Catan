@@ -11,10 +11,7 @@ import shared.definitions.ResourceType;
  * Created by Kyle 'TMD' Cornelison on 2/18/2016.
  */
 public class SetupOneState extends MaritimeTradeControllerState {
-    private Facade facade;
-    private UserCookie userCookie;
     private IMaritimeTradeView view;
-    private IMaritimeTradeOverlay overlay;
 
     /**
      * Constructor
@@ -22,9 +19,6 @@ public class SetupOneState extends MaritimeTradeControllerState {
     public SetupOneState(IMaritimeTradeView view, IMaritimeTradeOverlay overlay){
         super(view, overlay);
         this.view = view;
-        this.overlay = overlay;
-        this.facade = Facade.getInstance();
-        this.userCookie = UserCookie.getInstance();
     }
 
     @Override
