@@ -151,7 +151,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		for(final GameInfo game : games) {
 			if(game.getId() == currentGame.getId()) {
 				for (final PlayerInfo player : game.getPlayers()) {
-					if (player.getColor().equals(color)) {
+					if (player.getId() != UserCookie.getInstance().getPlayerId() && player.getColor().equals(color)) {
 						game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
 							getSelectColorView().setColorEnabled(p.getColor(), false);
 						});
