@@ -33,7 +33,7 @@ public class OtherStates extends RollControllerState{
 
     @Override
     public void update() {
-        //Do nothing
+        //Do nothing: Don't need this here but keeping for completeness
     }
 }
 

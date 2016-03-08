@@ -1,20 +1,15 @@
 package client.maritime.states;
 
-import client.facade.Facade;
 import client.maritime.IMaritimeTradeOverlay;
 import client.maritime.IMaritimeTradeView;
 import client.maritime.MaritimeTradeControllerState;
-import client.services.UserCookie;
 import shared.definitions.ResourceType;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 2/18/2016.
  */
 public class RobbingState extends MaritimeTradeControllerState {
-    private Facade facade;
-    private UserCookie userCookie;
     private IMaritimeTradeView view;
-    private IMaritimeTradeOverlay overlay;
 
     /**
      * Constructor
@@ -22,9 +17,6 @@ public class RobbingState extends MaritimeTradeControllerState {
     public RobbingState(IMaritimeTradeView view, IMaritimeTradeOverlay overlay){
         super(view, overlay);
         this.view = view;
-        this.overlay = overlay;
-        this.facade = Facade.getInstance();
-        this.userCookie = UserCookie.getInstance();
     }
 
     @Override

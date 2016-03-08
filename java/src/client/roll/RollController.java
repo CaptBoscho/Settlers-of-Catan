@@ -6,7 +6,6 @@ import client.services.*;
 import client.roll.states.*;
 import shared.exceptions.InvalidStateActionException;
 import shared.exceptions.PlayerExistsException;
-import shared.model.game.Dice;
 import shared.model.game.TurnTracker;
 
 import java.util.Observable;
@@ -16,11 +15,7 @@ import java.util.Observer;
  * Implementation for the roll controller
  */
 public final class RollController extends Controller implements IRollController, Observer {
-
-	private Dice roller;
     private Facade facade;
-	private IServer server;
-	private UserCookie userCookie;
 	private IRollResultView resultView;
     private RollControllerState state;
 
@@ -33,12 +28,8 @@ public final class RollController extends Controller implements IRollController,
 	public RollController(IRollView view, IRollResultView resultView) {
 		super(view);
 		setResultView(resultView);
-		roller = new Dice(2);
         facade = Facade.getInstance();
 		facade.addObserver(this);
-		server = ServerProxy.getInstance();
-		userCookie = UserCookie.getInstance();
-
         createState(facade.getPhase());
 	}
 	
