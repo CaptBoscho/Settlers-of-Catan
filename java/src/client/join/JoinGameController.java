@@ -22,6 +22,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	private ISelectColorView selectColorView;
 	private IMessageView messageView;
 	private IAction joinAction;
+	private GameInfo currentGame;
 	
 	/**
 	 * JoinGameController constructor
@@ -130,6 +131,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
 			getSelectColorView().setColorEnabled(p.getColor(), false);
 		});
+		currentGame = game;
         Facade.getInstance().setGameInfo(game);
         getSelectColorView().showModal();
 	}
@@ -142,6 +144,28 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	@Override
 	public void joinGame(CatanColor color) {
 		assert color != null;
+
+		// make sure color hasn't been taken
+		boolean colorTaken = false;
+		final List<GameInfo> games = ServerProxy.getInstance().getAllGames();
+		for(final GameInfo game : games) {
+			if(game.getId() == currentGame.getId()) {
+				for (final PlayerInfo player : game.getPlayers()) {
+					if (player.getColor().equals(color)) {
+						game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
+							getSelectColorView().setColorEnabled(p.getColor(), false);
+						});
+						final MessageView msg = new MessageView();
+						msg.setTitle("Bad Color");
+						msg.setMessage("Color has already been chosen by another player.");
+						msg.showModal();
+						colorTaken = true;
+					}
+				}
+			}
+		}
+
+		if(colorTaken) return;
 
         final JoinGameDTO dto = new JoinGameDTO(Facade.getInstance().getGameId(), color);
 		ServerProxy.getInstance().joinGame(dto);
