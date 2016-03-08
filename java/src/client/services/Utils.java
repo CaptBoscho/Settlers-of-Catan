@@ -77,7 +77,6 @@ public final class Utils {
             }
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
-            System.out.println("here post");
             MessageView view = new MessageView();
             view.setTitle("Bad Connection");
             view.setMessage("Unable to communicate with the server");
@@ -102,7 +101,6 @@ public final class Utils {
         try {
             return Utils.getStringFromHttpResponse(HttpClientBuilder.create().build().execute(get));
         } catch (IOException e) {
-            System.out.println("here get");
             MessageView view = new MessageView();
             view.setTitle("Bad Connection");
             view.setMessage("Unable to communicate with the server");
