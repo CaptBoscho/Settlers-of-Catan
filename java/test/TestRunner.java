@@ -31,10 +31,7 @@ public class TestRunner {
         String[] testClasses = new String[] {
             "client.networking.ServerTest",
             "model.bank.IDevelopmentCardBankTest",
-            "model.bank.ResourceCardBankTests",
             "model.bank.StructureBankTests",
-            "model.game.trade.TradePackageTests",
-            "model.game.trade.TradeTests",
             "model.game.GameTest",
             "model.game.LargestArmyTests",
             "model.game.LongestRoadTests",
