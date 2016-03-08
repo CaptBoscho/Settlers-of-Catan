@@ -5,8 +5,7 @@ import client.base.*;
 /**
  * Interface for the message view, which is used to display messages to the user
  */
-public interface IMessageView extends IOverlayView
-{
+public interface IMessageView extends IOverlayView {
 	
 	/**
 	 * Sets the title to be displayed.

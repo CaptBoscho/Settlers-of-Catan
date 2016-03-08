@@ -6,8 +6,7 @@ import client.base.*;
  * Interface for the wait view, which is used to display wait dialogs to the
  * user
  */
-public interface IWaitView extends IOverlayView
-{
+public interface IWaitView extends IOverlayView {
 	
 	/**
 	 * Sets the message displayed by the wait view.

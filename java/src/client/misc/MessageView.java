@@ -22,8 +22,7 @@ public class MessageView extends OverlayView implements IMessageView {
 	private JButton closeButton;
 	private JPanel buttonPanel;
 	private JLabel message;
-	
-	
+
 
 	public MessageView() {
 		
@@ -37,12 +36,15 @@ public class MessageView extends OverlayView implements IMessageView {
 		label.setFont(labelFont);
 		this.add(label, BorderLayout.NORTH);
 		
-		
-		
 		message = new JLabel("Message Body");
 		this.add(message, BorderLayout.CENTER);
 		
 		closeButton = new JButton("Close");
+		ActionListener actionListener = e -> {
+            if (e.getSource() == closeButton) {
+                closeModal();
+            }
+        };
 		closeButton.addActionListener(actionListener);
 		Font buttonFont = closeButton.getFont();
 		buttonFont = buttonFont.deriveFont(buttonFont.getStyle(), BUTTON_TEXT_SIZE);
@@ -54,16 +56,6 @@ public class MessageView extends OverlayView implements IMessageView {
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if (e.getSource() == closeButton) {
-				closeModal();
-			}
-		}	
-	};
-
 	@Override
 	public void setTitle(String title) {
 		label.setText(title);
@@ -73,7 +65,4 @@ public class MessageView extends OverlayView implements IMessageView {
 	public void setMessage(String message) {
 		this.message.setText(String.format("<html><div style=\"width:%dpx;\">%s</div><html>", 500, message));
 	}
-	
 }
-
-
