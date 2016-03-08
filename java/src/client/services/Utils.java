@@ -1,5 +1,6 @@
 package client.services;
 
+import client.misc.MessageView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.IOUtils;
@@ -76,7 +77,12 @@ public final class Utils {
             }
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("here post");
+            MessageView view = new MessageView();
+            view.setTitle("Bad Connection");
+            view.setMessage("Unable to communicate with the server");
+            view.showModal();
+//            e.printStackTrace();
         }
         return null;
     }
@@ -96,7 +102,12 @@ public final class Utils {
         try {
             return Utils.getStringFromHttpResponse(HttpClientBuilder.create().build().execute(get));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("here get");
+            MessageView view = new MessageView();
+            view.setTitle("Bad Connection");
+            view.setMessage("Unable to communicate with the server");
+            view.showModal();
+//            e.printStackTrace();
         }
         return null;
     }
