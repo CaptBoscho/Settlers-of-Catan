@@ -53,13 +53,14 @@ public class RollControllerState {
     }
 
     public void update() throws PlayerExistsException {
+        final int FOUR_SECONDS = 4 * 1000;
+
         int index = userCookie.getPlayerIndex();
         if(facade.getCurrentTurn() == index) {
             rollView.setMessage("Roll the dice");
             rollView.showModal();
 
             Timer timer = new Timer();
-            int fourSeconds = 4 * 1000;
 
             timer.schedule(new TimerTask() {
                 @Override
@@ -73,7 +74,7 @@ public class RollControllerState {
                         }
                     }
                 }
-            }, fourSeconds);
+            }, FOUR_SECONDS);
         }
     }
 }
