@@ -8,15 +8,20 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Derek Argueta
  */
 @RestController
-public class UserController {
+public class GameController {
 
-    @RequestMapping(method=RequestMethod.POST, path="/user/login")
-    public void login() {
+    @RequestMapping("/game/model")
+    public void getModel() {
 
     }
 
-    @RequestMapping(method=RequestMethod.POST, path="/user/register")
-    public void register() {
+    @RequestMapping(method=RequestMethod.POST, path="/game/addAI")
+    public void addAI() {
+
+    }
+
+    @RequestMapping("game/listAI")
+    public void listAI() {
 
     }
 }
