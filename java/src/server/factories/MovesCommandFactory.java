@@ -28,7 +28,7 @@ public class MovesCommandFactory {
      * @return an ICommand object
      */
     public ICommand createCommand(String command) {
-        assert !command.equals(null);
+        assert command != null;
 
         switch(command) {
             case "sendChat":

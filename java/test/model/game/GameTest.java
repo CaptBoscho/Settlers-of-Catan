@@ -1,11 +1,8 @@
 package model.game;
 
-import org.apache.http.client.cache.Resource;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
-
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.locations.*;

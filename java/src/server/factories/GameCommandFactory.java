@@ -23,7 +23,7 @@ public class GameCommandFactory {
     }
 
     public ICommand createCommand(String command) {
-        assert !command.equals(null);
+        assert command != null;
 
         switch(command) {
             case "model":
