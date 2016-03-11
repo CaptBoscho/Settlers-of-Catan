@@ -85,6 +85,12 @@ public final class Map implements IMap, JsonSerializable{
                    Interface Methods
      ============================================*/
 
+    /**
+     * Gives resources out to players
+     * @param diceRoll int In the range of 2 to 12, excluding 7
+     * @return A map of resources to give to each player
+     * @throws InvalidDiceRollException Throws exception if diceRoll is less than 2 or greater than 12 or equal to 7
+     */
     @Override
     public java.util.Map<Integer, List<ResourceType>> getResources(final int diceRoll) throws InvalidDiceRollException {
         assert diceRoll > 0;
@@ -110,6 +116,14 @@ public final class Map implements IMap, JsonSerializable{
         return resourceMap;
     }
 
+    /**
+     * Informs if a Settlement can be initiated at a vertex location
+     * @param playerIndex int
+     * @param vertexLoc VertexLocation
+     * @return boolean
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     */
     @Override
     public boolean canInitiateSettlement(final int playerIndex, VertexLocation vertexLoc) {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -137,6 +151,15 @@ public final class Map implements IMap, JsonSerializable{
         return !(roads != null && roads.size() > 1) && !vertex.hasBuilding() && !hasNeighborBuildings(vertexLoc);
     }
 
+    /**
+     * Builds a Settlement in setup phase and gives out resources if it is the players second turn
+     * @param playerIndex int
+     * @param vertexLoc VertexLocation
+     * @return A list of resources to give to the player
+     * @throws StructureException Throws exception if the Settlement can't be built at the vertex location
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public List<ResourceType> initiateSettlement(int playerIndex, VertexLocation vertexLoc) throws StructureException,
             InvalidLocationException {
@@ -195,6 +218,14 @@ public final class Map implements IMap, JsonSerializable{
         return resources;
     }
 
+    /**
+     * Informs if a road can be initiated at an edge location if connected to a vertex location
+     * @param playerIndex int
+     * @param edgeLoc EdgeLocation
+     * @return boolean
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     * @throws InvalidLocationException Throws exception if Edge/Vertex locaiton is not on the map
+     */
     @Override
     public boolean canInitiateRoad(int playerIndex, EdgeLocation edgeLoc) {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -250,6 +281,14 @@ public final class Map implements IMap, JsonSerializable{
         return false;
     }
 
+    /**
+     * Builds a Road in setup phase
+     * @param playerIndex int
+     * @param edgeLoc EdgeLocation
+     * @throws StructureException Throws exception if the Road can't be built at the EdgeLocation
+     * @throws InvalidLocationException Throws exception if vertex/edge location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public void initiateRoad(int playerIndex, EdgeLocation edgeLoc)
             throws StructureException, InvalidLocationException {
@@ -298,6 +337,14 @@ public final class Map implements IMap, JsonSerializable{
         }
     }
 
+    /**
+     * Informs if a Road can be built at an edge location
+     * @param playerIndex int
+     * @param edgeLoc EdgeLocation
+     * @return boolean
+     * @throws InvalidLocationException Throws exception if edge location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public boolean canBuildRoad(int playerIndex, EdgeLocation edgeLoc) {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -333,6 +380,14 @@ public final class Map implements IMap, JsonSerializable{
         return !edge.hasRoad() && edgeHasConnectingRoad(playerIndex, edgeLoc);
     }
 
+    /**
+     * Builds a Road at an edge location
+     * @param playerIndex int
+     * @param edgeLoc EdgeLocation
+     * @throws StructureException Throws Exception if Road can't be built at the edge location
+     * @throws InvalidLocationException Throws exception if edge location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public void buildRoad(int playerIndex, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -382,6 +437,14 @@ public final class Map implements IMap, JsonSerializable{
         }
     }
 
+    /**
+     * Informs if a Settlement can be built at a vertex location
+     * @param playerIndex int
+     * @param vertexLoc VertexLocation
+     * @return boolean
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public boolean canBuildSettlement(int playerIndex, VertexLocation vertexLoc) {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -417,6 +480,14 @@ public final class Map implements IMap, JsonSerializable{
                 vertexHasConnectingRoad(playerIndex, vertexLoc);
     }
 
+    /**
+     * Builds a Settlement at a vertex location
+     * @param playerIndex int
+     * @param vertexLoc VertexLocation
+     * @throws StructureException Throws exception if a Settlement can't be built at the vertex location
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public void buildSettlement(int playerIndex, VertexLocation vertexLoc) throws StructureException,
             InvalidLocationException {
@@ -472,6 +543,14 @@ public final class Map implements IMap, JsonSerializable{
         }
     }
 
+    /**
+     * Informs if a City can be built at a vertex location
+     * @param playerIndex int
+     * @param vertexLoc VertexLocation
+     * @return boolean
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public boolean canBuildCity(int playerIndex, VertexLocation vertexLoc) {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -506,6 +585,14 @@ public final class Map implements IMap, JsonSerializable{
         return vertex.canBuildCity() && vertex.getPlayerIndex() == playerIndex && !vertex.hasCity();
     }
 
+    /**
+     * Builds a City at a vertex location
+     * @param playerIndex int
+     * @param vertexLoc VertexLocation
+     * @throws StructureException Throws exception if a City can't be built at the vertex location
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public void buildCity(int playerIndex, VertexLocation vertexLoc) throws StructureException,
             InvalidLocationException {
@@ -562,6 +649,12 @@ public final class Map implements IMap, JsonSerializable{
         }
     }
 
+    /**
+     * Gets the size of the longest road of a player
+     * @param playerIndex int
+     * @return int Size of the longest road of a player
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public int getLongestRoadSize(int playerIndex) {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -582,6 +675,12 @@ public final class Map implements IMap, JsonSerializable{
         return size;
     }
 
+    /**
+     * Gets all the port types that a player has
+     * @param playerIndex int
+     * @return A set of port types
+     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
+     */
     @Override
     public Set<PortType> getPortTypes(int playerIndex) {
         assert playerIndex >= 0 && playerIndex <= 3;
@@ -594,6 +693,12 @@ public final class Map implements IMap, JsonSerializable{
         return portTypes;
     }
 
+    /**
+     * Informs if the robber can be moved to a hex location
+     * @param hexLoc HexLocation
+     * @return boolean
+     * @throws AlreadyRobbedException Throws exception if the hex location is not on the map
+     */
     @Override
     public boolean canMoveRobber(HexLocation hexLoc) {
         Hex hex = hexes.get(hexLoc);
@@ -603,12 +708,23 @@ public final class Map implements IMap, JsonSerializable{
         return !robber.getLocation().equals(hexLoc);
     }
 
+    /**
+     * Informs who can be robbed at a hex location
+     * @return A set of playerIndex that can be robbed
+     */
     @Override
     public Set<Integer> whoCanGetRobbed(int playerIndex) {
         assert this.robber != null;
         return getPlayers(playerIndex, robber.getLocation());
     }
 
+    /**
+     * Moves the Robber to a new hex location
+     * @param hexLoc HexLocation
+     * @return A set of playerIndex that can be robbed
+     * @throws AlreadyRobbedException Throws exception if Robber is moved to where it is already at
+     * @throws InvalidLocationException Throws exception if vertex location is not on the map
+     */
     @Override
     public Set<Integer> moveRobber(int playerIndex, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException {
         assert hexLoc != null;
@@ -626,11 +742,22 @@ public final class Map implements IMap, JsonSerializable{
         return getPlayers(playerIndex, hexLoc);
     }
 
+    /**
+     * Serializes the Map to a JsonObject
+     * @return JsonObject
+     */
     @Override
     public JsonObject toJSON() {
         return null;
     }
 
+    /**
+     * Deletes a road if a player cancels in the middle of the play road building card
+     * @param playerIndex int
+     * @param edgeLoc EdgeLocation
+     * @throws InvalidLocationException throws exception if edge locaiton is not on the map
+     * @throws StructureException throws exception if edge location doesn't have a road to delete
+     */
     @Override
     public void deleteRoad(int playerIndex, EdgeLocation edgeLoc) throws InvalidLocationException, StructureException {
         assert playerIndex >= 0 && playerIndex <= 3;
