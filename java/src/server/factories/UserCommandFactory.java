@@ -4,7 +4,7 @@ import server.commands.ICommand;
 
 /**
  * A factory class that creates User Commands on demand.  Use this class to get a User Command
- * Created by Danny Harding on 3/10/16.
+ * @author Danny Harding
  */
 public class UserCommandFactory {
 
