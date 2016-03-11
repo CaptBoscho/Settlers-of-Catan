@@ -25,7 +25,7 @@ public class ServerFacade implements IFacade {
      */
     @Override
     public void login(String username, String password) throws LoginException {
-        
+
     }
 
     /**
