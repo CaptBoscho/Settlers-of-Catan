@@ -1,6 +1,7 @@
 package server.factories;
 
 import server.commands.ICommand;
+import server.commands.user.*;
 
 /**
  * A factory class that creates User Commands on demand.  Use this class to get a User Command
@@ -10,7 +11,7 @@ public class UserCommandFactory {
 
     private static UserCommandFactory instance = null;
 
-    UserCommandFactory() {
+    private UserCommandFactory() {
 
     }
 
@@ -28,6 +29,15 @@ public class UserCommandFactory {
      * @return an ICommand object
      */
     public ICommand createCommand(String command) {
-        return null;
+        assert !command.equals(null);
+
+        switch(command) {
+            case "login":
+                return new LoginCommand();
+            case "register":
+                return new RegisterCommand();
+            default:
+                return null;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package server.factories;
 
 import server.commands.ICommand;
+import server.commands.game.*;
 
 /**
  * @author Derek Argueta
@@ -9,7 +10,7 @@ public class GameCommandFactory {
 
     private static GameCommandFactory instance = null;
 
-    GameCommandFactory() {
+    private GameCommandFactory() {
 
     }
 
@@ -22,6 +23,18 @@ public class GameCommandFactory {
     }
 
     public ICommand createCommand(String command) {
-        return null;
+        assert !command.equals(null);
+
+        switch(command) {
+            case "model":
+                return new ModelCommand();
+            case "addAI":
+                return new AddAICommand();
+            case "listAI":
+                return new ListAICommand();
+            default:
+                return null;
+        }
     }
+
 }
