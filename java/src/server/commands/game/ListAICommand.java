@@ -1,7 +1,29 @@
 package server.commands.game;
 
+import com.google.gson.JsonObject;
+import server.commands.ICommand;
+
 /**
- * Created by joel on 3/11/16.
+ * A command object that list the AI
+ *
+ * @author Joel Bradley
  */
-public class ListAICommand {
+public class ListAICommand implements ICommand {
+
+    /**
+     * Constructor
+     */
+    public ListAICommand() {
+
+    }
+
+    /**
+     * Communicates with the ServerFacade to carry out the List AI command
+     * @return JsonObject
+     */
+    @Override
+    public JsonObject execute() {
+        return null;
+    }
+
 }
