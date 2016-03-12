@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;
 import shared.exceptions.PlayerExistsException;
 import shared.exceptions.PlayerExistsException;
@@ -24,112 +25,240 @@ import javax.annotation.Resource;
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
 
-public interface IGame {
+interface IGame {
 
+    //region Game methods
+    //================================================================================
     /**
      * Starts the game, returns the Id for the first player
      * @param players
      * @return
      */
-    public int initializeGame(List<Player> players, boolean randomhex, boolean randomchits, boolean randomports);
+    int initializeGame(List<Player> players, boolean randomHex, boolean randomChits, boolean randomPorts);
 
     /**
-     * returns the playerID for whose turn it is
+     * Updates the game
+     * @param json
+     */
+    void updateGame(final JsonObject json);
+
+    /**
+     * Gets the current version of the game model
      * @return
      */
-    public int getCurrentTurn();
+    int getVersion();
 
+    /**
+     * Gets the playerIndex of the player who's turn it is
+     * @return
+     */
+    int getCurrentTurn();
 
-    public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException;
+    /**
+     * Gets the phase of the current turn
+     * @return
+     */
+    TurnTracker.Phase getCurrentPhase();
 
+    /**
+     * Moves turn to the next phase
+     */
+    void nextPhase();
+    //=================================================================================
+    //endregion
 
-    public boolean canInitiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException;
+    //region Can do methods
+    //=================================================================================
+    /**
+     * Determine if a settlement can be built by the player at the location
+     * @param playerIndex
+     * @param vertex
+     * @return
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     */
+    boolean canInitiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException;
 
-    public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    /**
+     * Determine if the player can build a settlement (Check their bank)
+     * @param playerIndex
+     * @param vertex
+     * @return
+     * @throws InvalidPlayerException
+     * @throws InvalidLocationException
+     */
+    boolean canBuildSettlement(int playerIndex, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
 
-    public void initiateRoad(int playerID,  EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    /**
+     * Determine if the player can build a city (Check their bank)
+     * @param playerIndex
+     * @param vertex
+     * @return
+     * @throws InvalidPlayerException
+     * @throws InvalidLocationException
+     */
+    boolean canBuildCity(int playerIndex, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
+
+    /**
+     * Determine if road can be built by the player at the location
+     * @param playerIndex
+     * @param edge
+     * @return
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     */
+    boolean canInitiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException;
+
+    /**
+     * Determine if Player can build a road at the location
+     * @param playerIndex
+     * @return
+     */
+    boolean canBuildRoad(int playerIndex, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
 
     /**
      * Determine if Player can discard cards
      * Checks resource cards, robber position,
      *        and hexes from dice roll
-     * @param playerID ID of Player performing action
+     * @param playerIndex Index of Player performing action
      * @return True if Player can discard cards
      */
-    boolean canDiscardCards(int playerID) throws PlayerExistsException;
-
-    /**
-     * Action - Player discards cards
-     * @param playerID ID of Player performing action
-     * @param cards Cards to be discarded
-     */
-    void discardCards(int playerID, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
-
+    boolean canDiscardCards(int playerIndex) throws PlayerExistsException;
 
     /**
      * Determine if Player can roll the dice
      * Checks Player turn and phase of turn
-     * @param playerID ID of Player performing action
+     * @param playerIndex Index of Player performing action
      * @return True if Player can roll the die
      */
-    boolean canRollNumber(int playerID);
-
-    /**
-     * Action - Player rolls the dice
-     * @param playerID ID of Player performing action
-     */
-    int rollNumber(int playerID) throws InvalidDiceRollException;
+    boolean canRollNumber(int playerIndex);
 
     /**
      * Determine if Player can offer a trade
      * Checks Player turn, phase, and resources
-     * @param playerID ID of Player performing action
+     * @param playerIndex Index of Player performing action
      * @return True if Player can offer a trade
      */
-    boolean canOfferTrade(int playerID);
-
-    /**
-     * Action - Player offers trade
-     * @param playerIDOne ID of Player offering the trade
-     * @param playerIDTwo ID of Player being offered the trade
-     */
-    void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
-
-
-    /**
-     * Determine if Player can finish their turn
-     * Checks Player turn and phase
-     * @param playerID ID of Player performing action
-     * @return True if Player can finish their turn
-     */
-    boolean canFinishTurn(int playerID);
-
-    /**
-     * Action - Player finishes their turn
-     * @param playerID ID of Player performing action
-     */
-    Integer finishTurn(int playerID) throws Exception;
-
-    public TurnTracker.Phase getCurrentPhase();
-
-    void nextPhase();
-
-
-    void addObserver(Observer o);
-
-    PlayerManager getPlayerManager();
-
-    int getId();
-
-    CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
+    boolean canOfferTrade(int playerIndex);
 
     /**
      * Determine if Player can play Year of Plenty
      * Checks Player turn, and dev cards
-     * @param playerID ID of Player performing action
+     * @param playerIndex Index of Player performing action
      * @return True if Player can play Year of Plenty
      */
-    boolean canUseYearOfPlenty(int playerID) throws PlayerExistsException;
+    boolean canUseYearOfPlenty(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Determine if Player can play Road Builder
+     * Checks Player turn, and dev cards
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Road Builder
+     */
+    boolean canUseRoadBuilding(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Determine if Player can play Soldier
+     * Checks Player turn, and dev cards
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Soldier
+     */
+    boolean canUseSoldier(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Determine if Player can play Monopoly
+     * Checks Player turn, and dev cards
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Monopoly
+     */
+    boolean canUseMonopoly(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Determine if Player can play Monument
+     * Checks Player turn, and dev cards
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Monument
+     */
+    boolean canUseMonument(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Determine if Player can place the Robber
+     * Checks Player turn, event(ie roll 7 or play Soldier)
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can place the Robber
+     */
+    boolean canPlaceRobber(int playerIndex, HexLocation hexLocation);
+
+    /**
+     * Determine if the player can buy a development card
+     * @param playerIndex
+     * @return
+     * @throws PlayerExistsException
+     */
+    boolean canBuyDevelopmentCard(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Determine if the player can perform the specified maritime trade
+     * @param playerIndex
+     * @param port
+     * @return
+     * @throws InvalidPlayerException
+     * @throws PlayerExistsException
+     */
+    boolean canMaritimeTrade(int playerIndex, PortType port) throws InvalidPlayerException, PlayerExistsException;
+
+    /**
+     * Determine if Player can finish their turn
+     * Checks Player turn and phase
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can finish their turn
+     */
+    boolean canFinishTurn(int playerIndex);
+    //End of can do methods
+    //=========================================================================
+    //endregion
+
+    //region Do methods
+    //==========================================================================
+    /**
+     * Initiates placing a settlement on the map
+     * @param playerIndex
+     * @param vertex
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     * @throws StructureException
+     */
+    void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException;
+
+    /**
+     * Initiates placing a road on the map
+     * @param playerIndex
+     * @param edge
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     * @throws StructureException
+     */
+    void initiateRoad(int playerIndex,  EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
+
+    /**
+     * Action - Player discards cards
+     * @param playerIndex Index of Player performing action
+     * @param cards Cards to be discarded
+     */
+    void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
+
+    /**
+     * Action - Player rolls the dice
+     * @param playerIndex Index of Player performing action
+     */
+    int rollNumber(int playerIndex) throws InvalidDiceRollException;
+
+    /**
+     * Action - Player offers trade
+     * @param playerIndexOne Index of Player offering the trade
+     * @param playerIndexTwo Index of Player being offered the trade
+     */
+    void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     /**
      * Action - Player plays Year of Plenty
@@ -138,12 +267,33 @@ public interface IGame {
     void useYearOfPlenty(int playerID, ResourceType want1, ResourceType want2) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException;
 
     /**
-     * Determine if Player can play Road Builder
-     * Checks Player turn, and dev cards
-     * @param playerID ID of Player performing action
-     * @return True if Player can play Road Builder
+     * Action - Player finishes their turn
+     * @param playerIndex Index of Player performing action
      */
-    boolean canUseRoadBuilder(int playerID) throws PlayerExistsException;
+    Integer finishTurn(int playerIndex) throws Exception;
+    //===================================================================================
+    //endregion
+
+    //region Utility methods
+    //Utility methods
+    //===================================================================================
+    void addObserver(Observer o);
+    //===================================================================================
+    //endregion
+
+    //region Getters
+    //===================================================================================
+    PlayerManager getPlayerManager();
+
+    int getId();
+
+    CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException;
+    //===================================================================================
+    //endregion
+
+    //region Setters
+    void setId(int id);
+    //endregion
 
     /**
      * Action - Player plays Road Builder
@@ -151,13 +301,6 @@ public interface IGame {
      */
     void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException;
 
-    /**
-     * Determine if Player can play Soldier
-     * Checks Player turn, and dev cards
-     * @param playerID ID of Player performing action
-     * @return True if Player can play Soldier
-     */
-    boolean canUseSoldier(int playerID) throws PlayerExistsException;
 
     /**
      * Action - Player plays Soldier
@@ -166,26 +309,11 @@ public interface IGame {
     Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException;
 
     /**
-     * Determine if Player can play Monopoly
-     * Checks Player turn, and dev cards
-     * @param playerID ID of Player performing action
-     * @return True if Player can play Monopoly
-     */
-    boolean canUseMonopoly(int playerID) throws PlayerExistsException;
-
-    /**
      * Action - Player plays Monopoly
      * @param playerID ID of Player performing action
      */
     void useMonopoly(int playerID, ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException;
 
-    /**
-     * Determine if Player can play Monument
-     * Checks Player turn, and dev cards
-     * @param playerID ID of Player performing action
-     * @return True if Player can play Monument
-     */
-    boolean canUseMonument(int playerID) throws PlayerExistsException;
 
     /**
      * Action - Player plays Monument
@@ -193,13 +321,6 @@ public interface IGame {
      */
     void useMonument(int playerID) throws PlayerExistsException, DevCardException;
 
-    /**
-     * Determine if Player can place the Robber
-     * Checks Player turn, event(ie roll 7 or play Soldier)
-     * @param playerID ID of Player performing action
-     * @return True if Player can place the Robber
-     */
-    boolean canPlaceRobber(int playerID, HexLocation hexloc);
 
     /**
      * Action - Player places the Robber
@@ -220,53 +341,31 @@ public interface IGame {
      */
     boolean canPlaceRoadBuildingCard(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
 
-    /**
-     * returns boolean value denoting if the player can build a
-     * road (just checks cards really)
-     * @param playerID
-     * @return
-     */
-    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
 
     /**
      * builds a road for the player
      */
-    public void buildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException;
+    void buildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException;
 
-    /**
-     * checks if the player has the cards to build a settlement
-     * @return
-     */
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
+
 
     /**
      * builds a settlement for this player
      */
-    public void buildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException;
+    void buildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException;
 
-    /**
-     * checks if the player has the cards to ubild a city
-     * @return
-     */
-    public boolean canBuildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException;
 
     /**
      * builds a city for this player
      * @param playerID
      */
-    public void buildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException;
+    void buildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException;
 
     /**
-     * returns the value of how many roads is the LongestRoad
+     * Get the player with the longest road card
      * @return
      */
-    public int currentLongestRoadSize();
-
-    /**
-     * returns the playerID of who owns the current longest road
-     * @return
-     */
-    public int currentLongestRoadPlayer();
+    int getPlayerWithLongestRoad();
 
     /**
      * deducts Victory Points from playerIDOld
@@ -276,21 +375,21 @@ public interface IGame {
      * @param playerIDNew
      * @param roadSize
      */
-    public void newLongestRoad(int playerIDOld, int playerIDNew, int roadSize);
+    void setPlayerWithLongestRoad(int playerIDOld, int playerIDNew, int roadSize);
 
     /**
      * returns the value of how many soldiers is the LargestArmy
      *
      * @return
      */
-    public int currentLargestArmySize();
+    int currentLargestArmySize();
 
     /**
      * returns the playerID of who owns the current largest army
      *
      * @return
      */
-    public int currentLargestArmyPlayer();
+    int getPlayerWithLargestArmy();
 
     /**
      * deducts Victory Points from playerIDOld
@@ -300,14 +399,9 @@ public interface IGame {
      * @param playerIDNew
      * @param armySize
      */
-    public void newLargestArmy(int playerIDOld, int playerIDNew, int armySize);
+    void newLargestArmy(int playerIDOld, int playerIDNew, int armySize);
 
-    /**
-     * checks if the player has the cards to buy a DevelopmentCard
-     * @param playerID
-     * @return
-     */
-    public boolean canBuyDevelopmentCard(int playerID) throws PlayerExistsException;
+
 
     /**
      * Buys a new developmentCard for the player
@@ -315,88 +409,85 @@ public interface IGame {
      * adds new developmentCard to his DCBank
      * @param playerID
      */
-    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception;
+    DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception;
 
+    //region Domestic trade methods
+    //===================================================================================
     /**
      * checks if the player is in the trade sequence of his turn
      *
      * @param playerID
      * @return
      */
-    public boolean canTrade(int playerID);
+    boolean canTrade(int playerID);
 
-    public boolean isTradeActive();
+    boolean isTradeActive();
 
-    public int getTradeReceiver();
+    int getTradeReceiver();
 
-    public int getTradeSender();
+    int getTradeSender();
 
-    public int getTradeBrick();
+    int getTradeBrick();
 
-    public int getTradeWood();
+    int getTradeWood();
 
-    public int getTradeSheep();
+    int getTradeSheep();
 
-    public int getTradeWheat();
+    int getTradeWheat();
 
-    public int getTradeOre();
+    int getTradeOre();
+    //======================================================================================
+    //endregion
 
-    /**
-     * checks if that player has the card needed for that port's trade
-     * @param playerID
-     * @param port
-     * @return
-     */
-    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException;
 
     /**
      * effectuates a trade based on the port type
      * @param playerID
      * @param port
      */
-    public void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
+    void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
 
-    public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+    void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
-    public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
+    Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException;
 
 
-    public Map getMap();
+    Map getMap();
 
-    public boolean ableToBuildSettlement(int id) throws PlayerExistsException;
+    boolean ableToBuildSettlement(int id) throws PlayerExistsException;
 
-    public boolean ableToBuildRoad(int id) throws PlayerExistsException;
+    boolean ableToBuildRoad(int id) throws PlayerExistsException;
 
-    public boolean ableToBuildCity(int id) throws PlayerExistsException;
+    boolean ableToBuildCity(int id) throws PlayerExistsException;
 
-    public Integer getAvailableRoads(int id) throws PlayerExistsException;
+    Integer getAvailableRoads(int id) throws PlayerExistsException;
 
-    public Integer getAvailableSettlements(int id) throws PlayerExistsException;
+    Integer getAvailableSettlements(int id) throws PlayerExistsException;
 
-    public Integer getAvailableCities(int id) throws PlayerExistsException;
+    Integer getAvailableCities(int id) throws PlayerExistsException;
 
-    public List<Player> getPlayers();
+    List<Player> getPlayers();
 
-    public Integer numberOfDevCard(int id) throws PlayerExistsException;
+    Integer numberOfDevCard(int id) throws PlayerExistsException;
 
-    public Player getWinner() throws GameOverException;
+    Player getWinner() throws GameOverException;
 
     int getNumberDevCards(DevCardType type, int playerID);
 
     int getNumberResourceCards(int playerIndex) throws PlayerExistsException;
 
-    public int amountOwnedResource(int playerID, ResourceType t)throws PlayerExistsException, InvalidTypeException;
+    int amountOwnedResource(int playerID, ResourceType t)throws PlayerExistsException, InvalidTypeException;
 
-    public void buildFirstRoad(int playerID, EdgeLocation hexloc);
+    void buildFirstRoad(int playerID, EdgeLocation hexloc);
 
-    public void cancelSoldierCard(int playerID);
+    void cancelSoldierCard(int playerID);
 
-    public void deleteRoad(int playerID, EdgeLocation edge);
+    void deleteRoad(int playerID, EdgeLocation edge);
 
-    public void cancelRoadBuildingCard(int playerID);
+    void cancelRoadBuildingCard(int playerID);
 
-    public Player getPlayerById(int id) throws PlayerExistsException;
+    Player getPlayerById(int id) throws PlayerExistsException;
 
     int getNumberOfSoldiers(int playerIndex);
 
@@ -406,9 +497,9 @@ public interface IGame {
 
     CatanColor getPlayerColorByName(String player);
 
-    public HashMap<ResourceType, Integer> getBankResources();
+    HashMap<ResourceType, Integer> getBankResources();
 
-    public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException;
+    HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException;
 
     MessageList getChat();
 

@@ -21,7 +21,6 @@ import shared.definitions.*;
 import shared.exceptions.*;
 import shared.model.player.PlayerManager;
 
-import javax.naming.InsufficientResourcesException;
 import java.util.*;
 
 /**
@@ -79,9 +78,9 @@ public class Facade {
         }
     }
 
-    public boolean canInitiateSettlement(int pID, VertexLocation vertex) {
+    public boolean canInitiateSettlement(int playerIndex, VertexLocation vertex) {
         try {
-            return this.game.canInitiateSettlement(pID, vertex);
+            return this.game.canInitiateSettlement(playerIndex, vertex);
         } catch(InvalidLocationException | InvalidPlayerException e) {
             return false;
         }
@@ -460,8 +459,8 @@ public class Facade {
         List<Player> players = this.game.getPlayers();
         List<PlayerInfo> playerInfos = new ArrayList<>();
 
-        int longestroad = this.game.currentLongestRoadPlayer();
-        int largestarmy = this.game.currentLargestArmyPlayer();
+        int longestroad = this.game.getPlayerWithLongestRoad();
+        int largestarmy = this.game.getPlayerWithLargestArmy();
         for(Player p: players){
             boolean lr = longestroad == p.getPlayerIndex();
             boolean la = largestarmy == p.getPlayerIndex();
@@ -476,8 +475,8 @@ public class Facade {
         List<Player> players = this.game.getPlayers();
         PlayerInfo[] playerInfos = new PlayerInfo[players.size()-1];
 
-        int longestroad = this.game.currentLongestRoadPlayer();
-        int largestarmy = this.game.currentLargestArmyPlayer();
+        int longestroad = this.game.getPlayerWithLongestRoad();
+        int largestarmy = this.game.getPlayerWithLargestArmy();
         int i = 0;
         for(Player p: players){
             if(p.getPlayerIndex() != id) {
@@ -542,8 +541,8 @@ public class Facade {
     public PlayerInfo getWinner() throws GameOverException {
         Player p = this.game.getWinner();
 
-        int longestroad = this.game.currentLongestRoadPlayer();
-        int largestarmy = this.game.currentLargestArmyPlayer();
+        int longestroad = this.game.getPlayerWithLongestRoad();
+        int largestarmy = this.game.getPlayerWithLargestArmy();
 
         boolean lr = longestroad == p.getId();
         boolean la = largestarmy == p.getId();
@@ -586,7 +585,7 @@ public class Facade {
 
     public boolean canUseRoadBuilder(int playerID){
         try {
-            return this.game.canUseRoadBuilder(playerID);
+            return this.game.canUseRoadBuilding(playerID);
         }catch(PlayerExistsException e){return false;}
     }
 
@@ -801,10 +800,10 @@ public class Facade {
     }
 
     public int hasLargestRoad() {
-        return this.game.currentLargestArmyPlayer();
+        return this.game.getPlayerWithLargestArmy();
     }
 
     public int hasLongestRoad() {
-        return this.game.currentLongestRoadPlayer();
+        return this.game.getPlayerWithLongestRoad();
     }
 }

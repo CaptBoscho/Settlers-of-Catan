@@ -1,7 +1,6 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
-import org.apache.http.client.cache.Resource;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
 import shared.model.JsonSerializable;
@@ -35,12 +34,7 @@ import java.util.Observable;
  */
 
 public final class Game extends Observable implements IGame, JsonSerializable {
-
-
-    private static Game instance;
-
     private int gameId;
-    private Dice dice;
     private Map map;
     private TurnTracker turnTracker;
     private LongestRoad longestRoadCard;
@@ -54,14 +48,11 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     private int winner;
     private int version;
 
-    //private List<Observer> observers = new ArrayList<Observer>();
-
     /**
      * Constructor
      */
-    protected Game() {
+    public Game() {
         this.version = -1;
-        this.dice = new Dice(2);
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
@@ -73,14 +64,37 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         this.log = new MessageList();
     }
 
-    public static Game getInstance() {
-        if(instance == null) {
-            instance = new Game();
-        }
+    //region Game methods
+    /**
+     * Starts the game, returns the Id for the first player
+     *
+     * @param players
+     * @param randomHex
+     * @param randomChits
+     * @param randomPorts @return
+     */
+    @Override
+    public int initializeGame(List<Player> players, boolean randomHex, boolean randomChits, boolean randomPorts) {
+        assert players != null;
+        assert this.playerManager != null;
+        assert this.map != null;
+        assert this.turnTracker != null;
 
-        return instance;
+        //Add players to PlayerManager
+        this.playerManager = new PlayerManager(players);
+        //Create the map
+        this.map = new Map(randomHex, randomChits, randomPorts);
+        //Create a new turn tracker
+        turnTracker = new TurnTracker();
+
+        //Return the first player's index
+        return turnTracker.getCurrentTurn();
     }
 
+    /**
+     * Updates the game
+     * @param json
+     */
     public void updateGame(final JsonObject json) {
         assert json != null;
         assert json.has("deck");
@@ -123,267 +137,38 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         notifyObservers();
     }
 
+    /**
+     * Gets the current version of the game model
+     * @return
+     */
     public int getVersion() {
         return this.version;
     }
 
-    //IGame Methods
-    //======================================================
     /**
-     * Starts the game, returns the Id for the first player
-     *
-     * @param players
-     * @return Id of first player
-     */
-    public int initializeGame(List<Player> players, boolean randomhexes, boolean randomchits, boolean randomports) {
-        assert players != null;
-        assert this.playerManager != null;
-        assert this.map != null;
-        assert this.turnTracker != null;
-
-        //Add players to PlayerManager
-        this.playerManager = new PlayerManager(players);
-        this.map = new Map(randomhexes, randomchits, randomports);
-        //List<Integer> order = this.playerManager.randomizePlayers();
-        turnTracker = new TurnTracker();
-
-        return turnTracker.getCurrentTurn();
-    }
-
-    public boolean canInitiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
-        assert playerID >= 0;
-        assert vertex != null;
-        assert this.turnTracker != null;
-        assert this.map != null;
-        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateSettlement(playerID, vertex);
-
-    }
-
-    public void initiateSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
-        assert playerID >= 0;
-        assert vertex != null;
-        assert this.map != null;
-
-        if(canInitiateSettlement(playerID, vertex)){
-            map.initiateSettlement(playerID, vertex);
-        }
-    }
-
-    public boolean canInitiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
-        assert playerID >= 0;
-        assert edge != null;
-        assert this.turnTracker != null;
-        assert this.map != null;
-
-        return turnTracker.isPlayersTurn(playerID) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerID, edge);
-    }
-
-    public void initiateRoad(int playerID, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
-        assert playerID >= 0;
-        assert edge != null;
-        assert this.map != null;
-
-        map.initiateRoad(playerID, edge);
-    }
-
-    /**
-     * returns the playerID for whose turn it is
+     * Gets the playerIndex of the player who's turn it is
      *
      * @return
      */
     @Override
     public int getCurrentTurn() {
-        assert this.turnTracker != null;
-
         return turnTracker.getCurrentTurn();
     }
 
     /**
-     * Determine if Player can discard cards
-     * Checks resource cards, robber position,
-     * and hexes from dice roll
+     * Gets the phase of the current turn
      *
-     * @param playerID ID of Player performing action
-     * @return True if Player can discard cards
-     */
-    @Override
-    public boolean canDiscardCards(int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
-
-        return playerManager.canDiscardCards(playerID);
-    }
-
-    @Override
-    public int getNumberResourceCards(int playerIndex) throws PlayerExistsException {
-        assert playerIndex >= 0;
-
-        return playerManager.getNumberResourceCards(playerIndex);
-    }
-
-    /**
-     * Action - Player discards cards
-     *
-     * @param playerID ID of Player performing action
-     * @param cards    Cards to be discarded
-     */
-    @Override
-    public void discardCards(int playerID, List<ResourceType> cards) throws PlayerExistsException, InvalidTypeException, InsufficientResourcesException{
-        if(canDiscardCards(playerID) && this.turnTracker.canDiscard()) {
-            playerManager.discardResourceType(playerID, cards);
-        }
-    }
-
-    /**
-     * Determine if Player can roll the dice
-     * Checks Player turn and phase of turn
-     *
-     * @param playerID ID of Player performing action
-     * @return True if Player can roll the dice
-     */
-    @Override
-    public boolean canRollNumber(int playerID) {
-        assert playerID >= 0;
-
-        return turnTracker.isPlayersTurn(playerID) && turnTracker.canRoll();
-
-    }
-
-
-    /**
-     * Action - Player rolls the dice
-     *
-     * @param playerID ID of Player performing action
-     */
-    @Override
-    public int rollNumber(int playerID) throws InvalidDiceRollException {
-        assert playerID >= 0;
-
-        int roll = dice.roll();
-        if(roll == 7) {
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
-        } else {
-            map.getResources(roll);
-        }
-
-        try {
-            turnTracker.nextPhase();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return roll;
-    }
-
-    /**
-     * Determine if Player can offer a trade
-     * Checks Player turn, phase, and resources
-     *
-     * @param playerID ID of Player performing action
-     * @return True if Player can offer a trade
-     */
-    @Override
-    public boolean canOfferTrade(int playerID) {
-        assert playerID >= 0;
-
-        return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
-    }
-
-    /**
-     * for testing purposes
-     * @param card
-     * @param id
-     * @throws PlayerExistsException
-     */
-    public void giveResource(ResourceCard card, int id) throws PlayerExistsException {
-        assert card != null;
-
-        playerManager.addResource(id, card);
-    }
-
-    /**
-     * for testing purposes.
-     * @param t
      * @return
-     * @throws InsufficientResourcesException
-     * @throws InvalidTypeException
-     */
-    public ResourceCard getResourceCard(final ResourceType t) throws InsufficientResourcesException, InvalidTypeException {
-        assert t != null;
-
-        return resourceCardBank.discard(t);
-    }
-
-    public int amountOwnedResource(final int playerID, final ResourceType t) throws PlayerExistsException, InvalidTypeException {
-        assert playerID >= 0;
-        assert t != null;
-
-        return playerManager.getPlayerByIndex(playerID).howManyOfThisCard(t);
-    }
-
-
-    /**
-     * Action - Player offers trade
-     *
-     * @param playerIDOne   ID of Player offering the trade
-     * @param playerIDTwo ID of Player being offered the trade
      */
     @Override
-    public void offerTrade(int playerIDOne, int playerIDTwo, List<ResourceType> onecards, List<ResourceType> twocards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
-        assert playerIDOne >= 0;
-        assert playerIDTwo >= 0;
-        assert playerIDOne != playerIDTwo;
-        assert onecards != null;
-        assert onecards.size() > 0;
-        assert twocards != null;
-        assert twocards.size() > 0;
-        assert !onecards.equals(twocards);
-
-        if(canOfferTrade(playerIDOne)){
-            final TradePackage one = new TradePackage(playerIDOne,onecards);
-            final TradePackage two = new TradePackage(playerIDTwo, twocards);
-
-            // TODO - why is this trade object unused?
-            Trade trade = new Trade(one,two);
-
-            playerManager.offerTrade(playerIDOne,playerIDTwo,onecards,twocards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
-
-        }
-    }
-
-    /**
-     * Determine if Player can finish their turn
-     * Checks Player turn and phase
-     *
-     * @param playerID ID of Player performing action
-     * @return True if Player can finish their turn
-     */
-    @Override
-    public boolean canFinishTurn(int playerID) {
-        assert playerID >= 0;
-
-        return turnTracker.isPlayersTurn(playerID);
-    }
-
-    /** 
-     * Action - Player finishes their turn
-     *
-     * @param playerID ID of Player performing action
-     */
-    @Override
-    public Integer finishTurn(int playerID) throws Exception {
-        assert playerID >= 0;
-        try {
-            moveNewToOld(playerID);
-        } catch (BadCallerException e) {
-            e.printStackTrace();
-        }
-
-        return turnTracker.nextTurn();
-    }
-
-    public TurnTracker.Phase getCurrentPhase(){
+    public TurnTracker.Phase getCurrentPhase() {
         return turnTracker.getPhase();
     }
 
+    /**
+     * Moves turn to the next phase
+     */
+    @Override
     public void nextPhase() {
         assert this.turnTracker != null;
 
@@ -393,87 +178,378 @@ public final class Game extends Observable implements IGame, JsonSerializable {
             e.printStackTrace();
         }
     }
+    //endregion
 
-    public void setPhase(TurnTracker.Phase p) {
+    //region Can do methods
+    /**
+     * Determine if a settlement can be built by the player at the location
+     *
+     * @param playerIndex
+     * @param vertex
+     * @return
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     */
+    @Override
+    public boolean canInitiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
+        assert playerIndex >= 0;
+        assert vertex != null;
         assert this.turnTracker != null;
+        assert this.map != null;
 
-        turnTracker.setPhase(p);
+        return turnTracker.isPlayersTurn(playerIndex) && turnTracker.isSetupPhase() && map.canInitiateSettlement(playerIndex, vertex);
     }
 
     /**
-     * checks if the player has the cards to buy a DevelopmentCard
+     * Determine if the player can build a settlement (Check their bank)
      *
-     * @param playerID
+     * @param playerIndex
+     * @param vertex
      * @return
+     * @throws InvalidPlayerException
+     * @throws InvalidLocationException
      */
     @Override
-    public boolean canBuyDevelopmentCard(final int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
+    public boolean canBuildSettlement(int playerIndex, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
+        assert playerIndex >= 0;
+        assert vertex != null;
+        assert vertex.getDir() != null;
+        assert vertex.getHexLoc() != null;
+        assert this.map != null;
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
-        return playerManager.canBuyDevCard(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay() && developmentCardBank.size() > 0;
+        return map.canBuildSettlement(playerIndex, vertex) && playerManager.canBuildSettlement(playerIndex) && turnTracker.canPlay();
     }
 
-        /**
-         * Action - Player buys a dev card
-         *
-         * @param playerID ID of Player performing action
-         */
+    /**
+     * Determine if the player can build a city (Check their bank)
+     *
+     * @param playerIndex
+     * @param vertex
+     * @return
+     * @throws InvalidPlayerException
+     * @throws InvalidLocationException
+     */
     @Override
-    public DevCardType buyDevelopmentCard(int playerID) throws Exception {
-        assert playerID >= 0;
-        assert this.playerManager != null;
-        assert this.developmentCardBank != null;
+    public boolean canBuildCity(int playerIndex, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
+        assert playerIndex >= 0;
+        assert vertex != null;
+        assert vertex.getDir() != null;
+        assert vertex.getHexLoc() != null;
 
-        playerManager.buyDevCard(playerID);
-        final DevelopmentCard dc = developmentCardBank.draw();
-        playerManager.addDevCard(playerID, dc);
-        return dc.getType();
+        return map.canBuildCity(playerIndex, vertex) && playerManager.canBuildCity(playerIndex) && turnTracker.canPlay();
+    }
+
+    /**
+     * Determine if road can be built by the player at the location
+     *
+     * @param playerIndex
+     * @param edge
+     * @return
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     */
+    @Override
+    public boolean canInitiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
+        assert playerIndex >= 0;
+        assert edge != null;
+        assert this.turnTracker != null;
+        assert this.map != null;
+
+        return turnTracker.isPlayersTurn(playerIndex) && turnTracker.isSetupPhase() && map.canInitiateRoad(playerIndex, edge);
+    }
+
+    /**
+     * Determine if Player can build a road at the location
+     *
+     * @param playerIndex
+     * @param edge
+     * @return
+     */
+    @Override
+    public boolean canBuildRoad(int playerIndex, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
+        assert playerIndex >= 0;
+        assert edge != null;
+        assert edge.getHexLoc() != null;
+        assert edge.getDir() != null;
+
+        return (map.canBuildRoad(playerIndex, edge) && playerManager.canBuildRoad(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex));
+    }
+
+    /**
+     * Determine if Player can discard cards
+     * Checks resource cards, robber position,
+     * and hexes from dice roll
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can discard cards
+     */
+    @Override
+    public boolean canDiscardCards(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+
+        return playerManager.canDiscardCards(playerIndex);
+    }
+
+    /**
+     * Determine if Player can roll the dice
+     * Checks Player turn and phase of turn
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can roll the die
+     */
+    @Override
+    public boolean canRollNumber(int playerIndex) {
+        assert playerIndex >= 0;
+
+        return turnTracker.isPlayersTurn(playerIndex) && turnTracker.canRoll();
+    }
+
+    /**
+     * Determine if Player can offer a trade
+     * Checks Player turn, phase, and resources
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can offer a trade
+     */
+    @Override
+    public boolean canOfferTrade(int playerIndex) {
+        assert playerIndex >= 0;
+
+        return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
     }
 
     /**
      * Determine if Player can play Year of Plenty
      * Checks Player turn, and dev cards
      *
-     * @param playerID ID of Player performing action
+     * @param playerIndex Index of Player performing action
      * @return True if Player can play Year of Plenty
      */
     @Override
-    public boolean canUseYearOfPlenty(int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
+    public boolean canUseYearOfPlenty(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
-        return getCurrentTurn() == playerID && playerManager.canUseYearOfPlenty(playerID) && turnTracker.canPlay();
+        return getCurrentTurn() == playerIndex && playerManager.canUseYearOfPlenty(playerIndex) && turnTracker.canPlay();
     }
 
-    public void addDevCard(final DevelopmentCard dc, final int playerID) throws PlayerExistsException {
-        assert dc != null;
-        assert playerID >= 0;
-        assert this.playerManager != null;
-
-        playerManager.getPlayerByIndex(playerID).addDevCard(dc);
+    /**
+     * Determine if Player can play Road Builder
+     * Checks Player turn, and dev cards
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Road Builder
+     */
+    @Override
+    public boolean canUseRoadBuilding(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+        return playerManager.canUseRoadBuilder(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
     }
 
-    public Integer numberOfDevCard(final int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
-        assert this.playerManager != null;
+    /**
+     * Determine if Player can play Soldier
+     * Checks Player turn, and dev cards
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Soldier
+     */
+    @Override
+    public boolean canUseSoldier(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
 
-        return playerManager.getPlayerByIndex(playerID).quantityOfDevCards();
+        return playerManager.canUseSoldier(playerIndex) && turnTracker.isPlayersTurn(playerIndex) && turnTracker.canPlay();
     }
 
-    public void moveNewToOld(int playerID) throws PlayerExistsException, BadCallerException {
-        assert playerID >= 0;
-        assert this.playerManager != null;
+    /**
+     * Determine if Player can play Monopoly
+     * Checks Player turn, and dev cards
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Monopoly
+     */
+    @Override
+    public boolean canUseMonopoly(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
 
-        playerManager.moveNewToOld(playerID);
+        return playerManager.canUseMonopoly(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
+    }
+
+    /**
+     * Determine if Player can play Monument
+     * Checks Player turn, and dev cards
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can play Monument
+     */
+    @Override
+    public boolean canUseMonument(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+
+        return playerManager.canUseMonument(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
+    }
+
+    /**
+     * Determine if Player can place the Robber
+     * Checks Player turn, event(ie roll 7 or play Soldier)
+     *
+     * @param playerIndex Index of Player performing action
+     * @param hexLocation
+     * @return True if Player can place the Robber
+     */
+    @Override
+    public boolean canPlaceRobber(int playerIndex, HexLocation hexLocation) {
+        assert playerIndex >= 0;
+
+        return turnTracker.isPlayersTurn(playerIndex) && turnTracker.canUseRobber() && map.canMoveRobber(hexLocation);
+    }
+
+    /**
+     * Determine if the player can buy a development card
+     *
+     * @param playerIndex
+     * @return
+     * @throws PlayerExistsException
+     */
+    @Override
+    public boolean canBuyDevelopmentCard(int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+        assert this.playerManager != null;
+        assert this.turnTracker != null;
+
+        return playerManager.canBuyDevCard(playerIndex) && turnTracker.isPlayersTurn(playerIndex) && turnTracker.canPlay() && developmentCardBank.size() > 0;
+    }
+
+    /**
+     * Determine if the player can perform the specified maritime trade
+     *
+     * @param playerIndex
+     * @param port
+     * @return
+     * @throws InvalidPlayerException
+     * @throws PlayerExistsException
+     */
+    @Override
+    public boolean canMaritimeTrade(int playerIndex, PortType port) throws InvalidPlayerException, PlayerExistsException {
+        assert playerIndex >= 0;
+        assert port != null;
+
+        if(canOfferTrade(playerIndex)){
+            Set<PortType> ports = getPortTypes(playerIndex);
+            assert ports != null;
+            if(ports.contains(port)){
+                return playerManager.canMaritimeTrade(playerIndex, port);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determine if Player can finish their turn
+     * Checks Player turn and phase
+     *
+     * @param playerIndex Index of Player performing action
+     * @return True if Player can finish their turn
+     */
+    @Override
+    public boolean canFinishTurn(int playerIndex) {
+        assert playerIndex >= 0;
+
+        return turnTracker.isPlayersTurn(playerIndex);
+    }
+    //endregion
+
+    //region Do methods
+    /**
+     * Initiates placing a settlement on the map
+     *
+     * @param playerIndex
+     * @param vertex
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     * @throws StructureException
+     */
+    @Override
+    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
+        assert playerIndex >= 0;
+        assert vertex != null;
+        assert this.map != null;
+
+        if(canInitiateSettlement(playerIndex, vertex)){
+            map.initiateSettlement(playerIndex, vertex);
+        }
+    }
+
+    /**
+     * Initiates placing a road on the map
+     *
+     * @param playerIndex
+     * @param edge
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     * @throws StructureException
+     */
+    @Override
+    public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
+        assert playerIndex >= 0;
+        assert edge != null;
+        assert this.map != null;
+
+        map.initiateRoad(playerIndex, edge);
+    }
+
+    /**
+     * Action - Player discards cards
+     *
+     * @param playerIndex Index of Player performing action
+     * @param cards       Cards to be discarded
+     */
+    @Override
+    public void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        if(canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
+            playerManager.discardResourceType(playerIndex, cards);
+        }
+    }
+
+    /**
+     * Action - Player offers trade
+     *
+     * @param playerIndexOne Index of Player offering the trade
+     * @param playerIndexTwo Index of Player being offered the trade
+     * @param playerOneCards
+     * @param playerTwoCards
+     */
+    @Override
+    public void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        assert playerIndexOne >= 0;
+        assert playerIndexTwo >= 0;
+        assert playerIndexOne != playerIndexTwo;
+        assert playerOneCards != null;
+        assert playerOneCards.size() > 0;
+        assert playerTwoCards != null;
+        assert playerTwoCards.size() > 0;
+        assert !playerOneCards.equals(playerTwoCards);
+
+        if(canOfferTrade(playerIndexOne)){
+            final TradePackage one = new TradePackage(playerIndexOne,playerOneCards);
+            final TradePackage two = new TradePackage(playerIndexTwo,playerTwoCards);
+
+            // TODO - why is this trade object unused?
+            Trade trade = new Trade(one,two);
+
+            playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
+
+        }
     }
 
     /**
      * Action - Player plays Year of Plenty
      *
      * @param playerID ID of Player performing action
+     * @param want1
+     * @param want2
      */
     @Override
     public void useYearOfPlenty(int playerID, ResourceType want1, ResourceType want2) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException {
@@ -491,124 +567,109 @@ public final class Game extends Observable implements IGame, JsonSerializable {
     }
 
     /**
-     * Determine if Player can play Road Builder
-     * Checks Player turn, and dev cards
+     * Action - Player finishes their turn
      *
-     * @param playerID ID of Player performing action
-     * @return True if Player can play Road Builder
+     * @param playerIndex Index of Player performing action
      */
     @Override
-    public boolean canUseRoadBuilder(int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
-        return playerManager.canUseRoadBuilder(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
+    public Integer finishTurn(int playerIndex) throws Exception {
+        assert playerIndex >= 0;
+        assert this.playerManager != null;
 
+        try {
+            playerManager.moveNewToOld(playerIndex);
+        } catch (BadCallerException e) {
+            e.printStackTrace();
+        }
+
+        return turnTracker.nextTurn();
     }
+    //endregion
+
+    //region Getters
+    @Override
+    public PlayerManager getPlayerManager() {
+        return this.playerManager;
+    }
+
+    @Override
+    public int getId() {
+        return this.gameId;
+    }
+    //endregion
+
+    //region Setters
+    public void setId(int id) {
+        this.gameId = id;
+    }
+    //endregion
+
+    //region Player info
+    @Override
+    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
+        return null;
+    }
+    //endregion
+
+    //region Testing methods only
+    /**
+     * Action - Player rolls the dice
+     *
+     * @param playerIndex Index of Player performing action
+     */
+    @Override
+    public int rollNumber(int playerIndex) throws InvalidDiceRollException {
+        assert playerIndex >= 0;
+        Dice dice = new Dice(2);
+
+        int roll = dice.roll();
+        if(roll == 7) {
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+        } else {
+            map.getResources(roll);
+        }
+
+        try {
+            turnTracker.nextPhase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return roll;
+    }
+    //endregion
+
 
     /**
      * Action - Player plays Road Builder
      *
      * @param playerID ID of Player performing action
+     * @param edge1
+     * @param edge2
      */
     @Override
     public void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException {
-        assert playerID >= 0;
-        assert edge1 != null;
-        assert edge1.getHexLoc() != null;
-        assert edge2 != null;
-        assert edge2.getHexLoc() != null;
-        assert !edge1.equals(edge2);
-
-        if(canUseRoadBuilder(playerID)) {
-            playerManager.useRoadBuilder(playerID);
-            buildRoad(playerID, edge1);
-            buildRoad(playerID, edge2);
-        }
-    }
-
-    /**
-     * Determine if Player can play Soldier
-     * Checks Player turn, and dev cards
-     *
-     * @param playerID ID of Player performing action
-     * @return True if Player can play Soldier
-     */
-    @Override
-    public boolean canUseSoldier(int playerID) throws PlayerExistsException{
-        assert playerID >= 0;
-        return playerManager.canUseSoldier(playerID) && turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
 
     }
 
     /**
      * Action - Player plays Soldier
      *
-     * @param playerIndex ID of Player performing action
-     */
-    @Override
-    public Set<Integer> useSoldier(int playerIndex, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
-        assert playerIndex >= 0;
-        assert this.playerManager != null;
-        assert this.largestArmyCard != null;
-        assert this.turnTracker != null;
-
-        if(canUseSoldier(playerIndex)) {
-            playerManager.useSoldier(playerIndex);
-            int used = playerManager.getNumberOfSoldiers(playerIndex);
-            if(used >= 3 && used > largestArmyCard.getMostSoldiers()) {
-                final int oldPlayer = largestArmyCard.getOwner();
-                largestArmyCard.setNewOwner(playerIndex, used);
-                playerManager.changeLargestArmyPossession(oldPlayer, playerIndex);
-            }
-
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
-            if(canPlaceRobber(playerIndex, hexloc)) {
-                return placeRobber(playerIndex, hexloc);
-            }
-            return null;
-        }
-        return null;
-    }
-
-    /**
-     * Determine if Player can play Monopoly
-     * Checks Player turn, and dev cards
-     *
      * @param playerID ID of Player performing action
-     * @return True if Player can play Monopoly
+     * @param hexloc
      */
     @Override
-    public boolean canUseMonopoly(final int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
-        return playerManager.canUseMonopoly(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
-
+    public Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
+        return null;
     }
 
     /**
      * Action - Player plays Monopoly
      *
      * @param playerID ID of Player performing action
+     * @param type
      */
     @Override
-    public void useMonopoly(final int playerID, final ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException {
-        assert playerID >= 0;
-        assert type != null;
-
-        if(canUseMonopoly(playerID)) {
-            playerManager.useMonopoly(playerID, type);
-        }
-    }
-
-    /**
-     * Determine if Player can play Monument
-     * Checks Player turn, and dev cards
-     *
-     * @param playerID ID of Player performing action
-     * @return True if Player can play Monument
-     */
-    @Override
-    public boolean canUseMonument(final int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
-        return playerManager.canUseMonument(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
+    public void useMonopoly(int playerID, ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException {
 
     }
 
@@ -618,160 +679,49 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param playerID ID of Player performing action
      */
     @Override
-    public void useMonument(final int playerID) throws PlayerExistsException, DevCardException {
-        assert playerID >= 0;
+    public void useMonument(int playerID) throws PlayerExistsException, DevCardException {
 
-        if(canUseMonument(playerID)){
-            playerManager.useMonument(playerID);
-        }
     }
 
-    /**
-     * Determine if Player can place the Robber
-     * Checks Player turn, event(ie roll 7 or play Soldier)
-     *
-     * @param playerID ID of Player performing action
-     * @return True if Player can place the Robber
-     */
-    @Override
-    public boolean canPlaceRobber(final int playerID, HexLocation hexloc) {
-        assert playerID >= 0;
-            return turnTracker.isPlayersTurn(playerID) && turnTracker.canUseRobber() && map.canMoveRobber(hexloc);
-    }
     /**
      * Action - Player places the Robber
      *
      * @param playerID ID of Player performing action
+     * @param hexloc
      */
     @Override
     public Set<Integer> placeRobber(int playerID, HexLocation hexloc) throws AlreadyRobbedException, InvalidLocationException {
-        assert playerID >= 0;
-        assert hexloc != null;
-        return map.moveRobber(playerID, hexloc);
-
-    }
-
-    //TODO change robbing to check if the phase in the turntracker is robbing phase
-    public void rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException{
-        assert playerRobbed > 0;
-        assert playerRobber > 0;
-        assert playerRobbed != playerRobber;
-        assert this.map != null;
-        assert this.turnTracker != null;
-        assert this.playerManager != null;
-
-        Set<Integer> who = map.whoCanGetRobbed(playerRobber);
-        assert who != null;
-        if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING); //TODO look at this statement
-            ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
-
-        }
+        return null;
     }
 
     @Override
-    public boolean canPlaceRoadBuildingCard(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
-        assert playerID >= 0;
-        assert edge != null;
-        assert edge.getHexLoc() != null;
-        assert edge.getDir() != null;
+    public void rob(int playerrobber, int playerrobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException {
 
-        return (map.canBuildRoad(playerID, edge));
     }
 
     /**
-     * returns boolean value denoting if the player can build a
-     * road
+     * Checks to see if a road can be built on the map for the road building card
      *
-     * @param playerID
-     * @return
+     * @param playerID int
+     * @param edge     EdgeLocation
+     * @return boolean
+     * @throws InvalidPlayerException
+     * @throws InvalidLocationException
+     * @throws PlayerExistsException
      */
     @Override
-    public boolean canBuildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
-        assert playerID >= 0;
-        assert edge != null;
-        assert edge.getHexLoc() != null;
-        assert edge.getDir() != null;
-
-        return (map.canBuildRoad(playerID, edge) && playerManager.canBuildRoad(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID));
-    }
-
-    public boolean ableToBuildRoad(int id) throws PlayerExistsException{
-        if(turnTracker.isSetupPhase()){return false;}
-        if(getAvailableRoads(id) == 0){return false;}
-        return playerManager.canBuildRoad(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id);
-    }
-
-    public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
-        if(turnTracker.isSetupPhase()){return false;}
-
-        if(getAvailableSettlements(id) == 0){return false;}
-        return(playerManager.canBuildSettlement(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
-    }
-
-    public boolean ableToBuildCity(int id) throws PlayerExistsException{
-        if(getAvailableSettlements(id) == 5){return false;}
-        if(turnTracker.isSetupPhase()){return false;}
-        if(getAvailableCities(id) == 0){return false;}
-        if(turnTracker.isSetupPhase()){return turnTracker.isPlayersTurn(id);}
-        return(playerManager.canBuildCity(id) && turnTracker.canPlay() && turnTracker.isPlayersTurn(id));
-    }
-
-    public Integer getAvailableRoads(int id) throws PlayerExistsException{
-        return this.playerManager.getAvailableRoads(id);
-    }
-
-    public Integer getAvailableSettlements(int id) throws PlayerExistsException{
-        return this.playerManager.getAvailableSettlements(id);
-    }
-
-    public Integer getAvailableCities(int id) throws PlayerExistsException{
-        return this.playerManager.getAvailableCities(id);
+    public boolean canPlaceRoadBuildingCard(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
+        return false;
     }
 
     /**
-     * builds a road for hte player
+     * builds a road for the player
      *
      * @param playerID
+     * @param edge
      */
     @Override
     public void buildRoad(int playerID, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
-        assert playerID >= 0;
-        assert edge != null;
-        assert edge.getHexLoc() != null;
-        assert edge.getDir() != null;
-        assert this.map != null;
-        assert this.playerManager != null;
-        assert this.longestRoadCard != null;
-
-        if(canBuildRoad(playerID, edge)) {
-            map.buildRoad(playerID, edge);
-            playerManager.buildRoad(playerID);
-            //check to update longest road
-            int roadlength = map.getLongestRoadSize(playerID);
-            if(roadlength >= 5 && roadlength > longestRoadCard.getSize()){
-                newLongestRoad(longestRoadCard.getOwner(), playerID, roadlength);
-            }
-        }
-    }
-
-    /**
-     * checks if the player has the cards to build a settlement
-     *
-     * @param playerID
-     * @return
-     */
-    @Override
-    public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
-        assert playerID >= 0;
-        assert vertex != null;
-        assert vertex.getDir() != null;
-        assert vertex.getHexLoc() != null;
-        assert this.map != null;
-        assert this.playerManager != null;
-        assert this.turnTracker != null;
-
-        return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID) && turnTracker.canPlay();
 
     }
 
@@ -779,76 +729,33 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * builds a settlement for this player
      *
      * @param playerID
+     * @param vertex
      */
     @Override
-    public void buildSettlement(final int playerID, final VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
-        assert playerID >= 0;
-        assert vertex != null;
-        assert vertex.getDir() != null;
-        assert vertex.getHexLoc() != null;
-        assert this.map != null;
-        assert this.playerManager != null;
+    public void buildSettlement(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
 
-        if(canBuildSettlement(playerID, vertex)) {
-            map.buildSettlement(playerID, vertex);
-            playerManager.buildSettlement(playerID);
-        }
-    }
-
-    /**
-     * checks if the player has the cards to build a city
-     *
-     * @param playerID
-     * @return
-     */
-    @Override
-    public boolean canBuildCity(final int playerID, final VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
-        assert playerID >= 0;
-        assert vertex != null;
-        assert vertex.getDir() != null;
-        assert vertex.getHexLoc() != null;
-
-        return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID) && turnTracker.canPlay(); //&& turnTracker.canBuild(playerID);
     }
 
     /**
      * builds a city for this player
      *
      * @param playerID
+     * @param vertex
      */
     @Override
-    public void buildCity(final int playerID, final VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
-        assert playerID >= 0;
-        assert vertex != null;
-        assert vertex.getDir() != null;
-        assert vertex.getHexLoc() != null;
+    public void buildCity(int playerID, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
 
-        if(canBuildCity(playerID, vertex)) {
-            map.buildCity(playerID, vertex);
-            playerManager.buildCity(playerID);
-        }
     }
 
     /**
-     * returns the value of how many roads is the LongestRoad
+     * Get the player with the longest road card
      *
      * @return
      */
     @Override
-    public int currentLongestRoadSize() {
-        return longestRoadCard.getSize();
+    public int getPlayerWithLongestRoad() {
+        return 0;
     }
-
-    /**
-     * returns the playerID of who owns the current longest road
-     *
-     * @return
-     */
-    @Override
-    public int currentLongestRoadPlayer() {
-        return longestRoadCard.getOwner();
-    }
-
 
     /**
      * deducts Victory Points from playerIDOld
@@ -860,13 +767,8 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @param roadSize
      */
     @Override
-    public void newLongestRoad(int playerIDOld, int playerIDNew, int roadSize) {
-        assert playerIDNew >= 0;
-        assert playerIDOld >= 0;
-        assert roadSize >= 0;
-        assert playerIDNew != playerIDOld;
+    public void setPlayerWithLongestRoad(int playerIDOld, int playerIDNew, int roadSize) {
 
-        longestRoadCard.setOwner(playerIDNew, roadSize);
     }
 
     /**
@@ -876,7 +778,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public int currentLargestArmySize() {
-        return largestArmyCard.getMostSoldiers();
+        return 0;
     }
 
     /**
@@ -885,25 +787,34 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      * @return
      */
     @Override
-    public int currentLargestArmyPlayer() {
-        return largestArmyCard.getOwner();
+    public int getPlayerWithLargestArmy() {
+        return 0;
     }
 
     /**
      * deducts Victory Points from playerIDOld
      * adds Victory Points to playerIDNew
      * Updates LargestArmy for playerIDNew and armySize
+     *
      * @param playerIDOld
      * @param playerIDNew
      * @param armySize
      */
-    public void newLargestArmy(int playerIDOld, int playerIDNew, int armySize){
-        assert playerIDNew >= 0;
-        assert playerIDOld >= 0;
-        assert armySize >= 0;
-        assert playerIDNew != playerIDOld;
+    @Override
+    public void newLargestArmy(int playerIDOld, int playerIDNew, int armySize) {
 
-        largestArmyCard.setNewOwner(playerIDNew, armySize);
+    }
+
+    /**
+     * Buys a new developmentCard for the player
+     * deducts cards
+     * adds new developmentCard to his DCBank
+     *
+     * @param playerID
+     */
+    @Override
+    public DevCardType buyDevelopmentCard(int playerID) throws PlayerExistsException, Exception {
+        return null;
     }
 
     /**
@@ -914,45 +825,47 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public boolean canTrade(int playerID) {
-        assert playerID >= 0;
-        return turnTracker.isPlayersTurn(playerID) && turnTracker.canPlay();
+        return false;
     }
 
-    public boolean isTradeActive(){return this.currentOffer.isActive();}
-
-    public int getTradeReceiver(){return this.currentOffer.getReceiver();}
-
-    public int getTradeSender(){return this.currentOffer.getSender();}
-
-    public int getTradeBrick(){return this.currentOffer.getBrick();}
-
-    public int getTradeWood(){return this.currentOffer.getWood();}
-
-    public int getTradeSheep(){return this.currentOffer.getSheep();}
-
-    public int getTradeWheat(){return this.currentOffer.getWheat();}
-
-    public int getTradeOre(){return this.currentOffer.getOre();}
-    /**
-     * checks if that player has the card needed for that port's trade
-     *
-     * @param playerID
-     * @param port
-     * @return
-     */
     @Override
-    public boolean canMaritimeTrade(int playerID, PortType port) throws InvalidPlayerException, PlayerExistsException {
-        assert playerID >= 0;
-        assert port != null;
-
-        if(canTrade(playerID)){
-            Set<PortType> ports = getPortTypes(playerID);
-            assert ports != null;
-            if(ports.contains(port)){
-                return playerManager.canMaritimeTrade(playerID, port);
-            }
-        }
+    public boolean isTradeActive() {
         return false;
+    }
+
+    @Override
+    public int getTradeReceiver() {
+        return 0;
+    }
+
+    @Override
+    public int getTradeSender() {
+        return 0;
+    }
+
+    @Override
+    public int getTradeBrick() {
+        return 0;
+    }
+
+    @Override
+    public int getTradeWood() {
+        return 0;
+    }
+
+    @Override
+    public int getTradeSheep() {
+        return 0;
+    }
+
+    @Override
+    public int getTradeWheat() {
+        return 0;
+    }
+
+    @Override
+    public int getTradeOre() {
+        return 0;
     }
 
     /**
@@ -960,239 +873,173 @@ public final class Game extends Observable implements IGame, JsonSerializable {
      *
      * @param playerID
      * @param port
+     * @param want
      */
     @Override
     public void maritimeTrade(int playerID, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
-        assert playerID >= 0;
-        assert port != null;
-        assert want != null;
 
-        if(canMaritimeTrade(playerID, port)){
-            List<ResourceType> cards = new ArrayList<>();
-            switch(port) {
-                case BRICK:
-                    cards.add(ResourceType.BRICK);
-                    cards.add(ResourceType.BRICK);
-                    break;
-                case ORE:
-                    cards.add(ResourceType.ORE);
-                    cards.add(ResourceType.ORE);
-                    break;
-                case SHEEP:
-                    cards.add(ResourceType.SHEEP);
-                    cards.add(ResourceType.SHEEP);
-                    break;
-                case WHEAT:
-                    cards.add(ResourceType.WHEAT);
-                    cards.add(ResourceType.WHEAT);
-                    break;
-                case WOOD:
-                    cards.add(ResourceType.WOOD);
-                    cards.add(ResourceType.WOOD);
-                    break;
-            }
-            final List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
-            assert discarded != null;
-            for(ResourceCard rc: discarded) {
-                resourceCardBank.addResource(rc);
-            }
-
-            playerManager.addResource(playerID, resourceCardBank.discard(want));
-        }
     }
 
+    @Override
     public void maritimeTradeThree(int playerID, PortType port, ResourceType give, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        assert playerID >=0 ;
-        assert port != null;
-        assert give != null;
-        assert want != null;
 
-        if(canMaritimeTrade(playerID, port)) {
-            if(port == PortType.THREE) {
-                final List<ResourceType> cards = new ArrayList<>();
-                cards.add(give);
-                cards.add(give);
-                cards.add(give);
-
-                final List<ResourceCard> discarded = playerManager.discardResourceType(playerID, cards);
-
-                for(final ResourceCard rc: discarded) {
-                    resourceCardBank.addResource(rc);
-                }
-
-                playerManager.addResource(playerID, resourceCardBank.discard(want));
-
-            } else {
-                throw new InvalidTypeException("not 3:1 port types");
-            }
-        }
-    }
-
-    public void setId(int id) {
-        this.gameId = id;
     }
 
     @Override
-    public int getId() {
-        return this.gameId;
-    }
-
-    public Set<PortType> getPortTypes(int playerID) {
-        assert playerID >= 0;
-        assert this.map != null;
-
-        return map.getPortTypes(playerID);
-    }
-
-    public TurnTracker getTurnTracker() {
-        return turnTracker;
+    public Set<PortType> getPortTypes(int playerID) throws InvalidPlayerException {
+        return null;
     }
 
     @Override
-    public PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
     public Map getMap() {
-        return this.map;
+        return null;
     }
 
-    public CatanColor getPlayerColorByIndex(int index) throws PlayerExistsException {
-        return this.playerManager.getPlayerColorByIndex(index);
+    @Override
+    public boolean ableToBuildSettlement(int id) throws PlayerExistsException {
+        return false;
     }
 
+    @Override
+    public boolean ableToBuildRoad(int id) throws PlayerExistsException {
+        return false;
+    }
+
+    @Override
+    public boolean ableToBuildCity(int id) throws PlayerExistsException {
+        return false;
+    }
+
+    @Override
+    public Integer getAvailableRoads(int id) throws PlayerExistsException {
+        return null;
+    }
+
+    @Override
+    public Integer getAvailableSettlements(int id) throws PlayerExistsException {
+        return null;
+    }
+
+    @Override
+    public Integer getAvailableCities(int id) throws PlayerExistsException {
+        return null;
+    }
+
+    @Override
     public List<Player> getPlayers() {
-        return this.playerManager.getPlayers();
+        return null;
     }
 
+    @Override
+    public Integer numberOfDevCard(int id) throws PlayerExistsException {
+        return null;
+    }
+
+    @Override
     public Player getWinner() throws GameOverException {
-        return playerManager.getWinner();
+        return null;
     }
 
     @Override
     public int getNumberDevCards(DevCardType type, int playerID) {
-        return playerManager.getNumberDevCards(type, playerID);
+        return 0;
     }
 
-    public void buildFirstRoad(int playerID, EdgeLocation hexloc){
-        try{
-        if(!this.turnTracker.isPlayersTurn(playerID)){return;}
-        if(!this.turnTracker.canPlay()){return;}
-
-            this.map.buildRoad(playerID, hexloc);
-        } catch(InvalidLocationException | StructureException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public int getNumberResourceCards(int playerIndex) throws PlayerExistsException {
+        return 0;
     }
 
-    public void cancelSoldierCard(int playerID){
-        try {
-            SoldierCard sc = new SoldierCard();
-            this.playerManager.addDevCard(playerID, sc);
-        } catch(PlayerExistsException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public int amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException {
+        return 0;
     }
 
-    public void deleteRoad(int playerID, EdgeLocation edge){
-        try{
-            if(!this.turnTracker.isPlayersTurn(playerID)){return;}
-            if(!this.turnTracker.canPlay()){return;}
+    @Override
+    public void buildFirstRoad(int playerID, EdgeLocation hexloc) {
 
-            this.map.deleteRoad(playerID, edge);
-        } catch(InvalidLocationException | StructureException e) {
-            e.printStackTrace();
-        }
     }
 
+    @Override
+    public void cancelSoldierCard(int playerID) {
+
+    }
+
+    @Override
+    public void deleteRoad(int playerID, EdgeLocation edge) {
+
+    }
+
+    @Override
     public void cancelRoadBuildingCard(int playerID) {
-        try {
-            RoadBuildCard rbc = new RoadBuildCard();
-            this.playerManager.addDevCard(playerID, rbc);
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        }
+
     }
 
+    @Override
     public Player getPlayerById(int id) throws PlayerExistsException {
-        return playerManager.getPlayerByID(id);
-    }
-
-    public HashMap<ResourceType,Integer> getBankResources(){
-        HashMap<ResourceType, Integer> resources = new HashMap<>();
-        resources.put(ResourceType.BRICK,this.resourceCardBank.getNumberOfBrick());
-        resources.put(ResourceType.WOOD, this.resourceCardBank.getNumberOfWood());
-        resources.put(ResourceType.ORE, this.resourceCardBank.getNumberOfOre());
-        resources.put(ResourceType.WHEAT, this.resourceCardBank.getNumberOfWheat());
-        resources.put(ResourceType.SHEEP, this.resourceCardBank.getNumberOfSheep());
-        return resources;
-    }
-
-    public HashMap<ResourceType,Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
-        HashMap<ResourceType, Integer> resources = new HashMap<>();
-        resources.put(ResourceType.BRICK,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfBrick());
-        resources.put(ResourceType.WOOD,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfWood());
-        resources.put(ResourceType.ORE,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfOre());
-        resources.put(ResourceType.WHEAT,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfWheat());
-        resources.put(ResourceType.SHEEP,this.playerManager.getPlayerByIndex(pIndex).getResourceCardBank().getNumberOfSheep());
-        return resources;
-    }
-
-    public void setPlayerManager(PlayerManager playerManager) {
-        this.playerManager = playerManager;
-        setChanged();
-        this.notifyObservers();
+        return null;
     }
 
     @Override
     public int getNumberOfSoldiers(int playerIndex) {
-        return playerManager.getNumberOfSoldiers(playerIndex);
+        return 0;
     }
 
     @Override
     public boolean hasDiscarded(int playerIndex) {
-        return playerManager.hasDiscarded(playerIndex);
+        return false;
     }
 
     @Override
     public MessageList getLog() {
-        return this.log;
-    }
-
-    @Override
-    public MessageList getChat() {
-        return this.chat;
-    }
-
-    @Override
-    public int getPoints(int playerIndex) throws PlayerExistsException {
-        Player player = playerManager.getPlayerByIndex(playerIndex);
-        int totalPoints = 0;
-        totalPoints += player.getVictoryPoints();
-        return totalPoints;
-    }
-
-    @Override
-    public int getWinnerId() {
-        return this.winner;
-    }
-
-    @Override
-    public String getPlayerNameByIndex(int playerIndex) throws PlayerExistsException {
-        return playerManager.getPlayerByIndex(playerIndex).getName();
+        return null;
     }
 
     @Override
     public CatanColor getPlayerColorByName(String player) {
-        assert player != null;
-        return playerManager.getPlayerColorByName(player);
+        return null;
+    }
+
+    @Override
+    public HashMap<ResourceType, Integer> getBankResources() {
+        return null;
+    }
+
+    @Override
+    public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
+        return null;
+    }
+
+    @Override
+    public MessageList getChat() {
+        return null;
+    }
+
+    @Override
+    public int getPoints(int playerIndex) throws PlayerExistsException {
+        return 0;
+    }
+
+    @Override
+    public int getWinnerId() {
+        return 0;
+    }
+
+    @Override
+    public String getPlayerNameByIndex(int playerIndex) throws PlayerExistsException {
+        return null;
     }
 
     @Override
     public int getPlayerIdByIndex(int playerIndex) throws PlayerExistsException {
-        return playerManager.getPlayerByIndex(playerIndex).getId();
+        return 0;
     }
 
+    /**
+     * Converts the object to JSON
+     *
+     * @return The JSON representation of the object
+     */
     @Override
     public JsonObject toJSON() {
         return null;

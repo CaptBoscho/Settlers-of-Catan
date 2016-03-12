@@ -1,7 +1,5 @@
 package model.game;
 
-import org.apache.http.client.cache.Resource;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
@@ -1991,12 +1989,12 @@ public class GameTest {
         game.setPhase(TurnTracker.Phase.PLAYING);
 
         if(game.numberOfDevCard(guy) == 0){
-            assertFalse(game.canUseRoadBuilder(guy));
+            assertFalse(game.canUseRoadBuilding(guy));
         }
         final RoadBuildCard card = new RoadBuildCard();
         game.addDevCard(card, guy);
         game.moveNewToOld(guy);
-        assertTrue(game.canUseRoadBuilder(guy));
+        assertTrue(game.canUseRoadBuilding(guy));
     }
 
     void testUseRoadBuilder() {
