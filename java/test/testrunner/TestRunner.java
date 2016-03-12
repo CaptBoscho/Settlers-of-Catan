@@ -1,14 +1,5 @@
-import client.networking.ServerTest;
-import model.Player.PlayerManagerTest;
-import model.Player.PlayerTest;
-import model.game.GameTest;
-import model.map.MapTest;
+package testrunner;
 import org.junit.Test;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.RunWith;
-import org.junit.runner.notification.Failure;
-import org.junit.runners.Suite;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
