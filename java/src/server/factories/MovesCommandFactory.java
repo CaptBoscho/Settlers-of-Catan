@@ -1,15 +1,17 @@
 package server.factories;
 
+import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import server.commands.moves.*;
+import server.facade.IFacade;
 
 /**
  * A factory class that creates Moves Commands on demand.  Use this class to get a Moves Command
  */
 public class MovesCommandFactory {
 
+    private IFacade facade;
     private static MovesCommandFactory instance = null;
-
     private MovesCommandFactory() {
 
     }
@@ -22,12 +24,16 @@ public class MovesCommandFactory {
         return instance;
     }
 
+    public void bind(IFacade new_facade){
+        facade = new_facade;
+    }
+
     /**
      * Creates a Moves command based on a given string
      * @param command The string indicating what type of command to return
      * @return an ICommand object
      */
-    public ICommand createCommand(String command) {
+    public ICommand createCommand(String command, JsonObject object) {
         assert command != null;
 
         switch(command) {
@@ -54,7 +60,7 @@ public class MovesCommandFactory {
             case "buildRoad":
                 return new BuildRoadCommand();
             case "buildSettlement":
-                return new BuildSettlementCommand();
+                //return new BuildSettlementCommand();
             case "buildCity":
                 return new BuildCityCommand();
             case "offerTrade":

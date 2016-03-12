@@ -2,6 +2,8 @@ package server.factories;
 
 import server.commands.ICommand;
 import server.commands.user.*;
+import server.facade.IFacade;
+import server.facade.ServerFacade;
 
 /**
  * A factory class that creates User Commands on demand.  Use this class to get a User Command
@@ -9,10 +11,11 @@ import server.commands.user.*;
  */
 public class UserCommandFactory {
 
+    private IFacade facade;
     private static UserCommandFactory instance = null;
 
     private UserCommandFactory() {
-
+        facade = new ServerFacade();
     }
 
     public static UserCommandFactory getInstance() {
@@ -21,6 +24,10 @@ public class UserCommandFactory {
         }
 
         return instance;
+    }
+
+    public void bind(IFacade new_facade){
+        facade = new_facade;
     }
 
     /**
