@@ -2,7 +2,6 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import server.facade.IFacade;
 
 /**
  * A command object that accepts a trade
@@ -23,7 +22,7 @@ public class AcceptTradeCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute(IFacade facade) {
+    public JsonObject execute() {
         return null;
     }
 

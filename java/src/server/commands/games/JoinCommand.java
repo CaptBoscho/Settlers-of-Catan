@@ -2,7 +2,6 @@ package server.commands.games;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import server.facade.IFacade;
 
 /**
  * A command object that adds a player to a game.
@@ -17,7 +16,7 @@ public class JoinCommand implements ICommand {
      * @return JsonObject with information about the join
      */
     @Override
-    public JsonObject execute(IFacade facade) {
+    public JsonObject execute() {
         return null;
     }
 }
