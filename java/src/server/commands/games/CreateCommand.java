@@ -2,7 +2,6 @@ package server.commands.games;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import server.facade.IFacade;
 
 /**
  * A command object that creates a game.
@@ -17,7 +16,7 @@ public class CreateCommand implements ICommand {
      * @return JsonObject with information about the game creation
      */
     @Override
-    public JsonObject execute(IFacade facade) {
+    public JsonObject execute() {
         return null;
     }
 }
