@@ -1,6 +1,7 @@
 package server.factories;
 
 import server.commands.ICommand;
+import server.commands.game.*;
 
 /**
  * A factory class that creates Game Commands on demand. Use this class to get a Game Command.
@@ -10,7 +11,7 @@ public class GameCommandFactory {
 
     private static GameCommandFactory instance = null;
 
-    GameCommandFactory() {
+    private GameCommandFactory() {
 
     }
 
@@ -28,6 +29,18 @@ public class GameCommandFactory {
      * @return an ICommand object
      */
     public ICommand createCommand(String command) {
-        return null;
+        assert command != null;
+
+        switch(command) {
+            case "model":
+                return new ModelCommand();
+            case "addAI":
+                return new AddAICommand();
+            case "listAI":
+                return new ListAICommand();
+            default:
+                return null;
+        }
     }
+
 }

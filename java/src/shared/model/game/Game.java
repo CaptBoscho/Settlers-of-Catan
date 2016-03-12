@@ -1,7 +1,6 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
-import org.apache.http.client.cache.Resource;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
 import shared.model.JsonSerializable;
