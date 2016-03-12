@@ -2,7 +2,7 @@ package server.factories;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import server.facade.IFacade;
+import server.commands.game.*;
 
 /**
  * A factory class that creates Game Commands on demand. Use this class to get a Game Command.
@@ -10,11 +10,10 @@ import server.facade.IFacade;
  */
 public class GameCommandFactory {
 
-    private IFacade facade;
 
     private static GameCommandFactory instance = null;
 
-    GameCommandFactory() {
+    private GameCommandFactory() {
 
     }
 
@@ -26,9 +25,6 @@ public class GameCommandFactory {
         return instance;
     }
 
-    public void bind(IFacade new_facade){
-        facade = new_facade;
-    }
 
     /**
      * Creates a game command based on a given string
@@ -36,9 +32,18 @@ public class GameCommandFactory {
      * @return an ICommand object
      */
     public ICommand createCommand(String command, JsonObject object) {
-        if(command == "addAI"){
+        assert command != null;
 
+        switch(command) {
+            case "model":
+                return new ModelCommand();
+            case "addAI":
+                return new AddAICommand();
+            case "listAI":
+                return new ListAICommand();
+            default:
+                return null;
         }
-        return null;
     }
+
 }

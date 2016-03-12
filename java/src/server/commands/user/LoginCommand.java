@@ -2,6 +2,7 @@ package server.commands.user;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.facade.IFacade;
 
 /**
  * A command object that logs a player in
@@ -16,7 +17,7 @@ public class LoginCommand implements ICommand {
      * @return JsonObject with information about the login
      */
     @Override
-    public JsonObject execute() {
+    public JsonObject execute(IFacade facade) {
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package server.commands;
 
 import com.google.gson.JsonObject;
+import server.facade.IFacade;
 
 /**
  * A parent interface for all command objects.  The execute function in each implementation of this interface will
@@ -16,5 +17,5 @@ public interface ICommand {
      *
      * @return JsonObject with information pertaining to the execute function of the given Command object
      */
-    JsonObject execute();
+    JsonObject execute(IFacade facade);
 }
