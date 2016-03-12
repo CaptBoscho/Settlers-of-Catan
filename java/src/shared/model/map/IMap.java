@@ -150,7 +150,7 @@ public interface IMap {
      * Informs if the robber can be moved to a hex location
      * @param hexLoc HexLocation
      * @return boolean
-     * @throws AlreadyRobbedException Throws exception if the hex location is not on the map
+     * @throws InvalidLocationException
      */
     boolean canMoveRobber(HexLocation hexLoc) throws InvalidLocationException;
 

@@ -28,7 +28,6 @@ public interface IFacade {
 
     /**
      * Registers a user
-     * @implNote usernames must be unique
      * @param username
      * @param password
      * @throws RegisterException
@@ -101,7 +100,6 @@ public interface IFacade {
 
     /**
      * Robs the specified player
-     * @implNote newLocation must be different from the previous location
      * @param player index of the player robbing
      * @param newLocation
      * @param victim index of the player being robbed
@@ -143,7 +141,6 @@ public interface IFacade {
 
     /**
      * Handles playing Soldier
-     * @implNote the new location must be different than the previous location
      * @param player index of the player
      * @param newLocation
      * @param victim index of the player being robbed
@@ -211,7 +208,6 @@ public interface IFacade {
 
     /**
      * Performs a maritime trade (trade with the bank)
-     * @implNote ratio refers to number of cards the player must give to receive one card
      * @param player index of the player
      * @param ratio trade ratio [2, 3 or 4]
      * @param give resource to trade away
