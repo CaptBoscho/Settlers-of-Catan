@@ -2,6 +2,8 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.facade.IFacade;
+import shared.dto.BuildSettlementDTO;
 
 /**
  * A command object that builds a settlement
@@ -10,11 +12,10 @@ import server.commands.ICommand;
  */
 public class BuildSettlementCommand implements ICommand {
 
-    /**
-     * Constructor
-     */
-    public BuildSettlementCommand() {
+    private BuildSettlementDTO dto;
 
+    public BuildSettlementCommand(BuildSettlementDTO dto) {
+        this.dto = dto;
     }
 
     /**
@@ -22,7 +23,7 @@ public class BuildSettlementCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public JsonObject execute(IFacade facade) {
         return null;
     }
 
