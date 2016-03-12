@@ -196,7 +196,7 @@ public interface IFacade {
      * @param recipient index of the player being offered
      * @throws OfferTradeException
      */
-    void offerTrade(int player, TradePackage offer, int recipient) throws OfferTradeException;
+    void offerTrade(int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException;
 
     /**
      * Accepts a trade offer

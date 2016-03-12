@@ -33,7 +33,7 @@ public class MovesCommandFactory {
      * @param command The string indicating what type of command to return
      * @return an ICommand object
      */
-    public ICommand createCommand(String command, JsonObject object) {
+    public ICommand createCommand(String command, JsonObject json) {
         assert command != null;
 
         switch(command) {
@@ -64,7 +64,16 @@ public class MovesCommandFactory {
             case "buildCity":
                 return new BuildCityCommand();
             case "offerTrade":
-                return new OfferTradeCommand();
+                int sender = json.get("sender").getAsInt();
+                int receiver = json.get("receiver").getAsInt();
+
+                JsonObject jj = json.get("offer").getAsJsonObject();
+                int brick = jj.get("brick").getAsInt();
+                int ore = jj.get("ore").getAsInt();
+                int sheep = jj.get("sheep").getAsInt();
+                int wheat = jj.get("wheat").getAsInt();
+                int wood = jj.get("wood").getAsInt();
+                return new OfferTradeCommand(sender, receiver, brick, ore, sheep, wheat, wood, facade);
             case "acceptTrade":
                 return new AcceptTradeCommand();
             case "maritimeTrade":
