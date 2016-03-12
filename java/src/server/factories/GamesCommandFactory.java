@@ -2,6 +2,8 @@ package server.factories;
 
 import server.commands.ICommand;
 import server.commands.games.*;
+import server.facade.IFacade;
+import server.facade.ServerFacade;
 
 /**
  * A factory class that creates Games Commands on demand.  Use this class to get a Games Command
@@ -9,10 +11,11 @@ import server.commands.games.*;
  */
 public class GamesCommandFactory {
 
+    private IFacade facade;
     private static GamesCommandFactory instance = null;
 
     private GamesCommandFactory() {
-
+        facade = new ServerFacade();
     }
 
     public static GamesCommandFactory getInstance() {
@@ -21,6 +24,10 @@ public class GamesCommandFactory {
         }
 
         return instance;
+    }
+
+    public void bind(IFacade new_facade){
+        facade = new_facade;
     }
 
     /**

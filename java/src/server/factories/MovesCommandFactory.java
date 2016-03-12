@@ -3,11 +3,14 @@ package server.factories;
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import server.commands.moves.*;
+import server.facade.IFacade;
+
 /**
  * A factory class that creates Moves Commands on demand.  Use this class to get a Moves Command
  */
 public class MovesCommandFactory {
 
+    private IFacade facade;
     private static MovesCommandFactory instance = null;
     private MovesCommandFactory() {
 
@@ -19,6 +22,10 @@ public class MovesCommandFactory {
         }
 
         return instance;
+    }
+
+    public void bind(IFacade new_facade){
+        facade = new_facade;
     }
 
     /**
