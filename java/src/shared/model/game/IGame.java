@@ -321,12 +321,23 @@ public interface IGame {
      */
     void useRoadBuilder(int playerID, EdgeLocation edge1, EdgeLocation edge2) throws PlayerExistsException, DevCardException, InvalidPlayerException, InvalidLocationException, StructureException;
 
+    /**
+     * Cancels playing the road building card
+     * @param playerIndex
+     */
+    void cancelRoadBuildingCard(int playerIndex);
 
     /**
      * Action - Player plays Soldier
      * @param playerID ID of Player performing action
      */
     Set<Integer> useSoldier(int playerID, HexLocation hexloc) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException;
+
+    /**
+     * Cancels playing a soldier card
+     * @param playerIndex
+     */
+    void cancelSoldierCard(int playerIndex);
 
     /**
      * Action - Player plays Monopoly
@@ -589,6 +600,18 @@ public interface IGame {
      * @param id
      */
     void setId(int id);
+
+    /**
+     * Sets the game's player manager
+     * @param playerManager
+     */
+    void setPlayerManager(PlayerManager playerManager);
+
+    /**
+     * Sets the game's current phase
+     * @param phase
+     */
+    void setPhase(TurnTracker.Phase phase)
     //====================================================================================
     //endregion
 

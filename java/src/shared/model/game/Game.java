@@ -748,6 +748,19 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     /**
+     * Cancels playing the road builder
+     * @param playerIndex
+     */
+    public void cancelRoadBuildingCard(int playerIndex) {
+        try {
+            RoadBuildCard rbc = new RoadBuildCard();
+            this.playerManager.addDevCard(playerIndex, rbc);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Action - Player plays Soldier
      *
      * @param playerID ID of Player performing action
@@ -776,6 +789,19 @@ public class Game extends Observable implements IGame, JsonSerializable {
             return null;
         }
         return null;
+    }
+
+    /**
+     * Cancels playing a soldier card
+     * @param playerIndex
+     */
+    public void cancelSoldierCard(int playerIndex){
+        try {
+            SoldierCard sc = new SoldierCard();
+            this.playerManager.addDevCard(playerID, sc);
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -1269,6 +1295,28 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void setId(int id) {
         this.gameId = id;
+    }
+
+    /**
+     * Sets the game's player manager
+     * @param playerManager
+     */
+    @Override
+    public void setPlayerManager(PlayerManager playerManager) {
+        this.playerManager = playerManager;
+        setChanged();
+        this.notifyObservers();
+    }
+
+    /**
+     * Sets the game's current phase
+     * @param phase
+     */
+    @Override
+    public void setPhase(TurnTracker.Phase phase) {
+        assert this.turnTracker != null;
+
+        turnTracker.setPhase(p);
     }
     //===================================================================================================
     //endregion
