@@ -34,7 +34,6 @@ public class MockFacade implements IFacade {
      * @param username
      * @param password
      * @throws RegisterException
-     * @implNote usernames must be unique
      */
     @Override
     public void register(String username, String password) throws RegisterException {
@@ -131,7 +130,6 @@ public class MockFacade implements IFacade {
      * @param newLocation
      * @param victim      index of the player being robbed
      * @throws RobPlayerException
-     * @implNote newLocation must be different from the previous location
      */
     @Override
     public void robPlayer(int player, HexLocation newLocation, int victim) throws RobPlayerException {
@@ -193,7 +191,6 @@ public class MockFacade implements IFacade {
      * @param newLocation
      * @param victim      index of the player being robbed
      * @throws SoldierException
-     * @implNote the new location must be different than the previous location
      */
     @Override
     public void soldier(int player, HexLocation newLocation, int victim) throws SoldierException {
@@ -294,7 +291,6 @@ public class MockFacade implements IFacade {
      * @param give   resource to trade away
      * @param get    resource to get
      * @throws MaritimeTradeException
-     * @implNote ratio refers to number of cards the player must give to receive one card
      */
     @Override
     public void maritimeTrade(int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {

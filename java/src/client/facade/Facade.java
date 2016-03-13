@@ -158,7 +158,6 @@ public class Facade {
      *
      * @param playerID
      * @param edge
-     * @throws BuildException
      */
     public void buildRoad(int playerID, EdgeLocation edge) throws MissingUserCookieException {
         assert playerID >= 0;
@@ -189,7 +188,6 @@ public class Facade {
      *
      * @param playerID
      * @param vertex
-     * @throws BuildException
      */
     public void buildSettlement(int playerID, VertexLocation vertex) throws MissingUserCookieException {
         vertex = getServerVertexLocation(vertex);
@@ -216,7 +214,6 @@ public class Facade {
      *
      * @param playerID
      * @param vertex
-     * @throws BuildException
      */
     public void buildCity(int playerID, VertexLocation vertex) throws MissingUserCookieException {
         vertex = getServerVertexLocation(vertex);
@@ -242,7 +239,6 @@ public class Facade {
      * player Buys a development card
      *
      * @param playerID
-     * @throws BuildException
      */
     public void buyDC(int playerID) throws MissingUserCookieException {
         assert playerID >= 0;
@@ -266,7 +262,6 @@ public class Facade {
      * Commits the trade
      *
      * @param playerOneID
-     * @throws BuildException
      */
     //TODO talk with server
     public void tradeWithPlayer(int playerOneID, int playerTwoID, List<ResourceType> oneCards, List<ResourceType> twoCards) {

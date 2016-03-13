@@ -4,22 +4,18 @@ import client.facade.Facade;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
-
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.locations.*;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.*;
 import shared.model.cards.resources.ResourceCard;
-import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
 import shared.model.player.Player;
-
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
