@@ -811,4 +811,8 @@ public class Facade {
     public int hasLongestRoad() {
         return this.game.getPlayerWithLongestRoad();
     }
+
+    public IGame getGame(){
+        return this.game;
+    }
 }

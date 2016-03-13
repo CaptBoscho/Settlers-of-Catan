@@ -8,6 +8,8 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
+import shared.model.cards.devcards.DevelopmentCard;
+import shared.model.cards.resources.ResourceCard;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.definitions.DevCardType;
@@ -677,5 +679,46 @@ public interface IGame {
      */
     boolean ableToBuildCity(int playerIndex) throws PlayerExistsException;
     //=======================================================================
+    //endregion
+
+    //region Helpers
+    //=======================================================================
+    /**
+     * Adds the dev card to the player
+     * @param dc
+     * @param playerIndex
+     * @throws PlayerExistsException
+     */
+    void addDevCard(final DevelopmentCard dc, final int playerIndex) throws PlayerExistsException;
+    //===========================================================================
+    //endregion
+
+    //region Testing only!!!
+    //=======================================================================
+    /**
+     * For testing purposes
+     * Action - Player rolls the dice
+     *
+     * @param playerIndex Index of Player performing action
+     */
+    int rollNumber(int playerIndex) throws InvalidDiceRollException;
+
+    /**
+     * for testing purposes
+     * @param card
+     * @param id
+     * @throws PlayerExistsException
+     */
+    void giveResource(ResourceCard card, int id) throws PlayerExistsException;
+
+    /**
+     * for testing purposes.
+     * @param t
+     * @return
+     * @throws InsufficientResourcesException
+     * @throws InvalidTypeException
+     */
+    ResourceCard getResourceCard(final ResourceType t) throws InsufficientResourcesException, InvalidTypeException;
+    //========================================================================
     //endregion
 }

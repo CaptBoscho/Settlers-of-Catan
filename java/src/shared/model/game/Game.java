@@ -1506,13 +1506,18 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Helpers
     //==========================================================
-
-    private void addDevCard(final DevelopmentCard dc, final int playerID) throws PlayerExistsException {
+    /**
+     * Adds the dev card to the player
+     * @param dc
+     * @param playerIndex
+     * @throws PlayerExistsException
+     */
+    public void addDevCard(final DevelopmentCard dc, final int playerIndex) throws PlayerExistsException {
         assert dc != null;
-        assert playerID >= 0;
+        assert playerIndex >= 0;
         assert this.playerManager != null;
 
-        playerManager.getPlayerByIndex(playerID).addDevCard(dc);
+        playerManager.getPlayerByIndex(playerIndex).addDevCard(dc);
     }
 
     /**

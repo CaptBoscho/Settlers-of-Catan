@@ -182,7 +182,7 @@ public final class ServerProxy implements IServer {
             return null;
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -201,8 +201,8 @@ public final class ServerProxy implements IServer {
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         PlayerManager tmp = new PlayerManager(obj.getAsJsonArray("players"));
-        if(!tmp.equals(Game.getInstance().getPlayerManager())) {
-            Game.getInstance().setPlayerManager(new PlayerManager(obj.getAsJsonArray("players")));
+        if(!tmp.equals(Facade.getInstance().getGame().getPlayerManager())) {
+            Facade.getInstance().getGame().setPlayerManager(new PlayerManager(obj.getAsJsonArray("players")));
         }
     }
 
@@ -278,7 +278,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -302,7 +302,7 @@ public final class ServerProxy implements IServer {
             throw new CommandExecutionFailed();
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -323,7 +323,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -344,7 +344,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -365,7 +365,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -387,7 +387,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -408,7 +408,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -429,7 +429,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -450,7 +450,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -471,7 +471,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -492,7 +492,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -513,7 +513,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -534,7 +534,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -555,7 +555,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -576,7 +576,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -597,7 +597,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
@@ -618,7 +618,7 @@ public final class ServerProxy implements IServer {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Game.getInstance().updateGame(obj);
+        Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 

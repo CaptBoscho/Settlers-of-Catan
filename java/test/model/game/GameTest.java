@@ -1,5 +1,6 @@
 package model.game;
 
+import client.facade.Facade;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
@@ -11,6 +12,7 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.*;
 import shared.model.cards.resources.ResourceCard;
 import shared.model.game.Game;
+import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
 import shared.model.player.Player;
 
@@ -1816,11 +1818,11 @@ public class GameTest {
             "0,\"winner\":\n" +
             "-1}\n";
 
-    private Game game;
+    private IGame game;
 
     @Before
     public void testInitializeGame() throws InvalidNameException, InvalidPlayerException {
-        game = Game.getInstance();
+        game = Facade.getInstance().getGame();
         final List<Player> players = new ArrayList<>();
 
         final Player one = new Player(0, CatanColor.BLUE, 0, 0, "Hope");
@@ -1974,7 +1976,7 @@ public class GameTest {
         }
         final YearOfPlentyCard card = new YearOfPlentyCard();
         game.addDevCard(card, guy);
-        game.moveNewToOld(guy);
+        game.getPlayerManager().moveNewToOld(guy);
         assertTrue(game.canUseYearOfPlenty(guy));
 
     }
@@ -1993,7 +1995,7 @@ public class GameTest {
         }
         final RoadBuildCard card = new RoadBuildCard();
         game.addDevCard(card, guy);
-        game.moveNewToOld(guy);
+        game.getPlayerManager().moveNewToOld(guy);
         assertTrue(game.canUseRoadBuilding(guy));
     }
 
@@ -2011,7 +2013,7 @@ public class GameTest {
         }
         final SoldierCard card = new SoldierCard();
         game.addDevCard(card, guy);
-        game.moveNewToOld(guy);
+        game.getPlayerManager().moveNewToOld(guy);
         //assertTrue(game.canUseSoldier(guy));
     }
 
@@ -2029,7 +2031,7 @@ public class GameTest {
         }
         final MonopolyCard card = new MonopolyCard();
         game.addDevCard(card, guy);
-        game.moveNewToOld(guy);
+        game.getPlayerManager().moveNewToOld(guy);
         assertTrue(game.canUseMonopoly(guy));
     }
 
@@ -2050,7 +2052,7 @@ public class GameTest {
         // give the user the monopoly card
         final MonopolyCard card = new MonopolyCard();
         game.addDevCard(card, guy);
-        game.moveNewToOld(guy);
+        game.getPlayerManager().moveNewToOld(guy);
 
         game.useMonopoly(guy, ResourceType.ORE);
     }
@@ -2065,7 +2067,7 @@ public class GameTest {
         }
         final MonumentCard card = new MonumentCard();
         game.addDevCard(card, guy);
-        game.moveNewToOld(guy);
+        game.getPlayerManager().moveNewToOld(guy);
         assertTrue(game.canUseMonument(guy));
     }
 
