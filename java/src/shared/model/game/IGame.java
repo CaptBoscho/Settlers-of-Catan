@@ -303,12 +303,6 @@ public interface IGame {
     void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
 
     /**
-     * Action - Player rolls the dice
-     * @param playerIndex Index of Player performing action
-     */
-    int rollNumber(int playerIndex) throws InvalidDiceRollException;
-
-    /**
      * Action - Player offers trade
      * @param playerIndexOne Index of Player offering the trade
      * @param playerIndexTwo Index of Player being offered the trade
@@ -402,6 +396,12 @@ public interface IGame {
      * @return
      */
     PlayerManager getPlayerManager();
+
+    /**
+     * Gets the instance of the turn tracker
+     * @return
+     */
+    TurnTracker getTurnTracker();
 
     /**
      * Gets the map instance
