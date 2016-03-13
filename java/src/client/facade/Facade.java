@@ -40,9 +40,8 @@ public class Facade {
      * Constructor initializes map and game values
      */
     private Facade() {
-        this.game = Game.getInstance();
+        this.game = new Game();
     }
-
 
     public static Facade getInstance(){
         if(_instance == null) {
@@ -495,31 +494,31 @@ public class Facade {
         return this.game.getId();
     }
 
-    public void setGameInfo(GameInfo game) {
-        Game.getInstance().setId(game.getId());
-        if(Game.getInstance().getPlayerManager().getPlayers().size() > 0) {
-            for (int i = 0; i < game.getPlayers().size(); i++) {
-                PlayerInfo info = game.getPlayers().get(i);
-                if(i >= Game.getInstance().getPlayers().size()) {
+    public void setGameInfo(GameInfo gameInfo) {
+        gameInfo.setId(gameInfo.getId());
+        if(game.getPlayerManager().getPlayers().size() > 0) {
+            for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
+                PlayerInfo info = gameInfo.getPlayers().get(i);
+                if(i >= gameInfo.getPlayers().size()) {
                     try {
-                        Game.getInstance().getPlayerManager().addPlayer(new Player(info.getVictoryPoints(), info.getColor(), info.getId(), info.getPlayerIndex(), info.getName()));
+                        game.getPlayerManager().addPlayer(new Player(info.getVictoryPoints(), info.getColor(), info.getId(), info.getPlayerIndex(), info.getName()));
                     } catch (InvalidPlayerException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Game.getInstance().getPlayerManager().getPlayers().get(i).setPlayerIndex(info.getPlayerIndex());
+                    game.getPlayerManager().getPlayers().get(i).setPlayerIndex(info.getPlayerIndex());
                 }
                 // TODO -- add rest
             }
         } else {
-            for(PlayerInfo info : game.getPlayers()) {
+            for(PlayerInfo info : gameInfo.getPlayers()) {
                 int playerId = info.getId();
                 int playerIndex = info.getPlayerIndex();
                 String name = info.getName();
                 CatanColor color = info.getColor();
                 int points = info.getVictoryPoints();
                 try {
-                    Game.getInstance().getPlayerManager().addPlayer(new Player(points, color, playerId, playerIndex, name));
+                    game.getPlayerManager().addPlayer(new Player(points, color, playerId, playerIndex, name));
                 } catch (InvalidPlayerException e) {
                     e.printStackTrace();
                 }
@@ -778,7 +777,13 @@ public class Facade {
     }
 
     public int getWinnerId() {
-        return this.game.getWinnerId();
+        try {
+            return this.game.getWinner().getId();
+        } catch (GameOverException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 
     public String getPlayerNameByIndex(int playerIndex) {
@@ -792,7 +797,7 @@ public class Facade {
 
     public int getPlayerIdByIndex(int playerIndex) {
         try {
-            return this.game.getPlayerIdByIndex(playerIndex);
+            return game.getPlayerIdByIndex(playerIndex);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
