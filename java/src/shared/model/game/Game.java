@@ -1468,7 +1468,36 @@ public class Game extends Observable implements IGame, JsonSerializable {
     //===============================================
     //endregion
 
+    //region Helpers
+    //==========================================================
 
+    private void addDevCard(final DevelopmentCard dc, final int playerID) throws PlayerExistsException {
+        assert dc != null;
+        assert playerID >= 0;
+        assert this.playerManager != null;
+
+        playerManager.getPlayerByIndex(playerID).addDevCard(dc);
+    }
+
+    /**
+     * deducts Victory Points from playerIDOld
+     * adds Victory Points to playerIDNew
+     * Updates LongestRoad for playerIDNew and roadSize
+     *
+     * @param playerIDOld
+     * @param playerIDNew
+     * @param roadSize
+     */
+    private void setPlayerWithLongestRoad(int playerIDOld, int playerIDNew, int roadSize) {
+        assert playerIDNew >= 0;
+        assert playerIDOld >= 0;
+        assert roadSize >= 0;
+        assert playerIDNew != playerIDOld;
+
+        longestRoadCard.setOwner(playerIDNew, roadSize);
+    }
+    //==========================================================
+    //endregion
 
 
     //Might need
