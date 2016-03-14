@@ -99,6 +99,7 @@
 	<target name="compile" depends="init" description="compile the source " >
 		<javac srcdir="${java.src}" destdir="${java.build}" debug="true" includeantruntime="true">
 			<classpath refid="java.lib.classpath" />
+			<classpath refid="Group Settlers of Swagtan\target\Settlers-of-Catan-1.0-SNAPSHOT.jar" />
 		</javac>
 	</target>
 	<target name="compile-test" depends="init" description="compile the source " >
