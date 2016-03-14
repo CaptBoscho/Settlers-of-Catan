@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.OfferTradeException;
 import server.facade.IFacade;
 import shared.definitions.ResourceType;
 
@@ -97,6 +98,12 @@ public class OfferTradeCommand implements ICommand {
             for(int i=0; i<ore; i++){
                 receive.add(ResourceType.ORE);
             }
+        }
+
+        try {
+            facade.offerTrade(sender, receiver, send, receive);
+        }catch(OfferTradeException e){
+
         }
         return null;
     }

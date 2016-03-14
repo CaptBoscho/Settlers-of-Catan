@@ -419,8 +419,12 @@ public final class PlayerManager implements IPlayerManager {
             // if this player is *not* the player who is playing the Monopoly card
             if (!monopolyUser.equals(player) && amount > 0) {
 
+                List<ResourceType> cards = new ArrayList<>();
+                for(int i=0; i<amount; i++){
+                    cards.add(type);
+                }
                 // collect all resources from that player and give it to the calling player
-                for (final ResourceCard aReturned : player.discardResourceCards(type, amount)) {
+                for (final ResourceCard aReturned : player.discardResourceCards(cards)) {
                     addResource(playerIndex, aReturned);
                 }
             }
@@ -741,7 +745,7 @@ public final class PlayerManager implements IPlayerManager {
     //endregion
 
     //region Private helper methods
-    private void addPlayer(final Player player) {
+    public void addPlayer(final Player player) {
         this.players.add(player);
     }
     //endregion
