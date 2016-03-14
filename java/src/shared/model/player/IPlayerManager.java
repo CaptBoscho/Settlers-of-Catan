@@ -47,108 +47,6 @@ public interface IPlayerManager {
     void moveNewToOld(int playerIndex) throws PlayerExistsException, BadCallerException;
     //endregion
 
-    //region Getters
-    /**
-     * Get the winning player
-     * @return
-     * @throws GameOverException
-     */
-    Player getWinner() throws GameOverException;
-
-    /**
-     * Gets a player by id
-     * @param id ID of the Player
-     * @return The Player with the specified ID
-     * @throws PlayerExistsException
-     */
-    Player getPlayerByID(int id) throws PlayerExistsException;
-
-    /**
-     * Gets the specified player's color
-     * @param playerIndex
-     * @return
-     * @throws PlayerExistsException
-     */
-    CatanColor getPlayerColorByIndex(int playerIndex) throws PlayerExistsException;
-
-    /**
-     * Gets a player by index
-     * @param index Index of the player
-     * @return Player at index
-     * @throws PlayerExistsException
-     */
-    Player getPlayerByIndex(int index) throws PlayerExistsException;
-
-    /**
-     * Get the number of resource cards the player has
-     * @param playerIndex
-     * @return
-     * @throws PlayerExistsException
-     */
-    int getNumberResourceCards(int playerIndex) throws PlayerExistsException;
-
-    /**
-     * Get number of roads the player has left
-     * @param playerIndex
-     * @return
-     * @throws PlayerExistsException
-     */
-    Integer getAvailableRoads(int playerIndex) throws PlayerExistsException;
-
-    /**
-     * Get the number of settlements the player has left
-     * @param playerIndex
-     * @return
-     * @throws PlayerExistsException
-     */
-    Integer getAvailableSettlements(int playerIndex) throws PlayerExistsException;
-
-    /**
-     * Get the number of cities the player has left
-     * @param playerIndex
-     * @return
-     * @throws PlayerExistsException
-     */
-    Integer getAvailableCities(int playerIndex)throws PlayerExistsException;
-
-    /**
-     * Get number of dev cards the player has
-     * @param type
-     * @param playerIndex
-     * @return
-     */
-    int getNumberDevCards(DevCardType type, int playerIndex);
-
-    /**
-     * Get the number of soldier cards the player has played
-     * @param playerIndex
-     * @return
-     */
-    int getNumberOfSoldiers(int playerIndex);
-
-    /**
-     * Determine if the user has discarded
-     * @param playerIndex
-     * @return
-     */
-    boolean hasDiscarded(int playerIndex);
-
-    /**
-     * Get the player by name
-     * @param name
-     * @return
-     * @throws PlayerExistsException
-     */
-    Player getPlayerByName(String name) throws PlayerExistsException;
-
-    /**
-     * Get the player's color
-     * @param name
-     * @return
-     */
-    CatanColor getPlayerColorByName(String name);
-    //endregion
-
     //region Can Do
     //==========================================================
     /**
@@ -290,16 +188,6 @@ public interface IPlayerManager {
     void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     /**
-     * Maritime trade with the bank
-     * @param playerIndex
-     * @param type
-     * @param want
-     * @throws InvalidTypeException
-     * @throws PlayerExistsException
-     */
-    void maritimeTrade(int playerIndex, PortType type, ResourceType want) throws InvalidTypeException, PlayerExistsException;
-
-    /**
      * Action - Player buys a dev card
      * @param playerIndex index of the player
      */
@@ -377,5 +265,113 @@ public interface IPlayerManager {
      * @throws PlayerExistsException
      */
     void addDevCard(int playerIndex, DevelopmentCard dc) throws PlayerExistsException;
+    //endregion
+
+    //region Getters
+    /**
+     * Get all players
+     * @return a list of players
+     */
+    List<Player> getPlayers();
+
+    /**
+     * Get the winning player
+     * @return
+     * @throws GameOverException
+     */
+    Player getWinner() throws GameOverException;
+
+    /**
+     * Gets a player by id
+     * @param id ID of the Player
+     * @return The Player with the specified ID
+     * @throws PlayerExistsException
+     */
+    Player getPlayerByID(int id) throws PlayerExistsException;
+
+    /**
+     * Gets the specified player's color
+     * @param playerIndex
+     * @return
+     * @throws PlayerExistsException
+     */
+    CatanColor getPlayerColorByIndex(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Gets a player by index
+     * @param index Index of the player
+     * @return Player at index
+     * @throws PlayerExistsException
+     */
+    Player getPlayerByIndex(int index) throws PlayerExistsException;
+
+    /**
+     * Get the number of resource cards the player has
+     * @param playerIndex
+     * @return
+     * @throws PlayerExistsException
+     */
+    int getNumberResourceCards(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Get number of roads the player has left
+     * @param playerIndex
+     * @return
+     * @throws PlayerExistsException
+     */
+    Integer getAvailableRoads(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Get the number of settlements the player has left
+     * @param playerIndex
+     * @return
+     * @throws PlayerExistsException
+     */
+    Integer getAvailableSettlements(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Get the number of cities the player has left
+     * @param playerIndex
+     * @return
+     * @throws PlayerExistsException
+     */
+    Integer getAvailableCities(int playerIndex)throws PlayerExistsException;
+
+    /**
+     * Get number of dev cards the player has
+     * @param type
+     * @param playerIndex
+     * @return
+     */
+    int getNumberDevCards(DevCardType type, int playerIndex);
+
+    /**
+     * Get the number of soldier cards the player has played
+     * @param playerIndex
+     * @return
+     */
+    int getNumberOfSoldiers(int playerIndex);
+
+    /**
+     * Determine if the user has discarded
+     * @param playerIndex
+     * @return
+     */
+    boolean hasDiscarded(int playerIndex);
+
+    /**
+     * Get the player by name
+     * @param name
+     * @return
+     * @throws PlayerExistsException
+     */
+    Player getPlayerByName(String name) throws PlayerExistsException;
+
+    /**
+     * Get the player's color
+     * @param name
+     * @return
+     */
+    CatanColor getPlayerColorByName(String name);
     //endregion
 }
