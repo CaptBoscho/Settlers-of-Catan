@@ -1,29 +1,19 @@
 package shared.model.player;
 
-import client.data.PlayerInfo;
-import client.services.UserCookie;
 import com.google.gson.*;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
-
 import shared.model.bank.InvalidTypeException;
-
 import shared.model.cards.Card;
-
 import shared.model.cards.devcards.DevelopmentCard;
-
 import shared.model.cards.resources.ResourceCard;
-
 import javax.naming.InsufficientResourcesException;
 import javax.security.sasl.AuthenticationException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Class for managing users
@@ -37,10 +27,14 @@ public final class PlayerManager implements IPlayerManager {
     /**
      * Default Constructor
      */
-    public PlayerManager(List<Player> ps){
-        this.players = ps;
+    public PlayerManager(List<Player> players){
+        this.players = players;
     }
 
+    /**
+     * Json Constructor
+     * @param players
+     */
     public PlayerManager(JsonArray players) {
         assert players != null;
         assert players.size() > 0;
@@ -67,14 +61,6 @@ public final class PlayerManager implements IPlayerManager {
 
         // TODO --
         return false;
-    }
-
-    /**
-     * Tests whether or not the max number of players has been reached
-     * @return True if a new player can be added
-     */
-    private boolean canAddPlayer(){
-        return this.players.size() < 4;
     }
 
     /**
@@ -115,12 +101,6 @@ public final class PlayerManager implements IPlayerManager {
 
     public void addPlayer(final Player p) {
         this.players.add(p);
-    }
-
-    public void playKnight(final int playerID) throws PlayerExistsException {
-        assert playerID >= 0;
-
-        getPlayerByIndex(playerID).playKnight();
     }
 
     //Can Do & Do
