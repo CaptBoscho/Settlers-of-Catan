@@ -261,9 +261,10 @@ public class ServerFacade implements IFacade {
     /**
      * Offers a trade to the specified player
      *
-     * @param player    index of the player offering
-     * @param offer     trade offer
-     * @param recipient index of the player being offered
+     * @param player
+     * @param recipient
+     * @param send
+     * @param receive
      * @throws OfferTradeException
      */
     @Override

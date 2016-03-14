@@ -261,13 +261,14 @@ public class MockFacade implements IFacade {
     /**
      * Offers a trade to the specified player
      *
-     * @param player    index of the player offering
-     * @param offer     trade offer
-     * @param recipient index of the player being offered
+     * @param player
+     * @param recipient
+     * @param send
+     * @param receive
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int player, TradePackage offer, int recipient) throws OfferTradeException {
+    public void offerTrade(int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
 
     }
 
