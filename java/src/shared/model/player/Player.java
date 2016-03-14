@@ -324,6 +324,23 @@ public final class Player implements IPlayer, Comparable<Player> {
     }
 
     /**
+     * Discards an amount of the specified resource
+     * @param rt
+     * @param amount
+     * @return
+     */
+    public List<ResourceCard> discardResourceCards(ResourceType rt, int amount) {
+        assert rt != null;
+        try {
+            return this.resourceCardBank.discard(rt, amount);
+        } catch (InvalidTypeException | InsufficientResourcesException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
      * Action - Player buys a dev card
      */
     @Override
