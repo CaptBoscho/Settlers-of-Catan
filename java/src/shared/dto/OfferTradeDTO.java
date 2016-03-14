@@ -44,4 +44,8 @@ public final class OfferTradeDTO implements JsonSerializable {
         obj.add("offer", this.offer.toJSON());
         return obj;
     }
+
+    public int getSender(){return playerIndex;}
+    public int getReceiver(){return receiver;}
+    public Trade getOffer(){return offer;}
 }

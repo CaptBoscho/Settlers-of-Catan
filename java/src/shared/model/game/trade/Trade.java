@@ -47,6 +47,10 @@ public final class Trade {
         active = false;
     }
 
+    public TradePackage getPackage1(){return package1;}
+
+    public TradePackage getPackage2(){return package2;}
+
     public int getSender() {
         return sender;
     }
