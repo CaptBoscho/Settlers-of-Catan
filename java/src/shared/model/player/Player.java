@@ -10,7 +10,6 @@ import shared.definitions.CatanColor;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.resources.ResourceCard;
-
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +19,8 @@ import java.util.List;
  *
  * @author Kyle Cornelison
  */
-public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30/2016 Add exceptions when danny is done
-
+public final class Player implements IPlayer, Comparable<Player> {
+    //region Member variables
     String name;
     int playerId;
     CatanColor color;
@@ -35,7 +34,9 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     private StructureBank structureBank;
     private IResourceCardBank resourceCardBank;
     private IDevelopmentCardBank developmentCardBank;
+    //endregion
 
+    //region Constructors
     /**
      * Construct a Player object from a JSON blob
      *
@@ -101,106 +102,19 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         this.playerId = id;
         this.playerIndex = playerIndex;
     }
+    //endregion
 
-    //IPlayer Interface Methods - Can Do & Do
-    //========================================================
-
+    //region Can do methods
     /**
      * Determine if Player can discard cards
      * Checks resource cards, robber position,
-     *        and hexes from dice roll
+     * and hexes from dice roll
      *
      * @return True if Player can discard cards
      */
     @Override
     public boolean canDiscardCards() {
         return resourceCardBank.canDiscardCards();
-    }
-
-    @Override
-    public int getNumberResourceCards() {
-        return resourceCardBank.size();
-    }
-
-    /**
-     * Action - Player discards cards
-     *
-     * @param cards Cards to be discarded
-     */
-    @Override
-    public List<ResourceCard> discardCards(final List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
-        assert cards != null;
-        assert cards.size() > 0;
-        assert this.resourceCardBank != null;
-        assert this.developmentCardBank != null;
-
-        try {
-            final List<ResourceCard> discarded = new ArrayList<>();
-            for (final Card card : cards) {
-                if (card instanceof ResourceCard) {
-                   final  ResourceCard resourceCard = (ResourceCard) card;
-                    discarded.add(resourceCardBank.discard(resourceCard.getType()));
-                } else if (card instanceof DevelopmentCard) {
-                    final DevelopmentCard developmentCard = (DevelopmentCard) card;
-                    developmentCardBank.discard(developmentCard.getType());
-                }
-            }
-            setDiscarded(true);
-            return discarded;
-        } catch (InsufficientResourcesException | InvalidTypeException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<ResourceCard> discardResourceCards(ResourceType rt, int amount) {
-        assert rt != null;
-        try {
-            return this.resourceCardBank.discard(rt, amount);
-        } catch (InvalidTypeException | InsufficientResourcesException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<ResourceCard> discardResourceCards(final List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
-        assert cards != null;
-        assert cards.size() > 0;
-        assert this.resourceCardBank != null;
-
-        final List<ResourceCard> discarded = new ArrayList<>();
-        for(final ResourceType rt: cards) {
-            discarded.add(resourceCardBank.discard(rt));
-        }
-
-        setDiscarded(true);
-        return discarded;
-    }
-
-    public Integer howManyOfThisCard(ResourceType t) throws InvalidTypeException {
-        assert t != null;
-        assert this.resourceCardBank != null;
-
-        switch(t) {
-            case SHEEP:
-                return resourceCardBank.getNumberOfSheep();
-            case ORE:
-                return resourceCardBank.getNumberOfOre();
-            case BRICK:
-                return resourceCardBank.getNumberOfBrick();
-            case WOOD:
-                return resourceCardBank.getNumberOfWood();
-            case WHEAT:
-                return resourceCardBank.getNumberOfWheat();
-        }
-        throw new InvalidTypeException("not correct resourcetype");
-    }
-
-    public int getNumberOfType(ResourceType t) {
-        assert t != null;
-        assert this.resourceCardBank != null;
-
-        return resourceCardBank.getNumberOfType(t);
     }
 
     /**
@@ -218,6 +132,7 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
      * Determine if Player can perform maritime trade
      * Checks Player turn, phase, resources, and ports
      *
+     * @param type Type of trade
      * @return True if Player can perform a maritime trade
      */
     @Override
@@ -233,10 +148,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         }
     }
 
-    public Integer quantityOfDevCards(){
-        return developmentCardBank.size();
-    }
-
     /**
      * Determine if Player can buy a dev card
      * Checks Player turn, phase, and resources
@@ -246,22 +157,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     @Override
     public boolean canBuyDevCard() {
         return resourceCardBank.canBuyDevCard();
-    }
-
-    /**
-     * Action - Player buys a dev card
-     */
-    @Override
-    public void buyDevCard() {
-        resourceCardBank.buyDevCard();
-    }
-
-
-    public void moveNewToOld() throws BadCallerException{ developmentCardBank.moveNewToOld();}
-
-    @Override
-    public int getNumberOfDevCardsByType(DevCardType type) {
-        return developmentCardBank.getNumberOfDevCardsByType(type);
     }
 
     /**
@@ -275,6 +170,165 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         assert this.developmentCardBank != null;
 
         return !hasPlayedDevCard() && developmentCardBank.canUseYearOfPlenty();
+    }
+
+    /**
+     * Determine if Player can play Soldier
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Soldier
+     */
+    @Override
+    public boolean canUseSoldier() {
+        return (!hasPlayedDevCard() && developmentCardBank.canUseSoldier());
+    }
+
+    /**
+     * Determine if Player can play Road Builder
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Road Builder
+     */
+    @Override
+    public boolean canUseRoadBuilder() {
+        return (!hasPlayedDevCard() && developmentCardBank.canUseRoadBuild()) && structureBank.getAvailableRoads() > 1;
+    }
+
+    /**
+     * Determine if Player can play Monopoly
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Monopoly
+     */
+    @Override
+    public boolean canUseMonopoly() {
+        assert this.developmentCardBank != null;
+
+        return !hasPlayedDevCard() && developmentCardBank.canUseMonopoly();
+    }
+
+    /**
+     * Determine if Player can play Monument
+     * Checks Player turn, and dev cards
+     *
+     * @return True if Player can play Monument
+     */
+    @Override
+    public boolean canUseMonument() {
+        return (!hasPlayedDevCard() && developmentCardBank.canUseMonument());
+    }
+
+    /**
+     * Determine if Player can place the Robber
+     * Checks Player turn, event(ie roll 7 or play Soldier)
+     *
+     * @return True if Player can place the Robber
+     */
+    @Override
+    public boolean canPlaceRobber() {
+        return canMoveRobber();
+    }
+
+    /**
+     * Determine if Player can build a road
+     * Checks resource cards
+     *
+     * @return True if Player can build a road
+     */
+    @Override
+    public boolean canBuildRoad() {
+        return resourceCardBank.canBuildRoad() && structureBank.canBuildRoad();
+    }
+
+    /**
+     * Determine if Player can build a settlement
+     * Checks resource cards
+     *
+     * @return True if Player can build a settlement
+     */
+    @Override
+    public boolean canBuildSettlement() {
+        assert this.resourceCardBank != null;
+        assert this.structureBank != null;
+
+        return resourceCardBank.canBuildSettlement() && structureBank.canBuildSettlement();
+    }
+
+    /**
+     * Determine if Player can build a city
+     * Checks resource cards
+     *
+     * @return True if Player can build a city
+     */
+    @Override
+    public boolean canBuildCity() {
+        assert this.resourceCardBank != null;
+        assert this.structureBank != null;
+
+        return resourceCardBank.canBuildCity() && structureBank.canBuildCity();
+    }
+    //endregion
+
+    //region Do methods
+    /**
+     * Action - Player discards cards
+     *
+     * @param cards Cards to be discarded
+     */
+    @Override
+    public List<ResourceCard> discardCards(List<Card> cards) throws InsufficientResourcesException, InvalidTypeException {
+        assert cards != null;
+        assert cards.size() > 0;
+        assert this.resourceCardBank != null;
+        assert this.developmentCardBank != null;
+
+        try {
+            final List<ResourceCard> discarded = new ArrayList<>();
+            for (final Card card : cards) {
+                if (card instanceof ResourceCard) {
+                    final  ResourceCard resourceCard = (ResourceCard) card;
+                    discarded.add(resourceCardBank.discard(resourceCard.getType()));
+                } else if (card instanceof DevelopmentCard) {
+                    final DevelopmentCard developmentCard = (DevelopmentCard) card;
+                    developmentCardBank.discard(developmentCard.getType());
+                }
+            }
+            setDiscarded(true);
+            return discarded;
+        } catch (InsufficientResourcesException | InvalidTypeException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Action - Player discards resource cards
+     * @param cards
+     * @return
+     * @throws InsufficientResourcesException
+     * @throws InvalidTypeException
+     */
+    @Override
+    public List<ResourceCard> discardResourceCards(final List<ResourceType> cards) throws InsufficientResourcesException, InvalidTypeException {
+        assert cards != null;
+        assert cards.size() > 0;
+        assert this.resourceCardBank != null;
+
+        final List<ResourceCard> discarded = new ArrayList<>();
+        for(final ResourceType rt: cards) {
+            discarded.add(resourceCardBank.discard(rt));
+        }
+
+        setDiscarded(true);
+        return discarded;
+    }
+
+    /**
+     * Action - Player buys a dev card
+     */
+    @Override
+    public void buyDevCard() {
+        resourceCardBank.buyDevCard();
     }
 
     /**
@@ -292,17 +346,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     }
 
     /**
-     * Determine if Player can play Road Builder
-     * Checks Player turn, and dev cards
-     *
-     * @return True if Player can play Road Builder
-     */
-    @Override
-    public boolean canUseRoadBuilder() {
-        return (!hasPlayedDevCard() && developmentCardBank.canUseRoadBuild()) && structureBank.getAvailableRoads() > 1;
-    }
-
-    /**
      * Action - Player plays Road Builder
      */
     @Override
@@ -311,21 +354,9 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
 
         if(canUseRoadBuilder()) {
             developmentCardBank.useRoadBuild();
-            // TODO: 1/30/2016 Add any additional functionality - does the map or the structure bank build the road 
         } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
-    }
-
-    /**
-     * Determine if Player can play Soldier
-     * Checks Player turn, and dev cards
-     *
-     * @return True if Player can play Soldier
-     */
-    @Override
-    public boolean canUseSoldier() {
-        return (!hasPlayedDevCard() && developmentCardBank.canUseSoldier());
     }
 
     /**
@@ -344,28 +375,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         }
     }
 
-    public void loseArmyCard() {
-        incrementPoints(-2);
-    }
-
-
-    public void winArmyCard() {
-        incrementPoints(2);
-    }
-
-    /**
-     * Determine if Player can play Monopoly
-     * Checks Player turn, and dev cards
-     *
-     * @return True if Player can play Monopoly
-     */
-    @Override
-    public boolean canUseMonopoly() {
-        assert this.developmentCardBank != null;
-
-        return !hasPlayedDevCard() && developmentCardBank.canUseMonopoly();
-    }
-
     /**
      * Action - Player plays Monopoly
      */
@@ -376,17 +385,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
-    }
-
-    /**
-     * Determine if Player can play Monument
-     * Checks Player turn, and dev cards
-     *
-     * @return True if Player can play Monument
-     */
-    @Override
-    public boolean canUseMonument() {
-        return (!hasPlayedDevCard() && developmentCardBank.canUseMonument());
     }
 
     /**
@@ -404,17 +402,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     }
 
     /**
-     * Determine if Player can place the Robber
-     * Checks Player turn, event(ie roll 7 or play Soldier)
-     *
-     * @return True if Player can place the Robber
-     */
-    @Override
-    public boolean canPlaceRobber() {
-        return canMoveRobber();
-    }
-
-    /**
      * Action - Player places the Robber
      */
     @Override
@@ -424,23 +411,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         } else {
             throw new MoveRobberException("Player cannot move the Robber at this time!");
         }
-    }
-
-    public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException{
-        assert this.resourceCardBank != null;
-
-        return resourceCardBank.robbed();
-    }
-
-    /**
-     * Determine if Player can build a road
-     * Checks resource cards
-     *
-     * @return True if Player can build a road
-     */
-    @Override
-    public boolean canBuildRoad() {
-        return resourceCardBank.canBuildRoad() && structureBank.canBuildRoad();
     }
 
     /**
@@ -457,20 +427,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         } catch (InsufficientResourcesException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Determine if Player can build a settlement
-     * Checks resource cards
-     *
-     * @return True if Player can build a settlement
-     */
-    @Override
-    public boolean canBuildSettlement() {
-        assert this.resourceCardBank != null;
-        assert this.structureBank != null;
-
-        return resourceCardBank.canBuildSettlement() && structureBank.canBuildSettlement();
     }
 
     /**
@@ -493,20 +449,6 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     }
 
     /**
-     * Determine if Player can build a city
-     * Checks resource cards
-     *
-     * @return True if Player can build a city
-     */
-    @Override
-    public boolean canBuildCity() {
-        assert this.resourceCardBank != null;
-        assert this.structureBank != null;
-
-        return resourceCardBank.canBuildCity() && structureBank.canBuildCity();
-    }
-
-    /**
      * Action - Player builds a city
      */
     @Override
@@ -525,7 +467,193 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         incrementPoints(); //Note: only have to increment by 1 since we are replacing a settlement
     }
 
-    //Helper Methods
+    /**
+     * Action - Player loses the largest army card to another player
+     */
+    @Override
+    public void loseArmyCard() {
+        incrementPoints(-2);
+    }
+
+    /**
+     * Action - Player wins the largest army card from another player
+     */
+    @Override
+    public void winArmyCard() {
+        incrementPoints(2);
+    }
+
+    /**
+     * Action - Player robbed by another player
+     *
+     * @return
+     * @throws InsufficientResourcesException
+     * @throws InvalidTypeException
+     */
+    @Override
+    public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException {
+        assert this.resourceCardBank != null;
+
+        return resourceCardBank.robbed();
+    }
+
+    /**
+     * Moves new development cards to old pile making them playable
+     *
+     * @throws BadCallerException
+     */
+    @Override
+    public void moveNewToOld() throws BadCallerException {
+        developmentCardBank.moveNewToOld();
+    }
+    //endregion
+
+    //region Getters
+    /**
+     * Get the number of resource cards the player has
+     *
+     * @return
+     */
+    @Override
+    public int getNumberResourceCards() {
+        return resourceCardBank.size();
+    }
+
+    /**
+     * Get the number of dev cards the player has of the specified type
+     *
+     * @param type
+     * @return
+     */
+    @Override
+    public int getNumberOfDevCardsByType(DevCardType type) {
+        return developmentCardBank.getNumberOfDevCardsByType(type);
+    }
+
+    /**
+     * Get the number of resource cards the player has matching the specified type
+     * @param resourceType
+     * @return
+     */
+    @Override
+    public int getNumberOfType(ResourceType resourceType) {
+        assert resourceType != null;
+        assert this.resourceCardBank != null;
+
+        return resourceCardBank.getNumberOfType(resourceType);
+    }
+
+    /**
+     * Determine how many resources the player has of the specified type
+     *
+     * @param resourceType
+     * @return
+     * @throws InvalidTypeException
+     */
+    @Override
+    public Integer howManyOfThisCard(ResourceType resourceType) throws InvalidTypeException {
+        assert resourceType != null;
+        assert this.resourceCardBank != null;
+
+        switch(resourceType) {
+            case SHEEP:
+                return resourceCardBank.getNumberOfSheep();
+            case ORE:
+                return resourceCardBank.getNumberOfOre();
+            case BRICK:
+                return resourceCardBank.getNumberOfBrick();
+            case WOOD:
+                return resourceCardBank.getNumberOfWood();
+            case WHEAT:
+                return resourceCardBank.getNumberOfWheat();
+        }
+        throw new InvalidTypeException("not correct resource type");
+    }
+
+    /**
+     * Get the number of total dev cards the player has
+     *
+     * @return
+     */
+    @Override
+    public Integer quantityOfDevCards() {
+        return developmentCardBank.size();
+    }
+
+    public int getVictoryPoints() {
+        return this.victoryPoints;
+    }
+
+    public CatanColor getColor() {
+        return this.color;
+    }
+
+    public Integer getAvailableRoads() {
+        return structureBank.getAvailableRoads();
+    }
+
+    public Integer getAvailableSettlements() {
+        return structureBank.getAvailableSettlements();
+    }
+
+    public Integer getAvailableCities() {
+        return structureBank.getAvailableCities();
+    }
+
+    public int getSoldiers() {
+        return soldiers;
+    }
+
+    public boolean hasPlayedDevCard() {
+        return playedDevCard;
+    }
+
+    public int getPlayerIndex() {
+        return this.playerIndex;
+    }
+
+    public IDevelopmentCardBank getDevelopmentCardBank(){return developmentCardBank;}
+
+    public IResourceCardBank getResourceCardBank(){return resourceCardBank;}
+
+    public int countResources(){return resourceCardBank.size();}
+
+    public boolean hasDiscarded() {
+        return discarded;
+    }
+
+    public boolean canMoveRobber() {
+        return moveRobber;
+    }
+
+    public int getId() {
+        return this.playerId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+    //endregion
+
+    //region Setters
+    public void setMoveRobber(boolean canMoveRobber) {
+        this.moveRobber = canMoveRobber;
+    }
+
+    public void setPlayerIndex(final int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
+    public void setPlayedDevCard(boolean playedDevCard) {
+        this.playedDevCard = playedDevCard;
+    }
+
+    public void setDiscarded(boolean discarded) {
+        this.discarded = discarded;
+    }
+    //endregion
+
+    //region Helper methods
     //======================================================
     /**
      * Increments the player's points by 1
@@ -552,7 +680,7 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
     }
 
     /**
-     * Adds a dev card to developmentCardBank
+     * Adds a dev card to developmentCardBank - Testing
      *
      * @param cardToAdd
      */
@@ -564,21 +692,18 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
         }
     }
 
-    public void playKnight() {
-        this.soldiers++;
-    }
-
     /**
-     * Adds a resource card to resourceCardBank
+     * Adds a resource card to resourceCardBank - Testing
      *
      * @param cardToAdd
      */
     public void addResourceCard(ResourceCard cardToAdd) {
         resourceCardBank.addResource(cardToAdd);
     }
+    //endregion
 
-     //Override Default Methods
-     //========================================================
+    //region Override default methods
+    //========================================================
     @Override
     public boolean equals(Object other){
         if (other == null) return false;
@@ -599,8 +724,9 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
             return 0;
         }
     }
+    //endregion
 
-    //Serialization/Deserialization
+    //region Serialization
     //=================================================
     /**
      * Converts the object to JSON
@@ -627,85 +753,5 @@ public final class Player implements IPlayer, Comparable<Player> { // TODO: 1/30
 
         return json;
     }
-
-    //Getters/Setters
-    //============================================
-
-    public int getId() {
-        return this.playerId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public IDevelopmentCardBank getDevelopmentCardBank(){return developmentCardBank;}
-
-    public IResourceCardBank getResourceCardBank(){return resourceCardBank;}
-
-    public int countResources(){return resourceCardBank.size();}
-
-    public boolean hasDiscarded() {
-        return discarded;
-    }
-
-    public void setDiscarded(boolean discarded) {
-        this.discarded = discarded;
-    }
-
-    public boolean canMoveRobber() {
-        return moveRobber;
-    }
-
-    public void setMoveRobber(boolean canMoveRobber) {
-        this.moveRobber = canMoveRobber;
-    }
-
-    public int getMonuments() {
-        return monuments;
-    }
-
-    public void setMonuments(int monuments) {
-        this.monuments = monuments;
-    }
-
-    public int getPlayerIndex() {
-        return this.playerIndex;
-    }
-
-    public void setPlayerIndex(final int playerIndex) {
-        this.playerIndex = playerIndex;
-    }
-
-    public boolean hasPlayedDevCard() {
-        return playedDevCard;
-    }
-
-    public void setPlayedDevCard(boolean playedDevCard) {
-        this.playedDevCard = playedDevCard;
-    }
-
-    public int getVictoryPoints() {
-        return this.victoryPoints;
-    }
-
-    public CatanColor getColor() {
-        return this.color;
-    }
-
-    public Integer getAvailableRoads() {
-        return structureBank.getAvailableRoads();
-    }
-
-    public Integer getAvailableSettlements() {
-        return structureBank.getAvailableSettlements();
-    }
-
-    public Integer getAvailableCities() {
-        return structureBank.getAvailableCities();
-    }
-
-    public int getSoldiers() {
-        return soldiers;
-    }
+    //endregion
 }

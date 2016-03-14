@@ -1,6 +1,7 @@
 package client.services;
 
 import client.data.PlayerInfo;
+import client.facade.Facade;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -91,7 +92,7 @@ public final class UserCookie {
 
     public int getPlayerIndex() {
         try {
-            return Game.getInstance().getPlayerById(this.getPlayerId()).getPlayerIndex();
+            return Facade.getInstance().getGame().getPlayerById(this.getPlayerId()).getPlayerIndex();
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }

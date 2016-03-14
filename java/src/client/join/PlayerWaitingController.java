@@ -31,9 +31,9 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	public void start() {
         Facade.getInstance().addObserver(this);
 
-        // START GAMEEE
+        // START GAME
         try {
-            ServerProxy.getInstance().getCurrentModel(Game.getInstance().getVersion());
+            ServerProxy.getInstance().getCurrentModel(Facade.getInstance().getGame().getVersion());
         } catch (MissingUserCookieException e) {
             e.printStackTrace();
         }
