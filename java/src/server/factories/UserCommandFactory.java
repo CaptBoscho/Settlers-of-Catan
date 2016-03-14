@@ -32,19 +32,10 @@ public class UserCommandFactory {
 
     /**
      * Creates a user command based on a given string
-     * @param command The string indicating what type of command to return
      * @return an ICommand object
      */
-    public ICommand createCommand(String command) {
-        assert command != null;
-
-        switch(command) {
-            case "login":
-                return new LoginCommand();
-            case "register":
-                return new RegisterCommand();
-            default:
-                return null;
-        }
+    public ICommand createCommand(Object obj) {
+        //TODO: use AuthDTO to create
+        return null;
     }
 }

@@ -34,22 +34,14 @@ public class GameCommandFactory {
 
     /**
      * Creates a game command based on a given string
-     * @param command The string indicating what type of command to return
      * @return an ICommand object
      */
-    public ICommand createCommand(String command, JsonObject object) {
-        assert command != null;
+    public ICommand createCommand(Object object) {
+        /*
+       Need to if(object instanceof ...) for modeldto, addAIDTO, listAIDTO
+         */
+        return null;
 
-        switch(command) {
-            case "model":
-                return new ModelCommand();
-            case "addAI":
-                return new AddAICommand();
-            case "listAI":
-                return new ListAICommand();
-            default:
-                return null;
-        }
     }
 
 }
