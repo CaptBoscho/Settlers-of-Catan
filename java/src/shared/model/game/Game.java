@@ -891,6 +891,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         return dc.getType();
     }
 
+    //TODO: Maritime messed up
     /**
      * Action - Player performs a maritime trade
      *

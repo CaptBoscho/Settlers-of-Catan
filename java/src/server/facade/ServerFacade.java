@@ -267,7 +267,7 @@ public class ServerFacade implements IFacade {
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int player, TradePackage offer, int recipient) throws OfferTradeException {
+    public void offerTrade(int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
 
     }
 

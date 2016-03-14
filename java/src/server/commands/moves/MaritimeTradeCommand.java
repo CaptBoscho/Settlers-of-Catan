@@ -2,6 +2,9 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.MaritimeTradeException;
+import server.facade.IFacade;
+import shared.definitions.ResourceType;
 
 /**
  * A command object that maritime trades
@@ -10,11 +13,20 @@ import server.commands.ICommand;
  */
 public class MaritimeTradeCommand implements ICommand {
 
+    private int player;
+    private int ratio;
+    private ResourceType give;
+    private ResourceType get;
+    IFacade facade;
     /**
      * Constructor
      */
-    public MaritimeTradeCommand() {
-
+    public MaritimeTradeCommand(int pindex, int rat, ResourceType send, ResourceType receive, IFacade fac) {
+        player = pindex;
+        ratio = rat;
+        give = send;
+        get = receive;
+        facade = fac;
     }
 
     /**
@@ -23,6 +35,11 @@ public class MaritimeTradeCommand implements ICommand {
      */
     @Override
     public JsonObject execute() {
+        try {
+            facade.maritimeTrade(player, ratio, give, get);
+        }catch(MaritimeTradeException e){
+
+        }
         return null;
     }
 

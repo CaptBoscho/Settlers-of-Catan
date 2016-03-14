@@ -4,6 +4,8 @@ import server.commands.ICommand;
 import server.commands.games.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
+import shared.dto.CreateGameDTO;
+import shared.dto.JoinGameDTO;
 
 /**
  * A factory class that creates Games Commands on demand.  Use this class to get a Games Command
@@ -32,21 +34,15 @@ public class GamesCommandFactory {
 
     /**
      * Creates a Games command based on a given string
-     * @param command The string indicating what type of command to return
      * @return an ICommand object
      */
-    public ICommand createCommand(String command) {
-        assert command != null;
+    public ICommand createCommand(Object obj) {
+        if(obj instanceof CreateGameDTO){
 
-        switch(command) {
-            case "list":
-                return new ListCommand();
-            case "create":
-                return new CreateCommand();
-            case "join":
-                return new JoinCommand();
-            default:
-                return null;
-        }
+        }else if(obj instanceof JoinGameDTO){
+
+        }//else if(obj instanceof ListGamesDTO){}
+
+        return null;
     }
 }
