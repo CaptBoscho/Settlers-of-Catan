@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="25" failures="0" name="client.networking.ServerTest" time="7.099" errors="0" skipped="0">
+<testsuite tests="25" failures="0" name="client.networking.ServerTest" time="7.317" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="15.0.3"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -11,7 +11,7 @@
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
     <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
     <property name="file.encoding.pkg" value="sun.io"/>
-    <property name="idea.launcher.port" value="7532"/>
+    <property name="idea.launcher.port" value="7533"/>
     <property name="user.script" value=""/>
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
@@ -63,29 +63,29 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="client.networking.ServerTest" name="testBadPlayMonumentCard" time="0.709"/>
-  <testcase classname="client.networking.ServerTest" name="testBadMaritimeTrade" time="0.01"/>
-  <testcase classname="client.networking.ServerTest" name="testBadFinishTurn" time="0.011"/>
-  <testcase classname="client.networking.ServerTest" name="testGetGames" time="0.269"/>
-  <testcase classname="client.networking.ServerTest" name="testBadPlaySoldierCard" time="0.032"/>
-  <testcase classname="client.networking.ServerTest" name="testBadSendChat" time="0.007"/>
-  <testcase classname="client.networking.ServerTest" name="testBadBuildSettlement" time="0.022"/>
-  <testcase classname="client.networking.ServerTest" name="testLogin" time="0.054"/>
-  <testcase classname="client.networking.ServerTest" name="testActualUserInteraction" time="0.584"/>
+  <testcase classname="client.networking.ServerTest" name="testBadPlayMonumentCard" time="0.666"/>
+  <testcase classname="client.networking.ServerTest" name="testBadMaritimeTrade" time="0.011"/>
+  <testcase classname="client.networking.ServerTest" name="testBadFinishTurn" time="0.015"/>
+  <testcase classname="client.networking.ServerTest" name="testGetGames" time="0.379"/>
+  <testcase classname="client.networking.ServerTest" name="testBadPlaySoldierCard" time="0.049"/>
+  <testcase classname="client.networking.ServerTest" name="testBadSendChat" time="0.013"/>
+  <testcase classname="client.networking.ServerTest" name="testBadBuildSettlement" time="0.033"/>
+  <testcase classname="client.networking.ServerTest" name="testLogin" time="0.048"/>
+  <testcase classname="client.networking.ServerTest" name="testActualUserInteraction" time="0.693"/>
   <testcase classname="client.networking.ServerTest" name="testBadPlayRoadBuildingCard" time="0.022"/>
-  <testcase classname="client.networking.ServerTest" name="testJoinGame" time="0.011"/>
-  <testcase classname="client.networking.ServerTest" name="testBadDiscardCards" time="0.007"/>
-  <testcase classname="client.networking.ServerTest" name="testBadRollNumber" time="0.011"/>
-  <testcase classname="client.networking.ServerTest" name="testCreateGame" time="0.022"/>
-  <testcase classname="client.networking.ServerTest" name="testBadBuildCity" time="0.01"/>
-  <testcase classname="client.networking.ServerTest" name="testBadBuildRoad" time="0.016"/>
-  <testcase classname="client.networking.ServerTest" name="testBadGetCurrentGameModel" time="0.001"/>
-  <testcase classname="client.networking.ServerTest" name="testBadPlayMonopolyCard" time="0.012"/>
-  <testcase classname="client.networking.ServerTest" name="testBadOfferTrade" time="0.014"/>
-  <testcase classname="client.networking.ServerTest" name="testBadTradeResponse" time="0.017"/>
-  <testcase classname="client.networking.ServerTest" name="testBadPlayYOPCard" time="0.037"/>
-  <testcase classname="client.networking.ServerTest" name="testRegisterNewUser" time="0"/>
-  <testcase classname="client.networking.ServerTest" name="testBadRobPlayer" time="0.017"/>
-  <testcase classname="client.networking.ServerTest" name="testPoller" time="5.074"/>
-  <testcase classname="client.networking.ServerTest" name="testBadBuyDevCard" time="0.033"/>
+  <testcase classname="client.networking.ServerTest" name="testJoinGame" time="0.004"/>
+  <testcase classname="client.networking.ServerTest" name="testBadDiscardCards" time="0.011"/>
+  <testcase classname="client.networking.ServerTest" name="testBadRollNumber" time="0.009"/>
+  <testcase classname="client.networking.ServerTest" name="testCreateGame" time="0.029"/>
+  <testcase classname="client.networking.ServerTest" name="testBadBuildCity" time="0.012"/>
+  <testcase classname="client.networking.ServerTest" name="testBadBuildRoad" time="0.019"/>
+  <testcase classname="client.networking.ServerTest" name="testBadGetCurrentGameModel" time="0.003"/>
+  <testcase classname="client.networking.ServerTest" name="testBadPlayMonopolyCard" time="0.013"/>
+  <testcase classname="client.networking.ServerTest" name="testBadOfferTrade" time="0.02"/>
+  <testcase classname="client.networking.ServerTest" name="testBadTradeResponse" time="0.014"/>
+  <testcase classname="client.networking.ServerTest" name="testBadPlayYOPCard" time="0.019"/>
+  <testcase classname="client.networking.ServerTest" name="testRegisterNewUser" time="0.031"/>
+  <testcase classname="client.networking.ServerTest" name="testBadRobPlayer" time="0.014"/>
+  <testcase classname="client.networking.ServerTest" name="testPoller" time="5.064"/>
+  <testcase classname="client.networking.ServerTest" name="testBadBuyDevCard" time="0.034"/>
 </testsuite>

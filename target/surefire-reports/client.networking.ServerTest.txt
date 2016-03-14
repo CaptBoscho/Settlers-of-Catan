@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: client.networking.ServerTest
 -------------------------------------------------------------------------------
-Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.087 sec
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.308 sec
