@@ -54,7 +54,7 @@ public class MovesCommandFactory {
             case "buildRoad":
                 return new BuildRoadCommand();
             case "buildSettlement":
-                return new BuildSettlementCommand();
+                //return new BuildSettlementCommand();
             case "buildCity":
                 return new BuildCityCommand();
             case "offerTrade":

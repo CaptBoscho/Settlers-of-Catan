@@ -743,15 +743,6 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     /**
-     * Serializes the Map to a JsonObject
-     * @return JsonObject
-     */
-    @Override
-    public JsonObject toJSON() {
-        return null;
-    }
-
-    /**
      * Deletes a road if a player cancels in the middle of the play road building card
      * @param playerIndex int
      * @param edgeLoc EdgeLocation
@@ -781,6 +772,188 @@ public final class Map implements IMap, JsonSerializable{
                 roads.remove(i);
             }
         }
+    }
+
+    /*===========================================
+                   Serializer Methods
+     ============================================*/
+
+    private HexLocation getServerHexLocation(HexLocation hexLoc) {
+        return new HexLocation(hexLoc.getX(), hexLoc.getY()-hexLoc.getX());
+    }
+
+    private EdgeLocation getServerEdgeLocation(EdgeLocation edgeLoc) {
+        return new EdgeLocation(getServerHexLocation(edgeLoc.getHexLoc()), edgeLoc.getDir());
+    }
+
+    private VertexLocation getServerVertexLocation(VertexLocation vertexLoc) {
+        return new VertexLocation(getServerHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
+    }
+
+    /**
+     * Serializes the Map to a JsonObject
+     * @return JsonObject
+     */
+    @Override
+    public JsonObject toJSON() {
+        JsonObject json = new JsonObject();
+        json.add("hexes", serializeHexes());
+        json.add("ports", serializePorts());
+        json.add("roads", serializeRoads());
+        json.add("settlements", serializeSettlements());
+        json.add("cities", serializeCities());
+        json.addProperty("radius", 3);
+        json.add("robber", getServerHexLocation(robber.getLocation()).toJSON());
+        return json;
+    }
+
+    private JsonArray serializeHexes() {
+        JsonArray hexes = new JsonArray();
+        for(java.util.Map.Entry<HexLocation, Hex> entry : this.hexes.entrySet()) {
+            JsonObject hex = new JsonObject();
+            HexLocation hexLoc = getServerHexLocation(entry.getKey());
+            hex.add("location", hexLoc.toJSON());
+            HexType hexType = entry.getValue().getType();
+            if(hexType != HexType.WATER && hexType != HexType.DESERT) {
+                switch(hexType) {
+                    case ORE:
+                        hex.addProperty("resource", "ore");
+                        break;
+                    case BRICK:
+                        hex.addProperty("resource", "brick");
+                        break;
+                    case SHEEP:
+                        hex.addProperty("resource", "sheep");
+                        break;
+                    case WHEAT:
+                        hex.addProperty("resource", "wheat");
+                        break;
+                    case WOOD:
+                        hex.addProperty("resource", "wood");
+                        break;
+                    default:
+                        break;
+                }
+                hex.addProperty("number", ((ChitHex)entry.getValue()).getChit());
+            }
+            hexes.add(hex);
+        }
+        return hexes;
+    }
+
+    private JsonArray serializePorts() {
+        JsonArray ports = new JsonArray();
+        ports.add(serializePort(1, -2, VertexDirection.SouthWest));
+        ports.add(serializePort(3, 0, VertexDirection.West));
+        ports.add(serializePort(3, 2, VertexDirection.NorthWest));
+        ports.add(serializePort(2, 3, VertexDirection.NorthWest));
+        ports.add(serializePort(0, 3, VertexDirection.NorthEast));
+        ports.add(serializePort(-2, 1, VertexDirection.East));
+        ports.add(serializePort(-3, -1, VertexDirection.East));
+        ports.add(serializePort(-3, -3, VertexDirection.SouthEast));
+        ports.add(serializePort(-1, -3, VertexDirection.SouthWest));
+        return ports;
+    }
+
+    private JsonObject serializePort(int x, int y, VertexDirection vertexDir) {
+        JsonObject port = new JsonObject();
+        HexLocation hexLoc = new HexLocation(x, y);
+        VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
+        vertexLoc = vertexLoc.getNormalizedLocation();
+        PortType portType = vertices.get(vertexLoc).getPort().getPortType();
+        if(portType != PortType.THREE) {
+            switch(portType) {
+                case ORE:
+                    port.addProperty("resource", "ore");
+                    break;
+                case BRICK:
+                    port.addProperty("resource", "brick");
+                    break;
+                case SHEEP:
+                    port.addProperty("resource", "sheep");
+                    break;
+                case WHEAT:
+                    port.addProperty("resource", "wheat");
+                    break;
+                case WOOD:
+                    port.addProperty("resource", "wood");
+                    break;
+                default:
+                    break;
+            }
+            port.addProperty("ratio", 2);
+        } else {
+            port.addProperty("ratio", 3);
+        }
+        port.add("location", getServerHexLocation(hexLoc).toJSON());
+        switch(vertexDir) {
+            case NorthWest:
+                port.addProperty("direction", "NW");
+                break;
+            case NorthEast:
+                port.addProperty("direction", "N");
+                break;
+            case East:
+                port.addProperty("direction", "NE");
+                break;
+            case SouthEast:
+                port.addProperty("direction", "SE");
+                break;
+            case SouthWest:
+                port.addProperty("direction", "S");
+                break;
+            case West:
+                port.addProperty("direction", "SW");
+                break;
+            default:
+                break;
+        }
+        return port;
+    }
+
+    private JsonArray serializeRoads() {
+        JsonArray roads = new JsonArray();
+        if(this.roads != null) {
+            for (java.util.Map.Entry<Integer, ArrayList<Edge>> entry : this.roads.entrySet()) {
+                for (Edge road : entry.getValue()) {
+                    JsonObject json = new JsonObject();
+                    json.addProperty("owner", entry.getKey());
+                    json.add("location", getServerEdgeLocation(road.getEdgeLoc()).toJSON());
+                    roads.add(json);
+                }
+            }
+        }
+        return roads;
+    }
+
+    private JsonArray serializeSettlements() {
+        JsonArray settlements = new JsonArray();
+        if(this.settlements != null) {
+            for (java.util.Map.Entry<Integer, ArrayList<Vertex>> entry : this.settlements.entrySet()) {
+                for (Vertex settlement : entry.getValue()) {
+                    JsonObject json = new JsonObject();
+                    json.addProperty("owner", entry.getKey());
+                    json.add("location", getServerVertexLocation(settlement.getVertexLoc()).toJSON());
+                    settlements.add(json);
+                }
+            }
+        }
+        return settlements;
+    }
+
+    private JsonArray serializeCities() {
+        JsonArray cities = new JsonArray();
+        if(this.cities != null) {
+            for (java.util.Map.Entry<Integer, ArrayList<Vertex>> entry : this.cities.entrySet()) {
+                for (Vertex city : entry.getValue()) {
+                    JsonObject json = new JsonObject();
+                    json.addProperty("owner", entry.getKey());
+                    json.add("location", getServerVertexLocation(city.getVertexLoc()).toJSON());
+                    cities.add(json);
+                }
+            }
+        }
+        return cities;
     }
 
     /*===========================================
