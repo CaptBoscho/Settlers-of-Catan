@@ -2,6 +2,7 @@ package server.facade;
 
 import com.google.gson.JsonObject;
 import server.exceptions.*;
+import server.managers.GameManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
@@ -16,6 +17,22 @@ import java.util.List;
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
  */
 public class ServerFacade implements IFacade {
+
+    private static ServerFacade instance;
+
+    public static ServerFacade getInstance() {
+        if(instance == null) {
+            instance = new ServerFacade();
+        }
+
+        return instance;
+    }
+
+    private GameManager gameManager;
+
+    private ServerFacade() {
+    }
+
     /**
      * Logs a player into the server
      *
@@ -226,39 +243,37 @@ public class ServerFacade implements IFacade {
     /**
      * Builds a road
      *
-     * @param player   index of the player
-     * @param isFree   whether the piece is free
+     * @param playerIndex   index of the player
      * @param location
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
-
+    public void buildRoad(int playerIndex, EdgeLocation location) throws BuildRoadException {
+        gameManager.buildRoad(playerIndex, location);
     }
 
     /**
      * Builds a settlement
      *
-     * @param player   index of the player
-     * @param isFree   whether the piece is free
+     * @param playerIndex   index of the player
      * @param location
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
-
+    public void buildSettlement(int playerIndex, VertexLocation location) throws BuildSettlementException {
+        gameManager.buildSettlement(playerIndex, location);
     }
 
     /**
      * Builds a city
      *
-     * @param player   index of the player
+     * @param playerIndex   index of the player
      * @param location
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int player, VertexLocation location) throws BuildCityException {
-
+    public void buildCity(int playerIndex, VertexLocation location) throws BuildCityException {
+        gameManager.buildCity(playerIndex, location);
     }
 
     /**

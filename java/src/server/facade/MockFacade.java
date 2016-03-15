@@ -227,12 +227,11 @@ public class MockFacade implements IFacade {
      * Builds a road
      *
      * @param player   index of the player
-     * @param isFree   whether the piece is free
      * @param location
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
+    public void buildRoad(int player, EdgeLocation location) throws BuildRoadException {
 
     }
 
@@ -240,12 +239,11 @@ public class MockFacade implements IFacade {
      * Builds a settlement
      *
      * @param player   index of the player
-     * @param isFree   whether the piece is free
      * @param location
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
+    public void buildSettlement(int player, VertexLocation location) throws BuildSettlementException {
 
     }
 

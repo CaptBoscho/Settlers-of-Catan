@@ -168,29 +168,27 @@ public interface IFacade {
 
     /**
      * Builds a road
-     * @param player index of the player
-     * @param isFree whether the piece is free
+     * @param playerIndex index of the player
      * @param location
      * @throws BuildRoadException
      */
-    void buildRoad(int player, boolean isFree, EdgeLocation location) throws BuildRoadException;
+    void buildRoad(int playerIndex, EdgeLocation location) throws BuildRoadException;
 
     /**
      * Builds a settlement
-     * @param player index of the player
-     * @param isFree whether the piece is free
+     * @param playerIndex index of the player
      * @param location
      * @throws BuildSettlementException
      */
-    void buildSettlement(int player, boolean isFree, VertexLocation location) throws BuildSettlementException;
+    void buildSettlement(int playerIndex, VertexLocation location) throws BuildSettlementException;
 
     /**
      * Builds a city
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @param location
      * @throws BuildCityException
      */
-    void buildCity(int player, VertexLocation location) throws BuildCityException;
+    void buildCity(int playerIndex, VertexLocation location) throws BuildCityException;
 
     /**
      * Offers a trade to the specified player

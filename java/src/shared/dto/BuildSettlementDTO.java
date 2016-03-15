@@ -22,6 +22,14 @@ public final class BuildSettlementDTO implements JsonSerializable {
         this.free = free;
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public VertexLocation getLocation() {
+        return location;
+    }
+
     /**
      * Converts the object to JSON
      *

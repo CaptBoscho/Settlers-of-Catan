@@ -2,6 +2,9 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.BuildCityException;
+import server.facade.IFacade;
+import shared.dto.BuildCityDTO;
 
 /**
  * A command object that builds a city
@@ -10,11 +13,15 @@ import server.commands.ICommand;
  */
 public class BuildCityCommand implements ICommand {
 
+    private IFacade facade;
+    private BuildCityDTO dto;
+
     /**
      * Constructor
      */
-    public BuildCityCommand() {
-
+    public BuildCityCommand(IFacade facade, BuildCityDTO dto) {
+        this.facade = facade;
+        this.dto = dto;
     }
 
     /**
@@ -23,6 +30,12 @@ public class BuildCityCommand implements ICommand {
      */
     @Override
     public JsonObject execute() {
+        try {
+            facade.buildCity(dto.getPlayerIndex(), dto.getLocation());
+        } catch (BuildCityException e) {
+            e.printStackTrace();
+        }
+        //TODO: change this later fool
         return null;
     }
 

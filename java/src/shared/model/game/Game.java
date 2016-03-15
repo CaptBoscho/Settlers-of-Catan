@@ -770,7 +770,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
-        return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID) && turnTracker.canPlay();
+        return map.canBuildSettlement(playerID, vertex) && playerManager.canBuildSettlement(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
 
     }
 
@@ -807,7 +807,7 @@ public final class Game extends Observable implements IGame, JsonSerializable {
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
 
-        return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID) && turnTracker.canPlay(); //&& turnTracker.canBuild(playerID);
+        return map.canBuildCity(playerID, vertex) && playerManager.canBuildCity(playerID) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerID);
     }
 
     /**

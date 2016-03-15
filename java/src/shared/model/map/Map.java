@@ -1174,7 +1174,7 @@ public final class Map implements IMap, JsonSerializable{
     }
 
     /*===========================================
-                   Private Methods
+                   Constructor Methods
      ============================================*/
 
     private void makeMap() {
@@ -1560,6 +1560,10 @@ public final class Map implements IMap, JsonSerializable{
         }
         return portTypes;
     }
+
+    /*===========================================
+                   Algorithms
+     ============================================*/
 
     private void getResourcesFromBuilding(java.util.Map<Integer, List<ResourceType>> resourceMap, HexLocation hexLoc,
                                           VertexDirection vertexDir) {

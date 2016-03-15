@@ -17,6 +17,14 @@ public final class BuildCityDTO implements JsonSerializable {
         this.location = location;
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public VertexLocation getLocation() {
+        return location;
+    }
+
     /**
      * Converts the object to JSON
      *
