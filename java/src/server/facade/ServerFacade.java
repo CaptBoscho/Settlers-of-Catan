@@ -22,8 +22,7 @@ public class ServerFacade implements IFacade {
      * Default Constructor - Private
      */
     private ServerFacade(){
-        //Create a new GameManager
-        //Create a new PlayerManager
+
     }
 
     /**
