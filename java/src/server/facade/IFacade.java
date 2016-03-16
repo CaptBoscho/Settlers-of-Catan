@@ -2,13 +2,13 @@ package server.facade;
 
 import com.google.gson.JsonObject;
 import server.exceptions.*;
+import shared.model.ai.AIType;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradePackage;
 
 import java.util.List;
 
@@ -39,16 +39,16 @@ public interface IFacade {
     //================================
     /**
      * Adds an AI to the game
-     * @param aiType
+     * @param type
      * @throws AddAIException
      */
-    void addAI(Object aiType) throws AddAIException;
+    void addAI(AIType type) throws AddAIException;
 
     /**
      * List the available AI types
      * @throws ListAIException
      */
-    void listAI() throws ListAIException;
+    List<String> listAI() throws ListAIException;
 
 
     //Games Methods

@@ -2,13 +2,13 @@ package server.facade;
 
 import com.google.gson.JsonObject;
 import server.exceptions.*;
+import shared.model.ai.AIType;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradePackage;
 
 import java.util.List;
 
@@ -65,11 +65,11 @@ public class ServerFacade implements IFacade {
     /**
      * Adds an AI to the game
      *
-     * @param aiType
+     * @param type
      * @throws AddAIException
      */
     @Override
-    public void addAI(Object aiType) throws AddAIException {
+    public void addAI(AIType type) throws AddAIException {
 
     }
 
@@ -79,8 +79,8 @@ public class ServerFacade implements IFacade {
      * @throws ListAIException
      */
     @Override
-    public void listAI() throws ListAIException {
-
+    public List<String> listAI() throws ListAIException {
+        return null;
     }
 
     /**
