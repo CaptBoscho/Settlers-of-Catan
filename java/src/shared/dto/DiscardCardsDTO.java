@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Derek Argueta
  */
-public final class DiscardCardsDTO implements JsonSerializable {
+public final class DiscardCardsDTO implements IDTO,JsonSerializable {
 
     private int playerIndex;
     private int brickCount;

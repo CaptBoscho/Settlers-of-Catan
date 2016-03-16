@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class SaveGameDTO implements JsonSerializable {
+public final class SaveGameDTO implements IDTO,JsonSerializable {
 
     private int gameId;
     private String name;

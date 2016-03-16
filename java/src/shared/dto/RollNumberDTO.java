@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class RollNumberDTO implements JsonSerializable {
+public final class RollNumberDTO implements IDTO,JsonSerializable {
 
     private int playerIndex;
     private int numberRolled;

@@ -8,7 +8,7 @@ import shared.model.JsonSerializable;
  *
  * @author Derek Argueta
  */
-public final class CreateGameDTO implements JsonSerializable{
+public final class CreateGameDTO implements IDTO,JsonSerializable{
 
     private boolean randomHexes;
     private boolean randomNumbers;
