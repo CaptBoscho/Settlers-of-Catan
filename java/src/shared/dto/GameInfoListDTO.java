@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author Derek Argueta
  */
-public final class GameInfoListDTO implements JsonSerializable {
+public final class GameInfoListDTO implements IDTO,JsonSerializable {
 
     List<GameInfo> games;
 
