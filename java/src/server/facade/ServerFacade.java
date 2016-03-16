@@ -16,6 +16,27 @@ import java.util.List;
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
  */
 public class ServerFacade implements IFacade {
+    private static IFacade _instance;
+
+    /**
+     * Default Constructor - Private
+     */
+    private ServerFacade(){
+
+    }
+
+    /**
+     * Singleton - get instance method
+     * @return
+     */
+    public static IFacade getInstance(){
+        if(_instance == null) {
+            _instance = new ServerFacade();
+        }
+        return _instance;
+    }
+
+
     /**
      * Logs a player into the server
      *
