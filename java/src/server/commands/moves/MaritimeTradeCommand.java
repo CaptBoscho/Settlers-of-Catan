@@ -14,6 +14,7 @@ import shared.dto.MaritimeTradeDTO;
  */
 public class MaritimeTradeCommand implements ICommand {
 
+    private int gameID;
     private int player;
     private int ratio;
     private ResourceType give;
@@ -28,6 +29,7 @@ public class MaritimeTradeCommand implements ICommand {
         give = convert(dto.getOutputResource());
         get = convert(dto.getInputResource());
         facade = fac;
+        //gameID = ;
     }
 
     private ResourceType convert(String type){
@@ -54,7 +56,7 @@ public class MaritimeTradeCommand implements ICommand {
     @Override
     public JsonObject execute() {
         try {
-            facade.maritimeTrade(player, ratio, give, get);
+            facade.maritimeTrade(gameID, player, ratio, give, get);
         }catch(MaritimeTradeException e){
 
         }

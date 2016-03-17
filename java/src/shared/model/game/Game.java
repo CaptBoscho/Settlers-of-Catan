@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
@@ -1446,6 +1447,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
+        JsonObject json = new JsonObject();
+        json.add("bank",resourceCardBank.toJSON());
+
+
         return null;
     }
     //=====================================================================

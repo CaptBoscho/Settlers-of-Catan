@@ -49,7 +49,16 @@ public final class MessageList implements JsonSerializable {
 
     @Override
     public JsonObject toJSON() {
-        return null;
+        JsonObject json = new JsonObject();
+        JsonArray array = new JsonArray();
+        for(MessageLine line : chat){
+            JsonObject item = new JsonObject();
+            item.addProperty("message",line.getMessage());
+            item.addProperty("source",line.getPlayer());
+            array.add(item);
+        }
+        json.add("lines",array);
+        return json;
     }
 
 }
