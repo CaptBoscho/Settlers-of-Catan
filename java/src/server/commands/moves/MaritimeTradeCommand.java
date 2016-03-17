@@ -29,7 +29,7 @@ public class MaritimeTradeCommand implements ICommand {
         give = convert(dto.getOutputResource());
         get = convert(dto.getInputResource());
         facade = fac;
-        //gameID = ;
+        gameID = 0;
     }
 
     private ResourceType convert(String type){

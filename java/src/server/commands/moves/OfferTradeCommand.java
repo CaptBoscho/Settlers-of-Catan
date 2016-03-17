@@ -22,6 +22,7 @@ public class OfferTradeCommand implements ICommand {
     private List<ResourceType> send;
     private List<ResourceType> receive;
     private IFacade facade;
+    private int game;
     /**
      * Constructor
      */
@@ -32,6 +33,7 @@ public class OfferTradeCommand implements ICommand {
         send = offer.getPackage1().getResources();
         receive = offer.getPackage2().getResources();
         facade = fac;
+        game = 0;
     }
 
     /**
@@ -41,7 +43,7 @@ public class OfferTradeCommand implements ICommand {
     @Override
     public JsonObject execute() {
         try {
-            facade.offerTrade(sender, receiver, send, receive);
+            facade.offerTrade(game, sender, receiver, send, receive);
         }catch(OfferTradeException e){
 
         }

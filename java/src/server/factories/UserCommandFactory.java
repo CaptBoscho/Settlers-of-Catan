@@ -4,6 +4,7 @@ import server.commands.ICommand;
 import server.commands.user.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
+import shared.dto.IDTO;
 
 /**
  * A factory class that creates User Commands on demand.  Use this class to get a User Command
@@ -34,7 +35,7 @@ public class UserCommandFactory {
      * Creates a user command based on a given string
      * @return an ICommand object
      */
-    public ICommand createCommand(Object obj) {
+    public ICommand createCommand(IDTO dto) {
         //TODO: use AuthDTO to create
         return null;
     }
