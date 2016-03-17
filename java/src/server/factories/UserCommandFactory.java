@@ -1,7 +1,6 @@
 package server.factories;
 
 import server.commands.ICommand;
-import server.commands.user.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
 
