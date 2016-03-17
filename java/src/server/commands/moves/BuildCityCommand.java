@@ -31,7 +31,7 @@ public class BuildCityCommand implements ICommand {
     @Override
     public JsonObject execute() {
         try {
-            facade.buildCity(dto.getPlayerIndex(), dto.getLocation());
+            facade.buildCity(0, dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildCityException e) {
             e.printStackTrace();
         }

@@ -16,6 +16,7 @@ import java.util.List;
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
  */
 public class MockFacade implements IFacade {
+
     /**
      * Logs a player into the server
      *
@@ -34,7 +35,6 @@ public class MockFacade implements IFacade {
      * @param username
      * @param password
      * @throws RegisterException
-     * @implNote usernames must be unique
      */
     @Override
     public void register(String username, String password) throws RegisterException {
@@ -44,11 +44,12 @@ public class MockFacade implements IFacade {
     /**
      * Adds an AI to the game
      *
+     * @param gameID
      * @param aiType
      * @throws AddAIException
      */
     @Override
-    public void addAI(Object aiType) throws AddAIException {
+    public void addAI(int gameID, Object aiType) throws AddAIException {
 
     }
 
@@ -103,211 +104,226 @@ public class MockFacade implements IFacade {
     /**
      * Sends a chat message
      *
+     * @param gameID
      * @param player  index of the player
      * @param message
      * @throws SendChatException
      */
     @Override
-    public void sendChat(int player, String message) throws SendChatException {
+    public void sendChat(int gameID, int player, String message) throws SendChatException {
 
     }
 
     /**
      * Rolls the specified value
      *
+     * @param gameID
      * @param player index of the player
      * @param value
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int player, int value) throws RollNumberException {
+    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
 
     }
 
     /**
      * Robs the specified player
      *
+     * @param gameID
      * @param player      index of the player robbing
      * @param newLocation
      * @param victim      index of the player being robbed
      * @throws RobPlayerException
-     * @implNote newLocation must be different from the previous location
      */
     @Override
-    public void robPlayer(int player, HexLocation newLocation, int victim) throws RobPlayerException {
+    public void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
 
     }
 
     /**
      * Ends the current player's turn making it the next player's turn
      *
+     * @param gameID
      * @param player index of the player
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int player) throws FinishTurnException {
+    public void finishTurn(int gameID, int player) throws FinishTurnException {
 
     }
 
     /**
      * Buys a new dev card
      *
+     * @param gameID
      * @param player index of the player
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int player) throws BuyDevCardException {
+    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
 
     }
 
     /**
      * Handles playing Year of Plenty
      *
+     * @param gameID
      * @param player      index of the player
      * @param resourceOne first resource to receive
      * @param resourceTwo second resource to receive
      * @throws YearOfPlentyException
      */
     @Override
-    public void yearOfPlenty(int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+    public void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
 
     }
 
     /**
      * Handles playing Road Building
      *
+     * @param gameID
      * @param player      index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
      * @throws RoadBuildingException
      */
     @Override
-    public void roadBuilding(int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
 
     }
 
     /**
      * Handles playing Soldier
      *
+     * @param gameID
      * @param player      index of the player
      * @param newLocation
      * @param victim      index of the player being robbed
      * @throws SoldierException
-     * @implNote the new location must be different than the previous location
      */
     @Override
-    public void soldier(int player, HexLocation newLocation, int victim) throws SoldierException {
+    public void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
 
     }
 
     /**
-     * Hanldes playing Monopoly
+     * Handles playing Monopoly
      *
+     * @param gameID
      * @param player   index of the player
      * @param resource resource to take
      * @throws MonopolyException
      */
     @Override
-    public void monopoly(int player, ResourceType resource) throws MonopolyException {
+    public void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
 
     }
 
     /**
      * Handles playing Monument
      *
+     * @param gameID
      * @param player index of the player
      * @throws MonumentException
      */
     @Override
-    public void monument(int player) throws MonumentException {
+    public void monument(int gameID, int player) throws MonumentException {
 
     }
 
     /**
      * Builds a road
      *
-     * @param player   index of the player
+     * @param gameID
+     * @param player index of the player
      * @param location
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int player, EdgeLocation location) throws BuildRoadException {
+    public void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
 
     }
 
     /**
      * Builds a settlement
      *
-     * @param player   index of the player
+     * @param gameID
+     * @param player index of the player
      * @param location
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int player, VertexLocation location) throws BuildSettlementException {
+    public void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
 
     }
 
     /**
      * Builds a city
      *
+     * @param gameID
      * @param player   index of the player
      * @param location
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int player, VertexLocation location) throws BuildCityException {
+    public void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
 
     }
 
     /**
      * Offers a trade to the specified player
      *
-     * @param player    index of the player offering
-     * @param offer     trade offer
-     * @param recipient index of the player being offered
+     * @param gameID
+     * @param player
+     * @param recipient
+     * @param send
+     * @param receive
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int player, TradePackage offer, int recipient) throws OfferTradeException {
+    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
 
     }
 
     /**
      * Accepts a trade offer
      *
+     * @param gameID
      * @param player     index of the player accepting the trade
      * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int player, boolean willAccept) throws AcceptTradeException {
+    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
 
     }
 
     /**
      * Performs a maritime trade (trade with the bank)
      *
+     * @param gameID
      * @param player index of the player
      * @param ratio  trade ratio [2, 3 or 4]
      * @param give   resource to trade away
      * @param get    resource to get
      * @throws MaritimeTradeException
-     * @implNote ratio refers to number of cards the player must give to receive one card
      */
     @Override
-    public void maritimeTrade(int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
+    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
 
     }
 
     /**
      * Discards the specified cards from the player's hand
      *
+     * @param gameID
      * @param player         index of the player discarding
      * @param cardsToDiscard list of cards to be discarded
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
+    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
 
     }
 }

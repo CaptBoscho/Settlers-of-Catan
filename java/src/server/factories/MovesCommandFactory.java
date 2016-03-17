@@ -1,15 +1,16 @@
 package server.factories;
 
 import server.commands.ICommand;
-import server.commands.moves.*;
+import server.facade.IFacade;
+import shared.dto.*;
 
 /**
  * A factory class that creates Moves Commands on demand.  Use this class to get a Moves Command
  */
 public class MovesCommandFactory {
 
+    private IFacade facade;
     private static MovesCommandFactory instance = null;
-
     private MovesCommandFactory() {
 
     }
@@ -22,52 +23,49 @@ public class MovesCommandFactory {
         return instance;
     }
 
-    /**
-     * Creates a Moves command based on a given string
-     * @param command The string indicating what type of command to return
-     * @return an ICommand object
-     */
-    public ICommand createCommand(String command) {
-        assert command != null;
-
-        switch(command) {
-            case "sendChat":
-                return new SendChatCommand();
-            case "rollNumber":
-                return new RollNumberCommand();
-            case "robPlayer":
-                return new RobPlayerCommand();
-            case "finishTurn":
-                return new FinishTurnCommand();
-            case "buyDevCard":
-                return new BuyDevCardCommand();
-            case "Year_Of_Plenty":
-                return new YearOfPlentyCommand();
-            case "Road_Building":
-                return new RoadBuildingCommand();
-            case "Soldier":
-                return new SoldierCommand();
-            case "Monopoly":
-                return new MonopolyCommand();
-            case "Monument":
-                return new MonumentCommand();
-            case "buildRoad":
-                return new BuildRoadCommand();
-            case "buildSettlement":
-                //return new BuildSettlementCommand();
-            case "buildCity":
-                return new BuildCityCommand();
-            case "offerTrade":
-                return new OfferTradeCommand();
-            case "acceptTrade":
-                return new AcceptTradeCommand();
-            case "maritimeTrade":
-                return new MaritimeTradeCommand();
-            case "discardCards":
-                return new DiscardCardsCommand();
-            default:
-                return null;
-        }
+    public void bind(IFacade new_facade){
+        facade = new_facade;
     }
 
+    /**
+     * Creates a Moves command based on a given string
+     * @return an ICommand object
+     */
+    public ICommand createCommand(Object obj) {
+        if (obj instanceof FinishTurnDTO) {
+            // do finish turn stuff
+        } else if (obj instanceof SendChatDTO) {
+
+        } else if (obj instanceof RollNumberDTO) {
+
+        } else if (obj instanceof RobPlayerDTO) {
+
+        } else if (obj instanceof BuyDevCardDTO) {
+
+        } else if (obj instanceof PlayYOPCardDTO) {
+
+        } else if (obj instanceof RoadBuildingDTO) {
+
+        } else if (obj instanceof PlayMonopolyDTO) {
+
+        } else if (obj instanceof PlaySoldierCardDTO) {
+
+        } else if (obj instanceof PlayMonumentDTO) {
+
+        } else if (obj instanceof BuildRoadDTO) {
+
+        } else if (obj instanceof BuildCityDTO) {
+
+        } else if (obj instanceof OfferTradeDTO) {
+
+        } else if (obj instanceof TradeOfferResponseDTO) {
+
+        } else if (obj instanceof MaritimeTradeDTO) {
+
+        } else if (obj instanceof DiscardCardsDTO) {
+
+        }
+
+        return null;
+    }
 }

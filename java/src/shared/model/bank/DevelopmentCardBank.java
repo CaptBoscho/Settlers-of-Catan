@@ -316,7 +316,7 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
     /**
      * Removes one DevelopmentCard from the DevelopmentCardBank and returns it
      * (@pre) getOwner() instanceof Game, not Player
-     * (@pre) size() > 0
+     * (@pre) size() gt 0
      *
      * (@post) returned DevelopmentCard is no longer in bank
      * (@post) new size() == old size() - 1

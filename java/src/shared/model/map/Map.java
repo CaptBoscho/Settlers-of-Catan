@@ -121,8 +121,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param playerIndex int
      * @param vertexLoc VertexLocation
      * @return boolean
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
-     * @throws InvalidLocationException Throws exception if vertex location is not on the map
      */
     @Override
     public boolean canInitiateSettlement(final int playerIndex, VertexLocation vertexLoc) {
@@ -158,7 +156,6 @@ public final class Map implements IMap, JsonSerializable{
      * @return A list of resources to give to the player
      * @throws StructureException Throws exception if the Settlement can't be built at the vertex location
      * @throws InvalidLocationException Throws exception if vertex location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public List<ResourceType> initiateSettlement(int playerIndex, VertexLocation vertexLoc) throws StructureException,
@@ -223,8 +220,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param playerIndex int
      * @param edgeLoc EdgeLocation
      * @return boolean
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
-     * @throws InvalidLocationException Throws exception if Edge/Vertex locaiton is not on the map
      */
     @Override
     public boolean canInitiateRoad(int playerIndex, EdgeLocation edgeLoc) {
@@ -287,7 +282,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param edgeLoc EdgeLocation
      * @throws StructureException Throws exception if the Road can't be built at the EdgeLocation
      * @throws InvalidLocationException Throws exception if vertex/edge location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public void initiateRoad(int playerIndex, EdgeLocation edgeLoc)
@@ -342,8 +336,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param playerIndex int
      * @param edgeLoc EdgeLocation
      * @return boolean
-     * @throws InvalidLocationException Throws exception if edge location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public boolean canBuildRoad(int playerIndex, EdgeLocation edgeLoc) {
@@ -386,7 +378,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param edgeLoc EdgeLocation
      * @throws StructureException Throws Exception if Road can't be built at the edge location
      * @throws InvalidLocationException Throws exception if edge location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public void buildRoad(int playerIndex, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
@@ -442,8 +433,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param playerIndex int
      * @param vertexLoc VertexLocation
      * @return boolean
-     * @throws InvalidLocationException Throws exception if vertex location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public boolean canBuildSettlement(int playerIndex, VertexLocation vertexLoc) {
@@ -486,7 +475,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param vertexLoc VertexLocation
      * @throws StructureException Throws exception if a Settlement can't be built at the vertex location
      * @throws InvalidLocationException Throws exception if vertex location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public void buildSettlement(int playerIndex, VertexLocation vertexLoc) throws StructureException,
@@ -548,8 +536,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param playerIndex int
      * @param vertexLoc VertexLocation
      * @return boolean
-     * @throws InvalidLocationException Throws exception if vertex location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public boolean canBuildCity(int playerIndex, VertexLocation vertexLoc) {
@@ -591,7 +577,6 @@ public final class Map implements IMap, JsonSerializable{
      * @param vertexLoc VertexLocation
      * @throws StructureException Throws exception if a City can't be built at the vertex location
      * @throws InvalidLocationException Throws exception if vertex location is not on the map
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public void buildCity(int playerIndex, VertexLocation vertexLoc) throws StructureException,
@@ -653,7 +638,6 @@ public final class Map implements IMap, JsonSerializable{
      * Gets the size of the longest road of a player
      * @param playerIndex int
      * @return int Size of the longest road of a player
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public int getLongestRoadSize(int playerIndex) {
@@ -679,7 +663,6 @@ public final class Map implements IMap, JsonSerializable{
      * Gets all the port types that a player has
      * @param playerIndex int
      * @return A set of port types
-     * @throws InvalidPlayerException Throws exception if playerIndex is invalid
      */
     @Override
     public Set<PortType> getPortTypes(int playerIndex) {
@@ -697,7 +680,6 @@ public final class Map implements IMap, JsonSerializable{
      * Informs if the robber can be moved to a hex location
      * @param hexLoc HexLocation
      * @return boolean
-     * @throws AlreadyRobbedException Throws exception if the hex location is not on the map
      */
     @Override
     public boolean canMoveRobber(HexLocation hexLoc) {

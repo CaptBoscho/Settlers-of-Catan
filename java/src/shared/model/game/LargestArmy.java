@@ -15,6 +15,10 @@ public final class LargestArmy {
         this.playerIndex = -1;
     }
 
+    /**
+     * Constructor
+     * @param playerIndex
+     */
     public LargestArmy(int playerIndex) {
         this.playerIndex = playerIndex;
     }
@@ -46,5 +50,9 @@ public final class LargestArmy {
         return pointWorth;
     }
 
+    /**
+     * Get the number of soldiers in the largest army
+     * @return
+     */
     public int getMostSoldiers(){ return mostSoldiers;}
 }

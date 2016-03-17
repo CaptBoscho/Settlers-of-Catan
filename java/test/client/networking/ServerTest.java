@@ -1,6 +1,7 @@
 package client.networking;
 
 import client.data.GameInfo;
+import client.facade.Facade;
 import client.services.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -336,7 +337,7 @@ public class ServerTest {
         JoinGameDTO jdto = new JoinGameDTO(3, CatanColor.WHITE);
         assertEquals(server.joinGame(jdto), "Success");
 
-        int initialVersion = Game.getInstance().getVersion();
+        int initialVersion = Facade.getInstance().getGame().getVersion();
 
         Poller poller = new Poller(server);
         poller.start();

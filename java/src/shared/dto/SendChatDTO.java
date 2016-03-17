@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class SendChatDTO implements JsonSerializable {
+public final class SendChatDTO implements IDTO,JsonSerializable {
 
     private int playerId;
     private String content;

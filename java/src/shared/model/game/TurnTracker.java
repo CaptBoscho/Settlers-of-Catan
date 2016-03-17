@@ -7,12 +7,13 @@ import shared.exceptions.BadJsonException;
  * Representation of Player Turns
  */
 public final class TurnTracker {
-
-
+    //region Member variables
     private int currentTurn;
     private Phase phase;
     private static final int NUM_PLAYERS = 4;
+    //endregion
 
+    //region Constructors
     /**
      * Default Constructor
      */
@@ -68,7 +69,9 @@ public final class TurnTracker {
                 throw new BadJsonException("Json has invalid value for 'status' in 'TurnTracker'.");
         }
     }
+    //endregion
 
+    //region TurnTracker methods
     /**
      * Increments the turn counter to the next player's turn
      * @return index of the next player
@@ -81,14 +84,6 @@ public final class TurnTracker {
             currentTurn %= NUM_PLAYERS;
             return currentTurn;
         }
-    }
-
-    /**
-     * Get the current turn (by player index)
-     * @return index of current player
-     */
-    public int getCurrentTurn() {
-        return this.currentTurn;
     }
 
     /**
@@ -127,17 +122,9 @@ public final class TurnTracker {
             nextTurn();
         }
     }
+    //endregion
 
-    public Phase getPhase() {
-        return phase;
-    }
-
-    public void setPhase(Phase p) {
-        assert p != null;
-
-        this.phase = p;
-    }
-
+    //region Can do methods
     public boolean canRoll() {
         return phase == Phase.ROLLING;
     }
@@ -146,8 +133,6 @@ public final class TurnTracker {
         return phase == Phase.PLAYING;
     }
 
-    public boolean canRob(){return phase == Phase.PLAYING;}
-
     public boolean canDiscard() {
         return phase == Phase.DISCARDING;
     }
@@ -155,19 +140,9 @@ public final class TurnTracker {
     public boolean canUseRobber() {
         return phase == Phase.ROBBING || phase == Phase.PLAYING;
     }
+    //endregion
 
-    /**
-     * Takes a playerID and responds whether it is that player's turn or not.
-     * ID system is base 0 so we don't need to subtract one fromt the currentTurn
-     * @param playerID the playerID to check
-     * @return true if it is the given player's turn, else false
-     */
-    public boolean isPlayersTurn(final int playerID) {
-        assert playerID >= 0;
-
-        return playerID == currentTurn;
-    }
-
+    //region Serialization
     /**
      * Converts the TurnTracker to JSON
      *
@@ -176,24 +151,64 @@ public final class TurnTracker {
     public JsonObject toJSON() {
         final JsonObject json = new JsonObject();
         json.addProperty("currentTurn", currentTurn);
-        //'Rolling' or 'Robbing' or 'Playing' or 'Discarding' or 'FirstRound' or 'SecondRound'
-//        json.addProperty("status", status);
         return json;
     }
+    //endregion
 
+    //region Getters
+    /**
+     * Get the current phase
+     * @return
+     */
+    public Phase getPhase() {
+        return phase;
+    }
+
+    /**
+     * Get the current turn (by player index)
+     * @return index of current player
+     */
+    public int getCurrentTurn() {
+        return this.currentTurn;
+    }
+
+    /**
+     * Determines if the current phase is a setup phase
+     * @return
+     */
     public boolean isSetupPhase() {
         return phase == Phase.SETUPONE || phase == Phase.SETUPTWO;
     }
 
-    public boolean isSetupPhaseOne(){return phase == Phase.SETUPONE;}
+    /**
+     * Takes a playerID and responds whether it is that player's turn or not.
+     * ID system is base 0 so we don't need to subtract one from the currentTurn
+     * @param playerID the playerID to check
+     * @return true if it is the given player's turn, else false
+     */
+    public boolean isPlayersTurn(final int playerID) {
+        assert playerID >= 0;
 
-    public boolean isSetupPhaseTwo(){return phase == Phase.SETUPTWO;}
-
-    public void setCurrentTurn(int currentTurn) {
-        this.currentTurn = currentTurn;
+        return playerID == currentTurn;
     }
+    //endregion
 
+    //region Setters
+    /**
+     * Set the current phase
+     * @param phase
+     */
+    public void setPhase(Phase phase) {
+        assert phase != null;
 
+        this.phase = phase;
+    }
+    //endregion
+
+    //region Phase enum
+    /**
+     * Enum to represent the various phases in a game
+     */
     public enum Phase {
         SETUPONE,
         SETUPTWO,
@@ -217,4 +232,5 @@ public final class TurnTracker {
             return values()[ordinal() + 1];
         }
     }
+    //endregion
 }

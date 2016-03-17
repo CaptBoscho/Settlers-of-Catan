@@ -2,6 +2,7 @@ package client.services;
 
 
 import client.data.GameInfo;
+import client.facade.Facade;
 import shared.model.game.Game;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public final class Poller {
                 try {
                     switch(state) {
                         case 1:
-                            server.getCurrentModel(Game.getInstance().getVersion());
+                            server.getCurrentModel(Facade.getInstance().getGame().getVersion());
                             break;
                         case 2:
                             server.getLatestPlayers();

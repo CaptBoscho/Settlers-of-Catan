@@ -1,5 +1,6 @@
 package model.Player;
 
+import client.facade.Facade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class PlayerTest {
         }
 
         pm = new PlayerManager(players);
-        Game.getInstance().initializeGame(players, false, false, false);
+        Facade.getInstance().getGame().initializeGame(players, false, false, false);
     }
 
     @After
@@ -166,7 +167,7 @@ public class PlayerTest {
 
     @Test
     public void testCanUseMonument() throws Exception {
-        for(final Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+        for(final Player p : Facade.getInstance().getGame().getPlayerManager().getPlayers()) {
             assertFalse(p.canUseMonument());
         }
 
@@ -193,20 +194,20 @@ public class PlayerTest {
     @Test
     public void testCanBuildRoad() throws Exception {
         // no players should be able to build a road at first
-        for(Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+        for(Player p : Facade.getInstance().getGame().getPlayerManager().getPlayers()) {
             assertFalse(p.canBuildRoad());
         }
         // give player 0 the resources to build a road
-        Game.getInstance().giveResource(new Brick(), 0);
-        Game.getInstance().giveResource(new Wood(), 0);
+        Facade.getInstance().getGame().giveResource(new Brick(), 0);
+        Facade.getInstance().getGame().giveResource(new Wood(), 0);
 
         // verify he can build a road
-        assertTrue(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildRoad());
+        assertTrue(Facade.getInstance().getGame().getPlayerManager().getPlayerByID(0).canBuildRoad());
 
-        Game.getInstance().getPlayerManager().getPlayerByID(0).buildRoad();
+        Facade.getInstance().getGame().getPlayerManager().getPlayerByID(0).buildRoad();
 
         // verify that the resources were consumed
-        assertFalse(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildRoad());
+        assertFalse(Facade.getInstance().getGame().getPlayerManager().getPlayerByID(0).canBuildRoad());
     }
 
     @Test
@@ -217,22 +218,22 @@ public class PlayerTest {
     @Test
     public void testCanBuildSettlement() throws Exception {
         // no players should be able to build a settlement at first
-        for(final Player p : Game.getInstance().getPlayerManager().getPlayers()) {
+        for(final Player p : Facade.getInstance().getGame().getPlayerManager().getPlayers()) {
             assertFalse(p.canBuildSettlement());
         }
         // give player 0 the resources to build a settlement
-        Game.getInstance().giveResource(new Brick(), 0);
-        Game.getInstance().giveResource(new Wood(), 0);
-        Game.getInstance().giveResource(new Sheep(), 0);
-        Game.getInstance().giveResource(new Wheat(), 0);
+        Facade.getInstance().getGame().giveResource(new Brick(), 0);
+        Facade.getInstance().getGame().giveResource(new Wood(), 0);
+        Facade.getInstance().getGame().giveResource(new Sheep(), 0);
+        Facade.getInstance().getGame().giveResource(new Wheat(), 0);
 
         // verify he can build a settlement
-        assertTrue(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildSettlement());
+        assertTrue(Facade.getInstance().getGame().getPlayerManager().getPlayerByID(0).canBuildSettlement());
 
-        Game.getInstance().getPlayerManager().getPlayerByID(0).buildSettlement();
+        Facade.getInstance().getGame().getPlayerManager().getPlayerByID(0).buildSettlement();
 
         // verify that the resources were consumed
-        assertFalse(Game.getInstance().getPlayerManager().getPlayerByID(0).canBuildSettlement());
+        assertFalse(Facade.getInstance().getGame().getPlayerManager().getPlayerByID(0).canBuildSettlement());
     }
 
     @Test

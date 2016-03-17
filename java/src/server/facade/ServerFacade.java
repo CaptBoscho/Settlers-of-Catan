@@ -51,7 +51,6 @@ public class ServerFacade implements IFacade {
      * @param username
      * @param password
      * @throws RegisterException
-     * @implNote usernames must be unique
      */
     @Override
     public void register(String username, String password) throws RegisterException {
@@ -65,7 +64,7 @@ public class ServerFacade implements IFacade {
      * @throws AddAIException
      */
     @Override
-    public void addAI(Object aiType) throws AddAIException {
+    public void addAI(int gameID, Object aiType) throws AddAIException {
 
     }
 
@@ -125,7 +124,7 @@ public class ServerFacade implements IFacade {
      * @throws SendChatException
      */
     @Override
-    public void sendChat(int player, String message) throws SendChatException {
+    public void sendChat(int gameID, int player, String message) throws SendChatException {
 
     }
 
@@ -137,7 +136,7 @@ public class ServerFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int player, int value) throws RollNumberException {
+    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
 
     }
 
@@ -148,10 +147,9 @@ public class ServerFacade implements IFacade {
      * @param newLocation
      * @param victim      index of the player being robbed
      * @throws RobPlayerException
-     * @implNote newLocation must be different from the previous location
      */
     @Override
-    public void robPlayer(int player, HexLocation newLocation, int victim) throws RobPlayerException {
+    public void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
 
     }
 
@@ -162,7 +160,7 @@ public class ServerFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int player) throws FinishTurnException {
+    public void finishTurn(int gameID, int player) throws FinishTurnException {
 
     }
 
@@ -173,7 +171,7 @@ public class ServerFacade implements IFacade {
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int player) throws BuyDevCardException {
+    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
 
     }
 
@@ -186,7 +184,7 @@ public class ServerFacade implements IFacade {
      * @throws YearOfPlentyException
      */
     @Override
-    public void yearOfPlenty(int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+    public void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
 
     }
 
@@ -199,7 +197,7 @@ public class ServerFacade implements IFacade {
      * @throws RoadBuildingException
      */
     @Override
-    public void roadBuilding(int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
 
     }
 
@@ -210,10 +208,9 @@ public class ServerFacade implements IFacade {
      * @param newLocation
      * @param victim      index of the player being robbed
      * @throws SoldierException
-     * @implNote the new location must be different than the previous location
      */
     @Override
-    public void soldier(int player, HexLocation newLocation, int victim) throws SoldierException {
+    public void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
 
     }
 
@@ -225,7 +222,7 @@ public class ServerFacade implements IFacade {
      * @throws MonopolyException
      */
     @Override
-    public void monopoly(int player, ResourceType resource) throws MonopolyException {
+    public void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
 
     }
 
@@ -236,56 +233,57 @@ public class ServerFacade implements IFacade {
      * @throws MonumentException
      */
     @Override
-    public void monument(int player) throws MonumentException {
+    public void monument(int gameID, int player) throws MonumentException {
 
     }
 
     /**
      * Builds a road
      *
-     * @param playerIndex   index of the player
+     * @param player   index of the player
      * @param location
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int playerIndex, EdgeLocation location) throws BuildRoadException {
-        gameManager.buildRoad(playerIndex, location);
+    public void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
+
     }
 
     /**
      * Builds a settlement
      *
-     * @param playerIndex   index of the player
+     * @param player index of the player
      * @param location
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int playerIndex, VertexLocation location) throws BuildSettlementException {
-        gameManager.buildSettlement(playerIndex, location);
+    public void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
+
     }
 
     /**
      * Builds a city
      *
-     * @param playerIndex   index of the player
+     * @param player index of the player
      * @param location
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int playerIndex, VertexLocation location) throws BuildCityException {
-        gameManager.buildCity(playerIndex, location);
+    public void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+
     }
 
     /**
      * Offers a trade to the specified player
      *
-     * @param player    index of the player offering
-     * @param offer     trade offer
-     * @param recipient index of the player being offered
+     * @param player
+     * @param recipient
+     * @param send
+     * @param receive
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int player, TradePackage offer, int recipient) throws OfferTradeException {
+    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
 
     }
 
@@ -297,7 +295,7 @@ public class ServerFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int player, boolean willAccept) throws AcceptTradeException {
+    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
 
     }
 
@@ -309,10 +307,9 @@ public class ServerFacade implements IFacade {
      * @param give   resource to trade away
      * @param get    resource to get
      * @throws MaritimeTradeException
-     * @implNote ratio refers to number of cards the player must give to receive one card
      */
     @Override
-    public void maritimeTrade(int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
+    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
 
     }
 
@@ -324,7 +321,7 @@ public class ServerFacade implements IFacade {
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
+    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
 
     }
 }
