@@ -1,10 +1,10 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import server.exceptions.OfferTradeException;
 import server.facade.IFacade;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +39,10 @@ public class OfferTradeCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Offer Trade command
-     * @return JsonObject
+     * @return GameModelDTO
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         List<ResourceType> send = new ArrayList<>();
         List<ResourceType> receive = new ArrayList<>();
         if(brick>=0){
@@ -101,7 +101,7 @@ public class OfferTradeCommand implements ICommand {
         }
 
         try {
-            facade.offerTrade(sender, receiver, send, receive);
+            facade.offerTrade(0, sender, receiver, send, receive);
         }catch(OfferTradeException e){
 
         }

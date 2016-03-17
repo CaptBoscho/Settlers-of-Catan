@@ -1,7 +1,7 @@
 package server.commands.user;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that registers a player.
@@ -13,10 +13,10 @@ public class RegisterCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Register command
      *
-     * @return JsonObject with information about the registration
+     * @return GameModelDTO with information about the registration
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 }

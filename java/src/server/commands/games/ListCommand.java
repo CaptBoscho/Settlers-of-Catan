@@ -1,7 +1,7 @@
 package server.commands.games;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that lists the available games.
@@ -13,10 +13,10 @@ public class ListCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the List command
      *
-     * @return JsonObject with information about the games list
+     * @return GameModelDTO with information about the games list
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 }

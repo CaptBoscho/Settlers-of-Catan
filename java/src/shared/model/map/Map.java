@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author Joel Bradley
  */
-public final class Map implements IMap, JsonSerializable{
+public final class Map implements IMap, JsonSerializable {
 
     private java.util.Map<HexLocation, Hex> hexes;
     private java.util.Map<EdgeLocation, Edge> edges;

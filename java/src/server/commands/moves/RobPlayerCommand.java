@@ -1,7 +1,7 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that robs a player
@@ -19,10 +19,10 @@ public class RobPlayerCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Rob Player command
-     * @return JsonObject
+     * @return GameModelDTO
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 

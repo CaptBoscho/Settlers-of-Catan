@@ -1,7 +1,7 @@
 package server.commands.games;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that adds a player to a game.
@@ -13,10 +13,10 @@ public class JoinCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Join Game command
      *
-     * @return JsonObject with information about the join
+     * @return GameModelDTO with information about the join
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 }

@@ -1,10 +1,10 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import server.exceptions.BuildRoadException;
 import server.facade.IFacade;
 import shared.dto.BuildRoadDTO;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that builds a road
@@ -26,12 +26,12 @@ public class BuildRoadCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Build Road command
-     * @return JsonObject
+     * @return GameModelDTO
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         try {
-            facade.buildRoad(dto.getPlayerIndex(), dto.getRoadLocation());
+            facade.buildRoad(0, dto.getPlayerIndex(), dto.getRoadLocation());
         } catch (BuildRoadException e) {
             e.printStackTrace();
         }

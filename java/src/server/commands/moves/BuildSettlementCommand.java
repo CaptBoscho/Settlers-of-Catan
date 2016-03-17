@@ -1,10 +1,10 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import server.exceptions.BuildSettlementException;
 import server.facade.IFacade;
 import shared.dto.BuildSettlementDTO;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that builds a settlement
@@ -23,12 +23,12 @@ public class BuildSettlementCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Build Settlement command
-     * @return JsonObject
+     * @return GameModelDTO
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         try {
-            facade.buildSettlement(dto.getPlayerIndex(), dto.getLocation());
+            facade.buildSettlement(0, dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildSettlementException e) {
             e.printStackTrace();
         }

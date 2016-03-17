@@ -1,10 +1,10 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import server.exceptions.BuildCityException;
 import server.facade.IFacade;
 import shared.dto.BuildCityDTO;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that builds a city
@@ -26,10 +26,10 @@ public class BuildCityCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Build City command
-     * @return JsonObject
+     * @return GameModelDTO
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         try {
             facade.buildCity(0, dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildCityException e) {

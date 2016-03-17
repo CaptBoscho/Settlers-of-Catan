@@ -1,7 +1,7 @@
 package server.commands.user;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that logs a player in
@@ -13,10 +13,10 @@ public class LoginCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Login command
      *
-     * @return JsonObject with information about the login
+     * @return GameModelDTO with information about the login
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 }
