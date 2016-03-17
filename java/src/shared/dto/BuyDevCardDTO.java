@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class BuyDevCardDTO implements JsonSerializable {
+public final class BuyDevCardDTO implements IDTO,JsonSerializable {
 
     private int playerIndex;
 
