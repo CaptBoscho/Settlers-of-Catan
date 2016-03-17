@@ -1,13 +1,17 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
+import com.sun.corba.se.spi.activation.Server;
 import server.exceptions.*;
+import server.managers.GameManager;
+import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
+import shared.model.game.Game;
 import shared.model.game.trade.TradePackage;
 
 import java.util.List;
@@ -17,13 +21,15 @@ import java.util.List;
  */
 public class ServerFacade implements IFacade {
     private static IFacade _instance;
+    private GameManager gameManager;
+    private UserManager userManager;
 
     /**
      * Default Constructor - Private
      */
     private ServerFacade(){
-        //Create a new GameManager
-        //Create a new PlayerManager
+        gameManager = new GameManager();
+        userManager = new UserManager();
     }
 
     /**
@@ -36,7 +42,6 @@ public class ServerFacade implements IFacade {
         }
         return _instance;
     }
-
 
     /**
      * Logs a player into the server
