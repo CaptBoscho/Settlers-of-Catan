@@ -14,7 +14,7 @@ public class UserCommandFactory {
     private static UserCommandFactory instance = null;
 
     private UserCommandFactory() {
-        facade = new ServerFacade();
+        facade = ServerFacade.getInstance();
     }
 
     public static UserCommandFactory getInstance() {
