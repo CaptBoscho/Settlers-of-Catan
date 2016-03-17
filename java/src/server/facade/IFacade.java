@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -96,7 +97,7 @@ public interface IFacade {
      * @param value
      * @throws RollNumberException
      */
-    void rollNumber(int gameID, int player, int value) throws RollNumberException;
+    GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException;
 
     /**
      * Robs the specified player

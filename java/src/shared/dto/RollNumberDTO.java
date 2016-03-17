@@ -19,6 +19,14 @@ public final class RollNumberDTO implements IDTO,JsonSerializable {
         this.numberRolled = numberRolled;
     }
 
+    public int getValue(){
+        return this.numberRolled;
+    }
+
+    public int getPlayerIndex(){
+        return this.playerIndex;
+    }
+
     /**
      * Converts the object to JSON
      *

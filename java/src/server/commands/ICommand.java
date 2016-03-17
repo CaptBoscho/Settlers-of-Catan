@@ -1,6 +1,7 @@
 package server.commands;
 
 import com.google.gson.JsonObject;
+import shared.dto.IDTO;
 
 /**
  * A parent interface for all command objects.  The execute function in each implementation of this interface will
@@ -14,7 +15,7 @@ public interface ICommand {
      * The main function on child classes of this interface.  It can be called to activate the set of instructions
      * indicated by that class.
      *
-     * @return JsonObject with information pertaining to the execute function of the given Command object
+     * @return DTO with information pertaining to the execute function of the given Command object
      */
-    JsonObject execute();
+    IDTO execute();
 }
