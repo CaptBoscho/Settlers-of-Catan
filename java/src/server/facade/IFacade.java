@@ -42,7 +42,7 @@ public interface IFacade {
      * @param aiType
      * @throws AddAIException
      */
-    void addAI(Object aiType) throws AddAIException;
+    void addAI(int gameID, Object aiType) throws AddAIException;
 
     /**
      * List the available AI types
@@ -88,7 +88,7 @@ public interface IFacade {
      * @param message
      * @throws SendChatException
      */
-    void sendChat(int player, String message) throws SendChatException;
+    void sendChat(int gameID, int player, String message) throws SendChatException;
 
     /**
      * Rolls the specified value
@@ -96,7 +96,7 @@ public interface IFacade {
      * @param value
      * @throws RollNumberException
      */
-    void rollNumber(int player, int value) throws RollNumberException;
+    void rollNumber(int gameID, int player, int value) throws RollNumberException;
 
     /**
      * Robs the specified player
@@ -105,21 +105,21 @@ public interface IFacade {
      * @param victim index of the player being robbed
      * @throws RobPlayerException
      */
-    void robPlayer(int player, HexLocation newLocation, int victim) throws RobPlayerException;
+    void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException;
 
     /**
      * Ends the current player's turn making it the next player's turn
      * @param player index of the player
      * @throws FinishTurnException
      */
-    void finishTurn(int player) throws FinishTurnException;
+    void finishTurn(int gameID, int player) throws FinishTurnException;
 
     /**
      * Buys a new dev card
      * @param player index of the player
      * @throws BuyDevCardException
      */
-    void buyDevCard(int player) throws BuyDevCardException;
+    void buyDevCard(int gameID, int player) throws BuyDevCardException;
 
     /**
      * Handles playing Year of Plenty
@@ -128,7 +128,7 @@ public interface IFacade {
      * @param resourceTwo second resource to receive
      * @throws YearOfPlentyException
      */
-    void yearOfPlenty(int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
+    void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
 
     /**
      * Handles playing Road Building
@@ -137,7 +137,7 @@ public interface IFacade {
      * @param locationTwo location for the second road
      * @throws RoadBuildingException
      */
-    void roadBuilding(int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException;
+    void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException;
 
     /**
      * Handles playing Soldier
@@ -146,22 +146,22 @@ public interface IFacade {
      * @param victim index of the player being robbed
      * @throws SoldierException
      */
-    void soldier(int player, HexLocation newLocation, int victim) throws SoldierException;
+    void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException;
 
     /**
-     * Hanldes playing Monopoly
+     * Handles playing Monopoly
      * @param player index of the player
      * @param resource resource to take
      * @throws MonopolyException
      */
-    void monopoly(int player, ResourceType resource) throws MonopolyException;
+    void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException;
 
     /**
      * Handles playing Monument
      * @param player index of the player
      * @throws MonumentException
      */
-    void monument(int player) throws MonumentException;
+    void monument(int gameID, int player) throws MonumentException;
 
     /**
      * Builds a road
@@ -170,7 +170,7 @@ public interface IFacade {
      * @param location
      * @throws BuildRoadException
      */
-    void buildRoad(int player, boolean isFree, EdgeLocation location) throws BuildRoadException;
+    void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException;
 
     /**
      * Builds a settlement
@@ -179,7 +179,7 @@ public interface IFacade {
      * @param location
      * @throws BuildSettlementException
      */
-    void buildSettlement(int player, boolean isFree, VertexLocation location) throws BuildSettlementException;
+    void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException;
 
     /**
      * Builds a city
@@ -187,7 +187,7 @@ public interface IFacade {
      * @param location
      * @throws BuildCityException
      */
-    void buildCity(int player, VertexLocation location) throws BuildCityException;
+    void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException;
 
     /**
      * Offers a trade to the specified player
@@ -197,7 +197,7 @@ public interface IFacade {
      * @param receive
      * @throws OfferTradeException
      */
-    void offerTrade(int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException;
+    void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException;
 
     /**
      * Accepts a trade offer
@@ -205,7 +205,7 @@ public interface IFacade {
      * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
      */
-    void acceptTrade(int player, boolean willAccept) throws AcceptTradeException;
+    void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException;
 
     /**
      * Performs a maritime trade (trade with the bank)
@@ -215,7 +215,7 @@ public interface IFacade {
      * @param get resource to get
      * @throws MaritimeTradeException
      */
-    void maritimeTrade(int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException;
+    void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException;
 
     /**
      * Discards the specified cards from the player's hand
@@ -223,5 +223,5 @@ public interface IFacade {
      * @param cardsToDiscard list of cards to be discarded
      * @throws DiscardCardsException
      */
-    void discardCards(int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException;
+    void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException;
 }
