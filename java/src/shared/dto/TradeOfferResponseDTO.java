@@ -6,7 +6,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class TradeOfferResponseDTO implements JsonSerializable {
+public final class TradeOfferResponseDTO implements IDTO,JsonSerializable {
 
     private int playerIndex;
     private boolean willAccept;

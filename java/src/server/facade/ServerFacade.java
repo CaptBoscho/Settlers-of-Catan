@@ -74,7 +74,7 @@ public class ServerFacade implements IFacade {
      * @throws AddAIException
      */
     @Override
-    public void addAI(Object aiType) throws AddAIException {
+    public void addAI(int gameID, Object aiType) throws AddAIException {
 
     }
 
@@ -134,7 +134,7 @@ public class ServerFacade implements IFacade {
      * @throws SendChatException
      */
     @Override
-    public void sendChat(int player, String message) throws SendChatException {
+    public void sendChat(int gameID, int player, String message) throws SendChatException {
 
     }
 
@@ -146,7 +146,7 @@ public class ServerFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int player, int value) throws RollNumberException {
+    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
 
     }
 
@@ -159,7 +159,7 @@ public class ServerFacade implements IFacade {
      * @throws RobPlayerException
      */
     @Override
-    public void robPlayer(int player, HexLocation newLocation, int victim) throws RobPlayerException {
+    public void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
 
     }
 
@@ -170,7 +170,7 @@ public class ServerFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int player) throws FinishTurnException {
+    public void finishTurn(int gameID, int player) throws FinishTurnException {
 
     }
 
@@ -181,7 +181,7 @@ public class ServerFacade implements IFacade {
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int player) throws BuyDevCardException {
+    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
 
     }
 
@@ -194,7 +194,7 @@ public class ServerFacade implements IFacade {
      * @throws YearOfPlentyException
      */
     @Override
-    public void yearOfPlenty(int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+    public void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
 
     }
 
@@ -207,7 +207,7 @@ public class ServerFacade implements IFacade {
      * @throws RoadBuildingException
      */
     @Override
-    public void roadBuilding(int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
 
     }
 
@@ -220,7 +220,7 @@ public class ServerFacade implements IFacade {
      * @throws SoldierException
      */
     @Override
-    public void soldier(int player, HexLocation newLocation, int victim) throws SoldierException {
+    public void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
 
     }
 
@@ -232,7 +232,7 @@ public class ServerFacade implements IFacade {
      * @throws MonopolyException
      */
     @Override
-    public void monopoly(int player, ResourceType resource) throws MonopolyException {
+    public void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
 
     }
 
@@ -243,7 +243,7 @@ public class ServerFacade implements IFacade {
      * @throws MonumentException
      */
     @Override
-    public void monument(int player) throws MonumentException {
+    public void monument(int gameID, int player) throws MonumentException {
 
     }
 
@@ -256,7 +256,7 @@ public class ServerFacade implements IFacade {
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
+    public void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
 
     }
 
@@ -269,7 +269,7 @@ public class ServerFacade implements IFacade {
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
+    public void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
 
     }
 
@@ -281,7 +281,7 @@ public class ServerFacade implements IFacade {
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int player, VertexLocation location) throws BuildCityException {
+    public void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
 
     }
 
@@ -295,7 +295,7 @@ public class ServerFacade implements IFacade {
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
+    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
 
     }
 
@@ -307,7 +307,7 @@ public class ServerFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int player, boolean willAccept) throws AcceptTradeException {
+    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
 
     }
 
@@ -321,7 +321,7 @@ public class ServerFacade implements IFacade {
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
+    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
 
     }
 
@@ -333,7 +333,7 @@ public class ServerFacade implements IFacade {
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
+    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
 
     }
 }

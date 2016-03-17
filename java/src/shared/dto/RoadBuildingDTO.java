@@ -7,7 +7,7 @@ import shared.model.JsonSerializable;
 /**
  * @author Joel Bradley
  */
-public final class RoadBuildingDTO implements JsonSerializable {
+public final class RoadBuildingDTO implements IDTO,JsonSerializable {
 
     private int playerIndex;
     private EdgeLocation roadLocationOne;
