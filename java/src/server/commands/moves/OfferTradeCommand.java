@@ -2,9 +2,11 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.OfferTradeException;
 import server.facade.IFacade;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ public class OfferTradeCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() throws CommandExecutionFailedException {
         List<ResourceType> send = new ArrayList<>();
         List<ResourceType> receive = new ArrayList<>();
         if(brick>=0){
@@ -103,7 +105,7 @@ public class OfferTradeCommand implements ICommand {
         try {
             facade.offerTrade(1, sender, receiver, send, receive);
         }catch(OfferTradeException e){
-
+            throw new CommandExecutionFailedException("OfferTradeCommand failed to execute properly");
         }
         return null;
     }

@@ -2,6 +2,8 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.GameModelDTO;
+import shared.model.game.Game;
 
 /**
  * A command object that plays a monument card
@@ -22,7 +24,7 @@ public class MonumentCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 

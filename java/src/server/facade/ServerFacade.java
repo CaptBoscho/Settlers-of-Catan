@@ -7,6 +7,7 @@ import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -177,12 +178,18 @@ public class ServerFacade implements IFacade {
     /**
      * Buys a new dev card
      *
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
-
+    public GameModelDTO buyDevCard(int gameID, int playerIndex) throws BuyDevCardException {
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            game.buyDevelopmentCard(playerIndex);
+        } catch (Exception e) {
+            throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
+        }
+        return game.getDTO();
     }
 
     /**

@@ -2,6 +2,7 @@ package server.commands.game;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.IDTO;
 
 /**
  * A command object that adds an AI
@@ -22,7 +23,7 @@ public class AddAICommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public IDTO execute() {
         return null;
     }
 
