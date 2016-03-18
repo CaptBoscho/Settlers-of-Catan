@@ -1,6 +1,7 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
+import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
 import shared.exceptions.BadJsonException;
 
 /**
@@ -233,7 +234,12 @@ public final class TurnTracker {
             }
         },
         DISCARDING,
-        ROBBING,
+        ROBBING {
+            @Override
+            public Phase next() {
+                return PLAYING;
+            }
+        },
         PLAYING {
             @Override
             public Phase next() {

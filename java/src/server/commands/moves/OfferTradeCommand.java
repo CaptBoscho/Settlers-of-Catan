@@ -1,12 +1,16 @@
 package server.commands.moves;
 
+import client.services.CommandExecutionFailed;
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.OfferTradeException;
 import server.facade.IFacade;
 import shared.definitions.ResourceType;
+import shared.dto.IDTO;
 import shared.dto.OfferTradeDTO;
 import shared.model.game.trade.Trade;
+import shared.dto.GameModelDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +38,12 @@ public class OfferTradeCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public IDTO execute() {
+
         try {
             facade.offerTrade(1, dot);
         }catch(OfferTradeException e){
-
+            //throw new CommandExecutionFailedException("OfferTradeCommand failed to execute properly");
         }
         return null;
     }

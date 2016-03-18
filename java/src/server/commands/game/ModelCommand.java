@@ -2,6 +2,7 @@ package server.commands.game;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that gets the game model
@@ -22,7 +23,7 @@ public class ModelCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 

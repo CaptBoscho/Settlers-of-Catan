@@ -11,6 +11,7 @@ import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -184,12 +185,18 @@ public class ServerFacade implements IFacade {
     /**
      * Buys a new dev card
      *
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
-
+    public GameModelDTO buyDevCard(int gameID, int playerIndex) throws BuyDevCardException {
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            game.buyDevelopmentCard(playerIndex);
+        } catch (Exception e) {
+            throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
+        }
+        return game.getDTO();
     }
 
     /**

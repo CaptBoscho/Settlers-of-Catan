@@ -551,8 +551,7 @@ public final class PlayerManager implements IPlayerManager {
                 return player;
             }
         }
-
-        throw new GameOverException("The game is still in progress.");
+        return null;
     }
 
     /**

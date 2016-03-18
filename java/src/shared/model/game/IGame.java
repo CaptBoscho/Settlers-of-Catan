@@ -380,7 +380,7 @@ public interface IGame {
      * adds new developmentCard to his DCBank
      * @param playerIndex
      */
-    DevCardType buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception;
+    void buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception;
 
     /**
      * Action - Player performs a maritime trade

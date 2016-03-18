@@ -3,6 +3,7 @@ package shared.model.game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
+import shared.dto.GameModelDTO;
 import shared.exceptions.PlayerExistsException;
 import shared.model.JsonSerializable;
 import shared.model.bank.DevelopmentCardBank;
@@ -49,7 +50,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Constructors
     /**
-     * Constructor
+     * Constructors
      */
     public Game() {
         this.version = 0;
@@ -63,6 +64,46 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.developmentCardBank = new DevelopmentCardBank(true);
         this.chat = new MessageList();
         this.log = new MessageList();
+    }
+
+    public Game(JsonObject gameJson) {
+        assert gameJson != null;
+        assert gameJson.has("deck");
+        assert gameJson.has("map");
+        assert gameJson.has("players");
+        assert gameJson.has("bank");
+        assert gameJson.has("turnTracker");
+        assert gameJson.has("chat");
+        assert gameJson.has("log");
+
+        this.developmentCardBank = new DevelopmentCardBank(gameJson.get("deck").getAsJsonObject(), true);
+        this.map = new Map(gameJson.get("map").getAsJsonObject());
+        this.playerManager = new PlayerManager(gameJson.get("players").getAsJsonArray());
+        this.resourceCardBank = new ResourceCardBank(gameJson.get("bank").getAsJsonObject(), true);
+
+        // only update if someone actually has the longest road
+        final JsonObject turnTracker = gameJson.getAsJsonObject("turnTracker");
+        int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
+        if(longestRoadIndex >= 0) {
+            this.longestRoadCard = new LongestRoad(longestRoadIndex);
+        }
+
+        this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
+        this.version = gameJson.get("version").getAsInt();
+        this.winner = gameJson.get("winner").getAsInt();
+        if(gameJson.has("tradeOffer")) {
+            this.currentOffer = new Trade(gameJson.get("tradeOffer").getAsJsonObject());
+        } else {
+            this.currentOffer = new Trade();
+        }
+        try {
+            this.turnTracker = new TurnTracker(gameJson.get("turnTracker").getAsJsonObject());
+        } catch (BadJsonException e) {
+            e.printStackTrace();
+        }
+        this.chat = new MessageList(gameJson.get("chat").getAsJsonObject());
+        this.log = new MessageList(gameJson.get("log").getAsJsonObject());
+        this.winner = gameJson.get("winner").getAsInt();
     }
     //endregion
 
@@ -889,15 +930,17 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIndex
      */
     @Override
-    public DevCardType buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception {
+    public void buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception {
         assert playerIndex >= 0;
         assert this.playerManager != null;
         assert this.developmentCardBank != null;
 
+        // remove player resources
         playerManager.buyDevCard(playerIndex);
+
+        // give Dev Card from game to player
         final DevelopmentCard dc = developmentCardBank.draw();
         playerManager.addDevCard(playerIndex, dc);
-        return dc.getType();
     }
 
     /**
@@ -1557,6 +1600,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert playerIDNew != playerIDOld;
 
         longestRoadCard.setOwner(playerIDNew, roadSize);
+    }
+
+    public GameModelDTO getDTO() {
+        return new GameModelDTO(toJSON());
     }
     //==========================================================
     //endregion

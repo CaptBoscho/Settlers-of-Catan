@@ -9,6 +9,7 @@ import shared.exceptions.PlayerExistsException;
 import shared.model.bank.InvalidTypeException;
 
 import javax.naming.InsufficientResourcesException;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that accepts a trade
@@ -33,7 +34,7 @@ public class AcceptTradeCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         try {
             facade.acceptTrade(1, playerIndex, answer);
         }catch(AcceptTradeException e){}

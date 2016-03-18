@@ -7,6 +7,7 @@ import shared.definitions.ResourceType;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.PlayerExistsException;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -124,7 +125,7 @@ public interface IFacade {
      * @param player index of the player
      * @throws BuyDevCardException
      */
-    void buyDevCard(int gameID, int player) throws BuyDevCardException;
+    GameModelDTO buyDevCard(int gameID, int player) throws BuyDevCardException;
 
     /**
      * Handles playing Year of Plenty
