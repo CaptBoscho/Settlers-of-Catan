@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.MaritimeTradeException;
 import server.facade.IFacade;
 import shared.definitions.ResourceType;
+import shared.dto.MaritimeTradeDTO;
 
 /**
  * A command object that maritime trades
@@ -13,6 +14,7 @@ import shared.definitions.ResourceType;
  */
 public class MaritimeTradeCommand implements ICommand {
 
+    private int gameID;
     private int player;
     private int ratio;
     private ResourceType give;
@@ -21,12 +23,30 @@ public class MaritimeTradeCommand implements ICommand {
     /**
      * Constructor
      */
-    public MaritimeTradeCommand(int pindex, int rat, ResourceType send, ResourceType receive, IFacade fac) {
-        player = pindex;
-        ratio = rat;
-        give = send;
-        get = receive;
+    public MaritimeTradeCommand(MaritimeTradeDTO dto, IFacade fac) {
+        player = dto.getPlayerIndex();
+        ratio = dto.getRatio();
+        give = convert(dto.getOutputResource());
+        get = convert(dto.getInputResource());
         facade = fac;
+        gameID = 0;
+    }
+
+    private ResourceType convert(String type){
+        switch(type){
+            case "brick":
+                return ResourceType.BRICK;
+            case "wood":
+                return ResourceType.WOOD;
+            case "wheat":
+                return ResourceType.WHEAT;
+            case "sheep":
+                return ResourceType.SHEEP;
+            case "ore":
+                return ResourceType.ORE;
+            default:
+                return null;
+        }
     }
 
     /**

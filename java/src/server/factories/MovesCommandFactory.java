@@ -33,7 +33,7 @@ public class MovesCommandFactory {
      * Creates a Moves command based on a given string
      * @return an ICommand object
      */
-    public ICommand createCommand(Object obj) {
+    public ICommand createCommand(IDTO obj) {
         if (obj instanceof FinishTurnDTO) {
             // do finish turn stuff
         } else if (obj instanceof SendChatDTO) {
@@ -59,7 +59,7 @@ public class MovesCommandFactory {
         } else if (obj instanceof BuildCityDTO) {
 
         } else if (obj instanceof OfferTradeDTO) {
-
+            //return new OfferTradeCommand(obj,facade);
         } else if (obj instanceof TradeOfferResponseDTO) {
 
         } else if (obj instanceof MaritimeTradeDTO) {

@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
 import shared.exceptions.PlayerExistsException;
@@ -51,7 +52,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * Constructor
      */
     public Game() {
-        this.version = -1;
+        this.version = 0;
+        this.winner = -1;
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
@@ -1446,6 +1448,22 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
+        JsonObject json = new JsonObject();
+        json.add("bank",resourceCardBank.toJSON());
+        json.add("chat",chat.toJSON());
+        json.add("log",log.toJSON());
+        json.add("map",map.toJSON());
+        json.add("players",playerManager.toJSON());
+        json.add("tradeOffer", currentOffer.toJSON());
+
+        JsonObject turn = turnTracker.toJSON();
+        turn.addProperty("longestRoad",longestRoadCard.getOwner());
+        turn.addProperty("largestArmy",largestArmyCard.getOwner());
+        json.add("turnTracker",turn);
+
+        json.addProperty("version",version);
+        json.addProperty("winner",winner);
+
         return null;
     }
     //=====================================================================
