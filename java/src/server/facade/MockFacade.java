@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -161,8 +162,8 @@ public class MockFacade implements IFacade {
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
-
+    public GameModelDTO buyDevCard(int gameID, int player) throws BuyDevCardException {
+        return null;
     }
 
     /**

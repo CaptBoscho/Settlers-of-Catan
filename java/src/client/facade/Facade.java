@@ -773,7 +773,9 @@ public class Facade {
 
     public int getWinnerId() {
         try {
-            return this.game.getWinner().getId();
+            if (game.getWinner() != null) {
+                return this.game.getWinner().getId();
+            }
         } catch (GameOverException e) {
             e.printStackTrace();
         }

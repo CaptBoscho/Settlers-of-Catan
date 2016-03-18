@@ -1,6 +1,8 @@
 package server.commands;
 
 import com.google.gson.JsonObject;
+import server.exceptions.CommandExecutionFailedException;
+import shared.dto.IDTO;
 
 /**
  * A parent interface for all command objects.  The execute function in each implementation of this interface will
@@ -16,5 +18,5 @@ public interface ICommand {
      *
      * @return JsonObject with information pertaining to the execute function of the given Command object
      */
-    JsonObject execute();
+    IDTO execute() throws CommandExecutionFailedException;
 }

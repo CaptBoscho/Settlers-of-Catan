@@ -2,6 +2,7 @@ package server.commands.user;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.IDTO;
 
 /**
  * A command object that logs a player in
@@ -16,7 +17,7 @@ public class LoginCommand implements ICommand {
      * @return JsonObject with information about the login
      */
     @Override
-    public JsonObject execute() {
+    public IDTO execute() {
         return null;
     }
 }

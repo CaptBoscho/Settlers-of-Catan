@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -119,7 +120,7 @@ public interface IFacade {
      * @param player index of the player
      * @throws BuyDevCardException
      */
-    void buyDevCard(int gameID, int player) throws BuyDevCardException;
+    GameModelDTO buyDevCard(int gameID, int player) throws BuyDevCardException;
 
     /**
      * Handles playing Year of Plenty
