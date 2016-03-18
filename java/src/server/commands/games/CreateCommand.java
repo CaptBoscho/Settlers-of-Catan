@@ -1,7 +1,7 @@
 package server.commands.games;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that creates a game.
@@ -13,10 +13,10 @@ public class CreateCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Create game command
      *
-     * @return GameModelDTO with information about the game creation
+     * @return IDTO with information about the game creation
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 }

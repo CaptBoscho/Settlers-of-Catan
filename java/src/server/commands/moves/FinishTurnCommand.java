@@ -1,7 +1,7 @@
 package server.commands.moves;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that finishes a turn
@@ -19,10 +19,10 @@ public class FinishTurnCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Finish Turn command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 

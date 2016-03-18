@@ -1,7 +1,7 @@
 package server.commands.games;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that lists the available games.
@@ -13,10 +13,10 @@ public class ListCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the List command
      *
-     * @return GameModelDTO with information about the games list
+     * @return IDTO with information about the games list
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 }

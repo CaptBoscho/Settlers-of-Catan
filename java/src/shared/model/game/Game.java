@@ -133,7 +133,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
         }
         this.chat = new MessageList(json.get("chat").getAsJsonObject());
         this.log = new MessageList(json.get("log").getAsJsonObject());
-        this.winner = json.get("winner").getAsInt();
         setChanged();
         notifyObservers();
     }

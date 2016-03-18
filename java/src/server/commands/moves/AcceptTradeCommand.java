@@ -1,7 +1,7 @@
 package server.commands.moves;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that accepts a trade
@@ -19,10 +19,10 @@ public class AcceptTradeCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Accept Trade command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 

@@ -4,7 +4,7 @@ import server.commands.ICommand;
 import server.exceptions.BuildRoadException;
 import server.facade.IFacade;
 import shared.dto.BuildRoadDTO;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that builds a road
@@ -26,12 +26,12 @@ public class BuildRoadCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Build Road command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         try {
-            facade.buildRoad(0, dto.getPlayerIndex(), dto.getRoadLocation());
+            facade.buildRoad(1, dto.getPlayerIndex(), dto.getRoadLocation());
         } catch (BuildRoadException e) {
             e.printStackTrace();
         }

@@ -3,13 +3,16 @@ package server.facade;
 import com.google.gson.JsonObject;
 import server.exceptions.*;
 import server.managers.GameManager;
+import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
+import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradePackage;
+import shared.model.game.Game;
 
 import java.util.List;
 
@@ -17,20 +20,27 @@ import java.util.List;
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
  */
 public class ServerFacade implements IFacade {
+    private static IFacade _instance;
+    private GameManager gameManager;
+    private UserManager userManager;
 
-    private static ServerFacade instance;
-
-    public static ServerFacade getInstance() {
-        if(instance == null) {
-            instance = new ServerFacade();
-        }
-
-        return instance;
+    /**
+     * Default Constructor - Private
+     */
+    private ServerFacade(){
+        gameManager = new GameManager();
+        userManager = new UserManager();
     }
 
-    private GameManager gameManager;
-
-    private ServerFacade() {
+    /**
+     * Singleton - get instance method
+     * @return
+     */
+    public static IFacade getInstance(){
+        if(_instance == null) {
+            _instance = new ServerFacade();
+        }
+        return _instance;
     }
 
     /**
@@ -146,11 +156,22 @@ public class ServerFacade implements IFacade {
      * @param player      index of the player robbing
      * @param newLocation
      * @param victim      index of the player being robbed
+     * @return GameModelDTO
      * @throws RobPlayerException
      */
     @Override
-    public void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+    public GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert newLocation != null;
+        assert victim >= 0;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            //TODO: fix model robbing cuz its a mess
+        } catch (Exception e) {
+            throw new RobPlayerException(e.getMessage());
+        }
     }
 
     /**
@@ -194,23 +215,37 @@ public class ServerFacade implements IFacade {
      * @param player      index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
+     * @return GameModelDTO
      * @throws RoadBuildingException
      */
     @Override
-    public void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert locationOne != null;
+        assert locationTwo != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canUseRoadBuilding(player)) {
+                game.useRoadBuilder(player, locationOne, locationTwo);
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException | DevCardException e) {
+            throw new RoadBuildingException(e.getMessage());
+        }
     }
 
     /**
      * Handles playing Soldier
      *
-     * @param player      index of the player
+     * @param player index of the player
      * @param newLocation
-     * @param victim      index of the player being robbed
+     * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws SoldierException
      */
     @Override
-    public void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+    public GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
 
     }
 
@@ -242,11 +277,25 @@ public class ServerFacade implements IFacade {
      *
      * @param player   index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
+    public GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert location != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canInitiateRoad(player, location)) {
+                game.initiateRoad(player, location);
+            } else if(game.canBuildRoad(player, location)) {
+                game.buildRoad(player, location);
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            throw new BuildRoadException(e.getMessage());
+        }
     }
 
     /**
@@ -254,23 +303,50 @@ public class ServerFacade implements IFacade {
      *
      * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
+    public GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert location != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canInitiateSettlement(player, location)) {
+                game.initiateSettlement(player, location);
+            } else if(game.canBuildSettlement(player, location)) {
+                game.buildSettlement(player, location);
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            throw new BuildSettlementException(e.getMessage());
+        }
     }
 
     /**
      * Builds a city
      *
+     * @param gameID id of the game
      * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+    public GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert location != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canBuildCity(player, location)) {
+                game.buildCity(player, location);
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            throw new BuildCityException(e.getMessage());
+        }
     }
 
     /**

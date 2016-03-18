@@ -1,7 +1,7 @@
 package server.commands.user;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that logs a player in
@@ -13,10 +13,10 @@ public class LoginCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Login command
      *
-     * @return GameModelDTO with information about the login
+     * @return IDTO with information about the login
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 }

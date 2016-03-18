@@ -1,7 +1,10 @@
 package server.commands.moves;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import server.exceptions.RobPlayerException;
+import server.facade.IFacade;
+import shared.dto.IDTO;
+import shared.dto.RobPlayerDTO;
 
 /**
  * A command object that robs a player
@@ -10,19 +13,29 @@ import shared.dto.GameModelDTO;
  */
 public class RobPlayerCommand implements ICommand {
 
+    private IFacade facade;
+    private RobPlayerDTO dto;
+
     /**
      * Constructor
      */
-    public RobPlayerCommand() {
-
+    public RobPlayerCommand(IFacade facade, RobPlayerDTO dto) {
+        this.facade = facade;
+        this.dto = dto;
     }
 
     /**
      * Communicates with the ServerFacade to carry out the Rob Player command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
+        try {
+            facade.robPlayer(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
+        } catch (RobPlayerException e) {
+            e.printStackTrace();
+        }
+        //TODO: change this later fool
         return null;
     }
 

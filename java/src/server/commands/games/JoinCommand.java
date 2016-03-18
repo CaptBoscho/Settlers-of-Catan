@@ -1,7 +1,7 @@
 package server.commands.games;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that adds a player to a game.
@@ -13,10 +13,10 @@ public class JoinCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Join Game command
      *
-     * @return GameModelDTO with information about the join
+     * @return IDTO with information about the join
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 }

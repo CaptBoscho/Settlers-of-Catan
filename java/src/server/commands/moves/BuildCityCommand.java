@@ -4,7 +4,7 @@ import server.commands.ICommand;
 import server.exceptions.BuildCityException;
 import server.facade.IFacade;
 import shared.dto.BuildCityDTO;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that builds a city
@@ -26,12 +26,12 @@ public class BuildCityCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Build City command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         try {
-            facade.buildCity(0, dto.getPlayerIndex(), dto.getLocation());
+            facade.buildCity(1, dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildCityException e) {
             e.printStackTrace();
         }

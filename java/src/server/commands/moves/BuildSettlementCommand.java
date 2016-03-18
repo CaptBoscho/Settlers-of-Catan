@@ -4,7 +4,7 @@ import server.commands.ICommand;
 import server.exceptions.BuildSettlementException;
 import server.facade.IFacade;
 import shared.dto.BuildSettlementDTO;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that builds a settlement
@@ -23,12 +23,12 @@ public class BuildSettlementCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Build Settlement command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         try {
-            facade.buildSettlement(0, dto.getPlayerIndex(), dto.getLocation());
+            facade.buildSettlement(1, dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildSettlementException e) {
             e.printStackTrace();
         }

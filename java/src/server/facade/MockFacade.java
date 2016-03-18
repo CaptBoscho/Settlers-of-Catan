@@ -4,11 +4,11 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradePackage;
 
 import java.util.List;
 
@@ -131,14 +131,15 @@ public class MockFacade implements IFacade {
      * Robs the specified player
      *
      * @param gameID
-     * @param player      index of the player robbing
+     * @param player index of the player robbing
      * @param newLocation
-     * @param victim      index of the player being robbed
+     * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws RobPlayerException
      */
     @Override
-    public void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
-
+    public GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+        return null;
     }
 
     /**
@@ -186,11 +187,12 @@ public class MockFacade implements IFacade {
      * @param player      index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
+     * @return GameModelDTO
      * @throws RoadBuildingException
      */
     @Override
-    public void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
-
+    public GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+        return null;
     }
 
     /**
@@ -199,12 +201,13 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player      index of the player
      * @param newLocation
-     * @param victim      index of the player being robbed
+     * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws SoldierException
      */
     @Override
-    public void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
-
+    public GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+        return null;
     }
 
     /**
@@ -238,11 +241,12 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
-
+    public GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
+        return null;
     }
 
     /**
@@ -251,11 +255,12 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
-
+    public GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
+        return null;
     }
 
     /**
@@ -264,11 +269,12 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player   index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
-
+    public GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+        return null;
     }
 
     /**

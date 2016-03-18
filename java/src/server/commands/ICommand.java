@@ -1,6 +1,6 @@
 package server.commands;
 
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A parent interface for all command objects.  The execute function in each implementation of this interface will
@@ -14,7 +14,7 @@ public interface ICommand {
      * The main function on child classes of this interface.  It can be called to activate the set of instructions
      * indicated by that class.
      *
-     * @return GameModelDTO with information pertaining to the execute function of the given Command object
+     * @return IDTO with information pertaining to the execute function of the given Command object
      */
-    GameModelDTO execute();
+    IDTO execute();
 }

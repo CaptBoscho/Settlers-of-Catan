@@ -1,7 +1,7 @@
 package server.commands.user;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that registers a player.
@@ -13,10 +13,10 @@ public class RegisterCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Register command
      *
-     * @return GameModelDTO with information about the registration
+     * @return IDTO with information about the registration
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 }

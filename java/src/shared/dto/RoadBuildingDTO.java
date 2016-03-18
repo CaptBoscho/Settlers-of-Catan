@@ -23,6 +23,18 @@ public final class RoadBuildingDTO implements IDTO,JsonSerializable {
         this.roadLocationTwo = locationTwo;
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public EdgeLocation getRoadLocationOne() {
+        return roadLocationOne;
+    }
+
+    public EdgeLocation getRoadLocationTwo() {
+        return roadLocationTwo;
+    }
+
     /**
      * Converts the object to JSON
      *

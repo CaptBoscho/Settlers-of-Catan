@@ -4,7 +4,7 @@ import server.commands.ICommand;
 import server.exceptions.MaritimeTradeException;
 import server.facade.IFacade;
 import shared.definitions.ResourceType;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that maritime trades
@@ -31,12 +31,12 @@ public class MaritimeTradeCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Maritime Trade command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         try {
-            facade.maritimeTrade(0, player, ratio, give, get);
+            facade.maritimeTrade(1, player, ratio, give, get);
         }catch(MaritimeTradeException e){
 
         }

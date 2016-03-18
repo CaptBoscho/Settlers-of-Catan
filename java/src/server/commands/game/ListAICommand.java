@@ -1,7 +1,7 @@
 package server.commands.game;
 
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that list the AI
@@ -19,10 +19,10 @@ public class ListAICommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the List AI command
-     * @return GameModelDTO
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 
