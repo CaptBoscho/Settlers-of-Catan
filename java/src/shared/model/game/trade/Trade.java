@@ -80,6 +80,8 @@ public final class Trade {
     }
 
     public boolean isActive(){return active;}
+
+    public void setActive(boolean act){active = act;}
     /**
      * Constructs a Trade object from a JSON blob
      *

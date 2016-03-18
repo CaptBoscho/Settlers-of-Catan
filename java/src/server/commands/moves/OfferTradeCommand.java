@@ -17,21 +17,14 @@ import java.util.List;
  * @author Joel Bradley
  */
 public class OfferTradeCommand implements ICommand {
-    private int sender;
-    private int receiver;
-    private List<ResourceType> send;
-    private List<ResourceType> receive;
+    private OfferTradeDTO dot;
     private IFacade facade;
     private int game;
     /**
      * Constructor
      */
     public OfferTradeCommand(OfferTradeDTO dto, IFacade fac) {
-        sender = dto.getSender();
-        receiver = dto.getReceiver();
-        Trade offer = dto.getOffer();
-        send = offer.getPackage1().getResources();
-        receive = offer.getPackage2().getResources();
+        dot = dto;
         facade = fac;
         game = 0;
     }
@@ -43,7 +36,7 @@ public class OfferTradeCommand implements ICommand {
     @Override
     public JsonObject execute() {
         try {
-            facade.offerTrade(1, sender, receiver, send, receive);
+            facade.offerTrade(1, dot);
         }catch(OfferTradeException e){
 
         }

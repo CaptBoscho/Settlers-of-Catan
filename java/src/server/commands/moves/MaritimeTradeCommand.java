@@ -15,38 +15,15 @@ import shared.dto.MaritimeTradeDTO;
 public class MaritimeTradeCommand implements ICommand {
 
     private int gameID;
-    private int player;
-    private int ratio;
-    private ResourceType give;
-    private ResourceType get;
+    private MaritimeTradeDTO dto;
     IFacade facade;
     /**
      * Constructor
      */
     public MaritimeTradeCommand(MaritimeTradeDTO dto, IFacade fac) {
-        player = dto.getPlayerIndex();
-        ratio = dto.getRatio();
-        give = convert(dto.getOutputResource());
-        get = convert(dto.getInputResource());
+        this.dto = dto;
         facade = fac;
         gameID = 0;
-    }
-
-    private ResourceType convert(String type){
-        switch(type){
-            case "brick":
-                return ResourceType.BRICK;
-            case "wood":
-                return ResourceType.WOOD;
-            case "wheat":
-                return ResourceType.WHEAT;
-            case "sheep":
-                return ResourceType.SHEEP;
-            case "ore":
-                return ResourceType.ORE;
-            default:
-                return null;
-        }
     }
 
     /**
@@ -56,7 +33,7 @@ public class MaritimeTradeCommand implements ICommand {
     @Override
     public JsonObject execute() {
         try {
-            facade.maritimeTrade(1, player, ratio, give, get);
+            facade.maritimeTrade(1, dto);
         }catch(MaritimeTradeException e){
 
         }

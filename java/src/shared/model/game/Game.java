@@ -693,11 +693,18 @@ public class Game extends Observable implements IGame, JsonSerializable {
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
 
             // TODO - why is this trade object unused?
-            Trade trade = new Trade(one,two);
-
-            playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
+            currentOffer = new Trade(one,two);
+            currentOffer.setActive(true);
+            //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
 
         }
+    }
+
+    public void acceptTrade(int playerIndex, boolean answer)throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
+        if(playerIndex == currentOffer.getReceiver() && answer){
+            playerManager.offerTrade(currentOffer.getSender(),currentOffer.getReceiver(),currentOffer.getPackage1().getResources(),currentOffer.getPackage2().getResources());
+        }
+        currentOffer = new Trade();
     }
 
     /**
@@ -893,52 +900,47 @@ public class Game extends Observable implements IGame, JsonSerializable {
         return dc.getType();
     }
 
-    //TODO: Maritime messed up
     /**
      * Action - Player performs a maritime trade
      *
      * @param playerIndex
-     * @param port
-     * @param want
      */
     @Override
-    public void maritimeTrade(int playerIndex, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+    public void maritimeTrade(int playerIndex, int ratio, ResourceType send, ResourceType receive) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         assert playerIndex >= 0;
-        assert port != null;
-        assert want != null;
-
-        if(canMaritimeTrade(playerIndex, port)){
-            List<ResourceType> cards = new ArrayList<>();
-            switch(port) {
+        List<ResourceType> cards = new ArrayList<>();
+        if(ratio == 3 && !canMaritimeTrade(playerIndex,PortType.THREE)){
+            return;
+        } else if(ratio == 2) {
+            switch (send) {
                 case BRICK:
-                    cards.add(ResourceType.BRICK);
-                    cards.add(ResourceType.BRICK);
+                    if(!canMaritimeTrade(playerIndex,PortType.BRICK)){return;}
                     break;
                 case ORE:
-                    cards.add(ResourceType.ORE);
-                    cards.add(ResourceType.ORE);
+                    if(!canMaritimeTrade(playerIndex,PortType.ORE)){return;}
                     break;
                 case SHEEP:
-                    cards.add(ResourceType.SHEEP);
-                    cards.add(ResourceType.SHEEP);
+                    if(!canMaritimeTrade(playerIndex,PortType.SHEEP)){return;}
                     break;
                 case WHEAT:
-                    cards.add(ResourceType.WHEAT);
-                    cards.add(ResourceType.WHEAT);
+                    if(!canMaritimeTrade(playerIndex,PortType.WHEAT)){return;}
                     break;
                 case WOOD:
-                    cards.add(ResourceType.WOOD);
-                    cards.add(ResourceType.WOOD);
+                    if(!canMaritimeTrade(playerIndex,PortType.WOOD)){return;}
                     break;
             }
-            final List<ResourceCard> discarded = playerManager.discardResourceType(playerIndex, cards);
-            assert discarded != null;
-            for(ResourceCard rc: discarded) {
-                resourceCardBank.addResource(rc);
-            }
-
-            playerManager.addResource(playerIndex, resourceCardBank.discard(want));
         }
+        for(int i=0; i<ratio; i++){
+            cards.add(send);
+        }
+        final List<ResourceCard> discarded = playerManager.discardResourceType(playerIndex, cards);
+        assert discarded != null;
+        for(ResourceCard rc: discarded) {
+            resourceCardBank.addResource(rc);
+        }
+
+        playerManager.addResource(playerIndex, resourceCardBank.discard(receive));
+
     }
 
     /**

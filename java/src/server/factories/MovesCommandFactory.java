@@ -59,11 +59,11 @@ public class MovesCommandFactory {
         } else if (obj instanceof BuildCityDTO) {
 
         } else if (obj instanceof OfferTradeDTO) {
-            //return new OfferTradeCommand(obj,facade);
+            return new OfferTradeCommand((OfferTradeDTO)obj,facade);
         } else if (obj instanceof TradeOfferResponseDTO) {
 
         } else if (obj instanceof MaritimeTradeDTO) {
-
+            return new MaritimeTradeCommand((MaritimeTradeDTO)obj,facade);
         } else if (obj instanceof DiscardCardsDTO) {
 
         }
