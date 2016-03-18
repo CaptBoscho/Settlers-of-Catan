@@ -1,7 +1,6 @@
 package server.factories;
 
 import server.commands.ICommand;
-import server.commands.user.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
 import shared.dto.IDTO;
@@ -16,7 +15,7 @@ public class UserCommandFactory {
     private static UserCommandFactory instance = null;
 
     private UserCommandFactory() {
-        facade = new ServerFacade();
+        facade = ServerFacade.getInstance();
     }
 
     public static UserCommandFactory getInstance() {

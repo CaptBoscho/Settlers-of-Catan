@@ -1,13 +1,17 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
+import com.sun.corba.se.spi.activation.Server;
 import server.exceptions.*;
+import server.managers.GameManager;
+import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
+import shared.model.game.Game;
 import shared.model.game.trade.TradePackage;
 
 import java.util.List;
@@ -16,6 +20,29 @@ import java.util.List;
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
  */
 public class ServerFacade implements IFacade {
+    private static IFacade _instance;
+    private GameManager gameManager;
+    private UserManager userManager;
+
+    /**
+     * Default Constructor - Private
+     */
+    private ServerFacade(){
+        gameManager = new GameManager();
+        userManager = new UserManager();
+    }
+
+    /**
+     * Singleton - get instance method
+     * @return
+     */
+    public static IFacade getInstance(){
+        if(_instance == null) {
+            _instance = new ServerFacade();
+        }
+        return _instance;
+    }
+
     /**
      * Logs a player into the server
      *

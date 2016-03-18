@@ -18,7 +18,7 @@ public class GamesCommandFactory {
     private static GamesCommandFactory instance = null;
 
     private GamesCommandFactory() {
-        facade = new ServerFacade();
+        facade = ServerFacade.getInstance();
     }
 
     public static GamesCommandFactory getInstance() {

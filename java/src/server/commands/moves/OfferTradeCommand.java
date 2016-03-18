@@ -43,7 +43,7 @@ public class OfferTradeCommand implements ICommand {
     @Override
     public JsonObject execute() {
         try {
-            facade.offerTrade(game, sender, receiver, send, receive);
+            facade.offerTrade(1, sender, receiver, send, receive);
         }catch(OfferTradeException e){
 
         }
