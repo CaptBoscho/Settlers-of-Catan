@@ -148,7 +148,7 @@ public class ServerFacade implements IFacade {
      */
     @Override
     public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
-
+        return null;
     }
 
     /**
