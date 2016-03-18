@@ -2,6 +2,7 @@ package server.facade;
 
 import com.google.gson.JsonObject;
 import server.exceptions.*;
+import server.managers.GameManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.GameModelDTO;
@@ -9,6 +10,7 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
+import shared.model.game.Game;
 import shared.model.game.trade.TradePackage;
 
 import java.util.List;
@@ -120,8 +122,11 @@ public class ServerFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
-        return null;
+    public GameModelDTO rollNumber(int gameId, int player, int value) throws RollNumberException {
+        //Game game = GameManager.getInstance().getGameById(gameId);
+        Game game = new Game();
+
+        game.r
     }
 
     /**

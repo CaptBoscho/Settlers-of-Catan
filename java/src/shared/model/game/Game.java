@@ -668,6 +668,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     /**
+     * Action - Player rolls the dice
+     */
+    public void rollNumber(int playerIndex, int value){
+
+    }
+
+    /**
      * Action - Player offers trade
      *
      * @param playerIndexOne Index of Player offering the trade

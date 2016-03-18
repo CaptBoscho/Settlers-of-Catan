@@ -16,6 +16,7 @@ import shared.dto.RollNumberDTO;
  * @author Joel Bradley
  */
 public class RollNumberCommand implements ICommand {
+    private int gameId;
     private int value;
     private int playerIndex;
     private IFacade facade;
@@ -25,6 +26,7 @@ public class RollNumberCommand implements ICommand {
      */
     public RollNumberCommand(IFacade facade, RollNumberDTO roll) {
         this.facade = facade;
+        this.gameId = roll.getGameId();
         this.value = roll.getValue();
         this.playerIndex = roll.getPlayerIndex();
     }
@@ -35,9 +37,8 @@ public class RollNumberCommand implements ICommand {
      */
     @Override
     public IDTO execute() {
-        int gameID = 10;
         try {
-            return facade.rollNumber(gameID, playerIndex, value);
+            return facade.rollNumber(gameId, playerIndex, value);
         } catch (RollNumberException e) {
             return new GameModelDTO();
         }
