@@ -2,6 +2,9 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.DiscardCardsException;
+import server.facade.IFacade;
+import shared.dto.DiscardCardsDTO;
 import shared.dto.GameModelDTO;
 
 /**
@@ -11,11 +14,14 @@ import shared.dto.GameModelDTO;
  */
 public class DiscardCardsCommand implements ICommand {
 
+    DiscardCardsDTO dto;
+    IFacade facade;
     /**
      * Constructor
      */
-    public DiscardCardsCommand() {
-
+    public DiscardCardsCommand(DiscardCardsDTO discard, IFacade fac) {
+        dto = discard;
+        facade = fac;
     }
 
     /**
@@ -24,6 +30,11 @@ public class DiscardCardsCommand implements ICommand {
      */
     @Override
     public GameModelDTO execute() {
+        try {
+            facade.discardCards(1, dto);
+        }catch(DiscardCardsException e){
+
+        }
         return null;
     }
 

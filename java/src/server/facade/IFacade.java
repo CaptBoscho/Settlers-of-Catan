@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.PlayerExistsException;
@@ -221,5 +222,5 @@ public interface IFacade {
      * @param cardsToDiscard list of cards to be discarded
      * @throws DiscardCardsException
      */
-    void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException;
+    void discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
 }

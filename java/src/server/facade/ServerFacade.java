@@ -7,6 +7,7 @@ import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.InvalidPlayerException;
@@ -22,6 +23,7 @@ import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 
 import javax.naming.InsufficientResourcesException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -348,13 +350,21 @@ public class ServerFacade implements IFacade {
     /**
      * Discards the specified cards from the player's hand
      *
-     * @param player         index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
-
+    public void discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        List<ResourceType> cards = new ArrayList<>();
+        for(int i=0; i<dto.getBrickCount(); i++){cards.add(ResourceType.BRICK);}
+        for(int i=0; i<dto.getWoodCount(); i++){cards.add(ResourceType.WOOD);}
+        for(int i=0; i<dto.getOreCount(); i++){cards.add(ResourceType.ORE);}
+        for(int i=0; i<dto.getWheatCount(); i++){cards.add(ResourceType.WHEAT);}
+        for(int i=0; i<dto.getSheepCount(); i++){cards.add(ResourceType.SHEEP);}
+        try {
+            gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
+        }catch(PlayerExistsException e){}
+        catch(InsufficientResourcesException e){}
+        catch(InvalidTypeException e){}
     }
 
     private ResourceType convert(String type){
