@@ -101,7 +101,7 @@ public class OfferTradeCommand implements ICommand {
         }
 
         try {
-            facade.offerTrade(sender, receiver, send, receive);
+            facade.offerTrade(1, sender, receiver, send, receive);
         }catch(OfferTradeException e){
 
         }

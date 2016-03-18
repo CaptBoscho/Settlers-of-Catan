@@ -36,7 +36,7 @@ public class MaritimeTradeCommand implements ICommand {
     @Override
     public JsonObject execute() {
         try {
-            facade.maritimeTrade(player, ratio, give, get);
+            facade.maritimeTrade(1, player, ratio, give, get);
         }catch(MaritimeTradeException e){
 
         }
