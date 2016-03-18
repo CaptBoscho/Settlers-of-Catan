@@ -36,7 +36,7 @@ public class MaritimeTradeCommand implements ICommand {
         try {
             facade.maritimeTrade(1, dto);
         }catch(MaritimeTradeException e){
-
+            e.printStackTrace();
         }
         return null;
     }

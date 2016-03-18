@@ -33,7 +33,7 @@ public class DiscardCardsCommand implements ICommand {
         try {
             facade.discardCards(1, dto);
         }catch(DiscardCardsException e){
-
+            e.printStackTrace();
         }
         return null;
     }

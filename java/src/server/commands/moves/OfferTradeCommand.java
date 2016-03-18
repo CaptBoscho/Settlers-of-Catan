@@ -43,7 +43,7 @@ public class OfferTradeCommand implements ICommand {
         try {
             facade.offerTrade(1, dot);
         }catch(OfferTradeException e){
-            //throw new CommandExecutionFailedException("OfferTradeCommand failed to execute properly");
+            e.printStackTrace();
         }
         return null;
     }

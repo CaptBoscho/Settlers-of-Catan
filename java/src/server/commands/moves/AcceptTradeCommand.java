@@ -37,10 +37,9 @@ public class AcceptTradeCommand implements ICommand {
     public GameModelDTO execute() {
         try {
             facade.acceptTrade(1, playerIndex, answer);
-        }catch(AcceptTradeException e){}
-        catch(InvalidTypeException e){}
-        catch(InsufficientResourcesException e){}
-        catch(PlayerExistsException e){}
+        }catch(AcceptTradeException | InvalidTypeException | PlayerExistsException | InsufficientResourcesException e){
+            e.printStackTrace();
+        }
         return null;
     }
 

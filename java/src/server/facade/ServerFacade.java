@@ -362,9 +362,9 @@ public class ServerFacade implements IFacade {
         for(int i=0; i<dto.getSheepCount(); i++){cards.add(ResourceType.SHEEP);}
         try {
             gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
-        }catch(PlayerExistsException e){}
-        catch(InsufficientResourcesException e){}
-        catch(InvalidTypeException e){}
+        }catch(PlayerExistsException | InvalidTypeException | InsufficientResourcesException e){
+            e.printStackTrace();
+        }
     }
 
     private ResourceType convert(String type){
