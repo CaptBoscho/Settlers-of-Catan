@@ -14,6 +14,31 @@ public final class DiscardCardsDTO implements IDTO,JsonSerializable {
     private int playerIndex;
     private int brickCount;
     private int oreCount;
+
+    public int getSheepCount() {
+        return sheepCount;
+    }
+
+    public int getWoodCount() {
+        return woodCount;
+    }
+
+    public int getWheatCount() {
+        return wheatCount;
+    }
+
+    public int getOreCount() {
+        return oreCount;
+    }
+
+    public int getBrickCount() {
+        return brickCount;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
     private int sheepCount;
     private int wheatCount;
     private int woodCount;

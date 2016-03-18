@@ -311,6 +311,7 @@ public interface IGame {
      */
     void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
+    void acceptTrade(int playerIndex, boolean answer) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
     /**
      * Action - Player plays Year of Plenty
      * @param playerIndex ID of Player performing action
@@ -384,9 +385,8 @@ public interface IGame {
     /**
      * Action - Player performs a maritime trade
      * @param playerIndex
-     * @param port
      */
-    void maritimeTrade(int playerIndex, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
+    void maritimeTrade(int playerIndex, int ratio, ResourceType send, ResourceType receive) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
 
     /**
      * Action - Player finishes their turn

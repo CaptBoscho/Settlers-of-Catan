@@ -9,6 +9,15 @@ import shared.model.JsonSerializable;
 public final class TradeOfferResponseDTO implements IDTO,JsonSerializable {
 
     private int playerIndex;
+
+    public boolean willAccept() {
+        return willAccept;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
     private boolean willAccept;
 
     /**
