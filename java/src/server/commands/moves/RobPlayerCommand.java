@@ -1,6 +1,7 @@
 package server.commands.moves;
 
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RobPlayerException;
 import server.facade.IFacade;
 import shared.dto.IDTO;
@@ -29,14 +30,12 @@ public class RobPlayerCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public IDTO execute() throws CommandExecutionFailedException {
         try {
-            facade.robPlayer(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
+            return facade.robPlayer(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
         } catch (RobPlayerException e) {
-            e.printStackTrace();
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        //TODO: change this later fool
-        return null;
     }
 
 }

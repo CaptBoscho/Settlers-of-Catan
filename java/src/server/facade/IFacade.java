@@ -120,7 +120,7 @@ public interface IFacade {
      * @param player index of the player
      * @throws BuyDevCardException
      */
-    void buyDevCard(int gameID, int player) throws BuyDevCardException;
+    GameModelDTO buyDevCard(int gameID, int player) throws BuyDevCardException;
 
     /**
      * Handles playing Year of Plenty

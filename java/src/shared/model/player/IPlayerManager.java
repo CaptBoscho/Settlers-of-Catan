@@ -228,7 +228,7 @@ public interface IPlayerManager {
      * @param playerRobbing index of the player robbing
      * @param playerRobbed index of the player being robbed
      */
-    ResourceType placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException,PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+    void placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException,PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     /**
      * Action - Player builds a road

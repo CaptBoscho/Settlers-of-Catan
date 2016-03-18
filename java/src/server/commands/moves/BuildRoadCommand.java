@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import server.commands.ICommand;
 import server.exceptions.BuildRoadException;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import shared.dto.BuildRoadDTO;
 import shared.dto.IDTO;
@@ -29,14 +30,12 @@ public class BuildRoadCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public IDTO execute() throws CommandExecutionFailedException {
         try {
-            facade.buildRoad(1, dto.getPlayerIndex(), dto.getRoadLocation());
+            return facade.buildRoad(1, dto.getPlayerIndex(), dto.getRoadLocation());
         } catch (BuildRoadException e) {
-            e.printStackTrace();
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        //TODO: change this later fool
-        return null;
     }
 
 }

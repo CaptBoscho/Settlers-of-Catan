@@ -1,6 +1,7 @@
 package server.controllers;
 
 import com.google.gson.JsonObject;
+import server.exceptions.CommandExecutionFailedException;
 import server.factories.UserCommandFactory;
 
 /**
@@ -9,10 +10,20 @@ import server.factories.UserCommandFactory;
 public class UserController {
 
     public static String login(final JsonObject body) {
-        return UserCommandFactory.getInstance().createCommand("").execute().toString();
+        try {
+            return UserCommandFactory.getInstance().createCommand("").execute().toString();
+        } catch (CommandExecutionFailedException e) {
+            e.printStackTrace();
+            return "return something else here.";
+        }
     }
 
     public static String register(final JsonObject body) {
-        return UserCommandFactory.getInstance().createCommand("").execute().toString();
+        try {
+            return UserCommandFactory.getInstance().createCommand("").execute().toString();
+        } catch (CommandExecutionFailedException e) {
+            e.printStackTrace();
+            return "return something else here.";
+        }
     }
 }

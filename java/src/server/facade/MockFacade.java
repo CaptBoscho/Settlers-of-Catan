@@ -162,8 +162,8 @@ public class MockFacade implements IFacade {
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
-
+    public GameModelDTO buyDevCard(int gameID, int player) throws BuyDevCardException {
+        return null;
     }
 
     /**

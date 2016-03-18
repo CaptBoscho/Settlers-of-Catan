@@ -1,7 +1,7 @@
 package server.commands.game;
 
 import server.commands.ICommand;
-import shared.dto.IDTO;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that gets the game model
@@ -22,7 +22,7 @@ public class ModelCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public GameModelDTO execute() {
         return null;
     }
 

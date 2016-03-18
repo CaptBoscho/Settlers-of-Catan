@@ -1,6 +1,7 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 import server.exceptions.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
@@ -11,9 +12,11 @@ import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.bank.InvalidTypeException;
 import shared.model.cards.resources.ResourceCard;
 import shared.model.game.Game;
 
+import javax.naming.InsufficientResourcesException;
 import java.util.List;
 
 /**
@@ -168,10 +171,14 @@ public class ServerFacade implements IFacade {
 
         Game game = gameManager.getGameByID(gameID);
         try {
-            //TODO: fix model robbing cuz its a mess
-        } catch (Exception e) {
+            if(game.canPlaceRobber(player, newLocation)) {
+                game.rob(player, victim, newLocation);
+                return game.getDTO();
+            }
+        } catch (InvalidTypeException | InsufficientResourcesException | MoveRobberException | AlreadyRobbedException | PlayerExistsException | InvalidLocationException e) {
             throw new RobPlayerException(e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -188,12 +195,18 @@ public class ServerFacade implements IFacade {
     /**
      * Buys a new dev card
      *
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
-
+    public GameModelDTO buyDevCard(int gameID, int playerIndex) throws BuyDevCardException {
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            game.buyDevelopmentCard(playerIndex);
+        } catch (Exception e) {
+            throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
+        }
+        return game.getDTO();
     }
 
     /**
@@ -229,10 +242,12 @@ public class ServerFacade implements IFacade {
         try {
             if(game.canUseRoadBuilding(player)) {
                 game.useRoadBuilder(player, locationOne, locationTwo);
+                return game.getDTO();
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException | DevCardException e) {
             throw new RoadBuildingException(e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -246,7 +261,21 @@ public class ServerFacade implements IFacade {
      */
     @Override
     public GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert newLocation != null;
+        assert victim >= 0;
 
+        Game game = gameManager.getGameByID(gameID);
+        try{
+            if(game.canUseSoldier(player)) {
+                game.useSoldier(player, victim, newLocation);
+                return game.getDTO();
+            }
+        } catch(MoveRobberException | InvalidTypeException | InsufficientResourcesException | DevCardException | PlayerExistsException | AlreadyRobbedException | InvalidLocationException e) {
+            throw new SoldierException(e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -290,12 +319,15 @@ public class ServerFacade implements IFacade {
         try {
             if(game.canInitiateRoad(player, location)) {
                 game.initiateRoad(player, location);
+                return game.getDTO();
             } else if(game.canBuildRoad(player, location)) {
                 game.buildRoad(player, location);
+                return game.getDTO();
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildRoadException(e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -316,12 +348,15 @@ public class ServerFacade implements IFacade {
         try {
             if(game.canInitiateSettlement(player, location)) {
                 game.initiateSettlement(player, location);
+                return game.getDTO();
             } else if(game.canBuildSettlement(player, location)) {
                 game.buildSettlement(player, location);
+                return game.getDTO();
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildSettlementException(e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -343,10 +378,12 @@ public class ServerFacade implements IFacade {
         try {
             if(game.canBuildCity(player, location)) {
                 game.buildCity(player, location);
+                return game.getDTO();
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildCityException(e.getMessage());
         }
+        return null;
     }
 
     /**

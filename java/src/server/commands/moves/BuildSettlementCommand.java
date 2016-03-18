@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import server.commands.ICommand;
 import server.exceptions.BuildSettlementException;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import shared.dto.BuildSettlementDTO;
 import shared.dto.IDTO;
@@ -26,14 +27,12 @@ public class BuildSettlementCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public IDTO execute() throws CommandExecutionFailedException {
         try {
-            facade.buildSettlement(1, dto.getPlayerIndex(), dto.getLocation());
+            return facade.buildSettlement(1, dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildSettlementException e) {
-            e.printStackTrace();
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        //TODO: change this later fool
-        return null;
     }
 
 }

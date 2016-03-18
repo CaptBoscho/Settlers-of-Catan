@@ -1,29 +1,31 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
-import shared.definitions.*;
-import shared.exceptions.PlayerExistsException;
-import shared.model.JsonSerializable;
-import shared.model.bank.DevelopmentCardBank;
-import shared.model.bank.ResourceCardBank;
+import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
+import shared.dto.GameModelDTO;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.JsonSerializable;
+import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
-import shared.definitions.DevCardType;
+import shared.model.bank.ResourceCardBank;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.devcards.RoadBuildCard;
 import shared.model.cards.devcards.SoldierCard;
+import shared.model.cards.resources.ResourceCard;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
-import shared.model.cards.resources.ResourceCard;
+
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
-import java.util.Observable;
 
 /**
  * game class representing a Catan game
@@ -48,7 +50,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Constructors
     /**
-     * Constructor
+     * Constructors
      */
     public Game() {
         this.version = -1;
@@ -62,6 +64,46 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.chat = new MessageList();
         this.log = new MessageList();
     }
+
+    public Game(JsonObject gameJson) {
+        assert gameJson != null;
+        assert gameJson.has("deck");
+        assert gameJson.has("map");
+        assert gameJson.has("players");
+        assert gameJson.has("bank");
+        assert gameJson.has("turnTracker");
+        assert gameJson.has("chat");
+        assert gameJson.has("log");
+
+        this.developmentCardBank = new DevelopmentCardBank(gameJson.get("deck").getAsJsonObject(), true);
+        this.map = new Map(gameJson.get("map").getAsJsonObject());
+        this.playerManager = new PlayerManager(gameJson.get("players").getAsJsonArray());
+        this.resourceCardBank = new ResourceCardBank(gameJson.get("bank").getAsJsonObject(), true);
+
+        // only update if someone actually has the longest road
+        final JsonObject turnTracker = gameJson.getAsJsonObject("turnTracker");
+        int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
+        if(longestRoadIndex >= 0) {
+            this.longestRoadCard = new LongestRoad(longestRoadIndex);
+        }
+
+        this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
+        this.version = gameJson.get("version").getAsInt();
+        this.winner = gameJson.get("winner").getAsInt();
+        if(gameJson.has("tradeOffer")) {
+            this.currentOffer = new Trade(gameJson.get("tradeOffer").getAsJsonObject());
+        } else {
+            this.currentOffer = new Trade();
+        }
+        try {
+            this.turnTracker = new TurnTracker(gameJson.get("turnTracker").getAsJsonObject());
+        } catch (BadJsonException e) {
+            e.printStackTrace();
+        }
+        this.chat = new MessageList(gameJson.get("chat").getAsJsonObject());
+        this.log = new MessageList(gameJson.get("log").getAsJsonObject());
+        this.winner = gameJson.get("winner").getAsInt();
+    }
     //endregion
 
     //region Game Methods
@@ -72,7 +114,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param players
      * @param randomHexes
      * @param randomChits
-     * @param randomPorts @return
+     * @param randomPorts
      */
     @Override
     public int initializeGame(List<Player> players, boolean randomHexes, boolean randomChits, boolean randomPorts) {
@@ -761,8 +803,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param location
      */
     @Override
-    public Set<Integer> useSoldier(int playerIndex, HexLocation location) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
+    public void useSoldier(int playerIndex, int victimIndex, HexLocation location) throws MoveRobberException, InvalidTypeException, InsufficientResourcesException, PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
         assert playerIndex >= 0;
+        assert victimIndex >= 0;
         assert this.playerManager != null;
         assert this.largestArmyCard != null;
         assert this.turnTracker != null;
@@ -775,14 +818,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 largestArmyCard.setNewOwner(playerIndex, used);
                 playerManager.changeLargestArmyPossession(oldPlayer, playerIndex);
             }
-
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
             if(canPlaceRobber(playerIndex, location)) {
-                return placeRobber(playerIndex, location);
+                rob(playerIndex, victimIndex, location);
             }
-            return null;
         }
-        return null;
     }
 
     /**
@@ -853,20 +892,24 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws InsufficientResourcesException
      */
     @Override
-    public void rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException {
-        assert playerRobbed > 0;
-        assert playerRobber > 0;
-        assert playerRobbed != playerRobber;
+    public void rob(int playerRobber, int playerRobbed, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException, MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException {
+        assert playerRobbed >= 0;
+        assert playerRobber >= 0;
+        assert hexLoc != null;
         assert this.map != null;
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
         Set<Integer> who = map.whoCanGetRobbed(playerRobber);
         assert who != null;
-        if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING); //TODO look at this statement
-            ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
-
+        if(turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
+            try {
+                turnTracker.nextPhase();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            map.moveRobber(playerRobber, hexLoc);
+            playerManager.placeRobber(playerRobber, playerRobbed);
         }
     }
 
@@ -878,15 +921,17 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIndex
      */
     @Override
-    public DevCardType buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception {
+    public void buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception {
         assert playerIndex >= 0;
         assert this.playerManager != null;
         assert this.developmentCardBank != null;
 
+        // remove player resources
         playerManager.buyDevCard(playerIndex);
+
+        // give Dev Card from game to player
         final DevelopmentCard dc = developmentCardBank.draw();
         playerManager.addDevCard(playerIndex, dc);
-        return dc.getType();
     }
 
     //TODO: Maritime messed up
@@ -1535,6 +1580,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert playerIDNew != playerIDOld;
 
         longestRoadCard.setOwner(playerIDNew, roadSize);
+    }
+
+    public GameModelDTO getDTO() {
+        return new GameModelDTO(toJSON());
     }
     //==========================================================
     //endregion

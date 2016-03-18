@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import server.commands.ICommand;
 import server.exceptions.BuildCityException;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import shared.dto.BuildCityDTO;
 import shared.dto.IDTO;
@@ -29,14 +30,12 @@ public class BuildCityCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public IDTO execute() throws CommandExecutionFailedException {
         try {
-            facade.buildCity(1, dto.getPlayerIndex(), dto.getLocation());
+            return facade.buildCity(1, dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildCityException e) {
-            e.printStackTrace();
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        //TODO: change this later fool
-        return null;
     }
 
 }

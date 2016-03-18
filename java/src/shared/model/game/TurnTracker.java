@@ -133,6 +133,10 @@ public final class TurnTracker {
         return phase == Phase.PLAYING;
     }
 
+    public boolean canRob() {
+        return phase == Phase.ROBBING;
+    }
+
     public boolean canDiscard() {
         return phase == Phase.DISCARDING;
     }
@@ -219,7 +223,12 @@ public final class TurnTracker {
             }
         },
         DISCARDING,
-        ROBBING,
+        ROBBING {
+            @Override
+            public Phase next() {
+                return PLAYING;
+            }
+        },
         PLAYING {
             @Override
             public Phase next() {
