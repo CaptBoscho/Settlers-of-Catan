@@ -1,6 +1,7 @@
 package server.commands;
 
 import com.google.gson.JsonObject;
+import server.exceptions.CommandExecutionFailedException;
 import shared.dto.IDTO;
 
 /**
@@ -15,7 +16,7 @@ public interface ICommand {
      * The main function on child classes of this interface.  It can be called to activate the set of instructions
      * indicated by that class.
      *
-     * @return DTO with information pertaining to the execute function of the given Command object
+     * @return JsonObject with information pertaining to the execute function of the given Command object
      */
-    IDTO execute();
+    IDTO execute() throws CommandExecutionFailedException;
 }

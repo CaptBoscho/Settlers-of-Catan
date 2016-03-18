@@ -2,6 +2,7 @@ package server.commands.games;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.IDTO;
 
 /**
  * A command object that adds a player to a game.
@@ -16,7 +17,7 @@ public class JoinCommand implements ICommand {
      * @return JsonObject with information about the join
      */
     @Override
-    public JsonObject execute() {
+    public IDTO execute() {
         return null;
     }
 }

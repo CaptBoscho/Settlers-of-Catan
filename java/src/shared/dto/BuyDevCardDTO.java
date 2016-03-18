@@ -16,6 +16,10 @@ public final class BuyDevCardDTO implements IDTO,JsonSerializable {
         this.playerIndex = playerIndex;
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
     /**
      * Converts the object to JSON
      *
