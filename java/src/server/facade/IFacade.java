@@ -88,7 +88,7 @@ public interface IFacade {
      * @param message
      * @throws SendChatException
      */
-    void sendChat(int gameID, int player, String message) throws SendChatException;
+    GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException;
 
     /**
      * Rolls the specified value

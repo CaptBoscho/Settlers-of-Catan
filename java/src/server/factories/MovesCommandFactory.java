@@ -37,7 +37,7 @@ public class MovesCommandFactory {
         if (dto instanceof FinishTurnDTO) {
             return new FinishTurnCommand(facade, (FinishTurnDTO)dto);
         } else if (dto instanceof SendChatDTO) {
-
+            return new SendChatCommand(facade, (SendChatDTO)dto);
         } else if (dto instanceof RollNumberDTO) {
 
         } else if (dto instanceof RobPlayerDTO) {
