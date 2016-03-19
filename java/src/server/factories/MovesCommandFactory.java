@@ -1,6 +1,7 @@
 package server.factories;
 
 import server.commands.ICommand;
+import server.commands.moves.*;
 import server.facade.IFacade;
 import shared.dto.*;
 
@@ -23,8 +24,8 @@ public class MovesCommandFactory {
         return instance;
     }
 
-    public void bind(IFacade new_facade){
-        facade = new_facade;
+    public void bind(IFacade newFacade){
+        facade = newFacade;
     }
 
     /**
@@ -34,29 +35,31 @@ public class MovesCommandFactory {
 
     public ICommand createCommand(IDTO dto) {
         if (dto instanceof FinishTurnDTO) {
-            // do finish turn stuff
+
         } else if (dto instanceof SendChatDTO) {
 
         } else if (dto instanceof RollNumberDTO) {
 
         } else if (dto instanceof RobPlayerDTO) {
-
+            return new RobPlayerCommand(facade, (RobPlayerDTO)dto);
         } else if (dto instanceof BuyDevCardDTO) {
 
         } else if (dto instanceof PlayYOPCardDTO) {
 
         } else if (dto instanceof RoadBuildingDTO) {
-
+            return new RoadBuildingCommand(facade, (RoadBuildingDTO)dto);
         } else if (dto instanceof PlayMonopolyDTO) {
 
         } else if (dto instanceof PlaySoldierCardDTO) {
-
+            return new SoldierCommand(facade, (PlaySoldierCardDTO) dto);
         } else if (dto instanceof PlayMonumentDTO) {
 
         } else if (dto instanceof BuildRoadDTO) {
-
+            return new BuildRoadCommand(facade, (BuildRoadDTO)dto);
+        } else if(dto instanceof BuildSettlementDTO) {
+            return new BuildSettlementCommand(facade, (BuildSettlementDTO)dto);
         } else if (dto instanceof BuildCityDTO) {
-
+            return new BuildCityCommand(facade, (BuildCityDTO)dto);
         } else if (dto instanceof OfferTradeDTO) {
             return new OfferTradeCommand((OfferTradeDTO)dto,facade);
         } else if (dto instanceof TradeOfferResponseDTO) {

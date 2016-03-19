@@ -27,6 +27,12 @@ public final class JoinGameDTO implements IDTO, JsonSerializable {
         this.color = color;
     }
 
+    public JoinGameDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.gameId = obj.get(kId).getAsInt();
+        this.color = CatanColor.translateFromString(obj.get(kColor).getAsString());
+    }
+
     /**
      * Converts the object to JSON
      *

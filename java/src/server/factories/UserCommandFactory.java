@@ -26,8 +26,8 @@ public class UserCommandFactory {
         return instance;
     }
 
-    public void bind(IFacade new_facade){
-        facade = new_facade;
+    public void bind(IFacade newFacade){
+        facade = newFacade;
     }
 
     /**
