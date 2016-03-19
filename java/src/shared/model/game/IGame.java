@@ -1,12 +1,14 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
+import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
 import shared.exceptions.PlayerExistsException;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.ai.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.resources.ResourceCard;
@@ -82,6 +84,13 @@ public interface IGame {
 
     //region Can do methods
     //=================================================================================
+    /**
+     * Determine if an AI player can be added to the game
+     *
+     * @return
+     */
+    boolean canAddAI();
+
     /**
      * Determine if a settlement can be built by the player at the location
      * @param playerIndex
@@ -244,6 +253,14 @@ public interface IGame {
 
     //region Do methods
     //==========================================================================
+    /**
+     * Adds an AI Player to the game
+     *
+     * @param type
+     * @return
+     */
+    void addAI(AIType type) throws AddAIException;
+
     /**
      * Initiates placing a settlement on the map
      * @param playerIndex
@@ -600,6 +617,13 @@ public interface IGame {
      * @throws PlayerExistsException
      */
     CatanColor getPlayerColorByIndex(int playerIndex) throws PlayerExistsException;
+
+    /**
+     * Get the types of AI allowed
+     *
+     * @return
+     */
+    List<AIType> getAITypes();
     //===================================================================================
     //endregion
 

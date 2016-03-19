@@ -11,6 +11,7 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.JsonSerializable;
+import shared.model.ai.AIType;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
 import shared.model.bank.ResourceCardBank;
@@ -276,6 +277,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Can do methods
     //============================================================================================
+    /**
+     * Determines if an AI Player can be added to the game
+     * @return
+     */
+    @Override
+    public boolean canAddAI(){
+        return isFull();
+    }
+
     /**
      * Determine if a settlement can be built by the player at the location
      *
@@ -579,6 +589,20 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Do methods
     //=========================================================================================
+    /**
+     * Adds an AI player to the game
+     *
+     * @param type
+     */
+    @Override
+    public void addAI(AIType type){
+        if(!isFull()){
+            //Add the AI
+        }else{
+            //throw an exception?
+        }
+    }
+
     /**
      * Initiates placing a settlement on the map
      *
@@ -1341,6 +1365,25 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public CatanColor getPlayerColorByIndex(int index) throws PlayerExistsException {
         return this.playerManager.getPlayerColorByIndex(index);
+    }
+
+    /**
+     * Get the AI types allowed
+     *
+     * @return
+     */
+    @Override
+    public List<AIType> getAITypes(){
+        List<AIType> aiTypes = Arrays.asList(AIType.values());
+        return aiTypes;
+    }
+
+    /**
+     * Determine if the game is full - 4 players
+     * @return
+     */
+    private boolean isFull(){
+        return playerManager.getPlayers().size() < 4;
     }
     //===============================================================================================
     //endregion

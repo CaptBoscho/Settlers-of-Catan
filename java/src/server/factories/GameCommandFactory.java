@@ -1,9 +1,14 @@
 package server.factories;
 
 import server.commands.ICommand;
+import server.commands.game.AddAICommand;
+import server.commands.game.ListAICommand;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
+import shared.dto.AddAIDTO;
+import shared.dto.GameModelDTO;
 import shared.dto.IDTO;
+import shared.dto.ListAIDTO;
 
 /**
  * A factory class that creates Game Commands on demand. Use this class to get a Game Command.
@@ -36,11 +41,15 @@ public class GameCommandFactory {
      * @return an ICommand object
      */
     public ICommand createCommand(IDTO dto) {
-        /*
-       Need to if(object instanceof ...) for modeldto, addAIDTO, listAIDTO
-         */
-        return null;
-
+       if(dto instanceof GameModelDTO){
+           return null;
+       }else if(dto instanceof ListAIDTO){
+           return new ListAICommand(facade);
+       }else if(dto instanceof AddAIDTO){
+           return new AddAICommand(facade, (AddAIDTO)dto);
+       }else{
+           return null;
+       }
     }
 
 }
