@@ -1,6 +1,5 @@
 package server.controllers;
 
-import com.google.gson.JsonObject;
 import server.exceptions.CommandExecutionFailedException;
 import server.factories.UserCommandFactory;
 import shared.dto.AuthDTO;
