@@ -23,7 +23,7 @@ public class RollNumberCommand implements ICommand {
      */
     public RollNumberCommand(IFacade facade, RollNumberDTO roll) {
         this.facade = facade;
-        this.gameId = roll.getGameId();
+        this.gameId = 1;
         this.value = roll.getValue();
         this.playerIndex = roll.getPlayerIndex();
     }

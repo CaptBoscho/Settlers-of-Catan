@@ -158,10 +158,10 @@ public class ServerFacade implements IFacade {
         Game game = gameManager.getGameByID(gameID);
         try {
             game.rollNumber(value);
+            return game.getDTO();
         } catch (Exception e) {
             throw new RollNumberException("Error while rolling!");
         }
-        return game.getDTO();
     }
 
     /**

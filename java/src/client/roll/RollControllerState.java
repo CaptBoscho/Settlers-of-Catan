@@ -43,7 +43,7 @@ public class RollControllerState {
         
         //Tell the server
         int index = userCookie.getPlayerIndex();
-        RollNumberDTO rollDTO = new RollNumberDTO(facade.getGameId(), index, roll);
+        RollNumberDTO rollDTO = new RollNumberDTO(index, roll);
         server.rollNumber(rollDTO);
 
         //Set the result view value - value of dice roll
