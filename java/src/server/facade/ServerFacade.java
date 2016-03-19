@@ -283,15 +283,21 @@ public class ServerFacade implements IFacade {
     }
 
     /**
-     * Hanldes playing Monopoly
+     * Handles playing Monopoly
      *
-     * @param player   index of the player
+     * @param playerIndex   index of the player
      * @param resource resource to take
      * @throws MonopolyException
      */
     @Override
-    public void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
-
+    public GameModelDTO monopoly(int gameID, int playerIndex, ResourceType resource) throws MonopolyException {
+        try {
+            Game game = gameManager.getGameByID(gameID);
+            game.useMonopoly(playerIndex, resource);
+            return game.getDTO();
+        } catch (PlayerExistsException | DevCardException | InvalidTypeException | InsufficientResourcesException e) {
+            throw new MonopolyException(e.getMessage());
+        }
     }
 
     /**

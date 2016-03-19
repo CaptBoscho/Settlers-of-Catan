@@ -157,7 +157,7 @@ public interface IFacade {
      * @param resource resource to take
      * @throws MonopolyException
      */
-    void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException;
+    GameModelDTO monopoly(int gameID, int player, ResourceType resource) throws MonopolyException;
 
     /**
      * Handles playing Monument
