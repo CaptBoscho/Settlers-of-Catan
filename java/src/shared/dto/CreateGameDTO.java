@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
@@ -60,5 +61,15 @@ public final class CreateGameDTO implements IDTO, JsonSerializable {
         obj.addProperty(kRandomPorts, this.randomPorts);
         obj.addProperty(kName, this.name);
         return obj;
+    }
+
+    public static boolean isValidRequestJson(String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasRandomTiles = obj.has(kRandomTiles) && obj.get(kRandomTiles).isJsonPrimitive();
+        final boolean hasRandomNumbers = obj.has(kRandomNumbers) && obj.get(kRandomNumbers).isJsonPrimitive();
+        final boolean hasRandomPorts = obj.has(kRandomPorts) && obj.get(kRandomPorts).isJsonPrimitive();
+        final boolean hasName = obj.has(kName) && obj.get(kName).isJsonPrimitive();
+
+        return hasRandomTiles && hasRandomNumbers && hasRandomPorts && hasName;
     }
 }
