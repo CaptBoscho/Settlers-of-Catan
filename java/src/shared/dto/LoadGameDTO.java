@@ -6,11 +6,15 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class LoadGameDTO implements IDTO,JsonSerializable {
+public final class LoadGameDTO implements IDTO, JsonSerializable {
 
+    // -- JSON keys
+    private static final String kName = "name";
+
+    // -- class members
     private String name;
 
-    public LoadGameDTO(String name) {
+    public LoadGameDTO(final String name) {
         assert name != null;
         assert name.length() > 0;
 
@@ -24,8 +28,8 @@ public final class LoadGameDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("name", this.name);
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kName, this.name);
         return obj;
     }
 }

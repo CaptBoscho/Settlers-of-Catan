@@ -370,9 +370,7 @@ public final class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useYearOfPlenty(int playerIndex) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByIndex(playerIndex);
-
-        player.useYearOfPlenty();
+        getPlayerByIndex(playerIndex).useYearOfPlenty();
     }
 
     /**
@@ -418,7 +416,7 @@ public final class PlayerManager implements IPlayerManager {
 
             // if this player is *not* the player who is playing the Monopoly card
             if (!monopolyUser.equals(player) && amount > 0) {
-
+                // TODO: 3/19/16 combine these 2 for loops. Can be done together.
                 List<ResourceType> cards = new ArrayList<>();
                 for(int i=0; i<amount; i++){
                     cards.add(type);
@@ -450,14 +448,13 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerRobbed  index of the player being robbed
      */
     @Override
-    public ResourceType placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         Player robber = getPlayerByIndex(playerRobbing);
         Player robbed = getPlayerByIndex(playerRobbed);
 
         robber.placeRobber();
         ResourceCard treasure = robbed.robbed();
         robber.addResourceCard(treasure);
-        return treasure.getType();
     }
 
     /**

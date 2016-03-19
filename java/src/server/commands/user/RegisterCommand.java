@@ -1,6 +1,5 @@
 package server.commands.user;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import shared.dto.IDTO;
 
@@ -14,7 +13,7 @@ public class RegisterCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Register command
      *
-     * @return JsonObject with information about the registration
+     * @return IDTO with information about the registration
      */
     @Override
     public IDTO execute() {

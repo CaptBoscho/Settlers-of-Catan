@@ -8,10 +8,16 @@ import shared.model.JsonSerializable;
  */
 public final class BuyDevCardDTO implements IDTO,JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+
+    // -- class members
     private int playerIndex;
 
-    public BuyDevCardDTO(int playerIndex) {
+    public BuyDevCardDTO(final int playerIndex) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         this.playerIndex = playerIndex;
     }
@@ -27,9 +33,9 @@ public final class BuyDevCardDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "buyDevCard");
-        obj.addProperty("playerIndex", this.playerIndex);
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "buyDevCard");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
         return obj;
     }
 }

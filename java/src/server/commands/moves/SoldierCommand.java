@@ -1,8 +1,12 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import server.exceptions.CommandExecutionFailedException;
+import server.exceptions.RobPlayerException;
+import server.exceptions.SoldierException;
+import server.facade.IFacade;
+import shared.dto.IDTO;
+import shared.dto.PlaySoldierCardDTO;
 
 /**
  * A command object that plays a soldier card
@@ -11,20 +15,28 @@ import shared.dto.GameModelDTO;
  */
 public class SoldierCommand implements ICommand {
 
+    private IFacade facade;
+    private PlaySoldierCardDTO dto;
+
     /**
      * Constructor
      */
-    public SoldierCommand() {
-
+    public SoldierCommand(IFacade facade, PlaySoldierCardDTO dto) {
+        this.facade = facade;
+        this.dto = dto;
     }
 
     /**
      * Communicates with the ServerFacade to carry out the Soldier command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
-        return null;
+    public IDTO execute() throws CommandExecutionFailedException {
+        try {
+            return facade.soldier(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
+        } catch (SoldierException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
 }

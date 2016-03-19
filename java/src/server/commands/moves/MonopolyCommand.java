@@ -1,8 +1,13 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import server.exceptions.CommandExecutionFailedException;
+import server.exceptions.MonopolyException;
+import server.facade.IFacade;
+import server.facade.ServerFacade;
+import shared.dto.IDTO;
+import shared.dto.PlayMonopolyDTO;
+import shared.model.bank.InvalidTypeException;
 
 /**
  * A command object that plays a monopoly card
@@ -10,21 +15,30 @@ import shared.dto.GameModelDTO;
  * @author Joel Bradley
  */
 public class MonopolyCommand implements ICommand {
+    PlayMonopolyDTO dto;
+    IFacade facade;
 
     /**
      * Constructor
+     * @param dto
+     * @param facade
      */
-    public MonopolyCommand() {
-
+    public MonopolyCommand(PlayMonopolyDTO dto, IFacade facade) {
+        this.dto = dto;
+        this.facade = facade;
     }
 
     /**
      * Communicates with the ServerFacade to carry out the Monopoly command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
-        return null;
+    public IDTO execute() throws CommandExecutionFailedException {
+        try {
+            return ServerFacade.getInstance().monopoly(1, dto.getPlayerIndex(), dto.getResource());
+        } catch (MonopolyException | InvalidTypeException e) {
+            throw new CommandExecutionFailedException("MonopolyCommand failed to execute properly");
+        }
     }
 
 }

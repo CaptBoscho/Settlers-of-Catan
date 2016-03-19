@@ -1,6 +1,5 @@
 package server.commands.user;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import shared.dto.IDTO;
 
@@ -14,7 +13,7 @@ public class LoginCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Login command
      *
-     * @return JsonObject with information about the login
+     * @return IDTO with information about the login
      */
     @Override
     public IDTO execute() {

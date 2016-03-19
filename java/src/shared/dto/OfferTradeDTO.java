@@ -7,8 +7,15 @@ import shared.model.game.trade.Trade;
 /**
  * @author Derek Argueta
  */
-public final class OfferTradeDTO implements IDTO,JsonSerializable {
+public final class OfferTradeDTO implements IDTO, JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kReceiver = "receiver";
+    private static final String kOffer = "offer";
+
+    // -- class members
     private int playerIndex;
     private Trade offer;
     private int receiver;
@@ -19,8 +26,9 @@ public final class OfferTradeDTO implements IDTO,JsonSerializable {
      * @param offer       What you get (+) and what you give (-)
      * @param receiver    Who you're offering the trade to (0-3)
      */
-    public OfferTradeDTO(int playerIndex, Trade offer, int receiver) {
+    public OfferTradeDTO(final int playerIndex, final Trade offer, final int receiver) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert receiver >= 0;
         assert playerIndex != receiver;
         assert offer != null;
@@ -37,15 +45,23 @@ public final class OfferTradeDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "offerTrade");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("receiver", this.receiver);
-        obj.add("offer", this.offer.toJSON());
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "offerTrade");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.addProperty(kReceiver, this.receiver);
+        obj.add(kOffer, this.offer.toJSON());
         return obj;
     }
 
-    public int getSender(){return playerIndex;}
-    public int getReceiver(){return receiver;}
-    public Trade getOffer(){return offer;}
+    public int getSender() {
+        return playerIndex;
+    }
+
+    public int getReceiver() {
+        return receiver;
+    }
+
+    public Trade getOffer() {
+        return offer;
+    }
 }
