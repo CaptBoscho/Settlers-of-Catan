@@ -44,7 +44,7 @@ public class MovesCommandFactory {
         } else if (dto instanceof RobPlayerDTO) {
 
         } else if (dto instanceof BuyDevCardDTO) {
-
+            return new BuyDevCardCommand((BuyDevCardDTO)dto, facade);
         } else if (dto instanceof PlayYOPCardDTO) {
 
         } else if (dto instanceof RoadBuildingDTO) {
