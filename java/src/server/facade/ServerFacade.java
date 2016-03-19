@@ -297,12 +297,18 @@ public class ServerFacade implements IFacade {
     /**
      * Handles playing Monument
      *
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @throws MonumentException
      */
     @Override
-    public void monument(int gameID, int player) throws MonumentException {
-
+    public GameModelDTO monument(int gameID, int playerIndex) throws MonumentException {
+        try {
+            gameManager.getGameByID(gameID).useMonument(playerIndex);
+            return gameManager.getGameByID(gameID).getDTO();
+        } catch (PlayerExistsException | DevCardException e) {
+            e.printStackTrace();
+            throw new MonumentException(e.getMessage());
+        }
     }
 
     /**

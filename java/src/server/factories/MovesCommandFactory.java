@@ -53,7 +53,7 @@ public class MovesCommandFactory {
         } else if (dto instanceof PlaySoldierCardDTO) {
             return new SoldierCommand(facade, (PlaySoldierCardDTO) dto);
         } else if (dto instanceof PlayMonumentDTO) {
-
+            return new MonumentCommand((PlayMonumentDTO)dto, facade);
         } else if (dto instanceof BuildRoadDTO) {
             return new BuildRoadCommand(facade, (BuildRoadDTO)dto);
         } else if(dto instanceof BuildSettlementDTO) {
