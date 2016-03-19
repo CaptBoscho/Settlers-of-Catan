@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
 import shared.dto.GameModelDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.cards.resources.ResourceCard;
-
-import java.util.List;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
@@ -196,13 +196,9 @@ public interface IFacade {
 
     /**
      * Offers a trade to the specified player
-     * @param player
-     * @param recipient
-     * @param send
-     * @param receive
      * @throws OfferTradeException
      */
-    void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException;
+    GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException;
 
     /**
      * Accepts a trade offer
@@ -210,23 +206,19 @@ public interface IFacade {
      * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
      */
-    void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException;
+    GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException ;
 
     /**
      * Performs a maritime trade (trade with the bank)
-     * @param player index of the player
-     * @param ratio trade ratio [2, 3 or 4]
-     * @param give resource to trade away
-     * @param get resource to get
      * @throws MaritimeTradeException
      */
-    void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException;
+    void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException;
 
     /**
      * Discards the specified cards from the player's hand
-     * @param player index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
+     * @param gameID
+     * @param dto
      * @throws DiscardCardsException
      */
-    void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException;
+    GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
 }

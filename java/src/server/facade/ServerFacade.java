@@ -1,22 +1,26 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 import server.exceptions.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
+import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.PlayerExistsException;
 import shared.dto.GameModelDTO;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.bank.InvalidTypeException;
-import shared.model.cards.resources.ResourceCard;
 import shared.model.game.Game;
-
+import shared.model.game.trade.Trade;
 import javax.naming.InsufficientResourcesException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -389,15 +393,21 @@ public class ServerFacade implements IFacade {
     /**
      * Offers a trade to the specified player
      *
-     * @param player
-     * @param recipient
-     * @param send
-     * @param receive
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
-
+    public GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
+        int sender = dto.getSender();
+        int receiver = dto.getReceiver();
+        Trade offer = dto.getOffer();
+        List<ResourceType> send = offer.getPackage1().getResources();
+        List<ResourceType> receive = offer.getPackage2().getResources();
+        try {
+            gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
+            return gameManager.getGameByID(gameID).getDTO();
+        } catch(InvalidTypeException | PlayerExistsException | InsufficientResourcesException e){
+            throw new OfferTradeException(e.getMessage());
+        }
     }
 
     /**
@@ -408,33 +418,65 @@ public class ServerFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
-
+    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+        try {
+            gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
+            return gameManager.getGameByID(gameID).getDTO();
+        } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+            throw new AcceptTradeException(e.getMessage());
+        }
     }
 
     /**
      * Performs a maritime trade (trade with the bank)
      *
-     * @param player index of the player
-     * @param ratio  trade ratio [2, 3 or 4]
-     * @param give   resource to trade away
-     * @param get    resource to get
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
-
+    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+        try {
+            gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), convert(dto.getInputResource()), convert(dto.getOutputResource()));
+        }catch(InvalidPlayerException e){}
+        catch(InvalidTypeException e){}
+        catch(InsufficientResourcesException e){}
+        catch(PlayerExistsException e){}
     }
 
     /**
      * Discards the specified cards from the player's hand
      *
-     * @param player         index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
+    public GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        List<ResourceType> cards = new ArrayList<>();
+        for(int i=0; i<dto.getBrickCount(); i++){cards.add(ResourceType.BRICK);}
+        for(int i=0; i<dto.getWoodCount(); i++){cards.add(ResourceType.WOOD);}
+        for(int i=0; i<dto.getOreCount(); i++){cards.add(ResourceType.ORE);}
+        for(int i=0; i<dto.getWheatCount(); i++){cards.add(ResourceType.WHEAT);}
+        for(int i=0; i<dto.getSheepCount(); i++){cards.add(ResourceType.SHEEP);}
+        try {
+            gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
+            return gameManager.getGameByID(gameID).getDTO();
+        }catch(PlayerExistsException | InvalidTypeException | InsufficientResourcesException e){
+            throw new DiscardCardsException(e.getMessage());
+        }
+    }
 
+    private ResourceType convert(String type){
+        switch(type){
+            case "brick":
+                return ResourceType.BRICK;
+            case "wood":
+                return ResourceType.WOOD;
+            case "wheat":
+                return ResourceType.WHEAT;
+            case "sheep":
+                return ResourceType.SHEEP;
+            case "ore":
+                return ResourceType.ORE;
+            default:
+                return null;
+        }
     }
 }

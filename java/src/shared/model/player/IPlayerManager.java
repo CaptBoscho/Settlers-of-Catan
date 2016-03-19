@@ -1,5 +1,7 @@
 package shared.model.player;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -373,5 +375,7 @@ public interface IPlayerManager {
      * @return
      */
     CatanColor getPlayerColorByName(String name);
+
+    JsonArray toJSON();
     //endregion
 }

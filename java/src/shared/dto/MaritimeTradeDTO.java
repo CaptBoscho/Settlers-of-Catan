@@ -13,6 +13,23 @@ public final class MaritimeTradeDTO implements IDTO,JsonSerializable {
     private String inputResource;
     private String outputResource;
 
+    public String getInputResource() {
+        return inputResource;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public int getRatio() {
+        return ratio;
+    }
+
+    public String getOutputResource() {
+        return outputResource;
+    }
+
+
     /**
      *
      * @param playerIndex    Who's doing the trading

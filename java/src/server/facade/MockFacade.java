@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
 import shared.dto.GameModelDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.cards.resources.ResourceCard;
-
-import java.util.List;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
@@ -281,15 +281,12 @@ public class MockFacade implements IFacade {
      * Offers a trade to the specified player
      *
      * @param gameID
-     * @param player
-     * @param recipient
-     * @param send
-     * @param receive
+     * @param dto
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
-
+    public GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
+        return null;
     }
 
     /**
@@ -301,22 +298,19 @@ public class MockFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
-
+    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+        return null;
     }
 
     /**
      * Performs a maritime trade (trade with the bank)
      *
      * @param gameID
-     * @param player index of the player
-     * @param ratio  trade ratio [2, 3 or 4]
-     * @param give   resource to trade away
-     * @param get    resource to get
+     * @param dto
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
+    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
 
     }
 
@@ -324,12 +318,11 @@ public class MockFacade implements IFacade {
      * Discards the specified cards from the player's hand
      *
      * @param gameID
-     * @param player         index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
+     * @param dto
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
-
+    public GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        return null;
     }
 }

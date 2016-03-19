@@ -4,6 +4,7 @@ import server.commands.ICommand;
 import server.exceptions.MaritimeTradeException;
 import server.facade.IFacade;
 import shared.definitions.ResourceType;
+import shared.dto.MaritimeTradeDTO;
 import shared.dto.GameModelDTO;
 
 /**
@@ -13,20 +14,16 @@ import shared.dto.GameModelDTO;
  */
 public class MaritimeTradeCommand implements ICommand {
 
-    private int player;
-    private int ratio;
-    private ResourceType give;
-    private ResourceType get;
+    private int gameID;
+    private MaritimeTradeDTO dto;
     IFacade facade;
     /**
      * Constructor
      */
-    public MaritimeTradeCommand(int pindex, int rat, ResourceType send, ResourceType receive, IFacade fac) {
-        player = pindex;
-        ratio = rat;
-        give = send;
-        get = receive;
+    public MaritimeTradeCommand(MaritimeTradeDTO dto, IFacade fac) {
+        this.dto = dto;
         facade = fac;
+        gameID = 0;
     }
 
     /**
@@ -36,9 +33,9 @@ public class MaritimeTradeCommand implements ICommand {
     @Override
     public GameModelDTO execute() {
         try {
-            facade.maritimeTrade(1, player, ratio, give, get);
+            facade.maritimeTrade(1, dto);
         }catch(MaritimeTradeException e){
-
+            e.printStackTrace();
         }
         return null;
     }
