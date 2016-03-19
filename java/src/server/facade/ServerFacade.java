@@ -20,6 +20,7 @@ import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
+import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
@@ -152,8 +153,18 @@ public class ServerFacade implements IFacade {
      * @throws SendChatException
      */
     @Override
-    public void sendChat(int gameID, int player, String message) throws SendChatException {
+    public GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException {
+        Game game = gameManager.getGameByID(gameID);
 
+        try {
+            String playerName = game.getPlayerNameByIndex(player);
+            MessageLine line = new MessageLine(playerName, message);
+            game.getChat().addMessage(line);
+            return game.getDTO();
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+            throw new SendChatException("Failed to send the chat message!");
+        }
     }
 
     /**
@@ -164,8 +175,14 @@ public class ServerFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
-
+    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            game.rollNumber(value);
+            return game.getDTO();
+        } catch (Exception e) {
+            throw new RollNumberException("Error while rolling!");
+        }
     }
 
     /**
@@ -203,8 +220,18 @@ public class ServerFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int gameID, int player) throws FinishTurnException {
-
+    public GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException {
+        Game game = gameManager.getGameByID(gameID);
+        if(game.canFinishTurn(player)){
+            try {
+                game.finishTurn(player);
+                return game.getDTO();
+            } catch (Exception e) {
+                throw new FinishTurnException("Failed to end the player's turn!");
+            }
+        }else{
+            throw new FinishTurnException("Player can't end their turn yet!");
+        }
     }
 
     /**

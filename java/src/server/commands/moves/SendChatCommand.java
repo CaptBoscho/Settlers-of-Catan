@@ -1,7 +1,11 @@
 package server.commands.moves;
 
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
+import server.exceptions.SendChatException;
+import server.facade.IFacade;
 import shared.dto.IDTO;
+import shared.dto.SendChatDTO;
 
 /**
  * A command object that sends a chat
@@ -9,12 +13,14 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class SendChatCommand implements ICommand {
-
+    private IFacade facade;
+    private SendChatDTO dto;
     /**
      * Constructor
      */
-    public SendChatCommand() {
-
+    public SendChatCommand(IFacade facade, SendChatDTO dto) {
+        this.facade = facade;
+        this.dto = dto;
     }
 
     /**
@@ -22,8 +28,12 @@ public class SendChatCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
-        return null;
+    public IDTO execute() throws CommandExecutionFailedException {
+        try {
+            return facade.sendChat(1, dto.getPlayerIndex(), dto.getContent());
+        } catch (SendChatException e) {
+            e.printStackTrace();
+            throw new CommandExecutionFailedException("Failed to send the chat!");
+        }
     }
-
 }

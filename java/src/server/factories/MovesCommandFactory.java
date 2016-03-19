@@ -35,11 +35,12 @@ public class MovesCommandFactory {
 
     public ICommand createCommand(IDTO dto) {
         if (dto instanceof FinishTurnDTO) {
-
+            return new FinishTurnCommand(facade, (FinishTurnDTO)dto);
         } else if (dto instanceof SendChatDTO) {
-
+            return new SendChatCommand(facade, (SendChatDTO)dto);
         } else if (dto instanceof RollNumberDTO) {
-
+            RollNumberDTO roll = (RollNumberDTO)dto;
+            return new RollNumberCommand(facade, roll);
         } else if (dto instanceof RobPlayerDTO) {
             return new RobPlayerCommand(facade, (RobPlayerDTO)dto);
         } else if (dto instanceof BuyDevCardDTO) {
