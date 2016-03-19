@@ -47,6 +47,10 @@ public final class Trade {
         active = false;
     }
 
+    public TradePackage getPackage1(){return package1;}
+
+    public TradePackage getPackage2(){return package2;}
+
     public int getSender() {
         return sender;
     }
@@ -76,6 +80,8 @@ public final class Trade {
     }
 
     public boolean isActive(){return active;}
+
+    public void setActive(boolean act){active = act;}
     /**
      * Constructs a Trade object from a JSON blob
      *
@@ -156,12 +162,16 @@ public final class Trade {
         }
 
         final JsonObject obj = new JsonObject();
-        obj.addProperty("brick", brickCount);
-        obj.addProperty("ore", oreCount);
-        obj.addProperty("sheep", sheepCount);
-        obj.addProperty("wheat", wheatCount);
-        obj.addProperty("wood", woodCount);
+        obj.addProperty("sender",sender);
+        obj.addProperty("receiver",receiver);
 
+        JsonObject offer = new JsonObject();
+        offer.addProperty("brick", brickCount);
+        offer.addProperty("ore", oreCount);
+        offer.addProperty("sheep", sheepCount);
+        offer.addProperty("wheat", wheatCount);
+        offer.addProperty("wood", woodCount);
+        obj.add("offer",offer);
         return obj;
     }
 }

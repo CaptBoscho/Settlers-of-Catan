@@ -152,6 +152,7 @@ public final class TurnTracker {
     public JsonObject toJSON() {
         final JsonObject json = new JsonObject();
         json.addProperty("currentTurn", currentTurn);
+        json.addProperty("status",getStringPhrase());
         return json;
     }
     //endregion
@@ -163,6 +164,18 @@ public final class TurnTracker {
      */
     public Phase getPhase() {
         return phase;
+    }
+
+    private String getStringPhrase(){
+        if(phase == Phase.SETUPONE){return "FirstRound";}
+        else if(phase == Phase.SETUPTWO){return "SecondRound";}
+        else if(phase == Phase.ROBBING){return "Robbing";}
+        else if (phase == Phase.ROLLING){return "Rolling";}
+        else if(phase == Phase.DISCARDING){return "Discarding";}
+        else if (phase == Phase.PLAYING){return "Playing";}
+        else{
+            return "";
+        }
     }
 
     /**
@@ -204,6 +217,7 @@ public final class TurnTracker {
 
         this.phase = phase;
     }
+
     //endregion
 
     //region Phase enum
@@ -237,6 +251,8 @@ public final class TurnTracker {
         public Phase next() {
             return values()[ordinal() + 1];
         }
+
+
     }
     //endregion
 }

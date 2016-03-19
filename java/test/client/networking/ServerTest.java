@@ -109,7 +109,7 @@ public class ServerTest {
 
     @Test
     public void testBadRollNumber() {
-        final RollNumberDTO dto = new RollNumberDTO(2, 2);
+        final RollNumberDTO dto = new RollNumberDTO(-1, 2, 2);
         try {
             server.rollNumber(dto);
             fail("MissingUserCookieException should be thrown");
