@@ -1,6 +1,10 @@
 package server.commands.moves;
 
 import server.commands.ICommand;
+import server.exceptions.FinishTurnException;
+import server.facade.IFacade;
+import shared.dto.FinishTurnDTO;
+import shared.dto.GameModelDTO;
 import shared.dto.IDTO;
 
 /**
@@ -9,12 +13,15 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class FinishTurnCommand implements ICommand {
+    private IFacade facade;
+    private FinishTurnDTO dto;
 
     /**
      * Constructor
      */
-    public FinishTurnCommand() {
-
+    public FinishTurnCommand(IFacade facade, FinishTurnDTO dto) {
+        this.facade = facade;
+        this.dto = dto;
     }
 
     /**
@@ -23,7 +30,12 @@ public class FinishTurnCommand implements ICommand {
      */
     @Override
     public IDTO execute() {
-        return null;
+        try {
+            return facade.finishTurn(1, dto.getPlayerIndex());
+        } catch (FinishTurnException e) {
+            e.printStackTrace();
+            
+        }
     }
 
 }
