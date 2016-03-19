@@ -220,7 +220,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public GameModelDTO monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
-
+        return null;
     }
 
     /**
