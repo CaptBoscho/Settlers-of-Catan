@@ -1,6 +1,7 @@
 package server.controllers;
 
 import com.google.gson.JsonObject;
+import server.exceptions.CommandExecutionFailedException;
 import server.factories.GamesCommandFactory;
 
 /**
@@ -9,14 +10,29 @@ import server.factories.GamesCommandFactory;
 public class GamesController {
 
     public static String createGame(final JsonObject body) {
-        return GamesCommandFactory.getInstance().createCommand("").execute().toString();
+        try {
+            return GamesCommandFactory.getInstance().createCommand("").execute().toString();
+        } catch (CommandExecutionFailedException e) {
+            e.printStackTrace();
+            return "return something else here.";
+        }
     }
 
     public static String joinGame(final JsonObject body) {
-        return GamesCommandFactory.getInstance().createCommand("").execute().toString();
+        try {
+            return GamesCommandFactory.getInstance().createCommand("").execute().toString();
+        } catch (CommandExecutionFailedException e) {
+            e.printStackTrace();
+            return "return something else here.";
+        }
     }
 
     public static String listCommand(final JsonObject body) {
-        return GamesCommandFactory.getInstance().createCommand("").execute().toString();
+        try {
+            return GamesCommandFactory.getInstance().createCommand("").execute().toString();
+        } catch (CommandExecutionFailedException e) {
+            e.printStackTrace();
+            return "return something else here.";
+        }
     }
 }

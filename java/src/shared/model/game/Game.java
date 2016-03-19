@@ -1,7 +1,9 @@
 package shared.model.game;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import shared.definitions.*;
+import shared.dto.GameModelDTO;
 import shared.exceptions.PlayerExistsException;
 import shared.model.JsonSerializable;
 import shared.model.bank.DevelopmentCardBank;
@@ -48,10 +50,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Constructors
     /**
-     * Constructor
+     * Constructors
      */
     public Game() {
-        this.version = -1;
+        this.version = 0;
+        this.winner = -1;
         this.map = new Map(false, false, false);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
@@ -61,6 +64,46 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.developmentCardBank = new DevelopmentCardBank(true);
         this.chat = new MessageList();
         this.log = new MessageList();
+    }
+
+    public Game(JsonObject gameJson) {
+        assert gameJson != null;
+        assert gameJson.has("deck");
+        assert gameJson.has("map");
+        assert gameJson.has("players");
+        assert gameJson.has("bank");
+        assert gameJson.has("turnTracker");
+        assert gameJson.has("chat");
+        assert gameJson.has("log");
+
+        this.developmentCardBank = new DevelopmentCardBank(gameJson.get("deck").getAsJsonObject(), true);
+        this.map = new Map(gameJson.get("map").getAsJsonObject());
+        this.playerManager = new PlayerManager(gameJson.get("players").getAsJsonArray());
+        this.resourceCardBank = new ResourceCardBank(gameJson.get("bank").getAsJsonObject(), true);
+
+        // only update if someone actually has the longest road
+        final JsonObject turnTracker = gameJson.getAsJsonObject("turnTracker");
+        int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
+        if(longestRoadIndex >= 0) {
+            this.longestRoadCard = new LongestRoad(longestRoadIndex);
+        }
+
+        this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
+        this.version = gameJson.get("version").getAsInt();
+        this.winner = gameJson.get("winner").getAsInt();
+        if(gameJson.has("tradeOffer")) {
+            this.currentOffer = new Trade(gameJson.get("tradeOffer").getAsJsonObject());
+        } else {
+            this.currentOffer = new Trade();
+        }
+        try {
+            this.turnTracker = new TurnTracker(gameJson.get("turnTracker").getAsJsonObject());
+        } catch (BadJsonException e) {
+            e.printStackTrace();
+        }
+        this.chat = new MessageList(gameJson.get("chat").getAsJsonObject());
+        this.log = new MessageList(gameJson.get("log").getAsJsonObject());
+        this.winner = gameJson.get("winner").getAsInt();
     }
     //endregion
 
@@ -691,11 +734,18 @@ public class Game extends Observable implements IGame, JsonSerializable {
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
 
             // TODO - why is this trade object unused?
-            Trade trade = new Trade(one,two);
-
-            playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
+            currentOffer = new Trade(one,two);
+            currentOffer.setActive(true);
+            //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
 
         }
+    }
+
+    public void acceptTrade(int playerIndex, boolean answer)throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException{
+        if(playerIndex == currentOffer.getReceiver() && answer){
+            playerManager.offerTrade(currentOffer.getSender(),currentOffer.getReceiver(),currentOffer.getPackage1().getResources(),currentOffer.getPackage2().getResources());
+        }
+        currentOffer = new Trade();
     }
 
     /**
@@ -880,63 +930,60 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIndex
      */
     @Override
-    public DevCardType buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception {
+    public void buyDevelopmentCard(int playerIndex) throws PlayerExistsException, Exception {
         assert playerIndex >= 0;
         assert this.playerManager != null;
         assert this.developmentCardBank != null;
 
+        // remove player resources
         playerManager.buyDevCard(playerIndex);
+
+        // give Dev Card from game to player
         final DevelopmentCard dc = developmentCardBank.draw();
         playerManager.addDevCard(playerIndex, dc);
-        return dc.getType();
     }
 
-    //TODO: Maritime messed up
     /**
      * Action - Player performs a maritime trade
      *
      * @param playerIndex
-     * @param port
-     * @param want
      */
     @Override
-    public void maritimeTrade(int playerIndex, PortType port, ResourceType want) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+    public void maritimeTrade(int playerIndex, int ratio, ResourceType send, ResourceType receive) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         assert playerIndex >= 0;
-        assert port != null;
-        assert want != null;
-
-        if(canMaritimeTrade(playerIndex, port)){
-            List<ResourceType> cards = new ArrayList<>();
-            switch(port) {
+        List<ResourceType> cards = new ArrayList<>();
+        if(ratio == 3 && !canMaritimeTrade(playerIndex,PortType.THREE)){
+            return;
+        } else if(ratio == 2) {
+            switch (send) {
                 case BRICK:
-                    cards.add(ResourceType.BRICK);
-                    cards.add(ResourceType.BRICK);
+                    if(!canMaritimeTrade(playerIndex,PortType.BRICK)){return;}
                     break;
                 case ORE:
-                    cards.add(ResourceType.ORE);
-                    cards.add(ResourceType.ORE);
+                    if(!canMaritimeTrade(playerIndex,PortType.ORE)){return;}
                     break;
                 case SHEEP:
-                    cards.add(ResourceType.SHEEP);
-                    cards.add(ResourceType.SHEEP);
+                    if(!canMaritimeTrade(playerIndex,PortType.SHEEP)){return;}
                     break;
                 case WHEAT:
-                    cards.add(ResourceType.WHEAT);
-                    cards.add(ResourceType.WHEAT);
+                    if(!canMaritimeTrade(playerIndex,PortType.WHEAT)){return;}
                     break;
                 case WOOD:
-                    cards.add(ResourceType.WOOD);
-                    cards.add(ResourceType.WOOD);
+                    if(!canMaritimeTrade(playerIndex,PortType.WOOD)){return;}
                     break;
             }
-            final List<ResourceCard> discarded = playerManager.discardResourceType(playerIndex, cards);
-            assert discarded != null;
-            for(ResourceCard rc: discarded) {
-                resourceCardBank.addResource(rc);
-            }
-
-            playerManager.addResource(playerIndex, resourceCardBank.discard(want));
         }
+        for(int i=0; i<ratio; i++){
+            cards.add(send);
+        }
+        final List<ResourceCard> discarded = playerManager.discardResourceType(playerIndex, cards);
+        assert discarded != null;
+        for(ResourceCard rc: discarded) {
+            resourceCardBank.addResource(rc);
+        }
+
+        playerManager.addResource(playerIndex, resourceCardBank.discard(receive));
+
     }
 
     /**
@@ -1446,6 +1493,22 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
+        JsonObject json = new JsonObject();
+        json.add("bank",resourceCardBank.toJSON());
+        json.add("chat",chat.toJSON());
+        json.add("log",log.toJSON());
+        json.add("map",map.toJSON());
+        json.add("players",playerManager.toJSON());
+        json.add("tradeOffer", currentOffer.toJSON());
+
+        JsonObject turn = turnTracker.toJSON();
+        turn.addProperty("longestRoad",longestRoadCard.getOwner());
+        turn.addProperty("largestArmy",largestArmyCard.getOwner());
+        json.add("turnTracker",turn);
+
+        json.addProperty("version",version);
+        json.addProperty("winner",winner);
+
         return null;
     }
     //=====================================================================
@@ -1537,6 +1600,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert playerIDNew != playerIDOld;
 
         longestRoadCard.setOwner(playerIDNew, roadSize);
+    }
+
+    public GameModelDTO getDTO() {
+        return new GameModelDTO(toJSON());
     }
     //==========================================================
     //endregion

@@ -551,8 +551,7 @@ public final class PlayerManager implements IPlayerManager {
                 return player;
             }
         }
-
-        throw new GameOverException("The game is still in progress.");
+        return null;
     }
 
     /**
@@ -769,5 +768,17 @@ public final class PlayerManager implements IPlayerManager {
         }
         return true;
     }
+
+    @Override
+    public JsonArray toJSON() {
+        JsonArray array = new JsonArray();
+        for(Player p: players){
+            array.add(p.toJSON());
+        }
+        JsonObject json = new JsonObject();
+
+        return array;
+    }
+
     //endregion
 }

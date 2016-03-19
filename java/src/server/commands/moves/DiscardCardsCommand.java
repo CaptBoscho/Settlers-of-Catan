@@ -2,6 +2,10 @@ package server.commands.moves;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.DiscardCardsException;
+import server.facade.IFacade;
+import shared.dto.DiscardCardsDTO;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that discards cards
@@ -10,11 +14,14 @@ import server.commands.ICommand;
  */
 public class DiscardCardsCommand implements ICommand {
 
+    DiscardCardsDTO dto;
+    IFacade facade;
     /**
      * Constructor
      */
-    public DiscardCardsCommand() {
-
+    public DiscardCardsCommand(DiscardCardsDTO discard, IFacade fac) {
+        dto = discard;
+        facade = fac;
     }
 
     /**
@@ -22,7 +29,12 @@ public class DiscardCardsCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
+        try {
+            facade.discardCards(1, dto);
+        }catch(DiscardCardsException e){
+            e.printStackTrace();
+        }
         return null;
     }
 

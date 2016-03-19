@@ -1,21 +1,58 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
+import com.sun.corba.se.spi.activation.Server;
 import server.exceptions.*;
+import server.managers.GameManager;
+import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
+import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.PlayerExistsException;
+import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.bank.InvalidTypeException;
 import shared.model.cards.resources.ResourceCard;
+import shared.model.game.Game;
+import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 
+import javax.naming.InsufficientResourcesException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
  */
 public class ServerFacade implements IFacade {
+    private static IFacade _instance;
+    private GameManager gameManager;
+    private UserManager userManager;
+
+    /**
+     * Default Constructor - Private
+     */
+    private ServerFacade(){
+        gameManager = new GameManager();
+        userManager = new UserManager();
+    }
+
+    /**
+     * Singleton - get instance method
+     * @return
+     */
+    public static IFacade getInstance(){
+        if(_instance == null) {
+            _instance = new ServerFacade();
+        }
+        return _instance;
+    }
+
     /**
      * Logs a player into the server
      *
@@ -150,12 +187,18 @@ public class ServerFacade implements IFacade {
     /**
      * Buys a new dev card
      *
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @throws BuyDevCardException
      */
     @Override
-    public void buyDevCard(int gameID, int player) throws BuyDevCardException {
-
+    public GameModelDTO buyDevCard(int gameID, int playerIndex) throws BuyDevCardException {
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            game.buyDevelopmentCard(playerIndex);
+        } catch (Exception e) {
+            throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
+        }
+        return game.getDTO();
     }
 
     /**
@@ -261,15 +304,20 @@ public class ServerFacade implements IFacade {
     /**
      * Offers a trade to the specified player
      *
-     * @param player
-     * @param recipient
-     * @param send
-     * @param receive
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
-
+    public void offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
+        int sender = dto.getSender();
+        int receiver = dto.getReceiver();
+        Trade offer = dto.getOffer();
+        List<ResourceType> send = offer.getPackage1().getResources();
+        List<ResourceType> receive = offer.getPackage2().getResources();
+        try {
+            gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
+        }catch(InsufficientResourcesException e){}
+        catch(InvalidTypeException e){}
+        catch(PlayerExistsException e){}
     }
 
     /**
@@ -280,33 +328,59 @@ public class ServerFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
-
+    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException, InsufficientResourcesException, PlayerExistsException, InvalidTypeException {
+        gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
     }
 
     /**
      * Performs a maritime trade (trade with the bank)
      *
-     * @param player index of the player
-     * @param ratio  trade ratio [2, 3 or 4]
-     * @param give   resource to trade away
-     * @param get    resource to get
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
-
+    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+        try {
+            gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), convert(dto.getInputResource()), convert(dto.getOutputResource()));
+        }catch(InvalidPlayerException e){}
+        catch(InvalidTypeException e){}
+        catch(InsufficientResourcesException e){}
+        catch(PlayerExistsException e){}
     }
 
     /**
      * Discards the specified cards from the player's hand
      *
-     * @param player         index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
+    public void discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        List<ResourceType> cards = new ArrayList<>();
+        for(int i=0; i<dto.getBrickCount(); i++){cards.add(ResourceType.BRICK);}
+        for(int i=0; i<dto.getWoodCount(); i++){cards.add(ResourceType.WOOD);}
+        for(int i=0; i<dto.getOreCount(); i++){cards.add(ResourceType.ORE);}
+        for(int i=0; i<dto.getWheatCount(); i++){cards.add(ResourceType.WHEAT);}
+        for(int i=0; i<dto.getSheepCount(); i++){cards.add(ResourceType.SHEEP);}
+        try {
+            gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
+        }catch(PlayerExistsException | InvalidTypeException | InsufficientResourcesException e){
+            e.printStackTrace();
+        }
+    }
 
+    private ResourceType convert(String type){
+        switch(type){
+            case "brick":
+                return ResourceType.BRICK;
+            case "wood":
+                return ResourceType.WOOD;
+            case "wheat":
+                return ResourceType.WHEAT;
+            case "sheep":
+                return ResourceType.SHEEP;
+            case "ore":
+                return ResourceType.ORE;
+            default:
+                return null;
+        }
     }
 }

@@ -3,6 +3,7 @@ package server.commands.moves;
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import shared.dto.BuildSettlementDTO;
+import shared.dto.GameModelDTO;
 
 /**
  * A command object that builds a settlement
@@ -22,7 +23,7 @@ public class BuildSettlementCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public JsonObject execute() {
+    public GameModelDTO execute() {
         return null;
     }
 

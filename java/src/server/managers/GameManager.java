@@ -3,6 +3,7 @@ package server.managers;
 import shared.model.game.Game;
 import shared.model.player.PlayerManager;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -12,5 +13,23 @@ import java.util.List;
  */
 public class GameManager {
 
-    private List<Game> games;
+    private HashMap<Integer, Game> games;
+    private Game game;
+
+    public GameManager() {
+        game = new Game();
+    }
+
+    public Game getGameByID(int gameID) {
+        return game;
+//        return games.get(gameID);
+    }
+
+    public void addGame(Game game) {
+        games.put(game.getId(), game);
+    }
+
+    public void removeGame(int gameID) {
+        games.remove(gameID);
+    }
 }

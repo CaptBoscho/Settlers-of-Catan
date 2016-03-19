@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.commands.game.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
+import shared.dto.IDTO;
 
 /**
  * A factory class that creates Game Commands on demand. Use this class to get a Game Command.
@@ -16,7 +17,7 @@ public class GameCommandFactory {
     private static GameCommandFactory instance = null;
 
     private GameCommandFactory() {
-        facade = new ServerFacade();
+        facade = ServerFacade.getInstance();
     }
 
     public static GameCommandFactory getInstance() {
@@ -36,7 +37,7 @@ public class GameCommandFactory {
      * Creates a game command based on a given string
      * @return an ICommand object
      */
-    public ICommand createCommand(Object object) {
+    public ICommand createCommand(IDTO dto) {
         /*
        Need to if(object instanceof ...) for modeldto, addAIDTO, listAIDTO
          */

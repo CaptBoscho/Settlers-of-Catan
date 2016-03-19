@@ -5,6 +5,7 @@ import server.commands.games.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
 import shared.dto.CreateGameDTO;
+import shared.dto.IDTO;
 import shared.dto.JoinGameDTO;
 
 /**
@@ -17,7 +18,7 @@ public class GamesCommandFactory {
     private static GamesCommandFactory instance = null;
 
     private GamesCommandFactory() {
-        facade = new ServerFacade();
+        facade = ServerFacade.getInstance();
     }
 
     public static GamesCommandFactory getInstance() {
@@ -36,7 +37,7 @@ public class GamesCommandFactory {
      * Creates a Games command based on a given string
      * @return an ICommand object
      */
-    public ICommand createCommand(Object obj) {
+    public ICommand createCommand(IDTO obj) {
         if(obj instanceof CreateGameDTO){
 
         }else if(obj instanceof JoinGameDTO){

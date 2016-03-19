@@ -2,6 +2,7 @@ package server.commands.games;
 
 import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import shared.dto.IDTO;
 
 /**
  * A command object that creates a game.
@@ -16,7 +17,7 @@ public class CreateCommand implements ICommand {
      * @return JsonObject with information about the game creation
      */
     @Override
-    public JsonObject execute() {
+    public IDTO execute() {
         return null;
     }
 }
