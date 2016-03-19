@@ -23,6 +23,18 @@ public final class RobPlayerDTO implements IDTO,JsonSerializable {
         this.location = location;
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public int getVictimIndex() {
+        return victimIndex;
+    }
+
+    public HexLocation getLocation() {
+        return location;
+    }
+
     /**
      * Converts the object to JSON
      *

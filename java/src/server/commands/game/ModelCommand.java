@@ -1,6 +1,5 @@
 package server.commands.game;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import shared.dto.GameModelDTO;
 
@@ -20,7 +19,7 @@ public class ModelCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Model command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
     public GameModelDTO execute() {

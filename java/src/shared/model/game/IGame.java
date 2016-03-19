@@ -342,7 +342,7 @@ public interface IGame {
      * @param playerIndex ID of Player performing action
      * @param location
      */
-    Set<Integer> useSoldier(int playerIndex, HexLocation location) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException;
+    void useSoldier(int playerIndex, int victim, HexLocation location) throws MoveRobberException, InvalidTypeException, InsufficientResourcesException, PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException;
 
     /**
      * Cancels playing a soldier card
@@ -379,7 +379,7 @@ public interface IGame {
      * @throws PlayerExistsException
      * @throws InsufficientResourcesException
      */
-    void rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
+    void rob(int playerRobber, int playerRobbed, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException, MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException;
 
     /**
      * Action - Player buys a new developmentCard

@@ -1,8 +1,11 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import server.exceptions.CommandExecutionFailedException;
+import server.exceptions.RoadBuildingException;
+import server.facade.IFacade;
+import shared.dto.IDTO;
+import shared.dto.RoadBuildingDTO;
 
 /**
  * A command object that plays a road building card
@@ -11,20 +14,28 @@ import shared.dto.GameModelDTO;
  */
 public class RoadBuildingCommand implements ICommand {
 
+    private IFacade facade;
+    private RoadBuildingDTO dto;
+
     /**
      * Constructor
      */
-    public RoadBuildingCommand() {
-
+    public RoadBuildingCommand(IFacade facade, RoadBuildingDTO dto) {
+        this.facade = facade;
+        this.dto = dto;
     }
 
     /**
      * Communicates with the ServerFacade to carry out the Road Building command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
-        return null;
+    public IDTO execute() throws CommandExecutionFailedException {
+        try {
+            return facade.roadBuilding(1, dto.getPlayerIndex(), dto.getRoadLocationOne(), dto.getRoadLocationTwo());
+        } catch (RoadBuildingException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
 }

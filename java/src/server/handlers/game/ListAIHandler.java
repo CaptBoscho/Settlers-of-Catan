@@ -1,8 +1,7 @@
 package server.handlers.game;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.controllers.GamesController;
+import shared.dto.GameInfoListDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -15,7 +14,6 @@ public class ListAIHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         response.status(200);
         response.type("application/json");
-        final JsonObject body = new JsonParser().parse(request.body()).getAsJsonObject();
-        return GamesController.listCommand(body);
+        return GamesController.listCommand(new GameInfoListDTO(request.body()));
     }
 }

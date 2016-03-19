@@ -1,6 +1,5 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import server.exceptions.MaritimeTradeException;
 import server.facade.IFacade;
@@ -29,7 +28,7 @@ public class MaritimeTradeCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Maritime Trade command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
     public GameModelDTO execute() {

@@ -1,6 +1,5 @@
 package server.commands.games;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import shared.dto.IDTO;
 
@@ -14,7 +13,7 @@ public class ListCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the List command
      *
-     * @return JsonObject with information about the games list
+     * @return IDTO with information about the games list
      */
     @Override
     public IDTO execute() {

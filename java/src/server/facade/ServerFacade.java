@@ -6,13 +6,21 @@ import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
+import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.PlayerExistsException;
 import shared.dto.GameModelDTO;
+import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.cards.resources.ResourceCard;
+import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
-
+import shared.model.game.trade.Trade;
+import javax.naming.InsufficientResourcesException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -161,11 +169,26 @@ public class ServerFacade implements IFacade {
      * @param player      index of the player robbing
      * @param newLocation
      * @param victim      index of the player being robbed
+     * @return GameModelDTO
      * @throws RobPlayerException
      */
     @Override
-    public void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+    public GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert newLocation != null;
+        assert victim >= 0;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canPlaceRobber(player, newLocation)) {
+                game.rob(player, victim, newLocation);
+                return game.getDTO();
+            }
+        } catch (InvalidTypeException | InsufficientResourcesException | MoveRobberException | AlreadyRobbedException | PlayerExistsException | InvalidLocationException e) {
+            throw new RobPlayerException(e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -215,24 +238,54 @@ public class ServerFacade implements IFacade {
      * @param player      index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
+     * @return GameModelDTO
      * @throws RoadBuildingException
      */
     @Override
-    public void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert locationOne != null;
+        assert locationTwo != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canUseRoadBuilding(player)) {
+                game.useRoadBuilder(player, locationOne, locationTwo);
+                return game.getDTO();
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException | DevCardException e) {
+            throw new RoadBuildingException(e.getMessage());
+        }
+        return null;
     }
 
     /**
      * Handles playing Soldier
      *
-     * @param player      index of the player
+     * @param player index of the player
      * @param newLocation
-     * @param victim      index of the player being robbed
+     * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws SoldierException
      */
     @Override
-    public void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+    public GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert newLocation != null;
+        assert victim >= 0;
 
+        Game game = gameManager.getGameByID(gameID);
+        try{
+            if(game.canUseSoldier(player)) {
+                game.useSoldier(player, victim, newLocation);
+                return game.getDTO();
+            }
+        } catch(MoveRobberException | InvalidTypeException | InsufficientResourcesException | DevCardException | PlayerExistsException | AlreadyRobbedException | InvalidLocationException e) {
+            throw new SoldierException(e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -262,52 +315,105 @@ public class ServerFacade implements IFacade {
      * Builds a road
      *
      * @param player   index of the player
-     * @param isFree   whether the piece is free
      * @param location
+     * @return GameModelDTO
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
+    public GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert location != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canInitiateRoad(player, location)) {
+                game.initiateRoad(player, location);
+                return game.getDTO();
+            } else if(game.canBuildRoad(player, location)) {
+                game.buildRoad(player, location);
+                return game.getDTO();
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            throw new BuildRoadException(e.getMessage());
+        }
+        return null;
     }
 
     /**
      * Builds a settlement
      *
-     * @param player   index of the player
-     * @param isFree   whether the piece is free
+     * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
+    public GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert location != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canInitiateSettlement(player, location)) {
+                game.initiateSettlement(player, location);
+                return game.getDTO();
+            } else if(game.canBuildSettlement(player, location)) {
+                game.buildSettlement(player, location);
+                return game.getDTO();
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            throw new BuildSettlementException(e.getMessage());
+        }
+        return null;
     }
 
     /**
      * Builds a city
      *
-     * @param player   index of the player
+     * @param gameID id of the game
+     * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+    public GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+        assert gameID >= 0;
+        assert player >= 0;
+        assert location != null;
 
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            if(game.canBuildCity(player, location)) {
+                game.buildCity(player, location);
+                return game.getDTO();
+            }
+        } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            throw new BuildCityException(e.getMessage());
+        }
+        return null;
     }
 
     /**
      * Offers a trade to the specified player
      *
-     * @param player
-     * @param recipient
-     * @param send
-     * @param receive
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
-
+    public GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
+        int sender = dto.getSender();
+        int receiver = dto.getReceiver();
+        Trade offer = dto.getOffer();
+        List<ResourceType> send = offer.getPackage1().getResources();
+        List<ResourceType> receive = offer.getPackage2().getResources();
+        try {
+            gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
+            return gameManager.getGameByID(gameID).getDTO();
+        } catch(InvalidTypeException | PlayerExistsException | InsufficientResourcesException e){
+            throw new OfferTradeException(e.getMessage());
+        }
     }
 
     /**
@@ -318,33 +424,65 @@ public class ServerFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
-
+    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+        try {
+            gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
+            return gameManager.getGameByID(gameID).getDTO();
+        } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+            throw new AcceptTradeException(e.getMessage());
+        }
     }
 
     /**
      * Performs a maritime trade (trade with the bank)
      *
-     * @param player index of the player
-     * @param ratio  trade ratio [2, 3 or 4]
-     * @param give   resource to trade away
-     * @param get    resource to get
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
-
+    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+        try {
+            gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), convert(dto.getInputResource()), convert(dto.getOutputResource()));
+        }catch(InvalidPlayerException e){}
+        catch(InvalidTypeException e){}
+        catch(InsufficientResourcesException e){}
+        catch(PlayerExistsException e){}
     }
 
     /**
      * Discards the specified cards from the player's hand
      *
-     * @param player         index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
+    public GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        List<ResourceType> cards = new ArrayList<>();
+        for(int i=0; i<dto.getBrickCount(); i++){cards.add(ResourceType.BRICK);}
+        for(int i=0; i<dto.getWoodCount(); i++){cards.add(ResourceType.WOOD);}
+        for(int i=0; i<dto.getOreCount(); i++){cards.add(ResourceType.ORE);}
+        for(int i=0; i<dto.getWheatCount(); i++){cards.add(ResourceType.WHEAT);}
+        for(int i=0; i<dto.getSheepCount(); i++){cards.add(ResourceType.SHEEP);}
+        try {
+            gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
+            return gameManager.getGameByID(gameID).getDTO();
+        }catch(PlayerExistsException | InvalidTypeException | InsufficientResourcesException e){
+            throw new DiscardCardsException(e.getMessage());
+        }
+    }
 
+    private ResourceType convert(String type){
+        switch(type){
+            case "brick":
+                return ResourceType.BRICK;
+            case "wood":
+                return ResourceType.WOOD;
+            case "wheat":
+                return ResourceType.WHEAT;
+            case "sheep":
+                return ResourceType.SHEEP;
+            case "ore":
+                return ResourceType.ORE;
+            default:
+                return null;
+        }
     }
 }

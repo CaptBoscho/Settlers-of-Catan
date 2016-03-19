@@ -4,14 +4,13 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.DiscardCardsDTO;
 import shared.dto.GameModelDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradePackage;
-
-import java.util.List;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
@@ -132,14 +131,15 @@ public class MockFacade implements IFacade {
      * Robs the specified player
      *
      * @param gameID
-     * @param player      index of the player robbing
+     * @param player index of the player robbing
      * @param newLocation
-     * @param victim      index of the player being robbed
+     * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws RobPlayerException
      */
     @Override
-    public void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
-
+    public GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+        return null;
     }
 
     /**
@@ -187,11 +187,12 @@ public class MockFacade implements IFacade {
      * @param player      index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
+     * @return GameModelDTO
      * @throws RoadBuildingException
      */
     @Override
-    public void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
-
+    public GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+        return null;
     }
 
     /**
@@ -200,12 +201,13 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player      index of the player
      * @param newLocation
-     * @param victim      index of the player being robbed
+     * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws SoldierException
      */
     @Override
-    public void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
-
+    public GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+        return null;
     }
 
     /**
@@ -237,28 +239,28 @@ public class MockFacade implements IFacade {
      * Builds a road
      *
      * @param gameID
-     * @param player   index of the player
-     * @param isFree   whether the piece is free
+     * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildRoadException
      */
     @Override
-    public void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException {
-
+    public GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
+        return null;
     }
 
     /**
      * Builds a settlement
      *
      * @param gameID
-     * @param player   index of the player
-     * @param isFree   whether the piece is free
+     * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildSettlementException
      */
     @Override
-    public void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException {
-
+    public GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
+        return null;
     }
 
     /**
@@ -267,26 +269,24 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player   index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildCityException
      */
     @Override
-    public void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
-
+    public GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+        return null;
     }
 
     /**
      * Offers a trade to the specified player
      *
      * @param gameID
-     * @param player
-     * @param recipient
-     * @param send
-     * @param receive
+     * @param dto
      * @throws OfferTradeException
      */
     @Override
-    public void offerTrade(int gameID, int player, int recipient, List<ResourceType> send, List<ResourceType> receive) throws OfferTradeException {
-
+    public GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
+        return null;
     }
 
     /**
@@ -298,22 +298,19 @@ public class MockFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
-
+    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+        return null;
     }
 
     /**
      * Performs a maritime trade (trade with the bank)
      *
      * @param gameID
-     * @param player index of the player
-     * @param ratio  trade ratio [2, 3 or 4]
-     * @param give   resource to trade away
-     * @param get    resource to get
+     * @param dto
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, int player, int ratio, ResourceType give, ResourceType get) throws MaritimeTradeException {
+    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
 
     }
 
@@ -321,12 +318,11 @@ public class MockFacade implements IFacade {
      * Discards the specified cards from the player's hand
      *
      * @param gameID
-     * @param player         index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
+     * @param dto
      * @throws DiscardCardsException
      */
     @Override
-    public void discardCards(int gameID, int player, List<ResourceCard> cardsToDiscard) throws DiscardCardsException {
-
+    public GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        return null;
     }
 }

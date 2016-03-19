@@ -450,14 +450,13 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerRobbed  index of the player being robbed
      */
     @Override
-    public ResourceType placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         Player robber = getPlayerByIndex(playerRobbing);
         Player robbed = getPlayerByIndex(playerRobbed);
 
         robber.placeRobber();
         ResourceCard treasure = robbed.robbed();
         robber.addResourceCard(treasure);
-        return treasure.getType();
     }
 
     /**

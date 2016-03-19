@@ -1,6 +1,5 @@
 package server.commands.game;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
 import shared.dto.IDTO;
 
@@ -20,7 +19,7 @@ public class ListAICommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the List AI command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
     public IDTO execute() {

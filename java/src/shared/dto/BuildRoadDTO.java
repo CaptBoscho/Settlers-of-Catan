@@ -30,6 +30,14 @@ public final class BuildRoadDTO implements IDTO, JsonSerializable {
         this.free = free;
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public EdgeLocation getRoadLocation() {
+        return roadLocation;
+    }
+
     /**
      * Converts the object to JSON
      *
