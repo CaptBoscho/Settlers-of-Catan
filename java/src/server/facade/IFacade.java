@@ -4,10 +4,7 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
-import shared.dto.DiscardCardsDTO;
-import shared.dto.GameModelDTO;
-import shared.dto.MaritimeTradeDTO;
-import shared.dto.OfferTradeDTO;
+import shared.dto.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -206,7 +203,7 @@ public interface IFacade {
      * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
      */
-    GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException ;
+    GameModelDTO acceptTrade(int gameID, TradeOfferResponseDTO dto) throws AcceptTradeException ;
 
     /**
      * Performs a maritime trade (trade with the bank)
@@ -221,4 +218,12 @@ public interface IFacade {
      * @throws DiscardCardsException
      */
     GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
+
+    /**
+     * Gets the current game model
+     * @param gameID
+     * @return
+     */
+    GameModelDTO getModel(int gameID);
+
 }

@@ -3,6 +3,7 @@ package server.factories;
 import server.commands.ICommand;
 import server.commands.moves.*;
 import server.facade.IFacade;
+import server.facade.ServerFacade;
 import shared.dto.*;
 
 /**
@@ -13,7 +14,7 @@ public class MovesCommandFactory {
     private IFacade facade;
     private static MovesCommandFactory instance = null;
     private MovesCommandFactory() {
-
+        facade = ServerFacade.getInstance();
     }
 
     public static MovesCommandFactory getInstance() {

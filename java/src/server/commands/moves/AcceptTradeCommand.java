@@ -19,15 +19,13 @@ import shared.dto.GameModelDTO;
  */
 public class AcceptTradeCommand implements ICommand {
     private IFacade facade;
-    private int playerIndex;
-    private boolean answer;
+    private TradeOfferResponseDTO dto;
     /**
      * Constructor
      */
     public AcceptTradeCommand(TradeOfferResponseDTO dto, IFacade fac) {
         facade = fac;
-        playerIndex = dto.getPlayerIndex();
-        answer = dto.willAccept();
+        this.dto = dto;
     }
 
     /**
@@ -37,7 +35,7 @@ public class AcceptTradeCommand implements ICommand {
     @Override
     public GameModelDTO execute() throws CommandExecutionFailedException {
         try {
-            return facade.acceptTrade(1, playerIndex, answer);
+            return facade.acceptTrade(1, dto);
         } catch(AcceptTradeException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }

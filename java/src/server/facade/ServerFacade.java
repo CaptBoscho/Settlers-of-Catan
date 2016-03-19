@@ -6,13 +6,10 @@ import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
-import shared.dto.DiscardCardsDTO;
-import shared.dto.MaritimeTradeDTO;
-import shared.dto.OfferTradeDTO;
+import shared.dto.*;
 import shared.exceptions.DevCardException;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
-import shared.dto.GameModelDTO;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -437,9 +434,9 @@ public class ServerFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+    public GameModelDTO acceptTrade(int gameID, TradeOfferResponseDTO dto) throws AcceptTradeException {
         try {
-            gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
+            gameManager.getGameByID(gameID).acceptTrade(dto.getPlayerIndex(),dto.willAccept());
             return gameManager.getGameByID(gameID).getDTO();
         } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
             throw new AcceptTradeException(e.getMessage());
@@ -483,6 +480,20 @@ public class ServerFacade implements IFacade {
         }
     }
 
+    /**
+     * gets the current game model
+     * @param gameID
+     * @return
+     */
+    public GameModelDTO getModel(int gameID){
+        return gameManager.getGameByID(gameID).getDTO();
+    }
+
+    /**
+     * converts a string to resourceType for convenience
+     * @param type
+     * @return
+     */
     private ResourceType convert(String type){
         switch(type){
             case "brick":

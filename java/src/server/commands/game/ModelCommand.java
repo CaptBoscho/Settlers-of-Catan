@@ -1,6 +1,7 @@
 package server.commands.game;
 
 import server.commands.ICommand;
+import server.facade.IFacade;
 import shared.dto.GameModelDTO;
 
 /**
@@ -10,11 +11,16 @@ import shared.dto.GameModelDTO;
  */
 public class ModelCommand implements ICommand {
 
+    private int gameID;
+    private IFacade facade;
+    private GameModelDTO dto;
     /**
      * Constructor
      */
-    public ModelCommand() {
-
+    public ModelCommand(GameModelDTO dto, IFacade fac) {
+        gameID = 1;
+        this.dto = dto;
+        facade = fac;
     }
 
     /**
@@ -23,7 +29,7 @@ public class ModelCommand implements ICommand {
      */
     @Override
     public GameModelDTO execute() {
-        return null;
+        return facade.getModel(gameID);
     }
 
 }

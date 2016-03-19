@@ -1,8 +1,12 @@
 package server.factories;
 
 import server.commands.ICommand;
+import server.commands.game.AddAICommand;
+import server.commands.game.ListAICommand;
+import server.commands.game.ModelCommand;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
+import shared.dto.GameModelDTO;
 import shared.dto.IDTO;
 
 /**
@@ -36,9 +40,9 @@ public class GameCommandFactory {
      * @return an ICommand object
      */
     public ICommand createCommand(IDTO dto) {
-        /*
-       Need to if(object instanceof ...) for modeldto, addAIDTO, listAIDTO
-         */
+        if(dto instanceof GameModelDTO){
+            return new ModelCommand((GameModelDTO)dto, facade);
+        }
         return null;
 
     }
