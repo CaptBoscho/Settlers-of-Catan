@@ -129,7 +129,7 @@ public interface IFacade {
      * @param resourceTwo second resource to receive
      * @throws YearOfPlentyException
      */
-    void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
+    GameModelDTO yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
 
     /**
      * Handles playing Road Building

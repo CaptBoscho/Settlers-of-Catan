@@ -370,9 +370,7 @@ public final class PlayerManager implements IPlayerManager {
      */
     @Override
     public void useYearOfPlenty(int playerIndex) throws DevCardException, PlayerExistsException {
-        Player player = getPlayerByIndex(playerIndex);
-
-        player.useYearOfPlenty();
+        getPlayerByIndex(playerIndex).useYearOfPlenty();
     }
 
     /**
