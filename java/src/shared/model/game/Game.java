@@ -710,9 +710,33 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     /**
      * Action - Player rolls the dice
+     * @param value
+     * @throws InvalidDiceRollException
      */
-    public void rollNumber(int playerIndex, int value){
+    @Override
+    public void rollNumber(int value) throws InvalidDiceRollException {
+        //Is value a 7 - robber
+        if(value == 7){
+            //Go to discarding phase before robbing if any player has to discard
+            getPlayers().forEach(player ->{
+                if(player.canDiscardCards()){
+                    turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+                    return;
+                }
+            });
+            //Otherwise just move to the robbing phase
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+        }else{
+            //Get the resources
+            java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
 
+            //Remove from the game's bank and give to players
+            resources.entrySet().forEach(entry -> {
+                entry.getValue().forEach(resource -> {
+                    safeDrawCard(entry.getKey(), resource);
+                });
+            });
+        }
     }
 
     /**
@@ -1509,7 +1533,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      *
      * @param playerIndex Index of Player performing action
      */
-    public int rollNumber(int playerIndex) throws InvalidDiceRollException {
+    public int rollDice(int playerIndex) throws InvalidDiceRollException {
         assert playerIndex >= 0;
 
         Dice dice = new Dice(2);
@@ -1531,13 +1555,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
     /**
      * for testing purposes
      * @param card
-     * @param id
+     * @param index
      * @throws PlayerExistsException
      */
-    public void giveResource(ResourceCard card, int id) throws PlayerExistsException {
+    public void giveResource(ResourceCard card, int index) throws PlayerExistsException {
         assert card != null;
 
-        playerManager.addResource(id, card);
+        playerManager.addResource(index, card);
     }
 
     /**
@@ -1557,6 +1581,22 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Helpers
     //==========================================================
+    /**
+     * Safely tries to draw a card from the bank and give to the player
+     * @param playerIndex
+     * @param type
+     */
+    private void safeDrawCard(int playerIndex, ResourceType type){
+        try {
+            ResourceCard card = resourceCardBank.draw(type);
+            playerManager.addResource(playerIndex, card);
+        } catch (InvalidTypeException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Adds the dev card to the player
      * @param dc

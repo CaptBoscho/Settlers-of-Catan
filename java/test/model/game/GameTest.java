@@ -1877,7 +1877,7 @@ public class GameTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        final int roll = game.rollNumber(turn);
+        final int roll = game.rollDice(turn);
         assertTrue(roll > 1);
         assertTrue(roll <= 12);
     }

@@ -1,7 +1,6 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
-import com.sun.corba.se.spi.activation.Server;
 import server.exceptions.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
@@ -13,7 +12,6 @@ import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.cards.resources.ResourceCard;
 import shared.model.game.Game;
-import shared.model.game.trade.TradePackage;
 
 import java.util.List;
 
@@ -148,7 +146,13 @@ public class ServerFacade implements IFacade {
      */
     @Override
     public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
-        return null;
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            game.rollDice(player, value);
+        } catch (Exception e) {
+            throw new RollNumberException("Error while rolling!");
+        }
+        return game.getDTO();
     }
 
     /**

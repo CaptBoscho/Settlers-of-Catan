@@ -4,7 +4,6 @@ import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RollNumberException;
 import server.facade.IFacade;
-import server.managers.GameManager;
 import shared.dto.GameModelDTO;
 import shared.dto.RollNumberDTO;
 
