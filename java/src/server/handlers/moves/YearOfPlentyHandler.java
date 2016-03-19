@@ -24,7 +24,7 @@ public class YearOfPlentyHandler implements Route {
             response.status(400);
             return "Invalid request";
         }
-        
+
         response.status(200);
         response.type("application/json");
         final JsonObject body = new JsonParser().parse(request.body()).getAsJsonObject();
