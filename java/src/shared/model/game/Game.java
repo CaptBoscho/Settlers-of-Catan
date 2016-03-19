@@ -1,31 +1,31 @@
 package shared.model.game;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import shared.definitions.*;
+import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
 import shared.dto.GameModelDTO;
-import shared.exceptions.PlayerExistsException;
-import shared.model.JsonSerializable;
-import shared.model.bank.DevelopmentCardBank;
-import shared.model.bank.ResourceCardBank;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.JsonSerializable;
+import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
-import shared.definitions.DevCardType;
+import shared.model.bank.ResourceCardBank;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.devcards.RoadBuildCard;
 import shared.model.cards.devcards.SoldierCard;
+import shared.model.cards.resources.ResourceCard;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
-import shared.model.cards.resources.ResourceCard;
+
 import javax.naming.InsufficientResourcesException;
 import java.util.*;
-import java.util.Observable;
 
 /**
  * game class representing a Catan game
@@ -115,7 +115,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param players
      * @param randomHexes
      * @param randomChits
-     * @param randomPorts @return
+     * @param randomPorts
      */
     @Override
     public int initializeGame(List<Player> players, boolean randomHexes, boolean randomChits, boolean randomPorts) {
@@ -176,7 +176,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
         }
         this.chat = new MessageList(json.get("chat").getAsJsonObject());
         this.log = new MessageList(json.get("log").getAsJsonObject());
-        this.winner = json.get("winner").getAsInt();
         setChanged();
         notifyObservers();
     }
@@ -732,7 +731,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if(canOfferTrade(playerIndexOne)){
             final TradePackage one = new TradePackage(playerIndexOne,playerOneCards);
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
-
             // TODO - why is this trade object unused?
             currentOffer = new Trade(one,two);
             currentOffer.setActive(true);
@@ -813,8 +811,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param location
      */
     @Override
-    public Set<Integer> useSoldier(int playerIndex, HexLocation location) throws PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
+    public void useSoldier(int playerIndex, int victimIndex, HexLocation location) throws MoveRobberException, InvalidTypeException, InsufficientResourcesException, PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
         assert playerIndex >= 0;
+        assert victimIndex >= 0;
         assert this.playerManager != null;
         assert this.largestArmyCard != null;
         assert this.turnTracker != null;
@@ -827,14 +826,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 largestArmyCard.setNewOwner(playerIndex, used);
                 playerManager.changeLargestArmyPossession(oldPlayer, playerIndex);
             }
-
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
             if(canPlaceRobber(playerIndex, location)) {
-                return placeRobber(playerIndex, location);
+                rob(playerIndex, victimIndex, location);
             }
-            return null;
         }
-        return null;
     }
 
     /**
@@ -905,20 +900,24 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws InsufficientResourcesException
      */
     @Override
-    public void rob(int playerRobber, int playerRobbed) throws MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException {
-        assert playerRobbed > 0;
-        assert playerRobber > 0;
-        assert playerRobbed != playerRobber;
+    public void rob(int playerRobber, int playerRobbed, HexLocation hexLoc) throws AlreadyRobbedException, InvalidLocationException, MoveRobberException, InvalidTypeException, PlayerExistsException, InsufficientResourcesException {
+        assert playerRobbed >= 0;
+        assert playerRobber >= 0;
+        assert hexLoc != null;
         assert this.map != null;
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
         Set<Integer> who = map.whoCanGetRobbed(playerRobber);
         assert who != null;
-        if(turnTracker.canPlay() && turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING); //TODO look at this statement
-            ResourceType stolenResource = playerManager.placeRobber(playerRobber, playerRobbed);
-
+        if(turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)){
+            try {
+                turnTracker.nextPhase();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            map.moveRobber(playerRobber, hexLoc);
+            playerManager.placeRobber(playerRobber, playerRobbed);
         }
     }
 

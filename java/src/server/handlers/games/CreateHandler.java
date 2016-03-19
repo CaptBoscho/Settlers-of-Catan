@@ -1,7 +1,5 @@
 package server.handlers.games;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.controllers.GamesController;
 import shared.dto.CreateGameDTO;
 import spark.Request;
@@ -22,7 +20,6 @@ public class CreateHandler implements Route {
 
         response.status(200);
         response.type("application/json");
-        final JsonObject body = new JsonParser().parse(request.body()).getAsJsonObject();
-        return GamesController.createGame(body);
+        return GamesController.createGame(new CreateGameDTO(request.body()));
     }
 }

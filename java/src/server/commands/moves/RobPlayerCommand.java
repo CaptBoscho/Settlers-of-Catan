@@ -1,8 +1,11 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import server.exceptions.CommandExecutionFailedException;
+import server.exceptions.RobPlayerException;
+import server.facade.IFacade;
+import shared.dto.IDTO;
+import shared.dto.RobPlayerDTO;
 
 /**
  * A command object that robs a player
@@ -11,20 +14,28 @@ import shared.dto.GameModelDTO;
  */
 public class RobPlayerCommand implements ICommand {
 
+    private IFacade facade;
+    private RobPlayerDTO dto;
+
     /**
      * Constructor
      */
-    public RobPlayerCommand() {
-
+    public RobPlayerCommand(IFacade facade, RobPlayerDTO dto) {
+        this.facade = facade;
+        this.dto = dto;
     }
 
     /**
      * Communicates with the ServerFacade to carry out the Rob Player command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
-        return null;
+    public IDTO execute() throws CommandExecutionFailedException {
+        try {
+            return facade.robPlayer(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
+        } catch (RobPlayerException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
 }

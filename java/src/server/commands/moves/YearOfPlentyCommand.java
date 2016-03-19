@@ -1,8 +1,7 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that plays a year of plenty card
@@ -20,10 +19,10 @@ public class YearOfPlentyCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the YearOfPlenty command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 

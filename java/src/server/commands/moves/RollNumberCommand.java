@@ -1,8 +1,7 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that rolls a number
@@ -20,10 +19,10 @@ public class RollNumberCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Roll Number command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public IDTO execute() {
         return null;
     }
 

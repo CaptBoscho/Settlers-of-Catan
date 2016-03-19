@@ -1,8 +1,5 @@
 package server.commands.moves;
 
-import client.services.CommandExecutionFailed;
-import com.google.gson.JsonObject;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import server.commands.ICommand;
 import server.exceptions.BuyDevCardException;
 import server.exceptions.CommandExecutionFailedException;
@@ -29,7 +26,7 @@ public class BuyDevCardCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Buy Development Card command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
     public GameModelDTO execute() throws CommandExecutionFailedException {

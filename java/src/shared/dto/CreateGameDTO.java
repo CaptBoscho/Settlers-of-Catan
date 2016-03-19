@@ -32,6 +32,14 @@ public final class CreateGameDTO implements IDTO, JsonSerializable {
         this.name = name;
     }
 
+    public CreateGameDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.randomHexes = obj.get(kRandomTiles).getAsBoolean();
+        this.randomNumbers = obj.get(kRandomNumbers).getAsBoolean();
+        this.randomPorts = obj.get(kRandomPorts).getAsBoolean();
+        this.name = obj.get(kName).getAsString();
+    }
+
     public boolean isRandomTiles() {
         return this.randomHexes;
     }

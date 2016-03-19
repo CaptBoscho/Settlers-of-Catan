@@ -1,7 +1,6 @@
 package server.factories;
 
 import server.commands.ICommand;
-import server.commands.games.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
 import shared.dto.CreateGameDTO;
@@ -29,8 +28,8 @@ public class GamesCommandFactory {
         return instance;
     }
 
-    public void bind(IFacade new_facade){
-        facade = new_facade;
+    public void bind(IFacade newFacade){
+        facade = newFacade;
     }
 
     /**

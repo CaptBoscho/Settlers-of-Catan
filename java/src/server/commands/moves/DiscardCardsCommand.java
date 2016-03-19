@@ -1,7 +1,7 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.DiscardCardsException;
 import server.facade.IFacade;
 import shared.dto.DiscardCardsDTO;
@@ -26,16 +26,15 @@ public class DiscardCardsCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Discard Cards command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public GameModelDTO execute() throws CommandExecutionFailedException {
         try {
-            facade.discardCards(1, dto);
+            return facade.discardCards(1, dto);
         }catch(DiscardCardsException e){
-            e.printStackTrace();
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        return null;
     }
 
 }

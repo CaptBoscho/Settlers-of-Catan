@@ -5,19 +5,12 @@ import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
+import shared.dto.GameModelDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
-import shared.exceptions.PlayerExistsException;
-import shared.dto.GameModelDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.bank.InvalidTypeException;
-import shared.model.cards.resources.ResourceCard;
-import shared.model.game.trade.TradePackage;
-
-import javax.naming.InsufficientResourcesException;
-import java.util.List;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
@@ -110,9 +103,10 @@ public interface IFacade {
      * @param player index of the player robbing
      * @param newLocation
      * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws RobPlayerException
      */
-    void robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException;
+    GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException;
 
     /**
      * Ends the current player's turn making it the next player's turn
@@ -142,18 +136,20 @@ public interface IFacade {
      * @param player index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
+     * @return GameModelDTO
      * @throws RoadBuildingException
      */
-    void roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException;
+    GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException;
 
     /**
      * Handles playing Soldier
      * @param player index of the player
      * @param newLocation
      * @param victim index of the player being robbed
+     * @return GameModelDTO
      * @throws SoldierException
      */
-    void soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException;
+    GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException;
 
     /**
      * Handles playing Monopoly
@@ -173,34 +169,36 @@ public interface IFacade {
     /**
      * Builds a road
      * @param player index of the player
-     * @param isFree whether the piece is free
      * @param location
+     * @return GameModelDTO
      * @throws BuildRoadException
      */
-    void buildRoad(int gameID, int player, boolean isFree, EdgeLocation location) throws BuildRoadException;
+    GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException;
 
     /**
      * Builds a settlement
      * @param player index of the player
-     * @param isFree whether the piece is free
      * @param location
+     * @return GameModelDTO
      * @throws BuildSettlementException
      */
-    void buildSettlement(int gameID, int player, boolean isFree, VertexLocation location) throws BuildSettlementException;
+    GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException;
 
     /**
      * Builds a city
+     * @param gameID id of game
      * @param player index of the player
      * @param location
+     * @return GameModelDTO
      * @throws BuildCityException
      */
-    void buildCity(int gameID, int player, VertexLocation location) throws BuildCityException;
+    GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException;
 
     /**
      * Offers a trade to the specified player
      * @throws OfferTradeException
      */
-    void offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException;
+    GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException;
 
     /**
      * Accepts a trade offer
@@ -208,7 +206,7 @@ public interface IFacade {
      * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
      */
-    void acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException;
+    GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException ;
 
     /**
      * Performs a maritime trade (trade with the bank)
@@ -218,9 +216,9 @@ public interface IFacade {
 
     /**
      * Discards the specified cards from the player's hand
-     * @param player index of the player discarding
-     * @param cardsToDiscard list of cards to be discarded
+     * @param gameID
+     * @param dto
      * @throws DiscardCardsException
      */
-    void discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
+    GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
 }

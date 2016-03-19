@@ -1,8 +1,9 @@
 package server.commands.moves;
 
-import com.google.gson.JsonObject;
+import client.services.CommandExecutionFailed;
 import server.commands.ICommand;
 import server.exceptions.AcceptTradeException;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import shared.dto.TradeOfferResponseDTO;
 import shared.exceptions.PlayerExistsException;
@@ -31,16 +32,15 @@ public class AcceptTradeCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Accept Trade command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public GameModelDTO execute() {
+    public GameModelDTO execute() throws CommandExecutionFailedException {
         try {
-            facade.acceptTrade(1, playerIndex, answer);
-        }catch(AcceptTradeException | InvalidTypeException | PlayerExistsException | InsufficientResourcesException e){
-            e.printStackTrace();
+            return facade.acceptTrade(1, playerIndex, answer);
+        } catch(AcceptTradeException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        return null;
     }
 
 }

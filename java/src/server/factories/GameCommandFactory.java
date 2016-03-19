@@ -1,8 +1,6 @@
 package server.factories;
 
-import com.google.gson.JsonObject;
 import server.commands.ICommand;
-import server.commands.game.*;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
 import shared.dto.IDTO;
@@ -28,8 +26,8 @@ public class GameCommandFactory {
         return instance;
     }
 
-    public void bind(IFacade new_facade){
-        facade = new_facade;
+    public void bind(IFacade newFacade){
+        facade = newFacade;
     }
 
 

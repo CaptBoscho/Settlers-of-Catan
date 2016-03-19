@@ -1,7 +1,6 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
 import shared.exceptions.BadJsonException;
 
 /**
@@ -132,6 +131,10 @@ public final class TurnTracker {
 
     public boolean canPlay() {
         return phase == Phase.PLAYING;
+    }
+
+    public boolean canRob() {
+        return phase == Phase.ROBBING;
     }
 
     public boolean canDiscard() {

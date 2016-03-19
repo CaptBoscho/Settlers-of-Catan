@@ -1,10 +1,8 @@
 package server.managers;
 
 import shared.model.game.Game;
-import shared.model.player.PlayerManager;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This class maintains multiple games. Anytime any game-specific info or action is required, the game

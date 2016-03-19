@@ -6,14 +6,8 @@ import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.OfferTradeException;
 import server.facade.IFacade;
-import shared.definitions.ResourceType;
 import shared.dto.IDTO;
 import shared.dto.OfferTradeDTO;
-import shared.model.game.trade.Trade;
-import shared.dto.GameModelDTO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A command object that offers a trade
@@ -35,17 +29,16 @@ public class OfferTradeCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the Offer Trade command
-     * @return JsonObject
+     * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public IDTO execute() throws CommandExecutionFailedException {
 
         try {
-            facade.offerTrade(1, dot);
+            return facade.offerTrade(1, dot);
         }catch(OfferTradeException e){
-            e.printStackTrace();
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        return null;
     }
 
 }
