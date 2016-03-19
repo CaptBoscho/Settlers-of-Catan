@@ -39,7 +39,8 @@ public class MovesCommandFactory {
         } else if (dto instanceof SendChatDTO) {
             return new SendChatCommand(facade, (SendChatDTO)dto);
         } else if (dto instanceof RollNumberDTO) {
-
+            RollNumberDTO roll = (RollNumberDTO)dto;
+            return new RollNumberCommand(facade, roll);
         } else if (dto instanceof RobPlayerDTO) {
             return new RobPlayerCommand(facade, (RobPlayerDTO)dto);
         } else if (dto instanceof BuyDevCardDTO) {

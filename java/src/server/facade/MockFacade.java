@@ -123,8 +123,8 @@ public class MockFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
-
+    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
+        return null;
     }
 
     /**

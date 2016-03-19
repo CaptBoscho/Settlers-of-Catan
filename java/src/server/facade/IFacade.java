@@ -96,7 +96,7 @@ public interface IFacade {
      * @param value
      * @throws RollNumberException
      */
-    void rollNumber(int gameID, int player, int value) throws RollNumberException;
+    GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException;
 
     /**
      * Robs the specified player

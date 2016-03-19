@@ -165,8 +165,14 @@ public class ServerFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
-
+    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
+        Game game = gameManager.getGameByID(gameID);
+        try {
+            game.rollNumber(value);
+            return game.getDTO();
+        } catch (Exception e) {
+            throw new RollNumberException("Error while rolling!");
+        }
     }
 
     /**
