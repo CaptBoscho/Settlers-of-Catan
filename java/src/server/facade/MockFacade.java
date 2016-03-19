@@ -176,8 +176,8 @@ public class MockFacade implements IFacade {
      * @throws YearOfPlentyException
      */
     @Override
-    public void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
-
+    public GameModelDTO yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+        return null;
     }
 
     /**

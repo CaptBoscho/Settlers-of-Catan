@@ -45,7 +45,7 @@ public class MovesCommandFactory {
         } else if (dto instanceof BuyDevCardDTO) {
             return new BuyDevCardCommand((BuyDevCardDTO)dto, facade);
         } else if (dto instanceof PlayYOPCardDTO) {
-
+            return new YearOfPlentyCommand((PlayYOPCardDTO)dto, facade);
         } else if (dto instanceof RoadBuildingDTO) {
             return new RoadBuildingCommand(facade, (RoadBuildingDTO)dto);
         } else if (dto instanceof PlayMonopolyDTO) {
