@@ -107,8 +107,8 @@ public class MockFacade implements IFacade {
      * @throws SendChatException
      */
     @Override
-    public void sendChat(int gameID, int player, String message) throws SendChatException {
-
+    public GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException {
+        return null;
     }
 
     /**
@@ -120,8 +120,8 @@ public class MockFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
-
+    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
+        return null;
     }
 
     /**
@@ -147,8 +147,8 @@ public class MockFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int gameID, int player) throws FinishTurnException {
-
+    public GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException {
+        return null;
     }
 
     /**

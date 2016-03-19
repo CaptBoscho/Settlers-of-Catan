@@ -85,7 +85,7 @@ public interface IFacade {
      * @param message
      * @throws SendChatException
      */
-    void sendChat(int gameID, int player, String message) throws SendChatException;
+    GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException;
 
     /**
      * Rolls the specified value
@@ -93,7 +93,7 @@ public interface IFacade {
      * @param value
      * @throws RollNumberException
      */
-    void rollNumber(int gameID, int player, int value) throws RollNumberException;
+    GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException;
 
     /**
      * Robs the specified player
@@ -110,7 +110,7 @@ public interface IFacade {
      * @param player index of the player
      * @throws FinishTurnException
      */
-    void finishTurn(int gameID, int player) throws FinishTurnException;
+    GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException;
 
     /**
      * Buys a new dev card
