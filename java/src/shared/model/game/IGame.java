@@ -708,7 +708,7 @@ public interface IGame {
      *
      * @param playerIndex Index of Player performing action
      */
-    int rollDice(int playerIndex) throws InvalidDiceRollException;
+    int rollDice(int playerIndex) throws InvalidDiceRollException, PlayerExistsException;
 
     /**
      * for testing purposes

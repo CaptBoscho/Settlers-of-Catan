@@ -46,6 +46,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     private MessageList log;
     private int winner;
     private int version;
+    private HashMap<Integer, Boolean> needToDiscard;
     //endregion
 
     //region Constructors
@@ -64,6 +65,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.developmentCardBank = new DevelopmentCardBank(true);
         this.chat = new MessageList();
         this.log = new MessageList();
+        this.needToDiscard = new HashMap<>();
     }
 
     public Game(JsonObject gameJson) {
@@ -704,8 +706,19 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        if(canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
+        if(canDiscardCards(playerIndex) && this.turnTracker.canDiscard() && needToDiscard.containsKey(playerIndex)) {
             playerManager.discardResourceType(playerIndex, cards);
+            needToDiscard.put(playerIndex,false);
+        }
+        boolean change = true;
+        for(HashMap.Entry<Integer,Boolean> entry : needToDiscard.entrySet()){
+            if(entry.getValue()){
+                change = false;
+            }
+        }
+        if(change){
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            needToDiscard.clear();
         }
     }
 
@@ -718,15 +731,17 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void rollNumber(int value) throws Exception {
         //Is value a 7 - robber
         if(value == 7){
-            //Go to discarding phase before robbing if any player has to discard
-            getPlayers().forEach(player ->{
-                if(player.canDiscardCards()){
-                    turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
-                    return;
+            needToDiscard.clear();
+            for(int i=0; i<4; i++){
+                if(playerManager.getPlayerByIndex(i).getNumberResourceCards() > 7){
+                    needToDiscard.put(i,true);
                 }
-            });
-            //Otherwise just move to the robbing phase
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            }
+            if(needToDiscard.size() > 0){
+                turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+            }else {
+                turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            }
         }else{
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
@@ -1555,13 +1570,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
      *
      * @param playerIndex Index of Player performing action
      */
-    public int rollDice(int playerIndex) throws InvalidDiceRollException {
+    public int rollDice(int playerIndex) throws InvalidDiceRollException, PlayerExistsException {
         assert playerIndex >= 0;
 
         Dice dice = new Dice(2);
         int roll = dice.roll();
         if(roll == 7) {
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+
         } else {
             map.getResources(roll);
         }

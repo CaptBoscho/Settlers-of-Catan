@@ -3,6 +3,7 @@ package server.factories;
 import server.commands.ICommand;
 import server.commands.moves.*;
 import server.facade.IFacade;
+import server.facade.ServerFacade;
 import shared.dto.*;
 
 /**
@@ -13,7 +14,7 @@ public class MovesCommandFactory {
     private IFacade facade;
     private static MovesCommandFactory instance = null;
     private MovesCommandFactory() {
-
+        facade = ServerFacade.getInstance();
     }
 
     public static MovesCommandFactory getInstance() {
@@ -64,11 +65,11 @@ public class MovesCommandFactory {
         } else if (dto instanceof OfferTradeDTO) {
             return new OfferTradeCommand((OfferTradeDTO)dto,facade);
         } else if (dto instanceof TradeOfferResponseDTO) {
-
+            return new AcceptTradeCommand((TradeOfferResponseDTO)dto, facade);
         } else if (dto instanceof MaritimeTradeDTO) {
             return new MaritimeTradeCommand((MaritimeTradeDTO)dto,facade);
         } else if (dto instanceof DiscardCardsDTO) {
-
+            return new DiscardCardsCommand((DiscardCardsDTO)dto, facade);
         }
 
         return null;

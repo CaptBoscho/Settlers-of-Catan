@@ -4,10 +4,7 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
-import shared.dto.DiscardCardsDTO;
-import shared.dto.GameModelDTO;
-import shared.dto.MaritimeTradeDTO;
-import shared.dto.OfferTradeDTO;
+import shared.dto.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -292,13 +289,10 @@ public class MockFacade implements IFacade {
     /**
      * Accepts a trade offer
      *
-     * @param gameID
-     * @param player     index of the player accepting the trade
-     * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
      */
     @Override
-    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+    public GameModelDTO acceptTrade(int gameID, TradeOfferResponseDTO dto) throws AcceptTradeException {
         return null;
     }
 
@@ -310,8 +304,8 @@ public class MockFacade implements IFacade {
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
-
+    public GameModelDTO maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+        return null;
     }
 
     /**
@@ -323,6 +317,11 @@ public class MockFacade implements IFacade {
      */
     @Override
     public GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        return null;
+    }
+
+    @Override
+    public GameModelDTO getModel(int gameID) {
         return null;
     }
 }
