@@ -731,15 +731,17 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void rollNumber(int value) throws Exception {
         //Is value a 7 - robber
         if(value == 7){
-            //Go to discarding phase before robbing if any player has to discard
-            getPlayers().forEach(player ->{
-                if(player.canDiscardCards()){
-                    turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
-                    return;
+            needToDiscard.clear();
+            for(int i=0; i<4; i++){
+                if(playerManager.getPlayerByIndex(i).getNumberResourceCards() > 7){
+                    needToDiscard.put(i,true);
                 }
-            });
-            //Otherwise just move to the robbing phase
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            }
+            if(needToDiscard.size() > 0){
+                turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+            }else {
+                turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            }
         }else{
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
@@ -1574,17 +1576,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         Dice dice = new Dice(2);
         int roll = dice.roll();
         if(roll == 7) {
-            needToDiscard.clear();
-            for(int i=0; i<4; i++){
-                if(playerManager.getPlayerByIndex(i).getNumberResourceCards() > 7){
-                    needToDiscard.put(i,true);
-                }
-            }
-            if(needToDiscard.size() > 0){
-                turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
-            }else {
-                turnTracker.setPhase(TurnTracker.Phase.ROBBING);
-            }
+
         } else {
             map.getResources(roll);
         }

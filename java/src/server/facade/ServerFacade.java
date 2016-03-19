@@ -456,8 +456,6 @@ public class ServerFacade implements IFacade {
     /**
      * Accepts a trade offer
      *
-     * @param player     index of the player accepting the trade
-     * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
      */
     @Override
