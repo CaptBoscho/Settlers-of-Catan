@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
@@ -50,5 +51,13 @@ public final class AuthDTO implements IDTO, JsonSerializable {
         json.addProperty(kUsername, this.username);
         json.addProperty(kPassword, this.password);
         return json;
+    }
+
+    public static boolean isValidRequestJson(String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasUsername = obj.has(kUsername) && obj.get(kUsername).isJsonPrimitive();
+        final boolean hasPassword = obj.has(kPassword) && obj.get(kPassword).isJsonPrimitive();
+
+        return hasUsername && hasPassword;
     }
 }
