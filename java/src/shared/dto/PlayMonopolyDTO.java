@@ -2,7 +2,9 @@ package shared.dto;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
+import shared.model.bank.InvalidTypeException;
 
 /**
  * @author Derek Argueta
@@ -49,5 +51,25 @@ public final class PlayMonopolyDTO implements IDTO, JsonSerializable {
         final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
 
         return hasType && hasResource && hasPlayerIndex;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public ResourceType getResource() throws InvalidTypeException {
+        switch (resource) {
+            case "brick":
+                return ResourceType.BRICK;
+            case "sheep":
+                return ResourceType.SHEEP;
+            case "WOOD":
+                return ResourceType.WOOD;
+            case "wheat":
+                return ResourceType.WHEAT;
+            case "ore":
+                return ResourceType.ORE;
+        }
+        throw new InvalidTypeException("Invalid Resource Type in PlayMonopolyDTO");
     }
 }
