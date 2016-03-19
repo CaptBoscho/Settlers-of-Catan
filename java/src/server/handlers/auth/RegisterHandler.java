@@ -1,7 +1,5 @@
 package server.handlers.auth;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.controllers.UserController;
 import shared.dto.AuthDTO;
 import spark.Request;
@@ -18,10 +16,9 @@ public class RegisterHandler implements Route {
             response.status(400);
             return "Invalid request.";
         }
-        
+
         response.status(200);
         response.type("application/json");
-        final JsonObject body = new JsonParser().parse(request.body()).getAsJsonObject();
-        return UserController.register(body);
+        return UserController.register(new AuthDTO(request.body()));
     }
 }

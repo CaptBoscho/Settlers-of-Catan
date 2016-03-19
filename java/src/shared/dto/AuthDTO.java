@@ -35,6 +35,12 @@ public final class AuthDTO implements IDTO, JsonSerializable {
         this.password = password;
     }
 
+    public AuthDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.username = obj.get(kUsername).getAsString();
+        this.password = obj.get(kPassword).getAsString();
+    }
+
     public String getUsername() {
         return this.username;
     }
