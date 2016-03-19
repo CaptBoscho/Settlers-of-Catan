@@ -231,8 +231,8 @@ public class MockFacade implements IFacade {
      * @throws MonumentException
      */
     @Override
-    public void monument(int gameID, int player) throws MonumentException {
-
+    public GameModelDTO monument(int gameID, int player) throws MonumentException {
+        return null;
     }
 
     /**

@@ -164,7 +164,7 @@ public interface IFacade {
      * @param player index of the player
      * @throws MonumentException
      */
-    void monument(int gameID, int player) throws MonumentException;
+    GameModelDTO monument(int gameID, int player) throws MonumentException;
 
     /**
      * Builds a road
