@@ -45,15 +45,15 @@ public class MovesCommandFactory {
         } else if (dto instanceof BuyDevCardDTO) {
             return new BuyDevCardCommand((BuyDevCardDTO)dto, facade);
         } else if (dto instanceof PlayYOPCardDTO) {
-
+            return new YearOfPlentyCommand((PlayYOPCardDTO)dto, facade);
         } else if (dto instanceof RoadBuildingDTO) {
             return new RoadBuildingCommand(facade, (RoadBuildingDTO)dto);
         } else if (dto instanceof PlayMonopolyDTO) {
-
+            return new MonopolyCommand((PlayMonopolyDTO)dto, facade);
         } else if (dto instanceof PlaySoldierCardDTO) {
             return new SoldierCommand(facade, (PlaySoldierCardDTO) dto);
         } else if (dto instanceof PlayMonumentDTO) {
-
+            return new MonumentCommand((PlayMonumentDTO)dto, facade);
         } else if (dto instanceof BuildRoadDTO) {
             return new BuildRoadCommand(facade, (BuildRoadDTO)dto);
         } else if(dto instanceof BuildSettlementDTO) {

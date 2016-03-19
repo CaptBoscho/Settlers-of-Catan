@@ -37,4 +37,16 @@ public final class PlayYOPCardDTO implements IDTO,JsonSerializable {
         obj.addProperty("resource2", this.resource2.toString().toLowerCase());
         return obj;
     }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public ResourceType getResource1() {
+        return resource1;
+    }
+
+    public ResourceType getResource2() {
+        return resource2;
+    }
 }

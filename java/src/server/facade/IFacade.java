@@ -127,7 +127,7 @@ public interface IFacade {
      * @param resourceTwo second resource to receive
      * @throws YearOfPlentyException
      */
-    void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
+    GameModelDTO yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
 
     /**
      * Handles playing Road Building
@@ -155,14 +155,14 @@ public interface IFacade {
      * @param resource resource to take
      * @throws MonopolyException
      */
-    void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException;
+    GameModelDTO monopoly(int gameID, int player, ResourceType resource) throws MonopolyException;
 
     /**
      * Handles playing Monument
      * @param player index of the player
      * @throws MonumentException
      */
-    void monument(int gameID, int player) throws MonumentException;
+    GameModelDTO monument(int gameID, int player) throws MonumentException;
 
     /**
      * Builds a road

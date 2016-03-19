@@ -337,6 +337,7 @@ public final class Player implements IPlayer, Comparable<Player> {
     @Override
     public void useYearOfPlenty() throws DevCardException {
         assert this.developmentCardBank != null;
+        assert developmentCardBank.getNumberOfDevCardsByType(DevCardType.YEAR_OF_PLENTY) > 0;
 
         if(canUseYearOfPlenty()) {
             developmentCardBank.useYearOfPlenty();
