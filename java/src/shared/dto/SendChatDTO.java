@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
@@ -44,5 +45,14 @@ public final class SendChatDTO implements IDTO, JsonSerializable {
         obj.addProperty(kPlayerIndex, this.playerId);
         obj.addProperty(kContent, this.content);
         return obj;
+    }
+
+    public static boolean isValidRequestJson(String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
+        final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
+        final boolean hasContent = obj.has(kContent) && obj.get(kContent).isJsonPrimitive();
+
+        return hasType && hasPlayerIndex && hasContent;
     }
 }

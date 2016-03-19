@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
@@ -39,5 +40,14 @@ public final class PlayMonopolyDTO implements IDTO, JsonSerializable {
         obj.addProperty(kResource, this.resource.toLowerCase());
         obj.addProperty(kPlayerIndex, this.playerIndex);
         return obj;
+    }
+
+    public static boolean isValidRequestJson(String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
+        final boolean hasResource = obj.has(kResource) && obj.get(kResource).isJsonPrimitive();
+        final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
+
+        return hasType && hasResource && hasPlayerIndex;
     }
 }
