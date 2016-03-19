@@ -150,12 +150,11 @@ public class ServerFacade implements IFacade {
             String playerName = game.getPlayerNameByIndex(player);
             MessageLine line = new MessageLine(playerName, message);
             game.getChat().addMessage(line);
+            return game.getDTO();
         } catch (PlayerExistsException e) {
             e.printStackTrace();
             throw new SendChatException("Failed to send the chat message!");
         }
-
-        return game.getDTO();
     }
 
     /**
@@ -210,13 +209,13 @@ public class ServerFacade implements IFacade {
         if(game.canFinishTurn(player)){
             try {
                 game.finishTurn(player);
+                return game.getDTO();
             } catch (Exception e) {
                 throw new FinishTurnException("Failed to end the player's turn!");
             }
         }else{
             throw new FinishTurnException("Player can't end their turn yet!");
         }
-        return game.getDTO();
     }
 
     /**
