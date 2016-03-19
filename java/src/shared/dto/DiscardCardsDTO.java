@@ -9,7 +9,12 @@ import java.util.List;
 /**
  * @author Derek Argueta
  */
-public final class DiscardCardsDTO implements IDTO,JsonSerializable {
+public final class DiscardCardsDTO implements IDTO, JsonSerializable {
+
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kDiscardedCards = "discardedCards";
 
     private int playerIndex;
     private int brickCount;
@@ -52,8 +57,9 @@ public final class DiscardCardsDTO implements IDTO,JsonSerializable {
      * @param discardedWheat
      * @param discardedWood
      */
-    public DiscardCardsDTO(int playerIndex, int discardedBrick, int discardedOre, int discardedSheep, int discardedWheat, int discardedWood) {
+    public DiscardCardsDTO(final int playerIndex, final int discardedBrick, final int discardedOre, final int discardedSheep, final int discardedWheat, final int discardedWood) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert discardedBrick >= 0;
         assert discardedOre >= 0;
         assert discardedSheep >= 0;
@@ -77,17 +83,17 @@ public final class DiscardCardsDTO implements IDTO,JsonSerializable {
     @Override
     public JsonObject toJSON() {
 
-        JsonObject inner = new JsonObject();
+        final JsonObject inner = new JsonObject();
         inner.addProperty("brick", this.brickCount);
         inner.addProperty("ore", this.oreCount);
         inner.addProperty("sheep", this.sheepCount);
         inner.addProperty("wheat", this.wheatCount);
         inner.addProperty("wood", this.woodCount);
 
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "discardCards");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.add("discardedCards", inner);
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "discardCards");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.add(kDiscardedCards, inner);
         return obj;
     }
 }

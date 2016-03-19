@@ -7,12 +7,18 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class BuildCityDTO implements IDTO,JsonSerializable {
+public final class BuildCityDTO implements IDTO, JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kVertexLocation = "vertexLocation";
+
+    // -- class members
     private int playerIndex;
     private VertexLocation location;
 
-    public BuildCityDTO(int playerIndex, VertexLocation location) {
+    public BuildCityDTO(final int playerIndex, final VertexLocation location) {
         this.playerIndex = playerIndex;
         this.location = location;
     }
@@ -32,10 +38,10 @@ public final class BuildCityDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "buildCity");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.add("vertexLocation", this.location.toJSON());
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "buildCity");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.add(kVertexLocation, this.location.toJSON());
         return obj;
     }
 }
