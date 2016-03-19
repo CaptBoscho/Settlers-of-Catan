@@ -1,13 +1,20 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
  * @author Derek Argueta
  */
-public final class SendChatDTO implements IDTO,JsonSerializable {
+public final class SendChatDTO implements IDTO, JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kContent = "content";
+
+    // -- class members
     private int playerId;
     private String content;
 
@@ -16,7 +23,7 @@ public final class SendChatDTO implements IDTO,JsonSerializable {
      * @param playerId The ID of the player who is sending the message
      * @param content  The actual message
      */
-    public SendChatDTO(int playerId, String content) {
+    public SendChatDTO(final int playerId, final String content) {
         assert playerId >= 0;
         assert playerId <= 3;
         assert content != null;
@@ -33,10 +40,19 @@ public final class SendChatDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "sendChat");
-        obj.addProperty("playerIndex", this.playerId);
-        obj.addProperty("content", this.content);
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "sendChat");
+        obj.addProperty(kPlayerIndex, this.playerId);
+        obj.addProperty(kContent, this.content);
         return obj;
+    }
+
+    public static boolean isValidRequestJson(String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
+        final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
+        final boolean hasContent = obj.has(kContent) && obj.get(kContent).isJsonPrimitive();
+
+        return hasType && hasPlayerIndex && hasContent;
     }
 }

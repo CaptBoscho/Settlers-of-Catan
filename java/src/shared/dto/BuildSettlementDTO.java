@@ -7,14 +7,21 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class BuildSettlementDTO implements IDTO,JsonSerializable {
+public final class BuildSettlementDTO implements IDTO, JsonSerializable {
+
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kFree = "free";
+    private static final String kVertexLocation = "vertexLocation";
 
     private int playerIndex;
     private VertexLocation location;
     private boolean free;
 
-    public BuildSettlementDTO(int playerIndex, VertexLocation location, boolean free) {
+    public BuildSettlementDTO(final int playerIndex, final VertexLocation location, final boolean free) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert location != null;
 
         this.playerIndex = playerIndex;
@@ -29,11 +36,11 @@ public final class BuildSettlementDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "buildSettlement");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("free", this.free);
-        obj.add("vertexLocation", this.location.toJSON());
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "buildSettlement");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.addProperty(kFree, this.free);
+        obj.add(kVertexLocation, this.location.toJSON());
         return obj;
     }
 }

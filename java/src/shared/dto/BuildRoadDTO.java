@@ -7,14 +7,22 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class BuildRoadDTO implements IDTO,JsonSerializable {
+public final class BuildRoadDTO implements IDTO, JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kFree = "free";
+    private static final String kRoadLocation = "roadLocation";
+
+    // -- class members
     private int playerIndex;
     private EdgeLocation roadLocation;
     private boolean free;
 
-    public BuildRoadDTO(int playerIndex, EdgeLocation location, boolean free) {
+    public BuildRoadDTO(final int playerIndex, final EdgeLocation location, final boolean free) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert location != null;
 
         this.playerIndex = playerIndex;
@@ -29,11 +37,11 @@ public final class BuildRoadDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "buildRoad");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("free", this.free);
-        obj.add("roadLocation", this.roadLocation.toJSON());
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "buildRoad");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.addProperty(kFree, this.free);
+        obj.add(kRoadLocation, this.roadLocation.toJSON());
         return obj;
     }
 }

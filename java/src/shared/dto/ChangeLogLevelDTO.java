@@ -6,11 +6,15 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class ChangeLogLevelDTO implements IDTO,JsonSerializable {
+public final class ChangeLogLevelDTO implements IDTO, JsonSerializable {
 
+    // -- JSON keys
+    private static final String kLogLevel = "logLevel";
+
+    // -- class members
     private String logLevel;
 
-    public ChangeLogLevelDTO(String logLevel) {
+    public ChangeLogLevelDTO(final String logLevel) {
         assert logLevel != null;
         assert logLevel.length() > 0;
 
@@ -24,8 +28,8 @@ public final class ChangeLogLevelDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("logLevel", this.logLevel);
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kLogLevel, this.logLevel);
         return obj;
     }
 }

@@ -6,12 +6,38 @@ import shared.model.JsonSerializable;
 /**
  * @author Derek Argueta
  */
-public final class MaritimeTradeDTO implements IDTO,JsonSerializable {
+public final class MaritimeTradeDTO implements IDTO, JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kRatio = "ratio";
+    private static final String kInputResource = "inputResource";
+    private static final String kOutputResource = "outputResource";
+
+    // -- class members
     private int playerIndex;
     private int ratio;
     private String inputResource;
     private String outputResource;
+
+    /**
+     *
+     * @param playerIndex    Who's doing the trading
+     * @param ratio          (<i>optional</i>) The ratio of the trade your doing as an integer (ie. put 3 for a 3:1 trade)
+     * @param inputResource  (<i>optional</i>) What type of resource you're giving
+     * @param outputResource (<i>optional</i>) What type of resource you're getting
+     */
+    public MaritimeTradeDTO(final int playerIndex, final int ratio, final String inputResource, final String outputResource) {
+        assert playerIndex >= 0;
+        assert inputResource != null;
+        assert outputResource != null;
+
+        this.playerIndex = playerIndex;
+        this.ratio = ratio;
+        this.inputResource = inputResource;
+        this.outputResource = outputResource;
+    }
 
     public String getInputResource() {
         return inputResource;
@@ -29,25 +55,6 @@ public final class MaritimeTradeDTO implements IDTO,JsonSerializable {
         return outputResource;
     }
 
-
-    /**
-     *
-     * @param playerIndex    Who's doing the trading
-     * @param ratio          (<i>optional</i>) The ratio of the trade your doing as an integer (ie. put 3 for a 3:1 trade)
-     * @param inputResource  (<i>optional</i>) What type of resource you're giving
-     * @param outputResource (<i>optional</i>) What type of resource you're getting
-     */
-    public MaritimeTradeDTO(int playerIndex, int ratio, String inputResource, String outputResource) {
-        assert playerIndex >= 0;
-        assert inputResource != null;
-        assert outputResource != null;
-
-        this.playerIndex = playerIndex;
-        this.ratio = ratio;
-        this.inputResource = inputResource;
-        this.outputResource = outputResource;
-    }
-
     /**
      * Converts the object to JSON
      *
@@ -55,12 +62,12 @@ public final class MaritimeTradeDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "maritimeTrade");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("ratio", this.ratio);
-        obj.addProperty("inputResource", this.inputResource);
-        obj.addProperty("outputResource", this.outputResource);
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "maritimeTrade");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.addProperty(kRatio, this.ratio);
+        obj.addProperty(kInputResource, this.inputResource);
+        obj.addProperty(kOutputResource, this.outputResource);
         return obj;
     }
 }
