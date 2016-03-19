@@ -11,6 +11,7 @@ import spark.Route;
  * @author Derek Argueta
  */
 public class BuyDevCardHandler implements Route {
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
         response.status(200);
