@@ -49,7 +49,7 @@ public class MovesCommandFactory {
         } else if (dto instanceof RoadBuildingDTO) {
             return new RoadBuildingCommand(facade, (RoadBuildingDTO)dto);
         } else if (dto instanceof PlayMonopolyDTO) {
-
+            return new MonopolyCommand((PlayMonopolyDTO)dto, facade);
         } else if (dto instanceof PlaySoldierCardDTO) {
             return new SoldierCommand(facade, (PlaySoldierCardDTO) dto);
         } else if (dto instanceof PlayMonumentDTO) {

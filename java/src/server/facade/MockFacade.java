@@ -219,8 +219,8 @@ public class MockFacade implements IFacade {
      * @throws MonopolyException
      */
     @Override
-    public void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
-
+    public GameModelDTO monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
+        return null;
     }
 
     /**
