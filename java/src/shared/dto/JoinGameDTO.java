@@ -9,12 +9,16 @@ import shared.model.JsonSerializable;
  *
  * @author Derek Argueta
  */
-public final class JoinGameDTO implements IDTO,JsonSerializable {
+public final class JoinGameDTO implements IDTO, JsonSerializable {
+
+    // -- JSON keys
+    private static final String kId = "id";
+    private static final String kColor = "color";
 
     private int gameId;
     private CatanColor color;
 
-    public JoinGameDTO(int gameId, CatanColor color) {
+    public JoinGameDTO(final int gameId, final CatanColor color) {
         assert gameId >= 0;
         assert color != null;
 
@@ -29,9 +33,9 @@ public final class JoinGameDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("id", this.gameId);
-        obj.addProperty("color", this.color.toString().toLowerCase());
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kId, this.gameId);
+        obj.addProperty(kColor, this.color.toString().toLowerCase());
         return obj;
     }
 }

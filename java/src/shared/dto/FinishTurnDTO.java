@@ -8,13 +8,18 @@ import shared.model.JsonSerializable;
  */
 public final class FinishTurnDTO implements IDTO,JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+
+    // -- class members
     private int playerIndex;
 
     /**
      *
      * @param playerIndex Who's sending this command (0-3)
      */
-    public FinishTurnDTO(int playerIndex) {
+    public FinishTurnDTO(final int playerIndex) {
         assert playerIndex >= 0;
         assert playerIndex <= 3;
 
@@ -28,9 +33,9 @@ public final class FinishTurnDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "finishTurn");
-        obj.addProperty("playerIndex", this.playerIndex);
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kType, "finishTurn");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
         return obj;
     }
 }
