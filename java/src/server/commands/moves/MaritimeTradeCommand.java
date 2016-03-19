@@ -33,7 +33,7 @@ public class MaritimeTradeCommand implements ICommand {
     @Override
     public GameModelDTO execute() {
         try {
-            facade.maritimeTrade(1, dto);
+            return facade.maritimeTrade(1, dto);
         }catch(MaritimeTradeException e){
             e.printStackTrace();
         }

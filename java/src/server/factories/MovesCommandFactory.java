@@ -63,11 +63,11 @@ public class MovesCommandFactory {
         } else if (dto instanceof OfferTradeDTO) {
             return new OfferTradeCommand((OfferTradeDTO)dto,facade);
         } else if (dto instanceof TradeOfferResponseDTO) {
-
+            return new AcceptTradeCommand((TradeOfferResponseDTO)dto, facade);
         } else if (dto instanceof MaritimeTradeDTO) {
             return new MaritimeTradeCommand((MaritimeTradeDTO)dto,facade);
         } else if (dto instanceof DiscardCardsDTO) {
-
+            return new DiscardCardsCommand((DiscardCardsDTO)dto, facade);
         }
 
         return null;

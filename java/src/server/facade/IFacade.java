@@ -212,7 +212,7 @@ public interface IFacade {
      * Performs a maritime trade (trade with the bank)
      * @throws MaritimeTradeException
      */
-    void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException;
+    GameModelDTO maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException;
 
     /**
      * Discards the specified cards from the player's hand

@@ -452,13 +452,14 @@ public class ServerFacade implements IFacade {
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+    public GameModelDTO maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
         try {
             gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), convert(dto.getInputResource()), convert(dto.getOutputResource()));
-        }catch(InvalidPlayerException e){}
-        catch(InvalidTypeException e){}
-        catch(InsufficientResourcesException e){}
-        catch(PlayerExistsException e){}
+            return gameManager.getGameByID(gameID).getDTO();
+        }catch(InvalidPlayerException | InvalidTypeException | InsufficientResourcesException | PlayerExistsException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
