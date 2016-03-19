@@ -9,6 +9,7 @@ import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
+import shared.exceptions.DevCardException;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
 import shared.dto.GameModelDTO;
@@ -222,14 +223,20 @@ public class ServerFacade implements IFacade {
     /**
      * Handles playing Year of Plenty
      *
-     * @param player      index of the player
+     * @param playerIndex      index of the player
      * @param resourceOne first resource to receive
      * @param resourceTwo second resource to receive
      * @throws YearOfPlentyException
      */
     @Override
-    public void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
-
+    public GameModelDTO yearOfPlenty(int gameID, int playerIndex, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+        try {
+            Game game = gameManager.getGameByID(gameID);
+            game.useYearOfPlenty(playerIndex, resourceOne, resourceTwo);
+            return game.getDTO();
+        } catch (PlayerExistsException | DevCardException | InsufficientResourcesException | InvalidTypeException e) {
+            throw new YearOfPlentyException("yearOfPlenty failed in the model on the server.");
+        }
     }
 
     /**
@@ -289,26 +296,38 @@ public class ServerFacade implements IFacade {
     }
 
     /**
-     * Hanldes playing Monopoly
+     * Handles playing Monopoly
      *
-     * @param player   index of the player
+     * @param playerIndex   index of the player
      * @param resource resource to take
      * @throws MonopolyException
      */
     @Override
-    public void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
-
+    public GameModelDTO monopoly(int gameID, int playerIndex, ResourceType resource) throws MonopolyException {
+        try {
+            Game game = gameManager.getGameByID(gameID);
+            game.useMonopoly(playerIndex, resource);
+            return game.getDTO();
+        } catch (PlayerExistsException | DevCardException | InvalidTypeException | InsufficientResourcesException e) {
+            throw new MonopolyException(e.getMessage());
+        }
     }
 
     /**
      * Handles playing Monument
      *
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @throws MonumentException
      */
     @Override
-    public void monument(int gameID, int player) throws MonumentException {
-
+    public GameModelDTO monument(int gameID, int playerIndex) throws MonumentException {
+        try {
+            gameManager.getGameByID(gameID).useMonument(playerIndex);
+            return gameManager.getGameByID(gameID).getDTO();
+        } catch (PlayerExistsException | DevCardException e) {
+            e.printStackTrace();
+            throw new MonumentException(e.getMessage());
+        }
     }
 
     /**
