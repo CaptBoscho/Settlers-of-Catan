@@ -4,7 +4,7 @@ import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RollNumberException;
 import server.facade.IFacade;
-import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 import shared.dto.RollNumberDTO;
 
 /**
@@ -33,7 +33,7 @@ public class RollNumberCommand implements ICommand {
      * @return JsonObject
      */
     @Override
-    public GameModelDTO execute() throws CommandExecutionFailedException {
+    public IDTO execute() throws CommandExecutionFailedException {
         try {
             return facade.rollNumber(gameId, playerIndex, value);
         } catch (RollNumberException e) {
