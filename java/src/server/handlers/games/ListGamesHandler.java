@@ -1,7 +1,19 @@
 package server.handlers.games;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
 /**
- * Created by derek on 3/18/16.
+ * @author Derek Argueta
  */
-public class ListGamesHandler {
+public class ListGamesHandler implements Route {
+
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+        // -- TODO
+        return null;
+    }
 }

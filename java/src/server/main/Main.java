@@ -5,6 +5,7 @@ import server.handlers.auth.RegisterHandler;
 import server.handlers.game.AddAIHandler;
 import server.handlers.game.ListAIHandler;
 import server.handlers.game.ModelHandler;
+import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
 import server.handlers.games.CreateHandler;
 import server.handlers.games.JoinHandler;
@@ -29,6 +30,7 @@ public class Main {
         post("/user/register", new RegisterHandler());
 
         ////////// Games HTTP Requests //////////
+        get("/games/list", new ListGamesHandler());
         post("/games/create", new CreateHandler());
         post("/games/join", new JoinHandler());
 
