@@ -35,7 +35,7 @@ public class MovesCommandFactory {
 
     public ICommand createCommand(IDTO dto) {
         if (dto instanceof FinishTurnDTO) {
-
+            return new FinishTurnCommand(facade, (FinishTurnDTO)dto);
         } else if (dto instanceof SendChatDTO) {
 
         } else if (dto instanceof RollNumberDTO) {
