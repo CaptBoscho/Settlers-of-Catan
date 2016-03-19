@@ -192,8 +192,18 @@ public class ServerFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int gameID, int player) throws FinishTurnException {
-
+    public GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException {
+        Game game = gameManager.getGameByID(gameID);
+        if(game.canFinishTurn(player)){
+            try {
+                game.finishTurn(player);
+            } catch (Exception e) {
+                throw new FinishTurnException("Failed to end the player's turn!");
+            }
+        }else{
+            throw new FinishTurnException("Player can't end their turn yet!");
+        }
+        return game.getDTO();
     }
 
     /**

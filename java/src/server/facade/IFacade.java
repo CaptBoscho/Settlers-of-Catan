@@ -113,7 +113,7 @@ public interface IFacade {
      * @param player index of the player
      * @throws FinishTurnException
      */
-    void finishTurn(int gameID, int player) throws FinishTurnException;
+    GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException;
 
     /**
      * Buys a new dev card

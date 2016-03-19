@@ -150,8 +150,8 @@ public class MockFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int gameID, int player) throws FinishTurnException {
-
+    public GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException {
+        return null;
     }
 
     /**
