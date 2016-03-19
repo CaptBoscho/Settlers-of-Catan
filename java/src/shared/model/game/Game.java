@@ -716,7 +716,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws InvalidDiceRollException
      */
     @Override
-    public void rollNumber(int value) throws InvalidDiceRollException {
+    public void rollNumber(int value) throws Exception {
         //Is value a 7 - robber
         if(value == 7){
             //Go to discarding phase before robbing if any player has to discard
@@ -738,6 +738,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
                     safeDrawCard(entry.getKey(), resource);
                 });
             });
+
+            //Move to next phase - Playing
+            turnTracker.nextPhase();
         }
     }
 

@@ -309,7 +309,7 @@ public interface IGame {
      * @param value
      * @throws InvalidDiceRollException
      */
-    void rollNumber(int value) throws InvalidDiceRollException;
+    void rollNumber(int value) throws Exception;
 
     /**
      * Action - Player offers trade
