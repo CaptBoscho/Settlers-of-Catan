@@ -1,6 +1,7 @@
 package server.commands.moves;
 
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.FinishTurnException;
 import server.facade.IFacade;
 import shared.dto.FinishTurnDTO;
@@ -29,12 +30,12 @@ public class FinishTurnCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public IDTO execute() throws CommandExecutionFailedException {
         try {
             return facade.finishTurn(1, dto.getPlayerIndex());
         } catch (FinishTurnException e) {
             e.printStackTrace();
-            
+            throw new CommandExecutionFailedException("Error ending player turn!");
         }
     }
 
