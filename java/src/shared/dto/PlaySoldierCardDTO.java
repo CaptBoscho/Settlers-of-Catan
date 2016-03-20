@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.locations.HexLocation;
 import shared.model.JsonSerializable;
 
@@ -9,6 +10,13 @@ import shared.model.JsonSerializable;
  */
 public final class PlaySoldierCardDTO implements IDTO,JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kVictimIndex = "victimIndex";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kLocation = "location";
+
+    // -- class members
     private int playerIndex;
     private int victimIndex;
     private HexLocation location;
@@ -27,6 +35,13 @@ public final class PlaySoldierCardDTO implements IDTO,JsonSerializable {
         this.playerIndex = playerIndex;
         this.victimIndex = victimIndex;
         this.location = location;
+    }
+
+    public PlaySoldierCardDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.victimIndex = obj.get(kVictimIndex).getAsInt();
+        this.location = new HexLocation(obj.get(kLocation).getAsJsonObject());
     }
 
     public int getPlayerIndex() {
@@ -49,10 +64,10 @@ public final class PlaySoldierCardDTO implements IDTO,JsonSerializable {
     @Override
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("type", "Soldier");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("victimIndex", this.victimIndex);
-        obj.add("location", this.location.toJSON());
+        obj.addProperty(kType, "Soldier");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.addProperty(kVictimIndex, this.victimIndex);
+        obj.add(kLocation, this.location.toJSON());
         return obj;
     }
 }

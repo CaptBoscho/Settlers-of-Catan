@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
@@ -22,6 +23,12 @@ public final class SaveGameDTO implements IDTO, JsonSerializable {
 
         this.gameId = gameId;
         this.name = name;
+    }
+
+    public SaveGameDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.gameId = obj.get(kId).getAsInt();
+        this.name = obj.get(kName).getAsString();
     }
 
     /**

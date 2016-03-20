@@ -15,22 +15,28 @@ public final class SendChatDTO implements IDTO, JsonSerializable {
     private static final String kContent = "content";
 
     // -- class members
-    private int playerId;
+    private int playerIndex;
     private String content;
 
     /**
      *
-     * @param playerId The ID of the player who is sending the message
+     * @param playerIndex The ID of the player who is sending the message
      * @param content  The actual message
      */
-    public SendChatDTO(final int playerId, final String content) {
-        assert playerId >= 0;
-        assert playerId <= 3;
+    public SendChatDTO(final int playerIndex, final String content) {
+        assert playerIndex >= 0;
+        assert playerIndex <= 3;
         assert content != null;
         assert content.length() > 0;
 
-        this.playerId = playerId;
+        this.playerIndex = playerIndex;
         this.content = content;
+    }
+
+    public SendChatDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.content = obj.get(kContent).getAsString();
     }
 
     /**
@@ -42,7 +48,7 @@ public final class SendChatDTO implements IDTO, JsonSerializable {
     public JsonObject toJSON() {
         final JsonObject obj = new JsonObject();
         obj.addProperty(kType, "sendChat");
-        obj.addProperty(kPlayerIndex, this.playerId);
+        obj.addProperty(kPlayerIndex, this.playerIndex);
         obj.addProperty(kContent, this.content);
         return obj;
     }

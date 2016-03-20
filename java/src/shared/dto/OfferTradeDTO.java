@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 import shared.model.game.trade.Trade;
 
@@ -36,6 +37,13 @@ public final class OfferTradeDTO implements IDTO, JsonSerializable {
         this.playerIndex = playerIndex;
         this.offer = offer;
         this.receiver = receiver;
+    }
+
+    public OfferTradeDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.offer = new Trade(obj.get(kOffer).getAsJsonObject());
+        this.receiver = obj.get(kReceiver).getAsInt();
     }
 
     /**

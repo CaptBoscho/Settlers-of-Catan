@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
 
@@ -9,6 +10,13 @@ import shared.model.JsonSerializable;
  */
 public final class PlayYOPCardDTO implements IDTO,JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kResourceOne = "resource1";
+    private static final String kResourceTwo = "resource2";
+
+    // -- class members
     private int playerIndex;
     private ResourceType resource1;
     private ResourceType resource2;
@@ -23,6 +31,13 @@ public final class PlayYOPCardDTO implements IDTO,JsonSerializable {
         this.resource2 = resource2;
     }
 
+    public PlayYOPCardDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.resource1 = ResourceType.translateFromString(obj.get(kResourceOne).getAsString());
+        this.resource2 = ResourceType.translateFromString(obj.get(kResourceTwo).getAsString());
+    }
+
     /**
      * Converts the object to JSON
      *
@@ -31,10 +46,10 @@ public final class PlayYOPCardDTO implements IDTO,JsonSerializable {
     @Override
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("type", "Year_of_Plenty");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("resource1", this.resource1.toString().toLowerCase());
-        obj.addProperty("resource2", this.resource2.toString().toLowerCase());
+        obj.addProperty(kType, "Year_of_Plenty");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.addProperty(kResourceOne, this.resource1.toString().toLowerCase());
+        obj.addProperty(kResourceTwo, this.resource2.toString().toLowerCase());
         return obj;
     }
 }

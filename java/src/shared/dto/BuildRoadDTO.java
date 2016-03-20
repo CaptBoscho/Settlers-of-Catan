@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.locations.EdgeLocation;
 import shared.model.JsonSerializable;
 
@@ -28,6 +29,13 @@ public final class BuildRoadDTO implements IDTO, JsonSerializable {
         this.playerIndex = playerIndex;
         this.roadLocation = location;
         this.free = free;
+    }
+
+    public BuildRoadDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.free = obj.get(kFree).getAsBoolean();
+        this.roadLocation = new EdgeLocation(obj.get(kRoadLocation).getAsJsonObject());
     }
 
     public int getPlayerIndex() {

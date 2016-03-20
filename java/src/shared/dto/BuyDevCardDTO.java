@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
@@ -20,6 +21,11 @@ public final class BuyDevCardDTO implements IDTO,JsonSerializable {
         assert playerIndex < 4;
 
         this.playerIndex = playerIndex;
+    }
+
+    public BuyDevCardDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
     }
 
     public int getPlayerIndex() {
