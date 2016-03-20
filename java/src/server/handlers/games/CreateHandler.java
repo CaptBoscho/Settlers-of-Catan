@@ -1,5 +1,6 @@
 package server.handlers.games;
 
+import server.commands.CommandExecutionResult;
 import server.controllers.GamesController;
 import shared.dto.CreateGameDTO;
 import spark.Request;
@@ -18,8 +19,13 @@ public class CreateHandler implements Route {
             return "Invalid request";
         }
 
-        response.status(200);
-        response.type("application/json");
-        return GamesController.createGame(new CreateGameDTO(request.body()));
+        CommandExecutionResult result = GamesController.createGame(new CreateGameDTO(request.body()));
+        if(result.errorOccurred()) {
+            response.status(result.getStatus());
+        } else {
+            response.status(200);
+        }
+
+        return result.getBody();
     }
 }

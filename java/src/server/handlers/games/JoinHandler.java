@@ -1,5 +1,6 @@
 package server.handlers.games;
 
+import server.commands.CommandExecutionResult;
 import server.controllers.GamesController;
 import shared.dto.JoinGameDTO;
 import spark.Request;
@@ -18,8 +19,13 @@ public class JoinHandler implements Route {
             return "Invalid request";
         }
 
-        response.status(200);
-        response.type("application/json");
-        return GamesController.joinGame(new JoinGameDTO(request.body()));
+        CommandExecutionResult result = GamesController.joinGame(new JoinGameDTO(request.body()));
+        if(result.errorOccurred()) {
+            response.status(result.getStatus());
+        } else {
+            response.status(200);
+        }
+
+        return result.getBody();
     }
 }
