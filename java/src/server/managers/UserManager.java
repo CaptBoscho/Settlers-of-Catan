@@ -1,7 +1,7 @@
 package server.managers;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class maintains a list of users. A user is defined as being a unique username/password
@@ -10,11 +10,11 @@ import java.util.Map;
  * @author Derek Argueta
  */
 public class UserManager {
-    private Map<String, String> users;
+    private List<UserCredentials> users;
     private static UserManager instance;
 
     private UserManager() {
-        this.users = new HashMap<>();
+        this.users = new ArrayList<>();
     }
 
     public static UserManager getInstance() {
@@ -24,12 +24,67 @@ public class UserManager {
         return instance;
     }
 
+    public int getIdForUser(final String username) {
+        for(final UserCredentials user : this.users) {
+            if(user.getUsername().equals(username)) {
+                return user.getUserId();
+            }
+        }
+
+        return -1;
+    }
+
     public boolean addUser(final String username, final String password) {
 
         // check if user already exists
-        if(users.containsKey(username)) return false;
+        for(final UserCredentials user : this.users) {
+            if(user.getUsername().equals(username)) {
+                return false;
+            }
+        }
 
-        users.put(username, password);
-        return true;
+        final UserCredentials newUser = new UserCredentials(username, password, users.size());
+        return users.add(newUser);
+    }
+}
+
+/**
+ * @author Derek Argueta
+ *
+ * This class acts as a "struct" to hold user info together. The UserID is equivalent
+ * to the user's index in the List where the credentials are held.
+ */
+class UserCredentials {
+
+    private String username;
+    private String password;
+    private int userId;
+
+    //// -- Constructors
+
+    UserCredentials(final String username, final String password, final int id) {
+        assert username != null;
+        assert username.length() > 0;
+        assert password != null;
+        assert password.length() > 0;
+        assert id >= 0;
+
+        this.username = username;
+        this.password = password;
+        this.userId = id;
+    }
+
+    //// -- Getters/Setters
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public int getUserId() {
+        return this.userId;
     }
 }
