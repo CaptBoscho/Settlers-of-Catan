@@ -6,17 +6,19 @@ import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.dto.*;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.DevCardException;
 import shared.exceptions.InvalidPlayerException;
 import shared.exceptions.PlayerExistsException;
-import shared.dto.GameModelDTO;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.ai.AIFactory;
+import shared.model.ai.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.MessageLine;
@@ -79,12 +81,19 @@ public class ServerFacade implements IFacade {
     /**
      * Adds an AI to the game
      *
-     * @param aiType
+     * @param type
      * @throws AddAIException
      */
     @Override
-    public void addAI(int gameID, Object aiType) throws AddAIException {
+    public GameModelDTO addAI(int gameId, AIType type) throws AddAIException {
+        Game game = gameManager.getGameByID(gameId);
 
+        if(game.canAddAI()){
+            game.addAI(type);
+            return game.getDTO();
+        }else{
+            throw new AddAIException("AI player can't be added!");
+        }
     }
 
     /**
@@ -93,8 +102,8 @@ public class ServerFacade implements IFacade {
      * @throws ListAIException
      */
     @Override
-    public void listAI() throws ListAIException {
-
+    public ListAIDTO listAI(int gameId) throws ListAIException {
+        return new ListAIDTO(AIFactory.listAITypes());
     }
 
     /**

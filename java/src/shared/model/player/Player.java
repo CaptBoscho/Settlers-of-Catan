@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Representation of a player in the game
+ * Representation of a player in the game - Super class for User Players and AI Players
  *
  * @author Kyle Cornelison
  */
-public final class Player implements IPlayer, Comparable<Player> {
+public class Player implements IPlayer, Comparable<Player> {
     //region Member variables
     String name;
     int playerId;
@@ -34,6 +34,7 @@ public final class Player implements IPlayer, Comparable<Player> {
     private StructureBank structureBank;
     private IResourceCardBank resourceCardBank;
     private IDevelopmentCardBank developmentCardBank;
+    private PlayerType playerType = PlayerType.USER;
     //endregion
 
     //region Constructors
@@ -634,6 +635,15 @@ public final class Player implements IPlayer, Comparable<Player> {
     public String getName() {
         return this.name;
     }
+
+    /**
+     * Get the type of Player [User,AI]
+     *
+     * @return
+     */
+    public PlayerType getPlayerType(){
+        return this.playerType;
+    }
     //endregion
 
     //region Setters
@@ -651,6 +661,15 @@ public final class Player implements IPlayer, Comparable<Player> {
 
     public void setDiscarded(boolean discarded) {
         this.discarded = discarded;
+    }
+
+    /**
+     * Set the player's type
+     *
+     * @param type
+     */
+    public void setPlayerType(PlayerType type){
+        this.playerType = type;
     }
     //endregion
 

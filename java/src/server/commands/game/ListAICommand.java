@@ -1,7 +1,12 @@
 package server.commands.game;
 
+import client.services.CommandExecutionFailed;
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
+import server.exceptions.ListAIException;
+import server.facade.IFacade;
 import shared.dto.IDTO;
+import shared.dto.ListAIDTO;
 
 /**
  * A command object that list the AI
@@ -9,12 +14,13 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class ListAICommand implements ICommand {
+    private IFacade facade;
 
     /**
      * Constructor
      */
-    public ListAICommand() {
-
+    public ListAICommand(IFacade facade) {
+        this.facade = facade;
     }
 
     /**
@@ -22,8 +28,13 @@ public class ListAICommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
-        return null;
+    public IDTO execute() throws CommandExecutionFailedException {
+        try {
+            return facade.listAI(1);
+        } catch (ListAIException e) {
+            e.printStackTrace();
+            throw new CommandExecutionFailedException("Failed to list AI types!");
+        }
     }
 
 }
