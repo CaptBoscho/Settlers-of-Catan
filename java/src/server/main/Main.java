@@ -26,6 +26,8 @@ public class Main {
             Config.host = args[0];
             Config.port = Integer.parseInt(args[1]);
             Config.facade = ServerFacade.getInstance();
+        } else {
+            Config.facade = ServerFacade.getInstance();
         }
 
         port(8081);

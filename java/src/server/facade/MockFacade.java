@@ -74,7 +74,7 @@ public class MockFacade implements IFacade {
      * @throws ListException
      */
     @Override
-    public CommandExecutionResult list() throws ListException {
+    public CommandExecutionResult list() {
         return null;
     }
 
@@ -89,7 +89,7 @@ public class MockFacade implements IFacade {
      * @throws CreateGameException
      */
     @Override
-    public CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws CreateGameException {
+    public CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) {
         return null;
     }
 

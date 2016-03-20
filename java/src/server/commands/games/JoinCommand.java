@@ -19,7 +19,7 @@ public class JoinCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Join Game command
      *
-     * @return IDTO with information about the join
+     * @return CommandExecutionResult with information about the join
      */
     @Override
     public CommandExecutionResult execute() {

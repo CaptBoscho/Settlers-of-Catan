@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import client.data.GameInfo;
 import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
@@ -59,7 +60,23 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public Game() {
         this.version = 0;
         this.winner = -1;
+        this.title = "";
         this.map = new Map(false, false, false);
+        this.turnTracker = new TurnTracker();
+        this.longestRoadCard = new LongestRoad();
+        this.largestArmyCard = new LargestArmy();
+        this.playerManager = new PlayerManager(new ArrayList<>());
+        this.resourceCardBank = new ResourceCardBank(true);
+        this.developmentCardBank = new DevelopmentCardBank(true);
+        this.chat = new MessageList();
+        this.log = new MessageList();
+    }
+
+    public Game(final String title, final boolean randomPorts, final boolean randomNumbers, final boolean randomTiles) {
+        this.version = 0;
+        this.winner = -1;
+        this.title = title;
+        this.map = new Map(randomTiles, randomNumbers, randomPorts);
         this.turnTracker = new TurnTracker();
         this.longestRoadCard = new LongestRoad();
         this.largestArmyCard = new LargestArmy();
@@ -1724,6 +1741,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         longestRoadCard.setOwner(playerIDNew, roadSize);
     }
 
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
     public String getTitle() {
         return this.title;
     }
@@ -1736,6 +1757,14 @@ public class Game extends Observable implements IGame, JsonSerializable {
             infos.add(tmpPlayerInfo);
         }
         return infos;
+    }
+
+    public GameInfo getAsGameInfo() {
+        final GameInfo gameInfo = new GameInfo();
+        gameInfo.setId(this.getId());
+        gameInfo.setTitle(this.title);
+//        gameInfo.setPlayers(this.playerManager.); TODO
+        return gameInfo;
     }
 
     public GameModelDTO getDTO() {

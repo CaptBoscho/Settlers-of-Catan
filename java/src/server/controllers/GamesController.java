@@ -14,6 +14,7 @@ public class GamesController {
         try {
             return GamesCommandFactory.getInstance().executeCommand("create", dto);
         } catch (Exception e) {
+            e.printStackTrace();
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong creating a game :(");
             result.triggerError(500);
             return result;
@@ -34,7 +35,8 @@ public class GamesController {
         try {
             return GamesCommandFactory.getInstance().executeCommand("list");
         } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong sending a chat :(");
+            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong listing games :(");
             result.triggerError(500);
             return result;
         }

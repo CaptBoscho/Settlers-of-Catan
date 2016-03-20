@@ -3,15 +3,11 @@ package server.facade;
 import client.data.GameInfo;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
-import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
-import shared.dto.DiscardCardsDTO;
-import shared.dto.ListGamesDTO;
-import shared.dto.MaritimeTradeDTO;
-import shared.dto.OfferTradeDTO;
+import shared.dto.*;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -106,7 +102,7 @@ public class ServerFacade implements IFacade {
 
         final Game game = gameManager.getGameByID(gameId);
 
-        if(game.canAddAI()){
+        if(game.canAddAI()) {
             game.addAI(type);
             return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
         }else{
@@ -138,10 +134,10 @@ public class ServerFacade implements IFacade {
      * @throws ListException
      */
     @Override
-    public CommandExecutionResult list() throws ListException {
+    public CommandExecutionResult list() {
         final List<GameInfo> games = this.gameManager.getGamesInfos();
         final ListGamesDTO dto = new ListGamesDTO(games);
-        final String jsonString = dto.toJSONArr().getAsString();
+        final String jsonString = dto.toJSONArr().toString();
         return new CommandExecutionResult(jsonString);
     }
 
@@ -156,11 +152,26 @@ public class ServerFacade implements IFacade {
      * @throws CreateGameException
      */
     @Override
-    public CommandExecutionResult create(final String name, final boolean randomTiles, final boolean randomNumbers, boolean randomPorts) throws CreateGameException {
+    public CommandExecutionResult create(final String name, final boolean randomTiles, final boolean randomNumbers, boolean randomPorts) {
         assert name != null;
         assert name.length() > 0;
 
-        return null;
+        // create the game in the model
+        final Game game = new Game(name, randomPorts, randomNumbers, randomTiles);
+        game.setId(this.gameManager.getNumGames());
+        this.gameManager.addGame(game);
+
+        // construct an info object to send back
+        final GameInfo gameInfo = game.getAsGameInfo();
+        gameInfo.setPlayers(new ArrayList<>());
+
+        // construct the response
+        final GameInfoDTO dto = new GameInfoDTO(gameInfo);
+        final String jsonString = dto.toJSON().toString();
+        final CommandExecutionResult result = new CommandExecutionResult(jsonString);
+        result.addCookie("catan.game", Integer.toString(game.getId()));
+
+        return result;
     }
 
     /**

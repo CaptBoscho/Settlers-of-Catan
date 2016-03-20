@@ -2,6 +2,7 @@ package server.commands.games;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.main.Config;
 import server.managers.GameManager;
 import shared.dto.IDTO;
 import shared.model.game.Game;
@@ -22,9 +23,7 @@ public class ListCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
-        Collection<Game> games = GameManager.getInstance().getAllGames();
-        CommandExecutionResult result = new CommandExecutionResult(games.toString());
-        return result;
+        return Config.facade.list();
     }
 
     @Override

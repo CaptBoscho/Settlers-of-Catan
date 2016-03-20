@@ -63,7 +63,7 @@ public interface IFacade {
      * @throws ListException
      * @return CommandExecutinResult
      */
-    CommandExecutionResult list() throws ListException;
+    CommandExecutionResult list();
 
     /**
      * Creates a new game
@@ -74,7 +74,7 @@ public interface IFacade {
      * @return CommandExecutionResult
      * @throws CreateGameException
      */
-    CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws CreateGameException;
+    CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts);
 
     /**
      * Joins a player to the specified game
