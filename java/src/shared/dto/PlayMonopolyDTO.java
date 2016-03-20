@@ -30,6 +30,12 @@ public final class PlayMonopolyDTO implements IDTO, JsonSerializable {
         this.resource = resource;
     }
 
+    public PlayMonopolyDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.resource = obj.get(kResource).getAsString();
+    }
+
     /**
      * Converts the object to JSON
      *

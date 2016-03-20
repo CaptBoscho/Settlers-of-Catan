@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.locations.EdgeLocation;
 import shared.model.JsonSerializable;
 
@@ -9,6 +10,13 @@ import shared.model.JsonSerializable;
  */
 public final class RoadBuildingDTO implements IDTO,JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kSpotOne = "spot1";
+    private static final String kSpotTwo = "spot2";
+
+    // -- class members
     private int playerIndex;
     private EdgeLocation roadLocationOne;
     private EdgeLocation roadLocationTwo;
@@ -21,6 +29,13 @@ public final class RoadBuildingDTO implements IDTO,JsonSerializable {
         this.playerIndex = playerIndex;
         this.roadLocationOne = locationOne;
         this.roadLocationTwo = locationTwo;
+    }
+
+    public RoadBuildingDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.roadLocationOne = new EdgeLocation(obj.get(kSpotOne).getAsJsonObject());
+        this.roadLocationTwo = new EdgeLocation(obj.get(kSpotTwo).getAsJsonObject());
     }
 
     public int getPlayerIndex() {
@@ -43,10 +58,10 @@ public final class RoadBuildingDTO implements IDTO,JsonSerializable {
     @Override
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("type", "Road_Building");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.add("spot1", this.roadLocationOne.toJSON());
-        obj.add("spot2", this.roadLocationTwo.toJSON());
+        obj.addProperty(kType, "Road_Building");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.add(kSpotOne, this.roadLocationOne.toJSON());
+        obj.add(kSpotTwo, this.roadLocationTwo.toJSON());
         return obj;
     }
 }

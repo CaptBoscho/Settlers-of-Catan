@@ -13,8 +13,6 @@ public final class EdgeLocation implements JsonSerializable {
 	
 	public EdgeLocation(HexLocation hexLoc, EdgeDirection dir) {
         assert hexLoc != null;
-//        assert hexLoc.getX() > 0;
-//        assert hexLoc.getY() > 0;
         assert dir != null;
 		setHexLoc(hexLoc);
 		setDir(dir);
@@ -27,32 +25,7 @@ public final class EdgeLocation implements JsonSerializable {
      */
 	public EdgeLocation(JsonObject json) {
 		int x = json.get("x").getAsInt();
-		int y = 0;
-		switch(x) {
-			case -3:
-				y = json.get("y").getAsInt() - 3;
-				break;
-			case -2:
-				y = json.get("y").getAsInt() - 2;
-				break;
-			case -1:
-				y = json.get("y").getAsInt() - 1;
-				break;
-			case 0:
-				y = json.get("y").getAsInt();
-				break;
-			case 1:
-				y = json.get("y").getAsInt() + 1;
-				break;
-			case 2:
-				y = json.get("y").getAsInt() + 2;
-				break;
-			case 3:
-				y = json.get("y").getAsInt() + 3;
-				break;
-			default:
-				break;
-		}
+		int y = json.get("y").getAsInt();
 		hexLoc = new HexLocation(x, y);
         String direction = json.get("direction").getAsString();
         switch(direction) {

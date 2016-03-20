@@ -942,13 +942,26 @@ public final class Map implements IMap, JsonSerializable {
                    Deserializer Methods
      ============================================*/
 
+    private HexLocation getModelHexLocation(HexLocation hexLoc) {
+        return new HexLocation(hexLoc.getX(), hexLoc.getY()+hexLoc.getX());
+    }
+
+    private EdgeLocation getModelEdgeLocation(EdgeLocation edgeLoc) {
+        return new EdgeLocation(getModelHexLocation(edgeLoc.getHexLoc()), edgeLoc.getDir());
+    }
+
+    private VertexLocation getModelVertexLocation(VertexLocation vertexLoc) {
+        return new VertexLocation(getModelHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
+    }
+
     private void makeIslandHexes(JsonArray jsonArray) {
         assert jsonArray != null;
 
         Gson gson = new Gson();
         for (JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            hexLoc = getModelHexLocation(hexLoc);
             makeEdgesForIslandHex(hexLoc);
             makeVerticesForIslandHex(hexLoc);
             if(!json.has("resource")) {
@@ -999,7 +1012,8 @@ public final class Map implements IMap, JsonSerializable {
         Gson gson = new Gson();
         for(JsonElement jsonElem : jsonArray) {
             final JsonObject json = jsonElem.getAsJsonObject();
-            final HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            HexLocation hexLoc = new HexLocation(gson.fromJson(json.get("location"), JsonObject.class));
+            hexLoc = getModelHexLocation(hexLoc);
             final String direction = json.get("direction").getAsString();
             VertexLocation vertexLocOne;
             VertexLocation vertexLocTwo;
@@ -1088,6 +1102,7 @@ public final class Map implements IMap, JsonSerializable {
             final JsonObject json = jsonElem.getAsJsonObject();
             final int playerIndex = json.get("owner").getAsInt();
             EdgeLocation edgeLoc = new EdgeLocation(json.get("location").getAsJsonObject());
+            edgeLoc = getModelEdgeLocation(edgeLoc);
             edgeLoc = edgeLoc.getNormalizedLocation();
             final Edge edge = edges.get(edgeLoc);
             final Road road = new Road(playerIndex);
@@ -1110,6 +1125,7 @@ public final class Map implements IMap, JsonSerializable {
             final JsonObject json = jsonElem.getAsJsonObject();
             final int playerIndex = json.get("owner").getAsInt();
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
+            vertexLoc = getModelVertexLocation(vertexLoc);
             vertexLoc = vertexLoc.getNormalizedLocation();
             final Vertex vertex = vertices.get(vertexLoc);
             final Settlement settlement = new Settlement(playerIndex);
@@ -1135,6 +1151,7 @@ public final class Map implements IMap, JsonSerializable {
             final JsonObject json = jsonElem.getAsJsonObject();
             final int playerIndex = json.get("owner").getAsInt();
             VertexLocation vertexLoc = new VertexLocation(json.get("location").getAsJsonObject());
+            vertexLoc = getModelVertexLocation(vertexLoc);
             vertexLoc = vertexLoc.getNormalizedLocation();
             final Vertex vertex = vertices.get(vertexLoc);
             final Settlement settlement = new Settlement(playerIndex);

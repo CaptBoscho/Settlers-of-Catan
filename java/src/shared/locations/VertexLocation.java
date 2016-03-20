@@ -13,8 +13,6 @@ public final class VertexLocation implements JsonSerializable {
 	
 	public VertexLocation(HexLocation hexLoc, VertexDirection dir) {
         assert hexLoc != null;
-//        assert hexLoc.getX() >= 0;
-//        assert hexLoc.getY() >= 0;
         assert dir != null;
 
 		setHexLoc(hexLoc);
@@ -27,32 +25,7 @@ public final class VertexLocation implements JsonSerializable {
         assert json.has("y");
 
 		final int x = json.get("x").getAsInt();
-		int y = 0;
-		switch(x) {
-			case -3:
-				y = json.get("y").getAsInt() - 3;
-				break;
-			case -2:
-				y = json.get("y").getAsInt() - 2;
-				break;
-			case -1:
-				y = json.get("y").getAsInt() - 1;
-				break;
-			case 0:
-				y = json.get("y").getAsInt();
-				break;
-			case 1:
-				y = json.get("y").getAsInt() + 1;
-				break;
-			case 2:
-				y = json.get("y").getAsInt() + 2;
-				break;
-			case 3:
-				y = json.get("y").getAsInt() + 3;
-				break;
-			default:
-				break;
-		}
+		final int y = json.get("y").getAsInt();
 		hexLoc = new HexLocation(x, y);
 		final String direction = json.get("direction").getAsString();
 		switch(direction) {
