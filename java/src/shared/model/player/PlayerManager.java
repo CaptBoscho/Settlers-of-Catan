@@ -740,7 +740,11 @@ public final class PlayerManager implements IPlayerManager {
     }
     //endregion
 
-    //region Private helper methods
+    //region helper methods
+    public boolean canAddPlayer(){
+        return players.size() < 4;
+    }
+
     public void addPlayer(final Player player) {
         this.players.add(player);
     }

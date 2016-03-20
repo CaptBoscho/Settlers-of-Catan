@@ -1,6 +1,7 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
+import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -11,6 +12,7 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.JsonSerializable;
+import shared.model.ai.AIType;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.InvalidTypeException;
 import shared.model.bank.ResourceCardBank;
@@ -276,6 +278,24 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Can do methods
     //============================================================================================
+    /**
+     * Determines if an AI Player can be added to the game
+     * @return
+     */
+    @Override
+    public boolean canAddAI(){
+        return playerManager.canAddPlayer();
+    }
+
+    /**
+     * Determines if a Player can be added to the game
+     * @return
+     */
+    @Override
+    public boolean canAddPlayer(){
+        return playerManager.canAddPlayer();
+    }
+
     /**
      * Determine if a settlement can be built by the player at the location
      *
@@ -579,6 +599,20 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Do methods
     //=========================================================================================
+    /**
+     * Adds an AI player to the game
+     *
+     * @param type
+     */
+    @Override
+    public void addAI(AIType type) throws AddAIException {
+        if(canAddAI()){
+            //Add the AI
+        }else{
+            //throw an exception
+        }
+    }
+
     /**
      * Initiates placing a settlement on the map
      *

@@ -4,13 +4,11 @@ import com.google.gson.JsonObject;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
-import shared.dto.DiscardCardsDTO;
-import shared.dto.GameModelDTO;
-import shared.dto.MaritimeTradeDTO;
-import shared.dto.OfferTradeDTO;
+import shared.dto.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.ai.AIType;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/10/2016.
@@ -39,16 +37,16 @@ public interface IFacade {
     //================================
     /**
      * Adds an AI to the game
-     * @param aiType
+     * @param type
      * @throws AddAIException
      */
-    void addAI(int gameID, Object aiType) throws AddAIException;
+    GameModelDTO addAI(int gameId, AIType type) throws AddAIException;
 
     /**
      * List the available AI types
      * @throws ListAIException
      */
-    void listAI() throws ListAIException;
+    ListAIDTO listAI(int gameId) throws ListAIException;
 
 
     //Games Methods

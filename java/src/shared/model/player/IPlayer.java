@@ -240,5 +240,20 @@ public interface IPlayer {
      * @return
      */
     Integer quantityOfDevCards();
+
+    /**
+     * Get the type of Player [User,AI]
+     *
+     * @return
+     */
+    PlayerType getPlayerType();
+    //endregion
+
+    //region Setters
+    /**
+     * Set the player's type [User, AI]
+     * @param type
+     */
+    void setPlayerType(PlayerType type);
     //endregion
 }

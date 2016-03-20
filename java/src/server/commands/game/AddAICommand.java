@@ -2,6 +2,8 @@ package server.commands.game;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.facade.IFacade;
+import shared.dto.AddAIDTO;
 import shared.dto.IDTO;
 
 /**
@@ -10,6 +12,8 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class AddAICommand implements ICommand {
+    private IFacade facade;
+    private AddAIDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the Add AI command
@@ -24,5 +28,4 @@ public class AddAICommand implements ICommand {
     public void setParams(IDTO dto) {
 
     }
-
 }
