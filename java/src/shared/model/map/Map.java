@@ -380,7 +380,7 @@ public final class Map implements IMap, JsonSerializable {
      * @throws InvalidLocationException Throws exception if edge location is not on the map
      */
     @Override
-    public void buildRoad(int playerIndex, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
+    public void buildRoad(final int playerIndex, EdgeLocation edgeLoc) throws StructureException, InvalidLocationException {
         assert playerIndex >= 0 && playerIndex <= 3;
         assert edgeLoc != null;
         assert edgeLoc.getDir() != null;
@@ -417,8 +417,12 @@ public final class Map implements IMap, JsonSerializable {
         if(!edgeHasConnectingRoad(playerIndex, edgeLoc)) {
             throw new StructureException("Road must be connected to existing Road");
         }
+
+        // TODO - unused variable
         final Road road = new Road(playerIndex);
         edge.setRoad(road);
+
+        // TODO - this condition is always false - should refactor
         if(roads == null) {
             roads = new ArrayList<>();
             roads.add(edge);
@@ -522,6 +526,8 @@ public final class Map implements IMap, JsonSerializable {
         if(vertex.hasPort()) {
             addPort(playerIndex, vertex);
         }
+
+        // TODO - this condition is always false - refactor
         if(settlements == null) {
             settlements = new ArrayList<>();
             settlements.add(vertex);

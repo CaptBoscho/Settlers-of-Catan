@@ -21,7 +21,7 @@ public final class MessageLine implements JsonSerializable {
         content = c;
     }
 
-    public MessageLine(JsonObject jo) {
+    public MessageLine(final JsonObject jo) {
         assert jo != null;
         assert jo.has("message");
         assert jo.has("source");

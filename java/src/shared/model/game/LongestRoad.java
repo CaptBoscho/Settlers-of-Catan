@@ -15,8 +15,8 @@ public final class LongestRoad {
         this.playerID = -1;
     }
 
-    public LongestRoad(int playerID) {
-        assert playerID >= 0 && playerID <= 3;  // should only assign this to a valid player
+    public LongestRoad(final int playerID) {
+        assert playerID >= 0 && playerID <= 3;
 
         this.playerID = playerID;
     }

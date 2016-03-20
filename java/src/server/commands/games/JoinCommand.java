@@ -2,6 +2,8 @@ package server.commands.games;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.exceptions.JoinGameException;
+import server.main.Config;
 import shared.definitions.CatanColor;
 import shared.dto.IDTO;
 import shared.dto.JoinGameDTO;
@@ -23,6 +25,14 @@ public class JoinCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        try {
+            return Config.facade.join(this.gameId, this.color);
+        } catch (JoinGameException e) {
+            // this is so dumb. ugh.
+            e.printStackTrace();
+        }
+
+        // TODO - SO DUMB
         return null;
     }
 

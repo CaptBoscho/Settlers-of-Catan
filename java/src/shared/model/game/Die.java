@@ -12,7 +12,7 @@ public final class Die {
     /**
      * Default Constructor - sets die range to [1,6]
      */
-    public Die() {
+    Die() {
         this.min = 1;
         this.max = 6;
     }
@@ -22,7 +22,7 @@ public final class Die {
      * @param min minimum value the dice can return
      * @param max maximum value the dice can return
      */
-    public Die(final int min, final int max) {
+    Die(final int min, final int max) {
         assert max > min;
 
         this.min = min;

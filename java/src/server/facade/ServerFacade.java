@@ -17,6 +17,7 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
+import shared.model.player.Player;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
@@ -190,6 +191,14 @@ public class ServerFacade implements IFacade {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert color != null;
+
+        // get the game
+        final Game game = this.gameManager.getGameByID(gameID);
+
+        // add a player?...
+
+        // create a player
+//        Player newPlayer = new Player(0, color, );
 
         //TODO: make this method work fool
         return null;
