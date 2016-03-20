@@ -19,11 +19,6 @@ public class RegisterCommand implements ICommand {
 
     }
 
-    public void setParams(final String username, final String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     /**
      * Communicates with the ServerFacade to carry out the Register command
      *
