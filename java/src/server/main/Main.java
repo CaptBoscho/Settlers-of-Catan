@@ -1,5 +1,6 @@
 package server.main;
 
+import server.facade.ServerFacade;
 import server.handlers.auth.LoginHandler;
 import server.handlers.auth.RegisterHandler;
 import server.handlers.game.AddAIHandler;
@@ -10,7 +11,8 @@ import server.handlers.moves.*;
 import server.handlers.games.CreateHandler;
 import server.handlers.games.JoinHandler;
 
-import static spark.Spark.*;
+import static spark.Spark.post;
+import static spark.Spark.get;
 
 /**
  * @author Derek Argueta
@@ -19,6 +21,14 @@ public class Main {
     private static final int HTTP_OK = 200;
 
     public static void main(String[] args) {
+        if(args.length == 2) {
+            Config.host = args[0];
+            Config.port = Integer.parseInt(args[1]);
+            Config.facade = ServerFacade.getInstance();
+        }
+
+        // TODO - enable configuring the mock server
+
         get("/hello", (req, res) -> {
             res.status(HTTP_OK);
             res.type("application/json");
