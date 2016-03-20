@@ -1,11 +1,12 @@
 package server.facade;
 
-import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
-import shared.dto.*;
+import shared.dto.DiscardCardsDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -22,16 +23,18 @@ public interface IFacade {
      * @param username
      * @param password
      * @throws LoginException
+     * @return CommandExecutionResult
      */
-    void login(String username, String password) throws LoginException;
+    CommandExecutionResult login(String username, String password) throws LoginException;
 
     /**
      * Registers a user
      * @param username
      * @param password
      * @throws RegisterException
+     * @return CommandExecutionResult
      */
-    void register(String username, String password) throws RegisterException;
+    CommandExecutionResult register(String username, String password) throws RegisterException;
 
 
     //Game Methods
@@ -40,14 +43,16 @@ public interface IFacade {
      * Adds an AI to the game
      * @param type
      * @throws AddAIException
+     * @return CommandExecutionResult
      */
-    GameModelDTO addAI(int gameId, AIType type) throws AddAIException;
+    CommandExecutionResult addAI(int gameId, AIType type) throws AddAIException;
 
     /**
      * List the available AI types
      * @throws ListAIException
+     * @return CommandExecutionResult
      */
-    ListAIDTO listAI(int gameId) throws ListAIException;
+    CommandExecutionResult listAI(int gameId) throws ListAIException;
 
 
     //Games Methods
@@ -56,8 +61,9 @@ public interface IFacade {
      * List the current games
      * @return info on the current games
      * @throws ListException
+     * @return CommandExecutinResult
      */
-    JsonObject list() throws ListException;
+    CommandExecutionResult list() throws ListException;
 
     /**
      * Creates a new game
@@ -65,18 +71,19 @@ public interface IFacade {
      * @param randomTiles
      * @param randomNumbers
      * @param randomPorts
-     * @return
+     * @return CommandExecutionResult
      * @throws CreateGameException
      */
-    JsonObject create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws CreateGameException;
+    CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws CreateGameException;
 
     /**
      * Joins a player to the specified game
      * @param gameID
      * @param color
      * @throws JoinGameException
+     * @return CommandExecutionResult
      */
-    void join(int gameID, CatanColor color) throws JoinGameException;
+    CommandExecutionResult join(int gameID, CatanColor color) throws JoinGameException;
 
 
     //Move Methods
@@ -86,40 +93,44 @@ public interface IFacade {
      * @param player index of the player
      * @param message
      * @throws SendChatException
+     * @return CommandExecutionResult
      */
-    GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException;
+    CommandExecutionResult sendChat(int gameID, int player, String message) throws SendChatException;
 
     /**
      * Rolls the specified value
      * @param player index of the player
      * @param value
      * @throws RollNumberException
+     * @return CommandExecutionResult
      */
-    GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException;
+    CommandExecutionResult rollNumber(int gameID, int player, int value) throws RollNumberException;
 
     /**
      * Robs the specified player
      * @param player index of the player robbing
      * @param newLocation
      * @param victim index of the player being robbed
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws RobPlayerException
      */
-    GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException;
+    CommandExecutionResult robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException;
 
     /**
      * Ends the current player's turn making it the next player's turn
      * @param player index of the player
      * @throws FinishTurnException
+     * @return CommandExecutionResult
      */
-    GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException;
+    CommandExecutionResult finishTurn(int gameID, int player) throws FinishTurnException;
 
     /**
      * Buys a new dev card
      * @param player index of the player
      * @throws BuyDevCardException
+     * @return CommandExecutionResult
      */
-    GameModelDTO buyDevCard(int gameID, int player) throws BuyDevCardException;
+    CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException;
 
     /**
      * Handles playing Year of Plenty
@@ -127,43 +138,46 @@ public interface IFacade {
      * @param resourceOne first resource to receive
      * @param resourceTwo second resource to receive
      * @throws YearOfPlentyException
+     * @return CommandExecutionResult
      */
-    GameModelDTO yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
+    CommandExecutionResult yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException;
 
     /**
      * Handles playing Road Building
      * @param player index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws RoadBuildingException
      */
-    GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException;
+    CommandExecutionResult roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException;
 
     /**
      * Handles playing Soldier
      * @param player index of the player
      * @param newLocation
      * @param victim index of the player being robbed
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws SoldierException
      */
-    GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException;
+    CommandExecutionResult soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException;
 
     /**
      * Handles playing Monopoly
      * @param player index of the player
      * @param resource resource to take
      * @throws MonopolyException
+     * @return CommandExecutionResult
      */
-    GameModelDTO monopoly(int gameID, int player, ResourceType resource) throws MonopolyException;
+    CommandExecutionResult monopoly(int gameID, int player, ResourceType resource) throws MonopolyException;
 
     /**
      * Handles playing Monument
      * @param player index of the player
      * @throws MonumentException
+     * @return CommandExecutionResult
      */
-    GameModelDTO monument(int gameID, int player) throws MonumentException;
+    CommandExecutionResult monument(int gameID, int player) throws MonumentException;
 
     /**
      * Builds a road
@@ -178,10 +192,10 @@ public interface IFacade {
      * Builds a settlement
      * @param player index of the player
      * @param location
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws BuildSettlementException
      */
-    GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException;
+    CommandExecutionResult buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException;
 
     /**
      * Builds a city
@@ -196,28 +210,32 @@ public interface IFacade {
     /**
      * Offers a trade to the specified player
      * @throws OfferTradeException
+     * @return CommandExecutionResult
      */
-    GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException;
+    CommandExecutionResult offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException;
 
     /**
      * Accepts a trade offer
      * @param player index of the player accepting the trade
      * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
+     * @return CommandExecutionResult
      */
-    GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException ;
+    CommandExecutionResult acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException ;
 
     /**
      * Performs a maritime trade (trade with the bank)
      * @throws MaritimeTradeException
+     * @return CommandExecutionResult
      */
-    void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException;
+    CommandExecutionResult maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException;
 
     /**
      * Discards the specified cards from the player's hand
      * @param gameID
      * @param dto
      * @throws DiscardCardsException
+     * @return CommandExecutionResult
      */
-    GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
+    CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
 }

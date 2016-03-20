@@ -159,7 +159,7 @@
 				<pathelement location="${java.build}"/>
 			</classpath>
 			<assertions>
-				<disable/>
+				<enable/>
 			</assertions>
 		</java>
 	</target>
@@ -184,7 +184,7 @@
 			<arg value="${port}"/>
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
 			<assertions>
-				<disable/>
+				<enable/>
 			</assertions>
 		</java>
 	</target>

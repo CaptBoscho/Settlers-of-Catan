@@ -11,6 +11,7 @@ import server.handlers.moves.*;
 import server.handlers.games.CreateHandler;
 import server.handlers.games.JoinHandler;
 
+import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.get;
 
@@ -26,6 +27,8 @@ public class Main {
             Config.port = Integer.parseInt(args[1]);
             Config.facade = ServerFacade.getInstance();
         }
+
+        port(8081);
 
         // TODO - enable configuring the mock server
 
