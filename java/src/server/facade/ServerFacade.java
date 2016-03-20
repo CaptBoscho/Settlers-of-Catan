@@ -17,6 +17,7 @@ import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.ai.AIFactory;
 import shared.model.ai.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
@@ -89,11 +90,10 @@ public class ServerFacade implements IFacade {
 
         if(game.canAddAI()){
             game.addAI(type);
+            return game.getDTO();
         }else{
             throw new AddAIException("AI player can't be added!");
         }
-
-        return game.getDTO();
     }
 
     /**
@@ -103,8 +103,7 @@ public class ServerFacade implements IFacade {
      */
     @Override
     public ListAIDTO listAI(int gameId) throws ListAIException {
-        Game game = gameManager.getGameByID(gameId);
-        return new ListAIDTO(game.getAITypes());
+        return new ListAIDTO(AIFactory.listAITypes());
     }
 
     /**

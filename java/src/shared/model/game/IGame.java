@@ -92,6 +92,13 @@ public interface IGame {
     boolean canAddAI();
 
     /**
+     * Determine if a player can be added to the game
+     *
+     * @return
+     */
+    boolean canAddPlayer();
+
+    /**
      * Determine if a settlement can be built by the player at the location
      * @param playerIndex
      * @param vertex
@@ -624,13 +631,6 @@ public interface IGame {
      * @throws PlayerExistsException
      */
     CatanColor getPlayerColorByIndex(int playerIndex) throws PlayerExistsException;
-
-    /**
-     * Get the types of AI allowed
-     *
-     * @return
-     */
-    List<AIType> getAITypes();
     //===================================================================================
     //endregion
 

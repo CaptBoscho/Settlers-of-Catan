@@ -1,6 +1,7 @@
 package shared.model.game;
 
 import com.google.gson.JsonObject;
+import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -283,7 +284,16 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public boolean canAddAI(){
-        return isFull();
+        return playerManager.canAddPlayer();
+    }
+
+    /**
+     * Determines if a Player can be added to the game
+     * @return
+     */
+    @Override
+    public boolean canAddPlayer(){
+        return playerManager.canAddPlayer();
     }
 
     /**
@@ -595,11 +605,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param type
      */
     @Override
-    public void addAI(AIType type){
-        if(!isFull()){
+    public void addAI(AIType type) throws AddAIException {
+        if(canAddAI()){
             //Add the AI
         }else{
-            //throw an exception?
+            //throw an exception
         }
     }
 
@@ -1399,25 +1409,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public CatanColor getPlayerColorByIndex(int index) throws PlayerExistsException {
         return this.playerManager.getPlayerColorByIndex(index);
-    }
-
-    /**
-     * Get the AI types allowed
-     *
-     * @return
-     */
-    @Override
-    public List<AIType> getAITypes(){
-        List<AIType> aiTypes = Arrays.asList(AIType.values());
-        return aiTypes;
-    }
-
-    /**
-     * Determine if the game is full - 4 players
-     * @return
-     */
-    private boolean isFull(){
-        return playerManager.getPlayers().size() < 4;
     }
     //===============================================================================================
     //endregion
