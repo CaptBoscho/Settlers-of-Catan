@@ -4,8 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.MonopolyException;
-import server.facade.IFacade;
-import server.facade.ServerFacade;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.PlayMonopolyDTO;
 import shared.model.bank.InvalidTypeException;
@@ -16,16 +15,8 @@ import shared.model.bank.InvalidTypeException;
  * @author Joel Bradley
  */
 public class MonopolyCommand implements ICommand {
-    PlayMonopolyDTO dto;
-    IFacade facade;
 
-    /**
-     * Constructor
-     */
-    public MonopolyCommand() {
-        this.dto = dto;
-        this.facade = facade;
-    }
+    PlayMonopolyDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the Monopoly command
@@ -33,17 +24,16 @@ public class MonopolyCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return ServerFacade.getInstance().monopoly(1, dto.getPlayerIndex(), dto.getResource());
-//        } catch (MonopolyException | InvalidTypeException e) {
-//            throw new CommandExecutionFailedException("MonopolyCommand failed to execute properly");
-//        }
-        return null;
+        try {
+            return Config.facade.monopoly(1, dto.getPlayerIndex(), dto.getResource());
+        } catch (MonopolyException | InvalidTypeException e) {
+            throw new CommandExecutionFailedException("MonopolyCommand failed to execute properly");
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (PlayMonopolyDTO)dto;
     }
 
 }

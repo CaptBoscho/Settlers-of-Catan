@@ -32,7 +32,7 @@ public class BuildCityCommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (BuildCityDTO)dto;
     }
 
 }

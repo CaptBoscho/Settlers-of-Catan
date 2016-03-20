@@ -4,8 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.MonumentException;
-import server.facade.IFacade;
-import server.facade.ServerFacade;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.PlayMonumentDTO;
 
@@ -15,16 +14,8 @@ import shared.dto.PlayMonumentDTO;
  * @author Joel Bradley
  */
 public class MonumentCommand implements ICommand {
-    PlayMonumentDTO dto;
-    IFacade facade;
 
-    /**
-     * Constructor
-     */
-    public MonumentCommand() {
-        this.dto = dto;
-        this.facade = facade;
-    }
+    PlayMonumentDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the Monument command
@@ -32,16 +23,15 @@ public class MonumentCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return ServerFacade.getInstance().monument(1, dto.getPlayerIndex());
-//        } catch (MonumentException e) {
-//            throw new CommandExecutionFailedException("MonumentCommand failed to execute properly");
-//        }
-        return null;
+        try {
+            return Config.facade.monument(1, dto.getPlayerIndex());
+        } catch (MonumentException e) {
+            throw new CommandExecutionFailedException("MonumentCommand failed to execute properly");
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (PlayMonumentDTO)dto;
     }
 }

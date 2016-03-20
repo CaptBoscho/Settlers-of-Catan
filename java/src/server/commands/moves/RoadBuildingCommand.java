@@ -4,7 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RoadBuildingException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.RoadBuildingDTO;
 
@@ -15,7 +15,6 @@ import shared.dto.RoadBuildingDTO;
  */
 public class RoadBuildingCommand implements ICommand {
 
-    private IFacade facade;
     private RoadBuildingDTO dto;
 
     /**
@@ -24,17 +23,16 @@ public class RoadBuildingCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.roadBuilding(1, dto.getPlayerIndex(), dto.getRoadLocationOne(), dto.getRoadLocationTwo());
-//        } catch (RoadBuildingException e) {
-//            throw new CommandExecutionFailedException(e.getMessage());
-//        }
-        return null;
+        try {
+            return Config.facade.roadBuilding(1, dto.getPlayerIndex(), dto.getRoadLocationOne(), dto.getRoadLocationTwo());
+        } catch (RoadBuildingException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (RoadBuildingDTO)dto;
     }
 
 }

@@ -4,9 +4,8 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.FinishTurnException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.FinishTurnDTO;
-import shared.dto.GameModelDTO;
 import shared.dto.IDTO;
 
 /**
@@ -15,7 +14,7 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class FinishTurnCommand implements ICommand {
-    private IFacade facade;
+
     private FinishTurnDTO dto;
 
     /**
@@ -24,18 +23,17 @@ public class FinishTurnCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.finishTurn(1, dto.getPlayerIndex());
-//        } catch (FinishTurnException e) {
-//            e.printStackTrace();
-//            throw new CommandExecutionFailedException("Error ending player turn!");
-//        }
-        return null;
+        try {
+            return Config.facade.finishTurn(1, dto.getPlayerIndex());
+        } catch (FinishTurnException e) {
+            e.printStackTrace();
+            throw new CommandExecutionFailedException("Error ending player turn!");
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (FinishTurnDTO)dto;
     }
 
 }

@@ -12,6 +12,8 @@ import shared.dto.IDTO;
  */
 public class ModelCommand implements ICommand {
 
+    private GameModelDTO dto;
+
     /**
      * Communicates with the ServerFacade to carry out the Model command
      * @return IDTO
@@ -23,7 +25,7 @@ public class ModelCommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (GameModelDTO)dto;
     }
 
 }

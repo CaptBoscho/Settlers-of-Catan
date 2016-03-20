@@ -4,9 +4,8 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuyDevCardException;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.BuyDevCardDTO;
-import shared.dto.GameModelDTO;
 import shared.dto.IDTO;
 
 /**
@@ -15,7 +14,7 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class BuyDevCardCommand implements ICommand {
-    private IFacade facade;
+
     private BuyDevCardDTO dto;
 
     /**
@@ -24,13 +23,16 @@ public class BuyDevCardCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-        return null;
-//            return facade.buyDevCard(1, dto.getPlayerIndex());
+        try {
+            return Config.facade.buyDevCard(1, dto.getPlayerIndex());
+        } catch (BuyDevCardException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (BuyDevCardDTO)dto;
     }
 
 }
