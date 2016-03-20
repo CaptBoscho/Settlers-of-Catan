@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.BuildCityException;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.BuildCityDTO;
 import shared.dto.IDTO;
 
@@ -15,7 +16,6 @@ import shared.dto.IDTO;
  */
 public class BuildCityCommand implements ICommand {
 
-    private IFacade facade;
     private BuildCityDTO dto;
 
     /**
@@ -24,12 +24,11 @@ public class BuildCityCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.buildCity(1, dto.getPlayerIndex(), dto.getLocation());
-//        } catch (BuildCityException e) {
-//            throw new CommandExecutionFailedException(e.getMessage());
-//        }
-        return null;
+        try {
+            return Config.facade.buildCity(1, dto.getPlayerIndex(), dto.getLocation());
+        } catch (BuildCityException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override

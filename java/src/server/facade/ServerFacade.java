@@ -1,6 +1,7 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
+import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
@@ -23,6 +24,8 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
+
+import javax.accessibility.AccessibleStateSet;
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +65,11 @@ public class ServerFacade implements IFacade {
      * @throws LoginException
      */
     @Override
-    public void login(String username, String password) throws LoginException {
-
+    public void login(final String username, final String password) throws LoginException {
+        assert username != null;
+        assert username.length() > 0;
+        assert password != null;
+        assert password.length() > 0;
     }
 
     /**
@@ -74,8 +80,11 @@ public class ServerFacade implements IFacade {
      * @throws RegisterException
      */
     @Override
-    public void register(String username, String password) throws RegisterException {
-
+    public void register(final String username, final String password) throws RegisterException {
+        assert username != null;
+        assert username.length() > 0;
+        assert password != null;
+        assert password.length() > 0;
     }
 
     /**
@@ -85,8 +94,12 @@ public class ServerFacade implements IFacade {
      * @throws AddAIException
      */
     @Override
-    public GameModelDTO addAI(int gameId, AIType type) throws AddAIException {
-        Game game = gameManager.getGameByID(gameId);
+    public GameModelDTO addAI(final int gameId, final AIType type) throws AddAIException {
+        assert gameId > 0;
+        assert gameId < this.gameManager.getNumGames();
+        assert type != null;
+
+        final Game game = gameManager.getGameByID(gameId);
 
         if(game.canAddAI()){
             game.addAI(type);
@@ -102,7 +115,10 @@ public class ServerFacade implements IFacade {
      * @throws ListAIException
      */
     @Override
-    public ListAIDTO listAI(int gameId) throws ListAIException {
+    public ListAIDTO listAI(final int gameId) throws ListAIException {
+        assert gameId >= 0;
+        assert gameId < this.gameManager.getNumGames();
+
         return new ListAIDTO(AIFactory.listAITypes());
     }
 
@@ -128,7 +144,10 @@ public class ServerFacade implements IFacade {
      * @throws CreateGameException
      */
     @Override
-    public JsonObject create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws CreateGameException {
+    public JsonObject create(final String name, final boolean randomTiles, final boolean randomNumbers, boolean randomPorts) throws CreateGameException {
+        assert name != null;
+        assert name.length() > 0;
+
         return null;
     }
 
@@ -140,7 +159,10 @@ public class ServerFacade implements IFacade {
      * @throws JoinGameException
      */
     @Override
-    public void join(int gameID, CatanColor color) throws JoinGameException {
+    public void join(final int gameID, final CatanColor color) throws JoinGameException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert color != null;
 
     }
 
@@ -152,12 +174,18 @@ public class ServerFacade implements IFacade {
      * @throws SendChatException
      */
     @Override
-    public GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException {
-        Game game = gameManager.getGameByID(gameID);
+    public GameModelDTO sendChat(final int gameID, final int player, final String message) throws SendChatException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert player >= 0;
+        assert player < 4;
+        assert message != null;
+        assert message.length() >= 0;
 
+        final Game game = gameManager.getGameByID(gameID);
         try {
-            String playerName = game.getPlayerNameByIndex(player);
-            MessageLine line = new MessageLine(playerName, message);
+            final String playerName = game.getPlayerNameByIndex(player);
+            final MessageLine line = new MessageLine(playerName, message);
             game.getChat().addMessage(line);
             return game.getDTO();
         } catch (PlayerExistsException e) {
@@ -174,8 +202,13 @@ public class ServerFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
-        Game game = gameManager.getGameByID(gameID);
+    public GameModelDTO rollNumber(final int gameID, final int player, final int value) throws RollNumberException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert player >= 0;
+        assert player < 4;
+
+        final Game game = gameManager.getGameByID(gameID);
         try {
             game.rollNumber(value);
             return game.getDTO();
@@ -194,8 +227,9 @@ public class ServerFacade implements IFacade {
      * @throws RobPlayerException
      */
     @Override
-    public GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+    public GameModelDTO robPlayer(final int gameID, final int player, final HexLocation newLocation, final int victim) throws RobPlayerException {
         assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
         assert newLocation != null;
         assert victim >= 0;
@@ -219,8 +253,13 @@ public class ServerFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException {
-        Game game = gameManager.getGameByID(gameID);
+    public GameModelDTO finishTurn(final int gameID, final int player) throws FinishTurnException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert player >= 0;
+        assert player < 4;
+
+        final Game game = gameManager.getGameByID(gameID);
         if(game.canFinishTurn(player)){
             try {
                 game.finishTurn(player);
@@ -240,8 +279,13 @@ public class ServerFacade implements IFacade {
      * @throws BuyDevCardException
      */
     @Override
-    public GameModelDTO buyDevCard(int gameID, int playerIndex) throws BuyDevCardException {
-        Game game = gameManager.getGameByID(gameID);
+    public GameModelDTO buyDevCard(final int gameID, final int playerIndex) throws BuyDevCardException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
+        final Game game = gameManager.getGameByID(gameID);
         try {
             game.buyDevelopmentCard(playerIndex);
         } catch (Exception e) {
@@ -259,9 +303,16 @@ public class ServerFacade implements IFacade {
      * @throws YearOfPlentyException
      */
     @Override
-    public GameModelDTO yearOfPlenty(int gameID, int playerIndex, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+    public GameModelDTO yearOfPlenty(final int gameID, final int playerIndex, final ResourceType resourceOne, final ResourceType resourceTwo) throws YearOfPlentyException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+        assert resourceOne != null;
+        assert resourceTwo != null;
+
         try {
-            Game game = gameManager.getGameByID(gameID);
+            final Game game = gameManager.getGameByID(gameID);
             game.useYearOfPlenty(playerIndex, resourceOne, resourceTwo);
             return game.getDTO();
         } catch (PlayerExistsException | DevCardException | InsufficientResourcesException | InvalidTypeException e) {
@@ -279,13 +330,14 @@ public class ServerFacade implements IFacade {
      * @throws RoadBuildingException
      */
     @Override
-    public GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public GameModelDTO roadBuilding(final int gameID, final int player, final EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
         assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
         assert locationOne != null;
         assert locationTwo != null;
 
-        Game game = gameManager.getGameByID(gameID);
+        final Game game = gameManager.getGameByID(gameID);
         try {
             if(game.canUseRoadBuilding(player)) {
                 game.useRoadBuilder(player, locationOne, locationTwo);
@@ -307,11 +359,13 @@ public class ServerFacade implements IFacade {
      * @throws SoldierException
      */
     @Override
-    public GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+    public GameModelDTO soldier(final int gameID, final int player, final HexLocation newLocation, final int victim) throws SoldierException {
         assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
         assert newLocation != null;
         assert victim >= 0;
+        assert victim < 4;
 
         Game game = gameManager.getGameByID(gameID);
         try{
@@ -333,7 +387,13 @@ public class ServerFacade implements IFacade {
      * @throws MonopolyException
      */
     @Override
-    public GameModelDTO monopoly(int gameID, int playerIndex, ResourceType resource) throws MonopolyException {
+    public GameModelDTO monopoly(final int gameID, final int playerIndex, final ResourceType resource) throws MonopolyException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+        assert resource != null;
+
         try {
             Game game = gameManager.getGameByID(gameID);
             game.useMonopoly(playerIndex, resource);
@@ -350,7 +410,12 @@ public class ServerFacade implements IFacade {
      * @throws MonumentException
      */
     @Override
-    public GameModelDTO monument(int gameID, int playerIndex) throws MonumentException {
+    public GameModelDTO monument(final int gameID, final int playerIndex) throws MonumentException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             gameManager.getGameByID(gameID).useMonument(playerIndex);
             return gameManager.getGameByID(gameID).getDTO();
@@ -369,19 +434,21 @@ public class ServerFacade implements IFacade {
      * @throws BuildRoadException
      */
     @Override
-    public GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
+    public CommandExecutionResult buildRoad(final int gameID, final int player, final EdgeLocation location) throws BuildRoadException {
         assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
+        assert player < 4;
         assert location != null;
 
-        Game game = gameManager.getGameByID(gameID);
+        final Game game = gameManager.getGameByID(gameID);
         try {
             if(game.canInitiateRoad(player, location)) {
                 game.initiateRoad(player, location);
             } else if(game.canBuildRoad(player, location)) {
                 game.buildRoad(player, location);
             }
-            return game.getDTO();
+            return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildRoadException(e.getMessage());
         }
@@ -396,12 +463,14 @@ public class ServerFacade implements IFacade {
      * @throws BuildSettlementException
      */
     @Override
-    public GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
+    public GameModelDTO buildSettlement(final int gameID, final int player, final VertexLocation location) throws BuildSettlementException {
         assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
+        assert player < 4;
         assert location != null;
 
-        Game game = gameManager.getGameByID(gameID);
+        final Game game = gameManager.getGameByID(gameID);
         try {
             if(game.canInitiateSettlement(player, location)) {
                 game.initiateSettlement(player, location);
@@ -424,17 +493,19 @@ public class ServerFacade implements IFacade {
      * @throws BuildCityException
      */
     @Override
-    public GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+    public CommandExecutionResult buildCity(final int gameID, final int player, final VertexLocation location) throws BuildCityException {
         assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
+        assert player < 4;
         assert location != null;
 
-        Game game = gameManager.getGameByID(gameID);
+        final Game game = gameManager.getGameByID(gameID);
         try {
             if(game.canBuildCity(player, location)) {
                 game.buildCity(player, location);
             }
-            return game.getDTO();
+            return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildCityException(e.getMessage());
         }
@@ -446,12 +517,16 @@ public class ServerFacade implements IFacade {
      * @throws OfferTradeException
      */
     @Override
-    public GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
-        int sender = dto.getSender();
-        int receiver = dto.getReceiver();
-        Trade offer = dto.getOffer();
-        List<ResourceType> send = offer.getPackage1().getResources();
-        List<ResourceType> receive = offer.getPackage2().getResources();
+    public GameModelDTO offerTrade(final int gameID, final OfferTradeDTO dto) throws OfferTradeException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert dto != null;
+
+        final int sender = dto.getSender();
+        final int receiver = dto.getReceiver();
+        final Trade offer = dto.getOffer();
+        final List<ResourceType> send = offer.getPackage1().getResources();
+        final List<ResourceType> receive = offer.getPackage2().getResources();
         try {
             gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
             return gameManager.getGameByID(gameID).getDTO();
@@ -468,7 +543,12 @@ public class ServerFacade implements IFacade {
      * @throws AcceptTradeException
      */
     @Override
-    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+    public GameModelDTO acceptTrade(final int gameID, final int player, final boolean willAccept) throws AcceptTradeException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert player >= 0;
+        assert player < 4;
+
         try {
             gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
             return gameManager.getGameByID(gameID).getDTO();
@@ -483,13 +563,14 @@ public class ServerFacade implements IFacade {
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+    public void maritimeTrade(final int gameID, final MaritimeTradeDTO dto) throws MaritimeTradeException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert dto != null;
+
         try {
             gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), convert(dto.getInputResource()), convert(dto.getOutputResource()));
-        }catch(InvalidPlayerException e){}
-        catch(InvalidTypeException e){}
-        catch(InsufficientResourcesException e){}
-        catch(PlayerExistsException e){}
+        } catch(InvalidPlayerException | InsufficientResourcesException | InvalidTypeException | PlayerExistsException ignored){}
     }
 
     /**
@@ -498,13 +579,27 @@ public class ServerFacade implements IFacade {
      * @throws DiscardCardsException
      */
     @Override
-    public GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
-        List<ResourceType> cards = new ArrayList<>();
-        for(int i=0; i<dto.getBrickCount(); i++){cards.add(ResourceType.BRICK);}
-        for(int i=0; i<dto.getWoodCount(); i++){cards.add(ResourceType.WOOD);}
-        for(int i=0; i<dto.getOreCount(); i++){cards.add(ResourceType.ORE);}
-        for(int i=0; i<dto.getWheatCount(); i++){cards.add(ResourceType.WHEAT);}
-        for(int i=0; i<dto.getSheepCount(); i++){cards.add(ResourceType.SHEEP);}
+    public GameModelDTO discardCards(final int gameID, final DiscardCardsDTO dto) throws DiscardCardsException {
+        assert gameID >= 0;
+        assert gameID < this.gameManager.getNumGames();
+        assert dto != null;
+
+        final List<ResourceType> cards = new ArrayList<>();
+        for(int i = 0; i < dto.getBrickCount(); i++) {
+            cards.add(ResourceType.BRICK);
+        }
+        for(int i = 0; i < dto.getWoodCount(); i++) {
+            cards.add(ResourceType.WOOD);
+        }
+        for(int i = 0; i < dto.getOreCount(); i++) {
+            cards.add(ResourceType.ORE);
+        }
+        for(int i = 0; i < dto.getWheatCount(); i++) {
+            cards.add(ResourceType.WHEAT);
+        }
+        for(int i = 0; i < dto.getSheepCount(); i++) {
+            cards.add(ResourceType.SHEEP);
+        }
         try {
             gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
             return gameManager.getGameByID(gameID).getDTO();
@@ -513,8 +608,10 @@ public class ServerFacade implements IFacade {
         }
     }
 
-    private ResourceType convert(String type){
-        switch(type){
+    private ResourceType convert(final String type) {
+        assert type != null;
+
+        switch(type) {
             case "brick":
                 return ResourceType.BRICK;
             case "wood":

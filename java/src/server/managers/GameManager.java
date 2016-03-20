@@ -35,6 +35,10 @@ public class GameManager {
         return games.values();
     }
 
+    public int getNumGames() {
+        return this.games.size();
+    }
+
     public void addGame(final Game game) {
         games.put(game.getId(), game);
     }

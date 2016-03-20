@@ -1,6 +1,7 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
+import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
@@ -244,7 +245,7 @@ public class MockFacade implements IFacade {
      * @throws BuildRoadException
      */
     @Override
-    public GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
+    public CommandExecutionResult buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
         return null;
     }
 
@@ -268,11 +269,11 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player   index of the player
      * @param location
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws BuildCityException
      */
     @Override
-    public GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
+    public CommandExecutionResult buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
         return null;
     }
 

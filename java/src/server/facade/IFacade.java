@@ -1,6 +1,7 @@
 package server.facade;
 
 import com.google.gson.JsonObject;
+import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
@@ -168,10 +169,10 @@ public interface IFacade {
      * Builds a road
      * @param player index of the player
      * @param location
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws BuildRoadException
      */
-    GameModelDTO buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException;
+    CommandExecutionResult buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException;
 
     /**
      * Builds a settlement
@@ -190,7 +191,7 @@ public interface IFacade {
      * @return GameModelDTO
      * @throws BuildCityException
      */
-    GameModelDTO buildCity(int gameID, int player, VertexLocation location) throws BuildCityException;
+    CommandExecutionResult buildCity(int gameID, int player, VertexLocation location) throws BuildCityException;
 
     /**
      * Offers a trade to the specified player
