@@ -1,6 +1,7 @@
 package server.controllers;
 
 import com.google.gson.JsonObject;
+import server.commands.CommandExecutionResult;
 import server.exceptions.CommandExecutionFailedException;
 import server.factories.UserCommandFactory;
 import shared.dto.AuthDTO;
@@ -10,7 +11,7 @@ import shared.dto.AuthDTO;
  */
 public class UserController {
 
-    public static JsonObject login(final AuthDTO dto) {
+    public static CommandExecutionResult login(final AuthDTO dto) {
         try {
             return UserCommandFactory.getInstance().createCommand(dto).execute().toJSON();
         } catch (CommandExecutionFailedException e) {

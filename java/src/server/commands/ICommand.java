@@ -1,14 +1,12 @@
 package server.commands;
 
-import shared.dto.IDTO;
-
 import server.exceptions.CommandExecutionFailedException;
 
 /**
  * A parent interface for all command objects.  The execute function in each implementation of this interface will
  * carry out a task in the server to get the desires information.
  *
- * Created by Danny Harding on 3/9/16.
+ * @author Danny Harding
  */
 public interface ICommand {
 

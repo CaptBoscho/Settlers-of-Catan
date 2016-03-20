@@ -1,6 +1,7 @@
 package server.commands;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is a transportation object to store the result of command executions.
@@ -11,15 +12,25 @@ import java.util.List;
  * @author Derek Argueta
  */
 public class CommandExecutionResult {
-    private List<String> newCookies;
+    private Map<String, String> newCookies;
     private String body;
 
-    public CommandExecutionResult(final String info) {
-        body = info;
+    public CommandExecutionResult() {
+        this.newCookies = new HashMap<>();
+        this.body = "";
     }
 
-    public List<String> getNewCookies() {
+    public CommandExecutionResult(final String info) {
+        this.newCookies = new HashMap<>();
+        this.body = info;
+    }
+
+    public Map<String, String> getNewCookies() {
         return this.newCookies;
+    }
+
+    public void addCookie(String key, String value) {
+        this.newCookies.put(key, value);
     }
 
     public String getBody() {

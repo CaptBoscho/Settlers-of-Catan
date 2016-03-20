@@ -1,8 +1,8 @@
 package server.managers;
 
-import shared.model.player.Player;
+import client.data.PlayerInfo;
 
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * This class maintains a list of users. A user is defined as being a unique username/password
@@ -11,13 +11,22 @@ import java.util.List;
  * @author Derek Argueta
  */
 public class UserManager {
-    private List<Player> users;
+    private HashMap<String, String> users;
     private static UserManager instance;
 
-    public UserManager getInstance() {
+    public static UserManager getInstance() {
         if(instance == null) {
             instance = new UserManager();
         }
         return instance;
+    }
+
+    public boolean addUser(final String username, final String password) {
+
+        // check if user already exists
+        if(users.containsKey(username)) return false;
+
+        users.put(username, password);
+        return true;
     }
 }

@@ -33,6 +33,12 @@ public final class SendChatDTO implements IDTO, JsonSerializable {
         this.content = content;
     }
 
+    public SendChatDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.content = obj.get(kContent).getAsString();
+    }
+
     public int getPlayerIndex(){
         return this.playerIndex;
     }
