@@ -1,7 +1,7 @@
 package server.controllers;
 
 import server.commands.CommandExecutionResult;
-import server.factories.MovesCommandFactory;
+import server.factories.GameCommandFactory;
 import shared.dto.AddAIDTO;
 import shared.dto.GameModelDTO;
 import shared.dto.ListAIDTO;
@@ -13,7 +13,7 @@ public class GameController {
 
     public static CommandExecutionResult getModel(final GameModelDTO dto) {
         try {
-            return MovesCommandFactory.getInstance().executeCommand("model", dto);
+            return GameCommandFactory.getInstance().executeCommand("model", dto);
         } catch (Exception e) {
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong getting the model :(");
             result.triggerError(500);
@@ -23,7 +23,7 @@ public class GameController {
 
     public static CommandExecutionResult addAI(final AddAIDTO dto) {
         try {
-            return MovesCommandFactory.getInstance().executeCommand("addAI", dto);
+            return GameCommandFactory.getInstance().executeCommand("addAI", dto);
         } catch (Exception e) {
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong adding an AI :(");
             result.triggerError(500);
@@ -33,7 +33,7 @@ public class GameController {
 
     public static CommandExecutionResult listAI(final ListAIDTO dto) {
         try {
-            return MovesCommandFactory.getInstance().executeCommand("listAI", dto);
+            return GameCommandFactory.getInstance().executeCommand("listAI", dto);
         } catch (Exception e) {
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong listing the AI :(");
             result.triggerError(500);
