@@ -6,8 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
 import shared.dto.*;
-import shared.model.game.Game;
-import shared.model.player.Player;
 import shared.model.player.PlayerManager;
 
 import java.util.List;
@@ -79,6 +77,7 @@ public final class ServerProxy implements IServer {
         String url = Utils.buildUrl(this.host, this.port) + "/user/register";
         String result = Utils.sendPost(url, auth.toJSON());
         assert result != null;
+        System.out.println(result);
         return result.equals("Success");
     }
 

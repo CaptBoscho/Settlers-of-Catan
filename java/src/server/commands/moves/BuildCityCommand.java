@@ -4,7 +4,6 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuildCityException;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
 import server.main.Config;
 import shared.dto.BuildCityDTO;
 import shared.dto.IDTO;

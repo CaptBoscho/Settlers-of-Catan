@@ -1,11 +1,12 @@
 package server.facade;
 
-import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
-import shared.dto.*;
+import shared.dto.DiscardCardsDTO;
+import shared.dto.MaritimeTradeDTO;
+import shared.dto.OfferTradeDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -22,10 +23,11 @@ public class MockFacade implements IFacade {
      * @param username
      * @param password
      * @throws LoginException
+     * @return CommandExecutionResult
      */
     @Override
-    public void login(String username, String password) throws LoginException {
-
+    public CommandExecutionResult login(String username, String password) throws LoginException {
+        return null;
     }
 
     /**
@@ -34,10 +36,11 @@ public class MockFacade implements IFacade {
      * @param username
      * @param password
      * @throws RegisterException
+     * @return CommandExecutionResult
      */
     @Override
-    public void register(String username, String password) throws RegisterException {
-
+    public CommandExecutionResult register(String username, String password) throws RegisterException {
+        return null;
     }
 
     /**
@@ -46,9 +49,10 @@ public class MockFacade implements IFacade {
      * @param gameId
      * @param type
      * @throws AddAIException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO addAI(int gameId, AIType type) throws AddAIException {
+    public CommandExecutionResult addAI(int gameId, AIType type) throws AddAIException {
         return null;
     }
 
@@ -59,18 +63,18 @@ public class MockFacade implements IFacade {
      * @throws ListAIException
      */
     @Override
-    public ListAIDTO listAI(int gameId) throws ListAIException {
+    public CommandExecutionResult listAI(int gameId) throws ListAIException {
         return null;
     }
 
     /**
      * List the current games
      *
-     * @return info on the current games
+     * @return CommandExecutionResult
      * @throws ListException
      */
     @Override
-    public JsonObject list() throws ListException {
+    public CommandExecutionResult list() throws ListException {
         return null;
     }
 
@@ -81,11 +85,11 @@ public class MockFacade implements IFacade {
      * @param randomTiles
      * @param randomNumbers
      * @param randomPorts
-     * @return
+     * @return CommandExecutionResult
      * @throws CreateGameException
      */
     @Override
-    public JsonObject create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws CreateGameException {
+    public CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws CreateGameException {
         return null;
     }
 
@@ -95,10 +99,11 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param color
      * @throws JoinGameException
+     * @return CommandExecutionResult
      */
     @Override
-    public void join(int gameID, CatanColor color) throws JoinGameException {
-
+    public CommandExecutionResult join(int gameID, CatanColor color) throws JoinGameException {
+        return null;
     }
 
     /**
@@ -108,9 +113,10 @@ public class MockFacade implements IFacade {
      * @param player  index of the player
      * @param message
      * @throws SendChatException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException {
+    public CommandExecutionResult sendChat(int gameID, int player, String message) throws SendChatException {
         return null;
     }
 
@@ -121,9 +127,10 @@ public class MockFacade implements IFacade {
      * @param player index of the player
      * @param value
      * @throws RollNumberException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
+    public CommandExecutionResult rollNumber(int gameID, int player, int value) throws RollNumberException {
         return null;
     }
 
@@ -134,11 +141,11 @@ public class MockFacade implements IFacade {
      * @param player index of the player robbing
      * @param newLocation
      * @param victim index of the player being robbed
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws RobPlayerException
      */
     @Override
-    public GameModelDTO robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
+    public CommandExecutionResult robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
         return null;
     }
 
@@ -148,9 +155,10 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @throws FinishTurnException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException {
+    public CommandExecutionResult finishTurn(int gameID, int player) throws FinishTurnException {
         return null;
     }
 
@@ -160,9 +168,10 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @throws BuyDevCardException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO buyDevCard(int gameID, int player) throws BuyDevCardException {
+    public CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException {
         return null;
     }
 
@@ -174,9 +183,10 @@ public class MockFacade implements IFacade {
      * @param resourceOne first resource to receive
      * @param resourceTwo second resource to receive
      * @throws YearOfPlentyException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+    public CommandExecutionResult yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
         return null;
     }
 
@@ -187,11 +197,11 @@ public class MockFacade implements IFacade {
      * @param player      index of the player
      * @param locationOne location for the first road
      * @param locationTwo location for the second road
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws RoadBuildingException
      */
     @Override
-    public GameModelDTO roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public CommandExecutionResult roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
         return null;
     }
 
@@ -202,11 +212,11 @@ public class MockFacade implements IFacade {
      * @param player      index of the player
      * @param newLocation
      * @param victim index of the player being robbed
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws SoldierException
      */
     @Override
-    public GameModelDTO soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
+    public CommandExecutionResult soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
         return null;
     }
 
@@ -217,9 +227,10 @@ public class MockFacade implements IFacade {
      * @param player   index of the player
      * @param resource resource to take
      * @throws MonopolyException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
+    public CommandExecutionResult monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
         return null;
     }
 
@@ -229,9 +240,10 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @throws MonumentException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO monument(int gameID, int player) throws MonumentException {
+    public CommandExecutionResult monument(int gameID, int player) throws MonumentException {
         return null;
     }
 
@@ -241,7 +253,7 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @param location
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws BuildRoadException
      */
     @Override
@@ -255,11 +267,11 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @param location
-     * @return GameModelDTO
+     * @return CommandExecutionResult
      * @throws BuildSettlementException
      */
     @Override
-    public GameModelDTO buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
+    public CommandExecutionResult buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
         return null;
     }
 
@@ -283,9 +295,10 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param dto
      * @throws OfferTradeException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
+    public CommandExecutionResult offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
         return null;
     }
 
@@ -296,9 +309,10 @@ public class MockFacade implements IFacade {
      * @param player     index of the player accepting the trade
      * @param willAccept whether or not the player accepts
      * @throws AcceptTradeException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
+    public CommandExecutionResult acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
         return null;
     }
 
@@ -310,8 +324,8 @@ public class MockFacade implements IFacade {
      * @throws MaritimeTradeException
      */
     @Override
-    public void maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
-
+    public CommandExecutionResult maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+        return null;
     }
 
     /**
@@ -320,9 +334,10 @@ public class MockFacade implements IFacade {
      * @param gameID
      * @param dto
      * @throws DiscardCardsException
+     * @return CommandExecutionResult
      */
     @Override
-    public GameModelDTO discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+    public CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
         return null;
     }
 }
