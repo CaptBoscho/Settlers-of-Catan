@@ -37,6 +37,10 @@ public class CommandExecutionResult {
         this.newCookies.put(key, value);
     }
 
+    public int getStatus() {
+        return this.status;
+    }
+
     public String getBody() {
         return this.body;
     }

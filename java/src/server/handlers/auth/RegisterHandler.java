@@ -21,10 +21,15 @@ public class RegisterHandler implements Route {
             return "Invalid request.";
         }
 
-        response.status(200);
+
+        CommandExecutionResult result = UserController.register(new AuthDTO(request.body()));
+        if(result.errorOccurred()) {
+            response.status(result.getStatus());
+        } else {
+            response.status(200);
+        }
 
         // set any new cookies
-        CommandExecutionResult result = UserController.register(new AuthDTO(request.body()));
         if(result.hasNewCookies()) {
             Map<String, String> cookies = result.getNewCookies();
             for(String key : cookies.keySet()) {
