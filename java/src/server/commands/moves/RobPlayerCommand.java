@@ -4,7 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RobPlayerException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.RobPlayerDTO;
 
@@ -15,7 +15,6 @@ import shared.dto.RobPlayerDTO;
  */
 public class RobPlayerCommand implements ICommand {
 
-    private IFacade facade;
     private RobPlayerDTO dto;
 
     /**
@@ -24,17 +23,16 @@ public class RobPlayerCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.robPlayer(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
-//        } catch (RobPlayerException e) {
-//            throw new CommandExecutionFailedException(e.getMessage());
-//        }
-        return null;
+        try {
+            return Config.facade.robPlayer(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
+        } catch (RobPlayerException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (RobPlayerDTO)dto;
     }
 
 }

@@ -4,6 +4,7 @@ package server.commands.game;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import shared.dto.IDTO;
+import shared.dto.ListAIDTO;
 
 /**
  * A command object that list the AI
@@ -11,6 +12,8 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class ListAICommand implements ICommand {
+
+    private ListAIDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the List AI command
@@ -24,7 +27,7 @@ public class ListAICommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (ListAIDTO)dto;
     }
 
 }

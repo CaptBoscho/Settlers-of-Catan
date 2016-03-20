@@ -4,7 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuildSettlementException;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.BuildSettlementDTO;
 import shared.dto.IDTO;
 
@@ -15,7 +15,6 @@ import shared.dto.IDTO;
  */
 public class BuildSettlementCommand implements ICommand {
 
-    private IFacade facade;
     private BuildSettlementDTO dto;
 
     /**
@@ -24,17 +23,16 @@ public class BuildSettlementCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.buildSettlement(1, dto.getPlayerIndex(), dto.getLocation());
-//        } catch (BuildSettlementException e) {
-//            throw new CommandExecutionFailedException(e.getMessage());
-//        }
-        return null;
+        try {
+            return Config.facade.buildSettlement(1, dto.getPlayerIndex(), dto.getLocation());
+        } catch (BuildSettlementException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (BuildSettlementDTO)dto;
     }
 
 }

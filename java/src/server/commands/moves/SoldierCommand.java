@@ -3,9 +3,8 @@ package server.commands.moves;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
-import server.exceptions.RobPlayerException;
 import server.exceptions.SoldierException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.PlaySoldierCardDTO;
 
@@ -16,7 +15,6 @@ import shared.dto.PlaySoldierCardDTO;
  */
 public class SoldierCommand implements ICommand {
 
-    private IFacade facade;
     private PlaySoldierCardDTO dto;
 
     /**
@@ -25,17 +23,16 @@ public class SoldierCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.soldier(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
-//        } catch (SoldierException e) {
-//            throw new CommandExecutionFailedException(e.getMessage());
-//        }
-        return null;
+        try {
+            return Config.facade.soldier(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
+        } catch (SoldierException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (PlaySoldierCardDTO)dto;
     }
 
 }

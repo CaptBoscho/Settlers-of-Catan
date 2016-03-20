@@ -4,7 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.SendChatException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.SendChatDTO;
 
@@ -14,15 +14,8 @@ import shared.dto.SendChatDTO;
  * @author Joel Bradley
  */
 public class SendChatCommand implements ICommand {
-    private IFacade facade;
+
     private SendChatDTO dto;
-    /**
-     * Constructor
-     */
-    public SendChatCommand() {
-        this.facade = facade;
-        this.dto = dto;
-    }
 
     /**
      * Communicates with the ServerFacade to carry out the Send Chat command
@@ -30,17 +23,15 @@ public class SendChatCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.sendChat(1, dto.getPlayerIndex(), dto.getContent());
-//        } catch (SendChatException e) {
-//            e.printStackTrace();
-//            throw new CommandExecutionFailedException("Failed to send the chat!");
-//        }
-        return null;
+        try {
+            return Config.facade.sendChat(1, dto.getPlayerIndex(), dto.getContent());
+        } catch (SendChatException e) {
+            throw new CommandExecutionFailedException("Failed to send the chat!");
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (SendChatDTO)dto;
     }
 }

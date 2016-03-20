@@ -4,7 +4,6 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuildRoadException;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
 import server.main.Config;
 import shared.dto.BuildRoadDTO;
 import shared.dto.IDTO;
@@ -33,7 +32,7 @@ public class BuildRoadCommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (BuildRoadDTO)dto;
     }
 
 }

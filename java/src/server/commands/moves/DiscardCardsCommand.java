@@ -4,9 +4,8 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.DiscardCardsException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.DiscardCardsDTO;
-import shared.dto.GameModelDTO;
 import shared.dto.IDTO;
 
 /**
@@ -17,7 +16,6 @@ import shared.dto.IDTO;
 public class DiscardCardsCommand implements ICommand {
 
     DiscardCardsDTO dto;
-    IFacade facade;
 
     /**
      * Communicates with the ServerFacade to carry out the Discard Cards command
@@ -25,16 +23,15 @@ public class DiscardCardsCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.discardCards(1, dto);
-//        }catch(DiscardCardsException e){
-//            throw new CommandExecutionFailedException(e.getMessage());
-//        }
-        return null;
+        try {
+            return Config.facade.discardCards(1, dto);
+        }catch(DiscardCardsException e){
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (DiscardCardsDTO)dto;
     }
 }

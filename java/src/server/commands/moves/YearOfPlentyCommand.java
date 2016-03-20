@@ -2,12 +2,10 @@ package server.commands.moves;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
-import shared.dto.IDTO;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.YearOfPlentyException;
-import server.facade.IFacade;
-import server.facade.ServerFacade;
-import shared.dto.GameModelDTO;
+import server.main.Config;
+import shared.dto.IDTO;
 import shared.dto.PlayYOPCardDTO;
 
 /**
@@ -18,7 +16,6 @@ import shared.dto.PlayYOPCardDTO;
 public class YearOfPlentyCommand implements ICommand {
 
     PlayYOPCardDTO dto;
-    IFacade facade;
 
     /**
      * Communicates with the ServerFacade to carry out the YearOfPlenty command
@@ -26,18 +23,16 @@ public class YearOfPlentyCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return ServerFacade.getInstance().yearOfPlenty(1, dto.getPlayerIndex(), dto.getResource1(), dto.getResource2());
-//        } catch (YearOfPlentyException e) {
-//            e.printStackTrace();
-//            throw new CommandExecutionFailedException("YearOfPlentyCommand failed to execute properly");
-//        }
-        return null;
+        try {
+            return Config.facade.yearOfPlenty(1, dto.getPlayerIndex(), dto.getResource1(), dto.getResource2());
+        } catch (YearOfPlentyException e) {
+            throw new CommandExecutionFailedException("YearOfPlentyCommand failed to execute properly");
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (PlayYOPCardDTO)dto;
     }
 
 }
