@@ -196,8 +196,8 @@ public class ServerFacade implements IFacade {
         final Game game = this.gameManager.getGameByID(gameID);
 
         if(game.canAddPlayer()) {
-            Player newPlayer = new Player(0, color, );
-            game.getPlayerManager().addPlayer();
+//            Player newPlayer = new Player(0, color, );
+//            game.getPlayerManager().addPlayer();
         }
 
         //TODO: make this method work fool

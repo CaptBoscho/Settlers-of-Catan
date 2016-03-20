@@ -27,7 +27,7 @@ public class RegisterCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() {
         if(UserManager.getInstance().addUser(this.username, this.password)) {
-            final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username))
+            final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
             CommandExecutionResult result = new CommandExecutionResult("Success");
             result.addCookie("name", username);
             result.addCookie("password", password);
