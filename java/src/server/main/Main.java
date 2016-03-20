@@ -1,19 +1,18 @@
 package server.main;
 
 import server.facade.ServerFacade;
+import server.handlers.Handlers;
 import server.handlers.auth.LoginHandler;
 import server.handlers.auth.RegisterHandler;
 import server.handlers.game.AddAIHandler;
 import server.handlers.game.ListAIHandler;
 import server.handlers.game.ModelHandler;
-import server.handlers.games.ListGamesHandler;
-import server.handlers.moves.*;
 import server.handlers.games.CreateHandler;
 import server.handlers.games.JoinHandler;
+import server.handlers.games.ListGamesHandler;
+import server.handlers.moves.*;
 
-import static spark.Spark.port;
-import static spark.Spark.post;
-import static spark.Spark.get;
+import static spark.Spark.*;
 
 /**
  * @author Derek Argueta
@@ -39,6 +38,11 @@ public class Main {
             res.type("application/json");
             return "{\"Hello\": \"World!\"}";
         });
+
+        ////////// Swagger Requests ////////////
+        get("/docs/api/data", new Handlers.JSONAppender(System.getProperty("user.dir") + "/demo/"));
+        get("/docs/api/data/*", new Handlers.JSONAppender(System.getProperty("user.dir") + "/demo/"));
+        get("/docs/api/view/*", new Handlers.BasicFile(System.getProperty("user.dir") + "/demo/"));
 
         ////////// User HTTP Requests //////////
         post("/user/login", new LoginHandler());
