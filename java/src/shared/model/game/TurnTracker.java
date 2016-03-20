@@ -40,7 +40,7 @@ public final class TurnTracker {
      *
      * @param json The JSON being used to build the object
      */
-    public TurnTracker(JsonObject json) throws BadJsonException {
+    public TurnTracker(final JsonObject json) throws BadJsonException {
         assert json.has("currentTurn");
         assert json.has("status");
 
@@ -215,7 +215,7 @@ public final class TurnTracker {
      * Set the current phase
      * @param phase
      */
-    public void setPhase(Phase phase) {
+    public void setPhase(final Phase phase) {
         assert phase != null;
 
         this.phase = phase;

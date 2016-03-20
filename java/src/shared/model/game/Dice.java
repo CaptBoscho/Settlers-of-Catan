@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by corne on 2/17/2016.
+ * @author Kyle Cornelison
  *
  * Representation of Game Dice
  */
@@ -19,7 +19,7 @@ public class Dice {
         assert diceCount > 0;
 
         //Init List
-        dice = new ArrayList<Die>();
+        dice = new ArrayList<>();
 
         //Create diceCount die
         for(int i = 0; i < diceCount; i++){

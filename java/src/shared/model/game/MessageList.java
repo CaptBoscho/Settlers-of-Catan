@@ -26,7 +26,7 @@ public final class MessageList implements JsonSerializable {
         makeMessageLog(gs.fromJson(js.getAsJsonArray("lines"), JsonArray.class));
     }
 
-    public void addMessage(MessageLine m) {
+    public void addMessage(final MessageLine m) {
         assert m != null;
         assert m.getMessage() != null;
         assert m.getMessage().length() > 0;
@@ -34,7 +34,7 @@ public final class MessageList implements JsonSerializable {
         chat.add(m);
     }
 
-    private void makeMessageLog(JsonArray jarray) {
+    private void makeMessageLog(final JsonArray jarray) {
         assert jarray != null;
 
         for (JsonElement je: jarray){
@@ -49,10 +49,10 @@ public final class MessageList implements JsonSerializable {
 
     @Override
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
-        JsonArray array = new JsonArray();
+        final JsonObject json = new JsonObject();
+        final JsonArray array = new JsonArray();
         for(MessageLine line : chat){
-            JsonObject item = new JsonObject();
+            final JsonObject item = new JsonObject();
             item.addProperty("message",line.getMessage());
             item.addProperty("source",line.getPlayer());
             array.add(item);

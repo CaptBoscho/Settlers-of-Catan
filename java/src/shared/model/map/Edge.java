@@ -18,7 +18,7 @@ public final class Edge {
      * Default constructor for an edge
      * @param edgeLoc EdgeLocation
      */
-    public Edge(EdgeLocation edgeLoc) {
+    public Edge(final EdgeLocation edgeLoc) {
         assert edgeLoc != null;
 
         this.edgeLoc = edgeLoc;
@@ -37,7 +37,7 @@ public final class Edge {
         return road;
     }
 
-    public void setRoad(Road road) {
+    public void setRoad(final Road road) {
         this.road = road;
     }
 
