@@ -13,7 +13,7 @@ public class ListGamesHandler implements Route {
     @Override
     public Object handle(Request request, Response response)  {
         try {
-            return GamesController.listCommand();
+            return GamesController.listGame();
         } catch (Exception e) {
             e.printStackTrace();
             response.status(500);
