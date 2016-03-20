@@ -20,7 +20,7 @@ public class HexLocationTests {
 
         final HexLocation loc = new HexLocation(obj);
         assertEquals(loc.getX(), 2);
-        assertEquals(loc.getY(), 4);
+        assertEquals(loc.getY(), 2);
     }
 
     /**

@@ -32,6 +32,10 @@ public final class FinishTurnDTO implements IDTO,JsonSerializable {
         this.playerIndex = obj.get(kPlayerIndex).getAsInt();
     }
 
+    public int getPlayerIndex(){
+        return this.playerIndex;
+    }
+
     /**
      * Converts the object to JSON
      *

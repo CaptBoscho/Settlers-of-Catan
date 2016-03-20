@@ -39,4 +39,8 @@ public final class PlayMonumentDTO implements IDTO,JsonSerializable {
         obj.addProperty(kPlayerIndex, this.playerIndex);
         return obj;
     }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
 }

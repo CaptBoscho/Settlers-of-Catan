@@ -35,25 +35,26 @@ public class MovesCommandFactory {
 
     public ICommand createCommand(IDTO dto) {
         if (dto instanceof FinishTurnDTO) {
-
+            return new FinishTurnCommand(facade, (FinishTurnDTO)dto);
         } else if (dto instanceof SendChatDTO) {
-
+            return new SendChatCommand(facade, (SendChatDTO)dto);
         } else if (dto instanceof RollNumberDTO) {
-
+            RollNumberDTO roll = (RollNumberDTO)dto;
+            return new RollNumberCommand(facade, roll);
         } else if (dto instanceof RobPlayerDTO) {
             return new RobPlayerCommand(facade, (RobPlayerDTO)dto);
         } else if (dto instanceof BuyDevCardDTO) {
             return new BuyDevCardCommand((BuyDevCardDTO)dto, facade);
         } else if (dto instanceof PlayYOPCardDTO) {
-
+            return new YearOfPlentyCommand((PlayYOPCardDTO)dto, facade);
         } else if (dto instanceof RoadBuildingDTO) {
             return new RoadBuildingCommand(facade, (RoadBuildingDTO)dto);
         } else if (dto instanceof PlayMonopolyDTO) {
-
+            return new MonopolyCommand((PlayMonopolyDTO)dto, facade);
         } else if (dto instanceof PlaySoldierCardDTO) {
             return new SoldierCommand(facade, (PlaySoldierCardDTO) dto);
         } else if (dto instanceof PlayMonumentDTO) {
-
+            return new MonumentCommand((PlayMonumentDTO)dto, facade);
         } else if (dto instanceof BuildRoadDTO) {
             return new BuildRoadCommand(facade, (BuildRoadDTO)dto);
         } else if(dto instanceof BuildSettlementDTO) {

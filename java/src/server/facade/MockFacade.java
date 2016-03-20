@@ -110,8 +110,8 @@ public class MockFacade implements IFacade {
      * @throws SendChatException
      */
     @Override
-    public void sendChat(int gameID, int player, String message) throws SendChatException {
-
+    public GameModelDTO sendChat(int gameID, int player, String message) throws SendChatException {
+        return null;
     }
 
     /**
@@ -123,8 +123,8 @@ public class MockFacade implements IFacade {
      * @throws RollNumberException
      */
     @Override
-    public void rollNumber(int gameID, int player, int value) throws RollNumberException {
-
+    public GameModelDTO rollNumber(int gameID, int player, int value) throws RollNumberException {
+        return null;
     }
 
     /**
@@ -150,8 +150,8 @@ public class MockFacade implements IFacade {
      * @throws FinishTurnException
      */
     @Override
-    public void finishTurn(int gameID, int player) throws FinishTurnException {
-
+    public GameModelDTO finishTurn(int gameID, int player) throws FinishTurnException {
+        return null;
     }
 
     /**
@@ -176,8 +176,8 @@ public class MockFacade implements IFacade {
      * @throws YearOfPlentyException
      */
     @Override
-    public void yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
-
+    public GameModelDTO yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
+        return null;
     }
 
     /**
@@ -219,8 +219,8 @@ public class MockFacade implements IFacade {
      * @throws MonopolyException
      */
     @Override
-    public void monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
-
+    public GameModelDTO monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
+        return null;
     }
 
     /**
@@ -231,8 +231,8 @@ public class MockFacade implements IFacade {
      * @throws MonumentException
      */
     @Override
-    public void monument(int gameID, int player) throws MonumentException {
-
+    public GameModelDTO monument(int gameID, int player) throws MonumentException {
+        return null;
     }
 
     /**
