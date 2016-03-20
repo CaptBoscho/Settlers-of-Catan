@@ -22,7 +22,6 @@ public class ListCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
-
         Collection<Game> games = GameManager.getInstance().getAllGames();
         CommandExecutionResult result = new CommandExecutionResult(games.toString());
         return result;
@@ -30,6 +29,6 @@ public class ListCommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-
+        // -- not needed
     }
 }

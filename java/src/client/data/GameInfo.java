@@ -39,9 +39,13 @@ public final class GameInfo {
 		return id;
 	}
 	
-	public void setId(int id)
+	public void setId(final int id)
 	{
 		this.id = id;
+	}
+
+	public void setPlayers(final List<PlayerInfo> players) {
+		this.players = players;
 	}
 	
 	public String getTitle()
@@ -49,12 +53,12 @@ public final class GameInfo {
 		return title;
 	}
 	
-	public void setTitle(String title)
+	public void setTitle(final String title)
 	{
 		this.title = title;
 	}
 	
-	public void addPlayer(PlayerInfo newPlayer)
+	public void addPlayer(final PlayerInfo newPlayer)
 	{
 		players.add(newPlayer);
 	}

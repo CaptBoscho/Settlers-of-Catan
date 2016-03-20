@@ -1,12 +1,15 @@
 package server.facade;
 
+import client.data.GameInfo;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
+import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
+import shared.dto.ListGamesDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.*;
@@ -136,7 +139,10 @@ public class ServerFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult list() throws ListException {
-        return null;
+        final List<GameInfo> games = this.gameManager.getGamesInfos();
+        final ListGamesDTO dto = new ListGamesDTO(games);
+        final String jsonString = dto.toJSONArr().getAsString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -271,7 +277,7 @@ public class ServerFacade implements IFacade {
         assert player < 4;
 
         final Game game = gameManager.getGameByID(gameID);
-        if(game.canFinishTurn(player)){
+        if(game.canFinishTurn(player)) {
             try {
                 game.finishTurn(player);
                 return new CommandExecutionResult(game.getDTO().toJSON().getAsString());

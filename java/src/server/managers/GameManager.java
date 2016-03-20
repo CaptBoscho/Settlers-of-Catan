@@ -1,7 +1,9 @@
 package server.managers;
 
+import client.data.GameInfo;
 import shared.model.game.Game;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,18 @@ public class GameManager {
 
     public int getNumGames() {
         return this.games.size();
+    }
+
+    public List<GameInfo> getGamesInfos() {
+        List<GameInfo> infos = new ArrayList<>();
+        for(final Game game : this.games.values()) {
+            final GameInfo gameInfo = new GameInfo();
+            gameInfo.setId(game.getId());
+            gameInfo.setTitle(game.getTitle());
+            gameInfo.setPlayers(game.getPlayerInfos());
+            infos.add(gameInfo);
+        }
+        return infos;
     }
 
     public void addGame(final Game game) {

@@ -1,5 +1,6 @@
 package shared.model.game;
 
+import client.data.PlayerInfo;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
@@ -31,11 +32,12 @@ import java.util.*;
 
 /**
  * game class representing a Catan game
+ * TODO - implement title
  */
-
 public class Game extends Observable implements IGame, JsonSerializable {
     //region Member variables
     private int gameId;
+    private String title;
     private Map map;
     private TurnTracker turnTracker;
     private LongestRoad longestRoadCard;
@@ -308,6 +310,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canInitiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert vertex != null;
         assert this.turnTracker != null;
         assert this.map != null;
@@ -326,6 +329,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canBuildSettlement(int playerIndex, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert vertex != null;
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
@@ -348,6 +352,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canBuildCity(int playerIndex, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert vertex != null;
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
@@ -367,6 +372,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canInitiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert edge != null;
         assert this.turnTracker != null;
         assert this.map != null;
@@ -384,6 +390,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canBuildRoad(int playerIndex, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert edge != null;
         assert edge.getHexLoc() != null;
         assert edge.getDir() != null;
@@ -402,6 +409,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canDiscardCards(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return playerManager.canDiscardCards(playerIndex);
     }
@@ -416,6 +424,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canRollNumber(int playerIndex) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return turnTracker.isPlayersTurn(playerIndex) && turnTracker.canRoll();
     }
@@ -430,6 +439,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canOfferTrade(int playerIndex) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
     }
@@ -444,6 +454,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseYearOfPlenty(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
@@ -460,6 +471,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseRoadBuilding(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return playerManager.canUseRoadBuilder(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
     }
@@ -494,6 +506,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseSoldier(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return playerManager.canUseSoldier(playerIndex) && turnTracker.isPlayersTurn(playerIndex) && turnTracker.canPlay();
     }
@@ -508,6 +521,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseMonopoly(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return playerManager.canUseMonopoly(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
     }
@@ -522,6 +536,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canUseMonument(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return playerManager.canUseMonument(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex);
     }
@@ -537,6 +552,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canPlaceRobber(int playerIndex, HexLocation location) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return turnTracker.isPlayersTurn(playerIndex) && turnTracker.canUseRobber() && map.canMoveRobber(location);
     }
@@ -551,6 +567,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canBuyDevelopmentCard(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert this.playerManager != null;
         assert this.turnTracker != null;
 
@@ -569,6 +586,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canMaritimeTrade(int playerIndex, PortType port) throws InvalidPlayerException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert port != null;
 
         if(canTrade(playerIndex)){
@@ -591,6 +609,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public boolean canFinishTurn(int playerIndex) {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return turnTracker.isPlayersTurn(playerIndex);
     }
@@ -625,6 +644,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert vertex != null;
         assert this.map != null;
 
@@ -646,6 +666,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void buildSettlement(int playerIndex, VertexLocation vertex) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert vertex != null;
         assert vertex.getDir() != null;
         assert vertex.getHexLoc() != null;
@@ -670,6 +691,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert edge != null;
         assert this.map != null;
 
@@ -689,6 +711,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void buildRoad(int playerIndex, EdgeLocation edge) throws InvalidPlayerException, InvalidLocationException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert edge != null;
         assert edge.getHexLoc() != null;
         assert edge.getDir() != null;
@@ -881,7 +904,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void useSoldier(int playerIndex, int victimIndex, HexLocation location) throws MoveRobberException, InvalidTypeException, InsufficientResourcesException, PlayerExistsException, DevCardException, AlreadyRobbedException, InvalidLocationException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert victimIndex >= 0;
+        assert victimIndex < 4;
         assert this.playerManager != null;
         assert this.largestArmyCard != null;
         assert this.turnTracker != null;
@@ -904,7 +929,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * Cancels playing a soldier card
      * @param playerIndex
      */
-    public void cancelSoldierCard(int playerIndex){
+    public void cancelSoldierCard(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             SoldierCard sc = new SoldierCard();
             this.playerManager.addDevCard(playerIndex, sc);
@@ -920,8 +948,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param type
      */
     @Override
-    public void useMonopoly(int playerIndex, ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException {
+    public void useMonopoly(final int playerIndex, final ResourceType type) throws PlayerExistsException, DevCardException, InsufficientResourcesException, InvalidTypeException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert type != null;
 
         if(canUseMonopoly(playerIndex)) {
@@ -935,8 +964,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIndex Index of Player performing action
      */
     @Override
-    public void useMonument(int playerIndex) throws PlayerExistsException, DevCardException {
+    public void useMonument(final int playerIndex) throws PlayerExistsException, DevCardException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         if(canUseMonument(playerIndex)){
             playerManager.useMonument(playerIndex);
@@ -950,8 +980,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param location
      */
     @Override
-    public Set<Integer> placeRobber(int playerIndex, HexLocation location) throws AlreadyRobbedException, InvalidLocationException {
+    public Set<Integer> placeRobber(final int playerIndex, final HexLocation location) throws AlreadyRobbedException, InvalidLocationException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert location != null;
 
         return map.moveRobber(playerIndex, location);
@@ -1327,6 +1358,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public int getNumberResourceCards(int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return playerManager.getNumberResourceCards(playerIndex);
     }
@@ -1341,7 +1373,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws InvalidTypeException
      */
     @Override
-    public int amountOwnedResource(int playerID, ResourceType t) throws PlayerExistsException, InvalidTypeException {
+    public int amountOwnedResource(final int playerID, final ResourceType t) throws PlayerExistsException, InvalidTypeException {
         assert playerID >= 0;
         assert t != null;
 
@@ -1589,8 +1621,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      *
      * @param playerIndex Index of Player performing action
      */
-    public int rollDice(int playerIndex) throws InvalidDiceRollException {
+    public int rollDice(final int playerIndex) throws InvalidDiceRollException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         Dice dice = new Dice(2);
         int roll = dice.roll();
@@ -1614,8 +1647,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param index
      * @throws PlayerExistsException
      */
-    public void giveResource(ResourceCard card, int index) throws PlayerExistsException {
+    public void giveResource(final ResourceCard card, final int index) throws PlayerExistsException {
         assert card != null;
+        assert index >= 0;
+        assert index < 4;
 
         playerManager.addResource(index, card);
     }
@@ -1642,13 +1677,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIndex
      * @param type
      */
-    private void safeDrawCard(int playerIndex, ResourceType type){
+    private void safeDrawCard(final int playerIndex, final ResourceType type) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+        assert type != null;
+
         try {
             ResourceCard card = resourceCardBank.draw(type);
             playerManager.addResource(playerIndex, card);
-        } catch (InvalidTypeException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        } catch (InvalidTypeException | Exception e) {
             e.printStackTrace();
         }
     }
@@ -1676,13 +1713,29 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIDNew
      * @param roadSize
      */
-    private void setPlayerWithLongestRoad(int playerIDOld, int playerIDNew, int roadSize) {
+    private void setPlayerWithLongestRoad(final int playerIDOld, final int playerIDNew, final int roadSize) {
         assert playerIDNew >= 0;
         assert playerIDOld >= 0;
+        assert playerIDNew < 4;
+        assert playerIDOld < 4;
         assert roadSize >= 0;
         assert playerIDNew != playerIDOld;
 
         longestRoadCard.setOwner(playerIDNew, roadSize);
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public List<PlayerInfo> getPlayerInfos() {
+        List<PlayerInfo> infos = new ArrayList<>();
+        for(final Player p : this.getPlayers()) {
+            // TODO - fix last two booleans to actual values
+            final PlayerInfo tmpPlayerInfo = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), false, false);
+            infos.add(tmpPlayerInfo);
+        }
+        return infos;
     }
 
     public GameModelDTO getDTO() {
