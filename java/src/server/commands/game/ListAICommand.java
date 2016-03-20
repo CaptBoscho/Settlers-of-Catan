@@ -3,7 +3,6 @@ package server.commands.game;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
-import server.facade.IFacade;
 import shared.dto.IDTO;
 
 /**
@@ -12,11 +11,11 @@ import shared.dto.IDTO;
  * @author Joel Bradley
  */
 public class ListAICommand implements ICommand {
-    private IFacade facade;
 
     /**
      * Communicates with the ServerFacade to carry out the List AI command
-     * @return IDTO
+     *
+     * @return CommandExecutionResult
      */
     @Override
     public CommandExecutionResult execute() {
