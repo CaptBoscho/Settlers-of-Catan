@@ -30,32 +30,7 @@ public final class HexLocation implements JsonSerializable {
         assert json.has("y");
 
         x = json.get("x").getAsInt();
-
-		switch(x) {
-			case -3:
-				y = json.get("y").getAsInt() - 3;
-				break;
-			case -2:
-				y = json.get("y").getAsInt() - 2;
-				break;
-			case -1:
-				y = json.get("y").getAsInt() - 1;
-				break;
-			case 0:
-				y = json.get("y").getAsInt();
-				break;
-			case 1:
-				y = json.get("y").getAsInt() + 1;
-				break;
-			case 2:
-				y = json.get("y").getAsInt() + 2;
-				break;
-			case 3:
-				y = json.get("y").getAsInt() + 3;
-				break;
-			default:
-				break;
-		}
+		y = json.get("y").getAsInt();
     }
 	
 	public int getX() {

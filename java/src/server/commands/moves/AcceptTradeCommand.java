@@ -1,16 +1,11 @@
 package server.commands.moves;
 
-import client.services.CommandExecutionFailed;
 import server.commands.ICommand;
 import server.exceptions.AcceptTradeException;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
-import shared.dto.TradeOfferResponseDTO;
-import shared.exceptions.PlayerExistsException;
-import shared.model.bank.InvalidTypeException;
-
-import javax.naming.InsufficientResourcesException;
 import shared.dto.GameModelDTO;
+import shared.dto.TradeOfferResponseDTO;
 
 /**
  * A command object that accepts a trade

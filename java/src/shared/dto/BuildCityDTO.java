@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.locations.VertexLocation;
 import shared.model.JsonSerializable;
 
@@ -21,6 +22,12 @@ public final class BuildCityDTO implements IDTO, JsonSerializable {
     public BuildCityDTO(final int playerIndex, final VertexLocation location) {
         this.playerIndex = playerIndex;
         this.location = location;
+    }
+
+    public BuildCityDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.location = new VertexLocation(obj.get(kVertexLocation).getAsJsonObject());
     }
 
     public int getPlayerIndex() {

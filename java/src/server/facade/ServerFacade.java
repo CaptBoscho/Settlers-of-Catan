@@ -378,15 +378,13 @@ public class ServerFacade implements IFacade {
         try {
             if(game.canInitiateRoad(player, location)) {
                 game.initiateRoad(player, location);
-                return game.getDTO();
             } else if(game.canBuildRoad(player, location)) {
                 game.buildRoad(player, location);
-                return game.getDTO();
             }
+            return game.getDTO();
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildRoadException(e.getMessage());
         }
-        return null;
     }
 
     /**
@@ -407,15 +405,13 @@ public class ServerFacade implements IFacade {
         try {
             if(game.canInitiateSettlement(player, location)) {
                 game.initiateSettlement(player, location);
-                return game.getDTO();
             } else if(game.canBuildSettlement(player, location)) {
                 game.buildSettlement(player, location);
-                return game.getDTO();
             }
+            return game.getDTO();
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildSettlementException(e.getMessage());
         }
-        return null;
     }
 
     /**
@@ -437,12 +433,11 @@ public class ServerFacade implements IFacade {
         try {
             if(game.canBuildCity(player, location)) {
                 game.buildCity(player, location);
-                return game.getDTO();
             }
+            return game.getDTO();
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildCityException(e.getMessage());
         }
-        return null;
     }
 
     /**

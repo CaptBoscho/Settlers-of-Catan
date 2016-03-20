@@ -1,6 +1,7 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
 /**
@@ -8,6 +9,12 @@ import shared.model.JsonSerializable;
  */
 public final class RollNumberDTO implements IDTO,JsonSerializable {
 
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kPlayerIndex = "playerIndex";
+    private static final String kNumber = "number";
+
+    // -- class members
     private int playerIndex;
     private int numberRolled;
 
@@ -17,6 +24,12 @@ public final class RollNumberDTO implements IDTO,JsonSerializable {
 
         this.playerIndex = playerIndex;
         this.numberRolled = numberRolled;
+    }
+
+    public RollNumberDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        this.numberRolled = obj.get(kNumber).getAsInt();
     }
 
     public int getValue(){
@@ -35,9 +48,9 @@ public final class RollNumberDTO implements IDTO,JsonSerializable {
     @Override
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("type", "rollNumber");
-        obj.addProperty("playerIndex", this.playerIndex);
-        obj.addProperty("number", this.numberRolled);
+        obj.addProperty(kType, "rollNumber");
+        obj.addProperty(kPlayerIndex, this.playerIndex);
+        obj.addProperty(kNumber, this.numberRolled);
         return obj;
     }
 }

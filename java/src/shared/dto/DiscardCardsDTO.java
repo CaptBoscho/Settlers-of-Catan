@@ -1,10 +1,8 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
-import shared.definitions.ResourceType;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
-
-import java.util.List;
 
 /**
  * @author Derek Argueta
@@ -15,6 +13,11 @@ public final class DiscardCardsDTO implements IDTO, JsonSerializable {
     private static final String kType = "type";
     private static final String kPlayerIndex = "playerIndex";
     private static final String kDiscardedCards = "discardedCards";
+    private static final String kBrick = "brick";
+    private static final String kOre = "ore";
+    private static final String kSheep = "sheep";
+    private static final String kWheat = "wheat";
+    private static final String kWood = "wood";
 
     private int playerIndex;
     private int brickCount;
@@ -73,6 +76,17 @@ public final class DiscardCardsDTO implements IDTO, JsonSerializable {
         this.sheepCount = discardedSheep;
         this.wheatCount = discardedWheat;
         this.woodCount = discardedWood;
+    }
+
+    public DiscardCardsDTO(final String json) {
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.playerIndex = obj.get(kPlayerIndex).getAsInt();
+        JsonObject discardedCards = obj.get(kDiscardedCards).getAsJsonObject();
+        this.brickCount = discardedCards.get(kBrick).getAsInt();
+        this.oreCount = discardedCards.get(kOre).getAsInt();
+        this.sheepCount = discardedCards.get(kSheep).getAsInt();
+        this.wheatCount = discardedCards.get(kWheat).getAsInt();
+        this.woodCount = discardedCards.get(kWood).getAsInt();
     }
 
     /**
