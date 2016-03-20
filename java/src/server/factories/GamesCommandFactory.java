@@ -8,6 +8,7 @@ import server.commands.games.ListCommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import server.facade.ServerFacade;
+import shared.dto.IDTO;
 
 import java.util.HashMap;
 
@@ -33,9 +34,12 @@ public class GamesCommandFactory {
         commands.put(name, command);
     }
 
-    public CommandExecutionResult executeCommand(final String name) throws Exception {
+    public CommandExecutionResult executeCommand(final String name, final IDTO dto) throws Exception {
         if(commands.containsKey(name)) {
             try {
+                ICommand command = commands.get(name);
+                command.setParams(dto);
+                // TODO - break out into "execute" and "fetchResult"
                 return commands.get(name).execute();
             } catch (CommandExecutionFailedException e) {
                 e.printStackTrace();

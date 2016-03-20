@@ -1,9 +1,12 @@
 package server.factories;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.commands.game.AddAICommand;
 import server.commands.game.ListAICommand;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
+import shared.dto.IDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +39,21 @@ public class GameCommandFactory {
         }
 
         return instance;
+    }
+
+    public CommandExecutionResult executeCommand(final String name, final IDTO dto) throws Exception {
+        if(commands.containsKey(name)) {
+            try {
+                ICommand command = commands.get(name);
+                command.setParams(dto);
+                // TODO - break out into "execute" and "fetchResult"
+                return commands.get(name).execute();
+            } catch (CommandExecutionFailedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        throw new Exception("no matching command found");
     }
 
     public void bind(IFacade newFacade){
