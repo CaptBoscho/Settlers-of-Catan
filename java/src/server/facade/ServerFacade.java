@@ -59,14 +59,13 @@ public class ServerFacade implements IFacade {
      * @return CommandExecutionResult
      */
     @Override
-    public CommandExecutionResult login(final String username, final String password) throws LoginException {
+    public boolean login(final String username, final String password) throws LoginException {
         assert username != null;
         assert username.length() > 0;
         assert password != null;
         assert password.length() > 0;
 
-        //TODO: make this method work fool
-        return null;
+        return UserManager.getInstance().authenticateUser(username, password);
     }
 
     /**
@@ -195,6 +194,7 @@ public class ServerFacade implements IFacade {
         // get the game
         final Game game = this.gameManager.getGameByID(gameID);
 
+        // TODO
         if(game.canAddPlayer()) {
 //            Player newPlayer = new Player(0, color, );
 //            game.getPlayerManager().addPlayer();

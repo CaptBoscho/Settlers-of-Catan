@@ -2,6 +2,7 @@ package server.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Pack200;
 
 /**
  * This class maintains a list of users. A user is defined as being a unique username/password
@@ -32,6 +33,16 @@ public class UserManager {
         }
 
         return -1;
+    }
+
+    public boolean authenticateUser(final String username, final String password) {
+        for(final UserCredentials user : this.users) {
+            if(user.matches(username, password)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean addUser(final String username, final String password) {
@@ -72,6 +83,20 @@ class UserCredentials {
         this.username = username;
         this.password = password;
         this.userId = id;
+    }
+
+    //// -- utility functions
+
+    /**
+     * A helper function to ease authentication in the UserManager
+     *
+     * @param username The username to check against
+     * @param password The password to check against
+     * @return Whether or not the credentials match
+     * @see UserManager
+     */
+    public boolean matches(final String username, final String password) {
+        return this.username.equals(username) && this.password.equals(password);
     }
 
     //// -- Getters/Setters

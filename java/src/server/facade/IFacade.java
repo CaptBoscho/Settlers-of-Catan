@@ -25,7 +25,7 @@ public interface IFacade {
      * @throws LoginException
      * @return CommandExecutionResult
      */
-    CommandExecutionResult login(String username, String password) throws LoginException;
+    boolean login(String username, String password) throws LoginException;
 
     /**
      * Registers a user

@@ -2,6 +2,9 @@ package server.commands.user;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.exceptions.LoginException;
+import server.main.Config;
+import server.managers.UserManager;
 import shared.dto.AuthDTO;
 import shared.dto.IDTO;
 
@@ -22,6 +25,21 @@ public class LoginCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        try {
+            if(Config.facade.login(this.username, this.password)) {
+                final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
+                CommandExecutionResult result = new CommandExecutionResult("Success");
+                result.addCookie("name", username);
+                result.addCookie("password", password);
+                result.addCookie("playerID", userId);
+                return result;
+            } else {
+                return new CommandExecutionResult("Failed");
+            }
+        } catch (LoginException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 

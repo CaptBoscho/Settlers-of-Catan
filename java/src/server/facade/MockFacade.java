@@ -26,8 +26,8 @@ public class MockFacade implements IFacade {
      * @return CommandExecutionResult
      */
     @Override
-    public CommandExecutionResult login(String username, String password) throws LoginException {
-        return null;
+    public boolean login(String username, String password) throws LoginException {
+        return true;
     }
 
     /**
