@@ -4,7 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RollNumberException;
-import server.facade.IFacade;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.RollNumberDTO;
 
@@ -14,10 +14,8 @@ import shared.dto.RollNumberDTO;
  * @author Joel Bradley
  */
 public class RollNumberCommand implements ICommand {
-    private int gameId;
-    private int value;
-    private int playerIndex;
-    private IFacade facade;
+
+    private RollNumberDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the Roll Number command
@@ -25,17 +23,15 @@ public class RollNumberCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
-//        try {
-//            return facade.rollNumber(gameId, playerIndex, value);
-//        } catch (RollNumberException e) {
-//            throw new CommandExecutionFailedException("Error occurred while rolling! GameId: " + gameId +
-//                    " PlayerIndex: " + playerIndex + " value: " + value);
-//        }
-        return null;
+        try {
+            return Config.facade.rollNumber(1, dto.getPlayerIndex(), dto.getValue());
+        } catch (RollNumberException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (RollNumberDTO)dto;
     }
 }

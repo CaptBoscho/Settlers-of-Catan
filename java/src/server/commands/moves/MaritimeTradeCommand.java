@@ -2,12 +2,11 @@ package server.commands.moves;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.MaritimeTradeException;
-import server.facade.IFacade;
-import shared.definitions.ResourceType;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.MaritimeTradeDTO;
-import shared.dto.GameModelDTO;
 
 /**
  * A command object that maritime trades
@@ -16,26 +15,23 @@ import shared.dto.GameModelDTO;
  */
 public class MaritimeTradeCommand implements ICommand {
 
-    private int gameID;
     private MaritimeTradeDTO dto;
-    IFacade facade;
 
     /**
      * Communicates with the ServerFacade to carry out the Maritime Trade command
      * @return IDTO
      */
     @Override
-    public CommandExecutionResult execute() {
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            facade.maritimeTrade(1, dto);
+            return Config.facade.maritimeTrade(1, dto);
         } catch(MaritimeTradeException e) {
-            e.printStackTrace();
+            throw new CommandExecutionFailedException(e.getMessage());
         }
-        return null;
     }
 
     @Override
     public void setParams(IDTO dto) {
-
+        this.dto = (MaritimeTradeDTO)dto;
     }
 }
