@@ -1,5 +1,6 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuildSettlementException;
 import server.exceptions.CommandExecutionFailedException;
@@ -17,22 +18,23 @@ public class BuildSettlementCommand implements ICommand {
     private IFacade facade;
     private BuildSettlementDTO dto;
 
-    public BuildSettlementCommand(IFacade facade, BuildSettlementDTO dto) {
-        this.facade = facade;
-        this.dto = dto;
-    }
-
     /**
      * Communicates with the ServerFacade to carry out the Build Settlement command
-     * @return IDTO
+     * @return CommandExecutionResult
      */
     @Override
-    public IDTO execute() throws CommandExecutionFailedException {
-        try {
-            return facade.buildSettlement(1, dto.getPlayerIndex(), dto.getLocation());
-        } catch (BuildSettlementException e) {
-            throw new CommandExecutionFailedException(e.getMessage());
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return facade.buildSettlement(1, dto.getPlayerIndex(), dto.getLocation());
+//        } catch (BuildSettlementException e) {
+//            throw new CommandExecutionFailedException(e.getMessage());
+//        }
+        return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

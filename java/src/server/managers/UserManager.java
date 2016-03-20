@@ -3,6 +3,7 @@ package server.managers;
 import client.data.PlayerInfo;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class maintains a list of users. A user is defined as being a unique username/password
@@ -11,8 +12,12 @@ import java.util.HashMap;
  * @author Derek Argueta
  */
 public class UserManager {
-    private HashMap<String, String> users;
+    private Map<String, String> users;
     private static UserManager instance;
+
+    private UserManager() {
+        this.users = new HashMap<>();
+    }
 
     public static UserManager getInstance() {
         if(instance == null) {

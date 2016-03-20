@@ -1,6 +1,7 @@
 package server.commands;
 
 import server.exceptions.CommandExecutionFailedException;
+import shared.dto.IDTO;
 
 /**
  * A parent interface for all command objects.  The execute function in each implementation of this interface will
@@ -17,4 +18,6 @@ public interface ICommand {
      * @return CommandExecutionResult with information pertaining to the execute function of the given Command object
      */
     CommandExecutionResult execute() throws CommandExecutionFailedException;
+
+    void setParams(IDTO dto);
 }

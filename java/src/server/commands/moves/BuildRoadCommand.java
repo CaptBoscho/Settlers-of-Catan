@@ -1,5 +1,6 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuildRoadException;
 import server.exceptions.CommandExecutionFailedException;
@@ -18,24 +19,22 @@ public class BuildRoadCommand implements ICommand {
     private BuildRoadDTO dto;
 
     /**
-     * Constructor
-     */
-    public BuildRoadCommand(IFacade facade, BuildRoadDTO dto) {
-        this.facade = facade;
-        this.dto = dto;
-    }
-
-    /**
      * Communicates with the ServerFacade to carry out the Build Road command
      * @return IDTO
      */
     @Override
-    public IDTO execute() throws CommandExecutionFailedException {
-        try {
-            return facade.buildRoad(1, dto.getPlayerIndex(), dto.getRoadLocation());
-        } catch (BuildRoadException e) {
-            throw new CommandExecutionFailedException(e.getMessage());
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return facade.buildRoad(1, dto.getPlayerIndex(), dto.getRoadLocation());
+//        } catch (BuildRoadException e) {
+//            throw new CommandExecutionFailedException(e.getMessage());
+//        }
+        return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

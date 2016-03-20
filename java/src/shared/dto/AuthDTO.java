@@ -45,6 +45,10 @@ public final class AuthDTO implements IDTO, JsonSerializable {
         return this.username;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
 
     /**
      * Converts the object to JSON

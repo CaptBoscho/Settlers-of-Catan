@@ -3,6 +3,8 @@ package server.commands.user;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.managers.UserManager;
+import shared.dto.AuthDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that registers a player.
@@ -13,10 +15,13 @@ public class RegisterCommand implements ICommand {
 
     private String username, password;
 
-    public RegisterCommand(final String username, final String password) {
+    public RegisterCommand() {
+
+    }
+
+    public void setParams(final String username, final String password) {
         this.username = username;
         this.password = password;
-
     }
 
     /**
@@ -35,5 +40,12 @@ public class RegisterCommand implements ICommand {
 
         // TODO - throw exception here
         return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+        AuthDTO tmpDTO = (AuthDTO)dto;
+        this.username = tmpDTO.getUsername();
+        this.password = tmpDTO.getPassword();
     }
 }

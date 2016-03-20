@@ -1,5 +1,6 @@
 package server.commands.games;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import shared.dto.IDTO;
 
@@ -16,7 +17,12 @@ public class CreateCommand implements ICommand {
      * @return IDTO with information about the game creation
      */
     @Override
-    public IDTO execute() {
+    public CommandExecutionResult execute() {
         return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 }

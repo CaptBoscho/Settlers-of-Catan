@@ -1,5 +1,6 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.FinishTurnException;
@@ -18,25 +19,23 @@ public class FinishTurnCommand implements ICommand {
     private FinishTurnDTO dto;
 
     /**
-     * Constructor
-     */
-    public FinishTurnCommand(IFacade facade, FinishTurnDTO dto) {
-        this.facade = facade;
-        this.dto = dto;
-    }
-
-    /**
      * Communicates with the ServerFacade to carry out the Finish Turn command
      * @return IDTO
      */
     @Override
-    public IDTO execute() throws CommandExecutionFailedException {
-        try {
-            return facade.finishTurn(1, dto.getPlayerIndex());
-        } catch (FinishTurnException e) {
-            e.printStackTrace();
-            throw new CommandExecutionFailedException("Error ending player turn!");
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return facade.finishTurn(1, dto.getPlayerIndex());
+//        } catch (FinishTurnException e) {
+//            e.printStackTrace();
+//            throw new CommandExecutionFailedException("Error ending player turn!");
+//        }
+        return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

@@ -1,10 +1,12 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.AcceptTradeException;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 import shared.dto.TradeOfferResponseDTO;
 
 /**
@@ -30,12 +32,18 @@ public class AcceptTradeCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public GameModelDTO execute() throws CommandExecutionFailedException {
-        try {
-            return facade.acceptTrade(1, playerIndex, answer);
-        } catch(AcceptTradeException e) {
-            throw new CommandExecutionFailedException(e.getMessage());
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return facade.acceptTrade(1, playerIndex, answer);
+//        } catch(AcceptTradeException e) {
+//            throw new CommandExecutionFailedException(e.getMessage());
+//        }
+        return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

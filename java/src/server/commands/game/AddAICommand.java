@@ -1,5 +1,6 @@
 package server.commands.game;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import shared.dto.IDTO;
 
@@ -11,19 +12,17 @@ import shared.dto.IDTO;
 public class AddAICommand implements ICommand {
 
     /**
-     * Constructor
-     */
-    public AddAICommand() {
-
-    }
-
-    /**
      * Communicates with the ServerFacade to carry out the Add AI command
      * @return IDTO
      */
     @Override
-    public IDTO execute() {
+    public CommandExecutionResult execute() {
         return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

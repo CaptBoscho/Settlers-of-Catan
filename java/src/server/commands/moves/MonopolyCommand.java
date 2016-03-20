@@ -1,5 +1,6 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.MonopolyException;
@@ -20,10 +21,8 @@ public class MonopolyCommand implements ICommand {
 
     /**
      * Constructor
-     * @param dto
-     * @param facade
      */
-    public MonopolyCommand(PlayMonopolyDTO dto, IFacade facade) {
+    public MonopolyCommand() {
         this.dto = dto;
         this.facade = facade;
     }
@@ -33,12 +32,18 @@ public class MonopolyCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() throws CommandExecutionFailedException {
-        try {
-            return ServerFacade.getInstance().monopoly(1, dto.getPlayerIndex(), dto.getResource());
-        } catch (MonopolyException | InvalidTypeException e) {
-            throw new CommandExecutionFailedException("MonopolyCommand failed to execute properly");
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return ServerFacade.getInstance().monopoly(1, dto.getPlayerIndex(), dto.getResource());
+//        } catch (MonopolyException | InvalidTypeException e) {
+//            throw new CommandExecutionFailedException("MonopolyCommand failed to execute properly");
+//        }
+        return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

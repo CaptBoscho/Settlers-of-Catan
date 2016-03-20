@@ -1,5 +1,6 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.MonumentException;
@@ -19,10 +20,8 @@ public class MonumentCommand implements ICommand {
 
     /**
      * Constructor
-     * @param dto
-     * @param facade
      */
-    public MonumentCommand(PlayMonumentDTO dto, IFacade facade) {
+    public MonumentCommand() {
         this.dto = dto;
         this.facade = facade;
     }
@@ -32,11 +31,17 @@ public class MonumentCommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public IDTO execute() throws CommandExecutionFailedException {
-        try {
-            return ServerFacade.getInstance().monument(1, dto.getPlayerIndex());
-        } catch (MonumentException e) {
-            throw new CommandExecutionFailedException("MonumentCommand failed to execute properly");
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return ServerFacade.getInstance().monument(1, dto.getPlayerIndex());
+//        } catch (MonumentException e) {
+//            throw new CommandExecutionFailedException("MonumentCommand failed to execute properly");
+//        }
+        return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 }

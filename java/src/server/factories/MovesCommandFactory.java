@@ -5,6 +5,9 @@ import server.commands.moves.*;
 import server.facade.IFacade;
 import shared.dto.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A factory class that creates Moves Commands on demand.  Use this class to get a Moves Command
  */
@@ -12,13 +15,36 @@ public class MovesCommandFactory {
 
     private IFacade facade;
     private static MovesCommandFactory instance = null;
-    private MovesCommandFactory() {
+    private Map<String, ICommand> commands;
 
+    private MovesCommandFactory() {
+        this.commands = new HashMap<>();
+    }
+
+    private void addCommand(final String name, final ICommand command) {
+        this.commands.put(name, command);
     }
 
     public static MovesCommandFactory getInstance() {
         if (instance == null) {
             instance = new MovesCommandFactory();
+            instance.addCommand("finishTurn", new FinishTurnCommand());
+            instance.addCommand("sendChat", new SendChatCommand());
+            instance.addCommand("rollNumber", new RollNumberCommand());
+            instance.addCommand("robPlayer", new RobPlayerCommand());
+            instance.addCommand("buyDevCard", new BuyDevCardCommand());
+            instance.addCommand("playYOP", new YearOfPlentyCommand());
+            instance.addCommand("playRoadBuilding", new RoadBuildingCommand());
+            instance.addCommand("playMonopoly", new MonopolyCommand());
+            instance.addCommand("playSoldier", new SoldierCommand());
+            instance.addCommand("playMonument", new MonumentCommand());
+            instance.addCommand("buildRoad", new BuildRoadCommand());
+            instance.addCommand("buildSettlement", new BuildSettlementCommand());
+            instance.addCommand("buildCity", new BuildCityCommand());
+            instance.addCommand("offerTrade", new OfferTradeCommand());
+//            instance.addCommand("respondToOffer", );
+            instance.addCommand("maritimeTrade", new MaritimeTradeCommand());
+            instance.addCommand("discardCards", new DiscardCardsCommand());
         }
 
         return instance;
@@ -26,51 +52,5 @@ public class MovesCommandFactory {
 
     public void bind(IFacade newFacade){
         facade = newFacade;
-    }
-
-    /**
-     * Creates a Moves command based on a given string
-     * @return an ICommand object
-     */
-
-    public ICommand createCommand(IDTO dto) {
-        if (dto instanceof FinishTurnDTO) {
-            return new FinishTurnCommand(facade, (FinishTurnDTO)dto);
-        } else if (dto instanceof SendChatDTO) {
-            return new SendChatCommand(facade, (SendChatDTO)dto);
-        } else if (dto instanceof RollNumberDTO) {
-            RollNumberDTO roll = (RollNumberDTO)dto;
-            return new RollNumberCommand(facade, roll);
-        } else if (dto instanceof RobPlayerDTO) {
-            return new RobPlayerCommand(facade, (RobPlayerDTO)dto);
-        } else if (dto instanceof BuyDevCardDTO) {
-            return new BuyDevCardCommand((BuyDevCardDTO)dto, facade);
-        } else if (dto instanceof PlayYOPCardDTO) {
-            return new YearOfPlentyCommand((PlayYOPCardDTO)dto, facade);
-        } else if (dto instanceof RoadBuildingDTO) {
-            return new RoadBuildingCommand(facade, (RoadBuildingDTO)dto);
-        } else if (dto instanceof PlayMonopolyDTO) {
-            return new MonopolyCommand((PlayMonopolyDTO)dto, facade);
-        } else if (dto instanceof PlaySoldierCardDTO) {
-            return new SoldierCommand(facade, (PlaySoldierCardDTO) dto);
-        } else if (dto instanceof PlayMonumentDTO) {
-            return new MonumentCommand((PlayMonumentDTO)dto, facade);
-        } else if (dto instanceof BuildRoadDTO) {
-            return new BuildRoadCommand(facade, (BuildRoadDTO)dto);
-        } else if(dto instanceof BuildSettlementDTO) {
-            return new BuildSettlementCommand(facade, (BuildSettlementDTO)dto);
-        } else if (dto instanceof BuildCityDTO) {
-            return new BuildCityCommand(facade, (BuildCityDTO)dto);
-        } else if (dto instanceof OfferTradeDTO) {
-            return new OfferTradeCommand((OfferTradeDTO)dto,facade);
-        } else if (dto instanceof TradeOfferResponseDTO) {
-
-        } else if (dto instanceof MaritimeTradeDTO) {
-            return new MaritimeTradeCommand((MaritimeTradeDTO)dto,facade);
-        } else if (dto instanceof DiscardCardsDTO) {
-
-        }
-
-        return null;
     }
 }

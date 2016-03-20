@@ -15,11 +15,6 @@ public class CommandExecutionResult {
     private Map<String, String> newCookies;
     private String body;
 
-    public CommandExecutionResult() {
-        this.newCookies = new HashMap<>();
-        this.body = "";
-    }
-
     public CommandExecutionResult(final String info) {
         this.newCookies = new HashMap<>();
         this.body = info;

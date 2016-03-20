@@ -3,6 +3,7 @@ package server.commands.games;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.managers.GameManager;
+import shared.dto.IDTO;
 import shared.model.game.Game;
 
 import java.util.Collection;
@@ -25,5 +26,10 @@ public class ListCommand implements ICommand {
         Collection<Game> games = GameManager.getInstance().getAllGames();
         CommandExecutionResult result = new CommandExecutionResult(games.toString());
         return result;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 }

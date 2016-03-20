@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kyle 'TMD' Cornelison on 3/10/2016.
+ * @author Kyle Cornelison
  */
 public class ServerFacade implements IFacade {
     private static IFacade _instance;
@@ -37,8 +37,8 @@ public class ServerFacade implements IFacade {
      * Default Constructor - Private
      */
     private ServerFacade(){
-        gameManager = new GameManager();
-        userManager = new UserManager();
+        gameManager = GameManager.getInstance();
+        userManager = UserManager.getInstance();
     }
 
     /**

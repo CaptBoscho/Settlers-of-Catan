@@ -1,5 +1,6 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RobPlayerException;
@@ -19,24 +20,22 @@ public class SoldierCommand implements ICommand {
     private PlaySoldierCardDTO dto;
 
     /**
-     * Constructor
-     */
-    public SoldierCommand(IFacade facade, PlaySoldierCardDTO dto) {
-        this.facade = facade;
-        this.dto = dto;
-    }
-
-    /**
      * Communicates with the ServerFacade to carry out the Soldier command
      * @return IDTO
      */
     @Override
-    public IDTO execute() throws CommandExecutionFailedException {
-        try {
-            return facade.soldier(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
-        } catch (SoldierException e) {
-            throw new CommandExecutionFailedException(e.getMessage());
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return facade.soldier(1, dto.getPlayerIndex(), dto.getLocation(), dto.getVictimIndex());
+//        } catch (SoldierException e) {
+//            throw new CommandExecutionFailedException(e.getMessage());
+//        }
+        return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

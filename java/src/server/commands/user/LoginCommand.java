@@ -2,6 +2,7 @@ package server.commands.user;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import shared.dto.IDTO;
 
 /**
  * A command object that logs a player in
@@ -18,5 +19,10 @@ public class LoginCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() {
         return null;
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 }

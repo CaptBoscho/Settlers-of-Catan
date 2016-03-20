@@ -29,7 +29,7 @@ public class GamesCommandFactory {
         commands = new HashMap<>();
     }
 
-    private void addCommand(final String name, ICommand command) {
+    private void addCommand(final String name, final ICommand command) {
         commands.put(name, command);
     }
 

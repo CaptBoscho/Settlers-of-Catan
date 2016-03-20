@@ -1,11 +1,13 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuyDevCardException;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import shared.dto.BuyDevCardDTO;
 import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that buys a development card
@@ -13,29 +15,22 @@ import shared.dto.GameModelDTO;
  * @author Joel Bradley
  */
 public class BuyDevCardCommand implements ICommand {
-    IFacade facade;
-    BuyDevCardDTO dto;
-
-    /**
-     * Constructor
-     */
-    public BuyDevCardCommand(BuyDevCardDTO dto, IFacade facade) {
-        this.facade = facade;
-        this.dto = dto;
-    }
+    private IFacade facade;
+    private BuyDevCardDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the Buy Development Card command
      * @return IDTO
      */
     @Override
-    public GameModelDTO execute() throws CommandExecutionFailedException {
-        try {
-            return facade.buyDevCard(1, dto.getPlayerIndex());
-        } catch (BuyDevCardException e) {
-            e.printStackTrace();
-            throw new CommandExecutionFailedException("BuyDevCardCommand failed to execute properly");
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        return null;
+//            return facade.buyDevCard(1, dto.getPlayerIndex());
+    }
+
+    @Override
+    public void setParams(IDTO dto) {
+
     }
 
 }

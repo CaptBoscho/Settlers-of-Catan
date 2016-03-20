@@ -1,8 +1,6 @@
 package server.controllers;
 
-import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
-import server.exceptions.CommandExecutionFailedException;
 import server.factories.UserCommandFactory;
 import shared.dto.AuthDTO;
 
@@ -13,21 +11,21 @@ public class UserController {
 
     public static CommandExecutionResult login(final AuthDTO dto) {
         try {
-            return UserCommandFactory.getInstance().createCommand(dto).execute().toJSON();
-        } catch (CommandExecutionFailedException e) {
+            return UserCommandFactory.getInstance().executeCommand("login", dto);
+        } catch (Exception e) {
             e.printStackTrace();
-            // TODO: fix this fool
-            return new JsonObject();
         }
+
+        return null;
     }
 
-    public static JsonObject register(final AuthDTO dto) {
+    public static CommandExecutionResult register(final AuthDTO dto) {
         try {
-            return UserCommandFactory.getInstance().createCommand(dto).execute().toJSON();
-        } catch (CommandExecutionFailedException e) {
+            return UserCommandFactory.getInstance().executeCommand("register", dto);
+        } catch (Exception e) {
             e.printStackTrace();
-            //TODO: fix this fool
-            return new JsonObject();
         }
+
+        return null;
     }
 }

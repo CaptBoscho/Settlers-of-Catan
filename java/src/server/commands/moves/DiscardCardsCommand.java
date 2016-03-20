@@ -1,11 +1,13 @@
 package server.commands.moves;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.DiscardCardsException;
 import server.facade.IFacade;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.GameModelDTO;
+import shared.dto.IDTO;
 
 /**
  * A command object that discards cards
@@ -16,25 +18,23 @@ public class DiscardCardsCommand implements ICommand {
 
     DiscardCardsDTO dto;
     IFacade facade;
-    /**
-     * Constructor
-     */
-    public DiscardCardsCommand(DiscardCardsDTO discard, IFacade fac) {
-        dto = discard;
-        facade = fac;
-    }
 
     /**
      * Communicates with the ServerFacade to carry out the Discard Cards command
      * @return IDTO
      */
     @Override
-    public GameModelDTO execute() throws CommandExecutionFailedException {
-        try {
-            return facade.discardCards(1, dto);
-        }catch(DiscardCardsException e){
-            throw new CommandExecutionFailedException(e.getMessage());
-        }
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+//        try {
+//            return facade.discardCards(1, dto);
+//        }catch(DiscardCardsException e){
+//            throw new CommandExecutionFailedException(e.getMessage());
+//        }
+        return null;
     }
 
+    @Override
+    public void setParams(IDTO dto) {
+
+    }
 }
