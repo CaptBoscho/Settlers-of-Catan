@@ -2,6 +2,7 @@ package server.commands.user;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import shared.dto.AuthDTO;
 import shared.dto.IDTO;
 
 /**
@@ -10,6 +11,9 @@ import shared.dto.IDTO;
  * @author Danny Harding
  */
 public class LoginCommand implements ICommand {
+
+    private String username;
+    private String password;
 
     /**
      * Communicates with the ServerFacade to carry out the Login command
@@ -23,6 +27,8 @@ public class LoginCommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-
+        AuthDTO tmpDTO = (AuthDTO)dto;
+        this.username = tmpDTO.getUsername();
+        this.password = tmpDTO.getPassword();
     }
 }
