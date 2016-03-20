@@ -2,7 +2,9 @@ package server.handlers.moves;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.PlayMonumentDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -22,10 +24,17 @@ public class MonumentHandler implements Route {
             response.status(400);
             return "Invalid request.";
         }
-        response.status(200);
-        response.type("application/json");
-        final JsonObject body = new JsonParser().parse(request.body()).getAsJsonObject();
-        return MovesController.monument(body).toString();
+
+        // TODO - validation
+
+        CommandExecutionResult result = MovesController.monument(new PlayMonumentDTO(request.body()));
+        if(result.errorOccurred()) {
+            response.status(result.getStatus());
+        } else {
+            response.status(200);
+        }
+
+        return result.getBody();
     }
 
     private boolean requestIsValid(final String requestBody) {

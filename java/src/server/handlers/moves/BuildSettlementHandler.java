@@ -1,8 +1,8 @@
 package server.handlers.moves;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.BuildSettlementDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -13,9 +13,15 @@ import spark.Route;
 public class BuildSettlementHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        response.status(200);
-        response.type("application/json");
-        final JsonObject body = new JsonParser().parse(request.body()).getAsJsonObject();
-        return MovesController.buildSettlement(body).toString();
+        // TODO - validation
+
+        CommandExecutionResult result = MovesController.buildSettlement(new BuildSettlementDTO(request.body()));
+        if(result.errorOccurred()) {
+            response.status(result.getStatus());
+        } else {
+            response.status(200);
+        }
+
+        return result.getBody();
     }
 }

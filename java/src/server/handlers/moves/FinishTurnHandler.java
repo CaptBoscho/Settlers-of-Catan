@@ -1,7 +1,6 @@
 package server.handlers.moves;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
 import shared.dto.FinishTurnDTO;
 import spark.Request;
@@ -20,9 +19,15 @@ public class FinishTurnHandler implements Route {
             return "Invalid request.";
         }
 
-        response.status(200);
-        response.type("application/json");
-        final JsonObject body = new JsonParser().parse(request.body()).getAsJsonObject();
-        return MovesController.finishTurn(body).toString();
+        // TODO - validation
+
+        CommandExecutionResult result = MovesController.finishTurn(new FinishTurnDTO(request.body()));
+        if(result.errorOccurred()) {
+            response.status(result.getStatus());
+        } else {
+            response.status(200);
+        }
+
+        return result.getBody();
     }
 }
