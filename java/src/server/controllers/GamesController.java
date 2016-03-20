@@ -14,26 +14,29 @@ public class GamesController {
         try {
             return MovesCommandFactory.getInstance().executeCommand("create", dto);
         } catch (Exception e) {
-            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong creating a game :(");
+            result.triggerError(500);
+            return result;
         }
-        return null;
     }
 
     public static CommandExecutionResult joinGame(final JoinGameDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("join", dto);
         } catch (Exception e) {
-            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong joining a game :(");
+            result.triggerError(500);
+            return result;
         }
-        return null;
     }
 
-//    public static CommandExecutionResult listGame(final ListGameDTO dto) {
-//        try {
-//            return MovesCommandFactory.getInstance().executeCommand("list", dto);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static CommandExecutionResult listGame() {
+        try {
+            return MovesCommandFactory.getInstance().executeCommand("list");
+        } catch (Exception e) {
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong sending a chat :(");
+            result.triggerError(500);
+            return result;
+        }
+    }
 }

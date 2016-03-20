@@ -1,7 +1,5 @@
 package server.managers;
 
-import client.data.PlayerInfo;
-
 import java.util.HashMap;
 import java.util.Map;
 

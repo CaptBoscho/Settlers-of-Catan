@@ -15,26 +15,29 @@ public class GameController {
         try {
             return MovesCommandFactory.getInstance().executeCommand("model", dto);
         } catch (Exception e) {
-            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong getting the model :(");
+            result.triggerError(500);
+            return result;
         }
-        return null;
     }
 
     public static CommandExecutionResult addAI(final AddAIDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("addAI", dto);
         } catch (Exception e) {
-            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong adding an AI :(");
+            result.triggerError(500);
+            return result;
         }
-        return null;
     }
 
     public static CommandExecutionResult listAI(final ListAIDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("listAI", dto);
         } catch (Exception e) {
-            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong listing the AI :(");
+            result.triggerError(500);
+            return result;
         }
-        return null;
     }
 }

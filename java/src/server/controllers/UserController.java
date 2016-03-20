@@ -13,18 +13,19 @@ public class UserController {
         try {
             return UserCommandFactory.getInstance().executeCommand("login", dto);
         } catch (Exception e) {
-            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong registering :(");
+            result.triggerError(500);
+            return result;
         }
-        return null;
     }
 
     public static CommandExecutionResult register(final AuthDTO dto) {
         try {
             return UserCommandFactory.getInstance().executeCommand("register", dto);
         } catch (Exception e) {
-            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong registering :(");
+            result.triggerError(500);
+            return result;
         }
-
-        return null;
     }
 }

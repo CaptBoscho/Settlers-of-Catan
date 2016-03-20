@@ -14,10 +14,19 @@ import java.util.Map;
 public class CommandExecutionResult {
     private Map<String, String> newCookies;
     private String body;
+    private boolean errorOccurred;
+    private int status;
 
     public CommandExecutionResult(final String info) {
         this.newCookies = new HashMap<>();
         this.body = info;
+        this.status = 200;
+        this.errorOccurred = false;
+    }
+
+    public void triggerError(int status) {
+        this.errorOccurred = true;
+        this.status = status;
     }
 
     public Map<String, String> getNewCookies() {
@@ -28,8 +37,16 @@ public class CommandExecutionResult {
         this.newCookies.put(key, value);
     }
 
+    public int getStatus() {
+        return this.status;
+    }
+
     public String getBody() {
         return this.body;
+    }
+
+    public boolean errorOccurred() {
+        return this.errorOccurred;
     }
 
     public boolean hasNewCookies() {

@@ -91,17 +91,22 @@
 		<mkdir dir="${java.build}"/>
 		<mkdir dir="${java.dist}"/>
 	</target>
-		
+
+	<!-- Deletes generated files -->
 	<target name="clean" description="clean build files" >
 		<delete dir="${java.build}"/>
 		<delete dir="${java.dist}"/>
 	</target>
+
+	<!-- compiles everything? -->
 	<target name="compile" depends="init" description="compile the source " >
 		<javac srcdir="${java.src}" destdir="${java.build}" debug="true" includeantruntime="true">
 			<classpath refid="java.lib.classpath" />
 			<classpath refid="Group Settlers of Swagtan\target\Settlers-of-Catan-1.0-SNAPSHOT.jar" />
 		</javac>
 	</target>
+
+	<!-- Compiles unit tests -->
 	<target name="compile-test" depends="init" description="compile the source " >
 		<javac srcdir="${java.test}" destdir="${java.build}" debug="true" includeantruntime="true">
 			<classpath refid="java.lib.classpath" />
@@ -141,6 +146,8 @@
 
 	<property name="host" value="localhost"/>
 	<property name="port" value="8081"/>
+
+	<!-- compiles our client -->
 	<target name="our-client" depends="package" description="compiles, packages, and runs the student client">
 		<java classname="client.main.Catan" fork="yes">
 			<arg value="${host}"/>
@@ -152,19 +159,10 @@
 				<pathelement location="${java.build}"/>
 			</classpath>
 			<assertions>
-				<enable/>
+				<disable/>
 			</assertions>
 		</java>
 	</target>
-
-	<!--<target name="our-client" depends="package" description="compiles, packages, and runs the student client">
-		<java jar="${java.dist}/catan-client.jar" dir="${java.dist}" fork="yes">
-			<sysproperty key="com.sun.management.jmxremote" value=""/>
-			<assertions>
-				<enable/>
-			</assertions>
-		</java>
-	</target>-->
 
 	<target name="test" depends="compile, compile-test" description="compiles, packages, and runs the JUnit tests for the project">
 		<java classname="TestRunner" fork="yes">
@@ -182,9 +180,11 @@
  	
 	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
 		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
+			<arg value="${host}"/>
+			<arg value="${port}"/>
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
 			<assertions>
-				<enable/>
+				<disable/>
 			</assertions>
 		</java>
 	</target>
