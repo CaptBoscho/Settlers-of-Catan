@@ -1,9 +1,8 @@
 package server.controllers;
 
-import server.exceptions.CommandExecutionFailedException;
+import server.commands.CommandExecutionResult;
 import server.factories.GamesCommandFactory;
 import shared.dto.CreateGameDTO;
-import shared.dto.GameInfoListDTO;
 import shared.dto.JoinGameDTO;
 
 /**
@@ -11,31 +10,15 @@ import shared.dto.JoinGameDTO;
  */
 public class GamesController {
 
-    public static String createGame(final CreateGameDTO dto) {
-
-        try {
-            return GamesCommandFactory.getInstance().createCommand(dto).execute().toString();
-        } catch (CommandExecutionFailedException e) {
-            e.printStackTrace();
-            return "return something else here.";
-        }
+    public static CommandExecutionResult createGame(final CreateGameDTO dto) throws Exception {
+        return GamesCommandFactory.getInstance().executeCommand("create");
     }
 
-    public static String joinGame(final JoinGameDTO dto) {
-        try {
-            return GamesCommandFactory.getInstance().createCommand(dto).execute().toString();
-        } catch (CommandExecutionFailedException e) {
-            e.printStackTrace();
-            return "return something else here.";
-        }
+    public static CommandExecutionResult joinGame(final JoinGameDTO dto) throws Exception {
+        return GamesCommandFactory.getInstance().executeCommand("join");
     }
 
-    public static String listCommand(final GameInfoListDTO dto) {
-        try {
-            return GamesCommandFactory.getInstance().createCommand(dto).execute().toString();
-        } catch (CommandExecutionFailedException e) {
-            e.printStackTrace();
-            return "return something else here.";
-        }
+    public static CommandExecutionResult listCommand() throws Exception {
+        return GamesCommandFactory.getInstance().executeCommand("list");
     }
 }

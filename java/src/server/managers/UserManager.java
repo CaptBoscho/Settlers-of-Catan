@@ -12,4 +12,12 @@ import java.util.List;
  */
 public class UserManager {
     private List<Player> users;
+    private static UserManager instance;
+
+    public UserManager getInstance() {
+        if(instance == null) {
+            instance = new UserManager();
+        }
+        return instance;
+    }
 }

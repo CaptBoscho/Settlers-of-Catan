@@ -1,22 +1,29 @@
 package server.commands.games;
 
+import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
-import shared.dto.IDTO;
+import server.managers.GameManager;
+import shared.model.game.Game;
+
+import java.util.Collection;
 
 /**
  * A command object that lists the available games.
  *
- * Created by Danny Harding on 3/10/16.
+ * @author Danny Harding
  */
 public class ListCommand implements ICommand {
 
     /**
      * Communicates with the ServerFacade to carry out the List command
      *
-     * @return IDTO with information about the games list
+     * @return CommandExecutionResult with information about the games list
      */
     @Override
-    public IDTO execute() {
-        return null;
+    public CommandExecutionResult execute() {
+
+        Collection<Game> games = GameManager.getInstance().getAllGames();
+        CommandExecutionResult result = new CommandExecutionResult(games.toString());
+        return result;
     }
 }

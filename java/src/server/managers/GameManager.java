@@ -2,7 +2,9 @@ package server.managers;
 
 import shared.model.game.Game;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class maintains multiple games. Anytime any game-specific info or action is required, the game
@@ -11,23 +13,29 @@ import java.util.HashMap;
  */
 public class GameManager {
 
+    private static GameManager instance;
     private HashMap<Integer, Game> games;
-    private Game game;
 
-    public GameManager() {
-        game = new Game();
+    private GameManager() {
+        games = new HashMap<>();
     }
 
-    public Game getGameByID(int gameID) {
-        return game;
-//        return games.get(gameID);
+    public static GameManager getInstance() {
+        if(instance == null) {
+            instance = new GameManager();
+        }
+        return instance;
     }
 
-    public void addGame(Game game) {
+    public Game getGameByID(final int gameID) {
+        return games.get(gameID);
+    }
+
+    public Collection<Game> getAllGames() {
+        return games.values();
+    }
+
+    public void addGame(final Game game) {
         games.put(game.getId(), game);
-    }
-
-    public void removeGame(int gameID) {
-        games.remove(gameID);
     }
 }

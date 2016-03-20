@@ -15,7 +15,7 @@ public class UserController {
             return UserCommandFactory.getInstance().createCommand(dto).execute().toJSON();
         } catch (CommandExecutionFailedException e) {
             e.printStackTrace();
-            //TODO: fix this fool
+            // TODO: fix this fool
             return new JsonObject();
         }
     }

@@ -1,7 +1,16 @@
 package shared.dto;
 
+import com.google.gson.JsonObject;
+
 /**
- * Created by derek on 3/19/16.
+ * @author Derek Argueta
  */
-public class PlaceholderDummyDTO {
+public class PlaceholderDummyDTO implements IDTO {
+
+    // literally doesn't do anything. Danny has bad design.
+
+    @Override
+    public JsonObject toJSON() {
+        return null;
+    }
 }

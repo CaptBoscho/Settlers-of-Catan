@@ -7,15 +7,15 @@ import com.google.gson.JsonObject;
  */
 public class GameController {
 
-    public static String getModel(int version) {
+    public static String getModel(final int version) {
         return "";
     }
 
-    public static String addAI(JsonObject body) {
+    public static String addAI(final JsonObject body) {
         return "";
     }
 
-    public static String listAI(JsonObject body) {
+    public static String listAI(final JsonObject body) {
         return "";
     }
 }

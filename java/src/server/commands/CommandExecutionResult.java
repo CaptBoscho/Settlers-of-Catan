@@ -12,12 +12,21 @@ import java.util.List;
  */
 public class CommandExecutionResult {
     private List<String> newCookies;
+    private String body;
 
-    public CommandExecutionResult() {
-
+    public CommandExecutionResult(final String info) {
+        body = info;
     }
 
     public List<String> getNewCookies() {
         return this.newCookies;
+    }
+
+    public String getBody() {
+        return this.body;
+    }
+
+    public boolean hasNewCookies() {
+        return this.newCookies != null && this.newCookies.size() > 0;
     }
 }
