@@ -690,14 +690,20 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws Exception, InvalidTypeException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert vertex != null;
         assert this.map != null;
 
         if (canInitiateSettlement(playerIndex, vertex)) {
-            map.initiateSettlement(playerIndex, vertex);
+            List<ResourceType> resources = map.initiateSettlement(playerIndex, vertex);
+            if(turnTracker.getPhase()== TurnTracker.Phase.SETUPTWO){
+                for(ResourceType type : resources){
+                    ResourceCard card = resourceCardBank.draw(type);
+                    playerManager.getPlayerByIndex(playerIndex).addResourceCard(card);
+                }
+            }
         }
     }
 

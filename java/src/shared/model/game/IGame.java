@@ -278,7 +278,7 @@ public interface IGame {
      * @throws InvalidPlayerException
      * @throws StructureException
      */
-    void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    void initiateSettlement(int playerIndex, VertexLocation vertex) throws Exception, InvalidTypeException;
 
     /**
      * Action - Player builds a settlement
