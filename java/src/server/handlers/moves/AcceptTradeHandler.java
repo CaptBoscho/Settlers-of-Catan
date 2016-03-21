@@ -17,14 +17,15 @@ import spark.Route;
 public class AcceptTradeHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
-//        if(!TradeOfferResponseDTO.is)
-        // TODO - validation
+        if(!TradeOfferResponseDTO.isValidRequestJson(request.body())) {
+            response.status(400);
+            return "Invalid request.";
+        }
 
-
-        CookieWrapperDTO dto = new CookieWrapperDTO(new TradeOfferResponseDTO(request.body()));
+        final CookieWrapperDTO dto = new CookieWrapperDTO(new TradeOfferResponseDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 
-        CommandExecutionResult result = MovesController.acceptTrade(dto);
+        final CommandExecutionResult result = MovesController.acceptTrade(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

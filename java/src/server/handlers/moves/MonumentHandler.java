@@ -15,18 +15,12 @@ import spark.Route;
  */
 public class MonumentHandler implements Route {
 
-    // -- request keys
-    private static final String kType = "type";
-    private static final String kPlayerIndex = "playerIndex";
-
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        if(!this.requestIsValid(request.body())) {
+        if(!PlayMonumentDTO.isValidRequestJson(request.body())) {
             response.status(400);
             return "Invalid request.";
         }
-
-        // TODO - validation
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new PlayMonumentDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
@@ -39,13 +33,5 @@ public class MonumentHandler implements Route {
         }
 
         return result.getBody();
-    }
-
-    private boolean requestIsValid(final String requestBody) {
-        final JsonObject obj = new JsonParser().parse(requestBody).getAsJsonObject();
-        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
-        final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
-
-        return hasType && hasPlayerIndex;
     }
 }

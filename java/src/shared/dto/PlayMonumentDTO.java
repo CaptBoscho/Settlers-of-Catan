@@ -2,6 +2,7 @@ package shared.dto;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.utils.JSONUtils;
 import shared.model.JsonSerializable;
 
 /**
@@ -42,5 +43,16 @@ public final class PlayMonumentDTO implements IDTO,JsonSerializable {
 
     public int getPlayerIndex() {
         return playerIndex;
+    }
+
+    public static boolean isValidRequestJson(final String json) {
+        if(!JSONUtils.isJSONValid(json)) {
+            return false;
+        }
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
+        final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
+
+        return hasType && hasPlayerIndex;
     }
 }

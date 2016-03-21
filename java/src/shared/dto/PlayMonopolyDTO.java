@@ -2,6 +2,7 @@ package shared.dto;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.utils.JSONUtils;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
 import shared.model.bank.InvalidTypeException;
@@ -50,7 +51,10 @@ public final class PlayMonopolyDTO implements IDTO, JsonSerializable {
         return obj;
     }
 
-    public static boolean isValidRequestJson(String json) {
+    public static boolean isValidRequestJson(final String json) {
+        if(!JSONUtils.isJSONValid(json)) {
+            return false;
+        }
         final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
         final boolean hasResource = obj.has(kResource) && obj.get(kResource).isJsonPrimitive();
