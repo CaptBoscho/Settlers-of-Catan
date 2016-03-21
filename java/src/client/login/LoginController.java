@@ -1,17 +1,10 @@
 package client.login;
 
-import client.base.*;
-import client.misc.*;
-
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.lang.reflect.*;
-
+import client.base.Controller;
+import client.base.IAction;
+import client.misc.IMessageView;
 import client.services.ServerProxy;
 import client.services.UserCookie;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import shared.dto.AuthDTO;
 
 

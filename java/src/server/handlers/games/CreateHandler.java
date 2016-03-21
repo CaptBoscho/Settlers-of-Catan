@@ -20,6 +20,7 @@ public class CreateHandler implements Route {
         }
 
         CommandExecutionResult result = GamesController.createGame(new CreateGameDTO(request.body()));
+
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

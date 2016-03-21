@@ -1,6 +1,7 @@
 package server.facade;
 
 import client.data.GameInfo;
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import server.managers.GameManager;
@@ -196,8 +197,13 @@ public class ServerFacade implements IFacade {
         // get the game
         final Game game = this.gameManager.getGameByID(gameID);
 
-        if(game.canAddPlayer()) {
+        if(game.canAddPlayer() && !game.isRejoining(playerId)) {
             game.getPlayerManager().addNewPlayer(username, playerId, color);
+            CommandExecutionResult result = new CommandExecutionResult("Success");
+            result.addCookie("catan.game", String.valueOf(game.getId()));
+            return result;
+        } else if(game.isRejoining(playerId)){
+            game.getPlayerManager().rejoin(username, playerId, color);
             CommandExecutionResult result = new CommandExecutionResult("Success");
             result.addCookie("catan.game", String.valueOf(game.getId()));
             return result;
@@ -678,6 +684,20 @@ public class ServerFacade implements IFacade {
         }
 
         final String jsonString = gameManager.getGameByID(gameID).getDTO().toJSON().getAsString();
+        return new CommandExecutionResult(jsonString);
+    }
+
+    /**
+     * Gets the model
+     * @param gameID
+     * @return CommandExecutionResult
+     * @throws GetModelException
+     */
+    @Override
+    public CommandExecutionResult getModel(int gameID) throws GetModelException {
+        Game game = gameManager.getGameByID(gameID);
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
         return new CommandExecutionResult(jsonString);
     }
 }

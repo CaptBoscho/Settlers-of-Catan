@@ -21,7 +21,7 @@ public enum CatanColor {
 	}
 
 	public static CatanColor translateFromString(String col) {
-        switch(col) {
+        switch(col.toLowerCase()) {
             case "red":
                 return CatanColor.RED;
             case "blue":

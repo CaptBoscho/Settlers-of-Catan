@@ -238,4 +238,12 @@ public interface IFacade {
      * @return CommandExecutionResult
      */
     CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
+
+    /**
+     * Gets the Model
+     * @param gameID
+     * @return CommandExecutionResult
+     * @throws GetModelException
+     */
+    CommandExecutionResult getModel(int gameID) throws GetModelException;
 }

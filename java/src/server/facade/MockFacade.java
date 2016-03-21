@@ -339,4 +339,15 @@ public class MockFacade implements IFacade {
     public CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
         return null;
     }
+
+    /**
+     * Gets the model
+     * @param gameID
+     * @return
+     * @throws GetModelException
+     */
+    @Override
+    public CommandExecutionResult getModel(int gameID) throws GetModelException {
+        return null;
+    }
 }

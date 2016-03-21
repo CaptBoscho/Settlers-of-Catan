@@ -1,6 +1,7 @@
 package shared.model.player;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -10,11 +11,11 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.resources.ResourceCard;
+
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Class for managing users
@@ -49,8 +50,8 @@ public final class PlayerManager implements IPlayerManager {
         assert players.size() < 5;
 
         this.players = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++) {
-            if (!(players.get(i) instanceof JsonNull)) {
+        for(int i = 0; i < players.size(); i++) {
+            if(players.get(i).getAsJsonObject().has("name")) {
                 addPlayer(new Player((JsonObject) players.get(i)));
             }
         }
@@ -782,13 +783,11 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     private int getNextAvailableIndex() {
-        for(int i = 0; i < this.players.size(); i++) {
-            if(this.players.get(i) == null) {
-                return i;
-            }
+        if(this.players.size() == 4) {
+            return -1;
         }
 
-        return -1;
+        return this.players.size();
     }
 
     public void addPlayer(final Player player) {
@@ -836,12 +835,33 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public JsonArray toJSON() {
         JsonArray array = new JsonArray();
+        int diff = 4 - players.size();
         for(Player p: players){
             array.add(p.toJSON());
         }
-        JsonObject json = new JsonObject();
 
+        for(int i = 0; i < diff; i++) {
+            array.add(new JsonObject());
+        }
         return array;
+    }
+
+    public boolean isRejoining(int playerId) {
+        for(Player p : players) {
+            if(p.getId() == playerId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void rejoin(String username, int playerId, CatanColor color) {
+        try {
+            Player p = getPlayerByID(playerId);
+            p.setColor(color);
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     //endregion

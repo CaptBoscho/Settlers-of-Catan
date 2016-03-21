@@ -756,7 +756,7 @@ public class Player implements IPlayer, Comparable<Player> {
     public JsonObject toJSON() {
         final JsonObject json = new JsonObject();
         json.addProperty("cities", structureBank.getAvailableCities());
-        json.addProperty("color", this.getColor().toString());
+        json.addProperty("color", this.getColor().toString().toLowerCase());
         json.addProperty("discarded", discarded);
         json.addProperty("monuments", monuments);
         json.addProperty("name", this.getName());
@@ -772,6 +772,10 @@ public class Player implements IPlayer, Comparable<Player> {
         json.addProperty("victoryPoints", this.getVictoryPoints());
 
         return json;
+    }
+
+    public void setColor(CatanColor color) {
+        this.color = color;
     }
     //endregion
 }
