@@ -39,6 +39,18 @@ public class ServerFacade implements IFacade {
         userManager = UserManager.getInstance();
     }
 
+    private HexLocation getModelHexLocation(HexLocation hexLoc) {
+        return new HexLocation(hexLoc.getX(), hexLoc.getY()+hexLoc.getX());
+    }
+
+    private EdgeLocation getModelEdgeLocation(EdgeLocation edgeLoc) {
+        return new EdgeLocation(getModelHexLocation(edgeLoc.getHexLoc()), edgeLoc.getDir());
+    }
+
+    private VertexLocation getModelVertexLocation(VertexLocation vertexLoc) {
+        return new VertexLocation(getModelHexLocation(vertexLoc.getHexLoc()), vertexLoc.getDir());
+    }
+
     /**
      * Singleton - get instance method
      * @return
@@ -290,7 +302,7 @@ public class ServerFacade implements IFacade {
      * @throws RobPlayerException
      */
     @Override
-    public CommandExecutionResult robPlayer(final int gameID, final int player, final HexLocation newLocation, final int victim) throws RobPlayerException {
+    public CommandExecutionResult robPlayer(final int gameID, final int player, HexLocation newLocation, final int victim) throws RobPlayerException {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
@@ -299,6 +311,7 @@ public class ServerFacade implements IFacade {
 
         Game game = gameManager.getGameByID(gameID);
         try {
+            newLocation = getModelHexLocation(newLocation);
             if(game.canPlaceRobber(player, newLocation)) {
                 game.rob(player, victim, newLocation);
             }
@@ -407,7 +420,7 @@ public class ServerFacade implements IFacade {
      * @throws RoadBuildingException
      */
     @Override
-    public CommandExecutionResult roadBuilding(final int gameID, final int player, final EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
+    public CommandExecutionResult roadBuilding(final int gameID, final int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
@@ -416,6 +429,8 @@ public class ServerFacade implements IFacade {
 
         final Game game = gameManager.getGameByID(gameID);
         try {
+            locationOne = getModelEdgeLocation(locationOne);
+            locationTwo = getModelEdgeLocation(locationTwo);
             if(game.canUseRoadBuilding(player)) {
                 game.useRoadBuilder(player, locationOne, locationTwo);
             }
@@ -438,7 +453,7 @@ public class ServerFacade implements IFacade {
      * @throws SoldierException
      */
     @Override
-    public CommandExecutionResult soldier(final int gameID, final int player, final HexLocation newLocation, final int victim) throws SoldierException {
+    public CommandExecutionResult soldier(final int gameID, final int player, HexLocation newLocation, final int victim) throws SoldierException {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
@@ -448,6 +463,7 @@ public class ServerFacade implements IFacade {
 
         Game game = gameManager.getGameByID(gameID);
         try{
+            newLocation = getModelHexLocation(newLocation);
             if(game.canUseSoldier(player)) {
                 game.useSoldier(player, victim, newLocation);
             }
@@ -524,7 +540,7 @@ public class ServerFacade implements IFacade {
      * @throws BuildRoadException
      */
     @Override
-    public CommandExecutionResult buildRoad(final int gameID, final int player, final EdgeLocation location) throws BuildRoadException {
+    public CommandExecutionResult buildRoad(final int gameID, final int player, EdgeLocation location) throws BuildRoadException {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
@@ -533,6 +549,7 @@ public class ServerFacade implements IFacade {
 
         final Game game = gameManager.getGameByID(gameID);
         try {
+            location = getModelEdgeLocation(location);
             if(game.canInitiateRoad(player, location)) {
                 game.initiateRoad(player, location);
             } else if(game.canBuildRoad(player, location)) {
@@ -557,7 +574,7 @@ public class ServerFacade implements IFacade {
      * @throws BuildSettlementException
      */
     @Override
-    public CommandExecutionResult buildSettlement(final int gameID, final int player, final VertexLocation location) throws BuildSettlementException {
+    public CommandExecutionResult buildSettlement(final int gameID, final int player, VertexLocation location) throws BuildSettlementException {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
@@ -566,6 +583,7 @@ public class ServerFacade implements IFacade {
 
         final Game game = gameManager.getGameByID(gameID);
         try {
+            location = getModelVertexLocation(location);
             if(game.canInitiateSettlement(player, location)) {
                 game.initiateSettlement(player, location);
             } else if(game.canBuildSettlement(player, location)) {
@@ -591,7 +609,7 @@ public class ServerFacade implements IFacade {
      * @throws BuildCityException
      */
     @Override
-    public CommandExecutionResult buildCity(final int gameID, final int player, final VertexLocation location) throws BuildCityException {
+    public CommandExecutionResult buildCity(final int gameID, final int player, VertexLocation location) throws BuildCityException {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert player >= 0;
@@ -600,6 +618,7 @@ public class ServerFacade implements IFacade {
 
         final Game game = gameManager.getGameByID(gameID);
         try {
+            location = getModelVertexLocation(location);
             if(game.canBuildCity(player, location)) {
                 game.buildCity(player, location);
             }

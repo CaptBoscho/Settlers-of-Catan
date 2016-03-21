@@ -79,6 +79,7 @@ public final class Map implements IMap, JsonSerializable {
         makeSettlements(gson.fromJson(blob.getAsJsonArray("settlements"), JsonArray.class));
         makeCities(gson.fromJson(blob.getAsJsonArray("cities"), JsonArray.class));
         HexLocation robberHexLoc = new HexLocation(blob.get("robber").getAsJsonObject());
+        robberHexLoc = getModelHexLocation(robberHexLoc);
         robber = new Robber(robberHexLoc);
     }
 
