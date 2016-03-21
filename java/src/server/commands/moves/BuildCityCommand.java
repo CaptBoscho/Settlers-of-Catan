@@ -6,6 +6,7 @@ import server.exceptions.BuildCityException;
 import server.exceptions.CommandExecutionFailedException;
 import server.main.Config;
 import shared.dto.BuildCityDTO;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 
 /**
@@ -15,6 +16,7 @@ import shared.dto.IDTO;
  */
 public class BuildCityCommand implements ICommand {
 
+    private CookieWrapperDTO cookies;
     private BuildCityDTO dto;
 
     /**
@@ -24,7 +26,7 @@ public class BuildCityCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.buildCity(1, dto.getPlayerIndex(), dto.getLocation());
+            return Config.facade.buildCity(cookies.getGameId(), dto.getPlayerIndex(), dto.getLocation());
         } catch (BuildCityException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
@@ -32,7 +34,8 @@ public class BuildCityCommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-        this.dto = (BuildCityDTO)dto;
+        this.cookies = (CookieWrapperDTO)dto;
+        this.dto = (BuildCityDTO)cookies.getDto();
     }
 
 }

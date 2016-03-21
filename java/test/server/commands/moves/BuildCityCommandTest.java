@@ -11,20 +11,20 @@ import server.main.Config;
  */
 public class BuildCityCommandTest {
 
-    private BuildCityCommand command;
+	private BuildCityCommand command;
 
-    @Before
-    public void setUp() {
-        Config.facade = new MockFacade();
-    }
+	@Before
+	public void setUp() {
+		Config.facade = new MockFacade();
+	}
 
-    @After
-    public void tearDown() {
+	@After
+	public void tearDown() {
 
-    }
+	}
 
-    @Test
-    public void testExecute() {
+	@Test
+	public void testExecute() {
 
-    }
+	}
 }
