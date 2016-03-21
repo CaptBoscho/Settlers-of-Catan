@@ -129,32 +129,27 @@ public class LoginView extends OverlayView implements ILoginView {
     }
 
     @Override
-    public String getLoginUsername()
-    {
+    public String getLoginUsername() {
         return signInPanel.txtUsername.getText();
     }
 
     @Override
-    public String getLoginPassword()
-    {
+    public String getLoginPassword() {
         return signInPanel.txtPassword.getText();
     }
 
     @Override
-    public String getRegisterUsername()
-    {
+    public String getRegisterUsername() {
         return registerPanel.txtUsername.getText();
     }
 
     @Override
-    public String getRegisterPassword()
-    {
+    public String getRegisterPassword() {
         return registerPanel.txtPassword.getText();
     }
 
     @Override
-    public String getRegisterPasswordRepeat()
-    {
+    public String getRegisterPasswordRepeat() {
         return registerPanel.txtPasswordAgain.getText();
     }
 
@@ -167,7 +162,7 @@ public class LoginView extends OverlayView implements ILoginView {
         private JTextField txtPassword = null;
         private JButton btnSignIn = null;
 
-        public SignInPanel() {
+        SignInPanel() {
             initComponents();
             initLayout();
             initEventListeners();
@@ -236,7 +231,7 @@ public class LoginView extends OverlayView implements ILoginView {
         private JTextField txtPasswordAgain = null;
         private JButton btnRegister = null;
 
-        public RegisterPanel() {
+        RegisterPanel() {
             initComponents();
             initTooltips();
             initLayout();
@@ -357,7 +352,7 @@ public class LoginView extends OverlayView implements ILoginView {
         private Border originalBorder = null;
         private Border redBorder = null;
 
-        public TextFieldValidator(JTextField textFieldValidate) {
+        TextFieldValidator(JTextField textFieldValidate) {
             this.textFieldValidate = textFieldValidate;
             originalBorder = textFieldValidate.getBorder();
             redBorder = BorderFactory.createLineBorder(Color.RED, 2);

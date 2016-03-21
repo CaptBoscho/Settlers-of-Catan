@@ -6,6 +6,7 @@ import client.misc.MessageView;
 import client.services.exceptions.BadHttpRequestException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.utils.JSONUtils;
 import shared.definitions.ClientModel;
 import shared.dto.*;
 import shared.model.player.PlayerManager;
@@ -225,7 +226,7 @@ public final class ServerProxy implements IServer {
                 e.printStackTrace();
             }
         }
-        if(result.equals("\"true\"")) {
+        if(result.equals("\"true\"") || !JSONUtils.isJSONValid(result)) {
             // already have latest model, don't update anything
             return null;
         }

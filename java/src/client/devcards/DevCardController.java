@@ -59,11 +59,11 @@ public final class DevCardController extends Controller implements IDevCardContr
 		getPlayCardView().setCardAmount(DevCardType.YEAR_OF_PLENTY, facade.getNumberDevCards(DevCardType.YEAR_OF_PLENTY, localPlayerIndex));
 	}
 
-	public IPlayDevCardView getPlayCardView() {
+	private IPlayDevCardView getPlayCardView() {
 		return (IPlayDevCardView)super.getView();
 	}
 
-	public IBuyDevCardView getBuyCardView() {
+	private IBuyDevCardView getBuyCardView() {
 		return buyCardView;
 	}
 

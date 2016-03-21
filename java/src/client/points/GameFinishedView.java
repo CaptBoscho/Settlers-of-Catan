@@ -64,6 +64,11 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 		middle.add(Box.createRigidArea(new Dimension(0,5))); // Spacing
 		
 		okButton = new JButton("OK");
+		ActionListener actionListener = e -> {
+            if (e.getSource() == okButton) {
+                closeModal();
+            }
+        };
 		okButton.addActionListener(actionListener);
 		Font buttonFont = okButton.getFont();
 		buttonFont = buttonFont.deriveFont(buttonFont.getStyle(), BUTTON_TEXT_SIZE);
@@ -72,15 +77,6 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 		this.add(okButton, BorderLayout.PAGE_END);
 	}
 
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == okButton) {
-				closeModal();
-			}
-		}	
-	};
-	
 	@Override
 	public IPointsController getController() {
 		
@@ -105,7 +101,4 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 		int newWidth = b.getWidth() * IMAGE_HEIGHT / b.getHeight();
 		image.setIcon(new ImageIcon(b.getScaledInstance(newWidth, IMAGE_HEIGHT, BufferedImage.SCALE_FAST)));
 	}
-
 }
-
-

@@ -55,11 +55,11 @@ public class DiscardController extends Controller implements IDiscardController,
 		facade.addObserver(this);
 	}
 
-	public IDiscardView getDiscardView() {
+	private IDiscardView getDiscardView() {
 		return (IDiscardView)super.getView();
 	}
 	
-	public IWaitView getWaitView() {
+	private IWaitView getWaitView() {
 		return waitView;
 	}
 

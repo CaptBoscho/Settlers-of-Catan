@@ -9,6 +9,8 @@ import spark.Response;
 import spark.Route;
 
 /**
+ * Handles HTTP GET request for fetching the game model.
+ *
  * @author Derek Argueta
  */
 public class ModelHandler implements Route {
@@ -16,7 +18,9 @@ public class ModelHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         //TODO: validation
 
-        CookieWrapperDTO dto = new CookieWrapperDTO(new GameModelDTO());
+        int requestedVersion = Integer.parseInt(request.queryMap("version").value());
+        GameModelDTO gameModelDTO = new GameModelDTO(requestedVersion);
+        CookieWrapperDTO dto = new CookieWrapperDTO(gameModelDTO);
         dto.extractCookieInfo(request.cookies());
 
         CommandExecutionResult result = GameController.getModel(dto);
