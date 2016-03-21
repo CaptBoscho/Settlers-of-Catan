@@ -27,15 +27,7 @@ public class JoinHandler implements Route {
         }
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new JoinGameDTO(request.body()));
-
-        //// literally THE dumbest way to do cookies. terribad design 340 peeps
-        final String decodedCookie = URLDecoder.decode(request.cookie("catan.user"), "UTF-8");
-        JsonObject crappyCookieDesign = new JsonParser().parse(decodedCookie).getAsJsonObject();
-
-        dto.setPlayerId(Integer.parseInt(crappyCookieDesign.get("playerID").getAsString()));
-        dto.setUsername(crappyCookieDesign.get("name").getAsString());
-
-        // like seriously, who stores a password as PLAIN TEXT in a cookie. cmon.
+        dto.extractCookieInfo(request.cookies());
 
         CommandExecutionResult result = GamesController.joinGame(dto);
         if(result.errorOccurred()) {
