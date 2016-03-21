@@ -18,3 +18,4 @@ hs_err_pid*
 
 demo/saves/
 *.log
+target/surefire-reports/

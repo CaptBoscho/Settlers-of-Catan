@@ -450,14 +450,4 @@ public class PlayerManagerTest {
             assertFalse(pm.canBuildCity(p.getId()));
         }
     }
-
-    //Test Helper Methods
-    private boolean wasShuffled(List<Player> players){
-        try{
-            return (players.get(0) != pm.getPlayerByIndex(0) || players.get(1) != pm.getPlayerByIndex(1)
-                    || players.get(2) != pm.getPlayerByIndex(2) || players.get(3) != pm.getPlayerByIndex(3));
-        }catch(PlayerExistsException e){
-            return false;
-        }
-    }
 }
