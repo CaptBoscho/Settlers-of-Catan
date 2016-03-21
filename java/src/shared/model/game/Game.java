@@ -833,14 +833,20 @@ public class Game extends Observable implements IGame, JsonSerializable {
         //Is value a 7 - robber
         if (value == 7) {
             //Go to discarding phase before robbing if any player has to discard
-            getPlayers().forEach(player -> {
+            boolean discard = false;
+            for(Player player: getPlayers()){
                 if (player.canDiscardCards()) {
-                    turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
                     player.setDiscarded(false);
+                    discard = true;
                 }else{
                     player.setDiscarded(true);
                 }
-            });
+            }
+            if(discard){
+               turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+            }else{
+                turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            }
             //Otherwise just move to the robbing phase
             //Can't move to robbing phase here! need to wait for everyone to discard
         } else {
@@ -855,7 +861,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
             });
 
             //Move to next phase - Playing
-            turnTracker.nextPhase();
+            //turnTracker.nextPhase();
+            turnTracker.setPhase(TurnTracker.Phase.PLAYING);
         }
     }
 
@@ -883,7 +890,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canOfferTrade(playerIndexOne)) {
             final TradePackage one = new TradePackage(playerIndexOne, playerOneCards);
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
-            // TODO - why is this trade object unused?
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
             //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
