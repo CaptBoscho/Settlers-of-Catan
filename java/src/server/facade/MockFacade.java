@@ -298,6 +298,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
+
         return null;
     }
 
