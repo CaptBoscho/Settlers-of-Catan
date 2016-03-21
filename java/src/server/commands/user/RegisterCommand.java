@@ -9,7 +9,7 @@ import shared.dto.IDTO;
 /**
  * A command object that registers a player.
  *
- * Created by Danny Harding on 3/10/16.
+ * @author Danny Harding
  */
 public class RegisterCommand implements ICommand {
 
@@ -22,7 +22,7 @@ public class RegisterCommand implements ICommand {
     /**
      * Communicates with the ServerFacade to carry out the Register command
      *
-     * @return IDTO with information about the registration
+     * @return CommandExecutionResult with information about the registration
      */
     @Override
     public CommandExecutionResult execute() {

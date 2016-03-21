@@ -10,7 +10,10 @@ import spark.Response;
 import spark.Route;
 
 /**
+ * Handles HTTP requests for playing the Year of Plenty card
+ *
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class YearOfPlentyHandler implements Route {
 

@@ -16,11 +16,15 @@ import static spark.Spark.*;
 
 /**
  * @author Derek Argueta
+ *
+ * Start of execution for the server
  */
 public class Main {
     private static final int HTTP_OK = 200;
 
     public static void main(String[] args) {
+
+        // set the configuration
         if(args.length == 2) {
             Config.host = args[0];
             Config.port = Integer.parseInt(args[1]);
@@ -29,6 +33,7 @@ public class Main {
             Config.facade = ServerFacade.getInstance();
         }
 
+        // for now, hardcode to port 8081
         port(8081);
 
         // TODO - enable configuring the mock server

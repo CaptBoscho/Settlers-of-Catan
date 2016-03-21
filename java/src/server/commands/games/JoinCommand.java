@@ -11,7 +11,7 @@ import shared.dto.JoinGameDTO;
 /**
  * A command object that adds a player to a game.
  *
- * Created by Danny Harding on 3/10/16.
+ * @author Danny Harding
  */
 public class JoinCommand implements ICommand {
 

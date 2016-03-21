@@ -10,7 +10,7 @@ import shared.dto.IDTO;
 /**
  * A command object that creates a game.
  *
- * Created by Danny Harding on 3/10/16.
+ * @author Danny Harding
  */
 public class CreateCommand implements ICommand {
 

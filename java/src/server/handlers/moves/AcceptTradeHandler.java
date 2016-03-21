@@ -1,7 +1,5 @@
 package server.handlers.moves;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
 import shared.dto.TradeOfferResponseDTO;
@@ -10,7 +8,10 @@ import spark.Response;
 import spark.Route;
 
 /**
+ * Handles HTTP requests for accepting a trade offer from another player
+ *
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class AcceptTradeHandler implements Route {
     @Override

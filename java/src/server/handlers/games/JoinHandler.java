@@ -9,6 +9,8 @@ import spark.Route;
 
 /**
  * @author Derek Argueta
+ *
+ * Handles HTTP requests for joining a game
  */
 public class JoinHandler implements Route {
 

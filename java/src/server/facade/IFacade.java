@@ -13,7 +13,7 @@ import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
 
 /**
- * Created by Kyle 'TMD' Cornelison on 3/10/2016.
+ * @author Kyle Cornelison
  */
 public interface IFacade {
     //User Methods

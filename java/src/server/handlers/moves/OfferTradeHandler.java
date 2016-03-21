@@ -8,7 +8,10 @@ import spark.Response;
 import spark.Route;
 
 /**
+ * Handles HTTP requests for offering a trade to another player
+ *
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class OfferTradeHandler implements Route {
     @Override
