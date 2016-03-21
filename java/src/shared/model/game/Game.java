@@ -59,7 +59,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * Constructors
      */
     public Game() {
-        this.version = 0;
+        this.version = -1;
         this.winner = -1;
         this.title = "";
         this.map = new Map(false, false, false);
@@ -74,7 +74,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public Game(final String title, final boolean randomPorts, final boolean randomNumbers, final boolean randomTiles) {
-        this.version = 0;
+        this.version = -1;
         this.winner = -1;
         this.title = title;
         this.map = new Map(randomTiles, randomNumbers, randomPorts);
