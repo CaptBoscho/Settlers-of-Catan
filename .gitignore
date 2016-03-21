@@ -17,3 +17,5 @@ hs_err_pid*
 
 demo/saves/
 *.log
+target/surefire-reports/testrunner.TestRunner.txt
+target/surefire-reports/TEST-server.commands.user.LoginCommandTest.xml

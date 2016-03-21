@@ -5,10 +5,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
+import shared.definitions.PortType;
+import shared.definitions.ResourceType;
+import shared.exceptions.BadCallerException;
 import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
+import shared.model.cards.devcards.*;
 import shared.model.cards.resources.*;
 import shared.model.game.Game;
 import shared.model.player.Player;
@@ -100,95 +104,267 @@ public class PlayerTest {
 
     @Test
     public void testCanMaritimeTrade() throws Exception {
+        for(final Player p : pm.getPlayers()){
+            assertFalse(p.canMaritimeTrade(PortType.BRICK));
+        }
 
+        for(final Player p : pm.getPlayers()){
+            for(int i = 0; i < 8; i++){
+                p.addResourceCard(new Brick());
+            }
+            assertTrue(p.canMaritimeTrade(PortType.BRICK));
+            assertFalse(p.canMaritimeTrade(PortType.ORE));
+        }
     }
 
     @Test
     public void testCanBuyDevCard() throws Exception {
+        for(final Player p : pm.getPlayers()){
+            assertFalse(p.canBuyDevCard());
+        }
 
+        for(final Player p : pm.getPlayers()){
+            for(int i = 0; i < 8; i++){
+                p.addResourceCard(new Sheep());
+                p.addResourceCard(new Ore());
+                p.addResourceCard(new Wheat());
+            }
+            assertTrue(p.canBuyDevCard());
+        }
     }
 
     @Test
     public void testBuyDevCard() throws Exception {
+        for(final Player p : pm.getPlayers()){
+            p.addResourceCard(new Sheep());
+            p.addResourceCard(new Ore());
+            p.addResourceCard(new Wheat());
 
+            assertTrue(p.canBuyDevCard());
+            p.buyDevCard();
+            assertFalse(p.canBuyDevCard());
+        }
     }
 
     @Test
-    public void testCanUseYearOfPlenty() throws Exception {
-        for(final Player p : pm.getPlayers()) {
+    public void testCanUseYearOfPlenty() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
             assertFalse(p.canUseYearOfPlenty());
         }
 
-        // TODO -- give YOP to a player and assert true
+        //Can't play if you've already played a dev card
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new YearOfPlentyCard());
+            p.setPlayedDevCard(true);
+            assertFalse(p.canUseYearOfPlenty());
+        }
+
+        //Can't play until next turn
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new YearOfPlentyCard());
+            p.setPlayedDevCard(false);
+            assertFalse(p.canUseYearOfPlenty());
+        }
+
+        //Can play now
+        for(final Player p : pm.getPlayers()){
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseYearOfPlenty());
+        }
     }
 
     @Test
-    public void testUseYearOfPlenty() throws Exception {
-
+    public void testUseYearOfPlenty() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new YearOfPlentyCard());
+            p.setPlayedDevCard(false);
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseYearOfPlenty());
+            p.useYearOfPlenty();
+            assertFalse(p.canUseYearOfPlenty());
+        }
     }
 
     @Test
-    public void testCanUseRoadBuilder() throws Exception {
+    public void testCanUseRoadBuilder() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
+            assertFalse(p.canUseRoadBuilder());
+        }
 
+        //Can't play if you've already played a dev card
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new RoadBuildCard());
+            p.setPlayedDevCard(true);
+            assertFalse(p.canUseRoadBuilder());
+        }
+
+        //Can't play until next turn
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new RoadBuildCard());
+            p.setPlayedDevCard(false);
+            assertFalse(p.canUseRoadBuilder());
+        }
+
+        //Can play now
+        for(final Player p : pm.getPlayers()){
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseRoadBuilder());
+        }
     }
 
     @Test
-    public void testUseRoadBuilder() throws Exception {
-
+    public void testUseRoadBuilder() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new RoadBuildCard());
+            p.setPlayedDevCard(false);
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseRoadBuilder());
+            p.useRoadBuilder();
+            assertFalse(p.canUseRoadBuilder());
+        }
     }
 
     @Test
-    public void testCanUseSoldier() throws Exception {
-        for(final Player p : pm.getPlayers()) {
+    public void testCanUseSoldier() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
             assertFalse(p.canUseSoldier());
         }
 
-        // TODO -- give soldier card to a player and assert true
+        //Can't play if you've already played a dev card
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new SoldierCard());
+            p.setPlayedDevCard(true);
+            assertFalse(p.canUseSoldier());
+        }
+
+        //Can't play until next turn
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new SoldierCard());
+            p.setPlayedDevCard(false);
+            assertFalse(p.canUseSoldier());
+        }
+
+        //Can play now
+        for(final Player p : pm.getPlayers()){
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseSoldier());
+        }
     }
 
     @Test
-    public void testUseSoldier() throws Exception {
-
+    public void testUseSoldier() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new SoldierCard());
+            p.setPlayedDevCard(false);
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseSoldier());
+            p.useSoldier();
+            assertFalse(p.canUseSoldier());
+        }
     }
 
     @Test
-    public void testCanUseMonopoly() throws Exception {
-        for(final Player p : pm.getPlayers()) {
+    public void testCanUseMonopoly() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
             assertFalse(p.canUseMonopoly());
         }
 
-        // TODO -- give monopoly card to a player and assert true
+        //Can't play if you've already played a dev card
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new MonopolyCard());
+            p.setPlayedDevCard(true);
+            assertFalse(p.canUseMonopoly());
+        }
+
+        //Can't play until next turn
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new MonopolyCard());
+            p.setPlayedDevCard(false);
+            assertFalse(p.canUseMonopoly());
+        }
+
+        //Can play now
+        for(final Player p : pm.getPlayers()){
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseMonopoly());
+        }
     }
 
     @Test
-    public void testUseMonopoly() throws Exception {
-
+    public void testUseMonopoly() throws Exception, BadCallerException, InvalidTypeException {
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new MonopolyCard());
+            p.setPlayedDevCard(false);
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseMonopoly());
+            p.discardMonopoly();
+            assertFalse(p.canUseMonopoly());
+        }
     }
 
     @Test
-    public void testCanUseMonument() throws Exception {
-        for(final Player p : Facade.getInstance().getGame().getPlayerManager().getPlayers()) {
+    public void testCanUseMonument() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
             assertFalse(p.canUseMonument());
         }
 
+        //Can't play if you've already played a dev card
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new MonumentCard());
+            p.setPlayedDevCard(true);
+            assertFalse(p.canUseMonument());
+        }
 
+        //Can't play until next turn
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new MonumentCard());
+            p.setPlayedDevCard(false);
+            assertFalse(p.canUseMonument());
+        }
 
-        // TODO -- give monument card to a player and assert true
+        //Can play now
+        for(final Player p : pm.getPlayers()){
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseMonument());
+        }
     }
 
     @Test
-    public void testUseMonument() throws Exception {
-
+    public void testUseMonument() throws Exception, BadCallerException {
+        for(final Player p : pm.getPlayers()){
+            p.addDevCard(new MonumentCard());
+            p.setPlayedDevCard(false);
+            p.getDevelopmentCardBank().moveNewToOld();
+            assertTrue(p.canUseMonument());
+            p.useMonument();
+            assertFalse(p.canUseMonument());
+        }
     }
 
     @Test
     public void testCanPlaceRobber() throws Exception {
-
+        for(final Player p : pm.getPlayers()){
+            p.setMoveRobber(false);
+            assertFalse(p.canPlaceRobber());
+            p.setMoveRobber(true);
+            assertTrue(p.canPlaceRobber());
+        }
     }
 
     @Test
-    public void testPlaceRobber() throws Exception {
+    public void testPlaceRobber() throws Exception, InvalidTypeException {
+        for(final Player p : pm.getPlayers()){
+            for(int i = 0; i < 4; i++){
+                p.addResourceCard(new Brick());
+            }
+        }
 
+        for(final Player p : pm.getPlayers()){
+            p.setMoveRobber(true);
+            assertTrue(p.canPlaceRobber());
+            p.placeRobber();
+            assertFalse(p.canPlaceRobber());
+        }
     }
 
     @Test
@@ -212,7 +388,13 @@ public class PlayerTest {
 
     @Test
     public void testBuildRoad() throws Exception {
-
+        for(final Player p : pm.getPlayers()){
+            p.addResourceCard(new Brick());
+            p.addResourceCard(new Wood());
+            assertTrue(p.canBuildRoad());
+            p.buildRoad();
+            assertFalse(p.canBuildRoad());
+        }
     }
 
     @Test
@@ -238,17 +420,46 @@ public class PlayerTest {
 
     @Test
     public void testBuildSettlement() throws Exception {
-
+        for(final Player p : pm.getPlayers()){
+            p.addResourceCard(new Brick());
+            p.addResourceCard(new Wood());
+            p.addResourceCard(new Wheat());
+            p.addResourceCard(new Sheep());
+            assertTrue(p.canBuildSettlement());
+            p.buildSettlement();
+            assertFalse(p.canBuildSettlement());
+        }
     }
 
     @Test
     public void testCanBuildCity() throws Exception {
+        for(final Player p : pm.getPlayers()){
+            assertFalse(pm.canBuildCity(p.getId()));
+        }
 
+        for(final Player p : pm.getPlayers()){
+            for(int i = 0; i < 3; i++) {
+                p.addResourceCard(new Ore());
+            }
+            for(int i = 0; i < 2; i++) {
+                p.addResourceCard(new Wheat());
+            }
+            assertTrue(p.canBuildCity());
+        }
     }
 
     @Test
     public void testBuildCity() throws Exception {
-
+        for(final Player p : pm.getPlayers()){
+            for(int i = 0; i < 3; i++) {
+                p.addResourceCard(new Ore());
+            }
+            for(int j = 0; j < 2; j++) {
+                p.addResourceCard(new Wheat());
+            }
+            p.buildCity();
+            assertFalse(p.canBuildCity());
+        }
     }
 
     @Test
