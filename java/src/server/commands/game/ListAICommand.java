@@ -3,6 +3,8 @@ package server.commands.game;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.exceptions.ListAIException;
+import server.main.Config;
 import shared.dto.IDTO;
 import shared.dto.ListAIDTO;
 
@@ -22,12 +24,17 @@ public class ListAICommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
-        return null;
+        try {
+            return Config.facade.listAI(0);
+        } catch (ListAIException e) {
+            e.printStackTrace();
+            return new CommandExecutionResult("Error listing AI types!");
+        }
     }
 
     @Override
     public void setParams(IDTO dto) {
-        this.dto = (ListAIDTO)dto;
+        //not needed
     }
 
 }

@@ -4,12 +4,14 @@ import client.data.GameInfo;
 import client.facade.Facade;
 import client.misc.MessageView;
 import client.services.exceptions.BadHttpRequestException;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
 import shared.dto.*;
 import shared.model.player.PlayerManager;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -316,9 +318,12 @@ public final class ServerProxy implements IServer {
         result = Utils.sendGet(url);
         assert result != null;
 
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        JsonArray arr = new JsonParser().parse(result).getAsJsonArray();
+        //JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         List<String> availableAIs = new ArrayList<>();
-        obj.getAsJsonArray().forEach(ai -> availableAIs.add(ai.getAsString()));
+        arr.get(0).getAsJsonObject().get("ai").getAsString();
+        arr.forEach(ai-> availableAIs.add(ai.getAsJsonObject().get("ai").getAsString()));
+        //arr.forEach(obj -> availableAIs.add(obj.get("ai").getAsString()));
         return availableAIs;
     }
 

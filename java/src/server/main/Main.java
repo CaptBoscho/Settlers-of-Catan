@@ -74,7 +74,7 @@ public class Main {
         ////////// Game HTTP Requests //////////
         get("/game/model", new ModelHandler());
         post("/game/addAI", new AddAIHandler());
-        post("/game/listAI", new ListAIHandler());
+        get("/game/listAI", new ListAIHandler());
 
         ////////// Moves HTTP Requests //////////
         post("/moves/sendChat", new SendChatHandler());
