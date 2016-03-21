@@ -18,18 +18,6 @@ public final class Die {
     }
 
     /**
-     * Overloaded Constructor - sets die range to [min,max]
-     * @param min minimum value the dice can return
-     * @param max maximum value the dice can return
-     */
-    Die(final int min, final int max) {
-        assert max > min;
-
-        this.min = min;
-        this.max = max;
-    }
-
-    /**
      * Simulates rolling a die
      * @return Integer value between the min and max (inclusive)
      */

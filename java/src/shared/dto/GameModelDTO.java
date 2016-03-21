@@ -5,17 +5,23 @@ import shared.model.JsonSerializable;
 import shared.model.game.Game;
 
 /**
- * Created by Kyle 'TMD' Cornelison on 3/16/2016.
+ * @author Kyle Cornelison
  */
 public class GameModelDTO implements IDTO,JsonSerializable {
 
     private Game game;
+    private int version;
 
     public GameModelDTO(JsonObject gameJSON) {
         game = new Game(gameJSON);
     }
 
-    public GameModelDTO() {
+    public GameModelDTO(final int version) {
+        this.version = version;
+    }
+
+    public int getVersion() {
+        return this.version;
     }
 
     /**

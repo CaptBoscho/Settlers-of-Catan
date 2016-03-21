@@ -33,14 +33,14 @@ public final class RollController extends Controller implements IRollController,
         createState(facade.getPhase());
 	}
 	
-	public IRollResultView getResultView() {
+	private IRollResultView getResultView() {
 		return resultView;
 	}
-	public void setResultView(IRollResultView resultView) {
+	private void setResultView(IRollResultView resultView) {
 		this.resultView = resultView;
 	}
 
-	public IRollView getRollView() {
+	private IRollView getRollView() {
 		return (IRollView)getView();
 	}
 	
@@ -48,16 +48,10 @@ public final class RollController extends Controller implements IRollController,
 	public void rollDice() {
         try {
             state.rollDice();
-        } catch (PlayerExistsException e) {
-            e.printStackTrace();
-        } catch (MissingUserCookieException e) {
-            e.printStackTrace();
-        } catch (CommandExecutionFailed commandExecutionFailed) {
-            commandExecutionFailed.printStackTrace();
-        } catch (InvalidStateActionException e) {
+        } catch (PlayerExistsException | MissingUserCookieException | CommandExecutionFailed | InvalidStateActionException e) {
             e.printStackTrace();
         }
-    }
+	}
 
 	/**
 	 * This method is called whenever the observed object is changed. An
@@ -85,7 +79,7 @@ public final class RollController extends Controller implements IRollController,
      * Create controller state
      * @param phase
      */
-    public void createState(TurnTracker.Phase phase){
+	private void createState(TurnTracker.Phase phase){
         switch (phase) {
             case ROLLING:  state = new RollingState(getRollView(), getResultView());
                 break;

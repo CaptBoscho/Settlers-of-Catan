@@ -18,12 +18,10 @@ import java.util.Map;
  */
 public class GameCommandFactory {
 
-    private IFacade facade;
     private static GameCommandFactory instance = null;
     private Map<String, ICommand> commands;
 
     private GameCommandFactory() {
-//        this.facade = ServerFacade.getInstance();
         this.commands = new HashMap<>();
     }
 
@@ -56,6 +54,4 @@ public class GameCommandFactory {
 
         throw new Exception("no matching command found");
     }
-
-
 }

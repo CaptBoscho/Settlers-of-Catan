@@ -17,7 +17,7 @@ public class PlaceholderTextField extends JTextField {
         return placeholder;
     }
     
-    public void setPlaceholder(String placeholder) {
+    void setPlaceholder(String placeholder) {
         if (placeholder == null) {
             this.placeholder = "";
         } else {

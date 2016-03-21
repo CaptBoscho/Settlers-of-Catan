@@ -171,6 +171,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert json.has("turnTracker");
         assert json.has("chat");
         assert json.has("log");
+        assert json.has("version");
+        assert json.has("winner");
 
         this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
         this.map = new Map(json.get("map").getAsJsonObject());
@@ -658,11 +660,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         return turnTracker.isPlayersTurn(playerIndex);
     }
-    //==================================================================================================
+    //==========================================================================
     //endregion
 
     //region Do methods
-    //=========================================================================================
+    //==========================================================================
 
     /**
      * Adds an AI player to the game
@@ -1189,11 +1191,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         return turnTracker.nextTurn();
     }
-    //================================================================================================
+    //==========================================================================
     //endregion
 
     //region Getters
-    //================================================================================
+    //==========================================================================
 
     /**
      * Gets the instance of the player manager
@@ -1599,11 +1601,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         turnTracker.setPhase(phase);
     }
-    //===================================================================================================
+    //==========================================================================
     //endregion
 
     //region Domestic trade methods
-    //============================================================================
+    //==========================================================================
 
     /**
      * checks if the player is in the trade sequence of his turn
@@ -1656,11 +1658,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public int getTradeOre() {
         return this.currentOffer.getOre();
     }
-    //============================================================================================
+    //==========================================================================
     //endregion
 
     //region ResourceBar controller methods
-    //======================================================================================
+    //==========================================================================
 
     /**
      * Determine if the player can build a settlement
@@ -1717,11 +1719,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         return (playerManager.canBuildCity(playerIndex) && turnTracker.canPlay() && turnTracker.isPlayersTurn(playerIndex));
     }
-    //=========================================================================================
+    //==========================================================================
     //endregion
 
     //region Serialization
-    //=====================================================================
+    //==========================================================================
 
     /**
      * Converts the object to JSON

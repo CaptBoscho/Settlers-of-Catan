@@ -142,7 +142,6 @@ public class ServerFacade implements IFacade {
      * List the current games
      *
      * @return CommandExecutionResult
-     * @throws ListException
      */
     @Override
     public CommandExecutionResult list() {
@@ -217,6 +216,7 @@ public class ServerFacade implements IFacade {
 
         // get the game
         final Game game = this.gameManager.getGameByID(gameID);
+        game.incrementVersion();
 
         if(game.canAddPlayer() && !game.isRejoining(playerId)) {
             game.getPlayerManager().addNewPlayer(username, playerId, color);
@@ -224,7 +224,7 @@ public class ServerFacade implements IFacade {
             result.addCookie("catan.game", String.valueOf(game.getId()));
             return result;
         } else if(game.isRejoining(playerId)){
-            game.getPlayerManager().rejoin(username, playerId, color);
+            game.getPlayerManager().rejoin(playerId, color);
             CommandExecutionResult result = new CommandExecutionResult("Success");
             result.addCookie("catan.game", String.valueOf(game.getId()));
             return result;
@@ -774,14 +774,20 @@ public class ServerFacade implements IFacade {
     /**
      * Gets the model
      * @param gameID
+     * @param version
      * @return CommandExecutionResult
      * @throws GetModelException
      */
     @Override
-    public CommandExecutionResult getModel(int gameID) throws GetModelException {
-        Game game = gameManager.getGameByID(gameID);
-        JsonObject json = game.toJSON();
-        String jsonString = json.toString();
+    public CommandExecutionResult getModel(int gameID, int version) throws GetModelException {
+        final Game game = gameManager.getGameByID(gameID);
+        if(game.getVersion() == version) {
+            // TODO - change this absurd stupidity of \"true\"
+            return new CommandExecutionResult("\"true\"");
+        }
+
+        final JsonObject json = game.toJSON();
+        final String jsonString = json.toString();
         return new CommandExecutionResult(jsonString);
     }
 }

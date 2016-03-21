@@ -37,7 +37,7 @@ public final class PlayerManager implements IPlayerManager {
     }
 
     public PlayerManager() {
-        this.players = new ArrayList<Player>(Collections.nCopies(4, null));
+        this.players = new ArrayList<>(Collections.nCopies(4, null));
     }
 
     /**
@@ -642,7 +642,7 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Integer getAvailableRoads(final int playerIndex) throws PlayerExistsException {
+    public int getAvailableRoads(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
 
@@ -657,7 +657,7 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Integer getAvailableSettlements(final int playerIndex) throws PlayerExistsException {
+    public int getAvailableSettlements(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
 
@@ -672,7 +672,7 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Integer getAvailableCities(final int playerIndex) throws PlayerExistsException {
+    public int getAvailableCities(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
 
@@ -855,7 +855,7 @@ public final class PlayerManager implements IPlayerManager {
         return false;
     }
 
-    public void rejoin(String username, int playerId, CatanColor color) {
+    public void rejoin(int playerId, CatanColor color) {
         try {
             Player p = getPlayerByID(playerId);
             p.setColor(color);
