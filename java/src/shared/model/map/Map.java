@@ -13,8 +13,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Representation of the map in the game. The game map keeps track of all locations, buildings, and chits as well as the
- * special robber character. The map uses a HashMap in the underlying implementation, which allows O(1)
+ * Representation of the map in the game. The game map keeps track of all
+ * locations, buildings, and chits as well as the special robber character. The
+ * map uses a HashMap in the underlying implementation, which allows O(1)
  * insertion/retrieval.
  *
  * @author Joel Bradley

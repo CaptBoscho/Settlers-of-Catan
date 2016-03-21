@@ -172,6 +172,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert json.has("chat");
         assert json.has("log");
 
+        System.out.println("hellur hellur");
+
         this.developmentCardBank = new DevelopmentCardBank(json.get("deck").getAsJsonObject(), true);
         this.map = new Map(json.get("map").getAsJsonObject());
         this.playerManager = new PlayerManager(json.get("players").getAsJsonArray());
