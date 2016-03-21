@@ -3,6 +3,7 @@ package server.handlers.moves;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
 import shared.dto.BuyDevCardDTO;
+import shared.dto.CookieWrapperDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -18,7 +19,10 @@ public class BuyDevCardHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.buyDevCard(new BuyDevCardDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new BuyDevCardDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.buyDevCard(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

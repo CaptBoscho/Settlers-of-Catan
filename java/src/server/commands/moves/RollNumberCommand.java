@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.RollNumberException;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.RollNumberDTO;
 
@@ -15,7 +16,9 @@ import shared.dto.RollNumberDTO;
  */
 public class RollNumberCommand implements ICommand {
 
-    private RollNumberDTO dto;
+    private int gameId;
+    private int playerIndex;
+    private int value;
 
     /**
      * Communicates with the ServerFacade to carry out the Roll Number command
@@ -24,14 +27,18 @@ public class RollNumberCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.rollNumber(1, dto.getPlayerIndex(), dto.getValue());
+            return Config.facade.rollNumber(this.gameId, this.playerIndex, this.value);
         } catch (RollNumberException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (RollNumberDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        final RollNumberDTO tmpDTO = (RollNumberDTO)cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
+        this.playerIndex = tmpDTO.getPlayerIndex();
+        this.value = tmpDTO.getValue();
     }
 }

@@ -2,6 +2,7 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.RoadBuildingDTO;
 import spark.Request;
 import spark.Response;
@@ -15,7 +16,10 @@ public class RoadBuildingHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.roadBuilding(new RoadBuildingDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new RoadBuildingDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.roadBuilding(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

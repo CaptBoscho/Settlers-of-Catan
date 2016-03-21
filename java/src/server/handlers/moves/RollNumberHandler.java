@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.RollNumberDTO;
 import spark.Request;
 import spark.Response;
@@ -28,7 +29,10 @@ public class RollNumberHandler implements Route {
 
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.rollNumber(new RollNumberDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new RollNumberDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.rollNumber(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

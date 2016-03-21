@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.DiscardCardsException;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.IDTO;
 
@@ -15,7 +16,8 @@ import shared.dto.IDTO;
  */
 public class DiscardCardsCommand implements ICommand {
 
-    DiscardCardsDTO dto;
+    private int gameId;
+    private DiscardCardsDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the Discard Cards command
@@ -31,7 +33,9 @@ public class DiscardCardsCommand implements ICommand {
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (DiscardCardsDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        this.dto = (DiscardCardsDTO)cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
     }
 }

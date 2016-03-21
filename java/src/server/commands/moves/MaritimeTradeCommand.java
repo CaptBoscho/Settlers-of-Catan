@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.MaritimeTradeException;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.MaritimeTradeDTO;
 
@@ -15,6 +16,7 @@ import shared.dto.MaritimeTradeDTO;
  */
 public class MaritimeTradeCommand implements ICommand {
 
+    private int gameId;
     private MaritimeTradeDTO dto;
 
     /**
@@ -31,7 +33,9 @@ public class MaritimeTradeCommand implements ICommand {
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (MaritimeTradeDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO) dto;
+        this.dto = (MaritimeTradeDTO) cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
     }
 }
