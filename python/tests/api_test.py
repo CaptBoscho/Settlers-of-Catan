@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+__author__ = 'Derek Argueta'
 
 import unittest
 import requests

@@ -1,6 +1,10 @@
 package client.services;
 
 import client.misc.MessageView;
+import client.services.exceptions.BadHttpRequestException;
+import client.services.exceptions.BadRequestException;
+import client.services.exceptions.InternalServerErrorException;
+import client.services.exceptions.NotFoundException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.IOUtils;
@@ -21,9 +25,9 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Derek Argueta
  */
-public final class Utils {
+final class Utils {
 
-    public static String buildUrl(String host, int port) {
+    static String buildUrl(String host, int port) {
         assert host != null;
         assert host.length() > 0;
         assert port > 0;
@@ -43,7 +47,7 @@ public final class Utils {
         return writer.toString();
     }
 
-    public static String sendPost(final String url, JsonObject body) {
+    static String sendPost(final String url, JsonObject body) throws BadHttpRequestException {
         assert url != null;
         assert url.length() > 0;
 
@@ -70,22 +74,30 @@ public final class Utils {
         try {
             assert httpClient != null;
             final HttpResponse response = httpClient.execute(post);
+            switch(response.getStatusLine().getStatusCode()) {
+                case 400:
+                    throw new BadRequestException();
+                case 404:
+                    throw new NotFoundException();
+                case 500:
+                    throw new InternalServerErrorException();
+            }
             if(response.containsHeader("Set-cookie")) {
                 final Header cookieHeader = response.getFirstHeader("Set-cookie");
                 UserCookie.getInstance().setCookies(cookieHeader.getValue());
             }
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
+            e.printStackTrace();
             MessageView view = new MessageView();
             view.setTitle("Bad Connection");
             view.setMessage("Unable to communicate with the server");
             view.showModal();
-//            e.printStackTrace();
         }
         return null;
     }
 
-    public static String sendGet(final String url) {
+    static String sendGet(final String url) {
         assert url != null;
         assert url.length() > 0;
 
@@ -100,11 +112,11 @@ public final class Utils {
         try {
             return Utils.getStringFromHttpResponse(HttpClientBuilder.create().build().execute(get));
         } catch (IOException e) {
+            e.printStackTrace();
             MessageView view = new MessageView();
             view.setTitle("Bad Connection");
             view.setMessage("Unable to communicate with the server");
             view.showModal();
-//            e.printStackTrace();
         }
         return null;
     }

@@ -1,6 +1,7 @@
 package client.services;
 
 import client.data.GameInfo;
+import client.facade.Facade;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.definitions.ClientModel;
@@ -206,117 +207,108 @@ public class MockServer implements IServer {
      * Sends a chat message
      *
      * @param dto The transport object that contains the information required to send a message
-     * @return The current state of the game
      */
     @Override
-    public ClientModel sendChat(SendChatDTO dto) {
+    public void sendChat(SendChatDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Used to roll a number at the beginning of your turn
      *
      * @param dto The transport object that contains the information required to roll a number
-     * @return The current state of the game
      */
     @Override
-    public ClientModel rollNumber(RollNumberDTO dto) {
+    public void rollNumber(RollNumberDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Moves the robber, selecting the new robber position and player to rob
      *
      * @param dto The transport object that contains the information required to rob a player
-     * @return The current state of the game
      */
     @Override
-    public ClientModel robPlayer(RobPlayerDTO dto) {
+    public void robPlayer(RobPlayerDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Used to finish your turn
      *
      * @param dto The transport object that contains the information required for a player to finish their turn
-     * @return The current state of the game
      */
     @Override
-    public ClientModel finishTurn(FinishTurnDTO dto) {
+    public void finishTurn(FinishTurnDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Used to buy a development card
      *
      * @param dto The transport object that contains the information required to buy a development card
-     * @return The current state of the game
      */
     @Override
-    public ClientModel buyDevCard(BuyDevCardDTO dto) {
+    public void buyDevCard(BuyDevCardDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Plays a 'Year of Plenty' card from the player's hand to gain the two specified resources
      *
      * @param dto The transport object that contains the information required to play the Year of Plenty card
-     * @return The current state of the game
      */
     @Override
-    public ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto) {
+    public void playYearOfPlentyCard(PlayYOPCardDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
      *
      * @param dto The transport object that contains the information required to play the Road Building card
-     * @return The current state of the game
      */
     @Override
-    public ClientModel playRoadBuildingCard(RoadBuildingDTO dto) {
+    public void playRoadBuildingCard(RoadBuildingDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob
      *
      * @param dto The transport object that contains the information required to play the soldier card
-     * @return The current state of the game
      */
     @Override
-    public ClientModel playSoldierCard(PlaySoldierCardDTO dto) {
+    public void playSoldierCard(PlaySoldierCardDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Plays a 'Monopoly' card from your hand to monopolize the specified resource
      *
      * @param dto The transport object that contains the information required to play a monopoly card
-     * @return The current state of the game
      */
     @Override
-    public ClientModel playMonopolyCard(PlayMonopolyDTO dto) {
+    public void playMonopolyCard(PlayMonopolyDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
@@ -326,10 +318,10 @@ public class MockServer implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel playMonumentCard(PlayMonumentDTO dto) {
+    public void playMonumentCard(PlayMonumentDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
@@ -339,36 +331,34 @@ public class MockServer implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel buildRoad(BuildRoadDTO dto) {
+    public void buildRoad(BuildRoadDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Builds a settlement at the specified location. (Set 'free' to true during initial setup.)
      *
      * @param dto The transport object that contains the information required to build a settlement
-     * @return The current state of the game
      */
     @Override
-    public ClientModel buildSettlement(BuildSettlementDTO dto) {
+    public void buildSettlement(BuildSettlementDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
      * Builds a city at the specified location
      *
      * @param dto The transport object that contains the information required to build a city
-     * @return The current state of the game
      */
     @Override
-    public ClientModel buildCity(BuildCityDTO dto) {
+    public void buildCity(BuildCityDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
@@ -378,10 +368,10 @@ public class MockServer implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel offerTrade(OfferTradeDTO dto) {
+    public void offerTrade(OfferTradeDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
@@ -391,10 +381,10 @@ public class MockServer implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel respondToTradeOffer(TradeOfferResponseDTO dto) {
+    public void respondToTradeOffer(TradeOfferResponseDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
@@ -404,10 +394,10 @@ public class MockServer implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel maritimeTrade(MaritimeTradeDTO dto) {
+    public void maritimeTrade(MaritimeTradeDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
@@ -417,10 +407,10 @@ public class MockServer implements IServer {
      * @return The current state of the game
      */
     @Override
-    public ClientModel discardCards(DiscardCardsDTO dto) {
+    public void discardCards(DiscardCardsDTO dto) {
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(this.exampleModel).getAsJsonObject();
-        return new ClientModel(obj);
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**

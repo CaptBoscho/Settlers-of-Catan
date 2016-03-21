@@ -122,136 +122,120 @@ public interface IServer {
      * Sends a chat message
      *
      * @param dto The transport object that contains the information required to send a message
-     * @return The current state of the game
      */
-    ClientModel sendChat(SendChatDTO dto) throws MissingUserCookieException;
+     void sendChat(SendChatDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to roll a number at the beginning of your turn
      *
      * @param dto The transport object that contains the information required to roll a number
-     * @return The current state of the game
      */
-    ClientModel rollNumber(RollNumberDTO dto) throws MissingUserCookieException, CommandExecutionFailed;
+    void rollNumber(RollNumberDTO dto) throws MissingUserCookieException, CommandExecutionFailed;
 
     /**
      * Moves the robber, selecting the new robber position and player to rob
      *
      * @param dto The transport object that contains the information required to rob a player
-     * @return The current state of the game
      */
-    ClientModel robPlayer(RobPlayerDTO dto) throws MissingUserCookieException;
+    void robPlayer(RobPlayerDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to finish your turn
      *
      * @param dto The transport object that contains the information required for a player to finish their turn
-     * @return The current state of the game
      */
-    ClientModel finishTurn(FinishTurnDTO dto) throws MissingUserCookieException;
+    void finishTurn(FinishTurnDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to buy a development card
      *
      * @param dto The transport object that contains the information required to buy a development card
-     * @return The current state of the game
      */
-    ClientModel buyDevCard(BuyDevCardDTO dto) throws MissingUserCookieException;
+    void buyDevCard(BuyDevCardDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Year of Plenty' card from the player's hand to gain the two specified resources
      *
      * @param dto The transport object that contains the information required to play the Year of Plenty card
-     * @return The current state of the game
      */
-    ClientModel playYearOfPlentyCard(PlayYOPCardDTO dto) throws MissingUserCookieException;
+    void playYearOfPlentyCard(PlayYOPCardDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
      *
      * @param dto The transport object that contains the information required to play the Road Building card
-     * @return The current state of the game
      */
-    ClientModel playRoadBuildingCard(RoadBuildingDTO dto) throws MissingUserCookieException;
+    void playRoadBuildingCard(RoadBuildingDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Soldier' from your hand, selecting the new robber position and player to rob
      *
      * @param dto The transport object that contains the information required to play the soldier card
-     * @return The current state of the game
      */
-    ClientModel playSoldierCard(PlaySoldierCardDTO dto) throws MissingUserCookieException;
+    void playSoldierCard(PlaySoldierCardDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Monopoly' card from your hand to monopolize the specified resource
      *
      * @param dto The transport object that contains the information required to play a monopoly card
-     * @return The current state of the game
      */
-    ClientModel playMonopolyCard(PlayMonopolyDTO dto) throws MissingUserCookieException;
+    void playMonopolyCard(PlayMonopolyDTO dto) throws MissingUserCookieException;
 
     /**
      * Plays a 'Monument' card from your hand to give you a victory point
      *
      * @param dto The transport object that contains the information required to play a monument card
-     * @return The current state of the game
      */
-    ClientModel playMonumentCard(PlayMonumentDTO dto) throws MissingUserCookieException;
+    void playMonumentCard(PlayMonumentDTO dto) throws MissingUserCookieException;
 
     /**
      * Builds a road at the specified location. (Set 'free' to true during initial setup.)
+     *
      * @param dto The transport object that contains the information required to build a road
-     * @return The current state of the game
      */
-    ClientModel buildRoad(BuildRoadDTO dto) throws MissingUserCookieException;
+    void buildRoad(BuildRoadDTO dto) throws MissingUserCookieException;
 
     /**
      * Builds a settlement at the specified location. (Set 'free' to true during initial setup.)
      *
      * @param dto The transport object that contains the information required to build a settlement
-     * @return The current state of the game
      */
-    ClientModel buildSettlement(BuildSettlementDTO dto) throws MissingUserCookieException;
+    void buildSettlement(BuildSettlementDTO dto) throws MissingUserCookieException;
 
     /**
      * Builds a city at the specified location
      *
      * @param dto The transport object that contains the information required to build a city
-     * @return The current state of the game
      */
-    ClientModel buildCity(BuildCityDTO dto) throws MissingUserCookieException;
+    void buildCity(BuildCityDTO dto) throws MissingUserCookieException;
 
     /**
      * Offers a domestic trade to another player
      *
      * @param dto The transport object that contains the information required respond to offer a trade
-     * @return The current state of the game
      */
-    ClientModel offerTrade(OfferTradeDTO dto) throws MissingUserCookieException;
+    void offerTrade(OfferTradeDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to accept or reject a trade offered to the player
      *
      * @param dto The transport object that contains the information required respond to a trade offer
-     * @return The current state of the game
      */
-    ClientModel respondToTradeOffer(TradeOfferResponseDTO dto) throws MissingUserCookieException;
+    void respondToTradeOffer(TradeOfferResponseDTO dto) throws MissingUserCookieException;
 
     /**
      * Used to execute a maritime trade
      *
      * @param dto The transport object that contains the information required to execute a maritime trade
-     * @return The current state of the game
      */
-    ClientModel maritimeTrade(MaritimeTradeDTO dto) throws MissingUserCookieException;
+    void maritimeTrade(MaritimeTradeDTO dto) throws MissingUserCookieException;
 
     /**
      * Discards the specified resource cards
      *
      * @param dto The transport object that contains the information required to discard cards
-     * @return The current state of the game
      */
-    ClientModel discardCards(DiscardCardsDTO dto) throws MissingUserCookieException;
+    void discardCards(DiscardCardsDTO dto) throws MissingUserCookieException;
 
     /**
      *

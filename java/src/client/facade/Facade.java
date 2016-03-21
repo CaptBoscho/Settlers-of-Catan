@@ -19,7 +19,6 @@ import shared.model.game.trade.TradePackage;
 import shared.model.player.Player;
 import shared.definitions.*;
 import shared.exceptions.*;
-import shared.model.player.PlayerManager;
 
 import java.util.*;
 
@@ -32,8 +31,6 @@ import java.util.*;
 public class Facade {
 
     private IGame game;
-    private List<Player> players = new ArrayList<>();
-    private HashMap<String, ModelPlayerInfo> entries = new HashMap<>();
     private static Facade _instance;
 
     /**
@@ -180,7 +177,6 @@ public class Facade {
      */
     public boolean canBuildSettlement(int playerID, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, PlayerExistsException {
         return this.game.canBuildSettlement(playerID, vertex);
-
     }
 
     /**
@@ -376,7 +372,10 @@ public class Facade {
     public boolean ableToBuyDevCard(int id){
         try {
             return this.game.canBuyDevelopmentCard(id);
-        }catch(PlayerExistsException e){ return false;}
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Integer getAvailableRoads(int id) throws PlayerExistsException{
@@ -396,7 +395,7 @@ public class Facade {
     }
 
     public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
-        try{
+        try {
             Set<Integer> ids = this.game.placeRobber(id, hexloc);
             List<Player> players = this.game.getPlayers();
             RobPlayerInfo[] robbed = new RobPlayerInfo[ids.size()];
@@ -416,8 +415,8 @@ public class Facade {
             }
 
             return robbed;
-        } catch(AlreadyRobbedException | InvalidLocationException ignored) {
-
+        } catch(AlreadyRobbedException | InvalidLocationException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -431,16 +430,15 @@ public class Facade {
         }
         try {
             ServerProxy.getInstance().robPlayer(dto);
-        }
-        catch(MissingUserCookieException e){
+        } catch(MissingUserCookieException e){
             e.printStackTrace();
         }
     }
 
     public void playSoldier(int playerIndex, HexLocation hexloc, int robbed){
         try{
-            if (this.game.canUseSoldier(playerIndex)) {
-                PlaySoldierCardDTO dto = new PlaySoldierCardDTO(playerIndex, robbed, hexloc);
+            if(this.game.canUseSoldier(playerIndex)) {
+                final PlaySoldierCardDTO dto = new PlaySoldierCardDTO(playerIndex, robbed, hexloc);
                 ServerProxy.getInstance().playSoldierCard(dto);
             }
         } catch(PlayerExistsException | MissingUserCookieException e){
@@ -450,15 +448,15 @@ public class Facade {
 
     //TODO flesh this puppy out
     public List<PlayerInfo> getPlayers() {
-        List<Player> players = this.game.getPlayers();
-        List<PlayerInfo> playerInfos = new ArrayList<>();
+        final List<Player> players = this.game.getPlayers();
+        final List<PlayerInfo> playerInfos = new ArrayList<>();
 
         int longestroad = this.game.getPlayerWithLongestRoad();
         int largestarmy = this.game.getPlayerWithLargestArmy();
-        for(Player p: players){
+        for(final Player p: players){
             boolean lr = longestroad == p.getPlayerIndex();
             boolean la = largestarmy == p.getPlayerIndex();
-            PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
+            final PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
             playerInfos.add(pi);
         }
 
@@ -565,7 +563,10 @@ public class Facade {
     public boolean canUseMonopoly(int playerID){
         try {
             return this.game.canUseMonopoly(playerID);
-        }catch(PlayerExistsException e){return false;}
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean canPlaceRoadBuildingCard(int playerIndex, EdgeLocation edgeLoc){
@@ -580,25 +581,37 @@ public class Facade {
     public boolean canUseRoadBuilder(int playerID){
         try {
             return this.game.canUseRoadBuilding(playerID);
-        }catch(PlayerExistsException e){return false;}
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean canUseMonument(int playerID){
         try{
             return this.game.canUseMonument(playerID);
-        }catch(PlayerExistsException e){return false;}
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean canUseSoldier(int playerID){
         try{
             return this.game.canUseSoldier(playerID);
-        }catch(PlayerExistsException e){return false;}
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean canUseYearOfPlenty(int playerID){
         try{
             return this.game.canUseYearOfPlenty(playerID);
-        }catch(PlayerExistsException e){return false;}
+        } catch(PlayerExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
@@ -620,6 +633,7 @@ public class Facade {
         try {
             return this.game.amountOwnedResource(playerID, resource);
         } catch(PlayerExistsException | InvalidTypeException e) {
+            e.printStackTrace();
             return 0;
         }
     }
@@ -722,7 +736,7 @@ public class Facade {
      * has.
      * @return
      */
-    public HashMap<ResourceType, Integer> getBankResources(){
+    public Map<ResourceType, Integer> getBankResources(){
         return this.game.getBankResources();
     }
 
@@ -732,18 +746,8 @@ public class Facade {
      * bank has.
      * @return
      */
-    public HashMap<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
+    public Map<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
         return this.game.getPlayerResources(pIndex);
-    }
-
-    public int getVictoryPoints(int pIndex) {
-        PlayerManager pm = game.getPlayerManager();
-        try {
-            Player player = pm.getPlayerByIndex(pIndex);
-            return player.getVictoryPoints();
-        } catch (PlayerExistsException e) {
-            return -1;
-        }
     }
 
     public void sendChat(int playerIndex, String message) {
@@ -799,14 +803,6 @@ public class Facade {
             e.printStackTrace();
         }
         return -1;
-    }
-
-    public int hasLargestRoad() {
-        return this.game.getPlayerWithLargestArmy();
-    }
-
-    public int hasLongestRoad() {
-        return this.game.getPlayerWithLongestRoad();
     }
 
     public IGame getGame(){
