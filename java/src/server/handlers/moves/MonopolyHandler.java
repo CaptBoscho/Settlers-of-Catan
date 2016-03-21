@@ -20,8 +20,6 @@ public class MonopolyHandler implements Route {
             return "Invalid request.";
         }
 
-        // TODO - validation
-
         CookieWrapperDTO dto = new CookieWrapperDTO(new PlayMonopolyDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 

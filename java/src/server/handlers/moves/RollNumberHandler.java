@@ -15,19 +15,12 @@ import spark.Route;
  */
 public class RollNumberHandler implements Route {
 
-    // -- request keys
-    private static final String kType = "type";
-    private static final String kPlayerIndex = "playerIndex";
-    private static final String kNumber = "number";
-
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        if(!this.validateRequest(request.body())) {
+        if(!RollNumberDTO.isValidRequestJson(request.body())) {
             response.status(400);
             return "Invalid request.";
         }
-
-        // TODO - validation
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new RollNumberDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
@@ -40,14 +33,5 @@ public class RollNumberHandler implements Route {
         }
 
         return result.getBody();
-    }
-
-    private boolean validateRequest(String requestBody) {
-        final JsonObject obj = new JsonParser().parse(requestBody).getAsJsonObject();
-        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
-        final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
-        final boolean hasNumber = obj.has(kNumber) && obj.get(kNumber).isJsonPrimitive();
-
-        return hasType && hasPlayerIndex && hasNumber;
     }
 }

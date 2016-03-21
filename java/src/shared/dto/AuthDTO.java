@@ -64,7 +64,7 @@ public final class AuthDTO implements IDTO, JsonSerializable {
         return json;
     }
 
-    public static boolean isValidRequestJson(String json) {
+    public static boolean isValidRequestJson(final String json) {
         if(!JSONUtils.isJSONValid(json)) {
             return false;
         }

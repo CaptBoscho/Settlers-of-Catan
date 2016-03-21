@@ -14,7 +14,10 @@ import spark.Route;
 public class MaritimeTradeHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        // TODO - validation
+        if(!MaritimeTradeDTO.isValidRequestJson(request.body())) {
+            response.status(400);
+            return "Invalid request.";
+        }
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new MaritimeTradeDTO(request.body()));
         dto.extractCookieInfo(request.cookies());

@@ -1,5 +1,6 @@
 package server.handlers.game;
 
+import shared.dto.AddAIDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -10,6 +11,12 @@ import spark.Route;
 public class AddAIHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        if(!AddAIDTO.isValidRequestJson(request.body())) {
+            response.status(400);
+            return "Invalid request.";
+        }
+
+        // TODO
         response.status(200);
         response.type("application/json");
         return "{\"Hello\": \"World!\"}";

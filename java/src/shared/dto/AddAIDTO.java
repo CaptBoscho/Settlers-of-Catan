@@ -1,6 +1,8 @@
 package shared.dto;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import server.utils.JSONUtils;
 import shared.model.JsonSerializable;
 import shared.model.ai.AIType;
 
@@ -8,6 +10,11 @@ import shared.model.ai.AIType;
  * @author Derek Argueta
  */
 public final class AddAIDTO implements IDTO,JsonSerializable {
+
+    // -- JSON keys
+    private static final String kType = "type";
+    private static final String kAi = "ai";
+
     private AIType type;
 
     public AddAIDTO(AIType type) {
@@ -26,8 +33,19 @@ public final class AddAIDTO implements IDTO,JsonSerializable {
     @Override
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("type", "addAI");
-        obj.addProperty("ai", this.type.toString());
+        obj.addProperty(kType, "addAI");
+        obj.addProperty(kAi, this.type.toString());
         return obj;
+    }
+
+    public static boolean isValidRequestJson(final String json) {
+        if(!JSONUtils.isJSONValid(json)) {
+            return false;
+        }
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
+        final boolean hasAi = obj.has(kAi) && obj.get(kAi).isJsonPrimitive();
+
+        return hasType && hasAi;
     }
 }

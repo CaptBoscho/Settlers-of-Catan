@@ -2,6 +2,7 @@ package shared.dto;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.utils.JSONUtils;
 import shared.model.JsonSerializable;
 
 /**
@@ -78,5 +79,19 @@ public final class MaritimeTradeDTO implements IDTO, JsonSerializable {
         obj.addProperty(kInputResource, this.inputResource);
         obj.addProperty(kOutputResource, this.outputResource);
         return obj;
+    }
+
+    public static boolean isValidRequestJson(final String json) {
+        if(!JSONUtils.isJSONValid(json)) {
+            return false;
+        }
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
+        final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
+        final boolean hasRatio = obj.has(kRatio) && obj.get(kRatio).isJsonPrimitive();
+        final boolean hasInputResource = obj.has(kInputResource) && obj.get(kInputResource).isJsonPrimitive();
+        final boolean hasOutputResource = obj.has(kOutputResource) && obj.get(kOutputResource).isJsonPrimitive();
+
+        return hasType && hasPlayerIndex && hasRatio && hasInputResource && hasOutputResource;
     }
 }
