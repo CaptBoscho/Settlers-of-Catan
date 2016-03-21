@@ -1089,6 +1089,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             map.moveRobber(playerRobber, hexLoc);
             playerManager.placeRobber(playerRobber, playerRobbed);
         }
+        //turnTracker.setPhase(TurnTracker.Phase.PLAYING); for Joel, love Corbin
     }
 
     /**
