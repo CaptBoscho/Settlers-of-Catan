@@ -55,7 +55,4 @@ public class UserCommandFactory {
         return instance;
     }
 
-    public void bind(IFacade newFacade){
-        facade = newFacade;
-    }
 }

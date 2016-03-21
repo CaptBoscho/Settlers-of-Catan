@@ -73,7 +73,4 @@ public class GamesCommandFactory {
         return instance;
     }
 
-    public void bind(IFacade newFacade) {
-        facade = newFacade;
-    }
 }

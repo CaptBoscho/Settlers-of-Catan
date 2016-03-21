@@ -23,7 +23,7 @@ public class MockFacade implements IFacade {
      * @param username
      * @param password
      * @throws LoginException
-     * @return CommandExecutionResult
+     * @return boolean
      */
     @Override
     public boolean login(String username, String password) throws LoginException {
