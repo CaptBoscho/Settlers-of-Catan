@@ -45,7 +45,7 @@ public class ChatController extends Controller implements IChatController, Obser
 
 	@Override
 	public void sendMessage(String message) {
-        if(!message.equals(null)) {
+        if(message != null) {
             facade.sendChat(userCookie.getPlayerIndex(), message);
         }
 	}

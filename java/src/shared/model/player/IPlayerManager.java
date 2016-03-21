@@ -314,7 +314,7 @@ public interface IPlayerManager {
      * @return
      * @throws PlayerExistsException
      */
-    Integer getAvailableRoads(int playerIndex) throws PlayerExistsException;
+    int getAvailableRoads(int playerIndex) throws PlayerExistsException;
 
     /**
      * Get the number of settlements the player has left
@@ -322,7 +322,7 @@ public interface IPlayerManager {
      * @return
      * @throws PlayerExistsException
      */
-    Integer getAvailableSettlements(int playerIndex) throws PlayerExistsException;
+    int getAvailableSettlements(int playerIndex) throws PlayerExistsException;
 
     /**
      * Get the number of cities the player has left
@@ -330,7 +330,7 @@ public interface IPlayerManager {
      * @return
      * @throws PlayerExistsException
      */
-    Integer getAvailableCities(int playerIndex)throws PlayerExistsException;
+    int getAvailableCities(int playerIndex)throws PlayerExistsException;
 
     /**
      * Get number of dev cards the player has

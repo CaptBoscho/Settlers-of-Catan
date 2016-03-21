@@ -12,8 +12,8 @@ import java.util.List;
  * @author Danny Harding
  */
 public final class Trade {
-    TradePackage package1;
-    TradePackage package2;
+    private TradePackage package1;
+    private TradePackage package2;
     private int sender;
     private int receiver;
     private List<ResourceType> sending = new ArrayList<>();

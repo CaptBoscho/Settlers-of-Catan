@@ -142,7 +142,6 @@ public class ServerFacade implements IFacade {
      * List the current games
      *
      * @return CommandExecutionResult
-     * @throws ListException
      */
     @Override
     public CommandExecutionResult list() {
@@ -224,7 +223,7 @@ public class ServerFacade implements IFacade {
             result.addCookie("catan.game", String.valueOf(game.getId()));
             return result;
         } else if(game.isRejoining(playerId)){
-            game.getPlayerManager().rejoin(username, playerId, color);
+            game.getPlayerManager().rejoin(playerId, color);
             CommandExecutionResult result = new CommandExecutionResult("Success");
             result.addCookie("catan.game", String.valueOf(game.getId()));
             return result;

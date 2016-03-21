@@ -50,8 +50,7 @@ import client.utils.ImageUtils;
  * Implementation for the resource bar view
  */
 @SuppressWarnings({"serial", "unused"})
-public class ResourceBarView extends PanelView implements IResourceBarView
-{
+public class ResourceBarView extends PanelView implements IResourceBarView {
 	private final boolean TESTING = false;
 	
 	private final String RESOURCE_IMAGE_PATH = "images" + File.separator +

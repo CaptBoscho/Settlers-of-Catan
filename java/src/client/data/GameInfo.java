@@ -63,8 +63,7 @@ public final class GameInfo {
 		players.add(newPlayer);
 	}
 	
-	public List<PlayerInfo> getPlayers()
-	{
+	public List<PlayerInfo> getPlayers() {
 		return Collections.unmodifiableList(players);
 	}
 
