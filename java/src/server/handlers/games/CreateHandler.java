@@ -16,7 +16,7 @@ public class CreateHandler implements Route {
     public Object handle(final Request request, final Response response) throws Exception {
         if(!CreateGameDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request";
+            return "Invalid request.";
         }
 
         CommandExecutionResult result = GamesController.createGame(new CreateGameDTO(request.body()));

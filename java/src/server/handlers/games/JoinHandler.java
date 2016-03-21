@@ -19,7 +19,7 @@ public class JoinHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!JoinGameDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request";
+            return "Invalid request.";
         }
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new JoinGameDTO(request.body()));

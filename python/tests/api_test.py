@@ -34,16 +34,21 @@ class UserTests(unittest.TestCase):
         self.assertEqual(requests.codes.unauthorized, r.status_code)
         self.assertEqual('Failed', r.text)
         self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
 
         r = requests.post('%suser/register' % BASE_URL, data=json.dumps(payload))
         self.assertEqual(requests.codes.ok, r.status_code)
         self.assertEqual('Success', r.text)
+        self.assertTrue('catan.user' in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
         self.assertEqual(expected_cookie, r.cookies['catan.user'])
 
         # should now be able to login with these credentials
         r = requests.post('%suser/login' % BASE_URL, data=json.dumps(payload))
         self.assertEqual(requests.codes.ok, r.status_code)
         self.assertEqual('Success', r.text)
+        self.assertTrue('catan.user' in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
         self.assertEqual(expected_cookie, r.cookies['catan.user'])
 
     def test_bad_json(self):
@@ -54,10 +59,48 @@ class UserTests(unittest.TestCase):
         r = requests.post('%suser/login' % BASE_URL, data=json.dumps(bad_payload))
         self.assertEqual(requests.codes.bad_request, r.status_code)
         self.assertEqual('Invalid request.', r.text)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
 
         r = requests.post('%suser/register' % BASE_URL, data=json.dumps(bad_payload))
         self.assertEqual(requests.codes.bad_request, r.status_code)
         self.assertEqual('Invalid request.', r.text)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
+
+    def test_bad_http_method(self):
+        ''' Verify that each endpoint is using GET/POST correctly '''
+        r = requests.get('%suser/login' % BASE_URL)
+        self.assertEqual(requests.codes.not_found, r.status_code)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
+
+        r = requests.get('%suser/register' % BASE_URL)
+        self.assertEqual(requests.codes.not_found, r.status_code)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
+
+
+class GamesTests(unittest.TestCase):
+
+    def test_bad_json(self):
+        ''' Validate what happens if you send incorrect JSON '''
+        bad_payload = {
+            'macklemore': 'ryan lewis'
+        }
+        bad_json = json.dumps(bad_payload)
+
+        r = requests.post('%sgames/create' % BASE_URL, data=bad_json)
+        self.assertEqual(requests.codes.bad_request, r.status_code)
+        self.assertEqual('Invalid request.', r.text)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
+
+        r = requests.post('%sgames/join' % BASE_URL, data=bad_json)
+        self.assertEqual(requests.codes.bad_request, r.status_code)
+        self.assertEqual('Invalid request.', r.text)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' not in r.cookies)
 
 
 if __name__ == '__main__':
