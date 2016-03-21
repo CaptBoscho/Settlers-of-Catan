@@ -28,9 +28,7 @@ public class LoginCommand implements ICommand {
         if(Config.facade.login(this.username, this.password)) {
             final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
             CommandExecutionResult result = new CommandExecutionResult("Success");
-            result.addCookie("name", username);
-            result.addCookie("password", password);
-            result.addCookie("playerID", userId);
+            result.addCookie("catan.user", "%7B%22name%22%3A%22" + username + "%22%2C%22password%22%3A%22" + password + "%22%2C%22playerID%22%3A" + UserManager.getInstance().getIdForUser(username) + "%7D");
             return result;
         } else {
             return new CommandExecutionResult("Failed");
