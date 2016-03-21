@@ -811,6 +811,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
         }
+        boolean change = true;
+        for(Player p : getPlayers()){
+            if(!p.hasDiscarded()){
+                change = false;
+            }
+        }
+        if(change){
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+        }
     }
 
     /**
@@ -827,10 +836,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
             getPlayers().forEach(player -> {
                 if (player.canDiscardCards()) {
                     turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+                    player.setDiscarded(false);
+                }else{
+                    player.setDiscarded(true);
                 }
             });
             //Otherwise just move to the robbing phase
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            //Can't move to robbing phase here! need to wait for everyone to discard
         } else {
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
