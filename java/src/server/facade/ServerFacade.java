@@ -239,7 +239,9 @@ public class ServerFacade implements IFacade {
             throw new SendChatException("Failed to send the chat message!");
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -264,7 +266,9 @@ public class ServerFacade implements IFacade {
             throw new RollNumberException("Error while rolling!");
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -293,7 +297,9 @@ public class ServerFacade implements IFacade {
             throw new RobPlayerException(e.getMessage());
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -321,7 +327,9 @@ public class ServerFacade implements IFacade {
             throw new FinishTurnException("Player can't end their turn yet!");
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -344,7 +352,10 @@ public class ServerFacade implements IFacade {
         } catch (Exception e) {
             throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
         }
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -372,7 +383,9 @@ public class ServerFacade implements IFacade {
             throw new YearOfPlentyException("yearOfPlenty failed in the model on the server.");
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -401,7 +414,9 @@ public class ServerFacade implements IFacade {
             throw new RoadBuildingException(e.getMessage());
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -431,7 +446,9 @@ public class ServerFacade implements IFacade {
             throw new SoldierException(e.getMessage());
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -457,7 +474,9 @@ public class ServerFacade implements IFacade {
             throw new MonopolyException(e.getMessage());
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -481,7 +500,10 @@ public class ServerFacade implements IFacade {
             throw new MonumentException(e.getMessage());
         }
 
-        return new CommandExecutionResult(gameManager.getGameByID(gameID).getDTO().toJSON().getAsString());
+        Game game = gameManager.getGameByID(gameID);
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -512,7 +534,9 @@ public class ServerFacade implements IFacade {
             throw new BuildRoadException(e.getMessage());
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -543,7 +567,9 @@ public class ServerFacade implements IFacade {
             throw new BuildSettlementException(e.getMessage());
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -572,7 +598,9 @@ public class ServerFacade implements IFacade {
             throw new BuildCityException(e.getMessage());
         }
 
-        return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -599,7 +627,10 @@ public class ServerFacade implements IFacade {
             throw new OfferTradeException(e.getMessage());
         }
 
-        return new CommandExecutionResult(gameManager.getGameByID(gameID).getDTO().toJSON().getAsString());
+        Game game = gameManager.getGameByID(gameID);
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -623,7 +654,10 @@ public class ServerFacade implements IFacade {
             throw new AcceptTradeException(e.getMessage());
         }
 
-        return new CommandExecutionResult(gameManager.getGameByID(gameID).getDTO().toJSON().getAsString());
+        Game game = gameManager.getGameByID(gameID);
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -644,7 +678,10 @@ public class ServerFacade implements IFacade {
             throw new MaritimeTradeException(e.getMessage());
         }
 
-        return new CommandExecutionResult(gameManager.getGameByID(gameID).getDTO().toJSON().getAsString());
+        Game game = gameManager.getGameByID(gameID);
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -683,7 +720,9 @@ public class ServerFacade implements IFacade {
             throw new DiscardCardsException(e.getMessage());
         }
 
-        final String jsonString = gameManager.getGameByID(gameID).getDTO().toJSON().getAsString();
+        Game game = gameManager.getGameByID(gameID);
+        JsonObject json = game.toJSON();
+        String jsonString = json.toString();
         return new CommandExecutionResult(jsonString);
     }
 
