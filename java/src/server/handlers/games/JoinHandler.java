@@ -2,11 +2,14 @@ package server.handlers.games;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.GamesController;
+import server.filters.AuthenticationFilter;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.JoinGameDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
+import static spark.Spark.before;
 
 /**
  * @author Derek Argueta
@@ -19,7 +22,7 @@ public class JoinHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!JoinGameDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request";
+            return "Invalid request.";
         }
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new JoinGameDTO(request.body()));

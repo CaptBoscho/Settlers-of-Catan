@@ -28,7 +28,7 @@ public class YearOfPlentyHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!this.requestIsValid(request.body())) {
             response.status(400);
-            return "Invalid request";
+            return "Invalid request.";
         }
 
         // TODO - validation

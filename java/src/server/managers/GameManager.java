@@ -56,4 +56,8 @@ public class GameManager {
     public void addGame(final Game game) {
         games.put(game.getId(), game);
     }
+
+    public static void reset() {
+        instance = new GameManager();
+    }
 }

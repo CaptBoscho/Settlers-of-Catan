@@ -1,6 +1,8 @@
 package server.main;
 
 import server.facade.ServerFacade;
+import server.filters.AuthenticationFilter;
+import server.filters.GameFilter;
 import server.handlers.Handlers;
 import server.handlers.auth.LoginHandler;
 import server.handlers.auth.RegisterHandler;
@@ -11,6 +13,8 @@ import server.handlers.games.CreateHandler;
 import server.handlers.games.JoinHandler;
 import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
+import server.managers.GameManager;
+import server.managers.UserManager;
 
 import static spark.Spark.*;
 
@@ -35,6 +39,15 @@ public class Main {
 
         // for now, hardcode to port 8081
         port(8081);
+
+        // the following endpoint patterns require authentication cookies
+        before("/games/*", new AuthenticationFilter());
+        before("/game/*", new AuthenticationFilter());
+        before("/moves/*", new AuthenticationFilter());
+
+        // the following endpoint patterns require a valid game cookie
+        before("/game/*", new GameFilter());
+        before("/moves/*", new GameFilter());
 
         // TODO - enable configuring the mock server
 
@@ -81,5 +94,11 @@ public class Main {
         post("/moves/acceptTrade", new AcceptTradeHandler());
         post("/moves/maritimeTrade", new MaritimeTradeHandler());
         post("/moves/discardCards", new DiscardCardsHandler());
+
+        get("/test/reset", (request, response) -> {
+            UserManager.reset();
+            GameManager.reset();
+            return "";
+        });
     }
 }

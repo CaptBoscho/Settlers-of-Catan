@@ -2,6 +2,7 @@ package shared.dto;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.utils.JSONUtils;
 import shared.model.JsonSerializable;
 
 /**
@@ -72,6 +73,9 @@ public final class CreateGameDTO implements IDTO, JsonSerializable {
     }
 
     public static boolean isValidRequestJson(String json) {
+        if(!JSONUtils.isJSONValid(json)) {
+            return false;
+        }
         final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         final boolean hasRandomTiles = obj.has(kRandomTiles) && obj.get(kRandomTiles).isJsonPrimitive();
         final boolean hasRandomNumbers = obj.has(kRandomNumbers) && obj.get(kRandomNumbers).isJsonPrimitive();

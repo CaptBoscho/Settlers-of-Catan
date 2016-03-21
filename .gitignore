@@ -1,13 +1,9 @@
 *.class
-dist/
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+java/dist/
+java/build/
 
 # Package Files #
 # *.jar
-*.war
-*.ear
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
@@ -15,5 +11,9 @@ hs_err_pid*
 # IDE-specific settings
 .idea/
 
+# Python
+*.pyc
+
 demo/saves/
 *.log
+target/surefire-reports/

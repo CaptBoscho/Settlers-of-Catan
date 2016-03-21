@@ -2,6 +2,7 @@ package shared.dto;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.utils.JSONUtils;
 import shared.definitions.CatanColor;
 import shared.model.JsonSerializable;
 
@@ -55,6 +56,9 @@ public final class JoinGameDTO implements IDTO, JsonSerializable {
     }
 
     public static boolean isValidRequestJson(final String json) {
+        if(!JSONUtils.isJSONValid(json)) {
+            return false;
+        }
         final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         final boolean hasId = obj.has(kId) && obj.get(kId).isJsonPrimitive();
         final boolean hasColor = obj.has(kColor) && obj.get(kColor).isJsonPrimitive();

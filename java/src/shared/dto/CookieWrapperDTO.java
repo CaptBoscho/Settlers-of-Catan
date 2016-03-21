@@ -56,6 +56,10 @@ public class CookieWrapperDTO implements IDTO {
         return this.playerId;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
     public void setUsername(final String username) {
         this.username = username;
     }

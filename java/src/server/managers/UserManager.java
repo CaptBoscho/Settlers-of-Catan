@@ -57,6 +57,10 @@ public class UserManager {
         final UserCredentials newUser = new UserCredentials(username, password, users.size());
         return users.add(newUser);
     }
+
+    public static void reset() {
+        instance = new UserManager();
+    }
 }
 
 /**
