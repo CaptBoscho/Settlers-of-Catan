@@ -13,6 +13,7 @@ import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.ai.AIFactory;
 import shared.model.ai.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
@@ -132,10 +133,10 @@ public class ServerFacade implements IFacade {
         assert gameId >= 0;
         assert gameId < this.gameManager.getNumGames();
 
-        //TODO: get this to work fool
-        //return new ListAIDTO(AIFactory.listAITypes());
-
-        return null;
+        final List<AIType> availableAIs = AIFactory.listAITypes();
+        final ListAIDTO dto = new ListAIDTO(availableAIs);
+        final String jsonString = dto.toJSONArr().toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**

@@ -1,5 +1,8 @@
 package shared.dto;
 
+import client.data.GameInfo;
+import client.data.PlayerInfo;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
 import shared.model.ai.AIType;
@@ -23,9 +26,24 @@ public final class ListAIDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("type", "listAI");
-        obj.addProperty("list", _AIs.toString());
-        return obj;
+        return null;
+    }
+
+    /**
+     * Builds a JSON array of ai types
+     *
+     * @return
+     */
+    public JsonArray toJSONArr() {
+
+        final JsonArray allAIs = new JsonArray();
+        for(final AIType aiType : this._AIs) {
+            // Serialize all the ai types
+            final JsonObject aiObj = new JsonObject();
+            aiObj.addProperty("ai", aiType.toString());
+            allAIs.add(aiObj);
+        }
+
+        return allAIs;
     }
 }
