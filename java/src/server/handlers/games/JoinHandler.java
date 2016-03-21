@@ -1,7 +1,5 @@
 package server.handlers.games;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.GamesController;
 import shared.dto.CookieWrapperDTO;
@@ -9,8 +7,6 @@ import shared.dto.JoinGameDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.net.URLDecoder;
 
 /**
  * @author Derek Argueta
