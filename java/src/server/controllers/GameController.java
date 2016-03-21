@@ -31,9 +31,9 @@ public class GameController {
         }
     }
 
-    public static CommandExecutionResult listAI(final ListAIDTO dto) {
+    public static CommandExecutionResult listAI() {
         try {
-            return GameCommandFactory.getInstance().executeCommand("listAI", dto);
+            return GameCommandFactory.getInstance().executeCommand("listAI");
         } catch (Exception e) {
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong listing the AI :(");
             result.triggerError(500);

@@ -57,5 +57,17 @@ public class GameCommandFactory {
         throw new Exception("no matching command found");
     }
 
+    public CommandExecutionResult executeCommand(final String name) throws Exception {
+        if(commands.containsKey(name)) {
+            try {
+                ICommand command = commands.get(name);
+                return command.execute();
+            } catch (CommandExecutionFailedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        throw new Exception("no matching command found");
+    }
 
 }

@@ -9,6 +9,7 @@ import client.services.Poller;
 import client.services.ServerProxy;
 import shared.model.game.Game;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -45,6 +46,8 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
             PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
             Facade.getInstance().getPlayers().toArray(infoArr);
             getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
+            List<String> availableAIs = ServerProxy.getInstance().getAITypes();
+            getView().setAIChoices(availableAIs.toArray(new String[availableAIs.size()]));
             if(!getView().isModalShowing()) {
                 getView().showModal();
             }

@@ -10,6 +10,7 @@ import shared.definitions.ClientModel;
 import shared.dto.*;
 import shared.model.player.PlayerManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -310,7 +311,15 @@ public final class ServerProxy implements IServer {
     @Override
     public List<String> getAITypes() {
         String url = Utils.buildUrl(this.host, this.port) + "/game/listAI";
-        return null;
+        String result;
+
+        result = Utils.sendGet(url);
+        assert result != null;
+
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        List<String> availableAIs = new ArrayList<>();
+        obj.getAsJsonArray().forEach(ai -> availableAIs.add(ai.getAsString()));
+        return availableAIs;
     }
 
     /**
