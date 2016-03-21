@@ -508,6 +508,7 @@ public final class ServerProxy implements IServer {
         String url = Utils.buildUrl(this.host, this.port) + "/moves/buildSettlement";
         String result = Utils.sendPost(url, dto.toJSON());
         assert result != null;
+        System.out.println(result);
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }

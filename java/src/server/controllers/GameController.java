@@ -3,7 +3,7 @@ package server.controllers;
 import server.commands.CommandExecutionResult;
 import server.factories.GameCommandFactory;
 import shared.dto.AddAIDTO;
-import shared.dto.GameModelDTO;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.ListAIDTO;
 
 /**
@@ -11,7 +11,7 @@ import shared.dto.ListAIDTO;
  */
 public class GameController {
 
-    public static CommandExecutionResult getModel(final GameModelDTO dto) {
+    public static CommandExecutionResult getModel(final CookieWrapperDTO dto) {
         try {
             return GameCommandFactory.getInstance().executeCommand("model", dto);
         } catch (Exception e) {

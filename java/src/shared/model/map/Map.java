@@ -824,7 +824,9 @@ public final class Map implements IMap, JsonSerializable {
                 }
                 hex.addProperty("number", ((ChitHex)entry.getValue()).getChit());
             }
-            hexes.add(hex);
+            if(hexType != HexType.WATER) {
+                hexes.add(hex);
+            }
         }
         return hexes;
     }

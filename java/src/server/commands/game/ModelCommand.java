@@ -2,7 +2,10 @@ package server.commands.game;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
-import shared.dto.GameModelDTO;
+import server.exceptions.CommandExecutionFailedException;
+import server.exceptions.GetModelException;
+import server.main.Config;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 
 /**
@@ -12,20 +15,24 @@ import shared.dto.IDTO;
  */
 public class ModelCommand implements ICommand {
 
-    private GameModelDTO dto;
+    private int gameId;
 
     /**
      * Communicates with the ServerFacade to carry out the Model command
      * @return IDTO
      */
     @Override
-    public CommandExecutionResult execute() {
-        return null;
+    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        try {
+            return Config.facade.getModel(this.gameId);
+        } catch (GetModelException e) {
+            throw new CommandExecutionFailedException(e.getMessage());
+        }
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (GameModelDTO)dto;
+    public void setParams(final IDTO dto) {
+        this.gameId = ((CookieWrapperDTO) dto).getGameId();
     }
 
 }

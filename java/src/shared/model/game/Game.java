@@ -336,6 +336,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         return playerManager.canAddPlayer();
     }
 
+    @Override
+    public boolean isRejoining(int playerId) {
+        return playerManager.isRejoining(playerId);
+    }
+
     /**
      * Determine if a settlement can be built by the player at the location
      *
@@ -1707,12 +1712,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public JsonObject toJSON() {
         JsonObject json = new JsonObject();
+        json.add("deck", developmentCardBank.toJSON());
         json.add("bank", resourceCardBank.toJSON());
         json.add("chat", chat.toJSON());
         json.add("log", log.toJSON());
         json.add("map", map.toJSON());
         json.add("players", playerManager.toJSON());
-        json.add("tradeOffer", currentOffer.toJSON());
+        if(currentOffer != null) {
+            json.add("tradeOffer", currentOffer.toJSON());
+        }
 
         JsonObject turn = turnTracker.toJSON();
         turn.addProperty("longestRoad", longestRoadCard.getOwner());
@@ -1722,7 +1730,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         json.addProperty("version", version);
         json.addProperty("winner", winner);
 
-        return null;
+        return json;
     }
     //=====================================================================
     //endregion

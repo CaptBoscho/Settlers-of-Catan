@@ -8,10 +8,14 @@ import shared.model.game.Game;
  * Created by Kyle 'TMD' Cornelison on 3/16/2016.
  */
 public class GameModelDTO implements IDTO,JsonSerializable {
+
     private Game game;
 
     public GameModelDTO(JsonObject gameJSON) {
         game = new Game(gameJSON);
+    }
+
+    public GameModelDTO() {
     }
 
     /**
@@ -21,6 +25,6 @@ public class GameModelDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        return game.toJSON();
     }
 }

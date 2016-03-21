@@ -4,6 +4,7 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.commands.game.AddAICommand;
 import server.commands.game.ListAICommand;
+import server.commands.game.ModelCommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.IFacade;
 import shared.dto.IDTO;
@@ -33,7 +34,7 @@ public class GameCommandFactory {
     public static GameCommandFactory getInstance() {
         if(instance == null) {
             instance = new GameCommandFactory();
-//            instance.addCommand("getModel", );
+            instance.addCommand("model", new ModelCommand());
             instance.addCommand("listAI", new ListAICommand());
             instance.addCommand("addAI", new AddAICommand());
         }

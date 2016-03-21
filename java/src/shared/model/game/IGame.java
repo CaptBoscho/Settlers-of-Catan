@@ -98,6 +98,8 @@ public interface IGame {
      */
     boolean canAddPlayer();
 
+    boolean isRejoining(int playerId);
+
     /**
      * Determine if a settlement can be built by the player at the location
      * @param playerIndex
