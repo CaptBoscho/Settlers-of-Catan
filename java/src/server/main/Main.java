@@ -11,6 +11,8 @@ import server.handlers.games.CreateHandler;
 import server.handlers.games.JoinHandler;
 import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
+import server.managers.GameManager;
+import server.managers.UserManager;
 
 import static spark.Spark.*;
 
@@ -81,5 +83,11 @@ public class Main {
         post("/moves/acceptTrade", new AcceptTradeHandler());
         post("/moves/maritimeTrade", new MaritimeTradeHandler());
         post("/moves/discardCards", new DiscardCardsHandler());
+
+        get("/test/reset", (request, response) -> {
+            UserManager.reset();
+            GameManager.reset();
+            return "";
+        });
     }
 }
