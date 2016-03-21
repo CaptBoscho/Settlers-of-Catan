@@ -17,7 +17,6 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
-import shared.model.player.Player;
 
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class ServerFacade implements IFacade {
      *
      * @param username The player's username
      * @param password The player's password
-     * @return CommandExecutionResult
+     * @return boolean
      */
     @Override
     public boolean login(final String username, final String password) {

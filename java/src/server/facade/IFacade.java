@@ -22,7 +22,7 @@ public interface IFacade {
      * Logs a player into the server
      * @param username The player's username
      * @param password The player's password
-     * @return CommandExecutionResult
+     * @return boolean
      */
     boolean login(String username, String password);
 
