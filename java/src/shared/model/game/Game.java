@@ -1745,6 +1745,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         turn.addProperty("largestArmy", largestArmyCard.getOwner());
         json.add("turnTracker", turn);
 
+
         json.addProperty("version", version);
         json.addProperty("winner", winner);
 
@@ -1900,4 +1901,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public GameModelDTO getDTO() {
         return new GameModelDTO(toJSON());
     }
+
+    public void incrementVersion() {
+        this.version++;
+    }
+
 }
