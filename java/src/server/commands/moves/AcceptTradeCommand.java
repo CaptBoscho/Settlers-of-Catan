@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.AcceptTradeException;
 import server.exceptions.CommandExecutionFailedException;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.TradeOfferResponseDTO;
 
@@ -15,7 +16,9 @@ import shared.dto.TradeOfferResponseDTO;
  */
 public class AcceptTradeCommand implements ICommand {
 
-    private TradeOfferResponseDTO dto;
+    private int gameId;
+    private int playerIndex;
+    private boolean willAccept;
 
     /**
      * Communicates with the ServerFacade to carry out the Accept Trade command
@@ -24,15 +27,19 @@ public class AcceptTradeCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.acceptTrade(1, dto.getPlayerIndex(), dto.willAccept());
+            return Config.facade.acceptTrade(this.gameId, this.playerIndex, this.willAccept);
         } catch(AcceptTradeException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (TradeOfferResponseDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        final TradeOfferResponseDTO tmpDTO = (TradeOfferResponseDTO)cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
+        this.playerIndex = tmpDTO.getPlayerIndex();
+        this.willAccept = tmpDTO.willAccept();
     }
 
 }

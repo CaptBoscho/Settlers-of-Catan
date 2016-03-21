@@ -8,6 +8,7 @@ import server.main.Config;
 import shared.dto.BuildCityDTO;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
+import shared.locations.VertexLocation;
 
 /**
  * A command object that builds a city
@@ -16,8 +17,9 @@ import shared.dto.IDTO;
  */
 public class BuildCityCommand implements ICommand {
 
-    private CookieWrapperDTO cookies;
-    private BuildCityDTO dto;
+    private int gameId;
+    private int playerIndex;
+    private VertexLocation location;
 
     /**
      * Communicates with the ServerFacade to carry out the Build City command
@@ -26,16 +28,19 @@ public class BuildCityCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.buildCity(cookies.getGameId(), dto.getPlayerIndex(), dto.getLocation());
+            return Config.facade.buildCity(this.gameId, this.playerIndex, this.location);
         } catch (BuildCityException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.cookies = (CookieWrapperDTO)dto;
-        this.dto = (BuildCityDTO)cookies.getDto();
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        final BuildCityDTO tmpDTO = (BuildCityDTO)cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
+        this.playerIndex = tmpDTO.getPlayerIndex();
+        this.location = tmpDTO.getLocation();
     }
 
 }
