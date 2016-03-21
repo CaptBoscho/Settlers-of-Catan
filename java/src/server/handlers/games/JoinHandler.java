@@ -9,6 +9,8 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.util.Map;
+
 import static spark.Spark.before;
 
 /**
@@ -33,6 +35,14 @@ public class JoinHandler implements Route {
             response.status(result.getStatus());
         } else {
             response.status(200);
+        }
+
+        // set any new cookies
+        if(result.hasNewCookies()) {
+            Map<String, String> cookies = result.getNewCookies();
+            for(String key : cookies.keySet()) {
+                response.cookie(key, cookies.get(key));
+            }
         }
 
         return result.getBody();

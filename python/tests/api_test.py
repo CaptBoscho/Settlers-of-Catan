@@ -657,6 +657,66 @@ class GamesTests(unittest.TestCase):
         self.assertEqual(requests.codes.bad_request, r.status_code)
         self.assertEqual('Game name taken.', r.text)
 
+    def test_joining_a_game(self):
+        # create a random game to start with
+        payload = {
+            'name': 'test 1',
+            'randomTiles': False,
+            'randomNumbers': False,
+            'randomPorts': False
+        }
+        json_payload = json.dumps(payload)
+        r = requests.post('%sgames/create' % BASE_URL, data=json_payload, cookies=self.cookies)
+
+        # create 3 more players and have them join the game
+        payload = {
+            'username': 'user1',
+            'password': 'user1'
+        }
+        r = requests.post('%suser/register' % BASE_URL, data=json.dumps(payload))
+        self.cookies['catan.user'] = r.cookies['catan.user']
+        payload = {
+            'id': 0,
+            'color': 'red'
+        }
+        r = requests.post('%sgames/join' % BASE_URL, data=json.dumps(payload), cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertTrue('catan.game' in r.cookies)
+        self.assertEqual(0, int(r.cookies['catan.game']))
+
+        payload = {
+            'username': 'user2',
+            'password': 'user2'
+        }
+        r = requests.post('%suser/register' % BASE_URL, data=json.dumps(payload))
+        self.cookies['catan.user'] = r.cookies['catan.user']
+        payload = {
+            'id': 0,
+            'color': 'blue'
+        }
+        r = requests.post('%sgames/join' % BASE_URL, data=json.dumps(payload), cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertTrue('catan.game' in r.cookies)
+        self.assertEqual(0, int(r.cookies['catan.game']))
+
+        payload = {
+            'username': 'user3',
+            'password': 'user3'
+        }
+        r = requests.post('%suser/register' % BASE_URL, data=json.dumps(payload))
+        self.cookies['catan.user'] = r.cookies['catan.user']
+        payload = {
+            'id': 0,
+            'color': 'yellow'
+        }
+        r = requests.post('%sgames/join' % BASE_URL, data=json.dumps(payload), cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertTrue('catan.game' in r.cookies)
+        self.assertEqual(0, int(r.cookies['catan.game']))
+
+        # TODO - add test to verify you can't have more than 4 users in a game
+        # TODO - pull game model to verify user info that's added to the game
+
 
 if __name__ == '__main__':
 
