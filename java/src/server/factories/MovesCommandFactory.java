@@ -67,7 +67,4 @@ public class MovesCommandFactory {
         throw new Exception("no matching command found");
     }
 
-    public void bind(IFacade newFacade){
-        facade = newFacade;
-    }
 }

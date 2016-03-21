@@ -23,7 +23,7 @@ public interface IFacade {
      * @param username
      * @param password
      * @throws LoginException
-     * @return CommandExecutionResult
+     * @return boolean
      */
     boolean login(String username, String password) throws LoginException;
 
