@@ -2,11 +2,14 @@ package server.handlers.games;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.GamesController;
+import server.filters.AuthenticationFilter;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.JoinGameDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
+import static spark.Spark.before;
 
 /**
  * @author Derek Argueta

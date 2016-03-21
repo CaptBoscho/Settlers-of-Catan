@@ -17,7 +17,7 @@ public class MonopolyHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!PlayMonopolyDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request";
+            return "Invalid request.";
         }
 
         // TODO - validation

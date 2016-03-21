@@ -11,6 +11,7 @@ public final class JSONUtils {
     private JSONUtils(){}
 
     public static boolean isJSONValid(String JSON_STRING) {
+        if(JSON_STRING.length() < 2) return false;
         try {
             gson.fromJson(JSON_STRING, Object.class);
             return true;
