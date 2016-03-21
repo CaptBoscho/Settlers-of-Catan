@@ -865,6 +865,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             //Move to next phase - Playing
             //turnTracker.nextPhase();
             turnTracker.setPhase(TurnTracker.Phase.PLAYING);
+            System.out.println(turnTracker.getPhase().toString());
         }
     }
 
@@ -1188,8 +1189,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         } catch (BadCallerException e) {
             e.printStackTrace();
         }
-
         return turnTracker.nextTurn();
+
     }
     //==========================================================================
     //endregion
