@@ -1,9 +1,8 @@
 package server.handlers.moves;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.PlaySoldierCardDTO;
 import spark.Request;
 import spark.Response;
@@ -17,7 +16,10 @@ public class SoldierHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.soldier(new PlaySoldierCardDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new PlaySoldierCardDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.soldier(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

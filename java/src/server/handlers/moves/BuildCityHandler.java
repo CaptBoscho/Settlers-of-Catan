@@ -3,6 +3,7 @@ package server.handlers.moves;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
 import shared.dto.BuildCityDTO;
+import shared.dto.CookieWrapperDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -15,7 +16,11 @@ public class BuildCityHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.buildCity(new BuildCityDTO(request.body()));
+
+        CookieWrapperDTO dto = new CookieWrapperDTO(new BuildCityDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.buildCity(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

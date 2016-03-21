@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.PlayYOPCardDTO;
 import spark.Request;
 import spark.Response;
@@ -32,7 +33,10 @@ public class YearOfPlentyHandler implements Route {
 
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.yearOfPlenty(new PlayYOPCardDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new PlayYOPCardDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.yearOfPlenty(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {
