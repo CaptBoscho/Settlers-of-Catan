@@ -29,13 +29,28 @@ class UserTests(unittest.TestCase):
             'username': test_username,
             'password': test_password
         }
+        # verify that the login credentials don't exist
+        r = requests.post('%suser/login' % BASE_URL, data=json.dumps(payload))
+        self.assertEqual(requests.codes.unauthorized, r.status_code)
+        self.assertEqual('Failed', r.text)
+        self.assertTrue('catan.user' not in r.cookies)
+
         r = requests.post('%suser/register' % BASE_URL, data=json.dumps(payload))
-        self.assertEqual(200, r.status_code)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertEqual('Success', r.text)
+        self.assertEqual(expected_cookie, r.cookies['catan.user'])
+
+        # should now be able to login with these credentials
+        r = requests.post('%suser/login' % BASE_URL, data=json.dumps(payload))
+        self.assertEqual(requests.codes.ok, r.status_code)
         self.assertEqual('Success', r.text)
         self.assertEqual(expected_cookie, r.cookies['catan.user'])
 
 
 if __name__ == '__main__':
+
+    # kill the server in-case it was left running in IntelliJ or something
+    subprocess.call(SERVER_KILL_COMMAND, shell=True)
 
     # Configurable options
     parser = argparse.ArgumentParser()
