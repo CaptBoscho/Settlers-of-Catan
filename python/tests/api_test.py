@@ -46,6 +46,19 @@ class UserTests(unittest.TestCase):
         self.assertEqual('Success', r.text)
         self.assertEqual(expected_cookie, r.cookies['catan.user'])
 
+    def test_bad_json(self):
+        ''' Validate what happens if you send incorrect JSON '''
+        bad_payload = {
+            'yolo': 'Taylor Swift'
+        }
+        r = requests.post('%suser/login' % BASE_URL, data=json.dumps(bad_payload))
+        self.assertEqual(requests.codes.bad_request, r.status_code)
+        self.assertEqual('Invalid request.', r.text)
+
+        r = requests.post('%suser/register' % BASE_URL, data=json.dumps(bad_payload))
+        self.assertEqual(requests.codes.bad_request, r.status_code)
+        self.assertEqual('Invalid request.', r.text)
+
 
 if __name__ == '__main__':
 
