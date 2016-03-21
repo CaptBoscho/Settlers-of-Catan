@@ -2,6 +2,7 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.FinishTurnDTO;
 import spark.Request;
 import spark.Response;
@@ -21,7 +22,10 @@ public class FinishTurnHandler implements Route {
 
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.finishTurn(new FinishTurnDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new FinishTurnDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.finishTurn(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

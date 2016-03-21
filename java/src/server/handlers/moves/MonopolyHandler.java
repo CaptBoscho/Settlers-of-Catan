@@ -2,6 +2,7 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.PlayMonopolyDTO;
 import spark.Request;
 import spark.Response;
@@ -21,7 +22,10 @@ public class MonopolyHandler implements Route {
 
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.monopoly(new PlayMonopolyDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new PlayMonopolyDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.monopoly(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

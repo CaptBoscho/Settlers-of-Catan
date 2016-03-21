@@ -2,7 +2,6 @@ package server.commands.games;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
-import server.exceptions.CreateGameException;
 import server.main.Config;
 import shared.dto.CreateGameDTO;
 import shared.dto.IDTO;
@@ -14,7 +13,10 @@ import shared.dto.IDTO;
  */
 public class CreateCommand implements ICommand {
 
-    private CreateGameDTO dto;
+    private String gameName;
+    private boolean randomTiles;
+    private boolean randomPorts;
+    private boolean randomNumbers;
 
     /**
      * Communicates with the ServerFacade to carry out the Create game command
@@ -23,15 +25,15 @@ public class CreateCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
-        final String gameName = this.dto.getName();
-        final boolean randomTiles = this.dto.isRandomTiles();
-        final boolean randomPorts = this.dto.isRandomPorts();
-        final boolean randomNumbers = this.dto.isRandomNumbers();
-        return Config.facade.create(gameName, randomTiles, randomPorts, randomNumbers);
+        return Config.facade.create(this.gameName, this.randomTiles, this.randomPorts, this.randomNumbers);
     }
 
     @Override
     public void setParams(IDTO dto) {
-        this.dto = (CreateGameDTO)dto;
+        CreateGameDTO tmpDTO = (CreateGameDTO)dto;
+        gameName = tmpDTO.getName();
+        randomTiles = tmpDTO.isRandomTiles();
+        randomPorts = tmpDTO.isRandomPorts();
+        randomNumbers = tmpDTO.isRandomNumbers();
     }
 }

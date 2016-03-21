@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.PlayMonumentDTO;
 import spark.Request;
 import spark.Response;
@@ -27,7 +28,10 @@ public class MonumentHandler implements Route {
 
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.monument(new PlayMonumentDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new PlayMonumentDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.monument(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

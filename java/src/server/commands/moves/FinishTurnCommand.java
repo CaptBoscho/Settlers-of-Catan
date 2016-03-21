@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.FinishTurnException;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.FinishTurnDTO;
 import shared.dto.IDTO;
 
@@ -15,7 +16,8 @@ import shared.dto.IDTO;
  */
 public class FinishTurnCommand implements ICommand {
 
-    private FinishTurnDTO dto;
+    private int gameId;
+    private int playerIndex;
 
     /**
      * Communicates with the ServerFacade to carry out the Finish Turn command
@@ -24,7 +26,7 @@ public class FinishTurnCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.finishTurn(1, dto.getPlayerIndex());
+            return Config.facade.finishTurn(this.gameId, this.playerIndex);
         } catch (FinishTurnException e) {
             e.printStackTrace();
             throw new CommandExecutionFailedException("Error ending player turn!");
@@ -32,8 +34,11 @@ public class FinishTurnCommand implements ICommand {
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (FinishTurnDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        final FinishTurnDTO tmpDTO = (FinishTurnDTO)cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
+        this.playerIndex = tmpDTO.getPlayerIndex();
     }
 
 }

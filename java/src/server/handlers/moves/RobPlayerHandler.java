@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.RobPlayerDTO;
 import spark.Request;
 import spark.Response;
@@ -31,7 +32,10 @@ public class RobPlayerHandler implements Route {
 
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.robPlayer(new RobPlayerDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new RobPlayerDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.robPlayer(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {
