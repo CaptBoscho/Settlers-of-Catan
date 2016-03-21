@@ -2,6 +2,7 @@ package server.controllers;
 
 import server.commands.CommandExecutionResult;
 import server.factories.GamesCommandFactory;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.CreateGameDTO;
 import shared.dto.JoinGameDTO;
 
@@ -21,10 +22,11 @@ public class GamesController {
         }
     }
 
-    public static CommandExecutionResult joinGame(final JoinGameDTO dto) {
+    public static CommandExecutionResult joinGame(final CookieWrapperDTO dto) {
         try {
             return GamesCommandFactory.getInstance().executeCommand("join", dto);
         } catch (Exception e) {
+            e.printStackTrace();
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong joining a game :(");
             result.triggerError(500);
             return result;

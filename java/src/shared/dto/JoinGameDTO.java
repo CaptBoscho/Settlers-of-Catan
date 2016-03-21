@@ -54,7 +54,7 @@ public final class JoinGameDTO implements IDTO, JsonSerializable {
         return obj;
     }
 
-    public static boolean isValidRequestJson(String json) {
+    public static boolean isValidRequestJson(final String json) {
         final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         final boolean hasId = obj.has(kId) && obj.get(kId).isJsonPrimitive();
         final boolean hasColor = obj.has(kColor) && obj.get(kColor).isJsonPrimitive();

@@ -13,28 +13,27 @@ import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
 
 /**
- * Created by Kyle 'TMD' Cornelison on 3/10/2016.
+ * @author Kyle Cornelison
  */
 public class MockFacade implements IFacade {
 
     /**
      * Logs a player into the server
      *
-     * @param username
-     * @param password
-     * @throws LoginException
+     * @param username The player's username
+     * @param password The player's password
      * @return CommandExecutionResult
      */
     @Override
-    public boolean login(String username, String password) throws LoginException {
+    public boolean login(String username, String password) {
         return true;
     }
 
     /**
      * Registers a user
      *
-     * @param username
-     * @param password
+     * @param username The player's username
+     * @param password The player's password
      * @throws RegisterException
      * @return CommandExecutionResult
      */
@@ -81,12 +80,11 @@ public class MockFacade implements IFacade {
     /**
      * Creates a new game
      *
-     * @param name
-     * @param randomTiles
-     * @param randomNumbers
-     * @param randomPorts
+     * @param name The name of the new game
+     * @param randomTiles Whether or not the tiles should be random
+     * @param randomNumbers Whether or not the chits should be random
+     * @param randomPorts Whether or not the ports should be random
      * @return CommandExecutionResult
-     * @throws CreateGameException
      */
     @Override
     public CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) {
@@ -96,13 +94,15 @@ public class MockFacade implements IFacade {
     /**
      * Joins a player to the specified game
      *
-     * @param gameID
-     * @param color
+     * @param gameID The ID of the game to be joined
+     * @param color The color the player has chosen for this game
+     * @param playerId
+     * @param username
      * @throws JoinGameException
      * @return CommandExecutionResult
      */
     @Override
-    public CommandExecutionResult join(int gameID, CatanColor color) throws JoinGameException {
+    public CommandExecutionResult join(final int gameID, final CatanColor color, final int playerId, final String username) throws JoinGameException {
         return null;
     }
 

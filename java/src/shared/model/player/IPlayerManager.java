@@ -24,13 +24,6 @@ import java.util.List;
 public interface IPlayerManager {
     //region Manager Methods
     //==========================================================
-    /**
-     * Authenticates a player
-     * @param playerIndex index of the player
-     * @return True if player authentication is successful
-     * @throws AuthenticationException
-     */
-    boolean authenticatePlayer(int playerIndex) throws AuthenticationException;
 
     /**
      * Changes control of the largest army card

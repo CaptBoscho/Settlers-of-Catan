@@ -53,13 +53,12 @@ public class ServerFacade implements IFacade {
     /**
      * Logs a player into the server
      *
-     * @param username
-     * @param password
-     * @throws LoginException
+     * @param username The player's username
+     * @param password The player's password
      * @return CommandExecutionResult
      */
     @Override
-    public boolean login(final String username, final String password) throws LoginException {
+    public boolean login(final String username, final String password) {
         assert username != null;
         assert username.length() > 0;
         assert password != null;
@@ -71,8 +70,8 @@ public class ServerFacade implements IFacade {
     /**
      * Registers a user
      *
-     * @param username
-     * @param password
+     * @param username The player's username
+     * @param password The player's password
      * @throws RegisterException
      * @return CommandExecutionResult
      */
@@ -146,12 +145,11 @@ public class ServerFacade implements IFacade {
     /**
      * Creates a new game
      *
-     * @param name
-     * @param randomTiles
-     * @param randomNumbers
-     * @param randomPorts
+     * @param name The name of the new game
+     * @param randomTiles Whether or not the tiles should be random
+     * @param randomNumbers Whether or not the chits should be random
+     * @param randomPorts Whether or not the ports should be random
      * @return CommandExecutionResult
-     * @throws CreateGameException
      */
     @Override
     public CommandExecutionResult create(final String name, final boolean randomTiles, final boolean randomNumbers, boolean randomPorts) {
@@ -180,28 +178,33 @@ public class ServerFacade implements IFacade {
     /**
      * Joins a player to the specified game
      *
-     * @param gameID
-     * @param color
+     * @param gameID The ID of the game to be joined
+     * @param color The color the player has chosen for this game
+     * @param playerId
+     * @param username
      * @throws JoinGameException
      * @return CommandExecutionResult
      */
     @Override
-    public CommandExecutionResult join(final int gameID, final CatanColor color) throws JoinGameException {
+    public CommandExecutionResult join(final int gameID, final CatanColor color, final int playerId, final String username) throws JoinGameException {
         assert gameID >= 0;
         assert gameID < this.gameManager.getNumGames();
         assert color != null;
+        assert playerId >= 0;
+        assert username != null;
+        assert username.length() > 0;
 
         // get the game
         final Game game = this.gameManager.getGameByID(gameID);
 
-        // TODO
         if(game.canAddPlayer()) {
-//            Player newPlayer = new Player(0, color, );
-//            game.getPlayerManager().addPlayer();
+            game.getPlayerManager().addNewPlayer(username, playerId, color);
+            CommandExecutionResult result = new CommandExecutionResult("Success");
+            result.addCookie("catan.game", String.valueOf(game.getId()));
+            return result;
+        } else {
+            return new CommandExecutionResult("Failure");
         }
-
-        //TODO: make this method work fool
-        return null;
     }
 
     /**
@@ -500,6 +503,7 @@ public class ServerFacade implements IFacade {
                 game.buildRoad(player, location);
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            e.printStackTrace();
             throw new BuildRoadException(e.getMessage());
         }
 
@@ -530,6 +534,7 @@ public class ServerFacade implements IFacade {
                 game.buildSettlement(player, location);
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
+            e.printStackTrace();
             throw new BuildSettlementException(e.getMessage());
         }
 
@@ -584,7 +589,8 @@ public class ServerFacade implements IFacade {
         final List<ResourceType> receive = offer.getPackage2().getResources();
         try {
             gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
-        } catch(InvalidTypeException | PlayerExistsException | InsufficientResourcesException e){
+        } catch(InvalidTypeException | PlayerExistsException | InsufficientResourcesException e) {
+            e.printStackTrace();
             throw new OfferTradeException(e.getMessage());
         }
 

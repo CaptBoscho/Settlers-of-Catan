@@ -5,6 +5,7 @@ import server.commands.ICommand;
 import server.exceptions.JoinGameException;
 import server.main.Config;
 import shared.definitions.CatanColor;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.JoinGameDTO;
 
@@ -17,6 +18,8 @@ public class JoinCommand implements ICommand {
 
     private int gameId;
     private CatanColor color;
+    private int playerId;
+    private String username;
 
     /**
      * Communicates with the ServerFacade to carry out the Join Game command
@@ -26,7 +29,7 @@ public class JoinCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() {
         try {
-            return Config.facade.join(this.gameId, this.color);
+            return Config.facade.join(this.gameId, this.color, this.playerId, this.username);
         } catch (JoinGameException e) {
             // this is so dumb. ugh.
             e.printStackTrace();
@@ -36,10 +39,17 @@ public class JoinCommand implements ICommand {
         return null;
     }
 
+    /**
+     *
+     * @param dto The parameters for the command to be executed
+     */
     @Override
-    public void setParams(IDTO dto) {
-        JoinGameDTO tmpDTO = (JoinGameDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        final JoinGameDTO tmpDTO = (JoinGameDTO)cookieDTO.getDto();
         this.gameId = tmpDTO.getGameId();
         this.color = tmpDTO.getColor();
+        this.playerId = cookieDTO.getPlayerId();
+        this.username = cookieDTO.getUsername();
     }
 }

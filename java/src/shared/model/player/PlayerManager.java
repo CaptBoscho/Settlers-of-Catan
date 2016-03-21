@@ -11,9 +11,10 @@ import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.resources.ResourceCard;
 import javax.naming.InsufficientResourcesException;
-import javax.security.sasl.AuthenticationException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Class for managing users
@@ -34,11 +35,15 @@ public final class PlayerManager implements IPlayerManager {
         this.players = players;
     }
 
+    public PlayerManager() {
+        this.players = new ArrayList<Player>(Collections.nCopies(4, null));
+    }
+
     /**
      * Json Constructor
-     * @param players
+     * @param players A JSON array representing the players
      */
-    public PlayerManager(JsonArray players) {
+    public PlayerManager(final JsonArray players) {
         assert players != null;
         assert players.size() > 0;
         assert players.size() < 5;
@@ -53,20 +58,6 @@ public final class PlayerManager implements IPlayerManager {
     //endregion
 
     //region Manager methods
-    /**
-     * Authenticates a player
-     *
-     * @param playerIndex index of the player
-     * @return True if player authentication is successful
-     * @throws AuthenticationException
-     */
-    @Override
-    public boolean authenticatePlayer(int playerIndex) throws AuthenticationException {
-        assert playerIndex >= 0;
-
-        // TODO --
-        return false;
-    }
 
     /**
      * Changes control of the largest army card
@@ -76,7 +67,7 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public void changeLargestArmyPossession(int playerOld, int playerNew) throws PlayerExistsException {
+    public void changeLargestArmyPossession(final int playerOld, final int playerNew) throws PlayerExistsException {
         assert playerNew >= 0;
         assert playerOld >= 0;
         assert playerNew != playerOld;
@@ -93,8 +84,9 @@ public final class PlayerManager implements IPlayerManager {
      * @throws BadCallerException
      */
     @Override
-    public void moveNewToOld(int playerIndex) throws PlayerExistsException, BadCallerException {
+    public void moveNewToOld(final int playerIndex) throws PlayerExistsException, BadCallerException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).moveNewToOld();
     }
@@ -110,8 +102,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can discard cards
      */
     @Override
-    public boolean canDiscardCards(int playerIndex) throws PlayerExistsException {
+    public boolean canDiscardCards(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canDiscardCards();
     }
@@ -124,8 +117,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can offer a trade
      */
     @Override
-    public boolean canOfferTrade(int playerIndex) throws PlayerExistsException {
+    public boolean canOfferTrade(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canOfferTrade();
     }
@@ -139,8 +133,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can perform a maritime trade
      */
     @Override
-    public boolean canMaritimeTrade(int playerIndex, PortType type) throws PlayerExistsException {
+    public boolean canMaritimeTrade(final int playerIndex, final PortType type) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert type != null;
 
         return getPlayerByIndex(playerIndex).canMaritimeTrade(type);
@@ -154,8 +149,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can buy a dev card
      */
     @Override
-    public boolean canBuyDevCard(int playerIndex) throws PlayerExistsException {
+    public boolean canBuyDevCard(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canBuyDevCard();
     }
@@ -334,9 +330,11 @@ public final class PlayerManager implements IPlayerManager {
      * @throws InvalidTypeException
      */
     @Override
-    public void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void offerTrade(final int playerIndexOne, final int playerIndexTwo, final List<ResourceType> playerOneCards, final List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         assert playerIndexOne >= 0;
+        assert playerIndexOne < 4;
         assert playerIndexTwo >= 0;
+        assert playerIndexTwo < 4;
         assert playerIndexOne != playerIndexTwo;
         assert playerOneCards != null;
         assert playerOneCards.size() > 0;
@@ -357,8 +355,9 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerIndex index of the player
      */
     @Override
-    public void buyDevCard(int playerIndex) throws PlayerExistsException {
+    public void buyDevCard(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).buyDevCard();
     }
@@ -369,7 +368,10 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerIndex index of the player
      */
     @Override
-    public void useYearOfPlenty(int playerIndex) throws DevCardException, PlayerExistsException {
+    public void useYearOfPlenty(final int playerIndex) throws DevCardException, PlayerExistsException {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         getPlayerByIndex(playerIndex).useYearOfPlenty();
     }
 
@@ -379,8 +381,9 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerIndex index of the player
      */
     @Override
-    public void useRoadBuilder(int playerIndex) throws DevCardException, PlayerExistsException {
+    public void useRoadBuilder(final int playerIndex) throws DevCardException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).useRoadBuilder();
     }
@@ -391,8 +394,9 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerIndex index of the player
      */
     @Override
-    public void useSoldier(int playerIndex) throws DevCardException, PlayerExistsException {
+    public void useSoldier(final int playerIndex) throws DevCardException, PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).useSoldier();
     }
@@ -404,8 +408,9 @@ public final class PlayerManager implements IPlayerManager {
      * @param type
      */
     @Override
-    public void useMonopoly(int playerIndex, ResourceType type) throws DevCardException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
+    public void useMonopoly(final int playerIndex, final ResourceType type) throws DevCardException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert type != null;
 
         Player monopolyUser = getPlayerByIndex(playerIndex);
@@ -448,12 +453,17 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerRobbed  index of the player being robbed
      */
     @Override
-    public void placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        Player robber = getPlayerByIndex(playerRobbing);
-        Player robbed = getPlayerByIndex(playerRobbed);
+    public void placeRobber(final int playerRobbing, final int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        assert playerRobbing >= 0;
+        assert playerRobbing < 4;
+        assert playerRobbed >= 0;
+        assert playerRobbed < 4;
+
+        final Player robber = getPlayerByIndex(playerRobbing);
+        final Player robbed = getPlayerByIndex(playerRobbed);
 
         robber.placeRobber();
-        ResourceCard treasure = robbed.robbed();
+        final ResourceCard treasure = robbed.robbed();
         robber.addResourceCard(treasure);
     }
 
@@ -463,8 +473,9 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerIndex index of the player
      */
     @Override
-    public void buildRoad(int playerIndex) throws PlayerExistsException {
+    public void buildRoad(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).buildRoad();
     }
@@ -475,8 +486,9 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerIndex index of the player
      */
     @Override
-    public void buildSettlement(int playerIndex) throws PlayerExistsException {
+    public void buildSettlement(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).buildSettlement();
     }
@@ -487,8 +499,9 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerIndex index of the player
      */
     @Override
-    public void buildCity(int playerIndex) throws PlayerExistsException {
+    public void buildCity(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).buildCity();
     }
@@ -503,8 +516,9 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public void addResource(int playerIndex, ResourceCard rc) throws PlayerExistsException {
+    public void addResource(final int playerIndex, final ResourceCard rc) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert rc != null;
 
         getPlayerByIndex(playerIndex).addResourceCard(rc);
@@ -518,8 +532,9 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public void addDevCard(int playerIndex, DevelopmentCard dc) throws PlayerExistsException {
+    public void addDevCard(final int playerIndex, final DevelopmentCard dc) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
         assert dc != null;
 
         getPlayerByIndex(playerIndex).addDevCard(dc);
@@ -543,7 +558,7 @@ public final class PlayerManager implements IPlayerManager {
      */
     @Override
     public Player getWinner() throws GameOverException {
-        for(Player player : players){
+        for(final Player player : players){
             if(player.getVictoryPoints() == WINNING_POINTS){
                 return player;
             }
@@ -559,7 +574,7 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Player getPlayerByID(int id) throws PlayerExistsException {
+    public Player getPlayerByID(final int id) throws PlayerExistsException {
         assert id >= 0;
 
         for (final Player player : this.players) {
@@ -591,7 +606,7 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Player getPlayerByIndex(int index) throws PlayerExistsException {
+    public Player getPlayerByIndex(final int index) throws PlayerExistsException {
         assert index >= 0 && index < 4;
 
         for (final Player player : this.players) {
@@ -611,8 +626,9 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public int getNumberResourceCards(int playerIndex) throws PlayerExistsException {
+    public int getNumberResourceCards(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).getNumberResourceCards();
     }
@@ -625,7 +641,10 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Integer getAvailableRoads(int playerIndex) throws PlayerExistsException {
+    public Integer getAvailableRoads(final int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         return getPlayerByIndex(playerIndex).getAvailableRoads();
     }
 
@@ -637,7 +656,10 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Integer getAvailableSettlements(int playerIndex) throws PlayerExistsException {
+    public Integer getAvailableSettlements(final int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         return getPlayerByIndex(playerIndex).getAvailableSettlements();
     }
 
@@ -649,7 +671,10 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Integer getAvailableCities(int playerIndex) throws PlayerExistsException {
+    public Integer getAvailableCities(final int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         return getPlayerByIndex(playerIndex).getAvailableCities();
     }
 
@@ -661,7 +686,11 @@ public final class PlayerManager implements IPlayerManager {
      * @return
      */
     @Override
-    public int getNumberDevCards(DevCardType type, int playerIndex) {
+    public int getNumberDevCards(final DevCardType type, final int playerIndex) {
+        assert type != null;
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             return getPlayerByIndex(playerIndex).getNumberOfDevCardsByType(type);
         } catch (PlayerExistsException e) {
@@ -677,7 +706,10 @@ public final class PlayerManager implements IPlayerManager {
      * @return
      */
     @Override
-    public int getNumberOfSoldiers(int playerIndex) {
+    public int getNumberOfSoldiers(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             return getPlayerByIndex(playerIndex).getSoldiers();
         } catch (PlayerExistsException e) {
@@ -693,7 +725,10 @@ public final class PlayerManager implements IPlayerManager {
      * @return
      */
     @Override
-    public boolean hasDiscarded(int playerIndex) {
+    public boolean hasDiscarded(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             return getPlayerByIndex(playerIndex).hasDiscarded();
         } catch (PlayerExistsException e) {
@@ -710,7 +745,7 @@ public final class PlayerManager implements IPlayerManager {
      * @throws PlayerExistsException
      */
     @Override
-    public Player getPlayerByName(String name) throws PlayerExistsException {
+    public Player getPlayerByName(final String name) throws PlayerExistsException {
         assert name != null;
 
         for (final Player player : this.players) {
@@ -729,8 +764,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return
      */
     @Override
-    public CatanColor getPlayerColorByName(String name) {
+    public CatanColor getPlayerColorByName(final String name) {
         assert name != null;
+
         try {
             return getPlayerByName(name).getColor();
         } catch (PlayerExistsException e) {
@@ -745,8 +781,35 @@ public final class PlayerManager implements IPlayerManager {
         return players.size() < 4;
     }
 
+    private int getNextAvailableIndex() {
+        for(int i = 0; i < this.players.size(); i++) {
+            if(this.players.get(i) == null) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public void addPlayer(final Player player) {
         this.players.add(player);
+    }
+
+    public Player addNewPlayer(final String name, final int id, final CatanColor color) {
+        assert name != null;
+        assert name.length() > 0;
+        assert id >= 0;
+        assert color != null;
+
+        final int openIndex = this.getNextAvailableIndex();
+        Player p = null;
+        try {
+            p = new Player(0, color, id, openIndex, name);
+        } catch (InvalidPlayerException e) {
+            e.printStackTrace();
+        }
+        this.addPlayer(p);
+        return p;
     }
     //endregion
 

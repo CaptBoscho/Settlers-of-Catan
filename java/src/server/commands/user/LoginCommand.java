@@ -25,22 +25,16 @@ public class LoginCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
-        try {
-            if(Config.facade.login(this.username, this.password)) {
-                final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
-                CommandExecutionResult result = new CommandExecutionResult("Success");
-                result.addCookie("name", username);
-                result.addCookie("password", password);
-                result.addCookie("playerID", userId);
-                return result;
-            } else {
-                return new CommandExecutionResult("Failed");
-            }
-        } catch (LoginException e) {
-            e.printStackTrace();
+        if(Config.facade.login(this.username, this.password)) {
+            final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
+            CommandExecutionResult result = new CommandExecutionResult("Success");
+            result.addCookie("name", username);
+            result.addCookie("password", password);
+            result.addCookie("playerID", userId);
+            return result;
+        } else {
+            return new CommandExecutionResult("Failed");
         }
-
-        return null;
     }
 
     @Override

@@ -20,17 +20,16 @@ public interface IFacade {
     //================================
     /**
      * Logs a player into the server
-     * @param username
-     * @param password
-     * @throws LoginException
+     * @param username The player's username
+     * @param password The player's password
      * @return CommandExecutionResult
      */
-    boolean login(String username, String password) throws LoginException;
+    boolean login(String username, String password);
 
     /**
      * Registers a user
-     * @param username
-     * @param password
+     * @param username The player's username
+     * @param password The player's password
      * @throws RegisterException
      * @return CommandExecutionResult
      */
@@ -41,7 +40,7 @@ public interface IFacade {
     //================================
     /**
      * Adds an AI to the game
-     * @param type
+     * @param type The type of AI to be added to the game
      * @throws AddAIException
      * @return CommandExecutionResult
      */
@@ -67,23 +66,24 @@ public interface IFacade {
 
     /**
      * Creates a new game
-     * @param name
-     * @param randomTiles
-     * @param randomNumbers
-     * @param randomPorts
+     * @param name The name of the new game
+     * @param randomTiles Whether or not the tiles should be random
+     * @param randomNumbers Whether or not the chits should be random
+     * @param randomPorts Whether or not the ports should be random
      * @return CommandExecutionResult
-     * @throws CreateGameException
      */
     CommandExecutionResult create(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts);
 
     /**
      * Joins a player to the specified game
-     * @param gameID
-     * @param color
+     * @param gameID The ID of the game to be joined
+     * @param color The color the player has chosen for this game
+     * @param playerId
+     * @param username
      * @throws JoinGameException
      * @return CommandExecutionResult
      */
-    CommandExecutionResult join(int gameID, CatanColor color) throws JoinGameException;
+    CommandExecutionResult join(final int gameID, final CatanColor color, final int playerId, final String username) throws JoinGameException;
 
 
     //Move Methods
