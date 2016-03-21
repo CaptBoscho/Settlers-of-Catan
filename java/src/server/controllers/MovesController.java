@@ -9,7 +9,7 @@ import shared.dto.*;
  */
 public class MovesController {
 
-    public static CommandExecutionResult sendChat(final SendChatDTO dto) {
+    public static CommandExecutionResult sendChat(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("sendChat", dto);
         } catch (Exception e) {
@@ -19,7 +19,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult rollNumber(final RollNumberDTO dto) {
+    public static CommandExecutionResult rollNumber(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("rollNumber", dto);
         } catch (Exception e) {
@@ -29,7 +29,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult robPlayer(final RobPlayerDTO dto) {
+    public static CommandExecutionResult robPlayer(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("robPlayer", dto);
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult finishTurn(final FinishTurnDTO dto) {
+    public static CommandExecutionResult finishTurn(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("finishTurn", dto);
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult buyDevCard(final BuyDevCardDTO dto) {
+    public static CommandExecutionResult buyDevCard(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("buyDevCard", dto);
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult yearOfPlenty(final PlayYOPCardDTO dto) {
+    public static CommandExecutionResult yearOfPlenty(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("playYOP", dto);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult roadBuilding(final RoadBuildingDTO dto) {
+    public static CommandExecutionResult roadBuilding(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("playRoadBuilding", dto);
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult soldier(final PlaySoldierCardDTO dto) {
+    public static CommandExecutionResult soldier(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("playSoldier", dto);
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult monopoly(final PlayMonopolyDTO dto) {
+    public static CommandExecutionResult monopoly(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("playMonopoly", dto);
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult monument(final PlayMonumentDTO dto) {
+    public static CommandExecutionResult monument(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("playMonument", dto);
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult buildRoad(final BuildRoadDTO dto) {
+    public static CommandExecutionResult buildRoad(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("buildRoad", dto);
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult buildSettlement(final BuildSettlementDTO dto) {
+    public static CommandExecutionResult buildSettlement(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("buildSettlement", dto);
         } catch (Exception e) {
@@ -129,7 +129,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult buildCity(final BuildCityDTO dto) {
+    public static CommandExecutionResult buildCity(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("buildCity", dto);
         } catch (Exception e) {
@@ -139,7 +139,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult offerTrade(final OfferTradeDTO dto) {
+    public static CommandExecutionResult offerTrade(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("offerTrade", dto);
         } catch (Exception e) {
@@ -149,7 +149,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult acceptTrade(final TradeOfferResponseDTO dto) {
+    public static CommandExecutionResult acceptTrade(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("respondToOffer", dto);
         } catch (Exception e) {
@@ -159,7 +159,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult maritimeTrade(final MaritimeTradeDTO dto) {
+    public static CommandExecutionResult maritimeTrade(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("maritimeTrade", dto);
         } catch (Exception e) {
@@ -169,7 +169,7 @@ public class MovesController {
         }
     }
 
-    public static CommandExecutionResult discardCards(final DiscardCardsDTO dto) {
+    public static CommandExecutionResult discardCards(final CookieWrapperDTO dto) {
         try {
             return MovesCommandFactory.getInstance().executeCommand("discardCards", dto);
         } catch (Exception e) {

@@ -176,6 +176,12 @@
 			</assertions>
 		</java>
 	</target>
+
+	<target name="test-integration" description="Runs a Python script that tests the API from an external black-box perspective">
+		<exec dir="python/tests" executable="python" failonerror="true">
+			<arg line="api_test.py" />
+		</exec>
+	</target>
  	
 	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
 		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">

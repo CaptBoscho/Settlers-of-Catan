@@ -2,6 +2,7 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.SendChatDTO;
 import spark.Request;
 import spark.Response;
@@ -21,7 +22,10 @@ public class SendChatHandler implements Route {
 
         // TODO - validation
 
-        CommandExecutionResult result = MovesController.sendChat(new SendChatDTO(request.body()));
+        CookieWrapperDTO dto = new CookieWrapperDTO(new SendChatDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = MovesController.sendChat(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

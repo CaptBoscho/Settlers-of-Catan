@@ -6,7 +6,9 @@ import server.exceptions.BuildRoadException;
 import server.exceptions.CommandExecutionFailedException;
 import server.main.Config;
 import shared.dto.BuildRoadDTO;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
+import shared.locations.EdgeLocation;
 
 /**
  * A command object that builds a road
@@ -15,7 +17,9 @@ import shared.dto.IDTO;
  */
 public class BuildRoadCommand implements ICommand {
 
-    private BuildRoadDTO dto;
+    private int gameId;
+    private int playerIndex;
+    private EdgeLocation location;
 
     /**
      * Communicates with the ServerFacade to carry out the Build Road command
@@ -24,15 +28,19 @@ public class BuildRoadCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.buildRoad(1, dto.getPlayerIndex(), dto.getRoadLocation());
+            return Config.facade.buildRoad(this.gameId, this.playerIndex, this.location);
         } catch (BuildRoadException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (BuildRoadDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        final BuildRoadDTO tmpDTO = (BuildRoadDTO)cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
+        this.playerIndex = tmpDTO.getPlayerIndex();
+        this.location = tmpDTO.getRoadLocation();
     }
 
 }
