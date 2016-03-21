@@ -250,6 +250,7 @@ public class ServerFacade implements IFacade {
         assert message.length() >= 0;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             final String playerName = game.getPlayerNameByIndex(player);
             final MessageLine line = new MessageLine(playerName, message);
@@ -280,6 +281,7 @@ public class ServerFacade implements IFacade {
         assert player < 4;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             game.rollNumber(value);
         } catch (Exception e) {
@@ -309,6 +311,7 @@ public class ServerFacade implements IFacade {
         assert victim >= 0;
 
         Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             newLocation = getModelHexLocation(newLocation);
             if(game.canPlaceRobber(player, newLocation)) {
@@ -338,6 +341,7 @@ public class ServerFacade implements IFacade {
         assert player < 4;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         if(game.canFinishTurn(player)) {
             try {
                 game.finishTurn(player);
@@ -368,6 +372,7 @@ public class ServerFacade implements IFacade {
         assert playerIndex < 4;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             game.buyDevelopmentCard(playerIndex);
         } catch (Exception e) {
@@ -398,6 +403,7 @@ public class ServerFacade implements IFacade {
         assert resourceTwo != null;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             game.useYearOfPlenty(playerIndex, resourceOne, resourceTwo);
         } catch (PlayerExistsException | DevCardException | InsufficientResourcesException | InvalidTypeException e) {
@@ -427,6 +433,7 @@ public class ServerFacade implements IFacade {
         assert locationTwo != null;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             locationOne = getModelEdgeLocation(locationOne);
             locationTwo = getModelEdgeLocation(locationTwo);
@@ -461,6 +468,7 @@ public class ServerFacade implements IFacade {
         assert victim < 4;
 
         Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try{
             newLocation = getModelHexLocation(newLocation);
             if(game.canUseSoldier(player)) {
@@ -492,6 +500,7 @@ public class ServerFacade implements IFacade {
         assert resource != null;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             game.useMonopoly(playerIndex, resource);
         } catch (PlayerExistsException | DevCardException | InvalidTypeException | InsufficientResourcesException e) {
@@ -519,6 +528,7 @@ public class ServerFacade implements IFacade {
 
         try {
             gameManager.getGameByID(gameID).useMonument(playerIndex);
+            gameManager.getGameByID(gameID).incrementVersion();
         } catch (PlayerExistsException | DevCardException e) {
             e.printStackTrace();
             throw new MonumentException(e.getMessage());
@@ -547,6 +557,7 @@ public class ServerFacade implements IFacade {
         assert location != null;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             location = getModelEdgeLocation(location);
             if(game.canInitiateRoad(player, location)) {
@@ -581,6 +592,7 @@ public class ServerFacade implements IFacade {
         assert location != null;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             location = getModelVertexLocation(location);
             if(game.canInitiateSettlement(player, location)) {
@@ -616,6 +628,7 @@ public class ServerFacade implements IFacade {
         assert location != null;
 
         final Game game = gameManager.getGameByID(gameID);
+        game.incrementVersion();
         try {
             location = getModelVertexLocation(location);
             if(game.canBuildCity(player, location)) {
@@ -649,6 +662,7 @@ public class ServerFacade implements IFacade {
         final List<ResourceType> receive = offer.getPackage2().getResources();
         try {
             gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
+            gameManager.getGameByID(gameID).incrementVersion();
         } catch(InvalidTypeException | PlayerExistsException | InsufficientResourcesException e) {
             e.printStackTrace();
             throw new OfferTradeException(e.getMessage());
@@ -677,6 +691,7 @@ public class ServerFacade implements IFacade {
 
         try {
             gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
+            gameManager.getGameByID(gameID).incrementVersion();
         } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
             throw new AcceptTradeException(e.getMessage());
         }
@@ -701,6 +716,7 @@ public class ServerFacade implements IFacade {
 
         try {
             gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), ResourceType.translateFromString(dto.getInputResource()), ResourceType.translateFromString(dto.getOutputResource()));
+            gameManager.getGameByID(gameID).incrementVersion();
         } catch(InvalidPlayerException | InsufficientResourcesException | InvalidTypeException | PlayerExistsException e){
             throw new MaritimeTradeException(e.getMessage());
         }
@@ -743,6 +759,7 @@ public class ServerFacade implements IFacade {
 
         try {
             gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
+            gameManager.getGameByID(gameID).incrementVersion();
         } catch(PlayerExistsException | InvalidTypeException | InsufficientResourcesException e) {
             throw new DiscardCardsException(e.getMessage());
         }

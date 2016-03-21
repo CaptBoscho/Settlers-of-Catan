@@ -104,6 +104,7 @@ public final class TurnTracker {
         } else if (phase == Phase.SETUPTWO) {
             if (currentTurn == 0) {
                 nextPhase();
+                currentTurn = 0;
                 return currentTurn;
             } else {
                 return currentTurn--;
