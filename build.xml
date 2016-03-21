@@ -1,5 +1,7 @@
 ﻿<project name="Demo Server" default="server" basedir=".">
 
+	<import file="maven-build.xml" />
+
 	<!-- PROPERTIES -->
 	<!-- ********** -->	
     
@@ -11,7 +13,7 @@
     <!-- Input folders -->
     <property name="java.dir" value="java"/>
     <property name="java.src.dir" value="${java.dir}/src"/>
-    <property name="java.lib.dir" value="${java.dir}/lib"/>
+    <property name="java.lib.dir" value="src/main/java/lib"/>
     
     <!-- Base output folder -->
     <property name="dest.dir" value="docs"/>
@@ -22,12 +24,12 @@
     <property name="server.jar.file" value="${demo.dir}/server.jar"/>
     <property name="client.jar.file" value="${demo.dir}/client.jar"/>
 	<property name="java.test" location="java/test"/>
-  
+
 	<!-- CLASSPATHS -->
 	<!-- ********** -->
     
 	<path id="java.lib.classpath">
-		<fileset dir="${java.lib.dir}">
+		<fileset dir="src/main/java/lib">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
@@ -72,7 +74,7 @@
         <mkdir dir="${java.dist}/lib" />
 
         <jar jarfile="${java.dist}/lib/dependencies-all.jar">
-            <zipgroupfileset dir="${java.lib}">
+            <zipgroupfileset dir="/">
                 <include name="**/*.jar" />
             </zipgroupfileset>
         </jar>
@@ -81,10 +83,10 @@
 
   	<property name="java.dir" location="java"/>
 	<property name="java.src" location="${java.dir}/src"/>
-	<property name="java.images" location="${java.dir}/images"/>
+	<property name="java.images" location="src/main/java/images"/>
 	<property name="java.build" location="${java.dir}/build"/>
 	<property name="java.dist" location="${java.dir}/dist"/>
-	<property name="java.lib" location="${java.dir}/lib"/>
+	<property name="java.lib" location="src/main/java/lib"/>
  
 	<target name="init" description="create build directories">
 		<tstamp/>
@@ -115,13 +117,13 @@
 	<target name="package" depends="compile, copy-dependencies" description="package the jar file" >
 		<mkdir dir="${java.dist}/lib"/>
 		<copy todir="${java.dist}/lib">
-			<fileset dir="${java.lib}">
+			<fileset dir="/">
 				<include name="**"/>
 			</fileset>
 		</copy>
 		<mkdir dir="${java.dist}/images"/>
 		<copy todir="${java.dist}/images">
-			<fileset dir="${java.images}">
+			<fileset dir="/images">
 				<include name="**"/>
 			</fileset>
 		</copy>
@@ -136,7 +138,7 @@
 		</jar>
  		<jar jarfile="${java.dist}/catan-server.jar" basedir="${java.build}">
 			<manifest>
-				<attribute name="Main-Class" value="PUT THE NAME OF YOUR SERVER'S MAIN CLASS HERE"/>
+				<attribute name="Main-Class" value="Main"/>
 				<attribute name="Class-Path" 
 					value="lib/gson-2.2.4.jar" />
 			</manifest>
@@ -197,5 +199,4 @@
     <target name="make-tester-zip" depends="package" description="makes a zip file for your testing team">
         <zip destfile="./tester.zip" basedir="${java.dist}" />
     </target>
-  
 </project>

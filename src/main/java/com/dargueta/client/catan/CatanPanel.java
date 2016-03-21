@@ -1,0 +1,100 @@
+package com.dargueta.client.catan;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+
+import com.dargueta.client.discard.DiscardController;
+import com.dargueta.client.discard.DiscardView;
+import com.dargueta.client.misc.WaitView;
+import com.dargueta.client.roll.RollController;
+import com.dargueta.client.roll.RollResultView;
+import com.dargueta.client.roll.RollView;
+
+@SuppressWarnings("serial")
+public class CatanPanel extends JPanel {
+
+    private DiscardView discardView;
+	private WaitView discardWaitView;
+
+    public CatanPanel() {
+		this.setLayout(new BorderLayout());
+
+        final TitlePanel titlePanel = new TitlePanel();
+        final MidPanel midPanel = new MidPanel();
+        final LeftPanel leftPanel = new LeftPanel(titlePanel, midPanel.getGameStatePanel());
+        final RightPanel rightPanel = new RightPanel(midPanel.getMapController());
+		
+		this.add(titlePanel, BorderLayout.NORTH);
+		this.add(leftPanel, BorderLayout.WEST);
+		this.add(midPanel, BorderLayout.CENTER);
+		this.add(rightPanel, BorderLayout.EAST);
+		
+		discardView = new DiscardView();
+		discardWaitView = new WaitView();
+		discardWaitView.setMessage("Waiting for other Players to Discard");
+        final DiscardController discardController = new DiscardController(discardView, discardWaitView);
+		discardView.setController(discardController);
+		discardWaitView.setController(discardController);
+
+        final RollView rollView = new RollView();
+        final RollResultView rollResultView = new RollResultView();
+        final RollController rollController = new RollController(rollView, rollResultView);
+		rollView.setController(rollController);
+		rollResultView.setController(rollController);
+		
+//		final JButton testButton = new JButton("Test");
+//		testButton.addActionListener(new ActionListener() {
+//
+////			 @Override
+////			 public void actionPerformed(ActionEvent e) {
+////
+////			 new GameFinishedView().showModal();
+////			 }
+////
+////			 @Override
+////			 public void actionPerformed(ActionEvent e) {
+////
+////			 rollView.showModal();
+////			 }
+////
+////			 @Override
+////			 public void actionPerformed(java.awt.event.ActionEvent
+////			 e) {
+////
+////			 midPanel.getMapController().startMove(PieceType.ROBBER,
+////			 false, false);
+////			 }
+//
+//			int state = 0;
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+////				rollView.showModal();
+//
+//				discardView.setResourceMaxAmount(ResourceType.WOOD, 1);
+//				discardView.setResourceMaxAmount(ResourceType.BRICK, 0);
+//				discardView.setResourceMaxAmount(ResourceType.SHEEP, 11);
+//				discardView.setResourceMaxAmount(ResourceType.WHEAT, 1);
+//				discardView.setResourceMaxAmount(ResourceType.ORE, 0);
+//
+//				discardView.setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
+//				discardView.setResourceAmountChangeEnabled(ResourceType.SHEEP, true, false);
+//				discardView.setResourceAmountChangeEnabled(ResourceType.WHEAT, true, false);
+//
+//				discardView.setStateMessage("0/6");
+//
+//				discardView.setDiscardButtonEnabled(true);
+//
+//				if(state == 0) {
+//					discardView.showModal();
+//					state = 1;
+//				} else if(state == 1) {
+//					discardWaitView.showModal();
+//					state = 2;
+//				}
+//			}
+//		});
+//		this.add(testButton, BorderLayout.SOUTH);
+	}
+}
