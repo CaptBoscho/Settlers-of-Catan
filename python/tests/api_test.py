@@ -591,6 +591,10 @@ class GamesTests(unittest.TestCase):
             self.cookies['catan.game'] = r.cookies['catan.game']
 
     def test_creating_a_game(self):
+        r = requests.get('%sgames/list' % BASE_URL, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertEqual(0, len(r.json()))
+
         payload = {
             'name': 'test 1',
             'randomTiles': False,
@@ -602,6 +606,56 @@ class GamesTests(unittest.TestCase):
         self.assertEqual(requests.codes.ok, r.status_code)
         self.assertTrue('catan.user' not in r.cookies)
         self.assertTrue('catan.game' in r.cookies)
+        self.cookies['catan.game'] = r.cookies['catan.game']
+
+        r = requests.get('%sgames/list' % BASE_URL, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertEqual(1, len(r.json()))
+
+        # create another game with a different name
+        payload['name'] = 'test 2'
+        json_payload = json.dumps(payload)
+        r = requests.post('%sgames/create' % BASE_URL, data=json_payload, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' in r.cookies)
+        self.cookies['catan.game'] = r.cookies['catan.game']
+
+        r = requests.get('%sgames/list' % BASE_URL, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertEqual(2, len(r.json()))
+
+        # create another game with a different name
+        payload['name'] = 'test 3'
+        json_payload = json.dumps(payload)
+        r = requests.post('%sgames/create' % BASE_URL, data=json_payload, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' in r.cookies)
+        self.cookies['catan.game'] = r.cookies['catan.game']
+
+        r = requests.get('%sgames/list' % BASE_URL, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertEqual(3, len(r.json()))
+
+        # create another game with a different name
+        payload['name'] = 'test 4'
+        json_payload = json.dumps(payload)
+        r = requests.post('%sgames/create' % BASE_URL, data=json_payload, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertTrue('catan.user' not in r.cookies)
+        self.assertTrue('catan.game' in r.cookies)
+        self.cookies['catan.game'] = r.cookies['catan.game']
+
+        r = requests.get('%sgames/list' % BASE_URL, cookies=self.cookies)
+        self.assertEqual(requests.codes.ok, r.status_code)
+        self.assertEqual(4, len(r.json()))
+
+        # verify we can't make a game with a duplicate name
+        json_payload = json.dumps(payload)
+        r = requests.post('%sgames/create' % BASE_URL, data=json_payload, cookies=self.cookies)
+        self.assertEqual(requests.codes.bad_request, r.status_code)
+        self.assertEqual('Game name taken.', r.text)
 
 
 if __name__ == '__main__':

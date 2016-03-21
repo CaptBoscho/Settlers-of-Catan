@@ -157,6 +157,15 @@ public class ServerFacade implements IFacade {
         assert name.length() > 0;
         assert this.gameManager != null;
 
+        // check if name is already taken
+        for(final Game game : this.gameManager.getAllGames()) {
+            if(game.getTitle().equals(name)) {
+                final CommandExecutionResult result = new CommandExecutionResult("Game name taken.");
+                result.triggerError(400);
+                return result;
+            }
+        }
+
         // create the game in the model
         final Game game = new Game(name, randomPorts, randomNumbers, randomTiles);
         game.setId(this.gameManager.getNumGames());
