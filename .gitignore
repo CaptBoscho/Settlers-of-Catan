@@ -1,5 +1,6 @@
 *.class
-dist/
+java/dist/
+java/build/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
