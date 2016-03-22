@@ -341,7 +341,7 @@ public class ServerFacade implements IFacade {
                 String robbed = game.getPlayerNameByIndex(victim);
                 String message;
                 if(player != victim) {
-                    message = robber + " sent his home boy Pancho to rob " + robbed;
+                    message = robber + " sent his home boy Pancho to mug " + robbed;
                 } else {
                     message = robber + " moved Pancho to a dope spot";
                 }
