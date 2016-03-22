@@ -26,7 +26,7 @@ public class MaritimeTradeCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.maritimeTrade(1, dto);
+            return Config.facade.maritimeTrade(gameId, dto);
         } catch(MaritimeTradeException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
