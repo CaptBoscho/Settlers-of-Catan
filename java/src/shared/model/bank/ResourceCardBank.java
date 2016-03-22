@@ -324,32 +324,22 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
             case BRICK:
                 if (getNumberOfBrick() > 0) {
                     return bricks.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available bricks");
                 }
             case ORE:
                 if (getNumberOfOre() > 0) {
                     return ores.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available ores");
                 }
             case SHEEP:
                 if (getNumberOfSheep() > 0) {
                     return sheeps.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available sheep");
                 }
             case WHEAT:
                 if (getNumberOfWheat() > 0) {
                     return wheats.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available wheats");
                 }
             case WOOD:
                 if (getNumberOfWood() > 0) {
                     return woods.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available woods");
                 }
             default:
                 throw new InvalidTypeException("The given type is invalid");
