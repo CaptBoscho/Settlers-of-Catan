@@ -696,7 +696,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.map != null;
 
         if (canInitiateSettlement(playerIndex, vertex)) {
-            map.initiateSettlement(playerIndex, vertex);
+            List<ResourceType> resources = map.initiateSettlement(playerIndex, vertex);
+            for(ResourceType resource : resources) {
+                safeDrawCard(playerIndex, resource);
+            }
         }
     }
 
@@ -855,11 +858,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
 
             //Remove from the game's bank and give to players
-            resources.entrySet().forEach(entry -> {
-                entry.getValue().forEach(resource -> {
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                for(ResourceType resource : entry.getValue()) {
                     safeDrawCard(entry.getKey(), resource);
-                });
-            });
+                }
+            }
 
             //Move to next phase - Playing
             //turnTracker.nextPhase();

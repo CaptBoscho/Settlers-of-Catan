@@ -82,8 +82,8 @@ public final class TurnTracker {
         } else {
             currentTurn++;
             currentTurn %= NUM_PLAYERS;
-            if(phase == Phase.PLAYING){
-                phase = Phase.ROLLING;
+            if(phase == Phase.PLAYING) {
+                setPhase(Phase.ROLLING);
             }
             return currentTurn;
         }
@@ -252,8 +252,7 @@ public final class TurnTracker {
             public Phase next() {
                 return ROLLING;
             }
-        },
-        GAMEFINISHED;
+        };
 
         public Phase next() {
             return values()[ordinal() + 1];

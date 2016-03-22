@@ -111,8 +111,6 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 				break;
 			case DISCARDING:  state = new DiscardingState(getTradeView(), getTradeOverlay());
 				break;
-			case GAMEFINISHED:  state = new GameFinishedState(getTradeView(), getTradeOverlay());
-				break;
 			default: state = new PlayingState(getTradeView(), getTradeOverlay());
 				break;
 		}
