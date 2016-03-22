@@ -83,7 +83,9 @@ public final class PlayerManager implements IPlayerManager {
         assert newOwnerIndex < 4;
         assert oldOwnerIndex >= -1;
 
-        getPlayerByIndex(oldOwnerIndex).loseLongestRoad();
+        if(oldOwnerIndex >= 0) {
+            getPlayerByIndex(oldOwnerIndex).loseLongestRoad();
+        }
         getPlayerByIndex(newOwnerIndex).winLongestRoad();
     }
 
