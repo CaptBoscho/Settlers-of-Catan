@@ -1,5 +1,8 @@
 package server.facade;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import jdk.nashorn.internal.parser.JSONParser;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import shared.definitions.CatanColor;
@@ -11,11 +14,17 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.game.Game;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  * @author Kyle Cornelison
  */
 public class MockFacade implements IFacade {
+    Game game;
 
     /**
      * Logs a player into the server
@@ -171,7 +180,19 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException {
-        return null;
+        try {
+            Scanner scan = new Scanner(new File("sample/model.json"));
+            String alladat = "";
+            while(scan.hasNext()) {
+                alladat += scan.nextLine();
+            }
+            JsonObject obj = new JsonParser().parse(alladat).getAsJsonObject();
+            game = new Game(obj);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return new CommandExecutionResult(game.toJSON().toString());
     }
 
     /**

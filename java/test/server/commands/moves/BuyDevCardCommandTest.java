@@ -3,6 +3,8 @@ package server.commands.moves;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import server.exceptions.BuyDevCardException;
 import server.facade.MockFacade;
 import server.main.Config;
 
@@ -25,6 +27,10 @@ public class BuyDevCardCommandTest {
 
     @Test
     public void testExecute() {
-
+        try {
+            System.out.println(Config.facade.buyDevCard(1, 3));
+        } catch (BuyDevCardException e) {
+            e.printStackTrace();
+        }
     }
 }
