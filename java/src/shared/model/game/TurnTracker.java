@@ -82,6 +82,9 @@ public final class TurnTracker {
         } else {
             currentTurn++;
             currentTurn %= NUM_PLAYERS;
+            if(phase == Phase.PLAYING){
+                phase = Phase.ROLLING;
+            }
             return currentTurn;
         }
     }

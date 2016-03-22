@@ -690,14 +690,20 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws Exception, InvalidTypeException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert vertex != null;
         assert this.map != null;
 
         if (canInitiateSettlement(playerIndex, vertex)) {
-            map.initiateSettlement(playerIndex, vertex);
+            List<ResourceType> resources = map.initiateSettlement(playerIndex, vertex);
+            if(turnTracker.getPhase()== TurnTracker.Phase.SETUPTWO){
+                for(ResourceType type : resources){
+                    ResourceCard card = resourceCardBank.draw(type);
+                    playerManager.getPlayerByIndex(playerIndex).addResourceCard(card);
+                }
+            }
         }
     }
 
@@ -813,6 +819,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
         }
+        boolean change = true;
+        for(Player p : getPlayers()){
+            if(!p.hasDiscarded()){
+                change = false;
+            }
+        }
+        if(change){
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+        }
     }
 
     /**
@@ -826,13 +841,22 @@ public class Game extends Observable implements IGame, JsonSerializable {
         //Is value a 7 - robber
         if (value == 7) {
             //Go to discarding phase before robbing if any player has to discard
-            getPlayers().forEach(player -> {
+            boolean discard = false;
+            for(Player player: getPlayers()){
                 if (player.canDiscardCards()) {
-                    turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+                    player.setDiscarded(false);
+                    discard = true;
+                }else{
+                    player.setDiscarded(true);
                 }
-            });
+            }
+            if(discard){
+               turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+            }else{
+                turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            }
             //Otherwise just move to the robbing phase
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            //Can't move to robbing phase here! need to wait for everyone to discard
         } else {
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
@@ -845,7 +869,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
             });
 
             //Move to next phase - Playing
-            turnTracker.nextPhase();
+            //turnTracker.nextPhase();
+            turnTracker.setPhase(TurnTracker.Phase.PLAYING);
+            System.out.println(turnTracker.getPhase().toString());
         }
     }
 
@@ -873,7 +899,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canOfferTrade(playerIndexOne)) {
             final TradePackage one = new TradePackage(playerIndexOne, playerOneCards);
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
-            // TODO - why is this trade object unused?
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
             //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
@@ -1073,6 +1098,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             map.moveRobber(playerRobber, hexLoc);
             playerManager.placeRobber(playerRobber, playerRobbed);
         }
+        //turnTracker.setPhase(TurnTracker.Phase.PLAYING); for Joel, love Corbin
     }
 
     /**
@@ -1169,8 +1195,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         } catch (BadCallerException e) {
             e.printStackTrace();
         }
-
         return turnTracker.nextTurn();
+
     }
     //==========================================================================
     //endregion
