@@ -356,6 +356,12 @@ public class Player implements IPlayer, Comparable<Player> {
 
         if(canUseRoadBuilder()) {
             developmentCardBank.useRoadBuild();
+            if (structureBank.canBuildRoad()) {
+                structureBank.buildRoad();
+            }
+            if (structureBank.canBuildRoad()) {
+                structureBank.buildRoad();
+            }
         } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
