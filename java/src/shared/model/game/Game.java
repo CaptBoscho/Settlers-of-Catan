@@ -298,7 +298,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public TurnTracker.Phase getCurrentPhase() {
         return turnTracker.getPhase();
     }
-
     /**
      * Moves turn to the next phase
      */
@@ -813,13 +812,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
         }
-        boolean change = true;
-        for(Player p : getPlayers()){
-            if(!p.hasDiscarded()){
-                change = false;
+        boolean allPlayersDiscarded = true;
+        for(Player player : getPlayers()){
+            if(!player.hasDiscarded()){
+                allPlayersDiscarded = false;
             }
         }
-        if(change){
+        if(allPlayersDiscarded){
             turnTracker.setPhase(TurnTracker.Phase.ROBBING);
         }
     }
