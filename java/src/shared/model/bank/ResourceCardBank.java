@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
  * @author Danny Harding
  */
 public final class ResourceCardBank implements JsonSerializable, IResourceCardBank {
-    static final int MAX_NUMBER_BRICK = 15;
-    static final int MAX_NUMBER_ORE = 15;
-    static final int MAX_NUMBER_SHEEP = 15;
-    static final int MAX_NUMBER_WHEAT = 15;
-    static final int MAX_NUMBER_WOOD = 15;
+    static final int MAX_NUMBER_BRICK = 19;
+    static final int MAX_NUMBER_ORE = 19;
+    static final int MAX_NUMBER_SHEEP = 19;
+    static final int MAX_NUMBER_WHEAT = 19;
+    static final int MAX_NUMBER_WOOD = 19;
 
     private List<Brick> bricks = new ArrayList<>();
     private List<Ore> ores = new ArrayList<>();

@@ -869,11 +869,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 }
             }
 
-            boolean enoughBrick = resourceCardBank.getNumberOfBrick() > bricksNeeded;
-            boolean enoughSheep = resourceCardBank.getNumberOfSheep() > sheepNeeded;
-            boolean enoughOre = resourceCardBank.getNumberOfOre() > oreNeeded;
-            boolean enoughWheat = resourceCardBank.getNumberOfWheat() > wheatNeeded;
-            boolean enoughWood = resourceCardBank.getNumberOfWood() > woodNeeded;
+            boolean enoughBrick = resourceCardBank.getNumberOfBrick() >= bricksNeeded;
+            boolean enoughSheep = resourceCardBank.getNumberOfSheep() >= sheepNeeded;
+            boolean enoughOre = resourceCardBank.getNumberOfOre() >= oreNeeded;
+            boolean enoughWheat = resourceCardBank.getNumberOfWheat() >= wheatNeeded;
+            boolean enoughWood = resourceCardBank.getNumberOfWood() >= woodNeeded;
 
 
             // put available resources in new Hashmap
