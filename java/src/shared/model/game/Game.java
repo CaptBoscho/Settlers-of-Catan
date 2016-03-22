@@ -2,6 +2,7 @@ package shared.model.game;
 
 import client.data.GameInfo;
 import client.data.PlayerInfo;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
@@ -116,7 +117,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (gameJson.has("tradeOffer")) {
             this.currentOffer = new Trade(gameJson.get("tradeOffer").getAsJsonObject());
         } else {
-            this.currentOffer = new Trade();
+            this.currentOffer = null;
         }
         try {
             this.turnTracker = new TurnTracker(gameJson.get("turnTracker").getAsJsonObject());
@@ -190,9 +191,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
         if (json.has("tradeOffer")) {
-            this.currentOffer = new Trade(json.get("tradeOffer").getAsJsonObject());
+            JsonObject offer = json.get("tradeOffer").getAsJsonObject();
+            this.currentOffer = new Trade(offer.get("offer").getAsJsonObject());
+            this.currentOffer.setReceiver(offer.get("receiver").getAsInt());
+            this.currentOffer.setSender(offer.get("playerIndex").getAsInt());
         } else {
-            this.currentOffer = new Trade();
+            this.currentOffer = null;
         }
         try {
             this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
@@ -969,11 +973,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canOfferTrade(playerIndexOne)) {
             final TradePackage one = new TradePackage(playerIndexOne, playerOneCards);
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
-            // TODO - why is this trade object unused?
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
-            //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
-
         }
     }
 
@@ -981,7 +982,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (playerIndex == currentOffer.getReceiver() && answer) {
             playerManager.offerTrade(currentOffer.getSender(), currentOffer.getReceiver(), currentOffer.getPackage1().getResources(), currentOffer.getPackage2().getResources());
         }
-        currentOffer = new Trade();
+        currentOffer = null;
     }
 
     /**
@@ -1709,41 +1710,52 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     @Override
     public boolean isTradeActive() {
-        return this.currentOffer.isActive();
+        if(currentOffer == null){
+        }else{
+            return true;
+        }
+        return (currentOffer != null);
     }
 
     @Override
     public int getTradeReceiver() {
+        assert currentOffer != null;
         return this.currentOffer.getReceiver();
     }
 
     @Override
     public int getTradeSender() {
+        assert currentOffer != null;
         return this.currentOffer.getSender();
     }
 
     @Override
     public int getTradeBrick() {
+        assert currentOffer != null;
         return this.currentOffer.getBrick();
     }
 
     @Override
     public int getTradeWood() {
+        assert currentOffer != null;
         return this.currentOffer.getWood();
     }
 
     @Override
     public int getTradeSheep() {
+        assert currentOffer != null;
         return this.currentOffer.getSheep();
     }
 
     @Override
     public int getTradeWheat() {
+        assert currentOffer != null;
         return this.currentOffer.getWheat();
     }
 
     @Override
     public int getTradeOre() {
+        assert currentOffer != null;
         return this.currentOffer.getOre();
     }
     //==========================================================================
