@@ -1,21 +1,17 @@
 package shared.model.player;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.model.bank.InvalidTypeException;
-import shared.exceptions.DevCardException;
-import shared.exceptions.MoveRobberException;
-import shared.exceptions.PlayerExistsException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.resources.ResourceCard;
+
 import javax.naming.InsufficientResourcesException;
-import javax.security.sasl.AuthenticationException;
 import java.util.List;
 
 /**
@@ -223,7 +219,7 @@ public interface IPlayerManager {
      * @param playerRobbing index of the player robbing
      * @param playerRobbed index of the player being robbed
      */
-    void placeRobber(int playerRobbing, int playerRobbed) throws MoveRobberException,PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+    void placeRobber(int playerRobbing, int playerRobbed) throws InvalidTypeException, Exception;
 
     /**
      * Action - Player builds a road

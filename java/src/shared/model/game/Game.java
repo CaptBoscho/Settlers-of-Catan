@@ -22,7 +22,7 @@ import shared.model.bank.ResourceCardBank;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.devcards.RoadBuildCard;
 import shared.model.cards.devcards.SoldierCard;
-import shared.model.cards.resources.ResourceCard;
+import shared.model.cards.resources.*;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
@@ -727,6 +727,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canBuildSettlement(playerIndex, vertex)) {
             map.buildSettlement(playerIndex, vertex);
             playerManager.buildSettlement(playerIndex);
+            resourceCardBank.addResource(new Brick());
+            resourceCardBank.addResource(new Wood());
+            resourceCardBank.addResource(new Sheep());
+            resourceCardBank.addResource(new Wheat());
         }
     }
 
@@ -773,6 +777,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canBuildRoad(playerIndex, edge)) {
             map.buildRoad(playerIndex, edge);
             playerManager.buildRoad(playerIndex);
+            resourceCardBank.addResource(new Brick());
+            resourceCardBank.addResource(new Wood());
             //check to update longest road
             int roadLength = map.getLongestRoadSize(playerIndex);
             if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
@@ -802,6 +808,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canBuildCity(playerIndex, vertex)) {
             map.buildCity(playerIndex, vertex);
             playerManager.buildCity(playerIndex);
+            resourceCardBank.addResource(new Ore());
+            resourceCardBank.addResource(new Ore());
+            resourceCardBank.addResource(new Ore());
+            resourceCardBank.addResource(new Wheat());
+            resourceCardBank.addResource(new Wheat());
+
         }
     }
 
@@ -1065,16 +1077,16 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
-        final Set<Integer> who = map.whoCanGetRobbed(playerRobber);
+        final Set<Integer> who = map.whoCanGetRobbed(playerRobber, hexLoc);
         assert who != null;
         if (turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)) {
+            map.moveRobber(playerRobber, hexLoc);
             try {
-                turnTracker.nextPhase();
+                playerManager.placeRobber(playerRobber, playerRobbed);
+                turnTracker.setPhase(TurnTracker.Phase.PLAYING);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            map.moveRobber(playerRobber, hexLoc);
-            playerManager.placeRobber(playerRobber, playerRobbed);
         }
     }
 
@@ -1094,6 +1106,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         // remove player resources
         playerManager.buyDevCard(playerIndex);
+
+        resourceCardBank.addResource(new Ore());
+        resourceCardBank.addResource(new Wheat());
+        resourceCardBank.addResource(new Sheep());
 
         // give Dev Card from game to player
         final DevelopmentCard dc = developmentCardBank.draw();

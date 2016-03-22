@@ -135,7 +135,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
     }
 
     @Override
-    public ResourceCard draw() throws Exception {
+    public ResourceCard draw() throws Exception, InvalidTypeException {
         if (ownedByGame) {
             throw new Exception("Must specify Resource Type to draw from Game");
         } else {
@@ -144,7 +144,9 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
             hand.addAll(sheeps.stream().collect(Collectors.toList()));
             hand.addAll(wheats.stream().collect(Collectors.toList()));
             hand.addAll(ores.stream().collect(Collectors.toList()));
-            return hand.get(new Random().nextInt(hand.size()));
+            ResourceCard removed = hand.remove(new Random().nextInt(hand.size()));
+            removeCard(removed.getType());
+            return removed;
         }
     }
 
@@ -369,6 +371,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
             if(getNumberOfSheep() > 0){content.add(ResourceType.SHEEP);}
             if(getNumberOfWheat() > 0){content.add(ResourceType.WHEAT);}
             if(getNumberOfWood() > 0){content.add(ResourceType.WOOD);}
+
 
             int card = new Random().nextInt(content.size());
 

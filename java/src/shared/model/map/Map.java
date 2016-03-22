@@ -703,9 +703,9 @@ public final class Map implements IMap, JsonSerializable {
      * @return A set of playerIndex that can be robbed
      */
     @Override
-    public Set<Integer> whoCanGetRobbed(int playerIndex) {
+    public Set<Integer> whoCanGetRobbed(int playerIndex, HexLocation hexLoc) {
         assert this.robber != null;
-        return getPlayers(playerIndex, robber.getLocation());
+        return getPlayers(playerIndex, hexLoc);
     }
 
     /**
@@ -725,7 +725,7 @@ public final class Map implements IMap, JsonSerializable {
         if(hex == null || hex.getType() == HexType.WATER) {
             throw new InvalidLocationException("Hex location is not on the map");
         }
-        if(robber.getLocation() == hexLoc) {
+        if(robber.getLocation().equals(hexLoc)) {
             throw new AlreadyRobbedException("Robber cannot remain at the same hex location");
         }
         robber.setLocation(hexLoc);
