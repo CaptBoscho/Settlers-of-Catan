@@ -1152,6 +1152,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
+        if(playerRobber == playerRobbed) {
+            placeRobber(playerRobber, hexLoc);
+            turnTracker.setPhase(TurnTracker.Phase.PLAYING);
+            return;
+        }
+
         final Set<Integer> who = map.whoCanGetRobbed(playerRobber, hexLoc);
         assert who != null;
         if (turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)) {
