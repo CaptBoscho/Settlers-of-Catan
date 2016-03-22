@@ -55,6 +55,7 @@ public class GameManager {
 
     public void addGame(final Game game) {
         games.put(game.getId(), game);
+        System.out.println("added game: " + game.getId() + " with title " + game.getTitle());
     }
 
     public static void reset() {

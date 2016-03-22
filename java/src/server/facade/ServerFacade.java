@@ -2,6 +2,8 @@ package server.facade;
 
 import client.data.GameInfo;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import jdk.nashorn.internal.parser.JSONParser;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import server.managers.GameManager;
@@ -20,8 +22,12 @@ import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
 
 import javax.naming.InsufficientResourcesException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author Kyle Cornelison
@@ -37,6 +43,36 @@ public class ServerFacade implements IFacade {
     private ServerFacade(){
         gameManager = GameManager.getInstance();
         userManager = UserManager.getInstance();
+
+        try {
+            Game game = makeGame("/Users/dannyharding/Documents/Winter 2016/CS 340/Settlers-of-Catan/sample/defaultGame.json");
+            game.setId(0);
+            game.setTitle("Default Game");
+            gameManager.addGame(game);
+            game = makeGame("/Users/dannyharding/Documents/Winter 2016/CS 340/Settlers-of-Catan/sample/emptyGame.json");
+            game.setId(1);
+            game.setTitle("Empty Game");
+            gameManager.addGame(game);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        userManager.addUser("pedro", "pedro");
+        userManager.addUser("jose", "jose");
+        userManager.addUser("pablo", "pablo");
+        userManager.addUser("jesus", "jesus");
+    }
+
+    private Game makeGame(String filePath) throws Exception {
+        try {
+            FileReader reader = new FileReader(filePath);
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = (JsonObject) jsonParser.parse(reader);
+
+            return new Game(jsonObject);
+        } catch (FileNotFoundException e) {
+            throw new Exception("Couldn't get file to make game with");
+        }
     }
 
     private HexLocation getModelHexLocation(HexLocation hexLoc) {
