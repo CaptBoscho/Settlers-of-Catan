@@ -301,7 +301,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public TurnTracker.Phase getCurrentPhase() {
         return turnTracker.getPhase();
     }
-
     /**
      * Moves turn to the next phase
      */
@@ -869,7 +868,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 }
             }
             //Otherwise just move to the robbing phase
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+            //Can't move to robbing phase here! need to wait for everyone to discard
         } else {
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
@@ -955,14 +954,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
                     safeDrawCard(entry.getKey(), resource);
                 }
             }
-
+            
             turnTracker.setPhase(TurnTracker.Phase.PLAYING);
         }
     }
 
     /**
      * Action - Player offers trade
-     *
      */
     @Override
     public void offerTrade(TradePackage one, TradePackage two) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
@@ -1182,6 +1180,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 e.printStackTrace();
             }
         }
+        //turnTracker.setPhase(TurnTracker.Phase.PLAYING); for Joel, love Corbin
     }
 
     /**
@@ -1282,8 +1281,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         } catch (BadCallerException e) {
             e.printStackTrace();
         }
-
         return turnTracker.nextTurn();
+
     }
     //==========================================================================
     //endregion
