@@ -951,27 +951,21 @@ public class Game extends Observable implements IGame, JsonSerializable {
     /**
      * Action - Player offers trade
      *
-     * @param playerIndexOne Index of Player offering the trade
-     * @param playerIndexTwo Index of Player being offered the trade
-     * @param playerOneCards
-     * @param playerTwoCards
      */
     @Override
-    public void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        assert playerIndexOne >= 0;
-        assert playerIndexOne < 4;
-        assert playerIndexTwo >= 0;
-        assert playerIndexTwo < 4;
-        assert playerIndexOne != playerIndexTwo;
-        assert playerOneCards != null;
-        assert playerOneCards.size() > 0;
-        assert playerTwoCards != null;
-        assert playerTwoCards.size() > 0;
-        assert !playerOneCards.equals(playerTwoCards);
+    public void offerTrade(TradePackage one, TradePackage two) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        assert one.getPlayerIndex() >= 0;
+        assert one.getPlayerIndex() < 4;
+        assert two.getPlayerIndex() >= 0;
+        assert two.getPlayerIndex() < 4;
+        assert one.getPlayerIndex() != two.getPlayerIndex();
+        assert one.getResources() != null;
+        assert one.getResources().size() > 0;
+        assert two.getResources() != null;
+        assert two.getResources().size() > 0;
+        assert !one.getResources().equals(two.getResources());
 
-        if (canOfferTrade(playerIndexOne)) {
-            final TradePackage one = new TradePackage(playerIndexOne, playerOneCards);
-            final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
+        if (canOfferTrade(one.getPlayerIndex())) {
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
         }

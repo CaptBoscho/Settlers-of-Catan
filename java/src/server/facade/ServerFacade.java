@@ -724,10 +724,10 @@ public class ServerFacade implements IFacade {
         final int sender = dto.getSender();
         final int receiver = dto.getReceiver();
         final Trade offer = dto.getOffer();
-        final List<ResourceType> send = offer.getPackage1().getResources();
-        final List<ResourceType> receive = offer.getPackage2().getResources();
+        offer.getPackage1().setPlayerIndex(sender);
+        offer.getPackage2().setPlayerIndex(receiver);
         try {
-            gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
+            gameManager.getGameByID(gameID).offerTrade(offer.getPackage1(), offer.getPackage2());
             gameManager.getGameByID(gameID).incrementVersion();
             String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(sender);
             String message = name + " doesn't have enough resources";

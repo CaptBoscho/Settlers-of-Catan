@@ -12,6 +12,7 @@ import shared.model.cards.devcards.*;
 import shared.model.cards.resources.ResourceCard;
 import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
+import shared.model.game.trade.TradePackage;
 import shared.model.player.Player;
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
@@ -1915,8 +1916,10 @@ public class GameTest {
         assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) == 1);
         assertTrue(game.amountOwnedResource(guy, ResourceType.ORE) == 1);
         assertTrue(game.amountOwnedResource(friend, ResourceType.SHEEP) == 1);
+        TradePackage package1 = new TradePackage(guy,ones);
+        TradePackage package2 = new TradePackage(friend, twos);
 
-        game.offerTrade(guy,friend,ones,twos);
+        game.offerTrade(package1, package2);
 
         assertTrue(game.amountOwnedResource(friend, ResourceType.BRICK) == 1);
         assertTrue(game.amountOwnedResource(friend, ResourceType.ORE) == 1);

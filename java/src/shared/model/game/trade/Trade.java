@@ -106,7 +106,7 @@ public final class Trade {
         if(wood <0){
             int wood1 = wood * -1;
             for(int i=0; i<wood1; i++){
-                receiving.add(ResourceType.BRICK);
+                receiving.add(ResourceType.WOOD);
             }
         }else{
             for(int i=0; i<wood; i++){
