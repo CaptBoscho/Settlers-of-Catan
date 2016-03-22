@@ -752,6 +752,8 @@ public interface IGame {
      * @throws InvalidTypeException
      */
     ResourceCard getResourceCard(final ResourceType t) throws InsufficientResourcesException, InvalidTypeException;
+
+    Player getPlayerByIndex(int index) throws PlayerExistsException;
     //========================================================================
     //endregion
 }

@@ -10,11 +10,13 @@ import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
+import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
 import shared.model.game.Game;
+import shared.model.player.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,6 +27,10 @@ import java.util.Scanner;
  */
 public class MockFacade implements IFacade {
     Game game;
+
+    public MockFacade() {
+        resetGame();
+    }
 
     /**
      * Logs a player into the server
@@ -174,25 +180,16 @@ public class MockFacade implements IFacade {
      * Buys a new dev card
      *
      * @param gameID
-     * @param player index of the player
+     * @param playerIndex index of the player
      * @throws BuyDevCardException
      * @return CommandExecutionResult
      */
     @Override
-    public CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException {
-        try {
-            Scanner scan = new Scanner(new File("sample/model.json"));
-            String alladat = "";
-            while(scan.hasNext()) {
-                alladat += scan.nextLine();
-            }
-            JsonObject obj = new JsonParser().parse(alladat).getAsJsonObject();
-            game = new Game(obj);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public CommandExecutionResult buyDevCard(int gameID, int playerIndex) throws BuyDevCardException {
+
 
         return new CommandExecutionResult(game.toJSON().toString());
+
     }
 
     /**
@@ -371,5 +368,23 @@ public class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult getModel(int gameID, int version) throws GetModelException {
         return null;
+    }
+
+    public void resetGame() {
+        try {
+            Scanner scan = new Scanner(new File("sample/mockGame.json"));
+            String jsonString = "";
+            while(scan.hasNext()) {
+                jsonString += scan.nextLine();
+            }
+            JsonObject obj = new JsonParser().parse(jsonString).getAsJsonObject();
+            game = new Game(obj);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

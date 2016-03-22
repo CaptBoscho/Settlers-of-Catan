@@ -1796,6 +1796,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         return resourceCardBank.discard(t);
     }
+
+    @Override
+    public Player getPlayerByIndex(int index) throws PlayerExistsException {
+        return playerManager.getPlayerByIndex(index);
+    }
     //===============================================
     //endregion
 
