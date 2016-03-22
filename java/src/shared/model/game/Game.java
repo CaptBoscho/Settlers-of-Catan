@@ -2007,4 +2007,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.version++;
     }
 
+    public void log(String name, String message) {
+        assert name != null;
+        assert message != null;
+
+        this.log.addMessage(new MessageLine(name, message));
+    }
+
 }
