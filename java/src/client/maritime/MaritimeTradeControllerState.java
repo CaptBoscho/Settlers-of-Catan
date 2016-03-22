@@ -65,7 +65,7 @@ public class MaritimeTradeControllerState {
     /**
      * Make (finalize) an existing maritime trade
      */
-    public void makeTrade() {
+    void makeTrade() {
         int index = userCookie.getPlayerIndex();
 
         try {
@@ -81,7 +81,7 @@ public class MaritimeTradeControllerState {
     /**
      * Cancel an existing maritime trade
      */
-    public void cancelTrade() {
+    void cancelTrade() {
         unsetGetValue();
         unsetGiveValue();
         overlay.reset();

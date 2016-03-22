@@ -15,7 +15,7 @@ public class Dice {
      * Default Constructor
      * @param diceCount Number of die to create
      */
-    public Dice(int diceCount){
+    public Dice(int diceCount) {
         assert diceCount > 0;
 
         //Init List
@@ -28,29 +28,10 @@ public class Dice {
     }
 
     /**
-     * Overloaded Constructor - Allows for specifying die range
-     * @param diceCount Number of die to create
-     * @param dieMin Min value for each die
-     * @param dieMax Max value for each die
-     */
-    public Dice(int diceCount, int dieMin, int dieMax){
-        assert diceCount > 0;
-        assert dieMax > dieMin;
-
-        //Init List
-        dice = new ArrayList<Die>();
-
-        //Create diceCount die
-        for(int i = 0; i < diceCount; i++){
-            dice.add(new Die(dieMin, dieMax));
-        }
-    }
-
-    /**
      * Simulates rolling one or more die
      * @return value of dice roll (all die added up)
      */
-    public int roll(){
+    public int roll() {
         //Initialize roll value
         int rollVal = 0;
 

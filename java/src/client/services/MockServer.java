@@ -315,7 +315,6 @@ public class MockServer implements IServer {
      * Plays a 'Monument' card from your hand to give you a victory point
      *
      * @param dto The transport object that contains the information required to play a monopoly card
-     * @return The current state of the game
      */
     @Override
     public void playMonumentCard(PlayMonumentDTO dto) {
@@ -328,7 +327,6 @@ public class MockServer implements IServer {
      * Builds a road at the specified location. (Set 'free' to true during initial setup.)
      *
      * @param dto The transport object that contains the information required to build a road
-     * @return The current state of the game
      */
     @Override
     public void buildRoad(BuildRoadDTO dto) {
@@ -365,7 +363,6 @@ public class MockServer implements IServer {
      * Offers a domestic trade to another player
      *
      * @param dto The transport object that contains the information required respond to offer a trade
-     * @return The current state of the game
      */
     @Override
     public void offerTrade(OfferTradeDTO dto) {
@@ -378,7 +375,6 @@ public class MockServer implements IServer {
      * Used to accept or reject a trade offered to the player
      *
      * @param dto The transport object that contains the information required respond to a trade offer
-     * @return The current state of the game
      */
     @Override
     public void respondToTradeOffer(TradeOfferResponseDTO dto) {
@@ -391,7 +387,6 @@ public class MockServer implements IServer {
      * Used to execute a maritime trade
      *
      * @param dto The transport object that contains the information required to execute a maritime trade
-     * @return The current state of the game
      */
     @Override
     public void maritimeTrade(MaritimeTradeDTO dto) {
@@ -404,7 +399,6 @@ public class MockServer implements IServer {
      * Discards the specified resource cards
      *
      * @param dto The transport object that contains the information required to discard cards
-     * @return The current state of the game
      */
     @Override
     public void discardCards(DiscardCardsDTO dto) {

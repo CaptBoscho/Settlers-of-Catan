@@ -27,20 +27,20 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 
 	//Image variables
 	BufferedImage reloadImg, woodImg, brickImg,	sheepImg, wheatImg, oreImg;
-	String resourceImageFolder;
+	private String resourceImageFolder;
 	
 	//give variables
 	private JButton givereload;
 	private JLabel giveAmount;
 	private JButton givewood, givebrick, givesheep, givewheat, giveore;
-	ResourceType[] giveAvailables;
+	private ResourceType[] giveAvailables;
 	
 	//get variables
 
 	private JButton getreload;
 	private JLabel getAmount;
 	private JButton getwood, getbrick, getsheep, getwheat, getore;
-	ResourceType[] getAvailables;
+	private ResourceType[] getAvailables;
 	
 	private ActionListener actionListener;
 	private ActionListener giveActionListener;
@@ -484,7 +484,7 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 	}
 	
 	
-	public static BufferedImage resize(BufferedImage image, int width, int height) {
+	private static BufferedImage resize(BufferedImage image, int width, int height) {
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));

@@ -5,8 +5,7 @@ import client.base.*;
 /**
  * Interface for the points view, which displays the user's victory points
  */
-public interface IPointsView extends IView
-{
+public interface IPointsView extends IView {
 	
 	/**
 	 * Sets the number of victory points the player has

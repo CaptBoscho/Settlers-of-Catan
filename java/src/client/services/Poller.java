@@ -10,7 +10,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * The poller keeps the client updated with the game information via long-polling.
+ * The poller keeps the client updated with the game information via
+ * long-polling.
  *
  * @author Derek Argueta
  */
@@ -32,7 +33,8 @@ public final class Poller {
 
     /**
      * Construct a poller instance using the given server
-     * @param server An instance of IServer - could be a real networking server, or a mock server for testing.
+     * @param server An instance of IServer - could be a real networking server,
+     *               or a mock server for testing.
      */
     public Poller(IServer server) {
         this.server = server;

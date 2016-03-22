@@ -10,7 +10,8 @@ import java.util.*;
 
 
 /**
- * A bank owned by either a Player or a game which holds all the owners DevelopmentCards
+ * A bank owned by either a Player or a game which holds all the owners
+ * DevelopmentCards
  *
  * @author Danny Harding
  */
@@ -23,19 +24,19 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
 
     private boolean ownedByGame;
 
-    private ArrayList<DevelopmentCard> developmentCards;
+    private List<DevelopmentCard> developmentCards;
 
-    private ArrayList<SoldierCard> soldierCards;
-    private ArrayList<MonumentCard> monumentCards;
-    private ArrayList<MonopolyCard> monopolyCards;
-    private ArrayList<YearOfPlentyCard> yearOfPlentyCards;
-    private ArrayList<RoadBuildCard> roadBuildCards;
+    private List<SoldierCard> soldierCards;
+    private List<MonumentCard> monumentCards;
+    private List<MonopolyCard> monopolyCards;
+    private List<YearOfPlentyCard> yearOfPlentyCards;
+    private List<RoadBuildCard> roadBuildCards;
 
-    private ArrayList<SoldierCard> newSoldierCards;
-    private ArrayList<MonumentCard> newMonumentCards;
-    private ArrayList<MonopolyCard> newMonopolyCards;
-    private ArrayList<YearOfPlentyCard> newYearOfPlentyCards;
-    private ArrayList<RoadBuildCard> newRoadBuildCards;
+    private List<SoldierCard> newSoldierCards;
+    private List<MonumentCard> newMonumentCards;
+    private List<MonopolyCard> newMonopolyCards;
+    private List<YearOfPlentyCard> newYearOfPlentyCards;
+    private List<RoadBuildCard> newRoadBuildCards;
 
     /**
      * Creates a DevelopmentCardBank

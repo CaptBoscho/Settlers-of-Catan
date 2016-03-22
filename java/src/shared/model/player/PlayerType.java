@@ -1,7 +1,7 @@
 package shared.model.player;
 
 /**
- * Created by Kyle 'TMD' Cornelison on 3/19/2016.
+ * @author Kyle Cornelison
  */
 public enum PlayerType {
     USER,

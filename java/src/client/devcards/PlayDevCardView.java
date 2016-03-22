@@ -213,14 +213,14 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 
 interface IButtonGroup {
 	
-	public void add(AbstractButton button);
-	public void clearSelection();
-	public int getButtonCount();
-	public Enumeration<AbstractButton> getElements();
-	public ButtonModel getSelection();
-	public boolean isSelected(ButtonModel model);
-	public void remove(AbstractButton button);
-	public void setSelected(ButtonModel model, boolean bool);
+	void add(AbstractButton button);
+	void clearSelection();
+	int getButtonCount();
+	Enumeration<AbstractButton> getElements();
+	ButtonModel getSelection();
+	boolean isSelected(ButtonModel model);
+	void remove(AbstractButton button);
+	void setSelected(ButtonModel model, boolean bool);
 }
 
 
@@ -243,11 +243,11 @@ class ButtonGroupPanel extends JPanel implements IButtonGroup {
 		bg = new ButtonGroup();
 	}
 	
-	public void setListener(ButtonGroupPanelListener listener) {		
+	void setListener(ButtonGroupPanelListener listener) {
 		this.listener = listener;
 	}
 	
-	protected void notifySelectedButtonChanged() {	
+	private void notifySelectedButtonChanged() {
 		if (listener != null) {
 			listener.selectedButtonChanged(this);
 		}
@@ -360,7 +360,7 @@ class ResourceCardChooser extends ButtonGroupPanel {
 	}
 
 
-	public ResourceType getSelectedResourceCard() {
+	ResourceType getSelectedResourceCard() {
 		
 		ButtonModel selection = getSelection();
 		
@@ -468,7 +468,7 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 		button.setText(Integer.toString(amount));
 	}
 	
-	public DevCardType getSelectedDevCard() {
+	DevCardType getSelectedDevCard() {
 		
 		ButtonModel selection = getSelection();
 		

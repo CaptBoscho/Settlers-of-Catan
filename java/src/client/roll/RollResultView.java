@@ -2,7 +2,6 @@ package client.roll;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.net.MalformedURLException;
 
 import javax.swing.*;
 
@@ -23,7 +22,6 @@ public final class RollResultView extends OverlayView implements IRollResultView
 
 	private JLabel titleLabel;
 	private JButton okayButton;
-	//private JPanel buttonPanel;
 	private JPanel centerPanel;
 	private JLabel rollLabel;
 	private ImageIcon picture;
@@ -44,6 +42,11 @@ public final class RollResultView extends OverlayView implements IRollResultView
 		
 		//add the button to the panel
 		okayButton = new JButton("Okay");
+		ActionListener actionListener = e -> {
+            if (e.getSource() == okayButton) {
+                closeModal();
+            }
+        };
 		okayButton.addActionListener(actionListener);
 		Font okayButtonFont = okayButton.getFont();
 		okayButtonFont = okayButtonFont.deriveFont(okayButtonFont.getStyle(), BUTTON_TEXT_SIZE);
@@ -76,15 +79,6 @@ public final class RollResultView extends OverlayView implements IRollResultView
 		this.add(Box.createRigidArea(new Dimension(50,50)),BorderLayout.WEST);
 	}
 
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == okayButton) {
-				closeModal();
-			}
-		}	
-	};
-	
 	@Override
 	public IRollController getController() {
 		return (IRollController)super.getController();

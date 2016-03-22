@@ -57,7 +57,7 @@ public final class TradePackage {
         return resources;
     }
 
-    public int getUserID() {
+    int getUserID() {
         return playerID;
     }
 }

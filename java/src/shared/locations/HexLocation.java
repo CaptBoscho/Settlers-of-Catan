@@ -12,9 +12,6 @@ public final class HexLocation implements JsonSerializable {
 	private int y;
 	
 	public HexLocation(int x, int y) {
-//        assert x >= 0;
-//        assert y >= 0;
-
 		setX(x);
 		setY(y);
 	}
@@ -48,8 +45,6 @@ public final class HexLocation implements JsonSerializable {
 	}
 	
 	private void setY(int y) {
-//        assert y >= 0;
-
 		this.y = y;
 	}
 	

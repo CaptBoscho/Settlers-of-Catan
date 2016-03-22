@@ -4,12 +4,9 @@ import shared.locations.VertexLocation;
 import shared.model.structures.*;
 
 /**
- * Contains a normalized VertexLocation
- * also contains a building object, if there
- * is no building on the vertex, set as null.
- * Also has a port object, if there is no port
- * connected to the vertex, then it is initialized
- * as null.
+ * Contains a normalized VertexLocation also contains a building object, if
+ * there is no building on the vertex, set as null. Also has a port object, if
+ * there is no port connected to the vertex, then it is initialized as null.
  *
  * @author Joel Bradley
  */
@@ -140,9 +137,5 @@ public final class Vertex {
 
     public VertexLocation getVertexLoc() {
         return vertexLoc;
-    }
-
-    public void setVertexLoc(VertexLocation vertexLoc) {
-        this.vertexLoc = vertexLoc;
     }
 }

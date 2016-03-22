@@ -31,15 +31,15 @@ public class PointsController extends Controller implements IPointsController, O
         facade.addObserver(this);
 	}
 	
-	public IPointsView getPointsView() {
+	private IPointsView getPointsView() {
 		return (IPointsView)super.getView();
 	}
 	
-	public IGameFinishedView getFinishedView() {
+	private IGameFinishedView getFinishedView() {
 		return finishedView;
 	}
 
-	public void setFinishedView(IGameFinishedView finishedView) {
+	private void setFinishedView(IGameFinishedView finishedView) {
 		this.finishedView = finishedView;
 	}
 

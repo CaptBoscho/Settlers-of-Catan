@@ -8,7 +8,6 @@ import com.google.gson.JsonParser;
 import shared.definitions.CatanColor;
 
 import shared.exceptions.PlayerExistsException;
-import shared.model.game.Game;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

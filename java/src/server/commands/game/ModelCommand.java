@@ -6,6 +6,7 @@ import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.GetModelException;
 import server.main.Config;
 import shared.dto.CookieWrapperDTO;
+import shared.dto.GameModelDTO;
 import shared.dto.IDTO;
 
 /**
@@ -16,6 +17,7 @@ import shared.dto.IDTO;
 public class ModelCommand implements ICommand {
 
     private int gameId;
+    private int requestedVersion;
 
     /**
      * Communicates with the ServerFacade to carry out the Model command
@@ -24,7 +26,7 @@ public class ModelCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.getModel(this.gameId);
+            return Config.facade.getModel(this.gameId, this.requestedVersion);
         } catch (GetModelException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
@@ -32,7 +34,11 @@ public class ModelCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
-        this.gameId = ((CookieWrapperDTO) dto).getGameId();
+        final CookieWrapperDTO tmpDto = (CookieWrapperDTO)dto;
+        this.gameId = tmpDto.getGameId();
+
+        final GameModelDTO gameModelDTO = (GameModelDTO)tmpDto.getDto();
+        this.requestedVersion = gameModelDTO.getVersion();
     }
 
 }

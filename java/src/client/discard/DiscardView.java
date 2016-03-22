@@ -362,7 +362,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			return this._discardAmount;
 		}
 
-		public void setDiscardAmount(int discardAmount) {
+		void setDiscardAmount(int discardAmount) {
 			this._discardAmount = discardAmount;
 			this.update();
 		}
@@ -371,7 +371,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			return this._maxAmount;
 		}
 
-		public void setMaxAmount(int maxAmount) {
+		void setMaxAmount(int maxAmount) {
 			this._maxAmount = maxAmount;
 			this.update();
 		}
@@ -380,7 +380,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			return this._canIncrease;
 		}
 
-		public void setIncrease(boolean canIncrease) {
+		void setIncrease(boolean canIncrease) {
 			this._canIncrease = canIncrease;
 			this.update();
 		}
@@ -389,7 +389,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			return this._canDecrease;
 		}
 
-		public void setDecrease(boolean canDecrease) {
+		void setDecrease(boolean canDecrease) {
 			this._canDecrease = canDecrease;
 			this.update();
 		}
@@ -402,7 +402,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			_discardResourcePanel.repaint();
 		}
 		
-		public void setResourceImage(BufferedImage resourceImage) {
+		void setResourceImage(BufferedImage resourceImage) {
 			final BufferedImage image = new BufferedImage(IMAGE_SIZE, IMAGE_SIZE, BufferedImage.TYPE_INT_ARGB);
 			final Graphics2D g = image.createGraphics();
 			final double heightScale = (double)IMAGE_SIZE / (double)(resourceImage.getHeight(null));
@@ -413,7 +413,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			this._resourceImage = image;
 		}
 		
-		public void setUpArrowImage(BufferedImage upImage) {
+		void setUpArrowImage(BufferedImage upImage) {
 			final BufferedImage image = new BufferedImage(BUTTON_SIZE, BUTTON_SIZE, BufferedImage.TYPE_INT_ARGB);
 			final Graphics2D g = image.createGraphics();
 			final double heightScale = (double)BUTTON_SIZE / (double)(upImage.getHeight(null));
@@ -428,7 +428,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			this._upImage = image;
 		}
 		
-		public void setDownArrowImage(BufferedImage downImage) {
+		void setDownArrowImage(BufferedImage downImage) {
 			BufferedImage image;
 			
 			image = new BufferedImage(BUTTON_SIZE, BUTTON_SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -447,7 +447,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			this._downImage = image;
 		}
 		
-		public JComponent asJComponent() {
+		JComponent asJComponent() {
 			final JPanel resourcePanel = new JPanel(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			c.insets = new Insets(PADDING, PADDING, PADDING, PADDING);
@@ -496,8 +496,6 @@ public class DiscardView extends OverlayView implements IDiscardView {
 			c.gridheight = 1;
 			c.insets = new Insets(0, 0, 0, 0);
 			resourcePanel.add(_upButton, c);
-//			if(_maxAmount == 0)
-//				_upButton.setEnabled(false);
 			
 			// Discard Amount Label Configuration
 			_discardAmountLabel = new JLabel(""+this._discardAmount, JLabel.CENTER);
@@ -546,7 +544,6 @@ public class DiscardView extends OverlayView implements IDiscardView {
                     DiscardView.this.getController().increaseAmount(Resource.this.getType());
                     break;
                 case "DOWN":
-
                     DiscardView.this.getController().decreaseAmount(Resource.this.getType());
                     break;
                 default:
