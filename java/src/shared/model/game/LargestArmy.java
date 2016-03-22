@@ -36,8 +36,6 @@ public final class LargestArmy {
      * @param index index of the player owning this card (-1 for no owner)
      */
     public void setNewOwner(final int index, final int soldiers) {
-        assert this.playerIndex != index;
-
         this.mostSoldiers = soldiers;
         this.playerIndex = index;
     }
