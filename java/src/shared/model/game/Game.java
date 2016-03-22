@@ -2,7 +2,6 @@ package shared.model.game;
 
 import client.data.GameInfo;
 import client.data.PlayerInfo;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
@@ -1966,11 +1965,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     private void setPlayerWithLongestRoad(final int oldOwnerIndex, final int newOwnerIndex, final int roadSize) throws PlayerExistsException {
         assert newOwnerIndex >= 0;
-        assert oldOwnerIndex >= 0;
         assert newOwnerIndex < 4;
         assert oldOwnerIndex < 4;
         assert roadSize >= 0;
-        assert newOwnerIndex != oldOwnerIndex;
 
         playerManager.changeLongestRoadPossession(oldOwnerIndex, newOwnerIndex);
         longestRoadCard.setOwner(newOwnerIndex, roadSize);
