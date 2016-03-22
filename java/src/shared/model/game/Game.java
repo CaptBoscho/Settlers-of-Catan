@@ -876,11 +876,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canOfferTrade(playerIndexOne)) {
             final TradePackage one = new TradePackage(playerIndexOne, playerOneCards);
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
-            // TODO - why is this trade object unused?
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
-            //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
-
         }
     }
 
@@ -889,6 +886,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             playerManager.offerTrade(currentOffer.getSender(), currentOffer.getReceiver(), currentOffer.getPackage1().getResources(), currentOffer.getPackage2().getResources());
         }
         currentOffer = new Trade();
+        currentOffer.setActive(false);
     }
 
     /**
@@ -1723,7 +1721,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         json.add("log", log.toJSON());
         json.add("map", map.toJSON());
         json.add("players", playerManager.toJSON());
-        if(currentOffer != null) {
+        if(currentOffer.isActive()) {
             json.add("tradeOffer", currentOffer.toJSON());
         }
 
