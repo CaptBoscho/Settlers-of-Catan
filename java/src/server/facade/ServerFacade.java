@@ -716,7 +716,10 @@ public class ServerFacade implements IFacade {
         assert dto != null;
 
         try {
-            gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), ResourceType.translateFromString(dto.getInputResource()), ResourceType.translateFromString(dto.getOutputResource()));
+            ResourceType send = ResourceType.translateFromString(dto.getInputResource());
+            ResourceType receive = ResourceType.translateFromString(dto.getOutputResource());
+            Game game = gameManager.getGameByID(gameID);
+            game.maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), send, receive);
             gameManager.getGameByID(gameID).incrementVersion();
         } catch(InvalidPlayerException | InsufficientResourcesException | InvalidTypeException | PlayerExistsException e){
             throw new MaritimeTradeException(e.getMessage());
