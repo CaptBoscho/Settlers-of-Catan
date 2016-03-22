@@ -242,8 +242,9 @@ public interface IFacade {
     /**
      * Gets the Model
      * @param gameID
+     * @param version
      * @return CommandExecutionResult
      * @throws GetModelException
      */
-    CommandExecutionResult getModel(int gameID) throws GetModelException;
+    CommandExecutionResult getModel(int gameID, int version) throws GetModelException;
 }

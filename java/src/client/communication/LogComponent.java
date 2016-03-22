@@ -26,7 +26,7 @@ public class LogComponent extends JComponent {
 	
 	private List<LogEntry> entries;
 	
-	public LogComponent() {
+	LogComponent() {
 		this.setBackground(Color.white);
 		this.setOpaque(true);
 		
@@ -36,7 +36,7 @@ public class LogComponent extends JComponent {
 		setEntries(null);
 	}
 	
-	public void setEntries(List<LogEntry> entries) {
+	void setEntries(List<LogEntry> entries) {
 		if(entries == null || entries.size() == 0) {
 			this.entries = new ArrayList<LogEntry>();
 			this.entries.add(new LogEntry(CatanColor.WHITE, "No messages"));

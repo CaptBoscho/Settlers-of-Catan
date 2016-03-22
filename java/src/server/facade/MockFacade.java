@@ -343,11 +343,12 @@ public class MockFacade implements IFacade {
     /**
      * Gets the model
      * @param gameID
+     * @param version
      * @return
      * @throws GetModelException
      */
     @Override
-    public CommandExecutionResult getModel(int gameID) throws GetModelException {
+    public CommandExecutionResult getModel(int gameID, int version) throws GetModelException {
         return null;
     }
 }

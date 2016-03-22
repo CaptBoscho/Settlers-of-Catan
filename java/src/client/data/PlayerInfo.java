@@ -91,9 +91,6 @@ public class PlayerInfo {
 		this.color = color;
 	}
 
-    //wrote these things
-    public void setVictoryPoints(int vp){this.victory = vp;}
-
     public int getVictoryPoints(){return this.victory;}
 
     public void setLongestRoad(boolean lr){this.longestroad = lr;}

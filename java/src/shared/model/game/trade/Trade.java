@@ -12,8 +12,8 @@ import java.util.List;
  * @author Danny Harding
  */
 public final class Trade {
-    TradePackage package1;
-    TradePackage package2;
+    private TradePackage package1;
+    private TradePackage package2;
     private int sender;
     private int receiver;
     private List<ResourceType> sending = new ArrayList<>();
@@ -23,7 +23,7 @@ public final class Trade {
     private int wheat = 0;
     private int sheep = 0;
     private int ore = 0;
-    boolean active = false;
+    private boolean active = false;
 
     public Trade(TradePackage package1, TradePackage package2) {
         assert package1 != null;
@@ -36,7 +36,7 @@ public final class Trade {
         this.package2 = package2;
     }
 
-    public Trade(){
+    public Trade() {
         sender = -1;
         receiver = -1;
         wood = 0;
@@ -47,9 +47,13 @@ public final class Trade {
         active = false;
     }
 
-    public TradePackage getPackage1(){return package1;}
+    public TradePackage getPackage1() {
+        return package1;
+    }
 
-    public TradePackage getPackage2(){return package2;}
+    public TradePackage getPackage2() {
+        return package2;
+    }
 
     public int getSender() {
         return sender;

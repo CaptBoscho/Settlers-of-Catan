@@ -11,7 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * A bank owned by either a Player or a game which holds all the owners DevelopmentCards
+ * A bank owned by either a Player or a game which holds all the owner
+ * DevelopmentCards
  *
  * @author Danny Harding
  */
@@ -22,11 +23,11 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
     static final int MAX_NUMBER_WHEAT = 15;
     static final int MAX_NUMBER_WOOD = 15;
 
-    private ArrayList<Brick> bricks = new ArrayList<>();
-    private ArrayList<Ore> ores = new ArrayList<>();
-    private ArrayList<Sheep> sheeps = new ArrayList<>();
-    private ArrayList<Wheat> wheats = new ArrayList<>();
-    private ArrayList<Wood> woods = new ArrayList<>();
+    private List<Brick> bricks = new ArrayList<>();
+    private List<Ore> ores = new ArrayList<>();
+    private List<Sheep> sheeps = new ArrayList<>();
+    private List<Wheat> wheats = new ArrayList<>();
+    private List<Wood> woods = new ArrayList<>();
 
     private boolean ownedByGame;
 

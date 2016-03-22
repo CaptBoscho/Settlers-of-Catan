@@ -20,7 +20,8 @@ public class LoginController extends Controller implements ILoginController {
 	 * LoginController constructor
 	 * 
 	 * @param view Login view
-	 * @param messageView Message view (used to display error messages that occur during the login process)
+	 * @param messageView Message view (used to display error messages that occur
+	 *                       during the login process)
 	 */
 	public LoginController(ILoginView view, IMessageView messageView) {
 		super(view);

@@ -3,7 +3,6 @@ package client.roll;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
@@ -52,6 +51,12 @@ public final class RollView extends OverlayView implements IRollView {
         }
 
 		rollButton = new JButton("Roll!");
+		ActionListener actionListener = e -> {
+            if (e.getSource() == rollButton) {
+                closeModal();
+                getController().rollDice();
+            }
+        };
 		rollButton.addActionListener(actionListener);
 		Font buttonFont = rollButton.getFont();
 		buttonFont = buttonFont.deriveFont(buttonFont.getStyle(), BUTTON_TEXT_SIZE);
@@ -63,16 +68,6 @@ public final class RollView extends OverlayView implements IRollView {
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 
-	private ActionListener actionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == rollButton) {
-				closeModal();
-				getController().rollDice();
-			}
-		}	
-	};
-	
 	@Override
 	public IRollController getController() {
 		return (IRollController)super.getController();

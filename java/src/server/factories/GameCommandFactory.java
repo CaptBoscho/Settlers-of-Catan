@@ -6,7 +6,6 @@ import server.commands.game.AddAICommand;
 import server.commands.game.ListAICommand;
 import server.commands.game.ModelCommand;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
 import shared.dto.IDTO;
 
 import java.util.HashMap;
@@ -17,13 +16,10 @@ import java.util.Map;
  * @author Derek Argueta
  */
 public class GameCommandFactory {
-
-    private IFacade facade;
     private static GameCommandFactory instance = null;
     private Map<String, ICommand> commands;
 
     private GameCommandFactory() {
-//        this.facade = ServerFacade.getInstance();
         this.commands = new HashMap<>();
     }
 

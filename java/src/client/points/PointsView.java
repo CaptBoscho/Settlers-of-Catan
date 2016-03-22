@@ -9,8 +9,7 @@ import client.utils.*;
  * Implementation for the points view, which displays the user's victory points
  */
 @SuppressWarnings("serial")
-public class PointsView extends ComponentView implements IPointsView
-{
+public class PointsView extends ComponentView implements IPointsView {
 	
 	private final int TOP_MARGIN = 40;
 	private final int IMAGE_SPACING = 5;
@@ -23,9 +22,7 @@ public class PointsView extends ComponentView implements IPointsView
 	
 	private int points;
 	
-	public PointsView()
-	{
-		
+	public PointsView() {
 		this.setBackground(Color.white);
 		
 		this.setPreferredSize(new Dimension(100, 700));
@@ -37,28 +34,22 @@ public class PointsView extends ComponentView implements IPointsView
 	}
 	
 	@Override
-	public IPointsController getController()
-	{
+	public IPointsController getController() {
 		return (IPointsController)super.getController();
 	}
 	
-	public void setPoints(int points)
-	{
+	public void setPoints(int points) {
 		
-		if(0 <= points && points <= MAX_POINTS)
-		{
+		if(0 <= points && points <= MAX_POINTS) {
 			this.points = points;
 			this.repaint();
-		}
-		else
-		{
+		} else {
 			throw new IllegalArgumentException("invalid points value");
 		}
 	}
 	
 	@Override
-	protected void paintComponent(Graphics g)
-	{
+	protected void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
 		
@@ -75,8 +66,7 @@ public class PointsView extends ComponentView implements IPointsView
 	}
 	
 	private int drawImages(Graphics2D g2, Image image, float scale, int count,
-						   int y)
-	{
+						   int y) {
 		
 		int midX = this.getWidth() / 2;
 		
@@ -85,8 +75,7 @@ public class PointsView extends ComponentView implements IPointsView
 		
 		int x = midX - scaledImageWidth / 2;
 		
-		for (int i = 0; i < count; ++i)
-		{
+		for (int i = 0; i < count; ++i) {
 			
 			g2.drawImage(image, x, y, x + scaledImageWidth,
 						 y + scaledImageHeight, 0, 0, image.getWidth(null),
@@ -97,6 +86,4 @@ public class PointsView extends ComponentView implements IPointsView
 		
 		return y;
 	}
-	
 }
-
