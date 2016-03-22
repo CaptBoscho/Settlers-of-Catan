@@ -70,10 +70,23 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public void changeLargestArmyPossession(final int playerOld, final int playerNew) throws PlayerExistsException {
         assert playerNew >= 0;
-        assert playerOld >= 0;
 
-        getPlayerByIndex(playerOld).loseArmyCard();
+        if(playerOld >= 0) {
+            getPlayerByIndex(playerOld).loseArmyCard();
+        }
         getPlayerByIndex(playerNew).winArmyCard();
+    }
+
+    @Override
+    public void changeLongestRoadPossession(final int oldOwnerIndex, final int newOwnerIndex) throws PlayerExistsException {
+        assert newOwnerIndex >= 0;
+        assert newOwnerIndex < 4;
+        assert oldOwnerIndex >= -1;
+
+        if(oldOwnerIndex >= 0) {
+            getPlayerByIndex(oldOwnerIndex).loseLongestRoad();
+        }
+        getPlayerByIndex(newOwnerIndex).winLongestRoad();
     }
 
     /**

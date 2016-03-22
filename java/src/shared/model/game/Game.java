@@ -116,7 +116,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (gameJson.has("tradeOffer")) {
             this.currentOffer = new Trade(gameJson.get("tradeOffer").getAsJsonObject());
         } else {
-            this.currentOffer = new Trade();
+            this.currentOffer = null;
         }
         try {
             this.turnTracker = new TurnTracker(gameJson.get("turnTracker").getAsJsonObject());
@@ -190,9 +190,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
         if (json.has("tradeOffer")) {
-            this.currentOffer = new Trade(json.get("tradeOffer").getAsJsonObject());
+            JsonObject offer = json.get("tradeOffer").getAsJsonObject();
+            this.currentOffer = new Trade(offer.get("offer").getAsJsonObject());
+            this.currentOffer.setReceiver(offer.get("receiver").getAsInt());
+            this.currentOffer.setSender(offer.get("playerIndex").getAsInt());
         } else {
-            this.currentOffer = new Trade();
+            this.currentOffer = null;
         }
         try {
             this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
@@ -689,7 +692,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert vertex != null;
@@ -697,6 +700,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         if (canInitiateSettlement(playerIndex, vertex)) {
             List<ResourceType> resources = map.initiateSettlement(playerIndex, vertex);
+            playerManager.getPlayerByIndex(playerIndex).buildFreeSettlement();
             for(ResourceType resource : resources) {
                 safeDrawCard(playerIndex, resource);
             }
@@ -743,13 +747,14 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert edge != null;
         assert this.map != null;
 
         map.initiateRoad(playerIndex, edge);
+        playerManager.getPlayerByIndex(playerIndex).buildFreeRoad();
     }
 
     /**
@@ -778,11 +783,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
             playerManager.buildRoad(playerIndex);
             resourceCardBank.addResource(new Brick());
             resourceCardBank.addResource(new Wood());
-            //check to update longest road
-            int roadLength = map.getLongestRoadSize(playerIndex);
-            if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
-                setPlayerWithLongestRoad(longestRoadCard.getOwner(), playerIndex, roadLength);
-            }
+            updateLongestRoad(playerIndex);
+        }
+    }
+
+    private void updateLongestRoad(int playerIndex) throws PlayerExistsException {
+        //check to update longest road
+        int roadLength = map.getLongestRoadSize(playerIndex);
+        if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
+            setPlayerWithLongestRoad(longestRoadCard.getOwner(), playerIndex, roadLength);
         }
     }
 
@@ -960,32 +969,23 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     /**
      * Action - Player offers trade
-     *
-     * @param playerIndexOne Index of Player offering the trade
-     * @param playerIndexTwo Index of Player being offered the trade
-     * @param playerOneCards
-     * @param playerTwoCards
      */
     @Override
-    public void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        assert playerIndexOne >= 0;
-        assert playerIndexOne < 4;
-        assert playerIndexTwo >= 0;
-        assert playerIndexTwo < 4;
-        assert playerIndexOne != playerIndexTwo;
-        assert playerOneCards != null;
-        assert playerOneCards.size() > 0;
-        assert playerTwoCards != null;
-        assert playerTwoCards.size() > 0;
-        assert !playerOneCards.equals(playerTwoCards);
+    public void offerTrade(TradePackage one, TradePackage two) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        assert one.getPlayerIndex() >= 0;
+        assert one.getPlayerIndex() < 4;
+        assert two.getPlayerIndex() >= 0;
+        assert two.getPlayerIndex() < 4;
+        assert one.getPlayerIndex() != two.getPlayerIndex();
+        assert one.getResources() != null;
+        assert one.getResources().size() > 0;
+        assert two.getResources() != null;
+        assert two.getResources().size() > 0;
+        assert !one.getResources().equals(two.getResources());
 
-        if (canOfferTrade(playerIndexOne)) {
-            final TradePackage one = new TradePackage(playerIndexOne, playerOneCards);
-            final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
+        if (canOfferTrade(one.getPlayerIndex())) {
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
-            //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
-
         }
     }
 
@@ -993,7 +993,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (playerIndex == currentOffer.getReceiver() && answer) {
             playerManager.offerTrade(currentOffer.getSender(), currentOffer.getReceiver(), currentOffer.getPackage1().getResources(), currentOffer.getPackage2().getResources());
         }
-        currentOffer = new Trade();
+        currentOffer = null;
     }
 
     /**
@@ -1037,9 +1037,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert !edge1.equals(edge2);
 
         if (canUseRoadBuilding(playerIndex)) {
+            map.buildRoad(playerIndex, edge1);
+            map.buildRoad(playerIndex, edge2);
             playerManager.useRoadBuilder(playerIndex);
-            buildRoad(playerIndex, edge1);
-            buildRoad(playerIndex, edge2);
+            updateLongestRoad(playerIndex);
         }
     }
 
@@ -1721,41 +1722,52 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     @Override
     public boolean isTradeActive() {
-        return this.currentOffer.isActive();
+        if(currentOffer == null){
+        }else{
+            return true;
+        }
+        return (currentOffer != null);
     }
 
     @Override
     public int getTradeReceiver() {
+        assert currentOffer != null;
         return this.currentOffer.getReceiver();
     }
 
     @Override
     public int getTradeSender() {
+        assert currentOffer != null;
         return this.currentOffer.getSender();
     }
 
     @Override
     public int getTradeBrick() {
+        assert currentOffer != null;
         return this.currentOffer.getBrick();
     }
 
     @Override
     public int getTradeWood() {
+        assert currentOffer != null;
         return this.currentOffer.getWood();
     }
 
     @Override
     public int getTradeSheep() {
+        assert currentOffer != null;
         return this.currentOffer.getSheep();
     }
 
     @Override
     public int getTradeWheat() {
+        assert currentOffer != null;
         return this.currentOffer.getWheat();
     }
 
     @Override
     public int getTradeOre() {
+        assert currentOffer != null;
         return this.currentOffer.getOre();
     }
     //==========================================================================
@@ -1956,23 +1968,22 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     /**
-     * deducts Victory Points from playerIDOld
-     * adds Victory Points to playerIDNew
-     * Updates LongestRoad for playerIDNew and roadSize
+     * deducts Victory Points from oldOwnerIndex
+     * adds Victory Points to newOwnerIndex
+     * Updates LongestRoad for newOwnerIndex and roadSize
      *
-     * @param playerIDOld
-     * @param playerIDNew
+     * @param oldOwnerIndex
+     * @param newOwnerIndex
      * @param roadSize
      */
-    private void setPlayerWithLongestRoad(final int playerIDOld, final int playerIDNew, final int roadSize) {
-        assert playerIDNew >= 0;
-        assert playerIDOld >= 0;
-        assert playerIDNew < 4;
-        assert playerIDOld < 4;
+    private void setPlayerWithLongestRoad(final int oldOwnerIndex, final int newOwnerIndex, final int roadSize) throws PlayerExistsException {
+        assert newOwnerIndex >= 0;
+        assert newOwnerIndex < 4;
+        assert oldOwnerIndex < 4;
         assert roadSize >= 0;
-        assert playerIDNew != playerIDOld;
 
-        longestRoadCard.setOwner(playerIDNew, roadSize);
+        playerManager.changeLongestRoadPossession(oldOwnerIndex, newOwnerIndex);
+        longestRoadCard.setOwner(newOwnerIndex, roadSize);
     }
 
     public void setTitle(final String title) {
@@ -2007,6 +2018,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     public void incrementVersion() {
         this.version++;
+    }
+
+    public void log(String name, String message) {
+        assert name != null;
+        assert message != null;
+
+        this.log.addMessage(new MessageLine(name, message));
     }
 
 }
