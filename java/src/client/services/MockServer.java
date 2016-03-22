@@ -4,8 +4,10 @@ import client.data.GameInfo;
 import client.facade.Facade;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.commands.CommandExecutionResult;
 import shared.definitions.ClientModel;
 import shared.dto.*;
+import shared.model.ai.AIType;
 
 import java.util.List;
 
@@ -185,10 +187,10 @@ public class MockServer implements IServer {
     /**
      * Adds an AI player to the current game with a POST request
      *
-     * @param aiType The type of AI player to add (currently, LARGEST_ARMY is the only supported type)
+     * @param dto Data transport object containing the information to add an AI to the game
      */
     @Override
-    public void addAI(String aiType) {
+    public void addAI(AddAIDTO dto) {
 
     }
 

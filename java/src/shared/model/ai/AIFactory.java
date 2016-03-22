@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Kyle 'TMD' Cornelison on 3/19/2016.
  */
 public class AIFactory implements IAIFactory {
-    private AIFactory _instance;
+    private static AIFactory _instance;
 
     private AIFactory(){
 
@@ -20,7 +20,7 @@ public class AIFactory implements IAIFactory {
      * Returns the instance of the AIFactory
      * @return
      */
-    public IAIFactory getInstance(){
+    public static IAIFactory getInstance(){
         if(_instance == null)
             _instance = new AIFactory();
 

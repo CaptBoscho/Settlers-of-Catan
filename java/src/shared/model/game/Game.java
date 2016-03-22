@@ -2,6 +2,7 @@ package shared.model.game;
 
 import client.data.GameInfo;
 import client.data.PlayerInfo;
+import client.facade.Facade;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
@@ -14,6 +15,8 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.JsonSerializable;
+import shared.model.ai.AIFactory;
+import shared.model.ai.AIPlayer;
 import shared.model.ai.AIType;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.IResourceCardBank;
@@ -674,9 +677,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void addAI(AIType type) throws AddAIException {
         if (canAddAI()) {
-            //Add the AI
+            try {
+                Player ai = AIFactory.getInstance().create(type);
+                playerManager.addPlayer(ai);
+            } catch (CreateAIException e) {
+                e.printStackTrace();
+                throw new AddAIException(e.getMessage());
+            }
         } else {
-            //throw an exception
+            throw new AddAIException("Game already has 4 players!");
         }
     }
 
