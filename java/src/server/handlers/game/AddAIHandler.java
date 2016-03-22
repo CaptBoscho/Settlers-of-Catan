@@ -30,6 +30,5 @@ public class AddAIHandler implements Route {
         }
 
         return result.getBody();
-
     }
 }
