@@ -70,9 +70,10 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public void changeLargestArmyPossession(final int playerOld, final int playerNew) throws PlayerExistsException {
         assert playerNew >= 0;
-        assert playerOld >= 0;
 
-        getPlayerByIndex(playerOld).loseArmyCard();
+        if(playerOld >= 0) {
+            getPlayerByIndex(playerOld).loseArmyCard();
+        }
         getPlayerByIndex(playerNew).winArmyCard();
     }
 
