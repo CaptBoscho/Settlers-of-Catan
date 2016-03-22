@@ -291,19 +291,13 @@ public class Facade {
         }
     }
 
-    public int getTradeReceiver() {
-        System.out.println("receiver " + this.game.getTradeReceiver());
-        return this.game.getTradeReceiver();
-    }
+    public int getTradeReceiver() { return this.game.getTradeReceiver(); }
 
     public boolean isTradeActive() {
         return this.game.isTradeActive();
     }
 
-    public int getTradeSender() {
-        System.out.println("sender: " + this.game.getTradeSender());
-        return this.game.getTradeSender();
-    }
+    public int getTradeSender() { return this.game.getTradeSender(); }
 
     public int getTradeBrick() {
         return this.game.getTradeBrick();

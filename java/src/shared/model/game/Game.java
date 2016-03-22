@@ -969,7 +969,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
             final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
-            System.out.println("current offer initialized");
         }
     }
 
