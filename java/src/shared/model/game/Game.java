@@ -1285,7 +1285,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
 
         try {
-            playerManager.moveNewToOld(playerIndex);
+            playerManager.finishTurn(playerIndex);
         } catch (BadCallerException e) {
             e.printStackTrace();
         }

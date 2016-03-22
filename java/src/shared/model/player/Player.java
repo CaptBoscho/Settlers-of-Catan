@@ -216,7 +216,8 @@ public class Player implements IPlayer, Comparable<Player> {
      */
     @Override
     public boolean canUseMonument() {
-        return (!hasPlayedDevCard() && developmentCardBank.canUseMonument());
+        boolean canWin = (developmentCardBank.getNumberOfDevCardsByType(DevCardType.MONUMENT) + getVictoryPoints()) >= 10;
+        return (developmentCardBank.canUseMonument() && canWin);
     }
 
     /**
@@ -342,6 +343,7 @@ public class Player implements IPlayer, Comparable<Player> {
 
         if(canUseYearOfPlenty()) {
             developmentCardBank.useYearOfPlenty();
+            setPlayedDevCard(true);
         } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
@@ -356,6 +358,7 @@ public class Player implements IPlayer, Comparable<Player> {
 
         if(canUseRoadBuilder()) {
             developmentCardBank.useRoadBuild();
+            setPlayedDevCard(true);
             if (structureBank.canBuildRoad()) {
                 structureBank.buildRoad();
             }
@@ -376,6 +379,7 @@ public class Player implements IPlayer, Comparable<Player> {
 
         if(canUseSoldier()) {
             developmentCardBank.useSoldier();
+            setPlayedDevCard(true);
             setMoveRobber(true);
             this.soldiers++;
         } else {
@@ -387,9 +391,10 @@ public class Player implements IPlayer, Comparable<Player> {
      * Action - Player plays Monopoly
      */
     @Override
-    public void discardMonopoly() throws DevCardException {
+    public void useMonopoly() throws DevCardException {
         if(canUseMonopoly()) {
             developmentCardBank.useMonopoly();
+            setPlayedDevCard(true);
         } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }
@@ -401,9 +406,11 @@ public class Player implements IPlayer, Comparable<Player> {
     @Override
     public void useMonument() throws DevCardException {
         if(canUseMonument()) {
-            developmentCardBank.useMonument();
-            incrementMonuments();
-            incrementPoints();
+            while (developmentCardBank.canUseMonument()) {
+                developmentCardBank.useMonument();
+                incrementMonuments();
+                incrementPoints();
+            }
         } else {
             throw new DevCardException("Player has already played a Development card this turn!");
         }

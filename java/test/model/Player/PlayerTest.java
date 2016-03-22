@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
 import shared.definitions.PortType;
-import shared.definitions.ResourceType;
 import shared.exceptions.BadCallerException;
 import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
@@ -14,7 +13,6 @@ import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.*;
 import shared.model.cards.resources.*;
-import shared.model.game.Game;
 import shared.model.player.Player;
 import shared.model.player.PlayerManager;
 
@@ -297,7 +295,7 @@ public class PlayerTest {
             p.setPlayedDevCard(false);
             p.getDevelopmentCardBank().moveNewToOld();
             assertTrue(p.canUseMonopoly());
-            p.discardMonopoly();
+            p.useMonopoly();
             assertFalse(p.canUseMonopoly());
         }
     }
