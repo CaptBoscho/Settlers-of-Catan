@@ -409,7 +409,7 @@ public class ServerFacade implements IFacade {
         try {
             game.buyDevelopmentCard(playerIndex);
             String name = game.getPlayerNameByIndex(playerIndex);
-            String message = name + " is gonna reck you with a development card";
+            String message = name + " is gonna reck you when they drop that dev card";
             game.log(name, message);
         } catch (Exception e) {
             throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
