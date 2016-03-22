@@ -71,7 +71,6 @@ public final class PlayerManager implements IPlayerManager {
     public void changeLargestArmyPossession(final int playerOld, final int playerNew) throws PlayerExistsException {
         assert playerNew >= 0;
         assert playerOld >= 0;
-        assert playerNew != playerOld;
 
         getPlayerByIndex(playerOld).loseArmyCard();
         getPlayerByIndex(playerNew).winArmyCard();
