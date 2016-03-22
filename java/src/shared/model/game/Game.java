@@ -868,7 +868,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 }
             }
             //Otherwise just move to the robbing phase
-            //Can't move to robbing phase here! need to wait for everyone to discard
+            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
         } else {
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
