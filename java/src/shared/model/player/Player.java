@@ -115,7 +115,7 @@ public class Player implements IPlayer, Comparable<Player> {
      */
     @Override
     public boolean canDiscardCards() {
-        return resourceCardBank.canDiscardCards();
+        return resourceCardBank.canDiscardCards() && !hasDiscarded();
     }
 
     /**

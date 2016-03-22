@@ -350,6 +350,8 @@ public interface IPlayerManager {
      */
     boolean hasDiscarded(int playerIndex);
 
+    void initializeDiscarding();
+
     /**
      * Get the player by name
      * @param name

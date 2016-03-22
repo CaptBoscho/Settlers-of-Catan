@@ -837,6 +837,16 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
         }
+        List<Player> players = playerManager.getPlayers();
+        for(Player player : players) {
+            if(!player.hasDiscarded()) {
+                return;
+            }
+        }
+        for(Player player : players) {
+            player.setDiscarded(false);
+        }
+        turnTracker.setPhase(TurnTracker.Phase.ROBBING);
     }
 
     /**
@@ -850,11 +860,14 @@ public class Game extends Observable implements IGame, JsonSerializable {
         //Is value a 7 - robber
         if (value == 7) {
             //Go to discarding phase before robbing if any player has to discard
-            getPlayers().forEach(player -> {
+            List<Player> players = getPlayers();
+            for(Player player : players) {
                 if (player.canDiscardCards()) {
                     turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+                    playerManager.initializeDiscarding();
+                    return;
                 }
-            });
+            }
             //Otherwise just move to the robbing phase
             turnTracker.setPhase(TurnTracker.Phase.ROBBING);
         } else {
@@ -943,8 +956,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 }
             }
 
-            //Move to next phase - Playing
-            turnTracker.nextPhase();
+            turnTracker.setPhase(TurnTracker.Phase.PLAYING);
         }
     }
 

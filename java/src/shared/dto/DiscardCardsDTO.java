@@ -118,12 +118,13 @@ public final class DiscardCardsDTO implements IDTO, JsonSerializable {
         final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         final boolean hasType = obj.has(kType) && obj.get(kType).isJsonPrimitive();
         final boolean hasPlayerIndex = obj.has(kPlayerIndex) && obj.get(kPlayerIndex).isJsonPrimitive();
-        final boolean hasDiscardedCards = obj.has(kDiscardedCards) && obj.get(kDiscardedCards).isJsonPrimitive();
-        final boolean hasBrick = obj.has(kBrick) && obj.get(kBrick).isJsonPrimitive();
-        final boolean hasOre = obj.has(kOre) && obj.get(kOre).isJsonPrimitive();
-        final boolean hasSheep = obj.has(kSheep) && obj.get(kSheep).isJsonPrimitive();
-        final boolean hasWheat = obj.has(kWheat) && obj.get(kWheat).isJsonPrimitive();
-        final boolean hasWood = obj.has(kWood) && obj.get(kWood).isJsonPrimitive();
+        final boolean hasDiscardedCards = obj.has(kDiscardedCards);
+        final JsonObject discardedCards = obj.get(kDiscardedCards).getAsJsonObject();
+        final boolean hasBrick = discardedCards.has(kBrick) && discardedCards.get(kBrick).isJsonPrimitive();
+        final boolean hasOre = discardedCards.has(kOre) && discardedCards.get(kOre).isJsonPrimitive();
+        final boolean hasSheep = discardedCards.has(kSheep) && discardedCards.get(kSheep).isJsonPrimitive();
+        final boolean hasWheat = discardedCards.has(kWheat) && discardedCards.get(kWheat).isJsonPrimitive();
+        final boolean hasWood = discardedCards.has(kWood) && discardedCards.get(kWood).isJsonPrimitive();
 
         return hasType && hasPlayerIndex && hasDiscardedCards && hasBrick && hasOre && hasSheep && hasWheat && hasWood;
     }

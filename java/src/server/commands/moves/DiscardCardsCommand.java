@@ -26,7 +26,7 @@ public class DiscardCardsCommand implements ICommand {
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
         try {
-            return Config.facade.discardCards(1, dto);
+            return Config.facade.discardCards(gameId, dto);
         }catch(DiscardCardsException e){
             throw new CommandExecutionFailedException(e.getMessage());
         }
