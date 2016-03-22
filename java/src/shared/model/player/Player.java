@@ -493,10 +493,10 @@ public class Player implements IPlayer, Comparable<Player> {
      * @throws InvalidTypeException
      */
     @Override
-    public ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException {
+    public ResourceCard robbed() throws InvalidTypeException, Exception {
         assert this.resourceCardBank != null;
 
-        return resourceCardBank.robbed();
+        return resourceCardBank.draw();
     }
 
     /**
