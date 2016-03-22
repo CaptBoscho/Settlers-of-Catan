@@ -67,17 +67,10 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	public void addAI() {
         //Build the AddAIDTO
         String aiType = getView().getSelectedAI();
-        AIType ai = AIType.valueOf(aiType);
-        AddAIDTO dto = new AddAIDTO(ai);
+        AddAIDTO dto = new AddAIDTO(aiType);
 
         //Add the AI to the game
         ServerProxy.getInstance().addAI(dto);
-        
-//        //// TODO: 3/7/16 implement add AI
-//        MessageView messageView = new MessageView();
-//        messageView.setTitle("Broken Button");
-//        messageView.setMessage("This button doesn't actually do anything.  Wait for 4 human players to join.");
-//        messageView.showModal();
 	}
 
     /**
