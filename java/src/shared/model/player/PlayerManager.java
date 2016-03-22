@@ -76,6 +76,16 @@ public final class PlayerManager implements IPlayerManager {
         getPlayerByIndex(playerNew).winArmyCard();
     }
 
+    @Override
+    public void changeLongestRoadPossession(final int oldOwnerIndex, final int newOwnerIndex) throws PlayerExistsException {
+        assert newOwnerIndex >= 0;
+        assert newOwnerIndex < 4;
+        assert oldOwnerIndex >= -1;
+
+        getPlayerByIndex(oldOwnerIndex).loseLongestRoad();
+        getPlayerByIndex(newOwnerIndex).winLongestRoad();
+    }
+
     /**
      * Moves new development cards to old pile - making them playable
      *

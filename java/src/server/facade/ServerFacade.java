@@ -37,6 +37,23 @@ public class ServerFacade implements IFacade {
     private ServerFacade(){
         gameManager = GameManager.getInstance();
         userManager = UserManager.getInstance();
+
+        userManager.addUser("jose", "jose");
+        userManager.addUser("juan", "juan");
+        userManager.addUser("pablo", "pablo");
+        userManager.addUser("jesus", "jesus");
+        userManager.addUser("juana", "juana");
+        userManager.addUser("emilio", "emilio");
+        userManager.addUser("emilia", "emilia");
+        userManager.addUser("jorge", "jorge");
+        userManager.addUser("juanita", "juanita");
+        userManager.addUser("pancho", "pancho");
+        userManager.addUser("oscar", "oscar");
+        userManager.addUser("ivan", "ivan");
+        userManager.addUser("sergio", "sergio");
+        userManager.addUser("antonio", "antonio");
+        userManager.addUser("pedro", "pedro");
+        userManager.addUser("maria", "maria");
     }
 
     private HexLocation getModelHexLocation(HexLocation hexLoc) {
