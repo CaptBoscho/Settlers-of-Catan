@@ -852,9 +852,84 @@ public class Game extends Observable implements IGame, JsonSerializable {
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
 
-            //Remove from the game's bank and give to players
+            int bricksNeeded = 0;
+            int sheepNeeded = 0;
+            int oreNeeded = 0;
+            int wheatNeeded = 0;
+            int woodNeeded = 0;
+
+            // check for enough resources in game's bank
             for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
-                for(ResourceType resource : entry.getValue()) {
+                for(ResourceType type : entry.getValue()) {
+                    switch (type) {
+                        case BRICK:
+                            bricksNeeded++;
+                            break;
+                        case SHEEP:
+                            sheepNeeded++;
+                            break;
+                        case ORE:
+                            oreNeeded++;
+                            break;
+                        case WHEAT:
+                            wheatNeeded++;
+                            break;
+                        case WOOD:
+                            woodNeeded++;
+                            break;
+                    }
+                }
+            }
+
+            boolean enoughBrick = resourceCardBank.getNumberOfBrick() >= bricksNeeded;
+            boolean enoughSheep = resourceCardBank.getNumberOfSheep() >= sheepNeeded;
+            boolean enoughOre = resourceCardBank.getNumberOfOre() >= oreNeeded;
+            boolean enoughWheat = resourceCardBank.getNumberOfWheat() >= wheatNeeded;
+            boolean enoughWood = resourceCardBank.getNumberOfWood() >= woodNeeded;
+
+
+            // put available resources in new Hashmap
+            // initiate new map to store actual resources to hand out
+            HashMap<Integer, List<ResourceType>> resourcesToGive = new HashMap<>();
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                resourcesToGive.put(entry.getKey(), new ArrayList<ResourceType>());
+            }
+
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                for (ResourceType type : entry.getValue()) {
+                    switch (type) {
+                        case BRICK:
+                            if (enoughBrick) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case SHEEP:
+                            if (enoughSheep) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case ORE:
+                            if (enoughOre) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case WHEAT:
+                            if (enoughWheat) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case WOOD:
+                            if (enoughWood) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            //Remove from the game's bank and give to players
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resourcesToGive.entrySet()) {
+                for (ResourceType resource : entry.getValue()) {
                     safeDrawCard(entry.getKey(), resource);
                 }
             }
