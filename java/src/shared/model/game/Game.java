@@ -781,11 +781,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
             playerManager.buildRoad(playerIndex);
             resourceCardBank.addResource(new Brick());
             resourceCardBank.addResource(new Wood());
-            //check to update longest road
-            int roadLength = map.getLongestRoadSize(playerIndex);
-            if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
-                setPlayerWithLongestRoad(longestRoadCard.getOwner(), playerIndex, roadLength);
-            }
+            updateLongestRoad(playerIndex);
+        }
+    }
+
+    private void updateLongestRoad(int playerIndex) throws PlayerExistsException {
+        //check to update longest road
+        int roadLength = map.getLongestRoadSize(playerIndex);
+        if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
+            setPlayerWithLongestRoad(longestRoadCard.getOwner(), playerIndex, roadLength);
         }
     }
 
@@ -1021,9 +1025,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert !edge1.equals(edge2);
 
         if (canUseRoadBuilding(playerIndex)) {
+            map.buildRoad(playerIndex, edge1);
+            map.buildRoad(playerIndex, edge2);
             playerManager.useRoadBuilder(playerIndex);
-            buildRoad(playerIndex, edge1);
-            buildRoad(playerIndex, edge2);
+            updateLongestRoad(playerIndex);
         }
     }
 
