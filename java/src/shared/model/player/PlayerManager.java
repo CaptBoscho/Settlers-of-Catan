@@ -89,6 +89,12 @@ public final class PlayerManager implements IPlayerManager {
         getPlayerByIndex(newOwnerIndex).winLongestRoad();
     }
 
+    @Override
+    public void finishTurn(int playerIndex) throws PlayerExistsException, BadCallerException {
+        moveNewToOld(playerIndex);
+        getPlayerByIndex(playerIndex).setPlayedDevCard(false);
+    }
+
     /**
      * Moves new development cards to old pile - making them playable
      *
@@ -427,7 +433,7 @@ public final class PlayerManager implements IPlayerManager {
         assert type != null;
 
         Player monopolyUser = getPlayerByIndex(playerIndex);
-        monopolyUser.discardMonopoly();
+        monopolyUser.useMonopoly();
         for(final Player player : this.getPlayers()) {
 
             final int amount = player.getNumberOfType(type);

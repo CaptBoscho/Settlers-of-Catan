@@ -370,5 +370,7 @@ public interface IPlayerManager {
     JsonArray toJSON();
 
     void changeLongestRoadPossession(int oldOwnerIndex, int newOwnerIndex) throws PlayerExistsException;
+
+    void finishTurn(int playerIndex) throws PlayerExistsException, BadCallerException;
     //endregion
 }
