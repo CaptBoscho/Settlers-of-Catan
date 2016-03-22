@@ -21,7 +21,7 @@ public class GameController {
         }
     }
 
-    public static CommandExecutionResult addAI(final AddAIDTO dto) {
+    public static CommandExecutionResult addAI(final CookieWrapperDTO dto) {
         try {
             return GameCommandFactory.getInstance().executeCommand("addAI", dto);
         } catch (Exception e) {

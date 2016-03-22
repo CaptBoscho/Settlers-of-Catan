@@ -7,6 +7,8 @@ import client.misc.MessageView;
 import client.services.MissingUserCookieException;
 import client.services.Poller;
 import client.services.ServerProxy;
+import shared.dto.AddAIDTO;
+import shared.model.ai.AIType;
 import shared.model.game.Game;
 
 import java.util.List;
@@ -63,11 +65,19 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void addAI() {
-        //// TODO: 3/7/16 implement add AI
-        MessageView messageView = new MessageView();
-        messageView.setTitle("Broken Button");
-        messageView.setMessage("This button doesn't actually do anything.  Wait for 4 human players to join.");
-        messageView.showModal();
+        //Build the AddAIDTO
+        String aiType = getView().getSelectedAI();
+        AIType ai = AIType.valueOf(aiType);
+        AddAIDTO dto = new AddAIDTO(ai);
+
+        //Add the AI to the game
+        ServerProxy.getInstance().addAI(dto);
+        
+//        //// TODO: 3/7/16 implement add AI
+//        MessageView messageView = new MessageView();
+//        messageView.setTitle("Broken Button");
+//        messageView.setMessage("This button doesn't actually do anything.  Wait for 4 human players to join.");
+//        messageView.showModal();
 	}
 
     /**

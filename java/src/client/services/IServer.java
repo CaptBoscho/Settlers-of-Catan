@@ -116,10 +116,9 @@ public interface IServer {
     /**
      * Adds an AI player to the current game with a POST request
      *
-     * @param aiType The type of AI player to add (currently, LARGEST_ARMY is
-     *               the only supported type)
+     * @param dto Transport object with the information needed to add an AI to the game
      */
-    void addAI(String aiType);
+    void addAI(AddAIDTO dto);
 
     /**
      * Returns a list of supported AI player types (currently, LARGEST_ARMY is

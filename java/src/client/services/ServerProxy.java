@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import server.utils.JSONUtils;
 import shared.definitions.ClientModel;
 import shared.dto.*;
+import shared.model.ai.AIType;
 import shared.model.player.PlayerManager;
 
 import java.io.Console;
@@ -298,12 +299,25 @@ public final class ServerProxy implements IServer {
     /**
      * Adds an AI player to the current game with a POST request
      *
-     * @param aiType The type of AI player to add (currently, LARGEST_ARMY is the only supported type)
+     * @param dto Transport object with the information to add an AI to the game.
      */
     @Override
-    public void addAI(String aiType) {
-        assert aiType != null;
+    public void addAI(final AddAIDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/addAI";
+        String result;
+
+        try {
+            result = Utils.sendPost(url, dto.toJSON());
+            assert result != null;
+        } catch (BadHttpRequestException e) {
+            e.printStackTrace();
+            this.showMessageViewForHttpError(e.getMessage());
+            return;
+        }
+
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     /**
