@@ -303,7 +303,7 @@ public class ServerFacade implements IFacade {
         try {
             game.rollNumber(value);
             String name = game.getPlayerNameByIndex(player);
-            String message = name + " rolled a " + value;
+            String message = name + " rolled a " + value + " fool";
             game.log(name, message);
         } catch (Exception e) {
             throw new RollNumberException("Error while rolling!");
@@ -443,7 +443,7 @@ public class ServerFacade implements IFacade {
         try {
             game.useYearOfPlenty(playerIndex, resourceOne, resourceTwo);
             String name = game.getPlayerNameByIndex(playerIndex);
-            String message = name + " got that year of plenty";
+            String message = name + " got that money";
             game.log(name, message);
         } catch (PlayerExistsException | DevCardException | InsufficientResourcesException | InvalidTypeException e) {
             throw new YearOfPlentyException("yearOfPlenty failed in the model on the server.");
@@ -697,7 +697,7 @@ public class ServerFacade implements IFacade {
             if(game.canBuildCity(player, location)) {
                 game.buildCity(player, location);
                 String name = game.getPlayerNameByIndex(player);
-                String message = name + " built a penthouse";
+                String message = name + " built a penthouse.  You're not invited";
                 game.log(name, message);
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
@@ -762,7 +762,7 @@ public class ServerFacade implements IFacade {
             gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
             gameManager.getGameByID(gameID).incrementVersion();
             String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(player);
-            String message = name + " helped the homeless";
+            String message = name + " makes deals with the homeless";
             gameManager.getGameByID(gameID).log(name, message);
         } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
             throw new AcceptTradeException(e.getMessage());
