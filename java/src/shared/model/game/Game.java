@@ -836,15 +836,16 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
         }
-        boolean allPlayersDiscarded = true;
-        for(Player player : getPlayers()){
-            if(!player.hasDiscarded()){
-                allPlayersDiscarded = false;
+        List<Player> players = playerManager.getPlayers();
+        for(Player player : players) {
+            if(!player.hasDiscarded()) {
+                return;
             }
         }
-        if(allPlayersDiscarded){
-            turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+        for(Player player : players) {
+            player.setDiscarded(false);
         }
+        turnTracker.setPhase(TurnTracker.Phase.ROBBING);
     }
 
     /**
@@ -858,19 +859,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
         //Is value a 7 - robber
         if (value == 7) {
             //Go to discarding phase before robbing if any player has to discard
-            boolean discard = false;
-            for(Player player: getPlayers()){
+            List<Player> players = getPlayers();
+            for(Player player : players) {
                 if (player.canDiscardCards()) {
-                    player.setDiscarded(false);
-                    discard = true;
-                }else{
-                    player.setDiscarded(true);
+                    turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+                    playerManager.initializeDiscarding();
+                    return;
                 }
-            }
-            if(discard){
-               turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
-            }else{
-                turnTracker.setPhase(TurnTracker.Phase.ROBBING);
             }
             //Otherwise just move to the robbing phase
             //Can't move to robbing phase here! need to wait for everyone to discard
@@ -959,11 +954,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
                     safeDrawCard(entry.getKey(), resource);
                 }
             }
-
-            //Move to next phase - Playing
-            //turnTracker.nextPhase();
+            
             turnTracker.setPhase(TurnTracker.Phase.PLAYING);
-            System.out.println(turnTracker.getPhase().toString());
         }
     }
 

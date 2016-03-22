@@ -749,6 +749,17 @@ public final class PlayerManager implements IPlayerManager {
         return false;
     }
 
+    @Override
+    public void initializeDiscarding() {
+        for(Player player : players) {
+            if(player.getNumberResourceCards() > 7) {
+                player.setDiscarded(false);
+            } else {
+                player.setDiscarded(true);
+            }
+        }
+    }
+
     /**
      * Get the player by name
      *
