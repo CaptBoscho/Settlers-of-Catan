@@ -30,6 +30,9 @@ public final class Trade {
         assert package2.getUserID() >= 0;
         assert !package1.equals(package2);
 
+        this.sender = package1.getUserID();
+        this.receiver = package2.getUserID();
+
         this.package1 = package1;
         this.package2 = package2;
     }
@@ -91,8 +94,8 @@ public final class Trade {
         List<ResourceType> sending = new ArrayList<>();
         List<ResourceType> receiving = new ArrayList<>();
         if(brick <0){
-            brick = brick * -1;
-            for(int i=0; i<brick; i++){
+            int brick1 = brick * -1;
+            for(int i=0; i<brick1; i++){
                 receiving.add(ResourceType.BRICK);
             }
         }else{
@@ -101,8 +104,8 @@ public final class Trade {
             }
         }
         if(wood <0){
-            wood = wood * -1;
-            for(int i=0; i<wood; i++){
+            int wood1 = wood * -1;
+            for(int i=0; i<wood1; i++){
                 receiving.add(ResourceType.BRICK);
             }
         }else{
@@ -111,8 +114,8 @@ public final class Trade {
             }
         }
         if(wheat <0){
-            wheat = wheat* -1;
-            for(int i=0; i<wheat; i++){
+            int wheat1 = wheat* -1;
+            for(int i=0; i<wheat1; i++){
                 receiving.add(ResourceType.WHEAT);
             }
         }else{
@@ -121,8 +124,8 @@ public final class Trade {
             }
         }
         if(sheep < 0){
-            sheep = sheep * -1;
-            for(int i=0; i<sheep; i++){
+            int sheep1 = sheep * -1;
+            for(int i=0; i<sheep1; i++){
                 receiving.add(ResourceType.SHEEP);
             }
         }else{
@@ -131,8 +134,8 @@ public final class Trade {
             }
         }
         if(ore < 0){
-            ore = ore * -1;
-            for(int i=0; i<ore; i++){
+            int ore1 = ore * -1;
+            for(int i=0; i<ore1; i++){
                 receiving.add(ResourceType.ORE);
             }
         }else{
