@@ -6,9 +6,7 @@ import shared.definitions.ResourceType;
 import shared.exceptions.BadCallerException;
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
-import shared.exceptions.PlayerExistsException;
 import shared.model.bank.InvalidTypeException;
-
 import shared.model.cards.Card;
 import shared.model.cards.resources.ResourceCard;
 
@@ -197,7 +195,7 @@ public interface IPlayer {
      * @throws InsufficientResourcesException
      * @throws InvalidTypeException
      */
-    ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException;
+    ResourceCard robbed() throws InvalidTypeException, Exception;
 
     /**
      * Moves new development cards to old pile making them playable

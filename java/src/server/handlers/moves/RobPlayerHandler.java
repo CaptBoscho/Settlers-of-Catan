@@ -18,7 +18,7 @@ public class RobPlayerHandler implements Route {
     // -- request keys
     private static final String kType = "type";
     private static final String kPlayerIndex = "playerIndex";
-    private static final String kVictimIndex = "victimindex";
+    private static final String kVictimIndex = "victimIndex";
     private static final String kLocation = "location";
     private static final String kX = "x";
     private static final String kY = "y";
