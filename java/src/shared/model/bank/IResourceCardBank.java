@@ -17,7 +17,7 @@ public interface IResourceCardBank {
 
     ResourceCard draw(ResourceType type) throws InvalidTypeException, Exception;
 
-    ResourceCard draw() throws Exception;
+    ResourceCard draw() throws Exception, InvalidTypeException;
 
     int size();
 

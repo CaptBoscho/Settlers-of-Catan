@@ -158,7 +158,7 @@ public interface IMap {
      * Informs who can be robbed at a hex location
      * @return A set of playerIndex that can be robbed
      */
-    Set<Integer> whoCanGetRobbed(int playerIndex);
+    Set<Integer> whoCanGetRobbed(int playerIndex, HexLocation hexLoc);
 
     /**
      * Moves the Robber to a new hex location

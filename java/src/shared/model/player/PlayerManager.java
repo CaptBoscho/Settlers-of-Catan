@@ -71,7 +71,6 @@ public final class PlayerManager implements IPlayerManager {
     public void changeLargestArmyPossession(final int playerOld, final int playerNew) throws PlayerExistsException {
         assert playerNew >= 0;
         assert playerOld >= 0;
-        assert playerNew != playerOld;
 
         getPlayerByIndex(playerOld).loseArmyCard();
         getPlayerByIndex(playerNew).winArmyCard();
@@ -454,7 +453,7 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerRobbed  index of the player being robbed
      */
     @Override
-    public void placeRobber(final int playerRobbing, final int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void placeRobber(final int playerRobbing, final int playerRobbed) throws InvalidTypeException, Exception {
         assert playerRobbing >= 0;
         assert playerRobbing < 4;
         assert playerRobbed >= 0;
@@ -463,7 +462,6 @@ public final class PlayerManager implements IPlayerManager {
         final Player robber = getPlayerByIndex(playerRobbing);
         final Player robbed = getPlayerByIndex(playerRobbed);
 
-        robber.placeRobber();
         final ResourceCard treasure = robbed.robbed();
         robber.addResourceCard(treasure);
     }
