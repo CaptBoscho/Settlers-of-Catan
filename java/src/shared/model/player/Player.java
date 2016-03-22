@@ -431,6 +431,11 @@ public class Player implements IPlayer, Comparable<Player> {
         }
     }
 
+    @Override
+    public void buildFreeRoad() {
+        structureBank.buildRoad();
+    }
+
     /**
      * Action - Player builds a settlement
      */
@@ -443,10 +448,15 @@ public class Player implements IPlayer, Comparable<Player> {
         try {
             resourceCardBank.buildSettlement();
             structureBank.buildSettlement();
+            incrementPoints();
         } catch (InsufficientResourcesException e) {
             e.printStackTrace();
         }
-        //Increment points
+    }
+
+    @Override
+    public void buildFreeSettlement() {
+        structureBank.buildSettlement();
         incrementPoints();
     }
 
@@ -462,11 +472,11 @@ public class Player implements IPlayer, Comparable<Player> {
         try {
             resourceCardBank.buildCity();
             structureBank.buildCity();
+            //Increment points
+            incrementPoints(); //Note: only have to increment by 1 since we are replacing a settlement
         } catch (InsufficientResourcesException e) {
             e.printStackTrace();
         }
-        //Increment points
-        incrementPoints(); //Note: only have to increment by 1 since we are replacing a settlement
     }
 
     /**
@@ -482,6 +492,22 @@ public class Player implements IPlayer, Comparable<Player> {
      */
     @Override
     public void winArmyCard() {
+        incrementPoints(2);
+    }
+
+    /**
+     * Player loses the longest road card
+     */
+    @Override
+    public void loseLongestRoad() {
+        incrementPoints(-2);
+    }
+
+    /**
+     * Player wins the longest road card
+     */
+    @Override
+    public void winLongestRoad() {
         incrementPoints(2);
     }
 

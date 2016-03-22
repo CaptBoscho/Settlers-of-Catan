@@ -253,5 +253,13 @@ public interface IPlayer {
      * @param type
      */
     void setPlayerType(PlayerType type);
+
+    void buildFreeSettlement();
+
+    void buildFreeRoad();
+
+    void loseLongestRoad();
+
+    void winLongestRoad();
     //endregion
 }

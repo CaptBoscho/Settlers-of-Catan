@@ -690,7 +690,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert vertex != null;
@@ -698,6 +698,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         if (canInitiateSettlement(playerIndex, vertex)) {
             List<ResourceType> resources = map.initiateSettlement(playerIndex, vertex);
+            playerManager.getPlayerByIndex(playerIndex).buildFreeSettlement();
             for(ResourceType resource : resources) {
                 safeDrawCard(playerIndex, resource);
             }
@@ -744,13 +745,14 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert edge != null;
         assert this.map != null;
 
         map.initiateRoad(playerIndex, edge);
+        playerManager.getPlayerByIndex(playerIndex).buildFreeRoad();
     }
 
     /**
@@ -1937,23 +1939,24 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     /**
-     * deducts Victory Points from playerIDOld
-     * adds Victory Points to playerIDNew
-     * Updates LongestRoad for playerIDNew and roadSize
+     * deducts Victory Points from oldOwnerIndex
+     * adds Victory Points to newOwnerIndex
+     * Updates LongestRoad for newOwnerIndex and roadSize
      *
-     * @param playerIDOld
-     * @param playerIDNew
+     * @param oldOwnerIndex
+     * @param newOwnerIndex
      * @param roadSize
      */
-    private void setPlayerWithLongestRoad(final int playerIDOld, final int playerIDNew, final int roadSize) {
-        assert playerIDNew >= 0;
-        assert playerIDOld >= 0;
-        assert playerIDNew < 4;
-        assert playerIDOld < 4;
+    private void setPlayerWithLongestRoad(final int oldOwnerIndex, final int newOwnerIndex, final int roadSize) throws PlayerExistsException {
+        assert newOwnerIndex >= 0;
+        assert oldOwnerIndex >= 0;
+        assert newOwnerIndex < 4;
+        assert oldOwnerIndex < 4;
         assert roadSize >= 0;
-        assert playerIDNew != playerIDOld;
+        assert newOwnerIndex != oldOwnerIndex;
 
-        longestRoadCard.setOwner(playerIDNew, roadSize);
+        playerManager.changeLongestRoadPossession(oldOwnerIndex, newOwnerIndex);
+        longestRoadCard.setOwner(newOwnerIndex, roadSize);
     }
 
     public void setTitle(final String title) {

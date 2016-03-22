@@ -278,7 +278,7 @@ public interface IGame {
      * @throws InvalidPlayerException
      * @throws StructureException
      */
-    void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException;
 
     /**
      * Action - Player builds a settlement
@@ -299,7 +299,7 @@ public interface IGame {
      * @throws InvalidPlayerException
      * @throws StructureException
      */
-    void initiateRoad(int playerIndex,  EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    void initiateRoad(int playerIndex,  EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException;
 
     /**
      * Action - Player builds a road

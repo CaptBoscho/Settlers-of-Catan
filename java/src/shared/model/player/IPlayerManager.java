@@ -366,5 +366,7 @@ public interface IPlayerManager {
     CatanColor getPlayerColorByName(String name);
 
     JsonArray toJSON();
+
+    void changeLongestRoadPossession(int oldOwnerIndex, int newOwnerIndex) throws PlayerExistsException;
     //endregion
 }
