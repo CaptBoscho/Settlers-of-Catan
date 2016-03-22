@@ -315,15 +315,18 @@ public final class ServerProxy implements IServer {
         String url = Utils.buildUrl(this.host, this.port) + "/game/listAI";
         String result;
 
-        result = Utils.sendGet(url);
-        assert result != null;
+        try {
+            result = Utils.sendPost(url, null);
+            assert result != null;
+        } catch (BadHttpRequestException e) {
+            e.printStackTrace();
+            this.showMessageViewForHttpError(e.getMessage());
+            return null;
+        }
 
         JsonArray arr = new JsonParser().parse(result).getAsJsonArray();
-        //JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         List<String> availableAIs = new ArrayList<>();
-        arr.get(0).getAsJsonObject().get("ai").getAsString();
         arr.forEach(ai-> availableAIs.add(ai.getAsJsonObject().get("ai").getAsString()));
-        //arr.forEach(obj -> availableAIs.add(obj.get("ai").getAsString()));
         return availableAIs;
     }
 
