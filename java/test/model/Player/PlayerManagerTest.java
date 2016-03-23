@@ -7,7 +7,6 @@ import shared.definitions.CatanColor;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.BadCallerException;
-import shared.exceptions.PlayerExistsException;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.*;
@@ -329,7 +328,7 @@ public class PlayerManagerTest {
 
         //Can play now
         for(final Player p : pm.getPlayers()){
-            p.setVictoryPoints(10);
+            p.incrementVictoryPoints(10);
             p.getDevelopmentCardBank().moveNewToOld();
             assertTrue(pm.canUseMonument(p.getPlayerIndex()));
         }
@@ -341,7 +340,7 @@ public class PlayerManagerTest {
             p.addDevCard(new MonumentCard());
             p.setPlayedDevCard(false);
             p.getDevelopmentCardBank().moveNewToOld();
-            p.setVictoryPoints(10);
+            p.incrementVictoryPoints(10);
             pm.useMonument(p.getPlayerIndex());
             assertFalse(pm.canUseMonument(p.getPlayerIndex()));
         }

@@ -702,11 +702,10 @@ public class Player implements IPlayer, Comparable<Player> {
         this.discarded = discarded;
     }
 
-    public void setVictoryPoints(int points){
-        assert points >=0;
-        assert  points <=10;
+    public void incrementVictoryPoints(int points){
+        assert points > 0;
 
-        this.victoryPoints = points;
+        this.victoryPoints += points;
     }
 
     /**
