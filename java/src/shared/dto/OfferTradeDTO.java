@@ -44,6 +44,8 @@ public final class OfferTradeDTO implements IDTO, JsonSerializable {
         this.playerIndex = obj.get(kPlayerIndex).getAsInt();
         this.offer = new Trade(obj.get(kOffer).getAsJsonObject());
         this.receiver = obj.get(kReceiver).getAsInt();
+        this.offer.setSender(playerIndex);
+        this.offer.setReceiver(receiver);
     }
 
     /**
@@ -57,7 +59,7 @@ public final class OfferTradeDTO implements IDTO, JsonSerializable {
         obj.addProperty(kType, "offerTrade");
         obj.addProperty(kPlayerIndex, this.playerIndex);
         obj.addProperty(kReceiver, this.receiver);
-        obj.add(kOffer, this.offer.toJSON());
+        obj.add(kOffer, this.offer.resourceListToJson());
         return obj;
     }
 

@@ -6,9 +6,7 @@ import shared.definitions.ResourceType;
 import shared.exceptions.BadCallerException;
 import shared.exceptions.DevCardException;
 import shared.exceptions.MoveRobberException;
-import shared.exceptions.PlayerExistsException;
 import shared.model.bank.InvalidTypeException;
-
 import shared.model.cards.Card;
 import shared.model.cards.resources.ResourceCard;
 
@@ -154,7 +152,7 @@ public interface IPlayer {
     /**
      * Action - Player plays Monopoly
      */
-    void discardMonopoly() throws DevCardException;
+    void useMonopoly() throws DevCardException;
 
     /**
      * Action - Player plays Monument
@@ -197,7 +195,7 @@ public interface IPlayer {
      * @throws InsufficientResourcesException
      * @throws InvalidTypeException
      */
-    ResourceCard robbed() throws InsufficientResourcesException, InvalidTypeException;
+    ResourceCard robbed() throws InvalidTypeException, Exception;
 
     /**
      * Moves new development cards to old pile making them playable
@@ -255,5 +253,13 @@ public interface IPlayer {
      * @param type
      */
     void setPlayerType(PlayerType type);
+
+    void buildFreeSettlement();
+
+    void buildFreeRoad();
+
+    void loseLongestRoad();
+
+    void winLongestRoad();
     //endregion
 }

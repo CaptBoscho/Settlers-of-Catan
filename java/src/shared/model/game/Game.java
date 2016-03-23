@@ -25,7 +25,7 @@ import shared.model.bank.ResourceCardBank;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.devcards.RoadBuildCard;
 import shared.model.cards.devcards.SoldierCard;
-import shared.model.cards.resources.ResourceCard;
+import shared.model.cards.resources.*;
 import shared.model.game.trade.Trade;
 import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
@@ -119,7 +119,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (gameJson.has("tradeOffer")) {
             this.currentOffer = new Trade(gameJson.get("tradeOffer").getAsJsonObject());
         } else {
-            this.currentOffer = new Trade();
+            this.currentOffer = null;
         }
         try {
             this.turnTracker = new TurnTracker(gameJson.get("turnTracker").getAsJsonObject());
@@ -193,9 +193,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.version = json.get("version").getAsInt();
         this.winner = json.get("winner").getAsInt();
         if (json.has("tradeOffer")) {
-            this.currentOffer = new Trade(json.get("tradeOffer").getAsJsonObject());
+            JsonObject offer = json.get("tradeOffer").getAsJsonObject();
+            this.currentOffer = new Trade(offer.get("offer").getAsJsonObject());
+            this.currentOffer.setReceiver(offer.get("receiver").getAsInt());
+            this.currentOffer.setSender(offer.get("playerIndex").getAsInt());
         } else {
-            this.currentOffer = new Trade();
+            this.currentOffer = null;
         }
         try {
             this.turnTracker = new TurnTracker(json.get("turnTracker").getAsJsonObject());
@@ -301,7 +304,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public TurnTracker.Phase getCurrentPhase() {
         return turnTracker.getPhase();
     }
-
     /**
      * Moves turn to the next phase
      */
@@ -699,14 +701,18 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert vertex != null;
         assert this.map != null;
 
         if (canInitiateSettlement(playerIndex, vertex)) {
-            map.initiateSettlement(playerIndex, vertex);
+            List<ResourceType> resources = map.initiateSettlement(playerIndex, vertex);
+            playerManager.getPlayerByIndex(playerIndex).buildFreeSettlement();
+            for(ResourceType resource : resources) {
+                safeDrawCard(playerIndex, resource);
+            }
         }
     }
 
@@ -733,6 +739,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canBuildSettlement(playerIndex, vertex)) {
             map.buildSettlement(playerIndex, vertex);
             playerManager.buildSettlement(playerIndex);
+            resourceCardBank.addResource(new Brick());
+            resourceCardBank.addResource(new Wood());
+            resourceCardBank.addResource(new Sheep());
+            resourceCardBank.addResource(new Wheat());
         }
     }
 
@@ -746,13 +756,14 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @throws StructureException
      */
     @Override
-    public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException {
+    public void initiateRoad(int playerIndex, EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert edge != null;
         assert this.map != null;
 
         map.initiateRoad(playerIndex, edge);
+        playerManager.getPlayerByIndex(playerIndex).buildFreeRoad();
     }
 
     /**
@@ -779,11 +790,17 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canBuildRoad(playerIndex, edge)) {
             map.buildRoad(playerIndex, edge);
             playerManager.buildRoad(playerIndex);
-            //check to update longest road
-            int roadLength = map.getLongestRoadSize(playerIndex);
-            if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
-                setPlayerWithLongestRoad(longestRoadCard.getOwner(), playerIndex, roadLength);
-            }
+            resourceCardBank.addResource(new Brick());
+            resourceCardBank.addResource(new Wood());
+            updateLongestRoad(playerIndex);
+        }
+    }
+
+    private void updateLongestRoad(int playerIndex) throws PlayerExistsException {
+        //check to update longest road
+        int roadLength = map.getLongestRoadSize(playerIndex);
+        if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
+            setPlayerWithLongestRoad(longestRoadCard.getOwner(), playerIndex, roadLength);
         }
     }
 
@@ -808,6 +825,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canBuildCity(playerIndex, vertex)) {
             map.buildCity(playerIndex, vertex);
             playerManager.buildCity(playerIndex);
+            resourceCardBank.addResource(new Ore());
+            resourceCardBank.addResource(new Ore());
+            resourceCardBank.addResource(new Ore());
+            resourceCardBank.addResource(new Wheat());
+            resourceCardBank.addResource(new Wheat());
+
         }
     }
 
@@ -822,6 +845,16 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
         }
+        List<Player> players = playerManager.getPlayers();
+        for(Player player : players) {
+            if(!player.hasDiscarded()) {
+                return;
+            }
+        }
+        for(Player player : players) {
+            player.setDiscarded(false);
+        }
+        turnTracker.setPhase(TurnTracker.Phase.ROBBING);
     }
 
     /**
@@ -835,58 +868,125 @@ public class Game extends Observable implements IGame, JsonSerializable {
         //Is value a 7 - robber
         if (value == 7) {
             //Go to discarding phase before robbing if any player has to discard
-            getPlayers().forEach(player -> {
+            List<Player> players = getPlayers();
+            for(Player player : players) {
                 if (player.canDiscardCards()) {
                     turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
+                    playerManager.initializeDiscarding();
+                    return;
                 }
-            });
+            }
             //Otherwise just move to the robbing phase
             turnTracker.setPhase(TurnTracker.Phase.ROBBING);
         } else {
             //Get the resources
             java.util.Map<Integer, List<ResourceType>> resources = map.getResources(value);
 
-            //Remove from the game's bank and give to players
-            resources.entrySet().forEach(entry -> {
-                entry.getValue().forEach(resource -> {
-                    safeDrawCard(entry.getKey(), resource);
-                });
-            });
+            int bricksNeeded = 0;
+            int sheepNeeded = 0;
+            int oreNeeded = 0;
+            int wheatNeeded = 0;
+            int woodNeeded = 0;
 
-            //Move to next phase - Playing
-            turnTracker.nextPhase();
+            // check for enough resources in game's bank
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                for(ResourceType type : entry.getValue()) {
+                    switch (type) {
+                        case BRICK:
+                            bricksNeeded++;
+                            break;
+                        case SHEEP:
+                            sheepNeeded++;
+                            break;
+                        case ORE:
+                            oreNeeded++;
+                            break;
+                        case WHEAT:
+                            wheatNeeded++;
+                            break;
+                        case WOOD:
+                            woodNeeded++;
+                            break;
+                    }
+                }
+            }
+
+            boolean enoughBrick = resourceCardBank.getNumberOfBrick() >= bricksNeeded;
+            boolean enoughSheep = resourceCardBank.getNumberOfSheep() >= sheepNeeded;
+            boolean enoughOre = resourceCardBank.getNumberOfOre() >= oreNeeded;
+            boolean enoughWheat = resourceCardBank.getNumberOfWheat() >= wheatNeeded;
+            boolean enoughWood = resourceCardBank.getNumberOfWood() >= woodNeeded;
+
+
+            // put available resources in new Hashmap
+            // initiate new map to store actual resources to hand out
+            HashMap<Integer, List<ResourceType>> resourcesToGive = new HashMap<>();
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                resourcesToGive.put(entry.getKey(), new ArrayList<ResourceType>());
+            }
+
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resources.entrySet()) {
+                for (ResourceType type : entry.getValue()) {
+                    switch (type) {
+                        case BRICK:
+                            if (enoughBrick) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case SHEEP:
+                            if (enoughSheep) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case ORE:
+                            if (enoughOre) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case WHEAT:
+                            if (enoughWheat) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                        case WOOD:
+                            if (enoughWood) {
+                                resourcesToGive.get(entry.getKey()).add(type);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            //Remove from the game's bank and give to players
+            for(java.util.Map.Entry<Integer, List<ResourceType>> entry : resourcesToGive.entrySet()) {
+                for (ResourceType resource : entry.getValue()) {
+                    safeDrawCard(entry.getKey(), resource);
+                }
+            }
+            
+            turnTracker.setPhase(TurnTracker.Phase.PLAYING);
         }
     }
 
     /**
      * Action - Player offers trade
-     *
-     * @param playerIndexOne Index of Player offering the trade
-     * @param playerIndexTwo Index of Player being offered the trade
-     * @param playerOneCards
-     * @param playerTwoCards
      */
     @Override
-    public void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
-        assert playerIndexOne >= 0;
-        assert playerIndexOne < 4;
-        assert playerIndexTwo >= 0;
-        assert playerIndexTwo < 4;
-        assert playerIndexOne != playerIndexTwo;
-        assert playerOneCards != null;
-        assert playerOneCards.size() > 0;
-        assert playerTwoCards != null;
-        assert playerTwoCards.size() > 0;
-        assert !playerOneCards.equals(playerTwoCards);
+    public void offerTrade(TradePackage one, TradePackage two) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+        assert one.getPlayerIndex() >= 0;
+        assert one.getPlayerIndex() < 4;
+        assert two.getPlayerIndex() >= 0;
+        assert two.getPlayerIndex() < 4;
+        assert one.getPlayerIndex() != two.getPlayerIndex();
+        assert one.getResources() != null;
+        assert one.getResources().size() > 0;
+        assert two.getResources() != null;
+        assert two.getResources().size() > 0;
+        assert !one.getResources().equals(two.getResources());
 
-        if (canOfferTrade(playerIndexOne)) {
-            final TradePackage one = new TradePackage(playerIndexOne, playerOneCards);
-            final TradePackage two = new TradePackage(playerIndexTwo, playerTwoCards);
-            // TODO - why is this trade object unused?
+        if (canOfferTrade(one.getPlayerIndex())) {
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
-            //playerManager.offerTrade(playerIndexOne,playerIndexTwo,playerOneCards,playerTwoCards); //// TODO: 2/15/16 poorly named function.  OfferTrade shouldn't do the trade.
-
         }
     }
 
@@ -894,7 +994,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (playerIndex == currentOffer.getReceiver() && answer) {
             playerManager.offerTrade(currentOffer.getSender(), currentOffer.getReceiver(), currentOffer.getPackage1().getResources(), currentOffer.getPackage2().getResources());
         }
-        currentOffer = new Trade();
+        currentOffer = null;
     }
 
     /**
@@ -938,9 +1038,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert !edge1.equals(edge2);
 
         if (canUseRoadBuilding(playerIndex)) {
+            map.buildRoad(playerIndex, edge1);
+            map.buildRoad(playerIndex, edge2);
             playerManager.useRoadBuilder(playerIndex);
-            buildRoad(playerIndex, edge1);
-            buildRoad(playerIndex, edge2);
+            updateLongestRoad(playerIndex);
         }
     }
 
@@ -1071,17 +1172,24 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
-        final Set<Integer> who = map.whoCanGetRobbed(playerRobber);
+        if(playerRobber == playerRobbed) {
+            placeRobber(playerRobber, hexLoc);
+            turnTracker.setPhase(TurnTracker.Phase.PLAYING);
+            return;
+        }
+
+        final Set<Integer> who = map.whoCanGetRobbed(playerRobber, hexLoc);
         assert who != null;
         if (turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)) {
+            map.moveRobber(playerRobber, hexLoc);
             try {
-                turnTracker.nextPhase();
+                playerManager.placeRobber(playerRobber, playerRobbed);
+                turnTracker.setPhase(TurnTracker.Phase.PLAYING);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            map.moveRobber(playerRobber, hexLoc);
-            playerManager.placeRobber(playerRobber, playerRobbed);
         }
+        //turnTracker.setPhase(TurnTracker.Phase.PLAYING); for Joel, love Corbin
     }
 
     /**
@@ -1100,6 +1208,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
         // remove player resources
         playerManager.buyDevCard(playerIndex);
+
+        resourceCardBank.addResource(new Ore());
+        resourceCardBank.addResource(new Wheat());
+        resourceCardBank.addResource(new Sheep());
 
         // give Dev Card from game to player
         final DevelopmentCard dc = developmentCardBank.draw();
@@ -1174,12 +1286,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
 
         try {
-            playerManager.moveNewToOld(playerIndex);
+            playerManager.finishTurn(playerIndex);
         } catch (BadCallerException e) {
             e.printStackTrace();
         }
-
         return turnTracker.nextTurn();
+
     }
     //==========================================================================
     //endregion
@@ -1611,41 +1723,52 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     @Override
     public boolean isTradeActive() {
-        return this.currentOffer.isActive();
+        if(currentOffer == null){
+        }else{
+            return true;
+        }
+        return (currentOffer != null);
     }
 
     @Override
     public int getTradeReceiver() {
+        assert currentOffer != null;
         return this.currentOffer.getReceiver();
     }
 
     @Override
     public int getTradeSender() {
+        assert currentOffer != null;
         return this.currentOffer.getSender();
     }
 
     @Override
     public int getTradeBrick() {
+        assert currentOffer != null;
         return this.currentOffer.getBrick();
     }
 
     @Override
     public int getTradeWood() {
+        assert currentOffer != null;
         return this.currentOffer.getWood();
     }
 
     @Override
     public int getTradeSheep() {
+        assert currentOffer != null;
         return this.currentOffer.getSheep();
     }
 
     @Override
     public int getTradeWheat() {
+        assert currentOffer != null;
         return this.currentOffer.getWheat();
     }
 
     @Override
     public int getTradeOre() {
+        assert currentOffer != null;
         return this.currentOffer.getOre();
     }
     //==========================================================================
@@ -1845,23 +1968,22 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     /**
-     * deducts Victory Points from playerIDOld
-     * adds Victory Points to playerIDNew
-     * Updates LongestRoad for playerIDNew and roadSize
+     * deducts Victory Points from oldOwnerIndex
+     * adds Victory Points to newOwnerIndex
+     * Updates LongestRoad for newOwnerIndex and roadSize
      *
-     * @param playerIDOld
-     * @param playerIDNew
+     * @param oldOwnerIndex
+     * @param newOwnerIndex
      * @param roadSize
      */
-    private void setPlayerWithLongestRoad(final int playerIDOld, final int playerIDNew, final int roadSize) {
-        assert playerIDNew >= 0;
-        assert playerIDOld >= 0;
-        assert playerIDNew < 4;
-        assert playerIDOld < 4;
+    private void setPlayerWithLongestRoad(final int oldOwnerIndex, final int newOwnerIndex, final int roadSize) throws PlayerExistsException {
+        assert newOwnerIndex >= 0;
+        assert newOwnerIndex < 4;
+        assert oldOwnerIndex < 4;
         assert roadSize >= 0;
-        assert playerIDNew != playerIDOld;
 
-        longestRoadCard.setOwner(playerIDNew, roadSize);
+        playerManager.changeLongestRoadPossession(oldOwnerIndex, newOwnerIndex);
+        longestRoadCard.setOwner(newOwnerIndex, roadSize);
     }
 
     public void setTitle(final String title) {
@@ -1898,5 +2020,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.version++;
     }
     //endregion
+
+    public void log(String name, String message) {
+        assert name != null;
+        assert message != null;
+
+        this.log.addMessage(new MessageLine(name, message));
+    }
 
 }

@@ -79,7 +79,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
                         if(isPlaying) {
                             getView().updateGameState("End Turn", isPlaying, color.getJavaColor());
                         } else {
-                            getView().updateGameState("Just Chill", isPlaying, color.getJavaColor());
+                            getView().updateGameState("Just Chill Fool", isPlaying, color.getJavaColor());
                         }
                         break;
                     case DISCARDING:

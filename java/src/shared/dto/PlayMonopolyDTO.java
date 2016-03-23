@@ -73,7 +73,7 @@ public final class PlayMonopolyDTO implements IDTO, JsonSerializable {
                 return ResourceType.BRICK;
             case "sheep":
                 return ResourceType.SHEEP;
-            case "WOOD":
+            case "wood":
                 return ResourceType.WOOD;
             case "wheat":
                 return ResourceType.WHEAT;
