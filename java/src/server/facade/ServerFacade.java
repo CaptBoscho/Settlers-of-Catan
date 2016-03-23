@@ -155,7 +155,7 @@ public final class ServerFacade implements IFacade {
         assert gameId < this.gameManager.getNumGames();
 
         final List<AIType> availableAIs = AIFactory.listAITypes();
-        final ListAIDTO dto = new ListAIDTO(availableAIs);
+        final ListAIDTO dto = new ListAIDTO(gameId, availableAIs);
         final String jsonString = dto.toJSONArr().toString();
         return new CommandExecutionResult(jsonString);
     }

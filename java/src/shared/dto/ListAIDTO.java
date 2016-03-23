@@ -42,7 +42,7 @@ public final class ListAIDTO implements IDTO,JsonSerializable {
         obj.addProperty(kId, this.gameId);
 
         final JsonArray allAIs = this.toJSONArr();
-        obj.addProperty(kAIs, allAIs.toString());
+        obj.add(kAIs, allAIs);
 
         return obj;
     }
