@@ -190,8 +190,9 @@ public class MockServer implements IServer {
      * @param dto Data transport object containing the information to add an AI to the game
      */
     @Override
-    public void addAI(AddAIDTO dto) {
-
+    public String addAI(AddAIDTO dto) {
+        return null;
+        // TODO - not needed, only for swagger page
     }
 
     /**
