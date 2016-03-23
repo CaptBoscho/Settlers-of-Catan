@@ -47,7 +47,7 @@ public class AIFactory implements IAIFactory {
     public AIPlayer create(AIType type) throws CreateAIException {
         if(type == AIType.LARGEST_ARMY){
             try {
-                return new AIPlayer(0, null, -1, -1, "Temp", AIType.LARGEST_ARMY); //TODO: Make legit!
+                return new AIPlayer(0, null, -1, -1, "Temp", AIType.LARGEST_ARMY);
             } catch (InvalidPlayerException e) {
                 e.printStackTrace();
                 throw new CreateAIException("Failed to create the AI Player");

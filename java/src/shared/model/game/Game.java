@@ -679,7 +679,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (canAddAI()) {
             try {
                 Player ai = AIFactory.getInstance().create(type);
-                playerManager.addPlayer(ai);
+                playerManager.addAI(ai);
             } catch (CreateAIException e) {
                 e.printStackTrace();
                 throw new AddAIException(e.getMessage());
@@ -1810,7 +1810,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Helpers
     //==========================================================
-
     /**
      * Safely tries to draw a card from the bank and give to the player
      *
@@ -1898,5 +1897,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void incrementVersion() {
         this.version++;
     }
+    //endregion
 
 }

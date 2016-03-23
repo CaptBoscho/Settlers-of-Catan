@@ -7,6 +7,7 @@ import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
+import shared.model.ai.AIPlayer;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
@@ -59,7 +60,6 @@ public final class PlayerManager implements IPlayerManager {
     //endregion
 
     //region Manager methods
-
     /**
      * Changes control of the largest army card
      *
@@ -90,6 +90,53 @@ public final class PlayerManager implements IPlayerManager {
         assert playerIndex < 4;
 
         getPlayerByIndex(playerIndex).moveNewToOld();
+    }
+
+    /**
+     * Initializes values within an AI player
+     *
+     * @param ai
+     */
+    public void addAI(Player ai){
+        //Set color
+        CatanColor color = CatanColor.BLUE;
+        int colorIndex = -1;
+        boolean validColor = false;
+        while(!validColor){
+            colorIndex++;
+            color = CatanColor.values()[colorIndex];
+            validColor = true;
+
+            for(int i = 0; i < players.size(); i++){
+                if(players.get(i).getColor() == color)
+                    validColor = false;
+            }
+        }
+        ai.setColor(color);
+
+        //Set id
+        int id = -1;
+        boolean validId = false;
+        while(!validId){
+            id++;
+            validId = true;
+
+            for(int i = 0; i < players.size(); i++){
+                if(players.get(i).getId() == id)
+                    validId = false;
+            }
+        }
+        ai.setPlayerId(id);
+
+        //Set name
+        ai.setName("AI-" + ai.getId());
+
+        //Add the player
+        addPlayer(ai);
+
+        //Set index
+        int index = players.size() - 1;
+        ai.setPlayerIndex(index);
     }
     //endregion
 
