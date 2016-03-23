@@ -8,7 +8,6 @@ import client.services.exceptions.UnauthorizedException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.utils.JSONUtils;
-import shared.definitions.ClientModel;
 import shared.dto.*;
 import shared.model.player.PlayerManager;
 
@@ -242,14 +241,15 @@ public final class ServerProxy implements IServer {
      * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public ClientModel getCurrentModel(final int version) throws MissingUserCookieException {
+    public void getCurrentModel(final int version) throws MissingUserCookieException {
         final JsonObject obj = this.requestModelJson(version);
+        if(obj == null) return;
         Facade.getInstance().getGame().updateGame(obj);
-        return new ClientModel(obj);
     }
 
     public void getLatestPlayers() throws MissingUserCookieException {
         JsonObject obj = this.requestModelJson(-1);
+        if(obj == null) return;
         PlayerManager tmp = new PlayerManager(obj.getAsJsonArray("players"));
         if(!tmp.equals(Facade.getInstance().getGame().getPlayerManager())) {
             Facade.getInstance().getGame().setPlayerManager(new PlayerManager(obj.getAsJsonArray("players")));
@@ -577,7 +577,6 @@ public final class ServerProxy implements IServer {
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
-        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Facade.getInstance().getGame().updateGame(obj);
     }
