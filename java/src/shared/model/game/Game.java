@@ -835,15 +835,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
+            playerManager.getPlayerByIndex(playerIndex).setDiscarded(true);
         }
         List<Player> players = playerManager.getPlayers();
         for(Player player : players) {
             if(!player.hasDiscarded()) {
                 return;
             }
-        }
-        for(Player player : players) {
-            player.setDiscarded(false);
         }
         turnTracker.setPhase(TurnTracker.Phase.ROBBING);
     }
@@ -861,7 +859,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             //Go to discarding phase before robbing if any player has to discard
             List<Player> players = getPlayers();
             for(Player player : players) {
-                if (player.canDiscardCards()) {
+                if (player.getNumberResourceCards() > 7) {
                     turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
                     playerManager.initializeDiscarding();
                     return;
