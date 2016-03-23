@@ -112,13 +112,17 @@ public class ServerFacade implements IFacade {
         assert gameId < this.gameManager.getNumGames();
         assert type != null;
 
+        // get the game
         final Game game = gameManager.getGameByID(gameId);
+        game.incrementVersion();
 
         if(game.canAddAI()) {
             game.addAI(type);
-            return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+            CommandExecutionResult result = new CommandExecutionResult("Success");
+            result.addCookie("catan.game", String.valueOf(game.getId()));
+            return result;
         } else {
-            throw new AddAIException("AI player can't be added!");
+            return new CommandExecutionResult("Failure");
         }
     }
 

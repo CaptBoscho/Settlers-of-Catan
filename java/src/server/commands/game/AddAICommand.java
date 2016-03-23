@@ -25,12 +25,16 @@ public class AddAICommand implements ICommand {
      * @return IDTO
      */
     @Override
-    public CommandExecutionResult execute() throws CommandExecutionFailedException {
+    public CommandExecutionResult execute() {
         try {
             return Config.facade.addAI(this.gameId, this.type);
         } catch (AddAIException e) {
-            throw new CommandExecutionFailedException(e.getMessage());
+            // this is so dumb. ugh.
+            e.printStackTrace();
         }
+
+        // TODO - SO DUMB
+        return null;
     }
 
     @Override
