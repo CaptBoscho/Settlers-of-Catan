@@ -25,6 +25,16 @@ public class RoadBuildingCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        RoadBuildingCommand roadBuildingCommand = new RoadBuildingCommand();
+        roadBuildingCommand.setParams(null);
+        roadBuildingCommand.execute();
+    }
+
+    /**
      * Validates that the command checks that the parameters are set before
      * executing using the `assert` keyword.
      */

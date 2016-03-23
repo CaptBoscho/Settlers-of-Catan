@@ -45,7 +45,7 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult register(String username, String password) throws RegisterException {
-        return null;
+        return new CommandExecutionResult("Success.");
     }
 
     /**

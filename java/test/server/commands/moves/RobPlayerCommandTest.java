@@ -25,6 +25,16 @@ public class RobPlayerCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        RobPlayerCommand robPlayerCommand = new RobPlayerCommand();
+        robPlayerCommand.setParams(null);
+        robPlayerCommand.execute();
+    }
+
+    /**
      * Validates that the command checks that the parameters are set before
      * executing using the `assert` keyword.
      */

@@ -33,7 +33,7 @@ public final class OfferTradeCommand implements ICommand {
         try {
             // TODO - better API
             return Config.facade.offerTrade(this.gameId, this.dto);
-        }catch(OfferTradeException e){
+        } catch(OfferTradeException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
     }
@@ -47,5 +47,4 @@ public final class OfferTradeCommand implements ICommand {
         this.dto = (OfferTradeDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();
     }
-
 }

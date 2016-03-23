@@ -3,8 +3,12 @@ package server.commands.user;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
+import shared.dto.AuthDTO;
+import shared.dto.CookieWrapperDTO;
+import shared.dto.SaveGameDTO;
 
 /**
  * Unit Testing for the "Login" command.
@@ -21,6 +25,48 @@ public class LoginCommandTest {
     @After
     public void tearDown() {
 
+    }
+
+    /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        LoginCommand loginCommand = new LoginCommand();
+        loginCommand.setParams(null);
+        loginCommand.execute();
+    }
+
+    /**
+     * Validate that you cannot pass a null username
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullUsername() throws CommandExecutionFailedException {
+        AuthDTO authDTO = new AuthDTO(null, "password");
+        LoginCommand registerCommand = new LoginCommand();
+        registerCommand.setParams(authDTO);
+        registerCommand.execute();
+    }
+
+    /**
+     * Validate that you cannot pass a null password
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullPassword() throws CommandExecutionFailedException {
+        AuthDTO authDTO = new AuthDTO("username", null);
+        LoginCommand registerCommand = new LoginCommand();
+        registerCommand.setParams(authDTO);
+        registerCommand.execute();
+    }
+
+    /**
+     * Validate that you cannot pass in the wrong king of DTO
+     */
+    @Test(expected = AssertionError.class)
+    public void testWrongDto() throws CommandExecutionFailedException {
+        LoginCommand registerCommand = new LoginCommand();
+        registerCommand.setParams(new SaveGameDTO(1, "Derek"));
+        registerCommand.execute();
     }
 
     /**

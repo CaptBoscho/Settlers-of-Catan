@@ -45,6 +45,7 @@ public final class YearOfPlentyCommand implements ICommand {
     @Override
     public void setParams(final IDTO dto) {
         assert dto != null;
+        assert dto instanceof CookieWrapperDTO;
 
         this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;

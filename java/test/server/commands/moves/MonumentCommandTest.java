@@ -25,6 +25,16 @@ public class MonumentCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        MonumentCommand mc = new MonumentCommand();
+        mc.setParams(null);
+        mc.execute();
+    }
+
+    /**
      * Validates that the command checks that the parameters are set before
      * executing using the `assert` keyword.
      */

@@ -48,6 +48,16 @@ public class OfferTradeCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        OfferTradeCommand otc = new OfferTradeCommand();
+        otc.setParams(null);
+        otc.execute();
+    }
+
+    /**
      * checks to see if the command makes it to the facade and back
      */
     @Test
