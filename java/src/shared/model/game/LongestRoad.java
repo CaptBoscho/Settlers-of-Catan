@@ -47,7 +47,6 @@ public final class LongestRoad {
      */
     public void setOwner(int id, int roadlength) {
         assert id >= 0 && id <= 3;
-        assert id != this.playerID;  // assign to a *different* player
         assert roadlength > 0;
         assert roadlength > this.size;
 

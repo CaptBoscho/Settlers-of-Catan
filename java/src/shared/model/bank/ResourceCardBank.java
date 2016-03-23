@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
  * @author Danny Harding
  */
 public final class ResourceCardBank implements JsonSerializable, IResourceCardBank {
-    static final int MAX_NUMBER_BRICK = 15;
-    static final int MAX_NUMBER_ORE = 15;
-    static final int MAX_NUMBER_SHEEP = 15;
-    static final int MAX_NUMBER_WHEAT = 15;
-    static final int MAX_NUMBER_WOOD = 15;
+    static final int MAX_NUMBER_BRICK = 19;
+    static final int MAX_NUMBER_ORE = 19;
+    static final int MAX_NUMBER_SHEEP = 19;
+    static final int MAX_NUMBER_WHEAT = 19;
+    static final int MAX_NUMBER_WOOD = 19;
 
     private List<Brick> bricks = new ArrayList<>();
     private List<Ore> ores = new ArrayList<>();
@@ -135,7 +135,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
     }
 
     @Override
-    public ResourceCard draw() throws Exception {
+    public ResourceCard draw() throws Exception, InvalidTypeException {
         if (ownedByGame) {
             throw new Exception("Must specify Resource Type to draw from Game");
         } else {
@@ -144,7 +144,9 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
             hand.addAll(sheeps.stream().collect(Collectors.toList()));
             hand.addAll(wheats.stream().collect(Collectors.toList()));
             hand.addAll(ores.stream().collect(Collectors.toList()));
-            return hand.get(new Random().nextInt(hand.size()));
+            ResourceCard removed = hand.remove(new Random().nextInt(hand.size()));
+            removeCard(removed.getType());
+            return removed;
         }
     }
 
@@ -324,32 +326,22 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
             case BRICK:
                 if (getNumberOfBrick() > 0) {
                     return bricks.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available bricks");
                 }
             case ORE:
                 if (getNumberOfOre() > 0) {
                     return ores.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available ores");
                 }
             case SHEEP:
                 if (getNumberOfSheep() > 0) {
                     return sheeps.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available sheep");
                 }
             case WHEAT:
                 if (getNumberOfWheat() > 0) {
                     return wheats.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available wheats");
                 }
             case WOOD:
                 if (getNumberOfWood() > 0) {
                     return woods.remove(0);
-                } else {
-                    throw new InsufficientResourcesException("There are no available woods");
                 }
             default:
                 throw new InvalidTypeException("The given type is invalid");
@@ -369,6 +361,7 @@ public final class ResourceCardBank implements JsonSerializable, IResourceCardBa
             if(getNumberOfSheep() > 0){content.add(ResourceType.SHEEP);}
             if(getNumberOfWheat() > 0){content.add(ResourceType.WHEAT);}
             if(getNumberOfWood() > 0){content.add(ResourceType.WOOD);}
+
 
             int card = new Random().nextInt(content.size());
 

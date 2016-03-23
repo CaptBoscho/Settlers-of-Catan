@@ -70,11 +70,29 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public void changeLargestArmyPossession(final int playerOld, final int playerNew) throws PlayerExistsException {
         assert playerNew >= 0;
-        assert playerOld >= 0;
-        assert playerNew != playerOld;
 
-        getPlayerByIndex(playerOld).loseArmyCard();
+        if(playerOld >= 0) {
+            getPlayerByIndex(playerOld).loseArmyCard();
+        }
         getPlayerByIndex(playerNew).winArmyCard();
+    }
+
+    @Override
+    public void changeLongestRoadPossession(final int oldOwnerIndex, final int newOwnerIndex) throws PlayerExistsException {
+        assert newOwnerIndex >= 0;
+        assert newOwnerIndex < 4;
+        assert oldOwnerIndex >= -1;
+
+        if(oldOwnerIndex >= 0) {
+            getPlayerByIndex(oldOwnerIndex).loseLongestRoad();
+        }
+        getPlayerByIndex(newOwnerIndex).winLongestRoad();
+    }
+
+    @Override
+    public void finishTurn(int playerIndex) throws PlayerExistsException, BadCallerException {
+        moveNewToOld(playerIndex);
+        getPlayerByIndex(playerIndex).setPlayedDevCard(false);
     }
 
     /**
@@ -415,7 +433,7 @@ public final class PlayerManager implements IPlayerManager {
         assert type != null;
 
         Player monopolyUser = getPlayerByIndex(playerIndex);
-        monopolyUser.discardMonopoly();
+        monopolyUser.useMonopoly();
         for(final Player player : this.getPlayers()) {
 
             final int amount = player.getNumberOfType(type);
@@ -454,7 +472,7 @@ public final class PlayerManager implements IPlayerManager {
      * @param playerRobbed  index of the player being robbed
      */
     @Override
-    public void placeRobber(final int playerRobbing, final int playerRobbed) throws MoveRobberException, PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void placeRobber(final int playerRobbing, final int playerRobbed) throws InvalidTypeException, Exception {
         assert playerRobbing >= 0;
         assert playerRobbing < 4;
         assert playerRobbed >= 0;
@@ -463,7 +481,6 @@ public final class PlayerManager implements IPlayerManager {
         final Player robber = getPlayerByIndex(playerRobbing);
         final Player robbed = getPlayerByIndex(playerRobbed);
 
-        robber.placeRobber();
         final ResourceCard treasure = robbed.robbed();
         robber.addResourceCard(treasure);
     }
@@ -736,6 +753,17 @@ public final class PlayerManager implements IPlayerManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public void initializeDiscarding() {
+        for(Player player : players) {
+            if(player.getNumberResourceCards() > 7) {
+                player.setDiscarded(false);
+            } else {
+                player.setDiscarded(true);
+            }
+        }
     }
 
     /**

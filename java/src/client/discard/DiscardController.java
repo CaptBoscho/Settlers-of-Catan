@@ -105,7 +105,7 @@ public class DiscardController extends Controller implements IDiscardController,
                 }
             } else {
                 if(!getWaitView().isModalShowing()) {
-                    getWaitView().setMessage("Chill while others discard...");
+                    getWaitView().setMessage("Chill while others discard fool");
                     getWaitView().showModal();
                 }
             }
