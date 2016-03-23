@@ -1,10 +1,7 @@
 package client.services;
 
 import client.misc.MessageView;
-import client.services.exceptions.BadHttpRequestException;
-import client.services.exceptions.BadRequestException;
-import client.services.exceptions.InternalServerErrorException;
-import client.services.exceptions.NotFoundException;
+import client.services.exceptions.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.IOUtils;
@@ -77,6 +74,8 @@ final class Utils {
             switch(response.getStatusLine().getStatusCode()) {
                 case 400:
                     throw new BadRequestException();
+                case 401:
+                    throw new UnauthorizedException();
                 case 404:
                     throw new NotFoundException();
                 case 500:
@@ -90,7 +89,7 @@ final class Utils {
         } catch (IOException e) {
             e.printStackTrace();
             MessageView view = new MessageView();
-            view.setTitle("Bad Connection");
+            view.setTitle("Bad Connection - IOException");
             view.setMessage("Unable to communicate with the server");
             view.showModal();
         }
@@ -114,7 +113,7 @@ final class Utils {
         } catch (IOException e) {
             e.printStackTrace();
             MessageView view = new MessageView();
-            view.setTitle("Bad Connection");
+            view.setTitle("Bad Connection - IOException");
             view.setMessage("Unable to communicate with the server");
             view.showModal();
         }

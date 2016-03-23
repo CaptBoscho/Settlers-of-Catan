@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joel on 3/20/16.
+ * @author Joel Bradley
  */
 public class OfferTradeCommandTest {
 
@@ -38,7 +38,9 @@ public class OfferTradeCommandTest {
     @Test
     public void testExecute() {
         List<ResourceType> send = new ArrayList<>();
+        send.add(ResourceType.BRICK);
         List<ResourceType> receive = new ArrayList<>();
+        receive.add(ResourceType.WHEAT);
         TradePackage package1 = new TradePackage(0,send);
         TradePackage package2 = new TradePackage(1,receive);
         Trade trade = new Trade(package1,package2);

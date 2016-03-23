@@ -4,6 +4,7 @@ import client.data.GameInfo;
 import client.facade.Facade;
 import client.misc.MessageView;
 import client.services.exceptions.BadHttpRequestException;
+import client.services.exceptions.UnauthorizedException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.utils.JSONUtils;
@@ -73,6 +74,12 @@ public final class ServerProxy implements IServer {
         try {
             result = Utils.sendPost(url, auth.toJSON());
         } catch (BadHttpRequestException e) {
+
+            // unauthorization is normal and frequent when logging in, so handle
+            // this normally
+            if(e instanceof UnauthorizedException) {
+                return false;
+            }
             e.printStackTrace();
             this.showMessageViewForHttpError(e.getMessage());
         }
@@ -99,7 +106,6 @@ public final class ServerProxy implements IServer {
             this.showMessageViewForHttpError(e.getMessage());
         }
         assert result != null;
-        System.out.println(result);
         return result.equals("Success");
     }
 
@@ -575,6 +581,7 @@ public final class ServerProxy implements IServer {
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
+        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Facade.getInstance().getGame().updateGame(obj);
     }

@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class RegisterHandler implements Route {
     @Override
@@ -20,7 +21,6 @@ public class RegisterHandler implements Route {
             response.status(400);
             return BAD_JSON_MESSAGE;
         }
-
 
         CommandExecutionResult result = UserController.register(new AuthDTO(request.body()));
         if(result.errorOccurred()) {

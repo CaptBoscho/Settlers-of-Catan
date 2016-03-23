@@ -11,12 +11,11 @@ import spark.Route;
 
 import java.util.Map;
 
-import static spark.Spark.before;
-
 /**
  * @author Derek Argueta
  *
  * Handles HTTP requests for joining a game
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class JoinHandler implements Route {
 

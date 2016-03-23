@@ -12,6 +12,7 @@ import spark.Route;
  * Handles HTTP GET request for fetching the game model.
  *
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class ModelHandler implements Route {
     @Override
