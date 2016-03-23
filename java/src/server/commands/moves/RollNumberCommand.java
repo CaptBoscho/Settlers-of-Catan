@@ -16,6 +16,7 @@ import shared.dto.RollNumberDTO;
  */
 public final class RollNumberCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
     private int value;
@@ -26,6 +27,11 @@ public final class RollNumberCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+
         try {
             return Config.facade.rollNumber(this.gameId, this.playerIndex, this.value);
         } catch (RollNumberException e) {
@@ -35,6 +41,9 @@ public final class RollNumberCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final RollNumberDTO tmpDTO = (RollNumberDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

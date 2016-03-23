@@ -13,11 +13,8 @@ import shared.dto.IDTO;
  */
 public final class RegisterCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private String username, password;
-
-    public RegisterCommand() {
-
-    }
 
     /**
      * Communicates with the ServerFacade to carry out the Register command
@@ -26,6 +23,10 @@ public final class RegisterCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.paramsSet;
+        assert this.username != null;
+        assert this.password != null;
+
         if(UserManager.getInstance().addUser(this.username, this.password)) {
             final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
             CommandExecutionResult result = new CommandExecutionResult("Success");
@@ -41,6 +42,9 @@ public final class RegisterCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final AuthDTO tmpDTO = (AuthDTO)dto;
         this.username = tmpDTO.getUsername();
         this.password = tmpDTO.getPassword();

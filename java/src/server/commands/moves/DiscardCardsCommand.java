@@ -16,6 +16,7 @@ import shared.dto.IDTO;
  */
 public final class DiscardCardsCommand implements ICommand {
 
+    private boolean paramsSet;
     private int gameId;
     private DiscardCardsDTO dto;
 
@@ -25,7 +26,12 @@ public final class DiscardCardsCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.dto != null;
+
         try {
+            // TODO - better API
             return Config.facade.discardCards(gameId, dto);
         }catch(DiscardCardsException e){
             throw new CommandExecutionFailedException(e.getMessage());
@@ -34,6 +40,7 @@ public final class DiscardCardsCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         this.dto = (DiscardCardsDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

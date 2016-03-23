@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import server.commands.CommandExecutionResult;
+import server.exceptions.CommandExecutionFailedException;
 import server.exceptions.OfferTradeException;
 import server.facade.MockFacade;
 import server.main.Config;
@@ -16,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Unit Testing for the "Offer Trade" command.
+ *
  * @author Joel Bradley
  */
 public class OfferTradeCommandTest {
-
-    private OfferTradeCommand command;
 
     @Before
     public void setUp() {
@@ -30,6 +31,15 @@ public class OfferTradeCommandTest {
     @After
     public void tearDown() {
 
+    }
+
+    /**
+     * Validates that the command checks that the parameters are set before
+     * executing using the `assert` keyword.
+     */
+    @Test(expected = AssertionError.class)
+    public void testExecuteWithMissingParams() throws CommandExecutionFailedException {
+        new OfferTradeCommand().execute();
     }
 
     /**
@@ -50,5 +60,7 @@ public class OfferTradeCommandTest {
         } catch (OfferTradeException e) {
             e.printStackTrace();
         }
+
+        // TODO - make this an actual test...
     }
 }

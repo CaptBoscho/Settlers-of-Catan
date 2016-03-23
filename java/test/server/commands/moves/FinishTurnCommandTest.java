@@ -3,15 +3,16 @@ package server.commands.moves;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
 
 /**
- * Created by joel on 3/20/16.
+ * Unit Testing for the "Finish Turn" command.
+ *
+ * @author Derek Argueta
  */
 public class FinishTurnCommandTest {
-
-    private FinishTurnCommand command;
 
     @Before
     public void setUp() {
@@ -20,11 +21,6 @@ public class FinishTurnCommandTest {
 
     @After
     public void tearDown() {
-
-    }
-
-    @Test
-    public void testExecute() {
 
     }
 }

@@ -18,6 +18,7 @@ import shared.model.bank.InvalidTypeException;
  */
 public final class MonopolyCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
     private ResourceType resourceType;
@@ -28,6 +29,12 @@ public final class MonopolyCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert resourceType != null;
+
         try {
             return Config.facade.monopoly(this.gameId, this.playerIndex, this.resourceType);
         } catch (MonopolyException e) {
@@ -37,6 +44,9 @@ public final class MonopolyCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final PlayMonopolyDTO tmpDTO = (PlayMonopolyDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

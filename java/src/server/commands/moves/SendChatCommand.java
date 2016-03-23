@@ -16,6 +16,7 @@ import shared.dto.SendChatDTO;
  */
 public final class SendChatCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
     private String content;
@@ -26,6 +27,12 @@ public final class SendChatCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert this.content != null;
+
         try {
             return Config.facade.sendChat(this.gameId, this.playerIndex, this.content);
         } catch (SendChatException e) {
@@ -35,6 +42,9 @@ public final class SendChatCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final SendChatDTO tmpDTO = (SendChatDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

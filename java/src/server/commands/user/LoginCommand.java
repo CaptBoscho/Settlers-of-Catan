@@ -15,8 +15,8 @@ import shared.dto.IDTO;
  */
 public final class LoginCommand implements ICommand {
 
-    private String username;
-    private String password;
+    private boolean paramsSet = false;
+    private String username, password;
 
     /**
      * Communicates with the ServerFacade to carry out the Login command
@@ -25,6 +25,10 @@ public final class LoginCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.paramsSet;
+        assert this.username != null;
+        assert this.password != null;
+
         if(Config.facade.login(this.username, this.password)) {
             final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
             CommandExecutionResult result = new CommandExecutionResult("Success");
@@ -39,6 +43,9 @@ public final class LoginCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final AuthDTO tmpDTO = (AuthDTO)dto;
         this.username = tmpDTO.getUsername();
         this.password = tmpDTO.getPassword();
