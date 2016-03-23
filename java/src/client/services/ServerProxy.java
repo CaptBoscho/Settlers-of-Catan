@@ -333,7 +333,7 @@ public final class ServerProxy implements IServer {
         } catch (BadHttpRequestException e) {
             e.printStackTrace();
             this.showMessageViewForHttpError(e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
 
         JsonArray arr = new JsonParser().parse(result).getAsJsonArray();

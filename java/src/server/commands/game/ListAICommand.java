@@ -25,10 +25,13 @@ public class ListAICommand implements ICommand {
     @Override
     public CommandExecutionResult execute() {
         try {
-            return Config.facade.listAI(0);
+            int tmpId = 0;
+            return Config.facade.listAI(tmpId);
         } catch (ListAIException e) {
             e.printStackTrace();
-            return new CommandExecutionResult("Error listing AI types!");
+            CommandExecutionResult result = new CommandExecutionResult("Error listing AI types!");
+            result.triggerError(500);
+            return result;
         }
     }
 
