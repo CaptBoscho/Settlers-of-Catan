@@ -19,12 +19,20 @@ public final class ModelCommand implements ICommand {
     private int gameId;
     private int requestedVersion;
 
+    public ModelCommand() {
+        this.gameId = -1;
+        this.requestedVersion = -2;
+    }
+
     /**
      * Communicates with the ServerFacade to carry out the Model command
      * @return IDTO
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.gameId >= 0;
+        assert this.requestedVersion >= -1;
+
         try {
             return Config.facade.getModel(this.gameId, this.requestedVersion);
         } catch (GetModelException e) {

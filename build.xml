@@ -176,6 +176,7 @@
 	</target>
 
 	<target name="test-integration" description="Runs a Python script that tests the API from an external black-box perspective">
+		<echo>Executing Python integration tests</echo>
 		<exec dir="python/tests" executable="python" failonerror="true">
 			<arg line="api_test.py" />
 		</exec>

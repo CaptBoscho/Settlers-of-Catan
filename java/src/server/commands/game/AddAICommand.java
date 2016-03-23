@@ -20,6 +20,8 @@ public final class AddAICommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.dto != null;
+        // -- TODO
         return null;
     }
 

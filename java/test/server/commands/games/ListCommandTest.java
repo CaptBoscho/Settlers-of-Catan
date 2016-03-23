@@ -7,11 +7,11 @@ import server.facade.MockFacade;
 import server.main.Config;
 
 /**
- * Created by joel on 3/20/16.
+ * Unit Testing for the "List Games" command.
+ *
+ * @author Derek Argueta
  */
 public class ListCommandTest {
-
-    private ListCommand command;
 
     @Before
     public void setUp() {
@@ -20,11 +20,6 @@ public class ListCommandTest {
 
     @After
     public void tearDown() {
-
-    }
-
-    @Test
-    public void testExecute() {
 
     }
 }

@@ -7,11 +7,11 @@ import server.facade.MockFacade;
 import server.main.Config;
 
 /**
- * Created by joel on 3/20/16.
+ * Unit Testing for the "Create Game" command.
+ *
+ * @author Derek Argueta
  */
 public class CreateCommandTest {
-
-    private CreateCommand command;
 
     @Before
     public void setUp() {
@@ -23,8 +23,12 @@ public class CreateCommandTest {
 
     }
 
-    @Test
-    public void testExecute() {
-
+    /**
+     * Validates that the command checks that the parameters are set before
+     * executing using the `assert` keyword.
+     */
+    @Test(expected = AssertionError.class)
+    public void testExecuteWithMissingParams() {
+        new CreateCommand().execute();
     }
 }

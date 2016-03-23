@@ -28,6 +28,11 @@ public final class JoinCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.gameId >= 0;
+        assert this.color != null;
+        assert this.playerId >= 0;
+        assert this.username != null;
+
         try {
             return Config.facade.join(this.gameId, this.color, this.playerId, this.username);
         } catch (JoinGameException e) {

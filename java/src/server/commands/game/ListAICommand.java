@@ -22,6 +22,7 @@ public final class ListAICommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.dto != null;
         return null;
     }
 

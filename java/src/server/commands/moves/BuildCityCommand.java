@@ -27,6 +27,11 @@ public final class BuildCityCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert this.location != null;
+
         try {
             return Config.facade.buildCity(this.gameId, this.playerIndex, this.location);
         } catch (BuildCityException e) {

@@ -27,6 +27,11 @@ public final class BuildRoadCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert location != null;
+
         try {
             return Config.facade.buildRoad(this.gameId, this.playerIndex, this.location);
         } catch (BuildRoadException e) {
