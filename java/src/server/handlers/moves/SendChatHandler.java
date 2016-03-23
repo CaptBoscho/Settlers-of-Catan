@@ -2,6 +2,7 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.SendChatDTO;
 import spark.Request;
@@ -17,7 +18,7 @@ public class SendChatHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!SendChatDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
 
         // TODO - validation

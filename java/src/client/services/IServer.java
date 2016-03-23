@@ -128,7 +128,7 @@ public interface IServer {
      *
      * @return A list of the supported AI types represented as arbitrary strings
      */
-    List<String> getAITypes();
+    List<String> getAITypes(ListAIDTO dto);
 
 
 

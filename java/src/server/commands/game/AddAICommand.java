@@ -15,7 +15,7 @@ import shared.model.ai.AIType;
  *
  * @author Joel Bradley
  */
-public class AddAICommand implements ICommand {
+public final class AddAICommand implements ICommand {
 
     private int gameId;
     private AIType type;

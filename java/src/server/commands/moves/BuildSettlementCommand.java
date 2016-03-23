@@ -15,7 +15,7 @@ import shared.locations.VertexLocation;
  *
  * @author Joel Bradley
  */
-public class BuildSettlementCommand implements ICommand {
+public final class BuildSettlementCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;
@@ -27,6 +27,11 @@ public class BuildSettlementCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert location != null;
+
         try {
             return Config.facade.buildSettlement(this.gameId, this.playerIndex, this.location);
         } catch (BuildSettlementException e) {

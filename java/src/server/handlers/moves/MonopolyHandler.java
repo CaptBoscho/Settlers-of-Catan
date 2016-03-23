@@ -2,6 +2,7 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.PlayMonopolyDTO;
 import spark.Request;
@@ -10,20 +11,21 @@ import spark.Route;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class MonopolyHandler implements Route {
+public final class MonopolyHandler implements Route {
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         if(!PlayMonopolyDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
 
-        CookieWrapperDTO dto = new CookieWrapperDTO(new PlayMonopolyDTO(request.body()));
+        final CookieWrapperDTO dto = new CookieWrapperDTO(new PlayMonopolyDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 
-        CommandExecutionResult result = MovesController.monopoly(dto);
+        final CommandExecutionResult result = MovesController.monopoly(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

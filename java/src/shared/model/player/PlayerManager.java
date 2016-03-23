@@ -619,10 +619,9 @@ public final class PlayerManager implements IPlayerManager {
      * Get the winning player
      *
      * @return
-     * @throws GameOverException
      */
     @Override
-    public Player getWinner() throws GameOverException {
+    public Player getWinner() {
         for(final Player player : players){
             if(player.getVictoryPoints() == WINNING_POINTS){
                 return player;

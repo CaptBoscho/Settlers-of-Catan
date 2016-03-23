@@ -3,11 +3,14 @@ package server.commands.moves;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
 
 /**
- * Created by joel on 3/20/16.
+ * Unit Testing for the "Build Road" command.
+ *
+ * @author Derek Argueta
  */
 public class BuildRoadCommandTest {
 
@@ -23,8 +26,12 @@ public class BuildRoadCommandTest {
 
     }
 
-    @Test
-    public void testExecute() {
-
+    /**
+     * Validates that the command checks that the parameters are set before
+     * executing using the `assert` keyword.
+     */
+    @Test(expected = AssertionError.class)
+    public void testExecuteWithMissingParams() throws CommandExecutionFailedException {
+        new BuildRoadCommand().execute();
     }
 }

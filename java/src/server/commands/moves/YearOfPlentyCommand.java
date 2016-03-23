@@ -15,12 +15,12 @@ import shared.dto.PlayYOPCardDTO;
  *
  * @author Joel Bradley
  */
-public class YearOfPlentyCommand implements ICommand {
+public final class YearOfPlentyCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
-    private ResourceType resourceOne;
-    private ResourceType resourceTwo;
+    private ResourceType resourceOne, resourceTwo;
 
     /**
      * Communicates with the ServerFacade to carry out the YearOfPlenty command
@@ -28,6 +28,13 @@ public class YearOfPlentyCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert this.resourceOne != null;
+        assert this.resourceTwo != null;
+
         try {
             return Config.facade.yearOfPlenty(this.gameId, this.playerIndex, this.resourceOne, this.resourceTwo);
         } catch (YearOfPlentyException e) {
@@ -37,6 +44,10 @@ public class YearOfPlentyCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+        assert dto instanceof CookieWrapperDTO;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final PlayYOPCardDTO tmpDTO = (PlayYOPCardDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

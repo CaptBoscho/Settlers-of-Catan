@@ -14,8 +14,9 @@ import shared.dto.OfferTradeDTO;
  *
  * @author Joel Bradley
  */
-public class OfferTradeCommand implements ICommand {
+public final class OfferTradeCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private OfferTradeDTO dto;
 
@@ -25,18 +26,25 @@ public class OfferTradeCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.dto != null;
+
         try {
+            // TODO - better API
             return Config.facade.offerTrade(this.gameId, this.dto);
-        }catch(OfferTradeException e){
+        } catch(OfferTradeException e) {
             throw new CommandExecutionFailedException(e.getMessage());
         }
     }
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         this.dto = (OfferTradeDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();
     }
-
 }

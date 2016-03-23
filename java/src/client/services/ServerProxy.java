@@ -5,15 +5,13 @@ import client.facade.Facade;
 import client.misc.MessageView;
 import client.services.exceptions.BadHttpRequestException;
 import com.google.gson.JsonArray;
+import client.services.exceptions.UnauthorizedException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.utils.JSONUtils;
 import shared.definitions.ClientModel;
 import shared.dto.*;
-import shared.model.ai.AIType;
 import shared.model.player.PlayerManager;
-
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,7 @@ public final class ServerProxy implements IServer {
     private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_PORT = 8081;
 
-    private ServerProxy(String host, int port) {
+    private ServerProxy(final String host, final int port) {
         assert host != null;
         assert host.length() > 0;
         assert port > 0;
@@ -46,7 +44,7 @@ public final class ServerProxy implements IServer {
     }
 
     @Override
-    public void configure(String host, int port) {
+    public void configure(final String host, final int port) {
         this.host = host;
         this.port = port;
     }
@@ -65,18 +63,24 @@ public final class ServerProxy implements IServer {
      * @return true if the request succeeded
      */
     @Override
-    public boolean authenticateUser(AuthDTO auth) {
+    public boolean authenticateUser(final AuthDTO auth) {
         assert auth != null;
         assert auth.getUsername() != null;
         assert auth.toJSON() != null;
         assert auth.toJSON().has("username");
         assert auth.toJSON().has("password");
 
-        String url = Utils.buildUrl(this.host, this.port) + "/user/login";
+        final String url = Utils.buildUrl(this.host, this.port) + "/user/login";
         String result = null;
         try {
             result = Utils.sendPost(url, auth.toJSON());
         } catch (BadHttpRequestException e) {
+
+            // unauthorization is normal and frequent when logging in, so handle
+            // this normally
+            if(e instanceof UnauthorizedException) {
+                return false;
+            }
             e.printStackTrace();
             this.showMessageViewForHttpError(e.getMessage());
         }
@@ -91,10 +95,14 @@ public final class ServerProxy implements IServer {
      * @return true if the request succeeded
      */
     @Override
-    public boolean registerUser(AuthDTO auth) {
+    public boolean registerUser(final AuthDTO auth) {
         assert auth != null;
+        assert auth.getUsername() != null;
+        assert auth.toJSON() != null;
+        assert auth.toJSON().has("username");
+        assert auth.toJSON().has("password");
 
-        String url = Utils.buildUrl(this.host, this.port) + "/user/register";
+        final String url = Utils.buildUrl(this.host, this.port) + "/user/register";
         String result = null;
         try {
             result = Utils.sendPost(url, auth.toJSON());
@@ -103,7 +111,6 @@ public final class ServerProxy implements IServer {
             this.showMessageViewForHttpError(e.getMessage());
         }
         assert result != null;
-        System.out.println(result);
         return result.equals("Success");
     }
 
@@ -114,8 +121,8 @@ public final class ServerProxy implements IServer {
      */
     @Override
     public List<GameInfo> getAllGames() {
-        String url = Utils.buildUrl(this.host, this.port) + "/games/list";
-        String result = Utils.sendGet(url);
+        final String url = Utils.buildUrl(this.host, this.port) + "/games/list";
+        final String result = Utils.sendGet(url);
         assert result != null;
         GameInfoListDTO list = new GameInfoListDTO(result);
         return list.getList();
@@ -130,7 +137,7 @@ public final class ServerProxy implements IServer {
     @Override
     public GameInfo createNewGame(final CreateGameDTO dto) {
         assert dto != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/games/create";
+        final String url = Utils.buildUrl(this.host, this.port) + "/games/create";
         String result = null;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -152,7 +159,7 @@ public final class ServerProxy implements IServer {
     public String joinGame(final JoinGameDTO dto) {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/games/join";
+        final String url = Utils.buildUrl(this.host, this.port) + "/games/join";
         String result = null;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -192,7 +199,7 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to load a game
      */
     @Override
-    public boolean loadGame(LoadGameDTO dto) {
+    public boolean loadGame(final LoadGameDTO dto) {
         assert dto != null;
         assert dto.toJSON() != null;
         final String url = Utils.buildUrl(this.host, this.port) + "/games/load";
@@ -209,15 +216,8 @@ public final class ServerProxy implements IServer {
         return result.equals("Success");
     }
 
-    /**
-     * Returns the current state of the game in JSON format with a GET request
-     *
-     * @param version The version number of the model that the caller already has.
-     * @return A ClientModel object that contains all the information about the state of the game
-     */
-    @Override
-    public ClientModel getCurrentModel(int version) throws MissingUserCookieException {
-        String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
+    private JsonObject requestModelJson(final int version) throws MissingUserCookieException {
+        final String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=" + version;
         String result = Utils.sendGet(url);
         assert result != null;
         if(result.contains("The catan.user HTTP cookie is missing.")) {
@@ -233,25 +233,24 @@ public final class ServerProxy implements IServer {
             // already have latest model, don't update anything
             return null;
         }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        return new JsonParser().parse(result).getAsJsonObject();
+    }
+
+    /**
+     * Returns the current state of the game in JSON format with a GET request
+     *
+     * @param version The version number of the model that the caller already has.
+     * @return A ClientModel object that contains all the information about the state of the game
+     */
+    @Override
+    public ClientModel getCurrentModel(final int version) throws MissingUserCookieException {
+        final JsonObject obj = this.requestModelJson(version);
         Facade.getInstance().getGame().updateGame(obj);
         return new ClientModel(obj);
     }
 
     public void getLatestPlayers() throws MissingUserCookieException {
-        String url = Utils.buildUrl(this.host, this.port) + "/game/model?version=-1";
-        String result = Utils.sendGet(url);
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing");
-        } else if(result.contains("catan.game HTTP cookie is missing")) {
-            try {
-                throw new Exception("catan.game HTTP cookie is missing");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        JsonObject obj = this.requestModelJson(-1);
         PlayerManager tmp = new PlayerManager(obj.getAsJsonArray("players"));
         if(!tmp.equals(Facade.getInstance().getGame().getPlayerManager())) {
             Facade.getInstance().getGame().setPlayerManager(new PlayerManager(obj.getAsJsonArray("players")));
@@ -263,7 +262,7 @@ public final class ServerProxy implements IServer {
      */
     @Override
     public void resetCurrentGame() {
-        String url = Utils.buildUrl(this.host, this.port) + "/game/reset";
+        final String url = Utils.buildUrl(this.host, this.port) + "/game/reset";
         assert url.contains(this.host);
         try {
             String result = Utils.sendPost(url, null);
@@ -289,7 +288,7 @@ public final class ServerProxy implements IServer {
      * @param gameCommands The list of commands to be executed
      */
     @Override
-    public void executeGameCommands(List<String> gameCommands) {
+    public void executeGameCommands(final List<String> gameCommands) {
         assert gameCommands != null;
         assert gameCommands.size() > 0;
         String url = Utils.buildUrl(this.host, this.port) + "/game/commands";
@@ -323,12 +322,14 @@ public final class ServerProxy implements IServer {
      * @return A list of the supported AI types represented as arbitrary strings
      */
     @Override
-    public List<String> getAITypes() {
+    public List<String> getAITypes(final ListAIDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/listAI";
         String result;
 
         try {
-            result = Utils.sendPost(url, null);
+            result = Utils.sendPost(url, dto.toJSON());
             assert result != null;
         } catch (BadHttpRequestException e) {
             e.printStackTrace();
@@ -406,7 +407,7 @@ public final class ServerProxy implements IServer {
     public void robPlayer(final RobPlayerDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/robPlayer";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/robPlayer";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -429,11 +430,11 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required for a player to finish their turn
      */
     @Override
-    public void finishTurn(FinishTurnDTO dto) throws MissingUserCookieException {
+    public void finishTurn(final FinishTurnDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/finishTurn";
-        String result = null;
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/finishTurn";
+        String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
         } catch (BadHttpRequestException e) {
@@ -455,10 +456,10 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to buy a development card
      */
     @Override
-    public void buyDevCard(BuyDevCardDTO dto) throws MissingUserCookieException {
+    public void buyDevCard(final BuyDevCardDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/buyDevCard";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/buyDevCard";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -485,7 +486,7 @@ public final class ServerProxy implements IServer {
         assert dto != null;
         assert dto.toJSON() != null;
 
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/Year_of_Plenty";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/Year_of_Plenty";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -512,7 +513,7 @@ public final class ServerProxy implements IServer {
     public void playRoadBuildingCard(RoadBuildingDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/Road_Building";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/Road_Building";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -538,7 +539,7 @@ public final class ServerProxy implements IServer {
     public void playSoldierCard(PlaySoldierCardDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/Soldier";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/Soldier";
         String result = null;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -564,7 +565,7 @@ public final class ServerProxy implements IServer {
     public void playMonopolyCard(PlayMonopolyDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/Monopoly";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/Monopoly";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -590,7 +591,7 @@ public final class ServerProxy implements IServer {
     public void playMonumentCard(PlayMonumentDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/Monument";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/Monument";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -603,6 +604,7 @@ public final class ServerProxy implements IServer {
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
+        System.out.println(result);
         JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
         Facade.getInstance().getGame().updateGame(obj);
     }
@@ -616,7 +618,7 @@ public final class ServerProxy implements IServer {
     public void buildRoad(BuildRoadDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildRoad";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/buildRoad";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -652,7 +654,6 @@ public final class ServerProxy implements IServer {
             return;
         }
         assert result != null;
-        System.out.println(result);
         if(result.contains("The catan.user HTTP cookie is missing.")) {
             throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
         }
@@ -669,7 +670,7 @@ public final class ServerProxy implements IServer {
     public void buildCity(BuildCityDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/buildCity";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/buildCity";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -692,10 +693,10 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required respond to offer a trade
      */
     @Override
-    public void offerTrade(OfferTradeDTO dto) throws MissingUserCookieException {
+    public void offerTrade(final OfferTradeDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/offerTrade";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/offerTrade";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -718,10 +719,10 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required respond to a trade offer
      */
     @Override
-    public void respondToTradeOffer(TradeOfferResponseDTO dto) throws MissingUserCookieException {
+    public void respondToTradeOffer(final TradeOfferResponseDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/acceptTrade";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/acceptTrade";
         String result;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -744,10 +745,10 @@ public final class ServerProxy implements IServer {
      * @param dto The transport object that contains the information required to execute a maritime trade
      */
     @Override
-    public void maritimeTrade(MaritimeTradeDTO dto) throws MissingUserCookieException {
+    public void maritimeTrade(final MaritimeTradeDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
+        final String url = Utils.buildUrl(this.host, this.port) + "/moves/maritimeTrade";
         String result = null;
         try {
             result = Utils.sendPost(url, dto.toJSON());
@@ -797,11 +798,11 @@ public final class ServerProxy implements IServer {
      * @return
      */
     @Override
-    public boolean changeLogLevel(ChangeLogLevelDTO dto) {
+    public boolean changeLogLevel(final ChangeLogLevelDTO dto) {
         assert dto != null;
         assert dto.toJSON() != null;
 
-        String url = Utils.buildUrl(this.host, this.port) + "/util/changeLogLevel";
+        final String url = Utils.buildUrl(this.host, this.port) + "/util/changeLogLevel";
         try {
             String result = Utils.sendPost(url, dto.toJSON());
         } catch (BadHttpRequestException e) {

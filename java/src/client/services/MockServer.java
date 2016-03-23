@@ -202,7 +202,7 @@ public class MockServer implements IServer {
      * @return A list of the supported AI types represented as arbitrary strings
      */
     @Override
-    public List<String> getAITypes() {
+    public List<String> getAITypes(final ListAIDTO dto) {
         return null;
     }
 

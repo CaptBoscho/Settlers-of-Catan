@@ -2,6 +2,7 @@ package server.handlers.auth;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.UserController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.AuthDTO;
 import spark.Request;
 import spark.Response;
@@ -11,17 +12,18 @@ import java.util.Map;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class LoginHandler implements Route {
+public final class LoginHandler implements Route {
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         if(!AuthDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
 
-        CommandExecutionResult result = UserController.login(new AuthDTO(request.body()));
+        final CommandExecutionResult result = UserController.login(new AuthDTO(request.body()));
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {
@@ -30,7 +32,7 @@ public class LoginHandler implements Route {
 
         // set any new cookies
         if(result.hasNewCookies()) {
-            Map<String, String> cookies = result.getNewCookies();
+            final Map<String, String> cookies = result.getNewCookies();
             for(String key : cookies.keySet()) {
                 response.cookie(key, cookies.get(key));
             }

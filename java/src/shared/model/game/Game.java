@@ -1598,10 +1598,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * Get the game winner
      *
      * @return
-     * @throws GameOverException
      */
     @Override
-    public Player getWinner() throws GameOverException {
+    public Player getWinner() {
         return playerManager.getWinner();
     }
 

@@ -11,15 +11,15 @@ import spark.Route;
 /**
  * @author Derek Argueta
  */
-public class SoldierHandler implements Route {
+public final class SoldierHandler implements Route {
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         // TODO - validation
 
-        CookieWrapperDTO dto = new CookieWrapperDTO(new PlaySoldierCardDTO(request.body()));
+        final CookieWrapperDTO dto = new CookieWrapperDTO(new PlaySoldierCardDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 
-        CommandExecutionResult result = MovesController.soldier(dto);
+        final CommandExecutionResult result = MovesController.soldier(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

@@ -15,8 +15,9 @@ import shared.locations.HexLocation;
  *
  * @author Joel Bradley
  */
-public class RobPlayerCommand implements ICommand {
+public final class RobPlayerCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
     private HexLocation location;
@@ -28,6 +29,14 @@ public class RobPlayerCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert this.location != null;
+        assert this.victimIndex >= 0;
+        assert this.victimIndex < 4;
+
         try {
             return Config.facade.robPlayer(this.gameId, this.playerIndex, this.location, this.victimIndex);
         } catch (RobPlayerException e) {
@@ -37,6 +46,9 @@ public class RobPlayerCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final RobPlayerDTO tmpDTO = (RobPlayerDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

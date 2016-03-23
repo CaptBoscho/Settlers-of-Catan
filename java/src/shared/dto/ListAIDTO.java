@@ -1,22 +1,34 @@
 package shared.dto;
 
-import client.data.GameInfo;
-import client.data.PlayerInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 import shared.model.ai.AIType;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Derek Argueta
  */
 public final class ListAIDTO implements IDTO,JsonSerializable {
-    private List<AIType> _AIs;
+    // -- JSON keys
+    private static final String kId = "id";
+    private static final String kAIs = "ais";
 
-    public ListAIDTO(List<AIType> types) {
-        _AIs = types;
+    private List<AIType> ais;
+    private int gameId;
+
+
+    public ListAIDTO(int gameId, List<AIType> types) {
+        this.gameId = gameId;
+        this.ais = types;
+    }
+
+    public ListAIDTO(final String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        this.gameId = obj.get(kId).getAsInt();
+        this.ais = convertJsonArrayToList(obj.get(kAIs).getAsJsonArray());
     }
 
     /**
@@ -26,7 +38,13 @@ public final class ListAIDTO implements IDTO,JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        return null;
+        final JsonObject obj = new JsonObject();
+        obj.addProperty(kId, this.gameId);
+
+        final JsonArray allAIs = this.toJSONArr();
+        obj.addProperty(kAIs, allAIs.toString());
+
+        return obj;
     }
 
     /**
@@ -37,7 +55,7 @@ public final class ListAIDTO implements IDTO,JsonSerializable {
     public JsonArray toJSONArr() {
 
         final JsonArray allAIs = new JsonArray();
-        for(final AIType aiType : this._AIs) {
+        for(final AIType aiType : this.ais) {
             // Serialize all the ai types
             final JsonObject aiObj = new JsonObject();
             aiObj.addProperty("ai", aiType.toString());
@@ -45,5 +63,17 @@ public final class ListAIDTO implements IDTO,JsonSerializable {
         }
 
         return allAIs;
+    }
+
+    private List<AIType> convertJsonArrayToList(final JsonArray arr){
+        List<AIType> aiTypes = new ArrayList<>();
+
+        arr.forEach(ai->
+            aiTypes.add(
+                AIType.valueOf(ai.getAsJsonObject().get("ai").getAsString())
+            )
+        );
+
+        return aiTypes;
     }
 }

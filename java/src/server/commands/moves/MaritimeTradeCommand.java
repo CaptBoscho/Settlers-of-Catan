@@ -14,8 +14,9 @@ import shared.dto.MaritimeTradeDTO;
  *
  * @author Joel Bradley
  */
-public class MaritimeTradeCommand implements ICommand {
+public final class MaritimeTradeCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private MaritimeTradeDTO dto;
 
@@ -25,6 +26,10 @@ public class MaritimeTradeCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.dto != null;
+
         try {
             return Config.facade.maritimeTrade(gameId, dto);
         } catch(MaritimeTradeException e) {
@@ -34,6 +39,9 @@ public class MaritimeTradeCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO) dto;
         this.dto = (MaritimeTradeDTO) cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

@@ -10,9 +10,9 @@ import spark.Response;
  * @author Derek Argueta
  * {@link} http://sparkjava.com/documentation.html#filters
  */
-public class GameFilter implements Filter {
+public final class GameFilter implements Filter {
     @Override
-    public void handle(Request request, Response response) throws Exception {
+    public void handle(final Request request, final Response response) throws Exception {
         // -- TODO check that the game cookie is valid and user actually belongs to game
     }
 }
