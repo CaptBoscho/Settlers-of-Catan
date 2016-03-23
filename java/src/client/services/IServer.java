@@ -1,7 +1,6 @@
 package client.services;
 
 import client.data.GameInfo;
-import shared.definitions.ClientModel;
 import shared.dto.*;
 
 import java.util.List;
@@ -92,7 +91,7 @@ public interface IServer {
      * @return A ClientModel object that contains all the information about the
      * state of the game
      */
-    ClientModel getCurrentModel(int version) throws MissingUserCookieException;
+    void getCurrentModel(int version) throws MissingUserCookieException;
 
     /**
      * Clears out the command history of the current game with a POST request

@@ -6,9 +6,7 @@ import server.commands.ICommand;
 import server.exceptions.ListAIException;
 import server.main.Config;
 import shared.dto.CookieWrapperDTO;
-import shared.dto.FinishTurnDTO;
 import shared.dto.IDTO;
-import shared.dto.ListAIDTO;
 
 /**
  * A command object that list the AI
