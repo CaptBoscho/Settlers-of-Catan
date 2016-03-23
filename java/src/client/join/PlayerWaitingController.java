@@ -8,9 +8,11 @@ import client.services.MissingUserCookieException;
 import client.services.Poller;
 import client.services.ServerProxy;
 import shared.dto.AddAIDTO;
+import shared.dto.ListAIDTO;
 import shared.model.ai.AIType;
 import shared.model.game.Game;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -48,7 +50,8 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
             PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
             Facade.getInstance().getPlayers().toArray(infoArr);
             getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
-            List<String> availableAIs = ServerProxy.getInstance().getAITypes();
+            ListAIDTO dto = new ListAIDTO(Facade.getInstance().getGameId(), new ArrayList<>());
+            List<String> availableAIs = ServerProxy.getInstance().getAITypes(dto);
             getView().setAIChoices(availableAIs.toArray(new String[availableAIs.size()]));
             if(!getView().isModalShowing()) {
                 getView().showModal();
