@@ -4,6 +4,7 @@ import client.facade.Facade;
 import org.junit.Before;
 import org.junit.Test;
 import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.locations.*;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Corbin Byers
@@ -2070,8 +2072,29 @@ public class GameTest {
         assertTrue(game.canUseMonument(guy));
     }
 
-    void testUseMonument() {
+    void testUseMonument() throws PlayerExistsException, BadCallerException {
+        final int currentPlayer = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
 
+        try {
+            game.useMonument(currentPlayer);
+            fail();
+        } catch (Exception e) {
+            assertTrue(e instanceof DevCardException);
+        }
+
+        final MonumentCard card = new MonumentCard();
+        game.addDevCard(card, currentPlayer);
+        game.getPlayerManager().moveNewToOld(currentPlayer);
+        game.getPlayerManager().getPlayerByIndex(currentPlayer).setVictoryPoints(10);
+
+        try {
+            game.useMonument(currentPlayer);
+        } catch (Exception e) {
+            fail();
+        }
+        
+        assertFalse(game.canUseMonument(currentPlayer));
     }
 
     @Test
