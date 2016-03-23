@@ -1983,7 +1983,7 @@ public class GameTest {
     }
 
     void testUseYearOfPlenty() {
-
+        // TODO: 3/23/2016 Do this!
     }
 
     @Test
@@ -2001,7 +2001,7 @@ public class GameTest {
     }
 
     void testUseRoadBuilder() {
-
+        // TODO: 3/23/2016 Do this!
     }
 
     @Test
@@ -2018,8 +2018,13 @@ public class GameTest {
         //assertTrue(game.canUseSoldier(guy));
     }
 
-    void testUseSoldier() {
+    void testUseSoldier() throws DevCardException, InsufficientResourcesException, PlayerExistsException, AlreadyRobbedException, InvalidLocationException, MoveRobberException, InvalidTypeException {
+        final int currentPlayer = game.getCurrentTurn();
+        final int victim = 3;
+        game.setPhase(TurnTracker.Phase.PLAYING);
 
+
+        game.useSoldier(currentPlayer, victim, game.getMap().getChits().values().iterator().next().get(0));
     }
 
     @Test
@@ -2093,7 +2098,7 @@ public class GameTest {
         } catch (Exception e) {
             fail();
         }
-        
+
         assertFalse(game.canUseMonument(currentPlayer));
     }
 
