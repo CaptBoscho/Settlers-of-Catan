@@ -726,7 +726,7 @@ public class Player implements IPlayer, Comparable<Player> {
      *
      * @param increment Number of points to add to the player's score
      */
-    private void incrementPoints(int increment) {
+    public void incrementPoints(int increment) {
         this.victoryPoints += increment;
     }
 

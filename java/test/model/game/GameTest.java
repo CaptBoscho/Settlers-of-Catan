@@ -2077,6 +2077,7 @@ public class GameTest {
         assertTrue(game.canUseMonument(guy));
     }
 
+    @Test
     void testUseMonument() throws PlayerExistsException, BadCallerException {
         final int currentPlayer = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
@@ -2091,7 +2092,7 @@ public class GameTest {
         final MonumentCard card = new MonumentCard();
         game.addDevCard(card, currentPlayer);
         game.getPlayerManager().moveNewToOld(currentPlayer);
-        game.getPlayerManager().getPlayerByIndex(currentPlayer).setVictoryPoints(10);
+        game.getPlayerManager().getPlayerByIndex(currentPlayer).incrementPoints(10);
 
         try {
             game.useMonument(currentPlayer);
