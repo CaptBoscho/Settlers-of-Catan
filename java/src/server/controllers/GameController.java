@@ -23,8 +23,7 @@ public class GameController {
 
     public static CommandExecutionResult addAI(final CookieWrapperDTO dto) {
         try {
-            CommandExecutionResult result = GameCommandFactory.getInstance().executeCommand("addAI", dto);
-            return result;
+            return GameCommandFactory.getInstance().executeCommand("addAI", dto);
         } catch (Exception e) {
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong adding an AI :(");
             result.triggerError(500);

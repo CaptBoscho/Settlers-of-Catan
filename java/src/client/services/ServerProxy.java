@@ -301,22 +301,19 @@ public final class ServerProxy implements IServer {
      * @param dto Transport object with the information to add an AI to the game.
      */
     @Override
-    public void addAI(final AddAIDTO dto) {
+    public String addAI(final AddAIDTO dto) {
         assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/addAI";
-        String result;
+        String result = null;
 
         try {
             result = Utils.sendPost(url, dto.toJSON());
-            assert result != null;
         } catch (BadHttpRequestException e) {
             e.printStackTrace();
             this.showMessageViewForHttpError(e.getMessage());
-            return;
         }
-
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        assert result != null;
+        return result;
     }
 
     /**
