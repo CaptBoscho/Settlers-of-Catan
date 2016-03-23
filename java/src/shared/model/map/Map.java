@@ -26,7 +26,7 @@ public final class Map implements IMap, JsonSerializable {
     private java.util.Map<EdgeLocation, Edge> edges;
     private java.util.Map<VertexLocation, Vertex> vertices;
     private java.util.Map<Integer, ArrayList<HexLocation>> chits;
-    private Robber robber;
+    private Robber pancho;
     private java.util.Map<Integer, ArrayList<Vertex>> settlements;
     private java.util.Map<Integer, ArrayList<Vertex>> cities;
     private java.util.Map<Integer, ArrayList<Edge>> roads;
@@ -80,7 +80,7 @@ public final class Map implements IMap, JsonSerializable {
         makeCities(gson.fromJson(blob.getAsJsonArray("cities"), JsonArray.class));
         HexLocation robberHexLoc = new HexLocation(blob.get("robber").getAsJsonObject());
         robberHexLoc = getModelHexLocation(robberHexLoc);
-        robber = new Robber(robberHexLoc);
+        pancho = new Robber(robberHexLoc);
     }
 
     /*===========================================
@@ -97,7 +97,7 @@ public final class Map implements IMap, JsonSerializable {
     public java.util.Map<Integer, List<ResourceType>> getResources(final int diceRoll) throws InvalidDiceRollException {
         assert diceRoll > 0;
         assert this.chits != null;
-        assert this.robber != null;
+        assert this.pancho != null;
 
         if(diceRoll < 2 || diceRoll > 12) {
             throw new InvalidDiceRollException("Dice roll was " + diceRoll);
@@ -107,7 +107,7 @@ public final class Map implements IMap, JsonSerializable {
         }
         final ArrayList<HexLocation> chitList = chits.get(diceRoll);
         final java.util.Map<Integer, List<ResourceType>> resourceMap = new HashMap<>();
-        chitList.stream().filter(hexLoc -> !robber.getLocation().equals(hexLoc)).forEach(hexLoc -> {
+        chitList.stream().filter(hexLoc -> !pancho.getLocation().equals(hexLoc)).forEach(hexLoc -> {
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthWest);
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthEast);
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.East);
@@ -695,7 +695,7 @@ public final class Map implements IMap, JsonSerializable {
         if(hex == null || hex.getType() == HexType.WATER) {
             return false;
         }
-        return !robber.getLocation().equals(hexLoc);
+        return !pancho.getLocation().equals(hexLoc);
     }
 
     /**
@@ -704,7 +704,7 @@ public final class Map implements IMap, JsonSerializable {
      */
     @Override
     public Set<Integer> whoCanGetRobbed(int playerIndex, HexLocation hexLoc) {
-        assert this.robber != null;
+        assert this.pancho != null;
         return getPlayers(playerIndex, hexLoc);
     }
 
@@ -725,10 +725,10 @@ public final class Map implements IMap, JsonSerializable {
         if(hex == null || hex.getType() == HexType.WATER) {
             throw new InvalidLocationException("Hex location is not on the map");
         }
-        if(robber.getLocation().equals(hexLoc)) {
+        if(pancho.getLocation().equals(hexLoc)) {
             throw new AlreadyRobbedException("Robber cannot remain at the same hex location");
         }
-        robber.setLocation(hexLoc);
+        pancho.setLocation(hexLoc);
         return getPlayers(playerIndex, hexLoc);
     }
 
@@ -793,7 +793,7 @@ public final class Map implements IMap, JsonSerializable {
         json.add("settlements", serializeSettlements());
         json.add("cities", serializeCities());
         json.addProperty("radius", 3);
-        json.add("robber", getServerHexLocation(robber.getLocation()).toJSON());
+        json.add("robber", getServerHexLocation(pancho.getLocation()).toJSON());
         return json;
     }
 
@@ -1313,7 +1313,7 @@ public final class Map implements IMap, JsonSerializable {
         if(hexType == HexType.DESERT) {
             final Hex desertHex = new Hex(hexLoc, hexType);
             hexes.put(hexLoc, desertHex);
-            robber = new Robber(hexLoc);
+            pancho = new Robber(hexLoc);
         } else {
             int chitIndex;
             int chit;
@@ -2107,6 +2107,6 @@ public final class Map implements IMap, JsonSerializable {
     }
 
     public Robber getRobber() {
-        return robber;
+        return pancho;
     }
 }
