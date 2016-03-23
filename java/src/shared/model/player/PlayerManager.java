@@ -623,7 +623,7 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public Player getWinner() {
         for(final Player player : players){
-            if(player.getVictoryPoints() == WINNING_POINTS){
+            if(player.getVictoryPoints() >= WINNING_POINTS){
                 return player;
             }
         }
