@@ -11,7 +11,7 @@ import static server.commands.CommandName.*;
 /**
  * @author Derek Argueta
  */
-public class UserController {
+public final class UserController {
 
     public static CommandExecutionResult login(final AuthDTO dto) {
         return executeCommand(USER_LOGIN, dto);

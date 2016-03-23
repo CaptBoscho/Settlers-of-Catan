@@ -14,7 +14,7 @@ import shared.dto.IDTO;
  *
  * @author Joel Bradley
  */
-public class BuyDevCardCommand implements ICommand {
+public final class BuyDevCardCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;
@@ -39,5 +39,4 @@ public class BuyDevCardCommand implements ICommand {
         this.gameId = cookieDTO.getGameId();
         this.playerIndex = tmpDTO.getPlayerIndex();
     }
-
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * A factory class that creates Moves Commands on demand.  Use this class to get a Moves Command
  */
-public class MovesCommandFactory {
+public final class MovesCommandFactory {
 
     private static MovesCommandFactory instance = null;
     private Map<CommandName, ICommand> commands;

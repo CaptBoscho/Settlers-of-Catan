@@ -14,7 +14,7 @@ import shared.dto.JoinGameDTO;
  *
  * @author Danny Harding
  */
-public class JoinCommand implements ICommand {
+public final class JoinCommand implements ICommand {
 
     private int gameId;
     private CatanColor color;

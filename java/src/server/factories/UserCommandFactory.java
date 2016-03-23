@@ -17,7 +17,7 @@ import java.util.Map;
  * A factory class that creates User Commands on demand.  Use this class to get a User Command
  * @author Danny Harding
  */
-public class UserCommandFactory {
+public final class UserCommandFactory {
 
     private final Map<CommandName, ICommand> commands;
     private static UserCommandFactory instance = null;

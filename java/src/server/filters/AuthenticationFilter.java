@@ -16,9 +16,9 @@ import static spark.Spark.halt;
  * @author Derek Argueta
  * {@link} http://sparkjava.com/documentation.html#filters
  */
-public class AuthenticationFilter implements Filter {
+public final class AuthenticationFilter implements Filter {
     @Override
-    public void handle(Request request, Response response) throws Exception {
+    public void handle(final Request request, final Response response) throws Exception {
         if(!request.cookies().containsKey(CATAN_USER_COOKIE_KEY)) {
             halt(401, "YOU SHALL NOT PASS");
         }

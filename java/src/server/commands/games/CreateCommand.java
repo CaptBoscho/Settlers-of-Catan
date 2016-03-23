@@ -11,7 +11,7 @@ import shared.dto.IDTO;
  *
  * @author Danny Harding
  */
-public class CreateCommand implements ICommand {
+public final class CreateCommand implements ICommand {
 
     private String gameName;
     private boolean randomTiles;

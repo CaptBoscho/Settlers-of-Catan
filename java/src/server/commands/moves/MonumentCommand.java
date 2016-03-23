@@ -14,7 +14,7 @@ import shared.dto.PlayMonumentDTO;
  *
  * @author Joel Bradley
  */
-public class MonumentCommand implements ICommand {
+public final class MonumentCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

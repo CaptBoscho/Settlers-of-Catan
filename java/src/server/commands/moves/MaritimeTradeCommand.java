@@ -14,7 +14,7 @@ import shared.dto.MaritimeTradeDTO;
  *
  * @author Joel Bradley
  */
-public class MaritimeTradeCommand implements ICommand {
+public final class MaritimeTradeCommand implements ICommand {
 
     private int gameId;
     private MaritimeTradeDTO dto;

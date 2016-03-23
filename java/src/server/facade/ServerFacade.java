@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author Kyle Cornelison
  */
-public class ServerFacade implements IFacade {
+public final class ServerFacade implements IFacade {
     private static IFacade _instance;
     private GameManager gameManager;
     private UserManager userManager;

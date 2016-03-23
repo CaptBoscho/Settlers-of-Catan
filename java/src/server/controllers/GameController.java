@@ -13,7 +13,7 @@ import static server.commands.CommandName.*;
 /**
  * @author Derek Argueta
  */
-public class GameController {
+public final class GameController {
 
     public static CommandExecutionResult getModel(final CookieWrapperDTO dto) {
         return executeCommand(GAME_MODEL, dto);

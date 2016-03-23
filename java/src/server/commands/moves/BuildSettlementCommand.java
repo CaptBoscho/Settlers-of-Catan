@@ -15,7 +15,7 @@ import shared.locations.VertexLocation;
  *
  * @author Joel Bradley
  */
-public class BuildSettlementCommand implements ICommand {
+public final class BuildSettlementCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

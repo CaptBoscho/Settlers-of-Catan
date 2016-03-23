@@ -12,15 +12,15 @@ import spark.Route;
  * @author Derek Argueta
  * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class RoadBuildingHandler implements Route {
+public final class RoadBuildingHandler implements Route {
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         // TODO - validation
 
-        CookieWrapperDTO dto = new CookieWrapperDTO(new RoadBuildingDTO(request.body()));
+        final CookieWrapperDTO dto = new CookieWrapperDTO(new RoadBuildingDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 
-        CommandExecutionResult result = MovesController.roadBuilding(dto);
+        final CommandExecutionResult result = MovesController.roadBuilding(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

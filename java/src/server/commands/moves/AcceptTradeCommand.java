@@ -14,7 +14,7 @@ import shared.dto.TradeOfferResponseDTO;
  *
  * @author Joel Bradley
  */
-public class AcceptTradeCommand implements ICommand {
+public final class AcceptTradeCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

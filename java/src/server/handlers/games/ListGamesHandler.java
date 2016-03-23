@@ -10,10 +10,10 @@ import spark.Route;
  * @author Derek Argueta
  * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class ListGamesHandler implements Route {
+public final class ListGamesHandler implements Route {
 
     @Override
-    public Object handle(Request request, Response response)  {
+    public Object handle(final Request request, final Response response)  {
         final CommandExecutionResult result = GamesController.listGame();
         if(result.errorOccurred()) {
             response.status(result.getStatus());

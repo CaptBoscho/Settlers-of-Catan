@@ -12,9 +12,9 @@ import spark.Route;
  * @author Derek Argueta
  * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class BuildCityHandler implements Route {
+public final class BuildCityHandler implements Route {
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         // TODO - validation
 
 

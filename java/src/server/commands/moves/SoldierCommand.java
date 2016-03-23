@@ -15,7 +15,7 @@ import shared.locations.HexLocation;
  *
  * @author Joel Bradley
  */
-public class SoldierCommand implements ICommand {
+public final class SoldierCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

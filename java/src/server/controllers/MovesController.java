@@ -10,7 +10,7 @@ import static server.commands.CommandName.*;
 /**
  * @author Derek Argueta
  */
-public class MovesController {
+public final class MovesController {
 
     public static CommandExecutionResult sendChat(final CookieWrapperDTO dto) {
         return executeCommand(MOVES_SEND_CHAT, dto);

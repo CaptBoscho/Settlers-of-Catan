@@ -13,10 +13,10 @@ import spark.Route;
  * @author Derek Argueta
  * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class FinishTurnHandler implements Route {
+public final class FinishTurnHandler implements Route {
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         if(!FinishTurnDTO.isValidRequestJson(request.body())) {
             response.status(400);
             return BAD_JSON_MESSAGE;

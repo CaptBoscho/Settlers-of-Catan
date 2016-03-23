@@ -14,7 +14,7 @@ import shared.dto.OfferTradeDTO;
  *
  * @author Joel Bradley
  */
-public class OfferTradeCommand implements ICommand {
+public final class OfferTradeCommand implements ICommand {
 
     private int gameId;
     private OfferTradeDTO dto;

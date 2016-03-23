@@ -15,9 +15,9 @@ import spark.Route;
  * @author Derek Argueta
  * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class AcceptTradeHandler implements Route {
+public final class AcceptTradeHandler implements Route {
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         if(!TradeOfferResponseDTO.isValidRequestJson(request.body())) {
             response.status(400);
             return BAD_JSON_MESSAGE;

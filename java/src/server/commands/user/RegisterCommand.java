@@ -11,7 +11,7 @@ import shared.dto.IDTO;
  *
  * @author Danny Harding
  */
-public class RegisterCommand implements ICommand {
+public final class RegisterCommand implements ICommand {
 
     private String username, password;
 
@@ -40,8 +40,8 @@ public class RegisterCommand implements ICommand {
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        AuthDTO tmpDTO = (AuthDTO)dto;
+    public void setParams(final IDTO dto) {
+        final AuthDTO tmpDTO = (AuthDTO)dto;
         this.username = tmpDTO.getUsername();
         this.password = tmpDTO.getPassword();
     }

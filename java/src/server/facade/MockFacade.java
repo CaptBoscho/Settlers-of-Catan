@@ -15,7 +15,7 @@ import shared.model.ai.AIType;
 /**
  * @author Kyle Cornelison
  */
-public class MockFacade implements IFacade {
+public final class MockFacade implements IFacade {
 
     /**
      * Logs a player into the server

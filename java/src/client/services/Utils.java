@@ -24,6 +24,13 @@ import java.io.UnsupportedEncodingException;
  */
 final class Utils {
 
+    private static void displayBadIOMessage() {
+        MessageView view = new MessageView();
+        view.setTitle("Bad Connection - IOException");
+        view.setMessage("Unable to communicate with the server");
+        view.showModal();
+    }
+
     static String buildUrl(String host, int port) {
         assert host != null;
         assert host.length() > 0;
@@ -88,10 +95,7 @@ final class Utils {
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
             e.printStackTrace();
-            MessageView view = new MessageView();
-            view.setTitle("Bad Connection - IOException");
-            view.setMessage("Unable to communicate with the server");
-            view.showModal();
+            displayBadIOMessage();
         }
         return null;
     }
@@ -112,10 +116,7 @@ final class Utils {
             return Utils.getStringFromHttpResponse(HttpClientBuilder.create().build().execute(get));
         } catch (IOException e) {
             e.printStackTrace();
-            MessageView view = new MessageView();
-            view.setTitle("Bad Connection - IOException");
-            view.setMessage("Unable to communicate with the server");
-            view.showModal();
+            displayBadIOMessage();
         }
         return null;
     }

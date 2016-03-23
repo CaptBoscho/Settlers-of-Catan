@@ -10,7 +10,7 @@ import shared.dto.IDTO;
  *
  * @author Joel Bradley
  */
-public class AddAICommand implements ICommand {
+public final class AddAICommand implements ICommand {
 
     private AddAIDTO dto;
 

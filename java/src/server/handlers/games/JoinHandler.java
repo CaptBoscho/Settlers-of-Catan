@@ -17,19 +17,19 @@ import java.util.Map;
  * Handles HTTP requests for joining a game
  * {@link} http://sparkjava.com/documentation.html#routes
  */
-public class JoinHandler implements Route {
+public final class JoinHandler implements Route {
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(final Request request, final Response response) throws Exception {
         if(!JoinGameDTO.isValidRequestJson(request.body())) {
             response.status(400);
             return BAD_JSON_MESSAGE;
         }
 
-        CookieWrapperDTO dto = new CookieWrapperDTO(new JoinGameDTO(request.body()));
+        final CookieWrapperDTO dto = new CookieWrapperDTO(new JoinGameDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 
-        CommandExecutionResult result = GamesController.joinGame(dto);
+        final CommandExecutionResult result = GamesController.joinGame(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {
@@ -38,7 +38,7 @@ public class JoinHandler implements Route {
 
         // set any new cookies
         if(result.hasNewCookies()) {
-            Map<String, String> cookies = result.getNewCookies();
+            final Map<String, String> cookies = result.getNewCookies();
             for(String key : cookies.keySet()) {
                 response.cookie(key, cookies.get(key));
             }

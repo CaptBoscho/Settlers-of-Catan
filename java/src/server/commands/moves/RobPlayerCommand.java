@@ -15,7 +15,7 @@ import shared.locations.HexLocation;
  *
  * @author Joel Bradley
  */
-public class RobPlayerCommand implements ICommand {
+public final class RobPlayerCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

@@ -9,19 +9,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Handlers {
-    public abstract static class BaseFile implements Route {
+public final class Handlers {
+    abstract static class BaseFile implements Route {
 
-        public BaseFile(String rootPath) {
+        BaseFile(String rootPath) {
             this.rootPath = rootPath;
         }
 
-        protected String rootPath;
-        protected String getRequestPath(HttpExchange exchange){
+        String rootPath;
+        String getRequestPath(HttpExchange exchange){
             return exchange.getRequestURI().getPath().substring(1);
         }
 
-        protected void sendFile(HttpExchange exchange, String filepath) throws IOException{
+        void sendFile(HttpExchange exchange, String filepath) throws IOException{
             try {
                 byte[] response = FileUtils.readFile(filepath);
                 ArrayList<String> mimetypes = new ArrayList<>();

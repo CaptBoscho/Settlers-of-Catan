@@ -12,7 +12,7 @@ import static server.commands.CommandName.*;
 /**
  * @author Derek Argueta
  */
-public class GamesController {
+public final class GamesController {
 
     public static CommandExecutionResult createGame(final CreateGameDTO dto) {
         return executeCommand(GAMES_CREATE, dto);

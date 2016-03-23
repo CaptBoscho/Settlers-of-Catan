@@ -13,7 +13,7 @@ import shared.dto.IDTO;
  *
  * @author Danny Harding
  */
-public class LoginCommand implements ICommand {
+public final class LoginCommand implements ICommand {
 
     private String username;
     private String password;
@@ -28,7 +28,7 @@ public class LoginCommand implements ICommand {
         if(Config.facade.login(this.username, this.password)) {
             final String userId = String.valueOf(UserManager.getInstance().getIdForUser(username));
             CommandExecutionResult result = new CommandExecutionResult("Success");
-            result.addCookie("catan.user", "%7B%22name%22%3A%22" + username + "%22%2C%22password%22%3A%22" + password + "%22%2C%22playerID%22%3A" + UserManager.getInstance().getIdForUser(username) + "%7D");
+            result.addCookie("catan.user", "%7B%22name%22%3A%22" + username + "%22%2C%22password%22%3A%22" + password + "%22%2C%22playerID%22%3A" + userId + "%7D");
             return result;
         } else {
             CommandExecutionResult result = new CommandExecutionResult("Failed");
@@ -38,8 +38,8 @@ public class LoginCommand implements ICommand {
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        AuthDTO tmpDTO = (AuthDTO)dto;
+    public void setParams(final IDTO dto) {
+        final AuthDTO tmpDTO = (AuthDTO)dto;
         this.username = tmpDTO.getUsername();
         this.password = tmpDTO.getPassword();
     }

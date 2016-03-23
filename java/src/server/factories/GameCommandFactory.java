@@ -20,7 +20,7 @@ import static server.utils.Strings.BAD_COMMAND_NAME_MSG;
  * A factory class that creates Game Commands on demand. Use this class to get a Game Command.
  * @author Derek Argueta
  */
-public class GameCommandFactory {
+public final class GameCommandFactory {
 
     private static GameCommandFactory instance = null;
     private Map<CommandName, ICommand> commands;

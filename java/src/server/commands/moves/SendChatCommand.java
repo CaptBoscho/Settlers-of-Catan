@@ -14,7 +14,7 @@ import shared.dto.SendChatDTO;
  *
  * @author Joel Bradley
  */
-public class SendChatCommand implements ICommand {
+public final class SendChatCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

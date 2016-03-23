@@ -14,7 +14,7 @@ import shared.dto.IDTO;
  *
  * @author Joel Bradley
  */
-public class ModelCommand implements ICommand {
+public final class ModelCommand implements ICommand {
 
     private int gameId;
     private int requestedVersion;

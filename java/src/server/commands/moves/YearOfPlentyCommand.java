@@ -15,7 +15,7 @@ import shared.dto.PlayYOPCardDTO;
  *
  * @author Joel Bradley
  */
-public class YearOfPlentyCommand implements ICommand {
+public final class YearOfPlentyCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

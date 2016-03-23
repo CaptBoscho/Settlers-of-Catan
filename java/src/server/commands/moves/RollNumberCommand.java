@@ -14,7 +14,7 @@ import shared.dto.RollNumberDTO;
  *
  * @author Joel Bradley
  */
-public class RollNumberCommand implements ICommand {
+public final class RollNumberCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

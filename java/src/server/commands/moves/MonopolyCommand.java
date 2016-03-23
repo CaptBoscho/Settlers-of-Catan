@@ -16,7 +16,7 @@ import shared.model.bank.InvalidTypeException;
  *
  * @author Joel Bradley
  */
-public class MonopolyCommand implements ICommand {
+public final class MonopolyCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

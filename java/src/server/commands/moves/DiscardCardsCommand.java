@@ -14,7 +14,7 @@ import shared.dto.IDTO;
  *
  * @author Joel Bradley
  */
-public class DiscardCardsCommand implements ICommand {
+public final class DiscardCardsCommand implements ICommand {
 
     private int gameId;
     private DiscardCardsDTO dto;

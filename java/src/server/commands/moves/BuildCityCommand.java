@@ -15,7 +15,7 @@ import shared.locations.VertexLocation;
  *
  * @author Joel Bradley
  */
-public class BuildCityCommand implements ICommand {
+public final class BuildCityCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

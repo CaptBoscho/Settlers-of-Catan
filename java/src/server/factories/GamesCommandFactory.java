@@ -21,7 +21,7 @@ import static server.utils.Strings.BAD_COMMAND_NAME_MSG;
  * @author Danny Harding, Derek Argueta
  * {@link} https://en.wikipedia.org/wiki/Command_pattern#Java_8
  */
-public class GamesCommandFactory {
+public final class GamesCommandFactory {
 
     private final Map<CommandName, ICommand> commands;
 

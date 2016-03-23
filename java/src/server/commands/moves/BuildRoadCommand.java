@@ -15,7 +15,7 @@ import shared.locations.EdgeLocation;
  *
  * @author Joel Bradley
  */
-public class BuildRoadCommand implements ICommand {
+public final class BuildRoadCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

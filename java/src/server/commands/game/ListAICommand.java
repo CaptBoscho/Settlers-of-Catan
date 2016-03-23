@@ -11,7 +11,7 @@ import shared.dto.ListAIDTO;
  *
  * @author Joel Bradley
  */
-public class ListAICommand implements ICommand {
+public final class ListAICommand implements ICommand {
 
     private ListAIDTO dto;
 
