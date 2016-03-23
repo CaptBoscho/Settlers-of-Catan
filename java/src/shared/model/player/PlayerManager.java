@@ -483,6 +483,7 @@ public final class PlayerManager implements IPlayerManager {
 
         final ResourceCard treasure = robbed.robbed();
         robber.addResourceCard(treasure);
+        robber.setMoveRobber(false);
     }
 
     /**

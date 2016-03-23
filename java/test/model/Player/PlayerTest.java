@@ -313,7 +313,7 @@ public class PlayerTest {
             assertFalse(p.canUseMonument());
         }
 
-        //Can't play until next turn
+        //Can't play until player can win
         for(final Player p : pm.getPlayers()){
             p.addDevCard(new MonumentCard());
             p.setPlayedDevCard(false);
@@ -322,6 +322,7 @@ public class PlayerTest {
 
         //Can play now
         for(final Player p : pm.getPlayers()){
+            p.setVictoryPoints(10);
             p.getDevelopmentCardBank().moveNewToOld();
             assertTrue(p.canUseMonument());
         }
@@ -333,6 +334,7 @@ public class PlayerTest {
             p.addDevCard(new MonumentCard());
             p.setPlayedDevCard(false);
             p.getDevelopmentCardBank().moveNewToOld();
+            p.setVictoryPoints(10);
             assertTrue(p.canUseMonument());
             p.useMonument();
             assertFalse(p.canUseMonument());
