@@ -2,6 +2,7 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.FinishTurnDTO;
 import spark.Request;
@@ -10,6 +11,7 @@ import spark.Route;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class FinishTurnHandler implements Route {
 
@@ -17,10 +19,8 @@ public class FinishTurnHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!FinishTurnDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
-
-        // TODO - validation
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new FinishTurnDTO(request.body()));
         dto.extractCookieInfo(request.cookies());

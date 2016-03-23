@@ -1,9 +1,8 @@
 package server.handlers.moves;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.RollNumberDTO;
 import spark.Request;
@@ -19,7 +18,7 @@ public class RollNumberHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!RollNumberDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new RollNumberDTO(request.body()));

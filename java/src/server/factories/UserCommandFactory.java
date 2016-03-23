@@ -5,8 +5,6 @@ import server.commands.ICommand;
 import server.commands.user.LoginCommand;
 import server.commands.user.RegisterCommand;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
-import server.facade.ServerFacade;
 import shared.dto.IDTO;
 
 import java.util.HashMap;
@@ -17,7 +15,6 @@ import java.util.HashMap;
  */
 public class UserCommandFactory {
 
-    private IFacade facade;
     private final HashMap<String, ICommand> commands;
     private static UserCommandFactory instance = null;
 
@@ -26,7 +23,6 @@ public class UserCommandFactory {
     }
 
     private UserCommandFactory() {
-        facade = ServerFacade.getInstance();
         commands = new HashMap<>();
     }
 

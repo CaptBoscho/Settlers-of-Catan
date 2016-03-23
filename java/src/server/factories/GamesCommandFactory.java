@@ -6,8 +6,6 @@ import server.commands.games.CreateCommand;
 import server.commands.games.JoinCommand;
 import server.commands.games.ListCommand;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
-import server.facade.ServerFacade;
 import shared.dto.IDTO;
 
 import java.util.HashMap;
@@ -22,11 +20,9 @@ public class GamesCommandFactory {
 
     private final HashMap<String, ICommand> commands;
 
-    private IFacade facade;
     private static GamesCommandFactory instance = null;
 
     private GamesCommandFactory() {
-        facade = ServerFacade.getInstance();
         commands = new HashMap<>();
     }
 

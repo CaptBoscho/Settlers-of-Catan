@@ -1,5 +1,6 @@
 package server.handlers.game;
 
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.AddAIDTO;
 import spark.Request;
 import spark.Response;
@@ -13,7 +14,7 @@ public class AddAIHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!AddAIDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
 
         // TODO

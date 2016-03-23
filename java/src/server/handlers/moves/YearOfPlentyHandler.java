@@ -1,9 +1,8 @@
 package server.handlers.moves;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.PlayYOPCardDTO;
 import spark.Request;
@@ -22,10 +21,8 @@ public class YearOfPlentyHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!PlayYOPCardDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
-
-        // TODO - validation
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new PlayYOPCardDTO(request.body()));
         dto.extractCookieInfo(request.cookies());

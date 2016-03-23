@@ -1,9 +1,8 @@
 package server.handlers.moves;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.PlayMonumentDTO;
 import spark.Request;
@@ -12,6 +11,7 @@ import spark.Route;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class MonumentHandler implements Route {
 
@@ -19,7 +19,7 @@ public class MonumentHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!PlayMonumentDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new PlayMonumentDTO(request.body()));

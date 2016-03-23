@@ -10,10 +10,9 @@ import spark.Route;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class BuyDevCardHandler implements Route {
-
-    // -- TODO add request validation
 
     @Override
     public Object handle(Request request, Response response) throws Exception {

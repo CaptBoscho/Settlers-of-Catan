@@ -4,7 +4,6 @@ import server.commands.CommandExecutionResult;
 import server.factories.GamesCommandFactory;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.CreateGameDTO;
-import shared.dto.JoinGameDTO;
 
 /**
  * @author Derek Argueta

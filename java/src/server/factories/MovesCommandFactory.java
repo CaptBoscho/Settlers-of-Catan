@@ -4,7 +4,6 @@ import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.commands.moves.*;
 import server.exceptions.CommandExecutionFailedException;
-import server.facade.IFacade;
 import shared.dto.IDTO;
 
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.Map;
  */
 public class MovesCommandFactory {
 
-    private IFacade facade;
     private static MovesCommandFactory instance = null;
     private Map<String, ICommand> commands;
 
