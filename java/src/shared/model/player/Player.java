@@ -702,12 +702,6 @@ public class Player implements IPlayer, Comparable<Player> {
         this.discarded = discarded;
     }
 
-    public void incrementVictoryPoints(int points){
-        assert points > 0;
-
-        this.victoryPoints += points;
-    }
-
     /**
      * Set the player's type
      *
@@ -732,7 +726,7 @@ public class Player implements IPlayer, Comparable<Player> {
      *
      * @param increment Number of points to add to the player's score
      */
-    private void incrementPoints(int increment) {
+    public void incrementPoints(int increment) {
         this.victoryPoints += increment;
     }
 

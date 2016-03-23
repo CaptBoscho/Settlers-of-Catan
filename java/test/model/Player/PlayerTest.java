@@ -322,7 +322,7 @@ public class PlayerTest {
 
         //Can play now
         for(final Player p : pm.getPlayers()){
-            p.incrementVictoryPoints(10);
+            p.incrementPoints(10);
             p.getDevelopmentCardBank().moveNewToOld();
             assertTrue(p.canUseMonument());
         }
@@ -334,7 +334,7 @@ public class PlayerTest {
             p.addDevCard(new MonumentCard());
             p.setPlayedDevCard(false);
             p.getDevelopmentCardBank().moveNewToOld();
-            p.incrementVictoryPoints(10);
+            p.incrementPoints(10);
             assertTrue(p.canUseMonument());
             p.useMonument();
             assertFalse(p.canUseMonument());
