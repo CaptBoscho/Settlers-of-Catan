@@ -29,7 +29,7 @@ public final class GameController {
 
     private static CommandExecutionResult executeCommand(final CommandName commandName, final IDTO dto) {
         try {
-            return GameCommandFactory.getInstance().executeCommand(GAME_LIST_AI, dto);
+            return GameCommandFactory.getInstance().executeCommand(commandName, dto);
         } catch (Exception e) {
             e.printStackTrace();
             CommandExecutionResult result = new CommandExecutionResult("Something went wrong :(");

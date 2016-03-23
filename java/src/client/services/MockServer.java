@@ -4,7 +4,6 @@ import client.data.GameInfo;
 import client.facade.Facade;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import shared.definitions.ClientModel;
 import shared.dto.*;
 
 import java.util.List;
@@ -152,8 +151,7 @@ public class MockServer implements IServer {
      * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public ClientModel getCurrentModel(int version) {
-        return null;
+    public void getCurrentModel(int version) {
     }
 
     /**

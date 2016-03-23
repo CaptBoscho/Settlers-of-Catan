@@ -3,8 +3,8 @@ package server.commands.game;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
-import shared.dto.ListAIDTO;
 
 /**
  * A command object that list the AI
@@ -13,7 +13,7 @@ import shared.dto.ListAIDTO;
  */
 public final class ListAICommand implements ICommand {
 
-    private ListAIDTO dto;
+    private CookieWrapperDTO dto;
 
     /**
      * Communicates with the ServerFacade to carry out the List AI command
@@ -28,7 +28,7 @@ public final class ListAICommand implements ICommand {
 
     @Override
     public void setParams(IDTO dto) {
-        this.dto = (ListAIDTO)dto;
+        this.dto = (CookieWrapperDTO)dto;
     }
 
 }
