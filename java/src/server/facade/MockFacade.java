@@ -9,13 +9,16 @@ import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.InvalidLocationException;
+import shared.exceptions.PlayerExistsException;
 import shared.exceptions.StructureException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 
+import javax.naming.InsufficientResourcesException;
 import java.io.FileNotFoundException;
 
 /**
@@ -424,9 +427,16 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.acceptTrade(player, willAccept);
+            } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+                throw new AcceptTradeException("Unable to accept trade without trade offer");
+            } catch (Exception e) {
+                throw new AcceptTradeException("Unable to accept trade without trade offer");
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }

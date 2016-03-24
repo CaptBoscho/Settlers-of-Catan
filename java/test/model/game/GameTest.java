@@ -1949,7 +1949,7 @@ public class GameTest {
     }
 
     @Test
-    public void testOfferTrade() throws InsufficientResourcesException, InvalidTypeException, PlayerExistsException {
+    public void testOfferTrade() throws Exception, InvalidTypeException {
         final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
 
