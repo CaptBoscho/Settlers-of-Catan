@@ -2,6 +2,7 @@ package server.handlers.games;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.GamesController;
+
 import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.JoinGameDTO;
@@ -9,6 +10,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.servlet.http.Cookie;
 import java.util.Map;
 
 /**
@@ -40,7 +42,9 @@ public final class JoinHandler implements Route {
         if(result.hasNewCookies()) {
             final Map<String, String> cookies = result.getNewCookies();
             for(String key : cookies.keySet()) {
-                response.cookie(key, cookies.get(key));
+                Cookie cookie = new Cookie(key, cookies.get(key));
+                cookie.setPath("/");
+                response.raw().addCookie(cookie);
             }
         }
 

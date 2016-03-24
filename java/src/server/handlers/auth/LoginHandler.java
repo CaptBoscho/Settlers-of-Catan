@@ -8,6 +8,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.servlet.http.Cookie;
 import java.util.Map;
 
 /**
@@ -34,7 +35,9 @@ public final class LoginHandler implements Route {
         if(result.hasNewCookies()) {
             final Map<String, String> cookies = result.getNewCookies();
             for(String key : cookies.keySet()) {
-                response.cookie(key, cookies.get(key));
+                Cookie cookie = new Cookie(key, cookies.get(key));
+                cookie.setPath("/");
+                response.raw().addCookie(cookie);
             }
         }
 
