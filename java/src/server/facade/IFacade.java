@@ -247,4 +247,6 @@ public interface IFacade {
      * @throws GetModelException
      */
     CommandExecutionResult getModel(int gameID, int version) throws GetModelException;
+
+    void resetGames();
 }
