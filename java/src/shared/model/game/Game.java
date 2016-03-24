@@ -109,9 +109,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         // only update if someone actually has the longest road
         final JsonObject turnTracker = gameJson.getAsJsonObject("turnTracker");
         int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
-        if (longestRoadIndex >= 0) {
-            this.longestRoadCard = new LongestRoad(longestRoadIndex);
-        }
+        this.longestRoadCard = new LongestRoad(longestRoadIndex);
 
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = gameJson.get("version").getAsInt();
@@ -185,9 +183,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         // only update if someone actually has the longest road
         final JsonObject turnTracker = json.getAsJsonObject("turnTracker");
         int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
-        if (longestRoadIndex >= 0) {
-            this.longestRoadCard = new LongestRoad(longestRoadIndex);
-        }
+        this.longestRoadCard = new LongestRoad(longestRoadIndex);
 
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = json.get("version").getAsInt();
@@ -1156,6 +1152,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      *
      * @param playerRobber
      * @param playerRobbed
+     * @param hexLoc
      * @throws MoveRobberException
      * @throws InvalidTypeException
      * @throws PlayerExistsException
@@ -1204,7 +1201,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIndex
      */
     @Override
-    public void buyDevelopmentCard(int playerIndex) throws Exception {
+    public void buyDevelopmentCard(final int playerIndex) throws Exception {
         assert playerIndex >= 0;
         assert playerIndex < 4;
         assert playerManager != null;
@@ -1226,7 +1223,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
     /**
      * Action - Player performs a maritime trade
      *
-     * @param playerIndex
+     * @param playerIndex The index of the player conducting the maritime trade
+     * @param ratio
+     * @param send The resource being sent
+     * @param receive The resource being received
      */
     @Override
     public void maritimeTrade(final int playerIndex, final int ratio, final ResourceType send, final ResourceType receive) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
@@ -1849,7 +1849,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.add("deck", developmentCardBank.toJSON());
         json.add("bank", resourceCardBank.toJSON());
         json.add("chat", chat.toJSON());
@@ -1860,7 +1860,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             json.add("tradeOffer", currentOffer.toJSON());
         }
 
-        JsonObject turn = turnTracker.toJSON();
+        final JsonObject turn = turnTracker.toJSON();
         turn.addProperty("longestRoad", longestRoadCard.getOwner());
         turn.addProperty("largestArmy", largestArmyCard.getOwner());
         json.add("turnTracker", turn);
