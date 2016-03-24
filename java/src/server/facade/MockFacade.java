@@ -8,13 +8,14 @@ import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
-import shared.exceptions.InvalidLocationException;
-import shared.exceptions.StructureException;
+import shared.exceptions.*;
+import shared.locations.EdgeDirection;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
 import shared.model.game.Game;
+import shared.model.game.MessageLine;
 
 import java.io.FileNotFoundException;
 
@@ -134,9 +135,18 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult sendChat(int gameID, int player, String message) throws SendChatException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                String playerName = defaultGame.getPlayerNameByIndex(player);
+                MessageLine line = new MessageLine(playerName, message);
+                defaultGame.getChat().addMessage(line);
+                resetGames();
+            } catch (PlayerExistsException e) {
+                resetGames();
+                throw new SendChatException(e.getMessage());
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
@@ -255,9 +265,18 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.useRoadBuilder(player, locationOne, locationTwo);
+                if(!defaultGame.getMap().getRoads().get(player).contains(locationOne)) {
+                    throw new RoadBuildingException("Did not play road building card");
+                }
+            } catch (PlayerExistsException | DevCardException | InvalidPlayerException | InvalidLocationException | StructureException e) {
+                resetGames();
+                throw new RoadBuildingException(e.getMessage());
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
@@ -355,10 +374,26 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.getMap().buildRoad(player, new EdgeLocation(location.getHexLoc(), EdgeDirection.NorthWest));
+                defaultGame.getMap().buildSettlement(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                resetGames();
+                throw new BuildSettlementException(e.getMessage());
+            }
+            resetGames();
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                emptyGame.getMap().buildSettlement(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                resetGames();
+                throw new BuildSettlementException(e.getMessage());
+            }
+            resetGames();
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
+            resetGames();
             return null;
         }
     }
@@ -378,17 +413,22 @@ public final class MockFacade implements IFacade {
             try {
                 defaultGame.getMap().buildCity(player, location);
             } catch (StructureException | InvalidLocationException e) {
+                resetGames();
                 throw new BuildCityException(e.getMessage());
             }
+            resetGames();
             return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
             try {
                 emptyGame.getMap().buildCity(player, location);
             } catch (StructureException | InvalidLocationException e) {
+                resetGames();
                 throw new BuildCityException(e.getMessage());
             }
+            resetGames();
             return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
+            resetGames();
             return null;
         }
     }
