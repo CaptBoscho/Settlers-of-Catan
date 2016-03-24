@@ -480,10 +480,39 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+        ResourceType give = ResourceType.translateFromString(dto.getInputResource());
+        ResourceType get = ResourceType.translateFromString(dto.getOutputResource());
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                int before = defaultGame.amountOwnedResource(dto.getPlayerIndex(),give);
+                defaultGame.maritimeTrade(dto.getPlayerIndex(),dto.getRatio(),give,get);
+                if(before == defaultGame.amountOwnedResource(dto.getPlayerIndex(),give)){
+                    resetGames();
+                    throw new MaritimeTradeException("trade didn't take place");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (InvalidPlayerException | InsufficientResourcesException | InvalidTypeException | PlayerExistsException e) {
+                resetGames();
+                throw new MaritimeTradeException("couldn't maritime trade");
+            }
+
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            int before = 0;
+            try {
+                before = emptyGame.amountOwnedResource(dto.getPlayerIndex(),give);
+                defaultGame.maritimeTrade(dto.getPlayerIndex(),dto.getRatio(),give,get);
+                if(before == defaultGame.amountOwnedResource(dto.getPlayerIndex(),give)){
+                    resetGames();
+                    throw new MaritimeTradeException("trade didn't take place");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (PlayerExistsException | InvalidTypeException | InsufficientResourcesException | InvalidPlayerException e) {
+                resetGames();
+                throw new MaritimeTradeException("can't trade on empty game");
+            }
+
         } else {
             return null;
         }
