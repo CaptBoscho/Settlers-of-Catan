@@ -412,10 +412,12 @@ public final class ServerFacade implements IFacade {
         final Game game = gameManager.getGameByID(gameID);
         game.incrementVersion();
         try {
-            game.buyDevelopmentCard(playerIndex);
-            String name = game.getPlayerNameByIndex(playerIndex);
-            String message = name + " is gonna reck you when they drop that dev card";
-            game.log(name, message);
+            if (game.canBuyDevelopmentCard(playerIndex)) {
+                game.buyDevelopmentCard(playerIndex);
+                String name = game.getPlayerNameByIndex(playerIndex);
+                String message = name + " is gonna reck you when they drop that dev card";
+                game.log(name, message);
+            }
         } catch (Exception e) {
             throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
         }
