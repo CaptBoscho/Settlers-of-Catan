@@ -9,6 +9,8 @@ import server.main.Config;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.PlayMonopolyDTO;
 
+import static org.junit.Assert.fail;
+
 /**
  * Unit Testing for the "Play Monopoly" command.
  *
@@ -49,10 +51,16 @@ public class MonopolyCommandTest {
      * Validates that the command works with valid parameters
      */
     @Test
-    public void testExecuteWithValidParams() throws CommandExecutionFailedException {
+    public void testExecuteWithValidParams() {
         MonopolyCommand monopolyCommand = new MonopolyCommand();
         CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new PlayMonopolyDTO(0, "wood"));
+        wrapperDTO.setGameId(MockFacade.DEFAULT_GAME);
         monopolyCommand.setParams(wrapperDTO);
-        monopolyCommand.execute();
+        try {
+            monopolyCommand.execute();
+        } catch (CommandExecutionFailedException e) {
+            fail();
+            e.printStackTrace();
+        }
     }
 }
