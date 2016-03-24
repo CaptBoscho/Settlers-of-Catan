@@ -8,6 +8,8 @@ import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
+import shared.exceptions.InvalidLocationException;
+import shared.exceptions.StructureException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -373,9 +375,19 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.getMap().buildCity(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                throw new BuildCityException(e.getMessage());
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                emptyGame.getMap().buildCity(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                throw new BuildCityException(e.getMessage());
+            }
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
@@ -392,9 +404,9 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }

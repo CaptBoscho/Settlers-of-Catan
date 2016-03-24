@@ -15,6 +15,7 @@ import shared.dto.IDTO;
  */
 public final class ListAICommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
 
     /**
@@ -24,6 +25,8 @@ public final class ListAICommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
         try {
             return Config.facade.listAI(gameId);
         } catch (ListAIException e) {
@@ -36,6 +39,9 @@ public final class ListAICommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         this.gameId = cookieDTO.getGameId();
     }
