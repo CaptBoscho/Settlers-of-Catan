@@ -438,8 +438,9 @@ public final class ServerProxy implements IServer {
     public void finishTurn(final FinishTurnDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
-        final String url = Utils.buildUrl(this.host, this.port) + FINISH_TURN_ENDPOINT;
 
+        final String url = Utils.buildUrl(this.host, this.port) + FINISH_TURN_ENDPOINT;
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
