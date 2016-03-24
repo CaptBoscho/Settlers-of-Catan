@@ -15,6 +15,9 @@ import shared.locations.EdgeDirection;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
  * Unit Testing for the "Build Road" command.
  *
@@ -59,12 +62,16 @@ public class BuildRoadCommandTest {
      * Validates that the command works with valid parameters
      */
     @Test
-    public void testExecuteWithValidParams() throws CommandExecutionFailedException {
+    public void testExecuteWithValidParams() {
         command = new BuildRoadCommand();
-        IDTO wrapperDTO = new CookieWrapperDTO(
-                new BuildRoadDTO(0, new EdgeLocation(new HexLocation(1,1), EdgeDirection.South), false)
-        );
+        CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new BuildRoadDTO(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.South), false));
+        wrapperDTO.setGameId(MockFacade.EMPTY_GAME);
         command.setParams(wrapperDTO);
-        command.execute(); // TODO: 3/23/2016 Needs a game on the server to test against (mock server)...
+        try {
+            command.execute();
+            fail();
+        } catch (CommandExecutionFailedException e) {
+            assertTrue(true); // exception should be thrown.
+        }
     }
 }

@@ -9,6 +9,8 @@ import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.InvalidLocationException;
+import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.PlayerExistsException;
 import shared.exceptions.StructureException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -335,9 +337,19 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.buildRoad(player, location);
+            } catch (InvalidPlayerException | InvalidLocationException | StructureException | PlayerExistsException e) {
+                throw new BuildRoadException("Can't build road with that person at that location.");
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                emptyGame.initiateRoad(player, location);
+            } catch (InvalidPlayerException | InvalidLocationException | StructureException | PlayerExistsException e) {
+                throw new BuildRoadException("Can't build road on empty game");
+            }
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
