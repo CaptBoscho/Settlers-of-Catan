@@ -2,6 +2,7 @@ package server.handlers.auth;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.UserController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.AuthDTO;
 import spark.Request;
 import spark.Response;
@@ -11,15 +12,15 @@ import java.util.Map;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class RegisterHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         if(!AuthDTO.isValidRequestJson(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
-
 
         CommandExecutionResult result = UserController.register(new AuthDTO(request.body()));
         if(result.errorOccurred()) {

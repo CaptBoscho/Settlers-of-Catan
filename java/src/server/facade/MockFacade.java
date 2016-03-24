@@ -11,11 +11,18 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.game.Game;
 
 /**
  * @author Kyle Cornelison
  */
-public class MockFacade implements IFacade {
+public final class MockFacade implements IFacade {
+
+    private Game game;
+
+    public MockFacade() {
+        this.game = new Game("A game", false, false, false);
+    }
 
     /**
      * Logs a player into the server
@@ -38,7 +45,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult register(String username, String password) throws RegisterException {
-        return null;
+        return new CommandExecutionResult("Success.");
     }
 
     /**
@@ -116,7 +123,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult sendChat(int gameID, int player, String message) throws SendChatException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -130,7 +137,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult rollNumber(int gameID, int player, int value) throws RollNumberException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -145,7 +152,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -158,7 +165,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult finishTurn(int gameID, int player) throws FinishTurnException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -171,7 +178,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -186,7 +193,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -201,7 +208,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -216,7 +223,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -230,7 +237,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -243,7 +250,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult monument(int gameID, int player) throws MonumentException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -257,7 +264,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -271,7 +278,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -285,7 +292,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -298,7 +305,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().toString());
     }
 
     /**
@@ -312,7 +319,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -324,7 +331,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -337,7 +344,7 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 
     /**
@@ -349,6 +356,6 @@ public class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult getModel(int gameID, int version) throws GetModelException {
-        return null;
+        return new CommandExecutionResult(this.game.toJSON().getAsString());
     }
 }

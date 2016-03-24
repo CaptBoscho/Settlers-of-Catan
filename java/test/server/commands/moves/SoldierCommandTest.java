@@ -3,15 +3,16 @@ package server.commands.moves;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
 
 /**
- * Created by joel on 3/20/16.
+ * Unit Testing for the "Play Soldier" command.
+ *
+ * @author Derek Argueta
  */
 public class SoldierCommandTest {
-
-    private SoldierCommand command;
 
     @Before
     public void setUp() {
@@ -23,8 +24,22 @@ public class SoldierCommandTest {
 
     }
 
-    @Test
-    public void testExecute() {
+    /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        SoldierCommand soldierCommand = new SoldierCommand();
+        soldierCommand.setParams(null);
+        soldierCommand.execute();
+    }
 
+    /**
+     * Validates that the command checks that the parameters are set before
+     * executing using the `assert` keyword.
+     */
+    @Test(expected = AssertionError.class)
+    public void testExecuteWithMissingParams() throws CommandExecutionFailedException {
+        new SoldierCommand().execute();
     }
 }

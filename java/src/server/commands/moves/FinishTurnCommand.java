@@ -14,7 +14,7 @@ import shared.dto.IDTO;
  *
  * @author Joel Bradley
  */
-public class FinishTurnCommand implements ICommand {
+public final class FinishTurnCommand implements ICommand {
 
     private int gameId;
     private int playerIndex;

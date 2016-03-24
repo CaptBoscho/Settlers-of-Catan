@@ -350,6 +350,8 @@ public interface IPlayerManager {
      */
     boolean hasDiscarded(int playerIndex);
 
+    void initializeDiscarding();
+
     /**
      * Get the player by name
      * @param name
@@ -366,5 +368,9 @@ public interface IPlayerManager {
     CatanColor getPlayerColorByName(String name);
 
     JsonArray toJSON();
+
+    void changeLongestRoadPossession(int oldOwnerIndex, int newOwnerIndex) throws PlayerExistsException;
+
+    void finishTurn(int playerIndex) throws PlayerExistsException, BadCallerException;
     //endregion
 }

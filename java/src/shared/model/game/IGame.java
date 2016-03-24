@@ -12,6 +12,7 @@ import shared.model.ai.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.resources.ResourceCard;
+import shared.model.game.trade.TradePackage;
 import shared.model.map.Map;
 import shared.model.player.Player;
 import shared.definitions.DevCardType;
@@ -278,7 +279,7 @@ public interface IGame {
      * @throws InvalidPlayerException
      * @throws StructureException
      */
-    void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    void initiateSettlement(int playerIndex, VertexLocation vertex) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException;
 
     /**
      * Action - Player builds a settlement
@@ -299,7 +300,7 @@ public interface IGame {
      * @throws InvalidPlayerException
      * @throws StructureException
      */
-    void initiateRoad(int playerIndex,  EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException;
+    void initiateRoad(int playerIndex,  EdgeLocation edge) throws InvalidLocationException, InvalidPlayerException, StructureException, PlayerExistsException;
 
     /**
      * Action - Player builds a road
@@ -342,7 +343,7 @@ public interface IGame {
      * @param playerIndexOne Index of Player offering the trade
      * @param playerIndexTwo Index of Player being offered the trade
      */
-    void offerTrade(int playerIndexOne, int playerIndexTwo, List<ResourceType> playerOneCards, List<ResourceType> playerTwoCards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+    void offerTrade(TradePackage package1, TradePackage package2) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
     void acceptTrade(int playerIndex, boolean answer) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
     /**

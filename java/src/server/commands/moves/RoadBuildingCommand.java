@@ -15,8 +15,9 @@ import shared.locations.EdgeLocation;
  *
  * @author Joel Bradley
  */
-public class RoadBuildingCommand implements ICommand {
+public final class RoadBuildingCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
     private EdgeLocation locationOne;
@@ -28,6 +29,13 @@ public class RoadBuildingCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+        assert locationOne != null;
+        assert locationTwo != null;
+
         try {
             return Config.facade.roadBuilding(this.gameId, this.playerIndex, this.locationOne, this.locationTwo);
         } catch (RoadBuildingException e) {
@@ -37,6 +45,9 @@ public class RoadBuildingCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final RoadBuildingDTO tmpDTO = (RoadBuildingDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

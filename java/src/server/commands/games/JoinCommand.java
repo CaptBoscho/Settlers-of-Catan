@@ -14,7 +14,7 @@ import shared.dto.JoinGameDTO;
  *
  * @author Danny Harding
  */
-public class JoinCommand implements ICommand {
+public final class JoinCommand implements ICommand {
 
     private int gameId;
     private CatanColor color;
@@ -28,6 +28,11 @@ public class JoinCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.gameId >= 0;
+        assert this.color != null;
+        assert this.playerId >= 0;
+        assert this.username != null;
+
         try {
             return Config.facade.join(this.gameId, this.color, this.playerId, this.username);
         } catch (JoinGameException e) {

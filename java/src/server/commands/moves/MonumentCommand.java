@@ -14,8 +14,9 @@ import shared.dto.PlayMonumentDTO;
  *
  * @author Joel Bradley
  */
-public class MonumentCommand implements ICommand {
+public final class MonumentCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
 
@@ -25,6 +26,11 @@ public class MonumentCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             return Config.facade.monument(this.gameId, this.playerIndex);
         } catch (MonumentException e) {
@@ -34,6 +40,9 @@ public class MonumentCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        assert dto != null;
+
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final PlayMonumentDTO tmpDTO = (PlayMonumentDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();

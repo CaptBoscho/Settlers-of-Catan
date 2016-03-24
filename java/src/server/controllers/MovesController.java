@@ -1,179 +1,91 @@
 package server.controllers;
 
 import server.commands.CommandExecutionResult;
+import server.commands.CommandName;
 import server.factories.MovesCommandFactory;
 import shared.dto.*;
+
+import static server.commands.CommandName.*;
 
 /**
  * @author Derek Argueta
  */
-public class MovesController {
+public final class MovesController {
 
     public static CommandExecutionResult sendChat(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("sendChat", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong sending a chat :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_SEND_CHAT, dto);
     }
 
     public static CommandExecutionResult rollNumber(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("rollNumber", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong rolling :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_ROLL_NUMBER, dto);
     }
 
     public static CommandExecutionResult robPlayer(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("robPlayer", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong robbing :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_ROB_PLAYER, dto);
     }
 
     public static CommandExecutionResult finishTurn(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("finishTurn", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong finishing a turn :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_FINISH_TURN, dto);
     }
 
     public static CommandExecutionResult buyDevCard(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("buyDevCard", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong buying a dev card :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_BUY_DEV_CARD, dto);
     }
 
     public static CommandExecutionResult yearOfPlenty(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("playYOP", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong with playing year of plenty :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_PLAY_YOP, dto);
     }
 
     public static CommandExecutionResult roadBuilding(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("playRoadBuilding", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong with playing road building :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_PLAY_ROAD_BUILDING, dto);
     }
 
     public static CommandExecutionResult soldier(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("playSoldier", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong playing soldier :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_PLAY_SOLDIER, dto);
     }
 
     public static CommandExecutionResult monopoly(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("playMonopoly", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong playing monopoly :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_PLAY_MONOPOLY, dto);
     }
 
     public static CommandExecutionResult monument(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("playMonument", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong with playing monument :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_PLAY_MONUMENT, dto);
     }
 
     public static CommandExecutionResult buildRoad(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("buildRoad", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong building a road :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_BUILD_ROAD, dto);
     }
 
     public static CommandExecutionResult buildSettlement(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("buildSettlement", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong building a settlement :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_BUILD_SETTLEMENT, dto);
     }
 
     public static CommandExecutionResult buildCity(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("buildCity", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong building a city :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_BUILD_CITY, dto);
     }
 
     public static CommandExecutionResult offerTrade(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("offerTrade", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong offering a trade :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_OFFER_TRADE, dto);
     }
 
     public static CommandExecutionResult acceptTrade(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("respondToOffer", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong responding to offer");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_RESPOND_TO_OFFER, dto);
     }
 
     public static CommandExecutionResult maritimeTrade(final CookieWrapperDTO dto) {
-        try {
-            return MovesCommandFactory.getInstance().executeCommand("maritimeTrade", dto);
-        } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong with maritime trade :(");
-            result.triggerError(500);
-            return result;
-        }
+        return executeCommand(MOVES_MARITIME_TRADE, dto);
     }
 
     public static CommandExecutionResult discardCards(final CookieWrapperDTO dto) {
+        return executeCommand(MOVES_DISCARD_CARDS, dto);
+    }
+
+    private static CommandExecutionResult executeCommand(final CommandName commandName, final IDTO dto) {
         try {
-            return MovesCommandFactory.getInstance().executeCommand("discardCards", dto);
+            return MovesCommandFactory.getInstance().executeCommand(commandName, dto);
         } catch (Exception e) {
-            CommandExecutionResult result = new CommandExecutionResult("Something went wrong discarding :(");
+            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Something went wrong :(");
             result.triggerError(500);
             return result;
         }

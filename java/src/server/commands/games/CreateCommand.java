@@ -11,7 +11,7 @@ import shared.dto.IDTO;
  *
  * @author Danny Harding
  */
-public class CreateCommand implements ICommand {
+public final class CreateCommand implements ICommand {
 
     private String gameName;
     private boolean randomTiles;
@@ -25,6 +25,9 @@ public class CreateCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.gameName != null;
+        assert !this.gameName.equals("");
+
         return Config.facade.create(this.gameName, this.randomTiles, this.randomPorts, this.randomNumbers);
     }
 

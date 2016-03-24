@@ -14,8 +14,9 @@ import shared.dto.IDTO;
  *
  * @author Joel Bradley
  */
-public class BuyDevCardCommand implements ICommand {
+public final class BuyDevCardCommand implements ICommand {
 
+    private boolean paramsSet = false;
     private int gameId;
     private int playerIndex;
 
@@ -25,6 +26,11 @@ public class BuyDevCardCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+
         try {
             return Config.facade.buyDevCard(this.gameId, this.playerIndex);
         } catch (BuyDevCardException e) {
@@ -34,10 +40,10 @@ public class BuyDevCardCommand implements ICommand {
 
     @Override
     public void setParams(final IDTO dto) {
+        this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         final BuyDevCardDTO tmpDTO = (BuyDevCardDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();
         this.playerIndex = tmpDTO.getPlayerIndex();
     }
-
 }

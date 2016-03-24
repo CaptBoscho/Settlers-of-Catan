@@ -163,6 +163,8 @@ public final class DevelopmentCardBank implements JsonSerializable, IDevelopment
      * (@post) cardToAdd is now in developmentCards
      *
      * @param cardToAdd Development card to add to the bank
+     * TODO - exceptions are dumb. If every caller constructs an object, then just
+     * TODO - switch to use an enum
      */
     @Override
     public void addDevCard(final DevelopmentCard cardToAdd) throws InvalidTypeException {

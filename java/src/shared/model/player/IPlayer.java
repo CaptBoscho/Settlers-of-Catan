@@ -152,7 +152,7 @@ public interface IPlayer {
     /**
      * Action - Player plays Monopoly
      */
-    void discardMonopoly() throws DevCardException;
+    void useMonopoly() throws DevCardException;
 
     /**
      * Action - Player plays Monument
@@ -253,5 +253,13 @@ public interface IPlayer {
      * @param type
      */
     void setPlayerType(PlayerType type);
+
+    void buildFreeSettlement();
+
+    void buildFreeRoad();
+
+    void loseLongestRoad();
+
+    void winLongestRoad();
     //endregion
 }

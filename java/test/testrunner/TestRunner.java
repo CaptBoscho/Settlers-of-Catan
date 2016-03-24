@@ -1,21 +1,9 @@
 package testrunner;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Derek Argueta
  */
 public class TestRunner {
-
-    @Test
-    public void test_1() {
-        assertEquals("OK", "OK");
-        assertTrue(true);
-        assertFalse(false);
-    }
 
     public static void main(String[] args) {
 

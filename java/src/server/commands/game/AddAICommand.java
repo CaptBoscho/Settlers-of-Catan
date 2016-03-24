@@ -10,7 +10,7 @@ import shared.dto.IDTO;
  *
  * @author Joel Bradley
  */
-public class AddAICommand implements ICommand {
+public final class AddAICommand implements ICommand {
 
     private AddAIDTO dto;
 
@@ -20,6 +20,8 @@ public class AddAICommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
+        assert this.dto != null;
+        // -- TODO
         return null;
     }
 

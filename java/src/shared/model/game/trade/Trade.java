@@ -16,8 +16,6 @@ public final class Trade {
     private TradePackage package2;
     private int sender;
     private int receiver;
-    private List<ResourceType> sending = new ArrayList<>();
-    private List<ResourceType> receiving = new ArrayList<>();
     private int wood = 0;
     private int brick = 0;
     private int wheat = 0;
@@ -31,6 +29,9 @@ public final class Trade {
         assert package2 != null;
         assert package2.getUserID() >= 0;
         assert !package1.equals(package2);
+
+        this.sender = package1.getUserID();
+        this.receiver = package2.getUserID();
 
         this.package1 = package1;
         this.package2 = package2;
@@ -63,6 +64,10 @@ public final class Trade {
         return receiver;
     }
 
+    public void setSender(int sender1){sender = sender1;}
+
+    public void setReceiver(int receiver1){receiver = receiver1;}
+
     public int getWood() {
         return wood;
     }
@@ -85,6 +90,64 @@ public final class Trade {
 
     public boolean isActive(){return active;}
 
+    private void createTradePackages(){
+        List<ResourceType> sending = new ArrayList<>();
+        List<ResourceType> receiving = new ArrayList<>();
+        if(brick <0){
+            int brick1 = brick * -1;
+            for(int i=0; i<brick1; i++){
+                receiving.add(ResourceType.BRICK);
+            }
+        }else{
+            for(int i=0; i<brick; i++){
+                sending.add(ResourceType.BRICK);
+            }
+        }
+        if(wood <0){
+            int wood1 = wood * -1;
+            for(int i=0; i<wood1; i++){
+                receiving.add(ResourceType.WOOD);
+            }
+        }else{
+            for(int i=0; i<wood; i++){
+                sending.add(ResourceType.WOOD);
+            }
+        }
+        if(wheat <0){
+            int wheat1 = wheat* -1;
+            for(int i=0; i<wheat1; i++){
+                receiving.add(ResourceType.WHEAT);
+            }
+        }else{
+            for(int i=0; i<wheat; i++){
+                sending.add(ResourceType.WHEAT);
+            }
+        }
+        if(sheep < 0){
+            int sheep1 = sheep * -1;
+            for(int i=0; i<sheep1; i++){
+                receiving.add(ResourceType.SHEEP);
+            }
+        }else{
+            for(int i=0; i<sheep; i++){
+                sending.add(ResourceType.SHEEP);
+            }
+        }
+        if(ore < 0){
+            int ore1 = ore * -1;
+            for(int i=0; i<ore1; i++){
+                receiving.add(ResourceType.ORE);
+            }
+        }else{
+            for(int i=0; i<ore; i++){
+                sending.add(ResourceType.ORE);
+            }
+        }
+
+        package1 = new TradePackage(sender, sending);
+        package2 = new TradePackage(receiver, receiving);
+    }
+
     public void setActive(boolean act){active = act;}
     /**
      * Constructs a Trade object from a JSON blob
@@ -92,28 +155,13 @@ public final class Trade {
      * @param json the JSON representation of the object
      */
     public Trade(JsonObject json) {
-        sender = json.get("sender").getAsInt();
-        receiver = json.get("receiver").getAsInt();
-
-        JsonObject jj = json.get("offer").getAsJsonObject();
-        brick = jj.get("brick").getAsInt();
-        ore = jj.get("ore").getAsInt();
-        sheep = jj.get("sheep").getAsInt();
-        wheat = jj.get("wheat").getAsInt();
-        wood = jj.get("wood").getAsInt();
+        brick = json.get("brick").getAsInt();
+        ore = json.get("ore").getAsInt();
+        sheep = json.get("sheep").getAsInt();
+        wheat = json.get("wheat").getAsInt();
+        wood = json.get("wood").getAsInt();
         active = true;
-    }
-
-    /**
-     * Gives resources from package1 to Player from package2 and vice versa.
-     * (@pre) package1 and package2 both have at least 1 resource
-     *
-     * (@post) The resource(s) from package1 are now in package2, and vice versa
-     */
-    public void switchResources() {
-        final List<ResourceType> ghost = package1.getResources();
-        package1.setResources(package2.getResources());
-        package2.setResources(ghost); //todo JUnit tests
+        createTradePackages();
     }
 
     /**
@@ -122,6 +170,18 @@ public final class Trade {
      * @return a JSON representation of the object
      */
     public JsonObject toJSON() {
+
+
+        final JsonObject obj = new JsonObject();
+        obj.addProperty("playerIndex",sender);
+
+        obj.add("offer",resourceListToJson());
+
+        obj.addProperty("receiver",receiver);
+        return obj;
+    }
+
+    public JsonObject resourceListToJson(){
         int brickCount = 0;
         int oreCount = 0;
         int sheepCount = 0;
@@ -164,18 +224,12 @@ public final class Trade {
                     woodCount -= 1;
             }
         }
-
-        final JsonObject obj = new JsonObject();
-        obj.addProperty("sender",sender);
-        obj.addProperty("receiver",receiver);
-
         JsonObject offer = new JsonObject();
         offer.addProperty("brick", brickCount);
         offer.addProperty("ore", oreCount);
         offer.addProperty("sheep", sheepCount);
         offer.addProperty("wheat", wheatCount);
         offer.addProperty("wood", woodCount);
-        obj.add("offer",offer);
-        return obj;
+        return offer;
     }
 }

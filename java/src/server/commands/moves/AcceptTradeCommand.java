@@ -14,10 +14,10 @@ import shared.dto.TradeOfferResponseDTO;
  *
  * @author Joel Bradley
  */
-public class AcceptTradeCommand implements ICommand {
+public final class AcceptTradeCommand implements ICommand {
 
-    private int gameId;
-    private int playerIndex;
+    private int gameId = -1;
+    private int playerIndex = -1;
     private boolean willAccept;
 
     /**
@@ -26,6 +26,10 @@ public class AcceptTradeCommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() throws CommandExecutionFailedException {
+        assert this.gameId >= 0;
+        assert this.playerIndex >= 0;
+        assert this.playerIndex < 4;
+
         try {
             return Config.facade.acceptTrade(this.gameId, this.playerIndex, this.willAccept);
         } catch(AcceptTradeException e) {

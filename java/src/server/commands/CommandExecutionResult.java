@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Derek Argueta
  */
-public class CommandExecutionResult {
+public final class CommandExecutionResult {
     private Map<String, String> newCookies;
     private String body;
     private boolean errorOccurred;

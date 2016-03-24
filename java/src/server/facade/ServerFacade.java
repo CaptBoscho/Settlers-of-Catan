@@ -32,7 +32,7 @@ import java.util.Scanner;
 /**
  * @author Kyle Cornelison
  */
-public class ServerFacade implements IFacade {
+public final class ServerFacade implements IFacade {
     private static IFacade _instance;
     private GameManager gameManager;
     private UserManager userManager;
@@ -59,8 +59,20 @@ public class ServerFacade implements IFacade {
 
         userManager.addUser("pedro", "pedro");
         userManager.addUser("jose", "jose");
+        userManager.addUser("juan", "juan");
         userManager.addUser("pablo", "pablo");
         userManager.addUser("jesus", "jesus");
+        userManager.addUser("juana", "juana");
+        userManager.addUser("emilio", "emilio");
+        userManager.addUser("emilia", "emilia");
+        userManager.addUser("jorge", "jorge");
+        userManager.addUser("juanita", "juanita");
+        userManager.addUser("pancho", "pancho");
+        userManager.addUser("oscar", "oscar");
+        userManager.addUser("ivan", "ivan");
+        userManager.addUser("sergio", "sergio");
+        userManager.addUser("antonio", "antonio");
+        userManager.addUser("maria", "maria");
     }
 
     private Game makeGame(String filePath) throws Exception {
@@ -321,6 +333,9 @@ public class ServerFacade implements IFacade {
         game.incrementVersion();
         try {
             game.rollNumber(value);
+            String name = game.getPlayerNameByIndex(player);
+            String message = name + " rolled a " + value + " fool";
+            game.log(name, message);
         } catch (Exception e) {
             throw new RollNumberException("Error while rolling!");
         }
@@ -353,6 +368,15 @@ public class ServerFacade implements IFacade {
             newLocation = getModelHexLocation(newLocation);
             if(game.canPlaceRobber(player, newLocation)) {
                 game.rob(player, victim, newLocation);
+                String robber = game.getPlayerNameByIndex(player);
+                String robbed = game.getPlayerNameByIndex(victim);
+                String message;
+                if(player != victim) {
+                    message = robber + " sent his home boy Pancho to mug " + robbed;
+                } else {
+                    message = robber + " moved Pancho to a dope spot";
+                }
+                game.log(robber, message);
             }
         } catch (InvalidTypeException | InsufficientResourcesException | MoveRobberException | AlreadyRobbedException | PlayerExistsException | InvalidLocationException e) {
             throw new RobPlayerException(e.getMessage());
@@ -382,6 +406,9 @@ public class ServerFacade implements IFacade {
         if(game.canFinishTurn(player)) {
             try {
                 game.finishTurn(player);
+                String name = game.getPlayerNameByIndex(player);
+                String message = name + " stopped hogging game time";
+                game.log(name, message);
             } catch (Exception e) {
                 throw new FinishTurnException("Failed to end the player's turn!");
             }
@@ -412,6 +439,9 @@ public class ServerFacade implements IFacade {
         game.incrementVersion();
         try {
             game.buyDevelopmentCard(playerIndex);
+            String name = game.getPlayerNameByIndex(playerIndex);
+            String message = name + " is gonna reck you when they drop that dev card";
+            game.log(name, message);
         } catch (Exception e) {
             throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
         }
@@ -443,6 +473,9 @@ public class ServerFacade implements IFacade {
         game.incrementVersion();
         try {
             game.useYearOfPlenty(playerIndex, resourceOne, resourceTwo);
+            String name = game.getPlayerNameByIndex(playerIndex);
+            String message = name + " got that money";
+            game.log(name, message);
         } catch (PlayerExistsException | DevCardException | InsufficientResourcesException | InvalidTypeException e) {
             throw new YearOfPlentyException("yearOfPlenty failed in the model on the server.");
         }
@@ -476,6 +509,9 @@ public class ServerFacade implements IFacade {
             locationTwo = getModelEdgeLocation(locationTwo);
             if(game.canUseRoadBuilding(player)) {
                 game.useRoadBuilder(player, locationOne, locationTwo);
+                String name = game.getPlayerNameByIndex(player);
+                String message = name + " is off to see the wizard, the wonderful wizard of Oz";
+                game.log(name, message);
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException | DevCardException e) {
             throw new RoadBuildingException(e.getMessage());
@@ -510,6 +546,15 @@ public class ServerFacade implements IFacade {
             newLocation = getModelHexLocation(newLocation);
             if(game.canUseSoldier(player)) {
                 game.useSoldier(player, victim, newLocation);
+                String robber = game.getPlayerNameByIndex(player);
+                String robbed = game.getPlayerNameByIndex(victim);
+                String message;
+                if(player != victim) {
+                    message = robbed + " got destroyed by " + robber;
+                } else {
+                    message = robber + " moved Pancho to a dope spot";
+                }
+                game.log(robber, message);
             }
         } catch(MoveRobberException | InvalidTypeException | InsufficientResourcesException | DevCardException | PlayerExistsException | AlreadyRobbedException | InvalidLocationException e) {
             throw new SoldierException(e.getMessage());
@@ -540,6 +585,9 @@ public class ServerFacade implements IFacade {
         game.incrementVersion();
         try {
             game.useMonopoly(playerIndex, resource);
+            String name = game.getPlayerNameByIndex(playerIndex);
+            String message = name + " got free parking.  Do not pass go.  Do not collect $200";
+            game.log(name, message);
         } catch (PlayerExistsException | DevCardException | InvalidTypeException | InsufficientResourcesException e) {
             throw new MonopolyException(e.getMessage());
         }
@@ -566,6 +614,9 @@ public class ServerFacade implements IFacade {
         try {
             gameManager.getGameByID(gameID).useMonument(playerIndex);
             gameManager.getGameByID(gameID).incrementVersion();
+            String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(playerIndex);
+            String message = name + " cheated";
+            gameManager.getGameByID(gameID).log(name, message);
         } catch (PlayerExistsException | DevCardException e) {
             e.printStackTrace();
             throw new MonumentException(e.getMessage());
@@ -602,6 +653,9 @@ public class ServerFacade implements IFacade {
             } else if(game.canBuildRoad(player, location)) {
                 game.buildRoad(player, location);
             }
+            String name = game.getPlayerNameByIndex(player);
+            String message = name + " built a strip";
+            game.log(name, message);
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             e.printStackTrace();
             throw new BuildRoadException(e.getMessage());
@@ -637,6 +691,9 @@ public class ServerFacade implements IFacade {
             } else if(game.canBuildSettlement(player, location)) {
                 game.buildSettlement(player, location);
             }
+            String name = game.getPlayerNameByIndex(player);
+            String message = name + " built a pad";
+            game.log(name, message);
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             e.printStackTrace();
             throw new BuildSettlementException(e.getMessage());
@@ -670,6 +727,9 @@ public class ServerFacade implements IFacade {
             location = getModelVertexLocation(location);
             if(game.canBuildCity(player, location)) {
                 game.buildCity(player, location);
+                String name = game.getPlayerNameByIndex(player);
+                String message = name + " built a penthouse.  You're not invited";
+                game.log(name, message);
             }
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException | StructureException e) {
             throw new BuildCityException(e.getMessage());
@@ -695,11 +755,14 @@ public class ServerFacade implements IFacade {
         final int sender = dto.getSender();
         final int receiver = dto.getReceiver();
         final Trade offer = dto.getOffer();
-        final List<ResourceType> send = offer.getPackage1().getResources();
-        final List<ResourceType> receive = offer.getPackage2().getResources();
+        offer.getPackage1().setPlayerIndex(sender);
+        offer.getPackage2().setPlayerIndex(receiver);
         try {
-            gameManager.getGameByID(gameID).offerTrade(sender, receiver, send, receive);
+            gameManager.getGameByID(gameID).offerTrade(offer.getPackage1(), offer.getPackage2());
             gameManager.getGameByID(gameID).incrementVersion();
+            String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(sender);
+            String message = name + " doesn't have enough resources";
+            gameManager.getGameByID(gameID).log(name, message);
         } catch(InvalidTypeException | PlayerExistsException | InsufficientResourcesException e) {
             e.printStackTrace();
             throw new OfferTradeException(e.getMessage());
@@ -729,6 +792,9 @@ public class ServerFacade implements IFacade {
         try {
             gameManager.getGameByID(gameID).acceptTrade(player,willAccept);
             gameManager.getGameByID(gameID).incrementVersion();
+            String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(player);
+            String message = name + " makes deals with the homeless";
+            gameManager.getGameByID(gameID).log(name, message);
         } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
             throw new AcceptTradeException(e.getMessage());
         }
@@ -752,8 +818,14 @@ public class ServerFacade implements IFacade {
         assert dto != null;
 
         try {
-            gameManager.getGameByID(gameID).maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), ResourceType.translateFromString(dto.getInputResource()), ResourceType.translateFromString(dto.getOutputResource()));
+            ResourceType send = ResourceType.translateFromString(dto.getInputResource());
+            ResourceType receive = ResourceType.translateFromString(dto.getOutputResource());
+            Game game = gameManager.getGameByID(gameID);
+            game.maritimeTrade(dto.getPlayerIndex(), dto.getRatio(), send, receive);
             gameManager.getGameByID(gameID).incrementVersion();
+            String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(dto.getPlayerIndex());
+            String message = name + " got that yacht";
+            gameManager.getGameByID(gameID).log(name, message);
         } catch(InvalidPlayerException | InsufficientResourcesException | InvalidTypeException | PlayerExistsException e){
             throw new MaritimeTradeException(e.getMessage());
         }
@@ -797,6 +869,9 @@ public class ServerFacade implements IFacade {
         try {
             gameManager.getGameByID(gameID).discardCards(dto.getPlayerIndex(), cards);
             gameManager.getGameByID(gameID).incrementVersion();
+            String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(dto.getPlayerIndex());
+            String message = name + " is a loser, lolz";
+            gameManager.getGameByID(gameID).log(name, message);
         } catch(PlayerExistsException | InvalidTypeException | InsufficientResourcesException e) {
             throw new DiscardCardsException(e.getMessage());
         }

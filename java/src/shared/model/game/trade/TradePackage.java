@@ -10,6 +10,14 @@ import java.util.List;
  * @author Danny Harding
  */
 public final class TradePackage {
+    public int getPlayerIndex() {
+        return playerID;
+    }
+
+    public void setPlayerIndex(int playerID) {
+        this.playerID = playerID;
+    }
+
     private int playerID;
     private List<ResourceType> resources;
 

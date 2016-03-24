@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import static server.utils.Strings.BAD_JSON_MESSAGE;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.RobPlayerDTO;
 import spark.Request;
@@ -12,6 +13,7 @@ import spark.Route;
 
 /**
  * @author Derek Argueta
+ * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class RobPlayerHandler implements Route {
 
@@ -27,10 +29,8 @@ public class RobPlayerHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if(!this.requestIsValid(request.body())) {
             response.status(400);
-            return "Invalid request.";
+            return BAD_JSON_MESSAGE;
         }
-
-        // TODO - validation
 
         CookieWrapperDTO dto = new CookieWrapperDTO(new RobPlayerDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
