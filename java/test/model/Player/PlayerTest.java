@@ -363,6 +363,7 @@ public class PlayerTest {
             p.setMoveRobber(true);
             assertTrue(p.canPlaceRobber());
             p.placeRobber();
+            p.setMoveRobber(false);
             assertFalse(p.canPlaceRobber());
         }
     }

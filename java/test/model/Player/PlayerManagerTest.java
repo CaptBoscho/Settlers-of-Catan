@@ -367,6 +367,7 @@ public class PlayerManagerTest {
         for(final Player p : pm.getPlayers()){
             p.setMoveRobber(true);
             pm.placeRobber(p.getPlayerIndex(), 1);
+            p.setMoveRobber(false);
             assertFalse(pm.canPlaceRobber(p.getPlayerIndex()));
         }
     }
