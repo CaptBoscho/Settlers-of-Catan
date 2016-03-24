@@ -46,7 +46,7 @@ public class AcceptTradeCommandTest {
             acceptTradeCommand.execute();
             fail();
         } catch (CommandExecutionFailedException e) {
-            e.printStackTrace();
+            // this should run. you shouldn't be able to accept trade at this point.
         }
     }
 }

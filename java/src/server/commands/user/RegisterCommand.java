@@ -43,7 +43,6 @@ public final class RegisterCommand implements ICommand {
     @Override
     public void setParams(final IDTO dto) {
         assert dto != null;
-        assert dto instanceof AuthDTO;
 
         this.paramsSet = true;
         final AuthDTO tmpDTO = (AuthDTO)dto;
