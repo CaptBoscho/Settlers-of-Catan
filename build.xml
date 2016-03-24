@@ -12,6 +12,8 @@
     <property name="java.dir" value="java"/>
     <property name="java.src.dir" value="${java.dir}/src"/>
     <property name="java.lib.dir" value="${java.dir}/lib"/>
+
+	<property name="demo.dir" value="demo"/>
     
     <!-- Base output folder -->
     <property name="dest.dir" value="docs"/>
@@ -122,6 +124,12 @@
 		<mkdir dir="${java.dist}/images"/>
 		<copy todir="${java.dist}/images">
 			<fileset dir="${java.images}">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<mkdir dir="${java.dist}/demo"/>
+		<copy todir="${java.dist}/demo" >
+			<fileset dir="${demo.dir}">
 				<include name="**"/>
 			</fileset>
 		</copy>
