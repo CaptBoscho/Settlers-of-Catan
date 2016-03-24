@@ -3,6 +3,7 @@ package server.facade;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import server.managers.GameManager;
+import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
@@ -47,7 +48,7 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public boolean login(String username, String password) {
-        return true;
+        return UserManager.getInstance().authenticateUser(username, password);
     }
 
     /**
