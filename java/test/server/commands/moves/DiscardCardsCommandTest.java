@@ -46,8 +46,7 @@ public class DiscardCardsCommandTest {
     }
 
     /**
-     * Validates that the command checks that the parameters are set before
-     * executing using the `assert` keyword.
+     * Validates that the command works with valid parameters
      */
     @Test
     public void testExecuteWithValidParams() throws CommandExecutionFailedException {
