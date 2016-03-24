@@ -16,6 +16,8 @@ import server.handlers.moves.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
 
+import java.util.Arrays;
+
 import static spark.Spark.*;
 
 /**
@@ -38,7 +40,7 @@ public class Main {
         }
 
         // for now, hardcode to port 8081
-        port(8081);
+        port(Config.port);
 
         // the following endpoint patterns require authentication cookies
 //        before("/games/*", new AuthenticationFilter()); TODO this is literally the worst application design that we are being forced to adhere to. And Swagger sucks kthnxbai.

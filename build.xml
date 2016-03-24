@@ -173,7 +173,9 @@
 		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
 			<arg value="${host}"/>
 			<arg value="${port}"/>
-			<sysproperty key="com.sun.management.jmxremote" value=""/>
+			<classpath>
+				<pathelement location="${java.build}"/>
+			</classpath>
 			<assertions>
 				<enable/>
 			</assertions>
