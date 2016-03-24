@@ -247,10 +247,39 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                if(!defaultGame.canBuyDevelopmentCard(player)){
+                    resetGames();
+                    throw new BuyDevCardException("not enough resources to buy dev card");
+                }
+                int amountOfDevs = defaultGame.numberOfDevCard(player);
+                defaultGame.buyDevelopmentCard(player);
+                if(amountOfDevs == defaultGame.numberOfDevCard(player)){
+                    resetGames();
+                    throw new BuyDevCardException("wasn't able to buy a dev card");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (Exception e) {
+                resetGames();
+                throw new BuyDevCardException("couldn't buy a dev card");
+            }
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                int amountOfDevs = emptyGame.numberOfDevCard(player);
+                emptyGame.buyDevelopmentCard(player);
+                if(amountOfDevs == emptyGame.numberOfDevCard(player)){
+                    resetGames();
+                    throw new BuyDevCardException("wasn't able to buy a dev card");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+            } catch (Exception e) {
+                resetGames();
+                throw new BuyDevCardException("couldn't buy a dev card");
+            }
         } else {
+            resetGames();
             return null;
         }
     }
