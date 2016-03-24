@@ -12,6 +12,8 @@
     <property name="java.dir" value="java"/>
     <property name="java.src.dir" value="${java.dir}/src"/>
     <property name="java.lib.dir" value="${java.dir}/lib"/>
+
+	<property name="demo.dir" value="demo"/>
     
     <!-- Base output folder -->
     <property name="dest.dir" value="docs"/>
@@ -125,6 +127,12 @@
 				<include name="**"/>
 			</fileset>
 		</copy>
+		<mkdir dir="${java.dist}/demo"/>
+		<copy todir="${java.dist}/demo" >
+			<fileset dir="${demo.dir}">
+				<include name="**"/>
+			</fileset>
+		</copy>
  		<jar jarfile="${java.dist}/catan-client.jar" basedir="${java.build}">
 			<manifest>
 				<attribute name="Main-Class" value="client.main.Catan"/>
@@ -161,6 +169,19 @@
 		</java>
 	</target>
 
+	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
+		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
+			<arg value="${host}"/>
+			<arg value="${port}"/>
+			<classpath>
+				<pathelement location="${java.build}"/>
+			</classpath>
+			<assertions>
+				<enable/>
+			</assertions>
+		</java>
+	</target>
+
 	<target name="test" depends="compile, compile-test" description="compiles, packages, and runs the JUnit tests for the project">
 		<java classname="testrunner.TestRunner" fork="yes">
 			<classpath>
@@ -180,17 +201,6 @@
 		<exec dir="python/tests" executable="python" failonerror="true">
 			<arg line="api_test.py" />
 		</exec>
-	</target>
- 	
-	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
-		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
-			<arg value="${host}"/>
-			<arg value="${port}"/>
-			<sysproperty key="com.sun.management.jmxremote" value=""/>
-			<assertions>
-				<enable/>
-			</assertions>
-		</java>
 	</target>
     
     <target name="make-tester-zip" depends="package" description="makes a zip file for your testing team">

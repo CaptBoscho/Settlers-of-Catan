@@ -2067,6 +2067,7 @@ public class GameTest {
         final MonumentCard card = new MonumentCard();
         game.addDevCard(card, guy);
         game.getPlayerManager().moveNewToOld(guy);
+        game.getPlayerManager().getPlayerByIndex(guy).incrementPoints(10);
         assertTrue(game.canUseMonument(guy));
     }
 

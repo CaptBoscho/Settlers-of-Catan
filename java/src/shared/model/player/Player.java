@@ -703,6 +703,24 @@ public class Player implements IPlayer, Comparable<Player> {
     }
 
     /**
+     * Sets a player's name
+     *
+     * @param name
+     */
+    public void setName(String name){
+        this.name = name;
+    }
+
+    /**
+     * Sets a player's id
+     *
+     * @param id
+     */
+    public void setPlayerId(int id){
+        this.playerId = id;
+    }
+
+    /**
      * Set the player's type
      *
      * @param type
@@ -726,7 +744,7 @@ public class Player implements IPlayer, Comparable<Player> {
      *
      * @param increment Number of points to add to the player's score
      */
-    private void incrementPoints(int increment) {
+    public void incrementPoints(int increment) {
         this.victoryPoints += increment;
     }
 

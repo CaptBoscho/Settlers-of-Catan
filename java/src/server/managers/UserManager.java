@@ -116,7 +116,7 @@ class UserCredentials {
      * @return Whether or not the credentials match
      * @see UserManager
      */
-    public boolean matches(final String username, final String password) {
+    boolean matches(final String username, final String password) {
         return this.username.equals(username) && this.password.equals(password);
     }
 
@@ -130,7 +130,7 @@ class UserCredentials {
         return this.password;
     }
 
-    public int getUserId() {
+    int getUserId() {
         return this.userId;
     }
 }

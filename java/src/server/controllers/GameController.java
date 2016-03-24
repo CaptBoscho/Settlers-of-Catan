@@ -19,11 +19,11 @@ public final class GameController {
         return executeCommand(GAME_MODEL, dto);
     }
 
-    public static CommandExecutionResult addAI(final AddAIDTO dto) {
+    public static CommandExecutionResult addAI(final CookieWrapperDTO dto) {
         return executeCommand(GAME_ADD_AI, dto);
     }
 
-    public static CommandExecutionResult listAI(final ListAIDTO dto) {
+    public static CommandExecutionResult listAI(final CookieWrapperDTO dto) {
         return executeCommand(GAME_LIST_AI, dto);
     }
 
