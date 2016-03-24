@@ -2126,6 +2126,7 @@ public class GameTest {
     public void testCanUseMonument() throws PlayerExistsException, BadCallerException{
         final int playerIndex = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
+        final int guy = game.getCurrentTurn();
 
         if(game.numberOfDevCard(playerIndex) == 0){
             assertFalse(game.canUseMonument(playerIndex));
