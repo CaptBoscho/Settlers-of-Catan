@@ -50,7 +50,7 @@ public final class GameCommandFactory {
                 ICommand command = commands.get(name);
                 command.setParams(dto);
                 // TODO - break out into "execute" and "fetchResult"
-                return commands.get(name).execute();
+                return command.execute();
             } catch (CommandExecutionFailedException e) {
                 e.printStackTrace();
             }

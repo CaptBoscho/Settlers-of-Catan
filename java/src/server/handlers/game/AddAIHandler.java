@@ -1,26 +1,32 @@
 package server.handlers.game;
 
-import static server.utils.Strings.BAD_JSON_MESSAGE;
+import server.commands.CommandExecutionResult;
+import server.controllers.GameController;
 import shared.dto.AddAIDTO;
+import shared.dto.CookieWrapperDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 /**
  * @author Derek Argueta
- * {@link} http://sparkjava.com/documentation.html#routes
  */
-public final class AddAIHandler implements Route {
+public class AddAIHandler implements Route {
     @Override
-    public Object handle(final Request request, final Response response) throws Exception {
-        if(!AddAIDTO.isValidRequestJson(request.body())) {
-            response.status(400);
-            return BAD_JSON_MESSAGE;
+    public Object handle(Request request, Response response) throws Exception {
+        // TODO - validation
+
+
+        CookieWrapperDTO dto = new CookieWrapperDTO(new AddAIDTO(request.body()));
+        dto.extractCookieInfo(request.cookies());
+
+        CommandExecutionResult result = GameController.addAI(dto);
+        if(result.errorOccurred()) {
+            response.status(result.getStatus());
+        } else {
+            response.status(200);
         }
 
-        // TODO
-        response.status(200);
-        response.type("application/json");
-        return "{\"Hello\": \"World!\"}";
+        return result.getBody();
     }
 }

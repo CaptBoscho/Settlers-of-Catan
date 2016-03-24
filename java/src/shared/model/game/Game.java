@@ -2,6 +2,7 @@ package shared.model.game;
 
 import client.data.GameInfo;
 import client.data.PlayerInfo;
+import client.facade.Facade;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
@@ -14,6 +15,8 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.JsonSerializable;
+import shared.model.ai.AIFactory;
+import shared.model.ai.AIPlayer;
 import shared.model.ai.AIType;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.IResourceCardBank;
@@ -106,9 +109,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         // only update if someone actually has the longest road
         final JsonObject turnTracker = gameJson.getAsJsonObject("turnTracker");
         int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
-        if (longestRoadIndex >= 0) {
-            this.longestRoadCard = new LongestRoad(longestRoadIndex);
-        }
+        this.longestRoadCard = new LongestRoad(longestRoadIndex);
 
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = gameJson.get("version").getAsInt();
@@ -182,9 +183,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
         // only update if someone actually has the longest road
         final JsonObject turnTracker = json.getAsJsonObject("turnTracker");
         int longestRoadIndex = turnTracker.get("longestRoad").getAsInt();
-        if (longestRoadIndex >= 0) {
-            this.longestRoadCard = new LongestRoad(longestRoadIndex);
-        }
+        this.longestRoadCard = new LongestRoad(longestRoadIndex);
 
         this.largestArmyCard = new LargestArmy(turnTracker.get("largestArmy").getAsInt());
         this.version = json.get("version").getAsInt();
@@ -676,9 +675,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void addAI(AIType type) throws AddAIException {
         if (canAddAI()) {
-            //Add the AI
+            try {
+                Player ai = AIFactory.getInstance().create(type);
+                playerManager.addAI(ai);
+            } catch (CreateAIException e) {
+                e.printStackTrace();
+                throw new AddAIException(e.getMessage());
+            }
         } else {
-            //throw an exception
+            throw new AddAIException("Game already has 4 players!");
         }
     }
 
@@ -1147,6 +1152,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      *
      * @param playerRobber
      * @param playerRobbed
+     * @param hexLoc
      * @throws MoveRobberException
      * @throws InvalidTypeException
      * @throws PlayerExistsException
@@ -1195,11 +1201,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param playerIndex
      */
     @Override
-    public void buyDevelopmentCard(int playerIndex) throws Exception {
+    public void buyDevelopmentCard(final int playerIndex) throws Exception {
         assert playerIndex >= 0;
         assert playerIndex < 4;
-        assert this.playerManager != null;
-        assert this.developmentCardBank != null;
+        assert playerManager != null;
+        assert developmentCardBank != null;
+        assert canBuyDevelopmentCard(playerIndex);
 
         // remove player resources
         playerManager.buyDevCard(playerIndex);
@@ -1216,7 +1223,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
     /**
      * Action - Player performs a maritime trade
      *
-     * @param playerIndex
+     * @param playerIndex The index of the player conducting the maritime trade
+     * @param ratio
+     * @param send The resource being sent
+     * @param receive The resource being received
      */
     @Override
     public void maritimeTrade(final int playerIndex, final int ratio, final ResourceType send, final ResourceType receive) throws InvalidPlayerException, PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
@@ -1839,7 +1849,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public JsonObject toJSON() {
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.add("deck", developmentCardBank.toJSON());
         json.add("bank", resourceCardBank.toJSON());
         json.add("chat", chat.toJSON());
@@ -1850,7 +1860,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             json.add("tradeOffer", currentOffer.toJSON());
         }
 
-        JsonObject turn = turnTracker.toJSON();
+        final JsonObject turn = turnTracker.toJSON();
         turn.addProperty("longestRoad", longestRoadCard.getOwner());
         turn.addProperty("largestArmy", largestArmyCard.getOwner());
         json.add("turnTracker", turn);
@@ -1927,7 +1937,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Helpers
     //==========================================================
-
     /**
      * Safely tries to draw a card from the bank and give to the player
      *
@@ -2014,6 +2023,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void incrementVersion() {
         this.version++;
     }
+    //endregion
 
     public void log(String name, String message) {
         assert name != null;

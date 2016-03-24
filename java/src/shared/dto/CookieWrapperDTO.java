@@ -72,6 +72,10 @@ public class CookieWrapperDTO implements IDTO {
         return this.gameId;
     }
 
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
     @Override
     public JsonObject toJSON() {
         return null;
