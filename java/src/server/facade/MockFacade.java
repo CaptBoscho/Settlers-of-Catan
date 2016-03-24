@@ -319,9 +319,14 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.useMonopoly(player, resource);
+            } catch (PlayerExistsException | DevCardException | InvalidTypeException | InsufficientResourcesException e) {
+                throw new MonopolyException("Something went wrong playing monopoly");
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
@@ -338,9 +343,9 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult monument(int gameID, int player) throws MonumentException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
