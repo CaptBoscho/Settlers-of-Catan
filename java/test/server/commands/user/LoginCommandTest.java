@@ -9,6 +9,8 @@ import server.main.Config;
 import shared.dto.AuthDTO;
 import shared.dto.SaveGameDTO;
 
+import static org.junit.Assert.assertFalse;
+
 /**
  * Unit Testing for the "Login" command.
  *
@@ -75,5 +77,14 @@ public class LoginCommandTest {
     @Test(expected = AssertionError.class)
     public void testExecuteWithMissingParams() {
         new LoginCommand().execute();
+    }
+
+    @Test
+    public void testExecute() {
+        //login
+        AuthDTO dto = new AuthDTO("pedro", "pedro");
+        LoginCommand command = new LoginCommand();
+        command.setParams(dto);
+        assertFalse(command.execute().errorOccurred());
     }
 }
