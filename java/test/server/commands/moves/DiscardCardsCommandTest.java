@@ -9,6 +9,8 @@ import server.main.Config;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.DiscardCardsDTO;
 
+import static org.junit.Assert.fail;
+
 /**
  * @author Derek Argueta
  */
@@ -49,10 +51,17 @@ public class DiscardCardsCommandTest {
      * Validates that the command works with valid parameters
      */
     @Test
-    public void testExecuteWithValidParams() throws CommandExecutionFailedException {
+    public void testExecuteWithValidParams() {
         DiscardCardsCommand command = new DiscardCardsCommand();
         CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new DiscardCardsDTO(0,1,0,0,0,0));
+        wrapperDTO.setGameId(MockFacade.DEFAULT_GAME);
         command.setParams(wrapperDTO);
-        command.execute();
+        try {
+            command.execute();
+            //execution worked
+        } catch (CommandExecutionFailedException e) {
+            fail();
+            e.printStackTrace();
+        }
     }
 }

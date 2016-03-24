@@ -9,14 +9,19 @@ import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.InvalidLocationException;
+import shared.exceptions.PlayerExistsException;
 import shared.exceptions.StructureException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 
+import javax.naming.InsufficientResourcesException;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kyle Cornelison
@@ -460,10 +465,32 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
+        final List<ResourceType> cards = new ArrayList<>();
+        for(int i = 0; i < dto.getBrickCount(); i++) {
+            cards.add(ResourceType.BRICK);
+        }
+        for(int i = 0; i < dto.getWoodCount(); i++) {
+            cards.add(ResourceType.WOOD);
+        }
+        for(int i = 0; i < dto.getOreCount(); i++) {
+            cards.add(ResourceType.ORE);
+        }
+        for(int i = 0; i < dto.getWheatCount(); i++) {
+            cards.add(ResourceType.WHEAT);
+        }
+        for(int i = 0; i < dto.getSheepCount(); i++) {
+            cards.add(ResourceType.SHEEP);
+        }
+
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.discardCards(dto.getPlayerIndex(), cards);
+            } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+                throw new DiscardCardsException("No players can discard at beginning of game");
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
@@ -480,9 +507,9 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult getModel(int gameID, int version) throws GetModelException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }
