@@ -8,14 +8,15 @@ import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
-import shared.exceptions.InvalidLocationException;
-import shared.exceptions.StructureException;
+import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 
+import javax.naming.InsufficientResourcesException;
 import java.io.FileNotFoundException;
 
 /**
@@ -276,9 +277,22 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.useSoldier(player,victim,newLocation);
+                if(!defaultGame.getMap().getRobber().getLocation().equals(newLocation)) {
+                    throw new SoldierException("Didn't use soldier card");
+                }
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (InvalidTypeException | InsufficientResourcesException | PlayerExistsException | MoveRobberException | DevCardException | AlreadyRobbedException | InvalidLocationException e) {
+                throw new SoldierException("Can't use soldier");
+            }
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                emptyGame.useSoldier(player,victim,newLocation);
+                return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+            } catch (InvalidTypeException | InsufficientResourcesException | PlayerExistsException | MoveRobberException | DevCardException | AlreadyRobbedException | InvalidLocationException e) {
+                throw new SoldierException("Can't use soldier");
+            }
         } else {
             return null;
         }
@@ -355,9 +369,9 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
         } else {
             return null;
         }

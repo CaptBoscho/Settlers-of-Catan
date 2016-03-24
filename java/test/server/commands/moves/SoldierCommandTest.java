@@ -6,8 +6,12 @@ import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.PlaySoldierCardDTO;
 import shared.locations.HexLocation;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Unit Testing for the "Play Soldier" command.
@@ -45,10 +49,18 @@ public class SoldierCommandTest {
         new SoldierCommand().execute();
     }
 
-
-    public void testGood() throws CommandExecutionFailedException {
+    @Test
+    public void testExecute() throws CommandExecutionFailedException {
+        CookieWrapperDTO dto = new CookieWrapperDTO(new PlaySoldierCardDTO(0,1,new HexLocation(0,0)));
+        dto.setGameId(MockFacade.DEFAULT_GAME);
         SoldierCommand soldierCommand = new SoldierCommand();
-        soldierCommand.setParams(new PlaySoldierCardDTO(0,1,new HexLocation(0,0)));
-        soldierCommand.execute();
+        soldierCommand.setParams(dto);
+        try {
+            soldierCommand.execute();
+            fail("can't rob if you don't have the card");
+        } catch (CommandExecutionFailedException e) {
+            //Should enter here
+            assertTrue(true);
+        }
     }
 }
