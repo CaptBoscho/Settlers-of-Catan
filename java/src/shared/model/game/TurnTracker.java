@@ -97,7 +97,7 @@ public final class TurnTracker {
     private int nextSetupTurn() throws Exception {
         if (phase == Phase.SETUPONE) {
             if (currentTurn < NUM_PLAYERS - 1) {
-                return currentTurn++;
+                return ++currentTurn;
             } else if (currentTurn == NUM_PLAYERS - 1) {
                 nextPhase();
                 return currentTurn;
@@ -110,7 +110,7 @@ public final class TurnTracker {
                 currentTurn = 0;
                 return currentTurn;
             } else {
-                return currentTurn--;
+                return --currentTurn;
             }
         } else {
             throw new Exception("Setup phase must be true to do setup.");

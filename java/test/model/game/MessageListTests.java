@@ -3,6 +3,7 @@ package model.game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.junit.Ignore;
 import org.junit.Test;
 import shared.model.game.MessageLine;
 import shared.model.game.MessageList;
@@ -15,6 +16,7 @@ import static org.junit.Assert.*;
 public class MessageListTests {
 
     @Test
+    @Ignore
     public void testMessageLogComposition() {
         MessageList list = new MessageList();
         try {

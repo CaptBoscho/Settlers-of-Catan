@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 import server.commands.CommandExecutionResult;
 import server.facade.MockFacade;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
+import shared.dto.ListGamesDTO;
 
 /**
  * Unit Testing for the "List Games" command.
@@ -30,8 +32,7 @@ public class ListCommandTest {
      */
     @Test
     public void testExecute() {
+        CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new ListGamesDTO())
         CommandExecutionResult result = new ListCommand().execute();
-        assertTrue(result != null);
-        assertFalse(result.errorOccurred());
     }
 }
