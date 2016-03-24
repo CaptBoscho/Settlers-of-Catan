@@ -9,6 +9,8 @@ import server.main.Config;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.GameModelDTO;
 
+import static org.junit.Assert.fail;
+
 /**
  * Unit Testing for the "Model" command.
  *
@@ -51,10 +53,16 @@ public class ModelCommandTest {
      * Validates that the command works with valid parameters
      */
     @Test
-    public void testExecuteWithValidParams() throws CommandExecutionFailedException {
+    public void testExecuteWithValidParams() {
         ModelCommand command = new ModelCommand();
         CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new GameModelDTO(0));
+        wrapperDTO.setGameId(MockFacade.DEFAULT_GAME);
         command.setParams(wrapperDTO);
-        command.execute();
+        try {
+            command.execute();
+        } catch (CommandExecutionFailedException e) {
+            fail();
+            e.printStackTrace();
+        }
     }
 }
