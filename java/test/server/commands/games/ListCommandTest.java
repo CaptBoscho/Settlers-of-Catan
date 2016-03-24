@@ -9,6 +9,7 @@ import server.facade.MockFacade;
 import server.main.Config;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.ListGamesDTO;
+import shared.dto.PlaceholderDummyDTO;
 
 /**
  * Unit Testing for the "List Games" command.
@@ -32,7 +33,10 @@ public class ListCommandTest {
      */
     @Test
     public void testExecute() {
-        CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new ListGamesDTO())
-        CommandExecutionResult result = new ListCommand().execute();
+        CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new PlaceholderDummyDTO());
+        ListCommand listCommand = new ListCommand();
+        listCommand.setParams(wrapperDTO);
+        CommandExecutionResult result = listCommand.execute();
+        assertEquals(result.getStatus(), 200);
     }
 }
