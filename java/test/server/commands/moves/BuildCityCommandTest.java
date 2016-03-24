@@ -32,4 +32,9 @@ public class BuildCityCommandTest {
 	public void testExecuteWithMissingParams() throws CommandExecutionFailedException {
 		new BuildCityCommand().execute();
 	}
+
+	@Test
+	public void testExecute() {
+
+	}
 }
