@@ -6,6 +6,8 @@ import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
+import shared.dto.PlaySoldierCardDTO;
+import shared.locations.HexLocation;
 
 /**
  * Unit Testing for the "Play Soldier" command.
@@ -41,5 +43,12 @@ public class SoldierCommandTest {
     @Test(expected = AssertionError.class)
     public void testExecuteWithMissingParams() throws CommandExecutionFailedException {
         new SoldierCommand().execute();
+    }
+
+
+    public void testGood() throws CommandExecutionFailedException {
+        SoldierCommand soldierCommand = new SoldierCommand();
+        soldierCommand.setParams(new PlaySoldierCardDTO(0,1,new HexLocation(0,0)));
+        soldierCommand.execute();
     }
 }
