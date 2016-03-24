@@ -45,11 +45,11 @@ public final class ServerFacade implements IFacade {
         userManager = UserManager.getInstance();
 
         try {
-            Game game = makeGame("/Users/dannyharding/Documents/Winter 2016/CS 340/Settlers-of-Catan/sample/defaultGame.json");
+            Game game = makeGame("sample/defaultGame.json");
             game.setId(0);
             game.setTitle("Default Game");
             gameManager.addGame(game);
-            game = makeGame("/Users/dannyharding/Documents/Winter 2016/CS 340/Settlers-of-Catan/sample/emptyGame.json");
+            game = makeGame("sample/emptyGame.json");
             game.setId(1);
             game.setTitle("Empty Game");
             gameManager.addGame(game);
