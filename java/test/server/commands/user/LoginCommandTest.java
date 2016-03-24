@@ -7,7 +7,6 @@ import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
 import shared.dto.AuthDTO;
-import shared.dto.CookieWrapperDTO;
 import shared.dto.SaveGameDTO;
 
 /**

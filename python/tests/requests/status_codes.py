@@ -22,7 +22,6 @@ _codes = {
     226: ('im_used',),
 
     # Redirection.
-    300: ('multiple_choices',),
     301: ('moved_permanently', 'moved', '\\o-'),
     302: ('found',),
     303: ('see_other', 'other'),
@@ -52,7 +51,6 @@ _codes = {
     415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
     416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
     417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
     422: ('unprocessable_entity', 'unprocessable'),
     423: ('locked',),
     424: ('failed_dependency', 'dependency'),
