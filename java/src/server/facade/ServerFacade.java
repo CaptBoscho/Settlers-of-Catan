@@ -43,48 +43,6 @@ public final class ServerFacade implements IFacade {
     private ServerFacade(){
         gameManager = GameManager.getInstance();
         userManager = UserManager.getInstance();
-
-        try {
-            Game game = makeGame("sample/defaultGame.json");
-            game.setId(0);
-            game.setTitle("Default Game");
-            gameManager.addGame(game);
-            game = makeGame("sample/emptyGame.json");
-            game.setId(1);
-            game.setTitle("Empty Game");
-            gameManager.addGame(game);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        userManager.addUser("pedro", "pedro");
-        userManager.addUser("jose", "jose");
-        userManager.addUser("juan", "juan");
-        userManager.addUser("pablo", "pablo");
-        userManager.addUser("jesus", "jesus");
-        userManager.addUser("juana", "juana");
-        userManager.addUser("emilio", "emilio");
-        userManager.addUser("emilia", "emilia");
-        userManager.addUser("jorge", "jorge");
-        userManager.addUser("juanita", "juanita");
-        userManager.addUser("pancho", "pancho");
-        userManager.addUser("oscar", "oscar");
-        userManager.addUser("ivan", "ivan");
-        userManager.addUser("sergio", "sergio");
-        userManager.addUser("antonio", "antonio");
-        userManager.addUser("maria", "maria");
-    }
-
-    private Game makeGame(String filePath) throws Exception {
-        try {
-            FileReader reader = new FileReader(filePath);
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = (JsonObject) jsonParser.parse(reader);
-
-            return new Game(jsonObject);
-        } catch (FileNotFoundException e) {
-            throw new Exception("Couldn't get file to make game with");
-        }
     }
 
     private HexLocation getModelHexLocation(HexLocation hexLoc) {
@@ -900,5 +858,10 @@ public final class ServerFacade implements IFacade {
         final JsonObject json = game.toJSON();
         final String jsonString = json.toString();
         return new CommandExecutionResult(jsonString);
+    }
+
+    @Override
+    public void resetGames() {
+        GameManager.reset();
     }
 }

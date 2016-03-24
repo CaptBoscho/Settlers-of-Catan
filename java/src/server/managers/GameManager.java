@@ -1,8 +1,12 @@
 package server.managers;
 
 import client.data.GameInfo;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import shared.model.game.Game;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,11 +19,26 @@ import java.util.List;
  */
 public class GameManager {
 
+    public static String DEFAULT_GAME = "sample/defaultGame.json";
+    public static String EMPTY_GAME = "sample/emptyGame.json";
+
     private static GameManager instance;
     private HashMap<Integer, Game> games;
 
     private GameManager() {
         games = new HashMap<>();
+        try {
+            Game game = GameManager.makeGameFromFile(GameManager.DEFAULT_GAME);
+            game.setId(0);
+            game.setTitle("Default Game");
+            addGame(game);
+            game = GameManager.makeGameFromFile(GameManager.EMPTY_GAME);
+            game.setId(1);
+            game.setTitle("Empty Game");
+            addGame(game);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static GameManager getInstance() {
@@ -55,7 +74,18 @@ public class GameManager {
 
     public void addGame(final Game game) {
         games.put(game.getId(), game);
-        System.out.println("added game: " + game.getId() + " with title " + game.getTitle());
+    }
+
+    public static Game makeGameFromFile(String filePath) throws FileNotFoundException {
+        try {
+            FileReader reader = new FileReader(filePath);
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = (JsonObject) jsonParser.parse(reader);
+
+            return new Game(jsonObject);
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException();
+        }
     }
 
     public static void reset() {

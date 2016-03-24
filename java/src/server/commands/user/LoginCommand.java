@@ -2,7 +2,6 @@ package server.commands.user;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
-import server.exceptions.LoginException;
 import server.main.Config;
 import server.managers.UserManager;
 import shared.dto.AuthDTO;
