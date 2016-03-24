@@ -5,13 +5,12 @@ import client.facade.Facade;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.dto.*;
-
 import java.util.List;
 
 /**
  * @author Derek Argueta
  */
-public class MockServer implements IServer {
+class MockServer implements IServer {
 
     // TODO - read directly out of .json files
     private final String noUser = "The catan.user HTTP cookie is missing.  You must login before calling this method.";
@@ -147,12 +146,9 @@ public class MockServer implements IServer {
      * Returns the current state of the game in JSON format with a GET request
      *
      * @param version The version number of the model that the caller already has.
-     *
-     * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public void getCurrentModel(int version) {
-    }
+    public void getCurrentModel(int version) {}
 
     /**
      * Clears out the command history of the current game with a POST request
@@ -183,11 +179,12 @@ public class MockServer implements IServer {
     /**
      * Adds an AI player to the current game with a POST request
      *
-     * @param aiType The type of AI player to add (currently, LARGEST_ARMY is the only supported type)
+     * @param dto Data transport object containing the information to add an AI to the game
      */
     @Override
-    public void addAI(String aiType) {
-
+    public String addAI(AddAIDTO dto) {
+        return null;
+        // TODO - not needed, only for swagger page
     }
 
     /**
@@ -197,7 +194,7 @@ public class MockServer implements IServer {
      * @return A list of the supported AI types represented as arbitrary strings
      */
     @Override
-    public List<String> getAITypes() {
+    public List<String> getAITypes(final ListAIDTO dto) {
         return null;
     }
 

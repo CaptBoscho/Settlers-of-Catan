@@ -2,8 +2,12 @@ package server.commands.game;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.exceptions.AddAIException;
+import server.main.Config;
 import shared.dto.AddAIDTO;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
+import shared.model.ai.AIType;
 
 /**
  * A command object that adds an AI
@@ -12,7 +16,9 @@ import shared.dto.IDTO;
  */
 public final class AddAICommand implements ICommand {
 
-    private AddAIDTO dto;
+    private boolean paramsSet = false;
+    private int gameId;
+    private AIType type;
 
     /**
      * Communicates with the ServerFacade to carry out the Add AI command
@@ -20,13 +26,29 @@ public final class AddAICommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
-        assert this.dto != null;
-        // -- TODO
+        assert this.paramsSet;
+        assert this.gameId >= 0;
+        assert this.type != null;
+
+        try {
+            return Config.facade.addAI(this.gameId, this.type);
+        } catch (AddAIException e) {
+            // this is so dumb. ugh.
+            e.printStackTrace();
+        }
+
+        // TODO - SO DUMB
         return null;
     }
 
     @Override
     public void setParams(IDTO dto) {
-        this.dto = (AddAIDTO)dto;
+        assert dto != null;
+
+        this.paramsSet = true;
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        final AddAIDTO tmpDTO = (AddAIDTO) cookieDTO.getDto();
+        this.gameId = cookieDTO.getGameId();
+        this.type = tmpDTO.getAIType();
     }
 }
