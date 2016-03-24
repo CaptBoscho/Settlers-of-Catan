@@ -5,4 +5,5 @@ package shared.model.ai;
  */
 public enum AIType {
     LARGEST_ARMY
+    //TODO: add RODHAMMER AI for phase 4 - Implementing a DQN would be pretty cool
 }

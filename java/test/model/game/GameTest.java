@@ -2130,14 +2130,11 @@ public class GameTest {
         if(game.numberOfDevCard(playerIndex) == 0){
             assertFalse(game.canUseMonument(playerIndex));
         }
-
-        //game.addDevCard(card, playerIndex);
-        game.getPlayerManager().moveNewToOld(playerIndex);
-
-        //Can't use monument until you winning play
-        assertFalse(game.canUseMonument(playerIndex));
-
-
+        final MonumentCard card = new MonumentCard();
+        game.addDevCard(card, guy);
+        game.getPlayerManager().moveNewToOld(guy);
+        game.getPlayerManager().getPlayerByIndex(guy).incrementPoints(10);
+        assertTrue(game.canUseMonument(guy));
     }
 
     void testUseMonument() {

@@ -2,6 +2,7 @@ package shared.model.game;
 
 import client.data.GameInfo;
 import client.data.PlayerInfo;
+import client.facade.Facade;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
@@ -14,6 +15,8 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.JsonSerializable;
+import shared.model.ai.AIFactory;
+import shared.model.ai.AIPlayer;
 import shared.model.ai.AIType;
 import shared.model.bank.DevelopmentCardBank;
 import shared.model.bank.IResourceCardBank;
@@ -676,9 +679,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
     @Override
     public void addAI(AIType type) throws AddAIException {
         if (canAddAI()) {
-            //Add the AI
+            try {
+                Player ai = AIFactory.getInstance().create(type);
+                playerManager.addAI(ai);
+            } catch (CreateAIException e) {
+                e.printStackTrace();
+                throw new AddAIException(e.getMessage());
+            }
         } else {
-            //throw an exception
+            throw new AddAIException("Game already has 4 players!");
         }
     }
 
@@ -835,15 +844,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
             playerManager.discardResourceType(playerIndex, cards);
+            playerManager.getPlayerByIndex(playerIndex).setDiscarded(true);
         }
         List<Player> players = playerManager.getPlayers();
         for(Player player : players) {
             if(!player.hasDiscarded()) {
                 return;
             }
-        }
-        for(Player player : players) {
-            player.setDiscarded(false);
         }
         turnTracker.setPhase(TurnTracker.Phase.ROBBING);
     }
@@ -861,7 +868,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             //Go to discarding phase before robbing if any player has to discard
             List<Player> players = getPlayers();
             for(Player player : players) {
-                if (player.canDiscardCards()) {
+                if (player.getNumberResourceCards() > 7) {
                     turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
                     playerManager.initializeDiscarding();
                     return;
@@ -1169,6 +1176,12 @@ public class Game extends Observable implements IGame, JsonSerializable {
             return;
         }
 
+        if(playerManager.getPlayerByIndex(playerRobbed).getNumberResourceCards() == 0) {
+            placeRobber(playerRobber, hexLoc);
+            turnTracker.setPhase(TurnTracker.Phase.PLAYING);
+            return;
+        }
+
         final Set<Integer> who = map.whoCanGetRobbed(playerRobber, hexLoc);
         assert who != null;
         if (turnTracker.isPlayersTurn(playerRobber) && turnTracker.canUseRobber() && who.contains(playerRobbed)) {
@@ -1194,8 +1207,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void buyDevelopmentCard(int playerIndex) throws Exception {
         assert playerIndex >= 0;
         assert playerIndex < 4;
-        assert this.playerManager != null;
-        assert this.developmentCardBank != null;
+        assert playerManager != null;
+        assert developmentCardBank != null;
+        assert canBuyDevelopmentCard(playerIndex);
 
         // remove player resources
         playerManager.buyDevCard(playerIndex);
@@ -1923,7 +1937,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
 
     //region Helpers
     //==========================================================
-
     /**
      * Safely tries to draw a card from the bank and give to the player
      *
@@ -2010,6 +2023,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void incrementVersion() {
         this.version++;
     }
+    //endregion
 
     public void log(String name, String message) {
         assert name != null;

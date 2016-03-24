@@ -25,6 +25,16 @@ public class SoldierCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        SoldierCommand soldierCommand = new SoldierCommand();
+        soldierCommand.setParams(null);
+        soldierCommand.execute();
+    }
+
+    /**
      * Validates that the command checks that the parameters are set before
      * executing using the `assert` keyword.
      */

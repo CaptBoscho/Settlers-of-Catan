@@ -25,6 +25,16 @@ public class SendChatCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        SendChatCommand sendChatCommand = new SendChatCommand();
+        sendChatCommand.setParams(null);
+        sendChatCommand.execute();
+    }
+
+    /**
      * Validates that the command checks that the parameters are set before
      * executing using the `assert` keyword.
      */

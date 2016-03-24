@@ -25,6 +25,16 @@ public class MonopolyCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        MonopolyCommand monopolyCommand = new MonopolyCommand();
+        monopolyCommand.setParams(null);
+        monopolyCommand.execute();
+    }
+
+    /**
      * Validates that the command checks that the parameters are set before
      * executing using the `assert` keyword.
      */

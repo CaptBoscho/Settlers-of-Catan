@@ -32,17 +32,18 @@ public final class RegisterCommand implements ICommand {
             CommandExecutionResult result = new CommandExecutionResult("Success");
 
             // TODO - implement a reasonable cookie scheme
-            result.addCookie("catan.user", "%7B%22name%22%3A%22" + username + "%22%2C%22password%22%3A%22" + password + "%22%2C%22playerID%22%3A" + UserManager.getInstance().getIdForUser(username) + "%7D");
+            result.addCookie("catan.user", "%7B%22name%22%3A%22" + username + "%22%2C%22password%22%3A%22" + password + "%22%2C%22playerID%22%3A" + userId + "%7D");
             return result;
         }
 
         // TODO - throw exception here
-        return null;
+        return new CommandExecutionResult("credentials already exist");
     }
 
     @Override
     public void setParams(final IDTO dto) {
         assert dto != null;
+        assert dto instanceof AuthDTO;
 
         this.paramsSet = true;
         final AuthDTO tmpDTO = (AuthDTO)dto;

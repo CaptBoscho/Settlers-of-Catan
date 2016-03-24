@@ -23,6 +23,16 @@ public class RollNumberCommandTest {
     }
 
     /**
+     * Validate that you cannot pass a null dto
+     */
+    @Test(expected = AssertionError.class)
+    public void testNullParameters() throws CommandExecutionFailedException {
+        RollNumberCommand rollNumberCommand = new RollNumberCommand();
+        rollNumberCommand.setParams(null);
+        rollNumberCommand.execute();
+    }
+
+    /**
      * Validates that the command checks that the parameters are set before
      * executing using the `assert` keyword.
      */

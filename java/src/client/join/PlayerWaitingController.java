@@ -7,8 +7,13 @@ import client.misc.MessageView;
 import client.services.MissingUserCookieException;
 import client.services.Poller;
 import client.services.ServerProxy;
+import shared.dto.AddAIDTO;
+import shared.dto.ListAIDTO;
+import shared.model.ai.AIType;
 import shared.model.game.Game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -45,6 +50,9 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
             PlayerInfo[] infoArr = new PlayerInfo[Facade.getInstance().getPlayers().size()];
             Facade.getInstance().getPlayers().toArray(infoArr);
             getView().setPlayers(Facade.getInstance().getPlayers().toArray(infoArr));
+            ListAIDTO dto = new ListAIDTO(Facade.getInstance().getGameId(), new ArrayList<>());
+            List<String> availableAIs = ServerProxy.getInstance().getAITypes(dto);
+            getView().setAIChoices(availableAIs.toArray(new String[availableAIs.size()]));
             if(!getView().isModalShowing()) {
                 getView().showModal();
             }
@@ -60,11 +68,12 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void addAI() {
-        //// TODO: 3/7/16 implement add AI
-        MessageView messageView = new MessageView();
-        messageView.setTitle("Broken Button");
-        messageView.setMessage("This button doesn't actually do anything.  Wait for 4 human players to join.");
-        messageView.showModal();
+        //Build the AddAIDTO
+        String aiType = getView().getSelectedAI();
+        AddAIDTO dto = new AddAIDTO(aiType);
+
+        //Add the AI to the game
+        ServerProxy.getInstance().addAI(dto);
 	}
 
     /**
