@@ -24,10 +24,10 @@ public class YearOfPlentyHandler implements Route {
             return BAD_JSON_MESSAGE;
         }
 
-        CookieWrapperDTO dto = new CookieWrapperDTO(new PlayYOPCardDTO(request.body()));
+        final CookieWrapperDTO dto = new CookieWrapperDTO(new PlayYOPCardDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 
-        CommandExecutionResult result = MovesController.yearOfPlenty(dto);
+        final CommandExecutionResult result = MovesController.yearOfPlenty(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

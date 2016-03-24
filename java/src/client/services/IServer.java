@@ -88,8 +88,6 @@ public interface IServer {
      *
      * @param version The version number of the model that the caller already
      *                has.
-     * @return A ClientModel object that contains all the information about the
-     * state of the game
      */
     void getCurrentModel(int version) throws MissingUserCookieException;
 
