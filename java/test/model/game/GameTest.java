@@ -10,6 +10,7 @@ import shared.locations.*;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.*;
 import shared.model.cards.resources.ResourceCard;
+import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
 import shared.model.game.trade.TradePackage;
@@ -1817,43 +1818,97 @@ public class GameTest {
 
     private IGame game;
 
+    /**
+     * Creates a game and make sure I can only add 4 players
+     * Tests initializing settlements and roads
+     * Tests finish turn
+     * Tests initializing settlement when it's not your turn
+     * Initializes the game for the other tests
+     * Tests that SetUpTwo initiateSettlement gives resources
+     * @throws InvalidNameException
+     * @throws InvalidPlayerException
+     */
     @Before
-    public void testInitializeGame() throws InvalidNameException, InvalidPlayerException {
-        game = Facade.getInstance().getGame();
-        final List<Player> players = new ArrayList<>();
+    public void testInitializeGame() throws Exception {
+        game = new Game();
 
         final Player one = new Player(0, CatanColor.BLUE, 0, 0, "Hope");
         final Player two = new Player(0, CatanColor.BROWN, 1, 1, "Corbin");
         final Player three = new Player(0, CatanColor.GREEN, 2, 2, "Hanna");
         final Player four = new Player(0, CatanColor.ORANGE, 3, 3, "Becca");
 
-        players.add(one);
-        players.add(two);
-        players.add(three);
-        players.add(four);
+        //Checks if you can add player
+        assertTrue(game.canAddPlayer());
+        game.getPlayerManager().addPlayer(one);
+        game.getPlayerManager().addPlayer(two);
+        game.getPlayerManager().addPlayer(three);
+        game.getPlayerManager().addPlayer(four);
 
-        final int first = game.initializeGame(players, true, true, false);
+        //Checks if can add player when you have too many
+        assertFalse(game.canAddPlayer());
 
-        assertTrue(first >= 0 && first < 4);
-    }
+        int current_turn = game.getCurrentTurn();
+        HexLocation hloc = new HexLocation(0,0);
+        VertexLocation vloc = new VertexLocation(hloc, VertexDirection.West);
+        EdgeLocation eloc = new EdgeLocation(hloc, EdgeDirection.NorthWest);
 
-    @Test
-    public void testInitialization() throws Exception{
-        final int current_turn = game.getCurrentTurn();
-        final HexLocation hloc = new HexLocation(0,0);
-        final VertexLocation vloc = new VertexLocation(hloc, VertexDirection.East);
-        final EdgeLocation eloc = new EdgeLocation(hloc, EdgeDirection.NorthEast);
-
-
+        //Checks if you can initiate settlement
         assertTrue(game.canInitiateSettlement(current_turn,vloc));
         game.initiateSettlement(current_turn,vloc);
         assertTrue(game.canInitiateRoad(current_turn,eloc));
-        assertFalse(game.canInitiateRoad(current_turn,new EdgeLocation(hloc, EdgeDirection.SouthWest)));
         game.initiateRoad(current_turn,eloc);
 
-        final int next = game.getTurnTracker().nextTurn();
+        //Checks if you can finish turn when you should
+        assertTrue(game.canFinishTurn(current_turn));
+        current_turn = game.finishTurn(current_turn);
 
-        assertFalse(game.canInitiateSettlement(next, vloc));
+        hloc = new HexLocation(-1,-1);
+        vloc = new VertexLocation(hloc,VertexDirection.NorthEast);
+        eloc = new EdgeLocation(hloc,EdgeDirection.NorthEast);
+
+        //Checks that you can't initiate Settlement when it's not your turn
+        assertFalse(game.canInitiateSettlement(current_turn-1,vloc));
+
+        //initializes the rest of the game so we can use the game for other tests
+        game.initiateSettlement(current_turn,vloc);
+        game.initiateRoad(current_turn,eloc);
+        current_turn = game.finishTurn(current_turn);
+
+        hloc = new HexLocation(2,2);
+        vloc = new VertexLocation(hloc,VertexDirection.NorthEast);
+        eloc = new EdgeLocation(hloc,EdgeDirection.NorthEast);
+
+        game.initiateSettlement(current_turn,vloc);
+        game.initiateRoad(current_turn,eloc);
+        current_turn = game.finishTurn(current_turn);
+
+        hloc = new HexLocation(-2,-2);
+        vloc = new VertexLocation(hloc,VertexDirection.NorthEast);
+        eloc = new EdgeLocation(hloc,EdgeDirection.NorthEast);
+
+        game.initiateSettlement(current_turn,vloc);
+        game.initiateRoad(current_turn,eloc);
+        int phaseTransitionTurn = current_turn;
+        current_turn = game.finishTurn(current_turn);
+
+        //Verify that the turntracker changed the phase correctly
+        assertTrue(game.getCurrentPhase()== TurnTracker.Phase.SETUPTWO);
+        assertTrue(phaseTransitionTurn == current_turn);
+
+        for(int i=2; i> -2; i--){
+            hloc = new HexLocation(i,1);
+            vloc = new VertexLocation(hloc,VertexDirection.NorthEast);
+            eloc = new EdgeLocation(hloc,EdgeDirection.North);
+
+            game.initiateSettlement(current_turn,vloc);
+            game.initiateRoad(current_turn,eloc);
+
+            //Checks that Setuptwo gives resources
+            assertTrue(game.getNumberResourceCards(current_turn)>0);
+
+            current_turn = game.finishTurn(current_turn);
+        }
+
     }
 
     @Test
@@ -1897,7 +1952,7 @@ public class GameTest {
 
         int friend = 3;
         if(guy == 3) {
-            friend = 4;
+            friend = 1;
         }
         final ResourceCard one = game.getResourceCard(ResourceType.BRICK);
         final ResourceCard two = game.getResourceCard(ResourceType.ORE);
@@ -1907,24 +1962,35 @@ public class GameTest {
         game.giveResource(two, guy);
         game.giveResource(three, friend);
 
+        //Checks if cards were added to players
+        assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) > 0);
+        assertTrue(game.amountOwnedResource(guy, ResourceType.ORE) > 0);
+        assertTrue(game.amountOwnedResource(friend, ResourceType.SHEEP) > 0);
+
+        int guyBrick = game.amountOwnedResource(guy, ResourceType.BRICK);
+        int guyOre = game.amountOwnedResource(guy, ResourceType.ORE);
+        int guySheep = game.amountOwnedResource(guy, ResourceType.SHEEP);
+        int friendSheep = game.amountOwnedResource(friend, ResourceType.SHEEP);
+        int friendBrick = game.amountOwnedResource(friend,ResourceType.BRICK);
+        int friendOre = game.amountOwnedResource(friend,ResourceType.ORE);
+
         final List<ResourceType> ones = new ArrayList<>();
         final List<ResourceType> twos = new ArrayList<>();
         ones.add(ResourceType.BRICK);
         ones.add(ResourceType.ORE);
         twos.add(ResourceType.SHEEP);
 
-        assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) == 1);
-        assertTrue(game.amountOwnedResource(guy, ResourceType.ORE) == 1);
-        assertTrue(game.amountOwnedResource(friend, ResourceType.SHEEP) == 1);
+
         TradePackage package1 = new TradePackage(guy,ones);
         TradePackage package2 = new TradePackage(friend, twos);
 
         game.offerTrade(package1, package2);
+        game.acceptTrade(friend, true);
 
-        assertTrue(game.amountOwnedResource(friend, ResourceType.BRICK) == 1);
-        assertTrue(game.amountOwnedResource(friend, ResourceType.ORE) == 1);
-        assertTrue(game.amountOwnedResource(guy, ResourceType.SHEEP) == 1);
-        assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) == 0);
+        assertTrue(game.amountOwnedResource(friend, ResourceType.BRICK) == friendBrick +1);
+        assertTrue(game.amountOwnedResource(friend, ResourceType.ORE) == friendOre + 1);
+        assertTrue(game.amountOwnedResource(guy, ResourceType.SHEEP) == friendSheep +1);
+        assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) == guyBrick - 1);
     }
 
     @Test
@@ -2058,16 +2124,20 @@ public class GameTest {
 
     @Test
     public void testCanUseMonument() throws PlayerExistsException, BadCallerException{
-        final int guy = game.getCurrentTurn();
+        final int playerIndex = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.PLAYING);
 
-        if(game.numberOfDevCard(guy) == 0){
-            assertFalse(game.canUseMonument(guy));
+        if(game.numberOfDevCard(playerIndex) == 0){
+            assertFalse(game.canUseMonument(playerIndex));
         }
-        final MonumentCard card = new MonumentCard();
-        game.addDevCard(card, guy);
-        game.getPlayerManager().moveNewToOld(guy);
-        assertTrue(game.canUseMonument(guy));
+
+        //game.addDevCard(card, playerIndex);
+        game.getPlayerManager().moveNewToOld(playerIndex);
+
+        //Can't use monument until you winning play
+        assertFalse(game.canUseMonument(playerIndex));
+
+
     }
 
     void testUseMonument() {
