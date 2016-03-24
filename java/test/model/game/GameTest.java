@@ -5,12 +5,14 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import shared.definitions.CatanColor;
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
 import shared.locations.*;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.devcards.*;
 import shared.model.cards.resources.ResourceCard;
+import shared.model.cards.resources.Wood;
 import shared.model.game.Game;
 import shared.model.game.IGame;
 import shared.model.game.TurnTracker;
@@ -2047,10 +2049,6 @@ public class GameTest {
 
     }
 
-    void testUseYearOfPlenty() {
-
-    }
-
     @Test
     public void testCanUseRoadBuilder() throws PlayerExistsException, BadCallerException{
         final int guy = game.getCurrentTurn();
@@ -2065,10 +2063,6 @@ public class GameTest {
         assertTrue(game.canUseRoadBuilding(guy));
     }
 
-    void testUseRoadBuilder() {
-
-    }
-
     @Test
     public void testCanUseSoldier() throws PlayerExistsException, BadCallerException{
         final int guy = game.getCurrentTurn();
@@ -2081,10 +2075,6 @@ public class GameTest {
         game.addDevCard(card, guy);
         game.getPlayerManager().moveNewToOld(guy);
         //assertTrue(game.canUseSoldier(guy));
-    }
-
-    void testUseSoldier() {
-
     }
 
     @Test
@@ -2161,5 +2151,107 @@ public class GameTest {
         final int sizenew = p.quantityOfDevCards();
 
         assertTrue(sizenew == sizeold + 1);
+    }
+
+    /**
+     * Checks canMaritimeTrade
+     * @throws PlayerExistsException
+     * @throws InvalidPlayerException
+     */
+    @Test
+    public void testCanMaritimeTrade() throws PlayerExistsException, InvalidPlayerException {
+        int current_turn = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.DISCARDING);
+        assertFalse(game.canMaritimeTrade(current_turn, PortType.WHEAT));
+        game.setPhase(TurnTracker.Phase.PLAYING);
+        assertTrue(game.canTrade(current_turn));
+    }
+
+    /**
+     * checks canBuildRoad
+     * @throws InvalidTypeException
+     * @throws InsufficientResourcesException
+     * @throws PlayerExistsException
+     * @throws InvalidLocationException
+     * @throws InvalidPlayerException
+     */
+    @Test
+    public void testCanBuildRoad() throws InvalidTypeException, InsufficientResourcesException, PlayerExistsException, InvalidLocationException, InvalidPlayerException {
+        int current_turn = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.PLAYING);
+        game.giveResource(game.getResourceCard(ResourceType.BRICK),current_turn);
+        game.giveResource(game.getResourceCard(ResourceType.WOOD),current_turn);
+        EdgeLocation eloc1 = new EdgeLocation(new HexLocation(-1, 0), EdgeDirection.NorthEast);
+        EdgeLocation eloc2 = new EdgeLocation(new HexLocation(2,1),EdgeDirection.NorthWest);
+        if(current_turn < 2) {
+            assertTrue(game.canBuildRoad(current_turn,eloc1));
+            assertFalse(game.canBuildRoad(current_turn,eloc2));
+        }else{
+            assertTrue(game.canBuildRoad(current_turn,eloc2));
+            assertFalse(game.canBuildRoad(current_turn,eloc1));
+        }
+
+    }
+
+    /**
+     * Checks canBuildSettlement
+     * checks canBuildCity
+     * @throws InvalidPlayerException
+     * @throws PlayerExistsException
+     * @throws InvalidLocationException
+     * @throws InvalidTypeException
+     * @throws InsufficientResourcesException
+     * @throws StructureException
+     */
+    @Test
+    public void testCanBuildRoadandCity() throws InvalidPlayerException, PlayerExistsException, InvalidLocationException, InvalidTypeException, InsufficientResourcesException, StructureException {
+        int current_turn = game.getCurrentTurn();
+        game.setPhase(TurnTracker.Phase.ROLLING);
+        assertFalse(game.canBuildSettlement(current_turn,new VertexLocation(new HexLocation(0,0),VertexDirection.NorthEast)));
+        game.setPhase(TurnTracker.Phase.PLAYING);
+
+        game.giveResource(game.getResourceCard(ResourceType.BRICK),current_turn);
+        game.giveResource(game.getResourceCard(ResourceType.WOOD),current_turn);
+        EdgeLocation eloc;
+        VertexLocation vloc;
+        if(current_turn < 2){
+            eloc = new EdgeLocation(new HexLocation(0,0),EdgeDirection.North);
+            vloc = new VertexLocation(new HexLocation(0,0),VertexDirection.NorthEast);
+        }else if(current_turn == 2){
+            eloc = new EdgeLocation(new HexLocation(0,0),EdgeDirection.NorthEast);
+            vloc = new VertexLocation(new HexLocation(0,0),VertexDirection.NorthEast);
+        }else{
+            eloc = new EdgeLocation(new HexLocation(1,0),EdgeDirection.NorthEast);
+            vloc = new VertexLocation(new HexLocation(1,0),VertexDirection.NorthEast);
+        }
+        game.buildRoad(current_turn, eloc);
+
+        //Checks if you can build Settlement
+        if(game.amountOwnedResource(current_turn,ResourceType.BRICK) > 0 && game.amountOwnedResource(current_turn, ResourceType.WOOD) > 0 &&
+                game.amountOwnedResource(current_turn, ResourceType.WHEAT) > 0 && game.amountOwnedResource(current_turn, ResourceType.SHEEP) > 0){
+            assertTrue(game.canBuildSettlement(current_turn,vloc));
+        }else{
+            assertFalse(game.canBuildSettlement(current_turn,vloc));
+            game.giveResource(game.getResourceCard(ResourceType.BRICK),current_turn);
+            game.giveResource(game.getResourceCard(ResourceType.WOOD),current_turn);
+            game.giveResource(game.getResourceCard(ResourceType.SHEEP),current_turn);
+            game.giveResource(game.getResourceCard(ResourceType.WHEAT),current_turn);
+            assertTrue(game.canBuildSettlement(current_turn,vloc));
+        }
+        game.buildSettlement(current_turn,vloc);
+
+        //Checks if you can build city
+        if(game.amountOwnedResource(current_turn,ResourceType.ORE) >= 3 && game.amountOwnedResource(current_turn, ResourceType.WHEAT) >= 2){
+            assertTrue(game.canBuildCity(current_turn,vloc));
+        }else{
+            assertFalse(game.canBuildCity(current_turn,vloc));
+            game.giveResource(game.getResourceCard(ResourceType.ORE),current_turn);
+            game.giveResource(game.getResourceCard(ResourceType.WHEAT),current_turn);
+            game.giveResource(game.getResourceCard(ResourceType.ORE),current_turn);
+            game.giveResource(game.getResourceCard(ResourceType.WHEAT),current_turn);
+            game.giveResource(game.getResourceCard(ResourceType.ORE),current_turn);
+            assertTrue(game.canBuildCity(current_turn,vloc));
+        }
+
     }
 }
