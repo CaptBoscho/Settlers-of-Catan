@@ -37,11 +37,39 @@ public final class ServerProxy implements IServer {
         this.port = port;
     }
 
+    /**
+     * Shows a pop-up with an error message if something goes wrong with any
+     * HTTP requests.
+     * @param message The message to be displayed to the user.
+     */
     private void showMessageViewForHttpError(final String message) {
         MessageView view = new MessageView();
         view.setTitle("HTTP Error");
         view.setMessage(message);
         view.showModal();
+    }
+
+    /**
+     * Executes the HTTP request and updates the Game model with the result
+     * @param url The URL for the request
+     * @param dto The DTO with the parameters for the request
+     * @throws MissingUserCookieException
+     */
+    private void executeModelUpdateRequest(final String url, final IDTO dto) throws MissingUserCookieException {
+        String result;
+        try {
+            result = Utils.sendPost(url, dto.toJSON());
+        } catch (BadHttpRequestException e) {
+            e.printStackTrace();
+            this.showMessageViewForHttpError(e.getMessage());
+            return;
+        }
+        assert result != null;
+        if(result.contains("The catan.user HTTP cookie is missing.")) {
+            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
+        }
+        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
+        Facade.getInstance().getGame().updateGame(obj);
     }
 
     @Override
@@ -354,21 +382,9 @@ public final class ServerProxy implements IServer {
     public void sendChat(final SendChatDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null; // avoid empty request error
+
         String url = Utils.buildUrl(this.host, this.port) + SEND_CHAT_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-            assert result != null;
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -410,20 +426,7 @@ public final class ServerProxy implements IServer {
         assert dto != null;
         assert dto.toJSON() != null;
         final String url = Utils.buildUrl(this.host, this.port) + ROB_PLAYER_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -436,20 +439,7 @@ public final class ServerProxy implements IServer {
         assert dto != null;
         assert dto.toJSON() != null;
         final String url = Utils.buildUrl(this.host, this.port) + FINISH_TURN_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+
     }
 
     /**
@@ -462,20 +452,7 @@ public final class ServerProxy implements IServer {
         assert dto != null;
         assert dto.toJSON() != null;
         final String url = Utils.buildUrl(this.host, this.port) + BUY_DEV_CARD_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -489,47 +466,20 @@ public final class ServerProxy implements IServer {
         assert dto.toJSON() != null;
 
         final String url = Utils.buildUrl(this.host, this.port) + YEAR_OF_PLENTY_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
      * Plays a 'Road Building' card from your hand to build two roads at the specified locations
      *
      * @param dto The transport object that contains the information required to play the Road Building card
-     * @return The current state of the game
      */
     @Override
     public void playRoadBuildingCard(RoadBuildingDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
         final String url = Utils.buildUrl(this.host, this.port) + ROAD_BUILDING_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -541,21 +491,9 @@ public final class ServerProxy implements IServer {
     public void playSoldierCard(PlaySoldierCardDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + SOLDIER_ENDPOINT;
-        String result = null;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -567,21 +505,9 @@ public final class ServerProxy implements IServer {
     public void playMonopolyCard(PlayMonopolyDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + MONOPOLY_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -593,21 +519,9 @@ public final class ServerProxy implements IServer {
     public void playMonumentCard(PlayMonumentDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + MONUMENT_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -619,21 +533,9 @@ public final class ServerProxy implements IServer {
     public void buildRoad(BuildRoadDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + BUILD_ROAD_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -645,21 +547,9 @@ public final class ServerProxy implements IServer {
     public void buildSettlement(BuildSettlementDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         String url = Utils.buildUrl(this.host, this.port) + BUILD_SETTLEMENT_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -671,21 +561,9 @@ public final class ServerProxy implements IServer {
     public void buildCity(BuildCityDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + BUILD_CITY_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -697,21 +575,9 @@ public final class ServerProxy implements IServer {
     public void offerTrade(final OfferTradeDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + OFFER_TRADE_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -723,21 +589,9 @@ public final class ServerProxy implements IServer {
     public void respondToTradeOffer(final TradeOfferResponseDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + ACCEPT_TRADE_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
@@ -749,54 +603,28 @@ public final class ServerProxy implements IServer {
     public void maritimeTrade(final MaritimeTradeDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         final String url = Utils.buildUrl(this.host, this.port) + MARITIME_TRADE_ENDPOINT;
-        String result = null;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
      * Discards the specified resource cards
      *
      * @param dto The transport object that contains the information required to discard cards
-     * @return The current state of the game
      */
     @Override
     public void discardCards(DiscardCardsDTO dto) throws MissingUserCookieException {
         assert dto != null;
         assert dto.toJSON() != null;
+
         String url = Utils.buildUrl(this.host, this.port) + DISCARD_CARDS_ENDPOINT;
-        String result;
-        try {
-            result = Utils.sendPost(url, dto.toJSON());
-        } catch (BadHttpRequestException e) {
-            e.printStackTrace();
-            this.showMessageViewForHttpError(e.getMessage());
-            return;
-        }
-        assert result != null;
-        if(result.contains("The catan.user HTTP cookie is missing.")) {
-            throw new MissingUserCookieException("The catan.user HTTP cookie is missing.");
-        }
-        JsonObject obj = new JsonParser().parse(result).getAsJsonObject();
-        Facade.getInstance().getGame().updateGame(obj);
+        this.executeModelUpdateRequest(url, dto);
     }
 
     /**
      *
      * @param dto The transport object that contains the information required to change the log level of the server
-     * @return
      */
     @Override
     public boolean changeLogLevel(final ChangeLogLevelDTO dto) {
