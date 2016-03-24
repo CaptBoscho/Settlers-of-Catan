@@ -1,5 +1,6 @@
 package server.facade;
 
+import client.data.GameInfo;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import server.managers.GameManager;
@@ -7,6 +8,7 @@ import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
+import shared.dto.ListGamesDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
 import shared.exceptions.*;
@@ -96,7 +98,10 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult list() {
-        return null;
+        final List<GameInfo> games = GameManager.getInstance().getGamesInfos();
+        final ListGamesDTO dto = new ListGamesDTO(games);
+        final String jsonString = dto.toJSONArr().toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**

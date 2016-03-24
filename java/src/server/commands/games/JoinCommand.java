@@ -40,7 +40,7 @@ public final class JoinCommand implements ICommand {
             e.printStackTrace();
         }
 
-        // TODO - SO DUMB
+        // TODO -
         return null;
     }
 
