@@ -1207,8 +1207,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public void buyDevelopmentCard(int playerIndex) throws Exception {
         assert playerIndex >= 0;
         assert playerIndex < 4;
-        assert this.playerManager != null;
-        assert this.developmentCardBank != null;
+        assert playerManager != null;
+        assert developmentCardBank != null;
+        assert canBuyDevelopmentCard(playerIndex);
 
         // remove player resources
         playerManager.buyDevCard(playerIndex);
