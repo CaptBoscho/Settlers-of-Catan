@@ -161,6 +161,17 @@
 		</java>
 	</target>
 
+	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
+		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
+			<arg value="${host}"/>
+			<arg value="${port}"/>
+			<sysproperty key="com.sun.management.jmxremote" value=""/>
+			<assertions>
+				<enable/>
+			</assertions>
+		</java>
+	</target>
+
 	<target name="test" depends="compile, compile-test" description="compiles, packages, and runs the JUnit tests for the project">
 		<java classname="testrunner.TestRunner" fork="yes">
 			<classpath>
@@ -180,17 +191,6 @@
 		<exec dir="python/tests" executable="python" failonerror="true">
 			<arg line="api_test.py" />
 		</exec>
-	</target>
- 	
-	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
-		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
-			<arg value="${host}"/>
-			<arg value="${port}"/>
-			<sysproperty key="com.sun.management.jmxremote" value=""/>
-			<assertions>
-				<enable/>
-			</assertions>
-		</java>
 	</target>
     
     <target name="make-tester-zip" depends="package" description="makes a zip file for your testing team">

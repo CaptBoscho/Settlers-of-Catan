@@ -4,13 +4,14 @@ import client.data.GameInfo;
 import client.facade.Facade;
 import client.misc.MessageView;
 import client.services.exceptions.BadHttpRequestException;
+import com.google.gson.JsonArray;
 import client.services.exceptions.UnauthorizedException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.utils.JSONUtils;
 import shared.dto.*;
 import shared.model.player.PlayerManager;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -296,12 +297,22 @@ public final class ServerProxy implements IServer {
     /**
      * Adds an AI player to the current game with a POST request
      *
-     * @param aiType The type of AI player to add (currently, LARGEST_ARMY is the only supported type)
+     * @param dto Transport object with the information to add an AI to the game.
      */
     @Override
-    public void addAI(final String aiType) {
-        assert aiType != null;
+    public String addAI(final AddAIDTO dto) {
+        assert dto != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/addAI";
+        String result = null;
+
+        try {
+            result = Utils.sendPost(url, dto.toJSON());
+        } catch (BadHttpRequestException e) {
+            e.printStackTrace();
+            this.showMessageViewForHttpError(e.getMessage());
+        }
+        assert result != null;
+        return result;
     }
 
     /**
@@ -311,9 +322,25 @@ public final class ServerProxy implements IServer {
      * @return A list of the supported AI types represented as arbitrary strings
      */
     @Override
-    public List<String> getAITypes() {
+    public List<String> getAITypes(final ListAIDTO dto) {
+        assert dto != null;
+        assert dto.toJSON() != null;
         String url = Utils.buildUrl(this.host, this.port) + "/game/listAI";
-        return null;
+        String result;
+
+        try {
+            result = Utils.sendPost(url, dto.toJSON());
+            assert result != null;
+        } catch (BadHttpRequestException e) {
+            e.printStackTrace();
+            this.showMessageViewForHttpError(e.getMessage());
+            return new ArrayList<>();
+        }
+
+        JsonArray arr = new JsonParser().parse(result).getAsJsonArray();
+        List<String> availableAIs = new ArrayList<>();
+        arr.forEach(ai-> availableAIs.add(ai.getAsJsonObject().get("ai").getAsString()));
+        return availableAIs;
     }
 
     /**

@@ -41,7 +41,7 @@ public class Main {
         port(8081);
 
         // the following endpoint patterns require authentication cookies
-        before("/games/*", new AuthenticationFilter());
+//        before("/games/*", new AuthenticationFilter()); TODO this is literally the worst application design that we are being forced to adhere to. And Swagger sucks kthnxbai.
         before("/game/*", new AuthenticationFilter());
         before("/moves/*", new AuthenticationFilter());
 

@@ -13,6 +13,7 @@ import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.ai.AIFactory;
 import shared.model.ai.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
@@ -128,13 +129,17 @@ public final class ServerFacade implements IFacade {
         assert gameId < this.gameManager.getNumGames();
         assert type != null;
 
+        // get the game
         final Game game = gameManager.getGameByID(gameId);
+        game.incrementVersion();
 
         if(game.canAddAI()) {
             game.addAI(type);
-            return new CommandExecutionResult(game.getDTO().toJSON().getAsString());
+            CommandExecutionResult result = new CommandExecutionResult("Success");
+            result.addCookie("catan.game", String.valueOf(game.getId()));
+            return result;
         } else {
-            throw new AddAIException("AI player can't be added!");
+            return new CommandExecutionResult("Failure");
         }
     }
 
@@ -149,10 +154,10 @@ public final class ServerFacade implements IFacade {
         assert gameId >= 0;
         assert gameId < this.gameManager.getNumGames();
 
-        //TODO: get this to work fool
-        //return new ListAIDTO(AIFactory.listAITypes());
-
-        return null;
+        final List<AIType> availableAIs = AIFactory.listAITypes();
+        final ListAIDTO dto = new ListAIDTO(gameId, availableAIs);
+        final String jsonString = dto.toJSONArr().toString();
+        return new CommandExecutionResult(jsonString);
     }
 
     /**
@@ -407,10 +412,12 @@ public final class ServerFacade implements IFacade {
         final Game game = gameManager.getGameByID(gameID);
         game.incrementVersion();
         try {
-            game.buyDevelopmentCard(playerIndex);
-            String name = game.getPlayerNameByIndex(playerIndex);
-            String message = name + " is gonna reck you when they drop that dev card";
-            game.log(name, message);
+            if (game.canBuyDevelopmentCard(playerIndex)) {
+                game.buyDevelopmentCard(playerIndex);
+                String name = game.getPlayerNameByIndex(playerIndex);
+                String message = name + " is gonna reck you when they drop that dev card";
+                game.log(name, message);
+            }
         } catch (Exception e) {
             throw new BuyDevCardException("Something went wrong while trying to buy a dev card");
         }
