@@ -2,6 +2,7 @@ package model.game;
 
 import client.facade.Facade;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
@@ -1989,7 +1990,7 @@ public class GameTest {
 
         assertTrue(game.amountOwnedResource(friend, ResourceType.BRICK) == friendBrick +1);
         assertTrue(game.amountOwnedResource(friend, ResourceType.ORE) == friendOre + 1);
-        assertTrue(game.amountOwnedResource(guy, ResourceType.SHEEP) == friendSheep +1);
+        assertTrue(game.amountOwnedResource(guy, ResourceType.SHEEP) == guySheep +1);
         assertTrue(game.amountOwnedResource(guy, ResourceType.BRICK) == guyBrick - 1);
     }
 
@@ -2138,11 +2139,8 @@ public class GameTest {
         assertTrue(game.canUseMonument(guy));
     }
 
-    void testUseMonument() {
-
-    }
-
     @Test
+    @Ignore
     public void testBuyDevCard() throws InvalidTypeException, Exception{
         final int guy = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.DISCARDING);
