@@ -195,9 +195,28 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                int cardsBefore = defaultGame.getNumberResourceCards(player);
+                defaultGame.rob(player,victim,newLocation);
+                if(cardsBefore == defaultGame.getNumberResourceCards(player)){
+                    resetGames();
+                    throw new RobPlayerException("No robbing took place");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            } catch (AlreadyRobbedException | InvalidLocationException | InsufficientResourcesException | PlayerExistsException | InvalidTypeException | MoveRobberException e) {
+                resetGames();
+                throw new RobPlayerException("can't rob");
+            }
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                emptyGame.rob(player,victim,newLocation);
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            } catch (AlreadyRobbedException | InvalidLocationException | InsufficientResourcesException | PlayerExistsException | InvalidTypeException | MoveRobberException e) {
+                resetGames();
+                throw new RobPlayerException("can't rob");
+            }
         } else {
             return null;
         }
@@ -233,10 +252,39 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                if(!defaultGame.canBuyDevelopmentCard(player)){
+                    resetGames();
+                    throw new BuyDevCardException("not enough resources to buy dev card");
+                }
+                int amountOfDevs = defaultGame.numberOfDevCard(player);
+                defaultGame.buyDevelopmentCard(player);
+                if(amountOfDevs == defaultGame.numberOfDevCard(player)){
+                    resetGames();
+                    throw new BuyDevCardException("wasn't able to buy a dev card");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (Exception e) {
+                resetGames();
+                throw new BuyDevCardException("couldn't buy a dev card");
+            }
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                int amountOfDevs = emptyGame.numberOfDevCard(player);
+                emptyGame.buyDevelopmentCard(player);
+                if(amountOfDevs == emptyGame.numberOfDevCard(player)){
+                    resetGames();
+                    throw new BuyDevCardException("wasn't able to buy a dev card");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+            } catch (Exception e) {
+                resetGames();
+                throw new BuyDevCardException("couldn't buy a dev card");
+            }
         } else {
+            resetGames();
             return null;
         }
     }
@@ -305,10 +353,29 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                defaultGame.useSoldier(player,victim,newLocation);
+                if(!defaultGame.getMap().getRobber().getLocation().equals(newLocation)) {
+                    resetGames();
+                    throw new SoldierException("Didn't use soldier card");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (InvalidTypeException | InsufficientResourcesException | PlayerExistsException | MoveRobberException | DevCardException | AlreadyRobbedException | InvalidLocationException e) {
+                resetGames();
+                throw new SoldierException("Can't use soldier");
+            }
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                emptyGame.useSoldier(player,victim,newLocation);
+                resetGames();
+                return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+            } catch (InvalidTypeException | InsufficientResourcesException | PlayerExistsException | MoveRobberException | DevCardException | AlreadyRobbedException | InvalidLocationException e) {
+                resetGames();
+                throw new SoldierException("Can't use soldier");
+            }
         } else {
+            resetGames();
             return null;
         }
     }
@@ -513,10 +580,39 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
+        ResourceType give = ResourceType.translateFromString(dto.getInputResource());
+        ResourceType get = ResourceType.translateFromString(dto.getOutputResource());
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                int before = defaultGame.amountOwnedResource(dto.getPlayerIndex(),give);
+                defaultGame.maritimeTrade(dto.getPlayerIndex(),dto.getRatio(),give,get);
+                if(before == defaultGame.amountOwnedResource(dto.getPlayerIndex(),give)){
+                    resetGames();
+                    throw new MaritimeTradeException("trade didn't take place");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (InvalidPlayerException | InsufficientResourcesException | InvalidTypeException | PlayerExistsException e) {
+                resetGames();
+                throw new MaritimeTradeException("couldn't maritime trade");
+            }
+
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            int before = 0;
+            try {
+                before = emptyGame.amountOwnedResource(dto.getPlayerIndex(),give);
+                defaultGame.maritimeTrade(dto.getPlayerIndex(),dto.getRatio(),give,get);
+                if(before == defaultGame.amountOwnedResource(dto.getPlayerIndex(),give)){
+                    resetGames();
+                    throw new MaritimeTradeException("trade didn't take place");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+            } catch (PlayerExistsException | InvalidTypeException | InsufficientResourcesException | InvalidPlayerException e) {
+                resetGames();
+                throw new MaritimeTradeException("can't trade on empty game");
+            }
+
         } else {
             return null;
         }
