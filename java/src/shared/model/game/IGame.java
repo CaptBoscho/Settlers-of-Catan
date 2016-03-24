@@ -345,7 +345,7 @@ public interface IGame {
      */
     void offerTrade(TradePackage package1, TradePackage package2) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 
-    void acceptTrade(int playerIndex, boolean answer) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
+    void acceptTrade(int playerIndex, boolean answer) throws Exception, InvalidTypeException;
     /**
      * Action - Player plays Year of Plenty
      * @param playerIndex ID of Player performing action

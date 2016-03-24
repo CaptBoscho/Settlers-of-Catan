@@ -984,7 +984,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         }
     }
 
-    public void acceptTrade(int playerIndex, boolean answer) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void acceptTrade(int playerIndex, boolean answer) throws Exception, InvalidTypeException {
+        if (currentOffer == null) {
+            throw new Exception("Can't accept trade; No current trade offer");
+        }
+
         if (playerIndex == currentOffer.getReceiver() && answer) {
             playerManager.offerTrade(currentOffer.getSender(), currentOffer.getReceiver(), currentOffer.getPackage1().getResources(), currentOffer.getPackage2().getResources());
         }

@@ -760,7 +760,7 @@ public final class ServerFacade implements IFacade {
             String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(player);
             String message = name + " makes deals with the homeless";
             gameManager.getGameByID(gameID).log(name, message);
-        } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+        } catch (InvalidTypeException | Exception e) {
             throw new AcceptTradeException(e.getMessage());
         }
 
