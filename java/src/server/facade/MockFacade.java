@@ -176,9 +176,28 @@ public final class MockFacade implements IFacade {
     @Override
     public CommandExecutionResult robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
         if (gameID == DEFAULT_GAME) {
-            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            try {
+                int cardsBefore = defaultGame.getNumberResourceCards(player);
+                defaultGame.rob(player,victim,newLocation);
+                if(cardsBefore == defaultGame.getNumberResourceCards(player)){
+                    resetGames();
+                    throw new RobPlayerException("No robbing took place");
+                }
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            } catch (AlreadyRobbedException | InvalidLocationException | InsufficientResourcesException | PlayerExistsException | InvalidTypeException | MoveRobberException e) {
+                resetGames();
+                throw new RobPlayerException("can't rob");
+            }
         } else if (gameID == EMPTY_GAME) {
-            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+            try {
+                emptyGame.rob(player,victim,newLocation);
+                resetGames();
+                return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+            } catch (AlreadyRobbedException | InvalidLocationException | InsufficientResourcesException | PlayerExistsException | InvalidTypeException | MoveRobberException e) {
+                resetGames();
+                throw new RobPlayerException("can't rob");
+            }
         } else {
             return null;
         }
@@ -280,20 +299,26 @@ public final class MockFacade implements IFacade {
             try {
                 defaultGame.useSoldier(player,victim,newLocation);
                 if(!defaultGame.getMap().getRobber().getLocation().equals(newLocation)) {
+                    resetGames();
                     throw new SoldierException("Didn't use soldier card");
                 }
+                resetGames();
                 return new CommandExecutionResult(this.defaultGame.toJSON().toString());
             } catch (InvalidTypeException | InsufficientResourcesException | PlayerExistsException | MoveRobberException | DevCardException | AlreadyRobbedException | InvalidLocationException e) {
+                resetGames();
                 throw new SoldierException("Can't use soldier");
             }
         } else if (gameID == EMPTY_GAME) {
             try {
                 emptyGame.useSoldier(player,victim,newLocation);
+                resetGames();
                 return new CommandExecutionResult(this.emptyGame.toJSON().toString());
             } catch (InvalidTypeException | InsufficientResourcesException | PlayerExistsException | MoveRobberException | DevCardException | AlreadyRobbedException | InvalidLocationException e) {
+                resetGames();
                 throw new SoldierException("Can't use soldier");
             }
         } else {
+            resetGames();
             return null;
         }
     }
