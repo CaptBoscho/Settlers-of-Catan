@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author Derek Argueta
  */
-public class MockServer implements IServer {
+class MockServer implements IServer {
 
     // TODO - read directly out of .json files
     private final String noUser = "The catan.user HTTP cookie is missing.  You must login before calling this method.";
@@ -146,12 +146,9 @@ public class MockServer implements IServer {
      * Returns the current state of the game in JSON format with a GET request
      *
      * @param version The version number of the model that the caller already has.
-     *
-     * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
-    public void getCurrentModel(int version) {
-    }
+    public void getCurrentModel(int version) {}
 
     /**
      * Clears out the command history of the current game with a POST request

@@ -2,30 +2,45 @@ package server.facade;
 
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
+import server.managers.GameManager;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.MaritimeTradeDTO;
 import shared.dto.OfferTradeDTO;
+import shared.exceptions.*;
+import shared.locations.EdgeDirection;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
+import shared.model.game.MessageLine;
+
+import javax.naming.InsufficientResourcesException;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kyle Cornelison
  */
 public final class MockFacade implements IFacade {
 
-    private Game game;
+    public static final int DEFAULT_GAME = 0;
+    public static final int EMPTY_GAME = 1;
+
+    private Game defaultGame;
+    private Game emptyGame;
 
     public MockFacade() {
-        this.game = new Game("A game", false, false, false);
+        resetGames();
     }
 
     /**
      * Logs a player into the server
+     *
      * @param username The player's username
      * @param password The player's password
      * @return boolean
@@ -40,8 +55,8 @@ public final class MockFacade implements IFacade {
      *
      * @param username The player's username
      * @param password The player's password
-     * @throws RegisterException
      * @return CommandExecutionResult
+     * @throws RegisterException
      */
     @Override
     public CommandExecutionResult register(String username, String password) throws RegisterException {
@@ -53,8 +68,8 @@ public final class MockFacade implements IFacade {
      *
      * @param gameId
      * @param type
-     * @throws AddAIException
      * @return CommandExecutionResult
+     * @throws AddAIException
      */
     @Override
     public CommandExecutionResult addAI(int gameId, AIType type) throws AddAIException {
@@ -86,10 +101,10 @@ public final class MockFacade implements IFacade {
     /**
      * Creates a new game
      *
-     * @param name The name of the new game
-     * @param randomTiles Whether or not the tiles should be random
+     * @param name          The name of the new game
+     * @param randomTiles   Whether or not the tiles should be random
      * @param randomNumbers Whether or not the chits should be random
-     * @param randomPorts Whether or not the ports should be random
+     * @param randomPorts   Whether or not the ports should be random
      * @return CommandExecutionResult
      */
     @Override
@@ -100,12 +115,12 @@ public final class MockFacade implements IFacade {
     /**
      * Joins a player to the specified game
      *
-     * @param gameID The ID of the game to be joined
-     * @param color The color the player has chosen for this game
+     * @param gameID   The ID of the game to be joined
+     * @param color    The color the player has chosen for this game
      * @param playerId
      * @param username
-     * @throws JoinGameException
      * @return CommandExecutionResult
+     * @throws JoinGameException
      */
     @Override
     public CommandExecutionResult join(final int gameID, final CatanColor color, final int playerId, final String username) throws JoinGameException {
@@ -118,12 +133,27 @@ public final class MockFacade implements IFacade {
      * @param gameID
      * @param player  index of the player
      * @param message
-     * @throws SendChatException
      * @return CommandExecutionResult
+     * @throws SendChatException
      */
     @Override
     public CommandExecutionResult sendChat(int gameID, int player, String message) throws SendChatException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            try {
+                String playerName = defaultGame.getPlayerNameByIndex(player);
+                MessageLine line = new MessageLine(playerName, message);
+                defaultGame.getChat().addMessage(line);
+                resetGames();
+            } catch (PlayerExistsException e) {
+                resetGames();
+                throw new SendChatException(e.getMessage());
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -132,27 +162,39 @@ public final class MockFacade implements IFacade {
      * @param gameID
      * @param player index of the player
      * @param value
-     * @throws RollNumberException
      * @return CommandExecutionResult
+     * @throws RollNumberException
      */
     @Override
     public CommandExecutionResult rollNumber(int gameID, int player, int value) throws RollNumberException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
      * Robs the specified player
      *
      * @param gameID
-     * @param player index of the player robbing
+     * @param player      index of the player robbing
      * @param newLocation
-     * @param victim index of the player being robbed
+     * @param victim      index of the player being robbed
      * @return CommandExecutionResult
      * @throws RobPlayerException
      */
     @Override
     public CommandExecutionResult robPlayer(int gameID, int player, HexLocation newLocation, int victim) throws RobPlayerException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -160,12 +202,18 @@ public final class MockFacade implements IFacade {
      *
      * @param gameID
      * @param player index of the player
-     * @throws FinishTurnException
      * @return CommandExecutionResult
+     * @throws FinishTurnException
      */
     @Override
     public CommandExecutionResult finishTurn(int gameID, int player) throws FinishTurnException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -173,12 +221,18 @@ public final class MockFacade implements IFacade {
      *
      * @param gameID
      * @param player index of the player
-     * @throws BuyDevCardException
      * @return CommandExecutionResult
+     * @throws BuyDevCardException
      */
     @Override
     public CommandExecutionResult buyDevCard(int gameID, int player) throws BuyDevCardException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -188,12 +242,18 @@ public final class MockFacade implements IFacade {
      * @param player      index of the player
      * @param resourceOne first resource to receive
      * @param resourceTwo second resource to receive
-     * @throws YearOfPlentyException
      * @return CommandExecutionResult
+     * @throws YearOfPlentyException
      */
     @Override
     public CommandExecutionResult yearOfPlenty(int gameID, int player, ResourceType resourceOne, ResourceType resourceTwo) throws YearOfPlentyException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -208,7 +268,22 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult roadBuilding(int gameID, int player, EdgeLocation locationOne, EdgeLocation locationTwo) throws RoadBuildingException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            try {
+                defaultGame.useRoadBuilder(player, locationOne, locationTwo);
+                if(!defaultGame.getMap().getRoads().get(player).contains(locationOne)) {
+                    throw new RoadBuildingException("Did not play road building card");
+                }
+            } catch (PlayerExistsException | DevCardException | InvalidPlayerException | InvalidLocationException | StructureException e) {
+                resetGames();
+                throw new RoadBuildingException(e.getMessage());
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -217,13 +292,19 @@ public final class MockFacade implements IFacade {
      * @param gameID
      * @param player      index of the player
      * @param newLocation
-     * @param victim index of the player being robbed
+     * @param victim      index of the player being robbed
      * @return CommandExecutionResult
      * @throws SoldierException
      */
     @Override
     public CommandExecutionResult soldier(int gameID, int player, HexLocation newLocation, int victim) throws SoldierException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -232,12 +313,18 @@ public final class MockFacade implements IFacade {
      * @param gameID
      * @param player   index of the player
      * @param resource resource to take
-     * @throws MonopolyException
      * @return CommandExecutionResult
+     * @throws MonopolyException
      */
     @Override
     public CommandExecutionResult monopoly(int gameID, int player, ResourceType resource) throws MonopolyException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -245,40 +332,74 @@ public final class MockFacade implements IFacade {
      *
      * @param gameID
      * @param player index of the player
-     * @throws MonumentException
      * @return CommandExecutionResult
+     * @throws MonumentException
      */
     @Override
     public CommandExecutionResult monument(int gameID, int player) throws MonumentException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
      * Builds a road
      *
      * @param gameID
-     * @param player index of the player
+     * @param player   index of the player
      * @param location
      * @return CommandExecutionResult
      * @throws BuildRoadException
      */
     @Override
     public CommandExecutionResult buildRoad(int gameID, int player, EdgeLocation location) throws BuildRoadException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
      * Builds a settlement
      *
      * @param gameID
-     * @param player index of the player
+     * @param player   index of the player
      * @param location
      * @return CommandExecutionResult
      * @throws BuildSettlementException
      */
     @Override
     public CommandExecutionResult buildSettlement(int gameID, int player, VertexLocation location) throws BuildSettlementException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            try {
+                defaultGame.getMap().buildRoad(player, new EdgeLocation(location.getHexLoc(), EdgeDirection.NorthWest));
+                defaultGame.getMap().buildSettlement(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                resetGames();
+                throw new BuildSettlementException(e.getMessage());
+            }
+            resetGames();
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            try {
+                emptyGame.getMap().buildSettlement(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                resetGames();
+                throw new BuildSettlementException(e.getMessage());
+            }
+            resetGames();
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            resetGames();
+            return null;
+        }
     }
 
     /**
@@ -292,7 +413,28 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult buildCity(int gameID, int player, VertexLocation location) throws BuildCityException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            try {
+                defaultGame.getMap().buildCity(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                resetGames();
+                throw new BuildCityException(e.getMessage());
+            }
+            resetGames();
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            try {
+                emptyGame.getMap().buildCity(player, location);
+            } catch (StructureException | InvalidLocationException e) {
+                resetGames();
+                throw new BuildCityException(e.getMessage());
+            }
+            resetGames();
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            resetGames();
+            return null;
+        }
     }
 
     /**
@@ -300,12 +442,18 @@ public final class MockFacade implements IFacade {
      *
      * @param gameID
      * @param dto
-     * @throws OfferTradeException
      * @return CommandExecutionResult
+     * @throws OfferTradeException
      */
     @Override
     public CommandExecutionResult offerTrade(int gameID, OfferTradeDTO dto) throws OfferTradeException {
-        return new CommandExecutionResult(this.game.toJSON().toString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -314,12 +462,25 @@ public final class MockFacade implements IFacade {
      * @param gameID
      * @param player     index of the player accepting the trade
      * @param willAccept whether or not the player accepts
-     * @throws AcceptTradeException
      * @return CommandExecutionResult
+     * @throws AcceptTradeException
      */
     @Override
     public CommandExecutionResult acceptTrade(int gameID, int player, boolean willAccept) throws AcceptTradeException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            try {
+                defaultGame.acceptTrade(player, willAccept);
+            } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+                throw new AcceptTradeException("Unable to accept trade without trade offer");
+            } catch (Exception e) {
+                throw new AcceptTradeException("Unable to accept trade without trade offer");
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -331,7 +492,13 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult maritimeTrade(int gameID, MaritimeTradeDTO dto) throws MaritimeTradeException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().getAsString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().getAsString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -339,16 +506,45 @@ public final class MockFacade implements IFacade {
      *
      * @param gameID
      * @param dto
-     * @throws DiscardCardsException
      * @return CommandExecutionResult
+     * @throws DiscardCardsException
      */
     @Override
     public CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        final List<ResourceType> cards = new ArrayList<>();
+        for(int i = 0; i < dto.getBrickCount(); i++) {
+            cards.add(ResourceType.BRICK);
+        }
+        for(int i = 0; i < dto.getWoodCount(); i++) {
+            cards.add(ResourceType.WOOD);
+        }
+        for(int i = 0; i < dto.getOreCount(); i++) {
+            cards.add(ResourceType.ORE);
+        }
+        for(int i = 0; i < dto.getWheatCount(); i++) {
+            cards.add(ResourceType.WHEAT);
+        }
+        for(int i = 0; i < dto.getSheepCount(); i++) {
+            cards.add(ResourceType.SHEEP);
+        }
+
+        if (gameID == DEFAULT_GAME) {
+            try {
+                defaultGame.discardCards(dto.getPlayerIndex(), cards);
+            } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+                throw new DiscardCardsException("No players can discard at beginning of game");
+            }
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            return null;
+        }
     }
 
     /**
      * Gets the model
+     *
      * @param gameID
      * @param version
      * @return
@@ -356,6 +552,42 @@ public final class MockFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult getModel(int gameID, int version) throws GetModelException {
-        return new CommandExecutionResult(this.game.toJSON().getAsString());
+        if (gameID == DEFAULT_GAME) {
+            return new CommandExecutionResult(this.defaultGame.toJSON().toString());
+        } else if (gameID == EMPTY_GAME) {
+            return new CommandExecutionResult(this.emptyGame.toJSON().toString());
+        } else {
+            return null;
+        }
     }
+
+    @Override
+    public void resetGames() {
+        try {
+            defaultGame = GameManager.makeGameFromFile(GameManager.DEFAULT_GAME);
+            defaultGame.setId(0);
+            defaultGame.setTitle("Default Game");
+            emptyGame = GameManager.makeGameFromFile(GameManager.EMPTY_GAME);
+            emptyGame.setId(1);
+            defaultGame.setTitle("Empty Game");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Game getGame(GameType game) {
+        if (game == GameType.DEFAULT_GAME) {
+            return defaultGame;
+        } else if (game == GameType.EMPTY_GAME) {
+            return emptyGame;
+        } else {
+            return null;
+        }
+    }
+
+    public enum GameType {
+        DEFAULT_GAME,
+        EMPTY_GAME
+    }
+
 }

@@ -21,12 +21,10 @@ public class SendChatHandler implements Route {
             return BAD_JSON_MESSAGE;
         }
 
-        // TODO - validation
-
-        CookieWrapperDTO dto = new CookieWrapperDTO(new SendChatDTO(request.body()));
+        final CookieWrapperDTO dto = new CookieWrapperDTO(new SendChatDTO(request.body()));
         dto.extractCookieInfo(request.cookies());
 
-        CommandExecutionResult result = MovesController.sendChat(dto);
+        final CommandExecutionResult result = MovesController.sendChat(dto);
         if(result.errorOccurred()) {
             response.status(result.getStatus());
         } else {

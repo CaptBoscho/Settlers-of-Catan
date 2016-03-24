@@ -6,6 +6,10 @@ import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
+import shared.dto.CookieWrapperDTO;
+import shared.dto.SendChatDTO;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit Testing for the "Send Chat" command.
@@ -41,5 +45,21 @@ public class SendChatCommandTest {
     @Test(expected = AssertionError.class)
     public void testExecuteWithMissingParams() throws CommandExecutionFailedException {
         new SendChatCommand().execute();
+    }
+
+    @Test
+    public void testExecute() {
+        //send a chat
+        CookieWrapperDTO dto = new CookieWrapperDTO(new SendChatDTO(0, "These tests are stupid"));
+        dto.setGameId(MockFacade.DEFAULT_GAME);
+        SendChatCommand command = new SendChatCommand();
+        command.setParams(dto);
+        try {
+            //Should send a chat just fine
+            command.execute();
+        } catch(CommandExecutionFailedException e) {
+            //Send chat didn't work
+            assertTrue(false);
+        }
     }
 }

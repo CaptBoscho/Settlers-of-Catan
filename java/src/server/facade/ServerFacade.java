@@ -2,6 +2,8 @@ package server.facade;
 
 import client.data.GameInfo;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import jdk.nashorn.internal.parser.JSONParser;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import server.managers.GameManager;
@@ -21,8 +23,12 @@ import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
 
 import javax.naming.InsufficientResourcesException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author Kyle Cornelison
@@ -38,23 +44,6 @@ public final class ServerFacade implements IFacade {
     private ServerFacade(){
         gameManager = GameManager.getInstance();
         userManager = UserManager.getInstance();
-
-        userManager.addUser("jose", "jose");
-        userManager.addUser("juan", "juan");
-        userManager.addUser("pablo", "pablo");
-        userManager.addUser("jesus", "jesus");
-        userManager.addUser("juana", "juana");
-        userManager.addUser("emilio", "emilio");
-        userManager.addUser("emilia", "emilia");
-        userManager.addUser("jorge", "jorge");
-        userManager.addUser("juanita", "juanita");
-        userManager.addUser("pancho", "pancho");
-        userManager.addUser("oscar", "oscar");
-        userManager.addUser("ivan", "ivan");
-        userManager.addUser("sergio", "sergio");
-        userManager.addUser("antonio", "antonio");
-        userManager.addUser("pedro", "pedro");
-        userManager.addUser("maria", "maria");
     }
 
     private HexLocation getModelHexLocation(HexLocation hexLoc) {
@@ -771,7 +760,7 @@ public final class ServerFacade implements IFacade {
             String name = gameManager.getGameByID(gameID).getPlayerNameByIndex(player);
             String message = name + " makes deals with the homeless";
             gameManager.getGameByID(gameID).log(name, message);
-        } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+        } catch (InvalidTypeException | Exception e) {
             throw new AcceptTradeException(e.getMessage());
         }
 
@@ -876,5 +865,10 @@ public final class ServerFacade implements IFacade {
         final JsonObject json = game.toJSON();
         final String jsonString = json.toString();
         return new CommandExecutionResult(jsonString);
+    }
+
+    @Override
+    public void resetGames() {
+        GameManager.reset();
     }
 }
