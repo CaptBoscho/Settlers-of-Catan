@@ -3,6 +3,8 @@ package server.commands.game;
 
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.exceptions.ListAIException;
+import server.main.Config;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 
@@ -13,7 +15,7 @@ import shared.dto.IDTO;
  */
 public final class ListAICommand implements ICommand {
 
-    private CookieWrapperDTO dto;
+    private int gameId;
 
     /**
      * Communicates with the ServerFacade to carry out the List AI command
@@ -22,13 +24,19 @@ public final class ListAICommand implements ICommand {
      */
     @Override
     public CommandExecutionResult execute() {
-        assert this.dto != null;
-        return null;
+        try {
+            return Config.facade.listAI(gameId);
+        } catch (ListAIException e) {
+            e.printStackTrace();
+            CommandExecutionResult result = new CommandExecutionResult("Error listing AI types!");
+            result.triggerError(500);
+            return result;
+        }
     }
 
     @Override
-    public void setParams(IDTO dto) {
-        this.dto = (CookieWrapperDTO)dto;
+    public void setParams(final IDTO dto) {
+        final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
+        this.gameId = cookieDTO.getGameId();
     }
-
 }

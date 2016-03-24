@@ -21,6 +21,15 @@ public final class AddAIDTO implements IDTO,JsonSerializable {
         this.type = type;
     }
 
+    public AddAIDTO(final String json) {
+        try{
+            this.type = AIType.valueOf(json);
+        }catch(IllegalArgumentException e){
+            final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+            this.type = AIType.valueOf(obj.get(kAi).getAsString());
+        }
+    }
+
     public AIType getAIType(){
         return this.type;
     }
