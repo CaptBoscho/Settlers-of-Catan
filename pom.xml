@@ -7,6 +7,13 @@
     <groupId>com.dargueta</groupId>
     <artifactId>Settlers-of-Catan</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <nd4j.version>0.4-rc3.8</nd4j.version>
+        <dl4j.version>0.4-rc3.8</dl4j.version>
+        <canova.version>0.0.0.14</canova.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -52,6 +59,21 @@
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-x86</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
 
+        <dependency>
+            <artifactId>canova-api</artifactId>
+            <groupId>org.nd4j</groupId>
+            <version>${canova.version}</version>
+        </dependency>
+    </dependencies>
 </project>
