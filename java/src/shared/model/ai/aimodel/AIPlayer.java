@@ -1,4 +1,4 @@
-package shared.model.ai;
+package shared.model.ai.aimodel;
 
 import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;

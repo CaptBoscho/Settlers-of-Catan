@@ -16,7 +16,7 @@ import shared.locations.EdgeDirection;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.ai.AIType;
+import shared.model.ai.aimodel.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.MessageLine;

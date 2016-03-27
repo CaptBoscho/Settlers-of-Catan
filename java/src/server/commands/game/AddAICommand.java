@@ -7,7 +7,7 @@ import server.main.Config;
 import shared.dto.AddAIDTO;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
-import shared.model.ai.AIType;
+import shared.model.ai.aimodel.AIType;
 
 /**
  * A command object that adds an AI

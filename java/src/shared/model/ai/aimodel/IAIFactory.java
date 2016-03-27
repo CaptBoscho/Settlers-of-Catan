@@ -1,4 +1,4 @@
-package shared.model.ai;
+package shared.model.ai.aimodel;
 
 import shared.exceptions.CreateAIException;
 

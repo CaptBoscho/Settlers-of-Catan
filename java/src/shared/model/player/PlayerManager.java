@@ -7,7 +7,6 @@ import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
-import shared.model.ai.AIPlayer;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;

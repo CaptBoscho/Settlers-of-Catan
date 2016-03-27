@@ -10,7 +10,7 @@ import shared.dto.OfferTradeDTO;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.ai.AIType;
+import shared.model.ai.aimodel.AIType;
 
 /**
  * @author Kyle Cornelison

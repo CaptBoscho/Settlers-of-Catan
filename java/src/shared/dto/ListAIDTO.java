@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
-import shared.model.ai.AIType;
+import shared.model.ai.aimodel.AIType;
 import java.util.ArrayList;
 import java.util.List;
 

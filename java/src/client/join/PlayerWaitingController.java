@@ -3,14 +3,11 @@ package client.join;
 import client.base.*;
 import client.data.PlayerInfo;
 import client.facade.Facade;
-import client.misc.MessageView;
 import client.services.MissingUserCookieException;
 import client.services.Poller;
 import client.services.ServerProxy;
 import shared.dto.AddAIDTO;
 import shared.dto.ListAIDTO;
-import shared.model.ai.AIType;
-import shared.model.game.Game;
 
 import java.util.ArrayList;
 import java.util.List;

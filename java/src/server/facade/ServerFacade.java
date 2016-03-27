@@ -2,8 +2,6 @@ package server.facade;
 
 import client.data.GameInfo;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import jdk.nashorn.internal.parser.JSONParser;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
 import server.managers.GameManager;
@@ -15,20 +13,16 @@ import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
-import shared.model.ai.AIFactory;
-import shared.model.ai.AIType;
+import shared.model.ai.aimodel.AIFactory;
+import shared.model.ai.aimodel.AIType;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Game;
 import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
 
 import javax.naming.InsufficientResourcesException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * @author Kyle Cornelison
