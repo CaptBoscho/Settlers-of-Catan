@@ -5,11 +5,12 @@ import shared.definitions.CatanColor;
 import shared.exceptions.InvalidPlayerException;
 import shared.model.ai.aimodel.AIPlayer;
 import shared.model.ai.aimodel.AIType;
+import shared.model.ai.aitrainer.ITrainable;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/26/2016.
  */
-public class Rodhammer extends AIPlayer {
+public class Rodhammer extends AIPlayer implements ITrainable {
     /**
      * Construct a Player object from a JSON blob
      *

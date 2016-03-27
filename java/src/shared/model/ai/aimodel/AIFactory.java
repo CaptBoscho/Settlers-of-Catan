@@ -45,15 +45,18 @@ public class AIFactory implements IAIFactory {
      */
     @Override
     public AIPlayer create(AIType type) throws CreateAIException {
-        if(type == AIType.LARGEST_ARMY){
-            try {
+
+        try {
+            if (type == AIType.LARGEST_ARMY) {
                 return new AIPlayer(0, null, -1, -1, "Temp", AIType.LARGEST_ARMY);
-            } catch (InvalidPlayerException e) {
-                e.printStackTrace();
-                throw new CreateAIException("Failed to create the AI Player");
+            } else if (type == AIType.RODHAMMER){
+                return new AIPlayer(0, null, -1, -1, "Temp", AIType.RODHAMMER);
+            }else{
+                throw new CreateAIException("Failed to create the AI type specified");
             }
-        }else{
-            throw new CreateAIException("Failed to create the AI type specified");
+        } catch (InvalidPlayerException e) {
+            e.printStackTrace();
+            throw new CreateAIException("Failed to create the AI Player");
         }
     }
 }
