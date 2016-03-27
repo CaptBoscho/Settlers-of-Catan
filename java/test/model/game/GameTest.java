@@ -406,6 +406,8 @@ public class GameTest {
     /**
      * Checks canBuildSettlement
      * checks canBuildCity
+     * checks to see if the amount of settlements available before a city is built increments
+     * after the city is built
      * @throws InvalidPlayerException
      * @throws PlayerExistsException
      * @throws InvalidLocationException
@@ -414,7 +416,7 @@ public class GameTest {
      * @throws StructureException
      */
     @Test
-    public void testCanBuildRoadandCity() throws InvalidPlayerException, PlayerExistsException, InvalidLocationException, InvalidTypeException, InsufficientResourcesException, StructureException {
+    public void testCanBuildSettlementandCity() throws InvalidPlayerException, PlayerExistsException, InvalidLocationException, InvalidTypeException, InsufficientResourcesException, StructureException {
         int current_turn = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.ROLLING);
         assertFalse(game.canBuildSettlement(current_turn,new VertexLocation(new HexLocation(0,0),VertexDirection.NorthEast)));
@@ -463,14 +465,14 @@ public class GameTest {
             assertTrue(game.canBuildCity(current_turn,vloc));
         }
 
-    }
+        int settlements_available_before = game.getAvailableSettlements(current_turn);
+        int cities_available_before = game.getAvailableCities(current_turn);
+        game.buildCity(current_turn,vloc);
+        int settlements_available_after = game.getAvailableSettlements(current_turn);
+        int cities_available_after = game.getAvailableCities(current_turn);
 
-    /**
-     * Testing to see if available settlements increment
-     * after building a city.
-     */
-    @Test
-    public void availableSettlements(){
-        int current = 
+        assertTrue(settlements_available_after == settlements_available_before+1);
+        assertTrue(cities_available_after == cities_available_before-1);
+
     }
 }
