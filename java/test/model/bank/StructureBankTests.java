@@ -83,9 +83,10 @@ public class StructureBankTests {
     @Test
     public void testBuildingCity() {
         StructureBank bank = new StructureBank();
-
+        bank.buildSettlement();
         bank.buildCity();
         assertEquals(3, bank.getAvailableCities());
+        bank.buildSettlement();
         assertTrue(bank.canBuildCity());
 
         for(int i = 0; i < 3; i++) bank.buildCity();
