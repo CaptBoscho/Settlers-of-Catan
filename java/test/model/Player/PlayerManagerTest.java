@@ -435,7 +435,9 @@ public class PlayerManagerTest {
             for(int i = 0; i < 2; i++) {
                 p.addResourceCard(new Wheat());
             }
-            assertTrue(pm.canBuildCity(p.getPlayerIndex()));
+            if(pm.getAvailableSettlements(p.getPlayerIndex()) < 5) {
+                assertTrue(pm.canBuildCity(p.getPlayerIndex()));
+            }else{assertFalse(pm.canBuildCity(p.getPlayerIndex()));}
         }
     }
 

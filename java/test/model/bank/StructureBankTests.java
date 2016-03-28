@@ -18,11 +18,14 @@ public class StructureBankTests {
 
         // bank should be able to build stuff right away
         assertTrue(bank.canBuildRoad());
-        assertTrue(bank.canBuildCity());
         assertTrue(bank.canBuildSettlement());
+        //need to build a settlement to be able to build a city
+        bank.buildSettlement();
+        assertTrue(bank.canBuildCity());
 
         assertEquals(15, bank.getAvailableRoads());
-        assertEquals(5, bank.getAvailableSettlements());
+        //had to build a settlement
+        assertEquals(4, bank.getAvailableSettlements());
         assertEquals(4, bank.getAvailableCities());
     }
 
@@ -89,7 +92,10 @@ public class StructureBankTests {
         bank.buildSettlement();
         assertTrue(bank.canBuildCity());
 
-        for(int i = 0; i < 3; i++) bank.buildCity();
+        for(int i = 0; i < 3; i++) {
+            bank.buildSettlement();
+            bank.buildCity();
+        }
         assertEquals(0, bank.getAvailableCities());
         assertFalse(bank.canBuildCity());
 

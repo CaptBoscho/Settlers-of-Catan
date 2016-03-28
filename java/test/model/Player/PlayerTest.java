@@ -445,7 +445,9 @@ public class PlayerTest {
             for(int i = 0; i < 2; i++) {
                 p.addResourceCard(new Wheat());
             }
-            assertTrue(p.canBuildCity());
+            if(p.getAvailableSettlements() < 5) {
+                assertTrue(p.canBuildCity());
+            }else{assertFalse(p.canBuildCity());}
         }
     }
 
