@@ -6,6 +6,15 @@ import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
 import server.main.Config;
+import shared.dto.BuildCityDTO;
+import shared.dto.CookieWrapperDTO;
+import shared.dto.RobPlayerDTO;
+import shared.locations.HexLocation;
+import shared.locations.VertexDirection;
+import shared.locations.VertexLocation;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Unit Testing for the "Rob Player" command.
@@ -41,5 +50,22 @@ public class RobPlayerCommandTest {
     @Test(expected = AssertionError.class)
     public void testExecuteWithMissingParams() throws CommandExecutionFailedException {
         new RobPlayerCommand().execute();
+    }
+
+    @Test
+    public void testExecute() {
+        //build a city where a settlement exists and pass
+        CookieWrapperDTO dto = new CookieWrapperDTO(new RobPlayerDTO(0, 1, new HexLocation(0, 0)));
+        dto.setGameId(MockFacade.DEFAULT_GAME);
+        RobPlayerCommand command = new RobPlayerCommand();
+        command.setParams(dto);
+
+        try {
+            command.execute();
+            fail("can't rob");
+        } catch (CommandExecutionFailedException e) {
+            //shouldn't be able to rob
+            assertTrue(true);
+        }
     }
 }

@@ -269,7 +269,6 @@ public final class ServerProxy implements IServer {
      * Returns the current state of the game in JSON format with a GET request
      *
      * @param version The version number of the model that the caller already has.
-     * @return A ClientModel object that contains all the information about the state of the game
      */
     @Override
     public void getCurrentModel(final int version) throws MissingUserCookieException {
