@@ -57,7 +57,8 @@ public final class StructureBank {
     }
 
     public boolean canBuildCity() {
-        return availableCities > 0 && availableSettlements < 5;}
+        return availableCities > 0 && availableSettlements < 5;
+    }
 
     public void buildCity() {
         assert this.availableCities > 0;

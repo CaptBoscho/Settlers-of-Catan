@@ -437,7 +437,9 @@ public class PlayerManagerTest {
             }
             if(pm.getAvailableSettlements(p.getPlayerIndex()) < 5) {
                 assertTrue(pm.canBuildCity(p.getPlayerIndex()));
-            }else{assertFalse(pm.canBuildCity(p.getPlayerIndex()));}
+            } else {
+                assertFalse(pm.canBuildCity(p.getPlayerIndex()));
+            }
         }
     }
 

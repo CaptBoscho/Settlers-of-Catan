@@ -21,6 +21,8 @@ import shared.model.player.Player;
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -465,14 +467,14 @@ public class GameTest {
             assertTrue(game.canBuildCity(current_turn,vloc));
         }
 
-        int settlements_available_before = game.getAvailableSettlements(current_turn);
-        int cities_available_before = game.getAvailableCities(current_turn);
+        int settlementsAvailableBefore = game.getAvailableSettlements(current_turn);
+        int citiesAvailableBefore = game.getAvailableCities(current_turn);
         game.buildCity(current_turn,vloc);
-        int settlements_available_after = game.getAvailableSettlements(current_turn);
-        int cities_available_after = game.getAvailableCities(current_turn);
+        int settlementsAvailableAfter = game.getAvailableSettlements(current_turn);
+        int citiesAvailableAfter = game.getAvailableCities(current_turn);
 
-        assertTrue(settlements_available_after == settlements_available_before+1);
-        assertTrue(cities_available_after == cities_available_before-1);
+        assertEquals(settlementsAvailableAfter, settlementsAvailableBefore + 1);
+        assertEquals(citiesAvailableAfter, citiesAvailableBefore-1);
 
     }
 }

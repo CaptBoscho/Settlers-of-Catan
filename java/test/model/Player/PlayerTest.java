@@ -447,7 +447,9 @@ public class PlayerTest {
             }
             if(p.getAvailableSettlements() < 5) {
                 assertTrue(p.canBuildCity());
-            }else{assertFalse(p.canBuildCity());}
+            } else {
+                assertFalse(p.canBuildCity());
+            }
         }
     }
 
