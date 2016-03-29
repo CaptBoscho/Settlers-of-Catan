@@ -1,8 +1,8 @@
 package shared.exceptions;
 
 /**
- * Created by corne on 1/30/2016.
  * Exception on Development Card Actions
+ * @author Kyle Cornelison
  */
 public class DevCardException extends Exception {
 

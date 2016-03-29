@@ -31,7 +31,7 @@ public class ChatController extends Controller implements IChatController, Obser
     private void initFromModel() {
         List<MessageLine> chat = facade.getChat().getMessages();
         List<LogEntry> entries = new ArrayList<>();
-        for(MessageLine line : chat) {
+        for (MessageLine line : chat) {
             CatanColor color = facade.getPlayerColorByName(line.getPlayer());
             entries.add(new LogEntry(color, line.getMessage()));
         }
@@ -45,7 +45,7 @@ public class ChatController extends Controller implements IChatController, Obser
 
 	@Override
 	public void sendMessage(String message) {
-        if(message != null) {
+        if (message != null) {
             facade.sendChat(userCookie.getPlayerIndex(), message);
         }
 	}

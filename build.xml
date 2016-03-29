@@ -177,6 +177,7 @@
 
 	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
 		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
+			<jvmarg value="-Djava.awt.headless=true"/>
 			<arg value="${host}"/>
 			<arg value="${port}"/>
 			<classpath>

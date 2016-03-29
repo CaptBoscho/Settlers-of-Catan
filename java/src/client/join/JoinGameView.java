@@ -75,7 +75,7 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 		// This is the looped layout
 		if (games != null && games.length > 0) {
 			labelFont = labelFont.deriveFont(labelFont.getStyle(), PANEL_TEXT_SIZE);
-			for (GameInfo game : games) {
+			for (final GameInfo game : games) {
 				final JLabel tmp1 = new JLabel(String.valueOf(game.getId()));
 				tmp1.setFont(labelFont);
 				gamePanel.add(tmp1);
@@ -94,7 +94,6 @@ public class JoinGameView extends OverlayView implements IJoinGameView {
 				tmp3.setFont(labelFont);
 				gamePanel.add(tmp3);
 				JButton joinButton;
-				
 				if (game.getPlayers().contains(localPlayer)) {
 					joinButton = new JButton("Re-Join");
 				} else if (game.getPlayers().size() >= 4) {

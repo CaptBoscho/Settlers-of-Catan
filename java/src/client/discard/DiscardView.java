@@ -55,8 +55,6 @@ import client.utils.FontUtils;
  */
 @SuppressWarnings({"serial", "unused"})
 public class DiscardView extends OverlayView implements IDiscardView {
-
-	private final boolean TESTING = false;
 	
 	private final int LABEL_TEXT_SIZE = 20;
 	private final int BUTTON_TEXT_SIZE = 14;
@@ -66,8 +64,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 											   "resources" + File.separator;
 	private final String MISC_IMAGE_PATH = "images" + File.separator +
 										   "misc" + File.separator;
-	
-	private JLabel label;
+
 	private JButton discardButton;
 	private RoundedButton testButton;
 	private JPanel resourcePanel;
@@ -153,8 +150,8 @@ public class DiscardView extends OverlayView implements IDiscardView {
 		this.setOpaque(true);
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createLineBorder(Color.black, BORDER_WIDTH));
-		
-		label = new JLabel("More than Seven Cards: Discard");
+
+		JLabel label = new JLabel("More than Seven Cards: Discard");
 		Font labelFont = label.getFont();
 		labelFont = labelFont.deriveFont(labelFont.getStyle(), LABEL_TEXT_SIZE);
 		label.setFont(labelFont);
@@ -162,7 +159,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 		
 		resourcePanel = new JPanel();
 		resourcePanel.setLayout(new BoxLayout(resourcePanel, BoxLayout.X_AXIS));
-		for(final ResourceType type : resourceList) {
+		for (final ResourceType type : resourceList) {
 			resourcePanel.add(resources.get(type).asJComponent());
 		}
 		
@@ -179,18 +176,12 @@ public class DiscardView extends OverlayView implements IDiscardView {
 		final JPanel discardButtonPanel = new JPanel();
 		discardButtonPanel.add(discardButton);
 		
-		if(TESTING) {
-    		testButton = new RoundedButton("Enable");
-    		testButton.addActionListener(actionListener);
-    		discardButtonPanel.add(testButton);
-		}
-		
 		this.add(discardButtonPanel, BorderLayout.SOUTH);
 		
 	}
 	
 	private void update() {
-		for(final ResourceType type : resourceList) {
+		for (final ResourceType type : resourceList) {
 			resources.get(type).update();
 		}
 		resourcePanel.repaint();
@@ -281,11 +272,11 @@ public class DiscardView extends OverlayView implements IDiscardView {
 		private boolean enabled = false;
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == discardButton) {
+			if (e.getSource() == discardButton) {
 				getController().discard();
-			} else if(e.getSource() == testButton) {
+			} else if (e.getSource() == testButton) {
 				enabled = !enabled;
-				if(enabled) {
+				if (enabled) {
 					testButton.setText("Disable");
 				} else {
 					testButton.setText("Enable");
@@ -539,7 +530,7 @@ public class DiscardView extends OverlayView implements IDiscardView {
 		}
 		
 		private ActionListener _actionListener = e -> {
-            switch(e.getActionCommand()) {
+            switch (e.getActionCommand()) {
                 case "UP":
                     DiscardView.this.getController().increaseAmount(Resource.this.getType());
                     break;

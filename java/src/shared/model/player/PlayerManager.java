@@ -2,12 +2,12 @@ package shared.model.player;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.exceptions.*;
-import shared.model.ai.AIPlayer;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
@@ -125,36 +125,18 @@ public final class PlayerManager implements IPlayerManager {
             color = CatanColor.values()[colorIndex];
             validColor = true;
 
-            for(int i = 0; i < players.size(); i++){
-                if(players.get(i).getColor() == color)
+            for (final Player player : players) {
+                if (player.getColor() == color)
                     validColor = false;
             }
         }
+
+        // TODO there needs to be better synchronization between PlayerManager and UserManager
         ai.setColor(color);
-
-        //Set id
-        int id = -1;
-        boolean validId = false;
-        while(!validId){
-            id++;
-            validId = true;
-
-            for(int i = 0; i < players.size(); i++){
-                if(players.get(i).getId() == id)
-                    validId = false;
-            }
-        }
-        ai.setPlayerId(id);
-
-        //Set name
+        ai.setPlayerId((int)(Math.random() * 9900 + 1));
         ai.setName("AI-" + ai.getId());
-
-        //Add the player
-        addPlayer(ai);
-
-        //Set index
-        int index = players.size() - 1;
-        ai.setPlayerIndex(index);
+        this.addPlayer(ai);
+        ai.setPlayerIndex(players.size() - 1);
     }
     //endregion
 
@@ -230,10 +212,11 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can play Year of Plenty
      */
     @Override
-    public boolean canUseYearOfPlenty(int playerIndex) throws PlayerExistsException {
-        Player player = getPlayerByIndex(playerIndex);
+    public boolean canUseYearOfPlenty(final int playerIndex) throws PlayerExistsException {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
 
-        return player.canUseYearOfPlenty();
+        return getPlayerByIndex(playerIndex).canUseYearOfPlenty();
     }
 
     /**
@@ -244,8 +227,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can play Road Builder
      */
     @Override
-    public boolean canUseRoadBuilder(int playerIndex) throws PlayerExistsException {
+    public boolean canUseRoadBuilder(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canUseRoadBuilder();
     }
@@ -258,8 +242,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can play Soldier
      */
     @Override
-    public boolean canUseSoldier(int playerIndex) throws PlayerExistsException {
+    public boolean canUseSoldier(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canUseSoldier();
     }
@@ -272,8 +257,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can play Monopoly
      */
     @Override
-    public boolean canUseMonopoly(int playerIndex) throws PlayerExistsException {
+    public boolean canUseMonopoly(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canUseMonopoly();
     }
@@ -286,8 +272,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can play Monument
      */
     @Override
-    public boolean canUseMonument(int playerIndex) throws PlayerExistsException {
+    public boolean canUseMonument(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canUseMonument();
     }
@@ -300,8 +287,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can place the Robber
      */
     @Override
-    public boolean canPlaceRobber(int playerIndex) throws PlayerExistsException {
+    public boolean canPlaceRobber(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canMoveRobber();
     }
@@ -314,8 +302,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can build a road
      */
     @Override
-    public boolean canBuildRoad(int playerIndex) throws PlayerExistsException {
+    public boolean canBuildRoad(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canBuildRoad();
     }
@@ -328,8 +317,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can build a settlement
      */
     @Override
-    public boolean canBuildSettlement(int playerIndex) throws PlayerExistsException {
+    public boolean canBuildSettlement(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canBuildSettlement();
     }
@@ -342,8 +332,9 @@ public final class PlayerManager implements IPlayerManager {
      * @return True if Player can build a city
      */
     @Override
-    public boolean canBuildCity(int playerIndex) throws PlayerExistsException {
+    public boolean canBuildCity(final int playerIndex) throws PlayerExistsException {
         assert playerIndex >= 0;
+        assert playerIndex < 4;
 
         return getPlayerByIndex(playerIndex).canBuildCity();
     }
@@ -822,6 +813,7 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public Player getPlayerByName(final String name) throws PlayerExistsException {
         assert name != null;
+        assert name.length() > 0;
 
         for (final Player player : this.players) {
             if(player.getName().equals(name)) {
@@ -841,6 +833,7 @@ public final class PlayerManager implements IPlayerManager {
     @Override
     public CatanColor getPlayerColorByName(final String name) {
         assert name != null;
+        assert name.length() > 0;
 
         try {
             return getPlayerByName(name).getColor();
@@ -920,8 +913,13 @@ public final class PlayerManager implements IPlayerManager {
         return array;
     }
 
-    public boolean isRejoining(int playerId) {
-        for(Player p : players) {
+    /**
+     *
+     * @param playerId
+     * @return
+     */
+    public boolean isRejoining(final int playerId) {
+        for(final Player p : players) {
             if(p.getId() == playerId) {
                 return true;
             }
@@ -929,10 +927,14 @@ public final class PlayerManager implements IPlayerManager {
         return false;
     }
 
-    public void rejoin(int playerId, CatanColor color) {
+    /**
+     *
+     * @param playerId
+     * @param color
+     */
+    public void rejoin(final int playerId, final CatanColor color) {
         try {
-            Player p = getPlayerByID(playerId);
-            p.setColor(color);
+            getPlayerByID(playerId).setColor(color);
         } catch (PlayerExistsException e) {
             e.printStackTrace();
         }
