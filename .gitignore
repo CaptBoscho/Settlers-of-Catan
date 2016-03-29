@@ -2,6 +2,8 @@
 java/dist/
 java/build/
 
+.DS_Store
+
 # Package Files #
 # *.jar
 *.zip
