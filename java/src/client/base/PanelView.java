@@ -15,8 +15,7 @@ public class PanelView extends JPanel implements IView {
 		return controller;
 	}
 	
-	public void setController(IController controller)
-	{
+	public void setController(IController controller) {
 		this.controller = controller;
 	}
 }

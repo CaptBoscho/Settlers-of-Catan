@@ -16,7 +16,6 @@ import shared.model.game.Game;
 public class ResourceBarController extends Controller implements IResourceBarController, Observer {
 
 	private Map<ResourceBarElement, IAction> elementActions;
-    private Game game = null;
     private Facade facade = Facade.getInstance();
 
     public ResourceBarController(IResourceBarView view) {
@@ -146,7 +145,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 
 	@Override
 	public void playCard() {
-
         if (facade.canPlayDC(UserCookie.getInstance().getPlayerIndex())) {
             executeElementAction(ResourceBarElement.PLAY_CARD);
         }
@@ -154,7 +152,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	}
 	
 	private void executeElementAction(ResourceBarElement element) {
-		
 		if (elementActions.containsKey(element)) {
 			IAction action = elementActions.get(element);
 			action.execute();

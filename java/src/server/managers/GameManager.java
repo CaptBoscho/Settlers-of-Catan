@@ -7,10 +7,7 @@ import shared.model.game.Game;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class maintains multiple games. Anytime any game-specific info or action is required, the game
@@ -19,11 +16,12 @@ import java.util.List;
  */
 public class GameManager {
 
+    // -- TODO this code should not be coupled with business logic
     public static String DEFAULT_GAME = "sample/defaultGame.json";
     public static String EMPTY_GAME = "sample/emptyGame.json";
 
     private static GameManager instance;
-    private HashMap<Integer, Game> games;
+    private Map<Integer, Game> games;
 
     private GameManager() {
         games = new HashMap<>();

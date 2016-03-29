@@ -30,6 +30,8 @@ import java.util.*;
  */
 public class Facade {
 
+    // TODO - validate that all the "id" variables aren't actual "index"
+
     private IGame game;
     private static Facade _instance;
 
@@ -47,15 +49,31 @@ public class Facade {
         return _instance;
     }
 
+    /**
+     *
+     * @param o
+     */
     public void addObserver(Observer o){
         this.game.addObserver(o);
     }
 
-    public CatanColor getPlayerColorByIndex(int id) throws PlayerExistsException {
+    /**
+     *
+     * @param id
+     * @return
+     * @throws PlayerExistsException
+     */
+    public CatanColor getPlayerColorByIndex(final int id) throws PlayerExistsException {
         return this.game.getPlayerColorByIndex(id);
     }
 
-    public boolean canInitiateRoad(int playerID, EdgeLocation edge){
+    /**
+     *
+     * @param playerID
+     * @param edge
+     * @return
+     */
+    public boolean canInitiateRoad(final int playerID, final EdgeLocation edge) {
         try{
             return this.game.canInitiateRoad(playerID,  edge);
         } catch(InvalidLocationException | InvalidPlayerException e) {
@@ -64,7 +82,7 @@ public class Facade {
     }
 
     //TODO talk to server
-    public void initiateRoad(int playerID, EdgeLocation edge){
+    public void initiateRoad(final int playerID, EdgeLocation edge) {
         try {
             edge = getServerEdgeLocation(edge);
             final BuildRoadDTO road = new BuildRoadDTO(playerID, edge, true);
@@ -99,7 +117,7 @@ public class Facade {
      *
      * @param playerID The ID of the player asking this
      */
-    public boolean myTurn(int playerID) {
+    private boolean myTurn(int playerID) {
         assert playerID >= 0;
 
         return playerID == this.game.getCurrentTurn();
@@ -114,10 +132,6 @@ public class Facade {
         } catch(MissingUserCookieException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean canFinishTurn(int playerID){
-        return this.game.canFinishTurn(playerID);
     }
 
     private HexLocation getServerHexLocation(HexLocation hexLoc){
@@ -282,7 +296,15 @@ public class Facade {
         }
     }
 
-    public void answerTrade(int playerIndex, boolean answer) {
+    /**
+     *
+     * @param playerIndex
+     * @param answer
+     */
+    public void answerTrade(final int playerIndex, final boolean answer) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         final TradeOfferResponseDTO dto = new TradeOfferResponseDTO(playerIndex, answer);
         try {
             ServerProxy.getInstance().respondToTradeOffer(dto);
@@ -291,40 +313,85 @@ public class Facade {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTradeReceiver() { return this.game.getTradeReceiver(); }
 
+    /**
+     *
+     * @return
+     */
     public boolean isTradeActive() {
         return this.game.isTradeActive();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTradeSender() { return this.game.getTradeSender(); }
 
+    /**
+     *
+     * @return
+     */
     public int getTradeBrick() {
         return this.game.getTradeBrick();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTradeWood() {
         return this.game.getTradeWood();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTradeSheep() {
         return this.game.getTradeSheep();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTradeWheat() {
         return this.game.getTradeWheat();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTradeOre() {
         return this.game.getTradeOre();
     }
 
-    public boolean canMaritimeTrade(int pIndex) {
+    /**
+     *
+     * @param pIndex
+     * @return
+     */
+    public boolean canMaritimeTrade(final int pIndex) {
         assert pIndex >= 0;
+        assert pIndex < 4;
+
         return canTrade(pIndex);
     }
 
-    public Set<PortType> maritimeTradeOptions(int playerID) throws InvalidPlayerException {
+    /**
+     *
+     * @param playerID
+     * @return
+     * @throws InvalidPlayerException
+     */
+    public Set<PortType> maritimeTradeOptions(final int playerID) throws InvalidPlayerException {
         assert playerID >= 0;
 
         if (canTrade(playerID)) {
@@ -333,14 +400,21 @@ public class Facade {
         throw new InvalidPlayerException("can't trade");
     }
 
-    public void maritimeTrade(int pIndex, int ratio, ResourceType get, ResourceType give) {
+    /**
+     *
+     * @param pIndex
+     * @param ratio
+     * @param get
+     * @param give
+     */
+    public void maritimeTrade(final int pIndex, final int ratio, final ResourceType get, final ResourceType give) {
         assert pIndex >= 0;
         assert ratio > 0;
         assert get != null;
         assert give != null;
 
         if(canMaritimeTrade(pIndex)){
-            MaritimeTradeDTO dto = new MaritimeTradeDTO(pIndex, ratio, give.toString(), get.toString());
+            final MaritimeTradeDTO dto = new MaritimeTradeDTO(pIndex, ratio, give.toString(), get.toString());
             try {
                 ServerProxy.getInstance().maritimeTrade(dto);
             } catch(MissingUserCookieException e) {
@@ -349,22 +423,57 @@ public class Facade {
         }
     }
 
-    public shared.model.map.Map getMap(){return this.game.getMap();}
+    /**
+     *
+     * @return
+     */
+    public shared.model.map.Map getMap() {
+        return this.game.getMap();
+    }
 
-    public TurnTracker.Phase getPhase(){return this.game.getCurrentPhase();}
+    /**
+     *
+     * @return
+     */
+    public TurnTracker.Phase getPhase() {
+        return this.game.getCurrentPhase();
+    }
 
-    public boolean ableToBuildRoad(int id) throws PlayerExistsException{
+    /**
+     *
+     * @param id
+     * @return
+     * @throws PlayerExistsException
+     */
+    public boolean ableToBuildRoad(final int id) throws PlayerExistsException{
         return this.game.ableToBuildRoad(id);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws PlayerExistsException
+     */
     public boolean ableToBuildSettlement(int id) throws PlayerExistsException{
         return this.game.ableToBuildSettlement(id);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws PlayerExistsException
+     */
     public boolean ableToBuildCity(int id) throws PlayerExistsException{
         return this.game.ableToBuildCity(id);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public boolean ableToBuyDevCard(int id){
         try {
             return this.game.canBuyDevelopmentCard(id);
@@ -374,23 +483,53 @@ public class Facade {
         }
     }
 
-    public Integer getAvailableRoads(int id) throws PlayerExistsException{
+    /**
+     *
+     * @param id
+     * @return
+     * @throws PlayerExistsException
+     */
+    public Integer getAvailableRoads(final int id) throws PlayerExistsException{
         return this.game.getAvailableRoads(id);
     }
 
-    public Integer getAvailableSettlements(int id) throws PlayerExistsException{
+    /**
+     *
+     * @param id
+     * @return
+     * @throws PlayerExistsException
+     */
+    public int getAvailableSettlements(final int id) throws PlayerExistsException{
         return this.game.getAvailableSettlements(id);
     }
 
-    public Integer getAvailableCities(int id) throws PlayerExistsException{
+    /**
+     *
+     * @param id
+     * @return
+     * @throws PlayerExistsException
+     */
+    public int getAvailableCities(final int id) throws PlayerExistsException{
         return this.game.getAvailableCities(id);
     }
 
-    public boolean canMoveRobber(int id, HexLocation hexloc) {
+    /**
+     *
+     * @param id
+     * @param hexloc
+     * @return
+     */
+    public boolean canMoveRobber(final int id, final HexLocation hexloc) {
         return this.game.canPlaceRobber(id, hexloc);
     }
 
-    public RobPlayerInfo[] moveRobber(int id, HexLocation hexloc){
+    /**
+     *
+     * @param id
+     * @param hexloc
+     * @return
+     */
+    public RobPlayerInfo[] moveRobber(final int id, final HexLocation hexloc){
         try {
             Set<Integer> ids = this.game.placeRobber(id, hexloc);
             List<Player> players = this.game.getPlayers();
@@ -417,7 +556,17 @@ public class Facade {
         return null;
     }
 
-    public void rob(int playerID, RobPlayerInfo victim, HexLocation hexLoc) {
+    /**
+     *
+     * @param playerID
+     * @param victim
+     * @param hexLoc
+     */
+    public void rob(final int playerID, final RobPlayerInfo victim, final HexLocation hexLoc) {
+        assert playerID >= 0;
+        assert victim != null;
+        assert hexLoc != null;
+
         RobPlayerDTO dto;
         if(getNumberResourceCards(victim.getPlayerIndex()) == 0) {
             dto = new RobPlayerDTO(playerID, playerID, hexLoc);
@@ -431,9 +580,19 @@ public class Facade {
         }
     }
 
-    public void playSoldier(int playerIndex, HexLocation hexloc, int robbed){
-        try{
-            if(this.game.canUseSoldier(playerIndex)) {
+    /**
+     *
+     * @param playerIndex
+     * @param hexloc
+     * @param robbed
+     */
+    public void playSoldier(final int playerIndex, final HexLocation hexloc, final int robbed) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+        assert hexloc != null;
+
+        try {
+            if (this.game.canUseSoldier(playerIndex)) {
                 final PlaySoldierCardDTO dto = new PlaySoldierCardDTO(playerIndex, robbed, hexloc);
                 ServerProxy.getInstance().playSoldierCard(dto);
             }
@@ -459,19 +618,25 @@ public class Facade {
         return playerInfos;
     }
 
-    public PlayerInfo[] getOtherPlayers(int id){
-        List<Player> players = this.game.getPlayers();
-        PlayerInfo[] playerInfos = new PlayerInfo[players.size()-1];
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public PlayerInfo[] getOtherPlayers(final int id) {
+        assert id >= 0;
 
-        int longestroad = this.game.getPlayerWithLongestRoad();
-        int largestarmy = this.game.getPlayerWithLargestArmy();
+        final List<Player> players = this.game.getPlayers();
+        final PlayerInfo[] playerInfos = new PlayerInfo[players.size()-1];
+
+        final int longestroad = this.game.getPlayerWithLongestRoad();
+        final int largestarmy = this.game.getPlayerWithLargestArmy();
         int i = 0;
-        for(Player p: players){
-            if(p.getPlayerIndex() != id) {
+        for (Player p: players){
+            if (p.getPlayerIndex() != id) {
                 boolean lr = longestroad == p.getPlayerIndex();
                 boolean la = largestarmy == p.getPlayerIndex();
-                PlayerInfo pi = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
-                playerInfos[i] = pi;
+                playerInfos[i] = new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
                 i++;
             }
         }
@@ -485,10 +650,10 @@ public class Facade {
 
     public void setGameInfo(GameInfo gameInfo) {
         game.setId(gameInfo.getId());
-        if(game.getPlayerManager().getPlayers().size() > 0) {
+        if (game.getPlayerManager().getPlayers().size() > 0) {
             for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
-                PlayerInfo info = gameInfo.getPlayers().get(i);
-                if(i >= gameInfo.getPlayers().size()) {
+                final PlayerInfo info = gameInfo.getPlayers().get(i);
+                if (i >= gameInfo.getPlayers().size()) {
                     try {
                         game.getPlayerManager().addPlayer(new Player(info.getVictoryPoints(), info.getColor(), info.getId(), info.getPlayerIndex(), info.getName()));
                     } catch (InvalidPlayerException e) {
@@ -500,12 +665,12 @@ public class Facade {
                 // TODO -- add rest
             }
         } else {
-            for(PlayerInfo info : gameInfo.getPlayers()) {
-                int playerId = info.getId();
-                int playerIndex = info.getPlayerIndex();
-                String name = info.getName();
-                CatanColor color = info.getColor();
-                int points = info.getVictoryPoints();
+            for (final PlayerInfo info : gameInfo.getPlayers()) {
+                final int playerId = info.getId();
+                final int playerIndex = info.getPlayerIndex();
+                final String name = info.getName();
+                final CatanColor color = info.getColor();
+                final int points = info.getVictoryPoints();
                 try {
                     game.getPlayerManager().addPlayer(new Player(points, color, playerId, playerIndex, name));
                 } catch (InvalidPlayerException e) {
@@ -515,7 +680,12 @@ public class Facade {
         }
     }
 
-    public int getPlayerIndexByID(int playerId) {
+    /**
+     *
+     * @param playerId
+     * @return
+     */
+    public int getPlayerIndexByID(final int playerId) {
         Player p = null;
         try {
             p = game.getPlayerById(playerId);
@@ -526,14 +696,19 @@ public class Facade {
         return p.getPlayerIndex();
     }
 
+    /**
+     *
+     * @return
+     * @throws GameOverException
+     */
     public PlayerInfo getWinner() throws GameOverException {
-        Player p = this.game.getWinner();
+        final Player p = this.game.getWinner();
 
-        int longestroad = this.game.getPlayerWithLongestRoad();
-        int largestarmy = this.game.getPlayerWithLargestArmy();
+        final int longestroad = this.game.getPlayerWithLongestRoad();
+        final int largestarmy = this.game.getPlayerWithLargestArmy();
 
-        boolean lr = longestroad == p.getId();
-        boolean la = largestarmy == p.getId();
+        final boolean lr = longestroad == p.getId();
+        final boolean la = largestarmy == p.getId();
 
         return new PlayerInfo(p.getName(), p.getVictoryPoints(), p.getColor(), p.getId(), p.getPlayerIndex(), lr, la);
     }
@@ -545,18 +720,22 @@ public class Facade {
      * @param playerID The ID of the player asking this
      * @return A boolean value indicating if a development card can be played
      */
-    public boolean canPlayDC(int playerID){
+    public boolean canPlayDC(final int playerID){
         assert playerID >= 0;
         try {
-            int cards = this.game.numberOfDevCard(playerID);
-            return cards > 0;
+            return this.game.numberOfDevCard(playerID) > 0;
         } catch(PlayerExistsException e) {
             return false;
         }
 
     }
 
-    public boolean canUseMonopoly(int playerID){
+    /**
+     *
+     * @param playerID
+     * @return
+     */
+    public boolean canUseMonopoly(final int playerID){
         try {
             return this.game.canUseMonopoly(playerID);
         } catch(PlayerExistsException e) {
@@ -565,7 +744,13 @@ public class Facade {
         }
     }
 
-    public boolean canPlaceRoadBuildingCard(int playerIndex, EdgeLocation edgeLoc){
+    /**
+     *
+     * @param playerIndex
+     * @param edgeLoc
+     * @return
+     */
+    public boolean canPlaceRoadBuildingCard(final int playerIndex, final EdgeLocation edgeLoc){
         try {
             return this.game.canPlaceRoadBuildingCard(playerIndex, edgeLoc);
         } catch (InvalidPlayerException | InvalidLocationException | PlayerExistsException e) {
@@ -574,7 +759,7 @@ public class Facade {
         return false;
     }
 
-    public boolean canUseRoadBuilder(int playerID){
+    public boolean canUseRoadBuilder(final int playerID){
         try {
             return this.game.canUseRoadBuilding(playerID);
         } catch(PlayerExistsException e) {
@@ -583,7 +768,8 @@ public class Facade {
         }
     }
 
-    public boolean canUseMonument(int playerID){
+    public boolean canUseMonument(final int playerID) {
+        assert playerID >= 0;
         try{
             return this.game.canUseMonument(playerID);
         } catch(PlayerExistsException e) {
@@ -592,7 +778,9 @@ public class Facade {
         }
     }
 
-    public boolean canUseSoldier(int playerID){
+    public boolean canUseSoldier(final int playerID) {
+        assert playerID >= 0;
+
         try{
             return this.game.canUseSoldier(playerID);
         } catch(PlayerExistsException e) {
@@ -601,7 +789,14 @@ public class Facade {
         }
     }
 
-    public boolean canUseYearOfPlenty(int playerID){
+    /**
+     *
+     * @param playerID
+     * @return
+     */
+    public boolean canUseYearOfPlenty(final int playerID) {
+        assert playerID >= 0;
+
         try{
             return this.game.canUseYearOfPlenty(playerID);
         } catch(PlayerExistsException e) {
@@ -610,8 +805,15 @@ public class Facade {
         }
     }
 
+    /**
+     *
+     * @param playerID
+     * @param edgeloc
+     */
+    public void buildFirstRoad(final int playerID, final EdgeLocation edgeloc) {
+        assert playerID >= 0;
+        assert edgeloc != null;
 
-    public void buildFirstRoad(int playerID, EdgeLocation edgeloc){
         this.game.buildFirstRoad(playerID, edgeloc);
     }
 
@@ -620,12 +822,23 @@ public class Facade {
      * @param playerID
      * @param road
      */
-    public void deleteRoad(int playerID, EdgeLocation road){
+    public void deleteRoad(final int playerID, final EdgeLocation road) {
+        assert playerID >= 0;
+        assert road != null;
+
         this.game.deleteRoad(playerID, road);
     }
 
+    /**
+     *
+     * @param playerID
+     * @param resource
+     * @return
+     */
+    public int getAmountOfResource(final int playerID, final ResourceType resource) {
+        assert playerID >= 0;
+        assert resource != null;
 
-    public int getAmountOfResource(int playerID, ResourceType resource){
         try {
             return this.game.amountOwnedResource(playerID, resource);
         } catch(PlayerExistsException | InvalidTypeException e) {
@@ -635,7 +848,12 @@ public class Facade {
     }
 
     //TODO to server
-    public void playRoadBuildingCard(int playerIndex, EdgeLocation one, EdgeLocation two){
+    public void playRoadBuildingCard(final int playerIndex, EdgeLocation one, EdgeLocation two) {
+        assert playerIndex >= 0;
+        assert  playerIndex < 4;
+        assert one != null;
+        assert two != null;
+
         one = getServerEdgeLocation(one);
         two = getServerEdgeLocation(two);
         RoadBuildingDTO dto = new RoadBuildingDTO(playerIndex, one, two);
@@ -652,12 +870,23 @@ public class Facade {
      * @param playerID the ID of the player to check
      * @return The number of DevelopmentCards of type 'type' owned by player of ID 'playerID'.
      */
-    public int getNumberDevCards(DevCardType type, int playerID) {
+    public int getNumberDevCards(final DevCardType type, final int playerID) {
+        assert type != null;
+        assert playerID >= 0;
         return game.getNumberDevCards(type, playerID);
     }
 
-    public void playMonopolyCard(int index, ResourceType resource) {
-        PlayMonopolyDTO dto = new PlayMonopolyDTO(index, resource.toString());
+    /**
+     *
+     * @param index
+     * @param resource
+     */
+    public void playMonopolyCard(final int index, final ResourceType resource) {
+        assert index >= 0;
+        assert index < 4;
+        assert resource != null;
+
+        final PlayMonopolyDTO dto = new PlayMonopolyDTO(index, resource.toString());
         try {
             ServerProxy.getInstance().playMonopolyCard(dto);
         } catch (MissingUserCookieException e) {
@@ -665,8 +894,19 @@ public class Facade {
         }
     }
 
-    public void playYearOfPlentyCard(int index, ResourceType resource1, ResourceType resource2) {
-        PlayYOPCardDTO dto = new PlayYOPCardDTO(index, resource1, resource2);
+    /**
+     *
+     * @param index
+     * @param resource1
+     * @param resource2
+     */
+    public void playYearOfPlentyCard(final int index, final ResourceType resource1, final ResourceType resource2) {
+        assert index >= 0;
+        assert index < 4;
+        assert resource1 != null;
+        assert resource2 != null;
+
+        final PlayYOPCardDTO dto = new PlayYOPCardDTO(index, resource1, resource2);
         try {
             ServerProxy.getInstance().playYearOfPlentyCard(dto);
         } catch (MissingUserCookieException e) {
@@ -674,8 +914,15 @@ public class Facade {
         }
     }
 
-    public void playMonumentCard(int index) {
-        PlayMonumentDTO dto = new PlayMonumentDTO(index);
+    /**
+     *
+     * @param index
+     */
+    public void playMonumentCard(final int index) {
+        assert index >= 0;
+        assert index < 4;
+
+        final PlayMonumentDTO dto = new PlayMonumentDTO(index);
         try {
             ServerProxy.getInstance().playMonumentCard(dto);
         } catch (MissingUserCookieException e) {
@@ -683,7 +930,15 @@ public class Facade {
         }
     }
 
-    public boolean canDiscard(int playerIndex) {
+    /**
+     *
+     * @param playerIndex
+     * @return
+     */
+    public boolean canDiscard(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             return this.game.canDiscardCards(playerIndex);
         } catch (PlayerExistsException e) {
@@ -692,7 +947,12 @@ public class Facade {
         return false;
     }
 
-    public int getNumberResourceCards(int playerIndex) {
+    /**
+     *
+     * @param playerIndex
+     * @return
+     */
+    public int getNumberResourceCards(final int playerIndex) {
         try {
             return this.game.getNumberResourceCards(playerIndex);
         } catch (PlayerExistsException e) {
@@ -701,8 +961,20 @@ public class Facade {
         return -1;
     }
 
+    /**
+     *
+     * @param playerIndex
+     * @param brick
+     * @param ore
+     * @param sheep
+     * @param wheat
+     * @param wood
+     */
     public void discard(int playerIndex, int brick, int ore, int sheep, int wheat, int wood) {
-        DiscardCardsDTO dto = new DiscardCardsDTO(playerIndex, brick, ore, sheep, wheat, wood);
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
+        final DiscardCardsDTO dto = new DiscardCardsDTO(playerIndex, brick, ore, sheep, wheat, wood);
         try {
             ServerProxy.getInstance().discardCards(dto);
         } catch (MissingUserCookieException e) {
@@ -710,19 +982,46 @@ public class Facade {
         }
     }
 
-    public int getNumberOfSoldiers(int playerIndex) {
+    /**
+     *
+     * @param playerIndex
+     * @return
+     */
+    public int getNumberOfSoldiers(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         return game.getNumberOfSoldiers(playerIndex);
     }
 
-    public boolean hasDiscarded(int playerIndex) {
+    /**
+     *
+     * @param playerIndex
+     * @return
+     */
+    public boolean hasDiscarded(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         return this.game.hasDiscarded(playerIndex);
     }
 
+    /**
+     *
+     * @return
+     */
     public MessageList getLog() {
         return this.game.getLog();
     }
 
-    public CatanColor getPlayerColorByName(String player) {
+    /**
+     *
+     * @param player
+     * @return
+     */
+    public CatanColor getPlayerColorByName(final String player) {
+        assert player != null;
+
         return this.game.getPlayerColorByName(player);
     }
 
@@ -742,12 +1041,24 @@ public class Facade {
      * bank has.
      * @return
      */
-    public Map<ResourceType, Integer> getPlayerResources(int pIndex) throws PlayerExistsException {
+    public Map<ResourceType, Integer> getPlayerResources(final int pIndex) throws PlayerExistsException {
+        assert pIndex >= 0;
+        assert pIndex < 4;
+
         return this.game.getPlayerResources(pIndex);
     }
 
-    public void sendChat(int playerIndex, String message) {
-        SendChatDTO dto = new SendChatDTO(playerIndex, message);
+    /**
+     *
+     * @param playerIndex
+     * @param message
+     */
+    public void sendChat(final int playerIndex, final String message) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+        assert message != null;
+
+        final SendChatDTO dto = new SendChatDTO(playerIndex, message);
         try {
             ServerProxy.getInstance().sendChat(dto);
         } catch (MissingUserCookieException e) {
@@ -755,10 +1066,19 @@ public class Facade {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public MessageList getChat() {
         return this.game.getChat();
     }
 
+    /**
+     *
+     * @param playerIndex
+     * @return
+     */
     public int getPoints(int playerIndex) {
         assert playerIndex >=0;
         assert playerIndex <=3;
@@ -771,6 +1091,10 @@ public class Facade {
         return -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getWinnerId() {
         try {
             if (game.getWinner() != null) {
@@ -783,7 +1107,15 @@ public class Facade {
         return -1;
     }
 
-    public String getPlayerNameByIndex(int playerIndex) {
+    /**
+     *
+     * @param playerIndex
+     * @return
+     */
+    public String getPlayerNameByIndex(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert playerIndex < 4;
+
         try {
             return this.game.getPlayerNameByIndex(playerIndex);
         } catch (PlayerExistsException e) {
@@ -792,7 +1124,15 @@ public class Facade {
         return null;
     }
 
-    public int getPlayerIdByIndex(int playerIndex) {
+    /**
+     *
+     * @param playerIndex
+     * @return
+     */
+    public int getPlayerIdByIndex(final int playerIndex) {
+        assert playerIndex >= 0;
+        assert  playerIndex < 4;
+
         try {
             return game.getPlayerIdByIndex(playerIndex);
         } catch (PlayerExistsException e) {
@@ -801,6 +1141,10 @@ public class Facade {
         return -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public IGame getGame(){
         return this.game;
     }

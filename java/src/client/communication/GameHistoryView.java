@@ -26,8 +26,7 @@ public class GameHistoryView extends PanelView implements IGameHistoryView {
 	}
 	
 	@Override
-	public IGameHistoryController getController()
-	{
+	public IGameHistoryController getController() {
 		return (IGameHistoryController)super.getController();
 	}
 	

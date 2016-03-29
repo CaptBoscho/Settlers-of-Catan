@@ -10,7 +10,7 @@ import shared.definitions.*;
 public class TitlePanel extends JPanel {
 	private JLabel titleLabel;
 	
-	public TitlePanel() {
+	TitlePanel() {
 		this.setLayout(new BorderLayout());
 		this.setBorder(new EmptyBorder(10, 10, 10, 10));
 		

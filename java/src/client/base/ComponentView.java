@@ -15,8 +15,7 @@ public class ComponentView extends JComponent implements IView {
 		return controller;
 	}
 	
-	public void setController(IController controller)
-	{
+	public void setController(IController controller) {
 		this.controller = controller;
 	}
 }

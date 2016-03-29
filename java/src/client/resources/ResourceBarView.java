@@ -2,12 +2,9 @@ package client.resources;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -20,9 +17,7 @@ import java.util.Map;
 
 import javax.swing.*;
 
-import shared.definitions.ResourceType;
 import client.base.*;
-import client.discard.DiscardView;
 import client.utils.FontUtils;
 import client.utils.ImageUtils;
 
@@ -51,7 +46,6 @@ import client.utils.ImageUtils;
  */
 @SuppressWarnings({"serial", "unused"})
 public class ResourceBarView extends PanelView implements IResourceBarView {
-	private final boolean TESTING = false;
 	
 	private final String RESOURCE_IMAGE_PATH = "images" + File.separator +
 											   "resources" + File.separator;
@@ -235,12 +229,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 		
 		JPanel discardButtonPanel = new JPanel();
 		discardButtonPanel.setBackground(Color.WHITE);
-		
-		if(TESTING) {
-    		testButton = new JButton("Enable");
-    		testButton.addActionListener(actionListener);
-    		discardButtonPanel.add(testButton);
-		}
+
 		this.setBackground(Color.WHITE);
 		this.add(discardButtonPanel, BorderLayout.SOUTH);
 		
@@ -250,14 +239,14 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 		private boolean enabled = false;
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == testButton) {
+			if (e.getSource() == testButton) {
 				enabled = !enabled;
 				if(enabled)
 					testButton.setText("Disable");
 				else
 					testButton.setText("Enable");
 			} else {
-				switch(ResourceBarElement.valueOf(e.getActionCommand())) {
+				switch (ResourceBarElement.valueOf(e.getActionCommand())) {
 					case ROAD:
 						getController().buildRoad();
 						break;
@@ -334,9 +323,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 			this(type, false, 0);
 		}
 		
-		ResourceElement(ResourceBarElement type,
-						boolean clickable)
-		{
+		ResourceElement(ResourceBarElement type, boolean clickable) {
 			this(type, clickable, 0);
 		}
 		
@@ -352,19 +339,13 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 			this(type, clickable, elementImage, 0);
 		}
 		
-		ResourceElement(ResourceBarElement type,
-						boolean clickable,
-						BufferedImage elementImage,
-						int elementCount)
-		{
+		ResourceElement(ResourceBarElement type, boolean clickable,
+						BufferedImage elementImage, int elementCount) {
 			this(type, clickable, false, elementImage, elementCount);
 		}
 		
-		ResourceElement(ResourceBarElement type,
-						boolean clickable,
-						boolean enabled,
-						int elementCount)
-		{
+		ResourceElement(ResourceBarElement type, boolean clickable,
+						boolean enabled, int elementCount) {
 			this.initialize();
 			this.setElementType(type);
 			this.setClickable(clickable);
@@ -374,10 +355,8 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 		}
 
 		//TODO use this guy to set buildings as enabled
-		ResourceElement(ResourceBarElement type,
-						boolean clickable,
-						boolean enabled,
-						BufferedImage elementImage,
+		ResourceElement(ResourceBarElement type, boolean clickable,
+						boolean enabled, BufferedImage elementImage,
 						int elementCount) {
 			this.initialize();
 			this.setElementType(type);
@@ -510,7 +489,7 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 			c.gridwidth = 1;
 			c.gridheight = 1;
     			
-			if(_elementCount >= 0) {
+			if (_elementCount >= 0) {
     			_elementCountLabel = new JLabel(""+_elementCount, JLabel.LEFT);
     			FontUtils.setFont(_elementCountLabel, LABEL_FONT_SIZE);
     			elementPanel.add(_elementCountLabel, c);

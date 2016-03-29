@@ -61,16 +61,16 @@ public class OverlayView extends PanelView implements IOverlayView {
 		final int heightDiff = (int)(winSize.getHeight() - prefSize.getHeight());
 		
 		overlayPanel.add(this, BorderLayout.CENTER);
-		if(widthDiff / 2 > 0) {
+		if (widthDiff / 2 > 0) {
 			overlayPanel.add(Box.createRigidArea(new Dimension(widthDiff / 2, 0)), BorderLayout.WEST);
 			overlayPanel.add(Box.createRigidArea(new Dimension(widthDiff / 2, 0)), BorderLayout.EAST);
 		}
-		if(heightDiff / 2 > 0) {
+		if (heightDiff / 2 > 0) {
 			overlayPanel.add(Box.createRigidArea(new Dimension(0, heightDiff / 2)), BorderLayout.NORTH);
 			overlayPanel.add(Box.createRigidArea(new Dimension(0, heightDiff / 2)), BorderLayout.SOUTH);
 		}
 		
-		if(overlayStack.size() > 0) {
+		if (overlayStack.size() > 0) {
 			// Hide the currently-visible overlay
 			overlayStack.peek().getOverlayPanel().setVisible(false);
 		}
@@ -86,12 +86,12 @@ public class OverlayView extends PanelView implements IOverlayView {
 	public void closeModal() {
 //		assert overlayStack.size() > 0;
 		
-		if(overlayStack.size() > 0) {
+		if (overlayStack.size() > 0) {
 			assert window.getGlassPane() == overlayStack.peek().getOverlayPanel();
 
 			overlayStack.pop().getOverlayPanel().setVisible(false);
 			
-			if(overlayStack.size() > 0) {
+			if (overlayStack.size() > 0) {
 				window.setGlassPane(overlayStack.peek().getOverlayPanel());
 				overlayStack.peek().getOverlayPanel().setVisible(true);
 			} else {
@@ -120,24 +120,24 @@ public class OverlayView extends PanelView implements IOverlayView {
 		private OverlayView overlayView;
 		private JPanel overlayPanel;
 		
-		public OverlayInfo(OverlayView overlayView, JPanel overlayPanel) {
+		OverlayInfo(OverlayView overlayView, JPanel overlayPanel) {
 			setOverlayView(overlayView);
 			setOverlayPanel(overlayPanel);
 		}
 		
-		public OverlayView getOverlayView() {
+		OverlayView getOverlayView() {
 			return overlayView;
 		}
 		
-		public void setOverlayView(OverlayView overlayView) {
+		void setOverlayView(OverlayView overlayView) {
 			this.overlayView = overlayView;
 		}
 		
-		public JPanel getOverlayPanel() {
+		JPanel getOverlayPanel() {
 			return overlayPanel;
 		}
 		
-		public void setOverlayPanel(JPanel overlayPanel) {
+		void setOverlayPanel(JPanel overlayPanel) {
 			
 			this.overlayPanel = overlayPanel;
 		}

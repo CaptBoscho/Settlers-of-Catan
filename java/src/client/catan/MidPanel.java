@@ -6,22 +6,19 @@ import javax.swing.*;
 import client.map.*;
 
 @SuppressWarnings("serial")
-public class MidPanel extends JPanel {
-	
-	private TradePanel tradePanel;
-	private MapView mapView;
-	private RobView robView;
+class MidPanel extends JPanel {
+
 	private MapController mapController;
 	private GameStatePanel gameStatePanel;
 	
-	public MidPanel() {
+	MidPanel() {
 		
 		this.setLayout(new BorderLayout());
-		
-		tradePanel = new TradePanel();
-		
-		mapView = new MapView();
-		robView = new RobView();
+
+		final TradePanel tradePanel = new TradePanel();
+
+		final MapView mapView = new MapView();
+		final RobView robView = new RobView();
 		mapController = new MapController(mapView, robView);
 		mapView.setController(mapController);
 		robView.setController(mapController);
@@ -35,12 +32,12 @@ public class MidPanel extends JPanel {
 		this.setPreferredSize(new Dimension(800, 700));
 	}
 	
-	public GameStatePanel getGameStatePanel()
+	GameStatePanel getGameStatePanel()
 	{
 		return gameStatePanel;
 	}
 	
-	public IMapController getMapController()
+	IMapController getMapController()
 	{
 		return mapController;
 	}

@@ -18,7 +18,7 @@ import java.util.Observer;
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
     private UserCookie userCookie;
-    boolean joining;
+    private boolean joining;
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		super(view);
@@ -57,7 +57,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
                 joining = false;
             }
             int winner = facade.getWinnerId();
-            if(winner != -1) {
+            if (winner != -1) {
                 getView().updateGameState("Game Over", false, color.getJavaColor());
             } else {
                 TurnTracker.Phase state = facade.getPhase();
