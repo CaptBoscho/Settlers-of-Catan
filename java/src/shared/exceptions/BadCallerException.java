@@ -1,7 +1,7 @@
 package shared.exceptions;
 
 /**
- * Created by Danny on 2/3/16.
+ * @author Danny Harding
  */
 public class BadCallerException extends Throwable {
     public BadCallerException(String s) {

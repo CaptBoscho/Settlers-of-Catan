@@ -8,7 +8,7 @@ import client.maritime.*;
 import client.misc.*;
 
 @SuppressWarnings("serial")
-public class TradePanel extends JPanel {
+class TradePanel extends JPanel {
 	
 	private DomesticTradeView domesticView;
 	private DomesticTradeOverlay domesticOverlay;
@@ -20,7 +20,7 @@ public class TradePanel extends JPanel {
 	private MaritimeTradeOverlay maritimeOverlay;
 	private MaritimeTradeController maritimeController;
 	
-	public TradePanel() {
+	TradePanel() {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		

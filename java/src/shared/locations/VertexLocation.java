@@ -28,7 +28,7 @@ public final class VertexLocation implements JsonSerializable {
 		final int y = json.get("y").getAsInt();
 		hexLoc = new HexLocation(x, y);
 		final String direction = json.get("direction").getAsString();
-		switch(direction) {
+		switch (direction) {
 			case "NW":
 				dir = VertexDirection.NorthWest;
 				break;
@@ -74,8 +74,7 @@ public final class VertexLocation implements JsonSerializable {
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "VertexLocation [hexLoc=" + hexLoc + ", dir=" + dir + "]";
 	}
 	
@@ -90,20 +89,20 @@ public final class VertexLocation implements JsonSerializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj)
+		if (this == obj)
 			return true;
-		if(obj == null)
+		if (obj == null)
 			return false;
-		if(getClass() != obj.getClass())
+		if (getClass() != obj.getClass())
 			return false;
 		VertexLocation other = (VertexLocation)obj;
-		if(dir != other.dir)
+		if (dir != other.dir)
 			return false;
-		if(hexLoc == null) {
-			if(other.hexLoc != null) {
+		if (hexLoc == null) {
+			if (other.hexLoc != null) {
 				return false;
 			}
-		} else if(!hexLoc.equals(other.hexLoc)) {
+		} else if (!hexLoc.equals(other.hexLoc)) {
             return false;
         }
 		return true;

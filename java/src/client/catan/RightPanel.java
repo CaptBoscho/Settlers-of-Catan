@@ -10,11 +10,11 @@ import client.map.*;
 import client.devcards.*;
 
 @SuppressWarnings("serial")
-public class RightPanel extends JPanel {
+class RightPanel extends JPanel {
 
 	private DevCardController devCardController;
 
-	public RightPanel(final IMapController mapController) {
+	RightPanel(final IMapController mapController) {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		
@@ -22,20 +22,8 @@ public class RightPanel extends JPanel {
 		//
 		final PlayDevCardView playCardView = new PlayDevCardView();
 		final BuyDevCardView buyCardView = new BuyDevCardView();
-		IAction soldierAction = new IAction() {
-			@Override
-			public void execute()
-			{
-				mapController.playSoldierCard();
-			}
-		};
-		IAction roadAction = new IAction() {
-			@Override
-			public void execute()
-			{
-				mapController.playRoadBuildingCard();
-			}
-		};
+		IAction soldierAction = () -> mapController.playSoldierCard();
+		IAction roadAction = () -> mapController.playRoadBuildingCard();
 		devCardController = new DevCardController(playCardView, buyCardView,
 												  soldierAction, roadAction);
 		playCardView.setController(devCardController);
@@ -59,21 +47,9 @@ public class RightPanel extends JPanel {
 		resourceController.setElementAction(ResourceBarElement.CITY,
 											createStartMoveAction(mapController, PieceType.CITY));
 		resourceController.setElementAction(ResourceBarElement.BUY_CARD,
-											new IAction() {
-												@Override
-												public void execute()
-												{
-													devCardController.startBuyCard();
-												}
-											});
+				() -> devCardController.startBuyCard());
 		resourceController.setElementAction(ResourceBarElement.PLAY_CARD,
-											new IAction() {
-												@Override
-												public void execute()
-												{
-													devCardController.startPlayCard();
-												}
-											});
+				() -> devCardController.startPlayCard());
 		resourceView.setController(resourceController);
 		
 		this.add(pointsView);

@@ -32,8 +32,7 @@ public class DomesticTradeView extends PanelView implements IDomesticTradeView {
 	}
 	
 	@Override
-	public IDomesticTradeController getController()
-	{
+	public IDomesticTradeController getController() {
 		return (IDomesticTradeController)super.getController();
 	}
 	
