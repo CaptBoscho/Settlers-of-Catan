@@ -28,14 +28,10 @@ public class LoginController extends Controller implements ILoginController {
 		this.messageView = messageView;
 	}
 	
-	public ILoginView getLoginView() {
+	private ILoginView getLoginView() {
 		return (ILoginView)super.getView();
 	}
-	
-	public IMessageView getMessageView() {
-		return messageView;
-	}
-	
+
 	/**
 	 * Sets the action to be executed when the user logs in
 	 * 
@@ -43,15 +39,6 @@ public class LoginController extends Controller implements ILoginController {
 	 */
 	public void setLoginAction(IAction value) {
 		loginAction = value;
-	}
-	
-	/**
-	 * Returns the action to be executed when the user logs in
-	 * 
-	 * @return The action to be executed when the user logs in
-	 */
-	public IAction getLoginAction() {
-		return loginAction;
 	}
 
 	@Override
@@ -72,8 +59,8 @@ public class LoginController extends Controller implements ILoginController {
 		final AuthDTO dto = new AuthDTO(username, password);
 		if(ServerProxy.getInstance().authenticateUser(dto)) {
 			// If log in succeeded
-			setLocalPlayerInfo();
-			getLoginView().closeModal();
+			this.setLocalPlayerInfo();
+			this.getLoginView().closeModal();
 			loginAction.execute();
 		} else {
 			messageView.setTitle("Invalid Username");
@@ -113,7 +100,7 @@ public class LoginController extends Controller implements ILoginController {
 
 	}
 
-	public static boolean validateUsername(String username) {
+	static boolean validateUsername(final String username) {
 		final int MIN_UNAME_LENGTH = 3;
 		final int MAX_UNAME_LENGTH = 7;
 
@@ -132,7 +119,7 @@ public class LoginController extends Controller implements ILoginController {
 		return true;
 	}
 
-	public static boolean validatePassword(String password) {
+	static boolean validatePassword(final String password) {
 		final int MIN_PASS_LENGTH = 5;
 		if (password.length() < MIN_PASS_LENGTH) {
 			return false;
