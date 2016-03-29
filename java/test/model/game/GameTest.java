@@ -464,13 +464,4 @@ public class GameTest {
         }
 
     }
-
-    /**
-     * Testing to see if available settlements increment
-     * after building a city.
-     */
-    @Test
-    public void availableSettlements(){
-        int current = 
-    }
 }
