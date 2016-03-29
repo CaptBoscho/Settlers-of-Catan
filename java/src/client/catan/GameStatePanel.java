@@ -13,7 +13,7 @@ public class GameStatePanel extends JPanel {
 
 	private MyButton button;
 	
-	public GameStatePanel() {
+	GameStatePanel() {
 		this.setLayout(new FlowLayout());
 		this.setBackground(Color.white);
 		this.setOpaque(true);
@@ -41,7 +41,7 @@ public class GameStatePanel extends JPanel {
 	
 	public void setButtonAction(final IAction action) {
 		final ActionListener[] listeners = button.getActionListeners();
-		for(final ActionListener listener : listeners) {
+		for (final ActionListener listener : listeners) {
 			button.removeActionListener(listener);
 		}
 		
@@ -49,11 +49,11 @@ public class GameStatePanel extends JPanel {
 		button.addActionListener(actionListener);
 	}
 
-	class MyButton extends JButton {
+	private class MyButton extends JButton {
 
 		private Color color;
 
-		public MyButton() {
+		MyButton() {
 			super();
 			super.setContentAreaFilled(false);
 		}

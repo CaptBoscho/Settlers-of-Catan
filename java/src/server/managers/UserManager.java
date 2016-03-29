@@ -11,6 +11,8 @@ import java.util.jar.Pack200;
  * @author Derek Argueta
  */
 public class UserManager {
+
+    // TODO add independent list of AIs
     private List<UserCredentials> users;
     private static UserManager instance;
 
@@ -60,6 +62,10 @@ public class UserManager {
         }
 
         return false;
+    }
+
+    public int getNumberOfUsers() {
+        return this.users.size();
     }
 
     public boolean addUser(final String username, final String password) {

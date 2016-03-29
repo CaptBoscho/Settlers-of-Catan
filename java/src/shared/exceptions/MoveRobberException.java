@@ -1,8 +1,8 @@
 package shared.exceptions;
 
 /**
- * Created by corne on 1/30/2016.
  * Exception for moving the Robber
+ * @author Kyle Cornelison
  */
 public class MoveRobberException extends Exception {
     /**

@@ -26,15 +26,15 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		facade.addObserver(this);
 	}
 	
-	public IMaritimeTradeView getTradeView() {
+	private IMaritimeTradeView getTradeView() {
 		return (IMaritimeTradeView)super.getView();
 	}
 	
-	public IMaritimeTradeOverlay getTradeOverlay() {
+	private IMaritimeTradeOverlay getTradeOverlay() {
 		return tradeOverlay;
 	}
 
-	public void setTradeOverlay(IMaritimeTradeOverlay tradeOverlay) {
+	private void setTradeOverlay(IMaritimeTradeOverlay tradeOverlay) {
 		this.tradeOverlay = tradeOverlay;
 	}
 
@@ -99,19 +99,26 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
      */
 	private void createState(TurnTracker.Phase phase){
 		switch (phase) {
-			case SETUPONE:  state = new SetupOneState(getTradeView(), getTradeOverlay());
+			case SETUPONE:
+				state = new SetupOneState(getTradeView(), getTradeOverlay());
 				break;
-			case SETUPTWO:  state = new SetupTwoState(getTradeView(), getTradeOverlay());
+			case SETUPTWO:
+				state = new SetupTwoState(getTradeView(), getTradeOverlay());
 				break;
-			case ROLLING:  state = new RollingState(getTradeView(), getTradeOverlay());
+			case ROLLING:
+				state = new RollingState(getTradeView(), getTradeOverlay());
 				break;
-			case PLAYING:  state = new PlayingState(getTradeView(), getTradeOverlay());
+			case PLAYING:
+				state = new PlayingState(getTradeView(), getTradeOverlay());
 				break;
-			case ROBBING:  state = new RobbingState(getTradeView(), getTradeOverlay());
+			case ROBBING:
+				state = new RobbingState(getTradeView(), getTradeOverlay());
 				break;
-			case DISCARDING:  state = new DiscardingState(getTradeView(), getTradeOverlay());
+			case DISCARDING:
+				state = new DiscardingState(getTradeView(), getTradeOverlay());
 				break;
-			default: state = new PlayingState(getTradeView(), getTradeOverlay());
+			default:
+				state = new PlayingState(getTradeView(), getTradeOverlay());
 				break;
 		}
 	}

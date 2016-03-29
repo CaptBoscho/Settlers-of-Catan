@@ -53,7 +53,7 @@ public class MaritimeTradeControllerState {
     /**
      * Start a new maritime trade
      */
-    public void startTrade() {
+    void startTrade() {
         ResourceType[] giveOptions = buildGiveOptions();
 
         overlay.setTradeEnabled(false);
@@ -187,7 +187,7 @@ public class MaritimeTradeControllerState {
         //List to hold resource types that can be traded away
         List<ResourceType> giveOptions = new ArrayList<>();
         //Calculate which resources can be traded away
-        for(Map.Entry<ResourceType, Integer> entry : give.entrySet()){
+        for (Map.Entry<ResourceType, Integer> entry : give.entrySet()){
             //Init ratio
             int ratio = 0;
 
@@ -200,7 +200,7 @@ public class MaritimeTradeControllerState {
 
             //If the number of resources (for the type) is >= trade ratio
             //then add the resource type to the list of resources that can be traded away
-            if(entry.getValue() >= ratio){
+            if (entry.getValue() >= ratio){
                 giveOptions.add(entry.getKey());
             }
         }
@@ -216,8 +216,8 @@ public class MaritimeTradeControllerState {
         //List to hold the resource types that can be traded for
         List<ResourceType> getOptions = new ArrayList<>();
         //Calculate which resources can be traded for
-        for(Map.Entry<ResourceType, Integer> entry : get.entrySet()){
-            if(entry.getValue() > 0){
+        for (Map.Entry<ResourceType, Integer> entry : get.entrySet()){
+            if (entry.getValue() > 0){
                 getOptions.add(entry.getKey());
             }
         }

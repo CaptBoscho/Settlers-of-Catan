@@ -8,13 +8,13 @@ import client.turntracker.*;
 
 
 @SuppressWarnings("serial")
-public class LeftPanel extends JPanel {
+class LeftPanel extends JPanel {
 
 	private GameHistoryView historyView;
 	private ChatView chatView;
 	private TurnTrackerView turnView;
 
-	public LeftPanel(TitlePanel titlePanel, GameStatePanel gameStatePanel) {
+	LeftPanel(TitlePanel titlePanel, GameStatePanel gameStatePanel) {
 		
 		this.setLayout(new BorderLayout());
 
@@ -35,8 +35,6 @@ public class LeftPanel extends JPanel {
 		final TurnTrackerController turnController = new TurnTrackerController(turnView);
 		turnView.setController(turnController);
 		
-//		gameStatePanel.setController(turnController);
-		
 		tabPane.add("game History", historyView);
 		tabPane.add("Chat Messages", chatView);
 		
@@ -44,17 +42,5 @@ public class LeftPanel extends JPanel {
 		this.add(turnView, BorderLayout.SOUTH);
 
 		this.setPreferredSize(new Dimension(350, 700));
-	}
-
-	public GameHistoryView getHistoryView() {
-		return historyView;
-	}
-
-	public ChatView getChatView() {
-		return chatView;
-	}
-
-	public TurnTrackerView getTurnView() {
-		return turnView;
 	}
 }

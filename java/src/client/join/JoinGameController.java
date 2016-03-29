@@ -33,25 +33,17 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @param messageView Message view (used to display error messages that occur while the user is joining a game)
 	 */
 	public JoinGameController(IJoinGameView view, INewGameView newGameView, 
-								ISelectColorView selectColorView, IMessageView messageView) {
+							  ISelectColorView selectColorView,
+							  IMessageView messageView) {
 		super(view);
 
-		setNewGameView(newGameView);
-		setSelectColorView(selectColorView);
-		setMessageView(messageView);
+		this.setNewGameView(newGameView);
+		this.setSelectColorView(selectColorView);
+		this.setMessageView(messageView);
 	}
 	
-	public IJoinGameView getJoinGameView() {
+	private IJoinGameView getJoinGameView() {
 		return (IJoinGameView)super.getView();
-	}
-	
-	/**
-	 * Returns the action to be executed when the user joins a game
-	 * 
-	 * @return The action to be executed when the user joins a game
-	 */
-	public IAction getJoinAction() {
-		return joinAction;
 	}
 
 	/**
@@ -63,27 +55,23 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		joinAction = value;
 	}
 	
-	public INewGameView getNewGameView() {
+	private INewGameView getNewGameView() {
 		return newGameView;
 	}
 
-	public void setNewGameView(INewGameView newGameView) {
+	private void setNewGameView(INewGameView newGameView) {
 		this.newGameView = newGameView;
 	}
 	
-	public ISelectColorView getSelectColorView() {
+	private ISelectColorView getSelectColorView() {
 		return selectColorView;
 	}
 
-	public void setSelectColorView(ISelectColorView selectColorView) {
+	private void setSelectColorView(ISelectColorView selectColorView) {
 		this.selectColorView = selectColorView;
 	}
-	
-	public IMessageView getMessageView() {
-		return messageView;
-	}
 
-	public void setMessageView(IMessageView messageView) {
+	private void setMessageView(IMessageView messageView) {
 		this.messageView = messageView;
 	}
 
@@ -92,10 +80,10 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		List<GameInfo> allGames = ServerProxy.getInstance().getAllGames();
 		GameInfo[] gamesArray = new GameInfo[allGames.size()];
 		allGames.toArray(gamesArray);
-		getJoinGameView().setGames(gamesArray, UserCookie.getInstance().getPlayerInfo());
-		setNewGameView(newGameView);
+		this.getJoinGameView().setGames(gamesArray, UserCookie.getInstance().getPlayerInfo());
+		this.setNewGameView(newGameView);
 
-		getJoinGameView().showModal();
+		this.getJoinGameView().showModal();
 	}
 
 	@Override
@@ -116,12 +104,12 @@ public class JoinGameController extends Controller implements IJoinGameControlle
         final String gameName = getNewGameView().getTitle();
         final CreateGameDTO createGameDTO = new CreateGameDTO(randomHexes, randomNumbers, randomPorts, gameName);
         final GameInfo newGame = ServerProxy.getInstance().createNewGame(createGameDTO);
-		getNewGameView().closeModal();
+		this.getNewGameView().closeModal();
 
 		JoinGameDTO joinGameDTO = new JoinGameDTO(newGame.getId(), CatanColor.WHITE);
 		ServerProxy.getInstance().joinGame(joinGameDTO);
 
-        start();
+        this.start();
 	}
 
 	@Override
@@ -129,11 +117,11 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		assert game != null;
 
 		game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
-			getSelectColorView().setColorEnabled(p.getColor(), false);
+			this.getSelectColorView().setColorEnabled(p.getColor(), false);
 		});
 		currentGame = game;
         Facade.getInstance().setGameInfo(game);
-        getSelectColorView().showModal();
+        this.getSelectColorView().showModal();
 	}
 
 	@Override
@@ -148,12 +136,12 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		// make sure color hasn't been taken
 		boolean colorTaken = false;
 		final List<GameInfo> games = ServerProxy.getInstance().getAllGames();
-		for(final GameInfo game : games) {
-			if(game.getId() == currentGame.getId()) {
+		for (final GameInfo game : games) {
+			if (game.getId() == currentGame.getId()) {
 				for (final PlayerInfo player : game.getPlayers()) {
 					if (player.getId() != UserCookie.getInstance().getPlayerId() && player.getColor().equals(color)) {
 						game.getPlayers().stream().filter(p -> p.getId() != UserCookie.getInstance().getPlayerId()).forEach(p -> {
-							getSelectColorView().setColorEnabled(p.getColor(), false);
+							this.getSelectColorView().setColorEnabled(p.getColor(), false);
 						});
 						final MessageView msg = new MessageView();
 						msg.setTitle("Bad Color");
@@ -173,8 +161,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
         // TODO - create/update game instance
 
 		// If join succeeded
-		getSelectColorView().closeModal();
-		getJoinGameView().closeModal();
+		this.getSelectColorView().closeModal();
+		this.getJoinGameView().closeModal();
 		joinAction.execute();
 	}
 }
