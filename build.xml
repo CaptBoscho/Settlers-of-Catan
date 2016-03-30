@@ -170,7 +170,7 @@
 				<pathelement location="${java.build}"/>
 			</classpath>
 			<assertions>
-				<enable/>
+				<disable/>
 			</assertions>
 		</java>
 	</target>
@@ -184,7 +184,7 @@
 				<pathelement location="${java.build}"/>
 			</classpath>
 			<assertions>
-				<enable/>
+				<disable/>
 			</assertions>
 		</java>
 	</target>
