@@ -18,6 +18,8 @@ import java.util.TimerTask;
  * Base class for Roll Controller states
  */
 public class RollControllerState {
+    private boolean rolled;
+
     private Facade facade;
     private IServer server;
     private UserCookie userCookie;
@@ -36,20 +38,23 @@ public class RollControllerState {
     }
 
     public void rollDice() throws PlayerExistsException, MissingUserCookieException, CommandExecutionFailed, InvalidStateActionException {
-        //Create a dice object
-        Dice roller = new Dice(2);
-        //Roll the dice
-        int roll = roller.roll();
-        
-        //Tell the server
-        int index = userCookie.getPlayerIndex();
-        RollNumberDTO rollDTO = new RollNumberDTO(index, roll);
-        server.rollNumber(rollDTO);
+        if (!rolled) {
+            rolled = true;
+            //Create a dice object
+            Dice roller = new Dice(2);
+            //Roll the dice
+            int roll = roller.roll();
 
-        //Set the result view value - value of dice roll
-        rollResultView.setRollValue(roll);
-        //Show the modal
-        rollResultView.showModal();
+            //Tell the server
+            int index = userCookie.getPlayerIndex();
+            RollNumberDTO rollDTO = new RollNumberDTO(index, roll);
+            server.rollNumber(rollDTO);
+
+            //Set the result view value - value of dice roll
+            rollResultView.setRollValue(roll);
+            //Show the modal
+            rollResultView.showModal();
+        }
     }
 
     public void update() throws PlayerExistsException {
@@ -57,6 +62,7 @@ public class RollControllerState {
 
         int index = userCookie.getPlayerIndex();
         if(facade.getCurrentTurn() == index) {
+            rolled = false;
             rollView.setMessage("Roll the dice");
             rollView.showModal();
 
