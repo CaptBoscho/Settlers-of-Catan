@@ -263,7 +263,6 @@ public final class ServerFacade implements IFacade {
         assert message.length() >= 0;
 
         final Game game = gameManager.getGameByID(gameID);
-        game.incrementVersion();
         try {
             final String playerName = game.getPlayerNameByIndex(player);
             final MessageLine line = new MessageLine(playerName, message);
