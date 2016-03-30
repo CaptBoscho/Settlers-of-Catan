@@ -917,7 +917,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public void rollNumber(final int value) throws Exception {
-        print();
         String name = getPlayerNameByIndex(getCurrentTurn());
         String message = name + " rolled a " + value + " fool";
         log(name, message);
@@ -1028,23 +1027,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
             }
             
             turnTracker.setPhase(TurnTracker.Phase.PLAYING);
-        }
-        print();
-    }
-
-    private void print() {
-        System.out.println("Game has" + resourceCardBank.getNumberOfWood() + " wood");
-        System.out.println("Game has" + resourceCardBank.getNumberOfBrick() + " brick");
-        System.out.println("Game has" + resourceCardBank.getNumberOfSheep() + " sheep");
-        System.out.println("Game has" + resourceCardBank.getNumberOfWheat() + " wheat");
-        System.out.println("Game has" + resourceCardBank.getNumberOfOre() + " ore");
-        List<Player> players = playerManager.getPlayers();
-        for(Player player : players) {
-            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.WOOD) + " wood");
-            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.BRICK) + " brick");
-            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.SHEEP) + " sheep");
-            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.WHEAT) + " wheat");
-            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.ORE) + " ore");
         }
     }
 
