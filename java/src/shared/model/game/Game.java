@@ -821,7 +821,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 owner = i;
             }
         }
-        if(owner >= 0 && longest > map.getLongestRoadSize(longestRoadCard.getOwner())) {
+        if(owner >= 0 && longestRoadCard.getOwner() != -1 && longest > map.getLongestRoadSize(longestRoadCard.getOwner())) {
+            setPlayerWithLongestRoad(longestRoadCard.getOwner(), owner, longest);
+        } else if(owner >= 0 && longestRoadCard.getOwner() == -1) {
             setPlayerWithLongestRoad(longestRoadCard.getOwner(), owner, longest);
         }
     }
@@ -875,6 +877,26 @@ public class Game extends Observable implements IGame, JsonSerializable {
             String message = name + " is a loser, lolz";
             log(name, message);
 
+            for(ResourceType resource : cards) {
+                switch(resource) {
+                    case BRICK:
+                        resourceCardBank.addResource(new Brick());
+                        break;
+                    case ORE:
+                        resourceCardBank.addResource(new Ore());
+                        break;
+                    case SHEEP:
+                        resourceCardBank.addResource(new Sheep());
+                        break;
+                    case WHEAT:
+                        resourceCardBank.addResource(new Wheat());
+                        break;
+                    case WOOD:
+                        resourceCardBank.addResource(new Wood());
+                        break;
+                }
+            }
+
             playerManager.discardResourceType(playerIndex, cards);
             playerManager.getPlayerByIndex(playerIndex).setDiscarded(true);
         }
@@ -895,6 +917,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public void rollNumber(final int value) throws Exception {
+        print();
         String name = getPlayerNameByIndex(getCurrentTurn());
         String message = name + " rolled a " + value + " fool";
         log(name, message);
@@ -1006,6 +1029,23 @@ public class Game extends Observable implements IGame, JsonSerializable {
             
             turnTracker.setPhase(TurnTracker.Phase.PLAYING);
         }
+        print();
+    }
+
+    private void print() {
+        System.out.println("Game has" + resourceCardBank.getNumberOfWood() + " wood");
+        System.out.println("Game has" + resourceCardBank.getNumberOfBrick() + " brick");
+        System.out.println("Game has" + resourceCardBank.getNumberOfSheep() + " sheep");
+        System.out.println("Game has" + resourceCardBank.getNumberOfWheat() + " wheat");
+        System.out.println("Game has" + resourceCardBank.getNumberOfOre() + " ore");
+        List<Player> players = playerManager.getPlayers();
+        for(Player player : players) {
+            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.WOOD) + " wood");
+            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.BRICK) + " brick");
+            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.SHEEP) + " sheep");
+            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.WHEAT) + " wheat");
+            System.out.println(player.getName() + " has " + player.getNumberOfType(ResourceType.ORE) + " ore");
+        }
     }
 
     /**
@@ -1109,7 +1149,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             String name = getPlayerNameByIndex(playerIndex);
             String message;
             if(getPlayerColorByIndex(playerIndex) == CatanColor.YELLOW) {
-                message = "Follow the yellow brick road." + name + " is";
+                message = "Follow the yellow brick road. " + name + " is";
             } else {
                 message = name + " is tearin up da streets";
             }
@@ -1158,7 +1198,7 @@ public class Game extends Observable implements IGame, JsonSerializable {
             String robbed = getPlayerNameByIndex(victimIndex);
             String message;
             if(playerIndex != victimIndex) {
-                message = "Yo " + robbed + ", u gonna get cut." + robber + " is on da prowl";
+                message = "Yo " + robbed + ", u gonna get cut. " + robber + " is on da prowl";
                 log(robber, message);
             }
 
@@ -1302,7 +1342,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 e.printStackTrace();
             }
         }
-        //turnTracker.setPhase(TurnTracker.Phase.PLAYING); for Joel, love Corbin
     }
 
     /**
