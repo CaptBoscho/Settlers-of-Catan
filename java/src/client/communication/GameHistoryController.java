@@ -32,7 +32,7 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 	private void initFromModel() {
         List<MessageLine> log = facade.getLog().getMessages();
 		List<LogEntry> entries = new ArrayList<>();
-        for(MessageLine line : log) {
+        for (MessageLine line : log) {
             CatanColor color = facade.getPlayerColorByName(line.getPlayer());
             entries.add(new LogEntry(color, line.getMessage()));
         }

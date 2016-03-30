@@ -102,7 +102,8 @@ public final class ServerFacade implements IFacade {
     /**
      * Adds an AI to the game
      *
-     * @param type
+     * @param gameId The ID of the game to which an AI is being added
+     * @param type The type of AI being added to the game
      * @throws AddAIException
      * @return CommandExecutionResult
      */
