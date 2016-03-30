@@ -89,9 +89,6 @@ public class SheepAI extends AIPlayer {
         for(VertexLocation vertex : sheepVertices) {
             if(game.canBuildSettlement(getPlayerIndex(), vertex)) {
                 game.buildSettlement(getPlayerIndex(), vertex);
-                String name = game.getPlayerNameByIndex(getPlayerIndex());
-                String message = name + " built a pad";
-                game.log(name, message);
                 return;
             }
         }
@@ -99,9 +96,6 @@ public class SheepAI extends AIPlayer {
         for(java.util.Map.Entry<VertexLocation, Vertex> entry : vertices.entrySet()) {
             if(game.canBuildSettlement(getPlayerIndex(), entry.getKey())) {
                 game.buildSettlement(getPlayerIndex(), entry.getKey());
-                String name = game.getPlayerNameByIndex(getPlayerIndex());
-                String message = name + " built a pad";
-                game.log(name, message);
                 return;
             }
         }
@@ -111,9 +105,6 @@ public class SheepAI extends AIPlayer {
         for(EdgeLocation edge : sheepEdges) {
             if(game.canBuildRoad(getPlayerIndex(), edge)) {
                 game.buildRoad(getPlayerIndex(), edge);
-                String name = game.getPlayerNameByIndex(getPlayerIndex());
-                String message = name + " built a strip";
-                game.log(name, message);
                 return;
             }
         }
@@ -121,9 +112,6 @@ public class SheepAI extends AIPlayer {
         for(java.util.Map.Entry<EdgeLocation, Edge> entry : edges.entrySet()) {
             if(game.canBuildRoad(getPlayerIndex(), entry.getKey())) {
                 game.buildRoad(getPlayerIndex(), entry.getKey());
-                String name = game.getPlayerNameByIndex(getPlayerIndex());
-                String message = name + " built a strip";
-                game.log(name, message);
                 return;
             }
         }
@@ -133,9 +121,6 @@ public class SheepAI extends AIPlayer {
         for(VertexLocation vertex : sheepVertices) {
             if(game.canBuildCity(getPlayerIndex(), vertex)) {
                 game.buildCity(getPlayerIndex(), vertex);
-                String name = game.getPlayerNameByIndex(getPlayerIndex());
-                String message = name + " built a penthouse.  You're not invited";
-                game.log(name, message);
                 return;
             }
         }
@@ -143,9 +128,6 @@ public class SheepAI extends AIPlayer {
         for(java.util.Map.Entry<VertexLocation, Vertex> entry : vertices.entrySet()) {
             if(game.canBuildCity(getPlayerIndex(), entry.getKey())) {
                 game.buildCity(getPlayerIndex(), entry.getKey());
-                String name = game.getPlayerNameByIndex(getPlayerIndex());
-                String message = name + " built a penthouse.  You're not invited";
-                game.log(name, message);
                 return;
             }
         }
@@ -179,33 +161,21 @@ public class SheepAI extends AIPlayer {
             case 0:
                 if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.ORE) >= oreRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
                     this.game.maritimeTrade(getPlayerIndex(), oreRatio, ResourceType.ORE, ResourceType.SHEEP);
-                    String name = this.game.getPlayerNameByIndex(getPlayerIndex());
-                    String message = name + " got that yacht";
-                    this.game.log(name, message);
                 }
                 break;
             case 1:
                 if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.BRICK) >= brickRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
                     this.game.maritimeTrade(getPlayerIndex(), brickRatio, ResourceType.BRICK, ResourceType.SHEEP);
-                    String name = this.game.getPlayerNameByIndex(getPlayerIndex());
-                    String message = name + " got that yacht";
-                    this.game.log(name, message);
                 }
                 break;
             case 2:
                 if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.WHEAT) >= wheatRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
                     this.game.maritimeTrade(getPlayerIndex(), wheatRatio, ResourceType.WHEAT, ResourceType.SHEEP);
-                    String name = this.game.getPlayerNameByIndex(getPlayerIndex());
-                    String message = name + " got that yacht";
-                    this.game.log(name, message);
                 }
                 break;
             case 3:
                 if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.WOOD) >= woodRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
                     this.game.maritimeTrade(getPlayerIndex(), woodRatio, ResourceType.WOOD, ResourceType.SHEEP);
-                    String name = this.game.getPlayerNameByIndex(getPlayerIndex());
-                    String message = name + " got that yacht";
-                    this.game.log(name, message);
                 }
                 break;
             default:
@@ -518,7 +488,7 @@ public class SheepAI extends AIPlayer {
                     return;
                 }
             }
-            //this is if the aiPlayer has a building on every single sheep hex.  Now it will just pick a random hex
+            //this is if the aiPlayer has a building on every single sheep hex.  Now it will just pick a random hex where it doesn't have a building
             java.util.Map<HexLocation, Hex> hexes = game.getMap().getHexes();
             for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
                 ArrayList<Integer> potentialVictims = getPlayers(getPlayerIndex(), entry.getKey());
@@ -526,6 +496,13 @@ public class SheepAI extends AIPlayer {
                     //this robs a random person on a random hex where the aiPlayer doesn't have a building there
                     int victim = potentialVictims.remove(0);
                     this.game.rob(getPlayerIndex(), victim, entry.getKey());
+                    return;
+                }
+            }
+            //this is the aiPlayer has a building on every hex that has a building.  Now it will just not rob anyone
+            for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
+                if(!this.game.getMap().getRobber().getLocation().equals(entry.getKey())) {
+                    this.game.rob(getPlayerIndex(), getPlayerIndex(), entry.getKey());
                     return;
                 }
             }
@@ -543,8 +520,8 @@ public class SheepAI extends AIPlayer {
                 playRoad();
                 playSettlement();
                 playCity();
-                getDevCard();
-                playDevCard();
+                //getDevCard();
+                //playDevCard();
                 maritimeTrade();
                 //trade();
                 isTrading = true;
