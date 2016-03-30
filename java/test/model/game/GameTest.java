@@ -21,6 +21,8 @@ import shared.model.player.Player;
 import javax.naming.InsufficientResourcesException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -406,6 +408,8 @@ public class GameTest {
     /**
      * Checks canBuildSettlement
      * checks canBuildCity
+     * checks to see if the amount of settlements available before a city is built increments
+     * after the city is built
      * @throws InvalidPlayerException
      * @throws PlayerExistsException
      * @throws InvalidLocationException
@@ -414,7 +418,7 @@ public class GameTest {
      * @throws StructureException
      */
     @Test
-    public void testCanBuildRoadandCity() throws InvalidPlayerException, PlayerExistsException, InvalidLocationException, InvalidTypeException, InsufficientResourcesException, StructureException {
+    public void testCanBuildSettlementandCity() throws InvalidPlayerException, PlayerExistsException, InvalidLocationException, InvalidTypeException, InsufficientResourcesException, StructureException {
         int current_turn = game.getCurrentTurn();
         game.setPhase(TurnTracker.Phase.ROLLING);
         assertFalse(game.canBuildSettlement(current_turn,new VertexLocation(new HexLocation(0,0),VertexDirection.NorthEast)));
@@ -462,6 +466,15 @@ public class GameTest {
             game.giveResource(game.getResourceCard(ResourceType.ORE),current_turn);
             assertTrue(game.canBuildCity(current_turn,vloc));
         }
+
+        int settlementsAvailableBefore = game.getAvailableSettlements(current_turn);
+        int citiesAvailableBefore = game.getAvailableCities(current_turn);
+        game.buildCity(current_turn,vloc);
+        int settlementsAvailableAfter = game.getAvailableSettlements(current_turn);
+        int citiesAvailableAfter = game.getAvailableCities(current_turn);
+
+        assertEquals(settlementsAvailableAfter, settlementsAvailableBefore + 1);
+        assertEquals(citiesAvailableAfter, citiesAvailableBefore-1);
 
     }
 }
