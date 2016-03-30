@@ -907,6 +907,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
             }
         }
         turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+        if(isAITurn()) {
+            playAI();
+        }
     }
 
     /**
