@@ -512,6 +512,14 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				receiveore = 0;
 				break;
 		}
+		if(sendbrick+sendwood+sendsheep+sendwheat+sendore <= 0) {
+			getTradeOverlay().setTradeEnabled(false);
+			getTradeOverlay().setStateMessage("Select Resource to Send to Other Player");
+		}
+		if(receivebrick+receivewood+receivesheep+receivewheat+receiveore <= 0) {
+			getTradeOverlay().setTradeEnabled(false);
+			getTradeOverlay().setStateMessage("Select Resource to Receive from Other Player");
+		}
 	}
 
 	@Override
