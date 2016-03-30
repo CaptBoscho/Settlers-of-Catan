@@ -21,9 +21,9 @@ public class UserManager {
 
         addUser("pedro", "pedro");
         addUser("jose", "jose");
-        addUser("juan", "juan");
         addUser("pablo", "pablo");
         addUser("jesus", "jesus");
+        addUser("juan", "juan");
         addUser("juana", "juana");
         addUser("emilio", "emilio");
         addUser("emilia", "emilia");

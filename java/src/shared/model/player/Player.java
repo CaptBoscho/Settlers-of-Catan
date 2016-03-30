@@ -483,10 +483,12 @@ public class Player implements IPlayer, Comparable<Player> {
 
         //Delegate action
         try {
-            resourceCardBank.buildCity();
-            structureBank.buildCity();
-            //Increment points
-            incrementPoints(); //Note: only have to increment by 1 since we are replacing a settlement
+            if(canBuildCity()) {
+                resourceCardBank.buildCity();
+                structureBank.buildCity();
+                //Increment points
+                incrementPoints(); //Note: only have to increment by 1 since we are replacing a settlement
+            }
         } catch (InsufficientResourcesException e) {
             e.printStackTrace();
         }
