@@ -259,7 +259,7 @@ public class SheepAI extends AIPlayer {
                     return;
                 }
             }
-            //this is if the aiPlayer has a building on every single sheep hex.  Now it will just pick a random hex
+            //this is if the aiPlayer has a building on every single sheep hex.  Now it will just pick a random hex where it doesn't have a building
             java.util.Map<HexLocation, Hex> hexes = game.getMap().getHexes();
             for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
                 ArrayList<Integer> potentialVictims = getPlayers(getPlayerIndex(), entry.getKey());
@@ -267,6 +267,13 @@ public class SheepAI extends AIPlayer {
                     //this robs a random person on a random hex where the aiPlayer doesn't have a building there
                     int victim = potentialVictims.remove(0);
                     this.game.useSoldier(getPlayerIndex(), victim, entry.getKey());
+                    return;
+                }
+            }
+            //this is the aiPlayer has a building on every hex that has a building.  Now it will just not rob anyone
+            for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
+                if(!this.game.getMap().getRobber().getLocation().equals(entry.getKey())) {
+                    this.game.useSoldier(getPlayerIndex(), getPlayerIndex(), entry.getKey());
                     return;
                 }
             }
@@ -499,7 +506,7 @@ public class SheepAI extends AIPlayer {
                     return;
                 }
             }
-            //this is the aiPlayer has a building on every hex that has a building.  Now it will just not rob anyone
+            //this is if the aiPlayer has a building on every hex that has a building.  Now it will just not rob anyone
             for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
                 if(!this.game.getMap().getRobber().getLocation().equals(entry.getKey())) {
                     this.game.rob(getPlayerIndex(), getPlayerIndex(), entry.getKey());
@@ -520,8 +527,8 @@ public class SheepAI extends AIPlayer {
                 playRoad();
                 playSettlement();
                 playCity();
-                //getDevCard();
-                //playDevCard();
+                getDevCard();
+                playDevCard();
                 maritimeTrade();
                 //trade();
                 isTrading = true;
