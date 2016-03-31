@@ -107,14 +107,14 @@ public final class Map implements IMap, JsonSerializable {
         }
         final ArrayList<HexLocation> chitList = chits.get(diceRoll);
         final java.util.Map<Integer, List<ResourceType>> resourceMap = new HashMap<>();
-        chitList.stream().filter(hexLoc -> !pancho.getLocation().equals(hexLoc)).forEach(hexLoc -> {
+        for(HexLocation hexLoc : chitList) {
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthWest);
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.NorthEast);
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.East);
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthEast);
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.SouthWest);
             getResourcesFromBuilding(resourceMap, hexLoc, VertexDirection.West);
-        });
+        }
         return resourceMap;
     }
 
@@ -2092,6 +2092,10 @@ public final class Map implements IMap, JsonSerializable {
 
     public java.util.Map<VertexLocation, Vertex> getVertices() {
         return vertices;
+    }
+
+    public java.util.Map<EdgeLocation, Edge> getEdges() {
+        return edges;
     }
 
     public java.util.Map<Integer, ArrayList<Edge>> getRoads() {

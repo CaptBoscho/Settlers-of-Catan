@@ -2,14 +2,12 @@ package shared.model.game;
 
 import client.data.GameInfo;
 import client.data.PlayerInfo;
-import client.facade.Facade;
 import com.google.gson.JsonObject;
 import server.exceptions.AddAIException;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
-import shared.dto.GameModelDTO;
 import shared.exceptions.*;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -704,6 +702,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.map != null;
 
         if (canInitiateSettlement(playerIndex, vertex)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = name + " built a pad";
+            log(name, message);
+
             List<ResourceType> resources = map.initiateSettlement(playerIndex, vertex);
             playerManager.getPlayerByIndex(playerIndex).buildFreeSettlement();
             for(ResourceType resource : resources) {
@@ -733,8 +736,14 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.playerManager != null;
 
         if (canBuildSettlement(playerIndex, vertex)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = name + " built a pad";
+            log(name, message);
+
             map.buildSettlement(playerIndex, vertex);
             playerManager.buildSettlement(playerIndex);
+            updateLongestRoad();
             resourceCardBank.addResource(new Brick());
             resourceCardBank.addResource(new Wood());
             resourceCardBank.addResource(new Sheep());
@@ -757,6 +766,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert playerIndex < 4;
         assert edge != null;
         assert this.map != null;
+
+        String name = getPlayerNameByIndex(playerIndex);
+        String message = name + " built a strip";
+        log(name, message);
 
         map.initiateRoad(playerIndex, edge);
         playerManager.getPlayerByIndex(playerIndex).buildFreeRoad();
@@ -784,19 +797,34 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.longestRoadCard != null;
 
         if (canBuildRoad(playerIndex, edge)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = name + " built a strip";
+            log(name, message);
+
             map.buildRoad(playerIndex, edge);
             playerManager.buildRoad(playerIndex);
             resourceCardBank.addResource(new Brick());
             resourceCardBank.addResource(new Wood());
-            updateLongestRoad(playerIndex);
+            updateLongestRoad();
         }
     }
 
-    private void updateLongestRoad(int playerIndex) throws PlayerExistsException {
+    private void updateLongestRoad() throws PlayerExistsException {
         //check to update longest road
-        int roadLength = map.getLongestRoadSize(playerIndex);
-        if (roadLength >= 5 && roadLength > longestRoadCard.getSize()) {
-            setPlayerWithLongestRoad(longestRoadCard.getOwner(), playerIndex, roadLength);
+        int longest = -1;
+        int owner = -1;
+        for(int i=0; i<4; i++) {
+            int roadLength = map.getLongestRoadSize(i);
+            if (roadLength >= 5 && roadLength > longest) {
+                longest = roadLength;
+                owner = i;
+            }
+        }
+        if(owner >= 0 && longestRoadCard.getOwner() != -1 && longest > map.getLongestRoadSize(longestRoadCard.getOwner())) {
+            setPlayerWithLongestRoad(longestRoadCard.getOwner(), owner, longest);
+        } else if(owner >= 0 && longestRoadCard.getOwner() == -1) {
+            setPlayerWithLongestRoad(longestRoadCard.getOwner(), owner, longest);
         }
     }
 
@@ -819,6 +847,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert vertex.getHexLoc() != null;
 
         if (canBuildCity(playerIndex, vertex)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = name + " built a penthouse.  You're not invited";
+            log(name, message);
+
             map.buildCity(playerIndex, vertex);
             playerManager.buildCity(playerIndex);
             resourceCardBank.addResource(new Ore());
@@ -837,8 +870,33 @@ public class Game extends Observable implements IGame, JsonSerializable {
      * @param cards       Cards to be discarded
      */
     @Override
-    public void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException {
+    public void discardCards(int playerIndex, List<ResourceType> cards) throws Exception, InvalidTypeException {
         if (canDiscardCards(playerIndex) && this.turnTracker.canDiscard()) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = name + " is a loser, lolz";
+            log(name, message);
+
+            for(ResourceType resource : cards) {
+                switch(resource) {
+                    case BRICK:
+                        resourceCardBank.addResource(new Brick());
+                        break;
+                    case ORE:
+                        resourceCardBank.addResource(new Ore());
+                        break;
+                    case SHEEP:
+                        resourceCardBank.addResource(new Sheep());
+                        break;
+                    case WHEAT:
+                        resourceCardBank.addResource(new Wheat());
+                        break;
+                    case WOOD:
+                        resourceCardBank.addResource(new Wood());
+                        break;
+                }
+            }
+
             playerManager.discardResourceType(playerIndex, cards);
             playerManager.getPlayerByIndex(playerIndex).setDiscarded(true);
         }
@@ -849,6 +907,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
             }
         }
         turnTracker.setPhase(TurnTracker.Phase.ROBBING);
+        if(isAITurn()) {
+            playAI();
+        }
     }
 
     /**
@@ -859,6 +920,9 @@ public class Game extends Observable implements IGame, JsonSerializable {
      */
     @Override
     public void rollNumber(final int value) throws Exception {
+        String name = getPlayerNameByIndex(getCurrentTurn());
+        String message = name + " rolled a " + value + " fool";
+        log(name, message);
         //Is value a 7 - robber
         if (value == 7) {
             //Go to discarding phase before robbing if any player has to discard
@@ -867,6 +931,13 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 if (player.getNumberResourceCards() > 7) {
                     turnTracker.setPhase(TurnTracker.Phase.DISCARDING);
                     playerManager.initializeDiscarding();
+                    //automatically has ai players discard
+                    for(int i=0; i<players.size(); i++) {
+                        if(players.get(i) instanceof AIPlayer) {
+                            AIPlayer aiPlayer = ((AIPlayer)players.get(i));
+                            aiPlayer.discarding(this);
+                        }
+                    }
                     return;
                 }
             }
@@ -979,8 +1050,17 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert !one.getResources().equals(two.getResources());
 
         if (canOfferTrade(one.getPlayerIndex())) {
+
+            String name = getPlayerNameByIndex(one.getPlayerIndex());
+            String message = name + " is desperate and beggin for help";
+            log(name, message);
+
             currentOffer = new Trade(one, two);
             currentOffer.setActive(true);
+            if(getPlayerManager().getPlayerByIndex(two.getPlayerIndex()) instanceof AIPlayer) {
+                AIPlayer aiPlayer = ((AIPlayer)getPlayerManager().getPlayerByIndex(two.getPlayerIndex()));
+                aiPlayer.acceptTrade(this);
+            }
         }
     }
 
@@ -988,6 +1068,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
         if (currentOffer == null) {
             throw new Exception("Can't accept trade; No current trade offer");
         }
+
+        String name = getPlayerNameByIndex(playerIndex);
+        String message;
+        if(answer) {
+            message = name + " helps the homeless";
+        } else {
+            message = name + " turns the homeless away. What a heartless soul";
+        }
+        log(name, message);
 
         if (playerIndex == currentOffer.getReceiver() && answer) {
             playerManager.offerTrade(currentOffer.getSender(), currentOffer.getReceiver(), currentOffer.getPackage1().getResources(), currentOffer.getPackage2().getResources());
@@ -1010,6 +1099,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert want2 != null;
 
         if (canUseYearOfPlenty(playerIndex)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = "Grab yo umbrella, cuz " + name + " is makin it rain";
+            log(name, message);
+
             playerManager.useYearOfPlenty(playerIndex);
             ResourceCard rc1 = resourceCardBank.discard(want1);
             ResourceCard rc2 = resourceCardBank.discard(want2);
@@ -1036,10 +1130,20 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert !edge1.equals(edge2);
 
         if (canUseRoadBuilding(playerIndex)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message;
+            if(getPlayerColorByIndex(playerIndex) == CatanColor.YELLOW) {
+                message = "Follow the yellow brick road. " + name + " is";
+            } else {
+                message = name + " is tearin up da streets";
+            }
+            log(name, message);
+
             map.buildRoad(playerIndex, edge1);
             map.buildRoad(playerIndex, edge2);
             playerManager.useRoadBuilder(playerIndex);
-            updateLongestRoad(playerIndex);
+            updateLongestRoad();
         }
     }
 
@@ -1074,6 +1178,15 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
 
         if (canUseSoldier(playerIndex)) {
+
+            String robber = getPlayerNameByIndex(playerIndex);
+            String robbed = getPlayerNameByIndex(victimIndex);
+            String message;
+            if(playerIndex != victimIndex) {
+                message = "Yo " + robbed + ", u gonna get cut. " + robber + " is on da prowl";
+                log(robber, message);
+            }
+
             playerManager.useSoldier(playerIndex);
             int used = playerManager.getNumberOfSoldiers(playerIndex);
             if (used >= 3 && used > largestArmyCard.getMostSoldiers()) {
@@ -1117,6 +1230,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert type != null;
 
         if (canUseMonopoly(playerIndex)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = name + " got free parking.  Do not pass go.  Do not collect $200";
+            log(name, message);
+
             playerManager.useMonopoly(playerIndex, type);
         }
     }
@@ -1132,6 +1250,11 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert playerIndex < 4;
 
         if (canUseMonument(playerIndex)) {
+
+            String name = getPlayerNameByIndex(playerIndex);
+            String message = name + " cheated";
+            log(name, message);
+
             playerManager.useMonument(playerIndex);
         }
     }
@@ -1171,6 +1294,16 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert this.turnTracker != null;
         assert this.playerManager != null;
 
+        String robber = getPlayerNameByIndex(playerRobber);
+        String robbed = getPlayerNameByIndex(playerRobbed);
+        String message;
+        if(playerRobber != playerRobbed) {
+            message = robber + " sent his home boy Pancho to mug " + robbed;
+        } else {
+            message = robber + " moved Pancho to a dope spot";
+        }
+        log(robber, message);
+
         if(playerRobber == playerRobbed) {
             placeRobber(playerRobber, hexLoc);
             turnTracker.setPhase(TurnTracker.Phase.PLAYING);
@@ -1194,7 +1327,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 e.printStackTrace();
             }
         }
-        //turnTracker.setPhase(TurnTracker.Phase.PLAYING); for Joel, love Corbin
     }
 
     /**
@@ -1211,6 +1343,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert playerManager != null;
         assert developmentCardBank != null;
         assert canBuyDevelopmentCard(playerIndex);
+
+        String name = getPlayerNameByIndex(playerIndex);
+        String message =  "You gonna get rekt when " + name + " drops that dev card";
+        log(name, message);
 
         // remove player resources
         playerManager.buyDevCard(playerIndex);
@@ -1238,6 +1374,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
         assert playerIndex < 4;
         assert send != null;
         assert receive != null;
+
+        String name = getPlayerNameByIndex(playerIndex);
+        String message = name + " got that yacht";
+        log(name, message);
 
         final List<ResourceType> cards = new ArrayList<>();
         if (ratio == 3 && !canMaritimeTrade(playerIndex, PortType.THREE)) {
@@ -1293,6 +1433,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
     public Integer finishTurn(int playerIndex) throws Exception {
         assert playerIndex >= 0;
         assert this.playerManager != null;
+
+        String name = getPlayerNameByIndex(playerIndex);
+        String message = name + " stopped hogging game time";
+        log(name, message);
 
         try {
             playerManager.finishTurn(playerIndex);
@@ -2020,10 +2164,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
         return gameInfo;
     }
 
-    public GameModelDTO getDTO() {
-        return new GameModelDTO(toJSON());
-    }
-
     public void incrementVersion() {
         this.version++;
     }
@@ -2036,4 +2176,69 @@ public class Game extends Observable implements IGame, JsonSerializable {
         this.log.addMessage(new MessageLine(name, message));
     }
 
+    public Trade getCurrentOffer() {
+        return this.currentOffer;
+    }
+
+    public boolean isAITurn() {
+        try {
+            Player player = playerManager.getPlayerByIndex(getCurrentTurn());
+            if(player instanceof AIPlayer) {
+                return true;
+            }
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void playAI() throws Exception {
+        AIPlayer aiPlayer = (AIPlayer)playerManager.getPlayerByIndex(getCurrentTurn());
+        TurnTracker.Phase phase = getCurrentPhase();
+        switch(phase) {
+            case SETUPONE:
+                aiPlayer.setUpOne(this);
+                finishTurn(aiPlayer.getPlayerIndex());
+                incrementVersion();
+                if(isAITurn()) {
+                    playAI();
+                }
+                break;
+            case SETUPTWO:
+                aiPlayer.setUpTwo(this);
+                finishTurn(aiPlayer.getPlayerIndex());
+                incrementVersion();
+                if(isAITurn()) {
+                    playAI();
+                }
+                break;
+            case ROLLING:
+                aiPlayer.rolling(this);
+                incrementVersion();
+                if(isAITurn()) {
+                    playAI();
+                }
+                break;
+            case ROBBING:
+                aiPlayer.robbing(this);
+                incrementVersion();
+                if(isAITurn()) {
+                    playAI();
+                }
+                break;
+            case PLAYING:
+                aiPlayer.playing(this);
+                if(currentOffer == null) {
+                    aiPlayer.setTrading(false);
+                    finishTurn(aiPlayer.getPlayerIndex());
+                }
+                incrementVersion();
+                if(isAITurn()) {
+                    playAI();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

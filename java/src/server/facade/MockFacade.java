@@ -648,7 +648,7 @@ public final class MockFacade implements IFacade {
         if (gameID == DEFAULT_GAME) {
             try {
                 defaultGame.discardCards(dto.getPlayerIndex(), cards);
-            } catch (PlayerExistsException | InsufficientResourcesException | InvalidTypeException e) {
+            } catch (Exception | InvalidTypeException e) {
                 throw new DiscardCardsException("No players can discard at beginning of game");
             }
             return new CommandExecutionResult(this.defaultGame.toJSON().toString());
