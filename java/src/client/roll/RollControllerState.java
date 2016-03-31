@@ -26,6 +26,9 @@ public class RollControllerState {
     private IRollView rollView;
     private IRollResultView rollResultView;
 
+    final int FOUR_SECONDS = 4 * 1000;
+
+
     /**
      * Constructor
      */
@@ -58,10 +61,8 @@ public class RollControllerState {
     }
 
     public void update() throws PlayerExistsException {
-        final int FOUR_SECONDS = 4 * 1000;
-
         int index = userCookie.getPlayerIndex();
-        if(facade.getCurrentTurn() == index) {
+        if(facade.getCurrentTurn() == index && facade.getPhase() == TurnTracker.Phase.ROLLING) {
             rolled = false;
             rollView.setMessage("Roll the dice");
             rollView.showModal();
