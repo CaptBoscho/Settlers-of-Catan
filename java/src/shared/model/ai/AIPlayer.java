@@ -3,14 +3,20 @@ package shared.model.ai;
 import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;
 import shared.exceptions.InvalidPlayerException;
+import shared.model.game.Game;
 import shared.model.player.Player;
 import shared.model.player.PlayerType;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/19/2016.
  */
-public class AIPlayer extends Player {
+abstract public class AIPlayer extends Player {
+
     private AIType aiType;
+
+    public AIPlayer() {
+        super();
+    }
     
     /**
      * Construct a Player object from a JSON blob
@@ -38,5 +44,25 @@ public class AIPlayer extends Player {
         this.aiType = type;
     }
 
-    // TODO: State pattern version of handling do methods for ai types
+    public AIType getAIType() {
+        return aiType;
+    }
+
+    abstract public void setUpOne(Game game);
+
+    abstract public void setUpTwo(Game game);
+
+    abstract public void rolling(Game game);
+
+    abstract public void discarding(Game game);
+
+    abstract public void robbing(Game game);
+
+    abstract public void playing(Game game);
+
+    abstract public void acceptTrade(Game game);
+
+    abstract public void setTrading(boolean isTrading);
+
+    abstract public boolean isTrading();
 }
