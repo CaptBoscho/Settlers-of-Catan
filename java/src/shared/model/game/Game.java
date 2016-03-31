@@ -2193,52 +2193,33 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public void playAI() throws Exception {
-        AIPlayer aiPlayer = (AIPlayer)playerManager.getPlayerByIndex(getCurrentTurn());
-        TurnTracker.Phase phase = getCurrentPhase();
-        switch(phase) {
-            case SETUPONE:
-                aiPlayer.setUpOne(this);
-                finishTurn(aiPlayer.getPlayerIndex());
-                incrementVersion();
-                if(isAITurn()) {
-                    playAI();
-                }
-                break;
-            case SETUPTWO:
-                aiPlayer.setUpTwo(this);
-                finishTurn(aiPlayer.getPlayerIndex());
-                incrementVersion();
-                if(isAITurn()) {
-                    playAI();
-                }
-                break;
-            case ROLLING:
-                aiPlayer.rolling(this);
-                incrementVersion();
-                if(isAITurn()) {
-                    playAI();
-                }
-                break;
-            case ROBBING:
-                aiPlayer.robbing(this);
-                incrementVersion();
-                if(isAITurn()) {
-                    playAI();
-                }
-                break;
-            case PLAYING:
-                aiPlayer.playing(this);
-                if(currentOffer == null) {
-                    aiPlayer.setTrading(false);
+        while (isAITurn() && getCurrentPhase() != TurnTracker.Phase.DISCARDING) {
+            AIPlayer aiPlayer = (AIPlayer) playerManager.getPlayerByIndex(getCurrentTurn());
+            assert aiPlayer != null;
+            TurnTracker.Phase phase = getCurrentPhase();
+            switch (phase) {
+                case SETUPONE:
+                    aiPlayer.setUpOne(this);
                     finishTurn(aiPlayer.getPlayerIndex());
-                }
-                incrementVersion();
-                if(isAITurn()) {
-                    playAI();
-                }
-                break;
-            default:
-                break;
+                    break;
+                case SETUPTWO:
+                    aiPlayer.setUpTwo(this);
+                    finishTurn(aiPlayer.getPlayerIndex());
+                    break;
+                case ROLLING:
+                    aiPlayer.rolling(this);
+                    break;
+                case ROBBING:
+                    aiPlayer.robbing(this);
+                    break;
+                case PLAYING:
+                    aiPlayer.playing(this);
+                    finishTurn(aiPlayer.getPlayerIndex());
+                    break;
+                default:
+                    break;
+            }
         }
+        incrementVersion();
     }
 }

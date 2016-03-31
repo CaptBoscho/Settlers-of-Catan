@@ -438,28 +438,28 @@ public class SheepAI extends AIPlayer {
                     ResourceType random = unwanted.remove(new Random().nextInt(unwanted.size()));
                     switch(random) {
                         case ORE:
-                            while(ore != 0) {
+                            while(ore != 0 && totalToDiscard != 0) {
                                 resources.add(random);
                                 ore--;
                                 totalToDiscard--;
                             }
                             break;
                         case WOOD:
-                            while(wood != 0) {
+                            while(wood != 0 && totalToDiscard != 0) {
                                 resources.add(random);
                                 wood--;
                                 totalToDiscard--;
                             }
                             break;
                         case WHEAT:
-                            while(wheat != 0) {
+                            while(wheat != 0 && totalToDiscard != 0) {
                                 resources.add(random);
                                 wheat--;
                                 totalToDiscard--;
                             }
                             break;
                         case BRICK:
-                            while(brick != 0) {
+                            while(brick != 0 && totalToDiscard != 0) {
                                 resources.add(random);
                                 brick--;
                                 totalToDiscard--;
@@ -469,13 +469,12 @@ public class SheepAI extends AIPlayer {
                             break;
                     }
                 }
-                while(sheep != 0 && totalToDiscard != 0) {
+                while(totalToDiscard != 0) {
                     resources.add(ResourceType.SHEEP);
                     sheep--;
                     totalToDiscard--;
                 }
                 this.game.discardCards(getPlayerIndex(), resources);
-                this.game.incrementVersion();
             }
         } catch(Exception | InvalidTypeException e) {
             e.printStackTrace();
