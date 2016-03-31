@@ -354,21 +354,21 @@ public class LongestRoadAI extends AIPlayer {
                     ResourceType random = unwanted.remove(new Random().nextInt(unwanted.size()));
                     switch(random) {
                         case ORE:
-                            while(ore != 0) {
+                            while(ore != 0 && totalToDiscard != 0) {
                                 resources.add(random);
                                 ore--;
                                 totalToDiscard--;
                             }
                             break;
                         case SHEEP:
-                            while(sheep != 0) {
+                            while(sheep != 0 && totalToDiscard != 0) {
                                 resources.add(random);
                                 sheep--;
                                 totalToDiscard--;
                             }
                             break;
                         case WHEAT:
-                            while(wheat != 0) {
+                            while(wheat != 0 && totalToDiscard != 0) {
                                 resources.add(random);
                                 wheat--;
                                 totalToDiscard--;
@@ -378,7 +378,7 @@ public class LongestRoadAI extends AIPlayer {
                             break;
                     }
                 }
-                while(wood != 0 && brick != 0 && totalToDiscard != 0) {
+                while(totalToDiscard != 0) {
                     if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.WOOD) >= this.game.amountOwnedResource(getPlayerIndex(), ResourceType.BRICK)) {
                         resources.add(ResourceType.WOOD);
                         wood--;
@@ -390,7 +390,6 @@ public class LongestRoadAI extends AIPlayer {
                     }
                 }
                 this.game.discardCards(getPlayerIndex(), resources);
-                this.game.incrementVersion();
             }
         } catch(Exception | InvalidTypeException e) {
             e.printStackTrace();
