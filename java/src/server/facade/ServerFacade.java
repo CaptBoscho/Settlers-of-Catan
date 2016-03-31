@@ -297,9 +297,6 @@ public final class ServerFacade implements IFacade {
             if (game.canRollNumber(player)) {
                 game.rollNumber(value);
                 game.incrementVersion();
-                String name = game.getPlayerNameByIndex(player);
-                String message = name + " rolled a " + value + " fool";
-                game.log(name, message);
             }
         } catch (Exception e) {
             throw new RollNumberException("Error while rolling!");
