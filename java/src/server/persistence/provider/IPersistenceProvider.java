@@ -1,8 +1,8 @@
-package server.persistence;
+package server.persistence.provider;
 
 import server.exceptions.EndTransactionException;
 import server.exceptions.StartTransactionException;
-import server.persistence.dao.IDAO;
+import server.persistence.daos.IDAO;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
