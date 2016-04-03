@@ -1,4 +1,4 @@
-package server.persistence.daos;
+package server.persistence.dao.daos;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.

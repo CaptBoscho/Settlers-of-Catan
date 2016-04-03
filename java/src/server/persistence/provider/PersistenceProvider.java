@@ -1,20 +1,40 @@
 package server.persistence.provider;
 
 import server.exceptions.EndTransactionException;
+import server.exceptions.PluginExistsException;
+import server.exceptions.RegisterPluginException;
 import server.exceptions.StartTransactionException;
-import server.persistence.daos.IDAO;
+import server.main.Config;
+import server.persistence.dao.daos.IDAO;
+import server.persistence.dao.facctory.DAOFactory;
+import server.persistence.dao.facctory.IDAOFactory;
+import server.persistence.plugins.IPersistencePlugin;
+import server.persistence.plugins.PersistenceType;
+import server.persistence.register.IRegister;
+import server.persistence.register.Register;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
 public class PersistenceProvider implements IPersistenceProvider {
-    private IPersistenceProvider instance;
+    private static IPersistenceProvider _instance;
+
+    private IRegister register = Register.getInstance();
+    private IDAOFactory factory = DAOFactory.getInstance();
+    private PersistenceType type = Config.persistenceType;
+    private IPersistencePlugin plugin;
 
     /**
      * Default Constructor
      */
-    private PersistenceProvider(){
-
+    private PersistenceProvider(){ // TODO: 4/2/2016 Handle exceptions
+        try {
+            this.plugin = register.registerPlugin(type);
+        } catch (PluginExistsException e) {
+            e.printStackTrace();
+        } catch (RegisterPluginException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -22,11 +42,22 @@ public class PersistenceProvider implements IPersistenceProvider {
      *
      * @return
      */
-    public IPersistenceProvider getInstance(){
-        if(this.instance == null)
-            this.instance = new PersistenceProvider();
+    public static IPersistenceProvider getInstance(){
+        if(_instance == null)
+            _instance = new PersistenceProvider();
 
-        return this.instance;
+        return _instance;
+    }
+
+
+    /**
+     * Returns a connection to the database
+     *
+     * @return
+     */
+    @Override
+    public Object getConnection() {
+        return plugin.getConnection();
     }
 
     /**
@@ -34,7 +65,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void clear() {
-
+        plugin.clear();
     }
 
     /**
@@ -44,7 +75,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void startTransaction() throws StartTransactionException {
-
+        plugin.startTransaction();
     }
 
     /**
@@ -55,7 +86,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void endTransaction(boolean commitTransaction) throws EndTransactionException {
-
+        plugin.endTransaction(commitTransaction);
     }
 
     /**
@@ -65,7 +96,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public IDAO getUserDAO() {
-        return null;
+        return factory.createUserDAO();
     }
 
     /**
@@ -75,7 +106,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public IDAO getGameDAO() {
-        return null;
+        return factory.createGameDAO();
     }
 
     /**
@@ -85,6 +116,6 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public IDAO getCommandDAO() {
-        return null;
+        return factory.createCommandDAO();
     }
 }

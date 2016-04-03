@@ -2,13 +2,20 @@ package server.persistence.provider;
 
 import server.exceptions.EndTransactionException;
 import server.exceptions.StartTransactionException;
-import server.persistence.daos.IDAO;
+import server.persistence.dao.daos.IDAO;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
 public interface IPersistenceProvider {
     //region Plugin Methods
+    /**
+     * Returns a connection to the database
+     *
+     * @return
+     */
+    Object getConnection(); // TODO: 4/2/2016 Maybe use a wrapper instead of Object...
+
     /**
      * Clears the database
      */
