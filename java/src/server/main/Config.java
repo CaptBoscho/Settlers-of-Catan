@@ -15,5 +15,6 @@ public class Config {
     public static IFacade facade = ServerFacade.getInstance();
     public static String host = "localhost";
     public static int port = 8081;
+    // TODO: 4/2/2016 Should we just store the string here instead of the enum?
     public static PersistenceType persistenceType = PersistenceType.SQL;
 }

@@ -49,7 +49,6 @@ public class PersistenceProvider implements IPersistenceProvider {
         return _instance;
     }
 
-
     /**
      * Returns a connection to the database
      *
