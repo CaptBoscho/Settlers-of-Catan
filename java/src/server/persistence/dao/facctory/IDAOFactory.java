@@ -1,6 +1,8 @@
 package server.persistence.dao.facctory;
 
-import server.persistence.dao.daos.IDAO;
+import server.persistence.dao.daos.ICommandDAO;
+import server.persistence.dao.daos.IGameDAO;
+import server.persistence.dao.daos.IUserDAO;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
@@ -9,21 +11,21 @@ public interface IDAOFactory {
     /**
      * Creates a new UserDAO
      *
-     * @return UserDAO that implements IDAO
+     * @return UserDAO that implements IUserDAO
      */
-    IDAO createUserDAO();
+    IUserDAO createUserDAO();
 
     /**
      * Creates a new GameDAO
      *
-     * @return GameDAO that implements IDAO
+     * @return GameDAO that implements IGameDAO
      */
-    IDAO createGameDAO();
+    IGameDAO createGameDAO();
 
     /**
      * Creates a new CommandDAO
      *
-     * @return CommandDAO that implements IDAO
+     * @return CommandDAO that implements ICommandDAO
      */
-    IDAO createCommandDAO();
+    ICommandDAO createCommandDAO();
 }

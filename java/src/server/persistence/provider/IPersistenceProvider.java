@@ -2,7 +2,9 @@ package server.persistence.provider;
 
 import server.exceptions.EndTransactionException;
 import server.exceptions.StartTransactionException;
-import server.persistence.dao.daos.IDAO;
+import server.persistence.dao.daos.ICommandDAO;
+import server.persistence.dao.daos.IGameDAO;
+import server.persistence.dao.daos.IUserDAO;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
@@ -41,22 +43,22 @@ public interface IPersistenceProvider {
     /**
      * Creates and returns a new UserDAO
      *
-     * @return UserDAO which implements IDAO interface
+     * @return UserDAO which implements IUserDAO interface
      */
-    IDAO getUserDAO();
+    IUserDAO getUserDAO();
 
     /**
      * Creates and returns a new GameDAO
      *
-     * @return GameDAO which implements IDAO interface
+     * @return GameDAO which implements IGameDAO interface
      */
-    IDAO getGameDAO();
+    IGameDAO getGameDAO();
 
     /**
      * Creates and returns a new CommandDAO
      *
-     * @return CommandDAO which implements IDAO interface
+     * @return CommandDAO which implements ICommandDAO interface
      */
-    IDAO getCommandDAO();
+    ICommandDAO getCommandDAO();
     //endregion
 }

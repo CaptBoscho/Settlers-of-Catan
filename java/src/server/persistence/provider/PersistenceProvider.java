@@ -5,7 +5,9 @@ import server.exceptions.PluginExistsException;
 import server.exceptions.RegisterPluginException;
 import server.exceptions.StartTransactionException;
 import server.main.Config;
-import server.persistence.dao.daos.IDAO;
+import server.persistence.dao.daos.ICommandDAO;
+import server.persistence.dao.daos.IGameDAO;
+import server.persistence.dao.daos.IUserDAO;
 import server.persistence.dao.facctory.DAOFactory;
 import server.persistence.dao.facctory.IDAOFactory;
 import server.persistence.plugins.IPersistencePlugin;
@@ -91,30 +93,30 @@ public class PersistenceProvider implements IPersistenceProvider {
     /**
      * Creates and returns a new UserDAO
      *
-     * @return UserDAO which implements IDAO interface
+     * @return UserDAO which implements IUserDAO interface
      */
     @Override
-    public IDAO getUserDAO() {
+    public IUserDAO getUserDAO() {
         return factory.createUserDAO();
     }
 
     /**
      * Creates and returns a new GameDAO
      *
-     * @return GameDAO which implements IDAO interface
+     * @return GameDAO which implements IGameDAO interface
      */
     @Override
-    public IDAO getGameDAO() {
+    public IGameDAO getGameDAO() {
         return factory.createGameDAO();
     }
 
     /**
      * Creates and returns a new CommandDAO
      *
-     * @return CommandDAO which implements IDAO interface
+     * @return CommandDAO which implements ICommandDAO interface
      */
     @Override
-    public IDAO getCommandDAO() {
+    public ICommandDAO getCommandDAO() {
         return factory.createCommandDAO();
     }
 }

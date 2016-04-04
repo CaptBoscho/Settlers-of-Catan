@@ -1,11 +1,40 @@
 package server.persistence.dao.daos.rockdb;
 
-import server.persistence.dao.daos.CommandDAO;
-import server.persistence.dao.daos.IDAO;
+import server.commands.ICommand;
+import server.persistence.dao.daos.ICommandDAO;
+
+import java.util.List;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public class RockDBCommandDAO extends CommandDAO implements IDAO {
-    // TODO: 4/2/2016 Corbin will stub this out 
+public class RockDBCommandDAO implements ICommandDAO {
+
+    RockDBCommandDAO instance = null;
+
+    private RockDBCommandDAO(){
+
+    }
+
+    public RockDBCommandDAO getInstance(){
+        if(instance == null){
+            instance = new RockDBCommandDAO();
+        }
+        return instance;
+    }
+
+    @Override
+    public void createCommand(int gameID, int version, ICommand command) {
+
+    }
+
+    @Override
+    public void deleteGameCommands(int gameID) {
+
+    }
+
+    @Override
+    public List<ICommand> getCommands(int gameID) {
+        return null;
+    }
 }

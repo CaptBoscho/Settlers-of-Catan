@@ -1,7 +1,9 @@
 package server.persistence.dao.facctory;
 
 import server.main.Config;
-import server.persistence.dao.daos.IDAO;
+import server.persistence.dao.daos.ICommandDAO;
+import server.persistence.dao.daos.IGameDAO;
+import server.persistence.dao.daos.IUserDAO;
 import server.persistence.dao.daos.rockdb.RockDBUserDAO;
 import server.persistence.dao.daos.sql.SQLUserDAO;
 import server.persistence.plugins.PersistenceType;
@@ -35,21 +37,21 @@ public class DAOFactory implements IDAOFactory {
     /**
      * Creates a new UserDAO
      *
-     * @return UserDAO that implements IDAO
+     * @return UserDAO that implements IUserDAO
      */
     @Override
-    public IDAO createUserDAO() {
-        IDAO userDAO;
+    public IUserDAO createUserDAO() {
+        IUserDAO userDAO;
 
         switch(type){
             case SQL:
-                userDAO = new SQLUserDAO();
+                userDAO = SQLUserDAO.getInstance();
                 break;
             case ROCK_DB:
-                userDAO = new RockDBUserDAO();
+                userDAO = RockDBUserDAO.getInstance();
                 break;
             default:
-                userDAO = new SQLUserDAO();
+                userDAO = SQLUserDAO.getInstance();
                 break;
         }
 
@@ -59,20 +61,20 @@ public class DAOFactory implements IDAOFactory {
     /**
      * Creates a new GameDAO
      *
-     * @return GameDAO that implements IDAO
+     * @return GameDAO that implements IGameDAO
      */
     @Override
-    public IDAO createGameDAO() {
+    public IGameDAO createGameDAO() {
         return null;
     }
 
     /**
      * Creates a new CommandDAO
      *
-     * @return CommandDAO that implements IDAO
+     * @return CommandDAO that implements ICommandDAO
      */
     @Override
-    public IDAO createCommandDAO() {
+    public ICommandDAO createCommandDAO() {
         return null;
     }
 }
