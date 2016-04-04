@@ -3,7 +3,6 @@ package client.services;
 
 import client.data.GameInfo;
 import client.facade.Facade;
-import shared.model.game.Game;
 
 import java.util.List;
 import java.util.Timer;

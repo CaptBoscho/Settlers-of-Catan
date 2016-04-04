@@ -329,7 +329,7 @@ public interface IGame {
      * @param playerIndex Index of Player performing action
      * @param cards Cards to be discarded
      */
-    void discardCards(int playerIndex, List<ResourceType> cards) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
+    void discardCards(int playerIndex, List<ResourceType> cards) throws Exception, InvalidTypeException; // TODO: 1/30/2016 Would be better with Card generic class
 
     /**
      * Action - Player rolls the dice
@@ -340,8 +340,8 @@ public interface IGame {
 
     /**
      * Action - Player offers trade
-     * @param playerIndexOne Index of Player offering the trade
-     * @param playerIndexTwo Index of Player being offered the trade
+     * @param package1 Index of Player offering the trade
+     * @param package2 Index of Player being offered the trade
      */
     void offerTrade(TradePackage package1, TradePackage package2) throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException;
 

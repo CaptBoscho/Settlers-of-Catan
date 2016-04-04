@@ -79,6 +79,8 @@ public class Player implements IPlayer, Comparable<Player> {
         this.structureBank = new StructureBank(json.get("roads").getAsInt(), json.get("settlements").getAsInt(), json.get("cities").getAsInt());
     }
 
+    public Player(){}
+
     /**
      * New Player Constructor
      * @param points    Initial points
