@@ -1,4 +1,4 @@
-package server.persistence.dao.daos.redis;
+package server.persistence.dao.daos.rockdb;
 
 import server.commands.ICommand;
 import server.persistence.dao.daos.ICommandDAO;
@@ -8,17 +8,17 @@ import java.util.List;
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public class RedisDBCommandDAO implements ICommandDAO {
+public class RockDBCommandDAO implements ICommandDAO {
 
-    RedisDBCommandDAO instance = null;
+    RockDBCommandDAO instance = null;
 
-    private RedisDBCommandDAO(){
+    private RockDBCommandDAO(){
 
     }
 
-    public RedisDBCommandDAO getInstance(){
+    public RockDBCommandDAO getInstance(){
         if(instance == null){
-            instance = new RedisDBCommandDAO();
+            instance = new RockDBCommandDAO();
         }
         return instance;
     }

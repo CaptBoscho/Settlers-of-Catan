@@ -1,21 +1,21 @@
-package server.persistence.dao.daos.redis;
+package server.persistence.dao.daos.rockdb;
 
 import server.persistence.dao.daos.IUserDAO;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public class RedisDBUserDAO implements IUserDAO {
+public class RockDBUserDAO implements IUserDAO {
 
-    private static RedisDBUserDAO instance = null;
+    private static RockDBUserDAO instance = null;
 
-    private RedisDBUserDAO(){
+    private RockDBUserDAO(){
 
     }
 
     public static IUserDAO getInstance() {
         if(instance == null){
-            instance = new RedisDBUserDAO();
+            instance = new RockDBUserDAO();
         }
         return instance;
     }

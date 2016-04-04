@@ -7,5 +7,5 @@ package server.persistence.plugins;
  */
 public enum PersistenceType {
     SQL,
-    REDIS
+    ROCK_DB
 }

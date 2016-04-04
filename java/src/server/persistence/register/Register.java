@@ -4,8 +4,7 @@ import server.exceptions.PluginExistsException;
 import server.exceptions.RegisterPluginException;
 import server.persistence.plugins.IPersistencePlugin;
 import server.persistence.plugins.PersistenceType;
-import server.persistence.plugins.RedisDBPlugin;
-import server.persistence.plugins.RedisDBPlugin;
+import server.persistence.plugins.RockDBPlugin;
 import server.persistence.plugins.SQLPlugin;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public class Register implements IRegister {
      */
     private Register(){
         registry.put(PersistenceType.SQL, "");
-        registry.put(PersistenceType.REDIS, "");
+        registry.put(PersistenceType.ROCK_DB, "");
     }
 
     /**
@@ -51,8 +50,8 @@ public class Register implements IRegister {
             case SQL:
                 plugin = new SQLPlugin(path);
                 break;
-            case REDIS:
-                plugin = new RedisDBPlugin(path);
+            case ROCK_DB:
+                plugin = new RockDBPlugin(path);
                 break;
             default:
                 plugin = new SQLPlugin(path);
