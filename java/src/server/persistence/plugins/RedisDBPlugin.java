@@ -8,13 +8,13 @@ import server.exceptions.StartTransactionException;
  *
  * Persistence Plugin based on RockDB
  */
-public class RockDBPlugin implements IPersistencePlugin {
+public class RedisDBPlugin implements IPersistencePlugin {
 
     /**
      * Constructor
      * @param location Location of the RockDBPlugin
      */
-    public RockDBPlugin(String location){
+    public RedisDBPlugin(String location){
         // TODO: 4/2/2016 Set up the plugin, eg: database, etc.
     }
 

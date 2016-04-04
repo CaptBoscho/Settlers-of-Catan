@@ -1,4 +1,4 @@
-package server.persistence.dao.daos.rockdb;
+package server.persistence.dao.daos.redis;
 
 import com.google.gson.JsonObject;
 import server.persistence.dao.daos.IGameDAO;
@@ -6,17 +6,17 @@ import server.persistence.dao.daos.IGameDAO;
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public class RockDBGameDAO implements IGameDAO {
+public class RedisDBGameDAO implements IGameDAO {
 
-    RockDBGameDAO instance = null;
+    RedisDBGameDAO instance = null;
 
-    private RockDBGameDAO(){
+    private RedisDBGameDAO(){
 
     }
 
-    public RockDBGameDAO getInstance(){
+    public RedisDBGameDAO getInstance(){
         if (instance == null){
-            instance = new RockDBGameDAO();
+            instance = new RedisDBGameDAO();
         }
         return instance;
     }
