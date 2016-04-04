@@ -1,11 +1,8 @@
 package server.persistence.register;
 
-import server.exceptions.PluginExistsException;
-import server.exceptions.RegisterPluginException;
 import server.persistence.plugins.IPersistencePlugin;
 import server.persistence.plugins.PersistenceType;
-import server.persistence.plugins.RockDBPlugin;
-import server.persistence.plugins.SQLPlugin;
+
 import java.util.Map;
 
 /**
@@ -38,26 +35,12 @@ public class Register implements IRegister {
      * Registers a new Persistence Plugin
      *
      * @param type Type of Persistence Plugin to register
-     * @throws PluginExistsException
-     * @throws RegisterPluginException
      */
     @Override
-    public IPersistencePlugin registerPlugin(PersistenceType type) throws PluginExistsException, RegisterPluginException {
+    public IPersistencePlugin registerPlugin(PersistenceType type){
         IPersistencePlugin plugin;
         String path = registry.get(type);
 
-        switch (type){
-            case SQL:
-                plugin = new SQLPlugin(path);
-                break;
-            case ROCK_DB:
-                plugin = new RockDBPlugin(path);
-                break;
-            default:
-                plugin = new SQLPlugin(path);
-                break;
-        }
-
-        return plugin;
+        return null;
     }
 }

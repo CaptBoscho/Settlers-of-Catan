@@ -1,18 +1,8 @@
 package server.persistence.provider;
 
-import server.exceptions.EndTransactionException;
-import server.exceptions.PluginExistsException;
-import server.exceptions.RegisterPluginException;
-import server.exceptions.StartTransactionException;
 import server.main.Config;
-import server.persistence.dao.daos.ICommandDAO;
-import server.persistence.dao.daos.IGameDAO;
-import server.persistence.dao.daos.IUserDAO;
-import server.persistence.dao.facctory.DAOFactory;
-import server.persistence.dao.facctory.IDAOFactory;
 import server.persistence.plugins.IPersistencePlugin;
 import server.persistence.plugins.PersistenceType;
-import server.persistence.register.IRegister;
 import server.persistence.register.Register;
 
 /**
@@ -21,22 +11,14 @@ import server.persistence.register.Register;
 public class PersistenceProvider implements IPersistenceProvider {
     private static IPersistenceProvider _instance;
 
-    private IRegister register = Register.getInstance();
-    private IDAOFactory factory = DAOFactory.getInstance();
-    private PersistenceType type = Config.persistenceType;
+    //private PersistenceType type = Config.persistenceType;
     private IPersistencePlugin plugin;
 
     /**
      * Default Constructor
      */
     private PersistenceProvider(){ // TODO: 4/2/2016 Handle exceptions
-        try {
-            this.plugin = register.registerPlugin(type);
-        } catch (PluginExistsException e) {
-            e.printStackTrace();
-        } catch (RegisterPluginException e) {
-            e.printStackTrace();
-        }
+
     }
 
     /**
@@ -69,54 +51,14 @@ public class PersistenceProvider implements IPersistenceProvider {
         plugin.clear();
     }
 
-    /**
-     * Starts a transaction on the database
-     *
-     * @throws StartTransactionException
-     */
     @Override
-    public void startTransaction() throws StartTransactionException {
-        plugin.startTransaction();
+    public void startTransaction() {
+
     }
 
-    /**
-     * Ends a transaction on the database
-     *
-     * @param commitTransaction
-     * @throws EndTransactionException
-     */
     @Override
-    public void endTransaction(boolean commitTransaction) throws EndTransactionException {
-        plugin.endTransaction(commitTransaction);
+    public void endTransaction(boolean commitTransaction) {
+
     }
 
-    /**
-     * Creates and returns a new UserDAO
-     *
-     * @return UserDAO which implements IUserDAO interface
-     */
-    @Override
-    public IUserDAO getUserDAO() {
-        return factory.createUserDAO();
-    }
-
-    /**
-     * Creates and returns a new GameDAO
-     *
-     * @return GameDAO which implements IGameDAO interface
-     */
-    @Override
-    public IGameDAO getGameDAO() {
-        return factory.createGameDAO();
-    }
-
-    /**
-     * Creates and returns a new CommandDAO
-     *
-     * @return CommandDAO which implements ICommandDAO interface
-     */
-    @Override
-    public ICommandDAO getCommandDAO() {
-        return factory.createCommandDAO();
-    }
 }
