@@ -2,9 +2,6 @@ package server.main;
 
 import server.facade.IFacade;
 import server.facade.ServerFacade;
-import server.persistence.plugins.PersistenceType;
-import server.persistence.provider.IPersistenceProvider;
-import server.persistence.provider.PersistenceProvider;
 
 /**
  * @author Derek Argueta
@@ -15,6 +12,4 @@ public class Config {
     public static IFacade facade = ServerFacade.getInstance();
     public static String host = "localhost";
     public static int port = 8081;
-    // TODO: 4/2/2016 Should we just store the string here instead of the enum?
-    public static PersistenceType persistenceType = PersistenceType.SQL;
 }
