@@ -7,8 +7,8 @@ import server.persistence.daos.ICommandDAO;
 import server.persistence.daos.IGameDAO;
 import server.persistence.daos.IUserDAO;
 import server.persistence.plugin.IPersistencePlugin;
-import server.persistence.register.IRegister;
-import server.persistence.register.Register;
+import server.persistence.register.IRegistry;
+import server.persistence.register.Registry;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
@@ -16,7 +16,7 @@ import server.persistence.register.Register;
 public class PersistenceProvider implements IPersistenceProvider {
     private static IPersistenceProvider _instance;
 
-    private IRegister register = Register.getInstance();
+    private IRegistry registry = Registry.getInstance();
     private String pluginLoc = Config.persistenceLoc;
     private IPersistencePlugin plugin;
 
@@ -25,10 +25,8 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     private PersistenceProvider(){ // TODO: 4/2/2016 Handle exceptions
         try {
-            this.plugin = register.registerPlugin(pluginLoc);
-        } catch (PluginExistsException e) {
-            e.printStackTrace();
-        } catch (RegisterPluginException e) {
+            this.plugin = registry.registerPlugin(pluginLoc);
+        } catch (PluginExistsException | RegisterPluginException e) {
             e.printStackTrace();
         }
     }

@@ -9,13 +9,13 @@ import java.net.URISyntaxException;
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public class Register implements IRegister {
-    private static IRegister _instance;
+public class Registry implements IRegistry {
+    private static IRegistry _instance;
 
     /**
      * Default Constructor
      */
-    private Register(){
+    private Registry(){
 
     }
 
@@ -23,9 +23,9 @@ public class Register implements IRegister {
      * Gets the instance of the Register
      * @return
      */
-    public static IRegister getInstance(){
+    public static IRegistry getInstance(){
         if(_instance == null)
-            _instance = new Register();
+            _instance = new Registry();
 
         return _instance;
     }

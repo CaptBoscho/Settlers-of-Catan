@@ -1,7 +1,7 @@
 package server.exceptions;
 
 /**
- * Exception for an invalid player
+ * Exception for error attempting to end a transaction
  */
 public class EndTransactionException extends Exception {
     public EndTransactionException(String message) {

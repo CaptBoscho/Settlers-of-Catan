@@ -1,7 +1,7 @@
 package server.exceptions;
 
 /**
- * Exception for an invalid player
+ * Exception for when the specified db plugin doesn't exist
  */
 public class PluginExistsException extends Exception {
     public PluginExistsException(String message) {

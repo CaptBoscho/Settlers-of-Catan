@@ -1,7 +1,7 @@
 package server.exceptions;
 
 /**
- * Exception for an invalid player
+ * Exception for failing to register a plugin
  */
 public class RegisterPluginException extends Exception {
     public RegisterPluginException(String message) {

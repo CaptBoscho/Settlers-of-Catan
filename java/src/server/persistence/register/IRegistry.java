@@ -7,7 +7,7 @@ import server.persistence.plugin.IPersistencePlugin;
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public interface IRegister {
+public interface IRegistry {
     /**
      * Registers a new Persistence Plugin
      * @param location Location of the plugin to register
