@@ -1,8 +1,6 @@
 package server.persistence.plugin;
 
-import externalpersistencetemp.redis.daos.ICommandDAO;
-import externalpersistencetemp.redis.daos.IGameDAO;
-import externalpersistencetemp.redis.daos.IUserDAO;
+import server.persistence.daos.*;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
