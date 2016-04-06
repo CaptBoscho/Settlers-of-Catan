@@ -1,7 +1,6 @@
 package server.persistence.register;
 
 import server.exceptions.PluginExistsException;
-import server.exceptions.RegisterPluginException;
 import server.persistence.plugin.IDatabase;
 
 /**
@@ -22,7 +21,7 @@ public interface IRegistry {
      *
      * @param plugin
      * @return
-     * @throws RegisterPluginException
+     * @throws PluginExistsException
      */
     IDatabase getPlugin(String plugin) throws PluginExistsException;
 }

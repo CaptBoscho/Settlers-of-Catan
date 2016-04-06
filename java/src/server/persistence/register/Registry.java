@@ -44,7 +44,7 @@ public class Registry implements IRegistry {
      *
      * @param plugin
      * @return
-     * @throws RegisterPluginException
+     * @throws PluginExistsException
      */
     @Override
     public IDatabase getPlugin(String plugin) throws PluginExistsException {
