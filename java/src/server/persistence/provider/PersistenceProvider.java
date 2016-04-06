@@ -1,34 +1,23 @@
 package server.persistence.provider;
 
-import server.exceptions.PluginExistsException;
-import server.exceptions.RegisterPluginException;
 import server.main.Config;
 import server.persistence.daos.ICommandDAO;
 import server.persistence.daos.IGameDAO;
 import server.persistence.daos.IUserDAO;
-import server.persistence.plugin.IPersistencePlugin;
-import server.persistence.register.IRegistry;
-import server.persistence.register.Registry;
+import server.persistence.plugin.IDatabase;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
 public class PersistenceProvider implements IPersistenceProvider {
     private static IPersistenceProvider _instance;
-
-    private IRegistry registry = Registry.getInstance();
-    private String pluginLoc = Config.persistenceLoc;
-    private IPersistencePlugin plugin;
+    private IDatabase database;
 
     /**
      * Default Constructor
      */
-    private PersistenceProvider(){ // TODO: 4/2/2016 Handle exceptions
-        try {
-            this.plugin = registry.registerPlugin(pluginLoc);
-        } catch (PluginExistsException | RegisterPluginException e) {
-            e.printStackTrace();
-        }
+    private PersistenceProvider(){
+        this.database = Config.database;
     }
 
     /**
@@ -50,7 +39,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public Object getConnection() {
-        return plugin.getConnection();
+        return database.getConnection();
     }
 
     /**
@@ -58,7 +47,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void clear() {
-        plugin.clear();
+        database.clear();
     }
 
     /**
@@ -87,7 +76,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public IUserDAO getUserDAO() {
-        return ((IUserDAO) plugin.createUserDAO());
+        return database.createUserDAO();
     }
 
     /**
@@ -97,7 +86,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public IGameDAO getGameDAO() {
-        return ((IGameDAO) plugin.createGameDAO());
+        return database.createGameDAO();
     }
 
     /**
@@ -107,6 +96,6 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public ICommandDAO getCommandDAO() {
-        return ((ICommandDAO) plugin.createCommandDAO());
+        return database.createCommandDAO();
     }
 }

@@ -2,17 +2,27 @@ package server.persistence.register;
 
 import server.exceptions.PluginExistsException;
 import server.exceptions.RegisterPluginException;
-import server.persistence.plugin.IPersistencePlugin;
+import server.persistence.plugin.IDatabase;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
 public interface IRegistry {
+
     /**
-     * Registers a new Persistence Plugin
-     * @param location Location of the plugin to register
-     * @throws PluginExistsException
+     * Checks if the specified plugin exists
+     *
+     * @param plugin
+     * @return
+     */
+    boolean pluginExists(String plugin);
+
+    /**
+     * Gets a database plugin
+     *
+     * @param plugin
+     * @return
      * @throws RegisterPluginException
      */
-    IPersistencePlugin registerPlugin(String location) throws PluginExistsException, RegisterPluginException;
+    IDatabase getPlugin(String plugin) throws PluginExistsException;
 }

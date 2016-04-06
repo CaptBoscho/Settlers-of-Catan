@@ -5,7 +5,7 @@ import server.persistence.daos.*;
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public interface IPersistencePlugin {
+public interface IDatabase {
     //region Plugin Methods
     /**
      * Returns a connection to the database

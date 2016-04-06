@@ -2,9 +2,7 @@ package server.persistence.register;
 
 import server.exceptions.PluginExistsException;
 import server.exceptions.RegisterPluginException;
-import server.persistence.plugin.IPersistencePlugin;
-import java.net.URI;
-import java.net.URISyntaxException;
+import server.persistence.plugin.IDatabase;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
@@ -30,23 +28,26 @@ public class Registry implements IRegistry {
         return _instance;
     }
 
+    /**
+     * Checks if the specified plugin exists
+     *
+     * @param plugin
+     * @return
+     */
+    @Override
+    public boolean pluginExists(String plugin) {
+        return false;
+    }
 
     /**
-     * Registers a new Persistence Plugin
+     * Gets a database plugin
      *
-     * @param location Location of the plugin to register
-     * @throws PluginExistsException
+     * @param plugin
+     * @return
      * @throws RegisterPluginException
      */
     @Override
-    public IPersistencePlugin registerPlugin(String location) throws PluginExistsException, RegisterPluginException {
-        //Build the URI
-        try {
-            URI uri = new URI(location);
-            return null;
-            // TODO: 4/5/2016 Load the JAR file in and instantiate the class that implements IPersistencePlugin
-        } catch (URISyntaxException e) {
-            throw new PluginExistsException("Malformed URI!");
-        }
+    public IDatabase getPlugin(String plugin) throws PluginExistsException {
+        return null;
     }
 }
