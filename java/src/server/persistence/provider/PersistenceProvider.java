@@ -1,9 +1,7 @@
 package server.persistence.provider;
 
-import server.exceptions.EndTransactionException;
 import server.exceptions.PluginExistsException;
 import server.exceptions.RegisterPluginException;
-import server.exceptions.StartTransactionException;
 import server.main.Config;
 import server.persistence.daos.ICommandDAO;
 import server.persistence.daos.IGameDAO;
@@ -67,24 +65,22 @@ public class PersistenceProvider implements IPersistenceProvider {
 
     /**
      * Starts a transaction on the database
-     *
-     * @throws StartTransactionException
      */
     @Override
-    public void startTransaction() throws StartTransactionException {
-        plugin.startTransaction();
+    public void startTransaction() {
+
     }
 
     /**
      * Ends a transaction on the database
      *
      * @param commitTransaction
-     * @throws EndTransactionException
      */
     @Override
-    public void endTransaction(boolean commitTransaction) throws EndTransactionException {
-        plugin.endTransaction(commitTransaction);
+    public void endTransaction(boolean commitTransaction) {
+
     }
+
 
     /**
      * Creates and returns a new UserDAO

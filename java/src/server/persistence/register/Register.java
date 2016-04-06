@@ -1,10 +1,8 @@
 package server.persistence.register;
 
-
 import server.exceptions.PluginExistsException;
 import server.exceptions.RegisterPluginException;
 import server.persistence.plugin.IPersistencePlugin;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 

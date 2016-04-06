@@ -1,10 +1,6 @@
 package server.persistence.provider;
 
-import server.exceptions.EndTransactionException;
-import server.exceptions.StartTransactionException;
-import server.persistence.daos.ICommandDAO;
-import server.persistence.daos.IGameDAO;
-import server.persistence.daos.IUserDAO;
+import server.persistence.daos.*;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
@@ -26,17 +22,15 @@ public interface IPersistenceProvider {
     /**
      * Starts a transaction on the database
      *
-     * @throws StartTransactionException
      */
-    void startTransaction() throws StartTransactionException;
+    void startTransaction();
 
     /**
      * Ends a transaction on the database
      *
      * @param commitTransaction
-     * @throws EndTransactionException
      */
-    void endTransaction(boolean commitTransaction) throws EndTransactionException;
+    void endTransaction(boolean commitTransaction);
     //endregion
 
     //region Factory Methods
