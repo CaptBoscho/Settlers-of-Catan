@@ -1,26 +1,24 @@
 package server.persistence.register;
 
+
 import server.exceptions.PluginExistsException;
 import server.exceptions.RegisterPluginException;
-import server.persistence.plugins.IPersistencePlugin;
-import server.persistence.plugins.PersistenceType;
-import server.persistence.plugins.RockDBPlugin;
-import server.persistence.plugins.SQLPlugin;
-import java.util.Map;
+import server.persistence.plugin.IPersistencePlugin;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
 public class Register implements IRegister {
     private static IRegister _instance;
-    private Map<PersistenceType, String> registry;
 
     /**
      * Default Constructor
      */
     private Register(){
-        registry.put(PersistenceType.SQL, "");
-        registry.put(PersistenceType.ROCK_DB, "");
+
     }
 
     /**
@@ -34,30 +32,23 @@ public class Register implements IRegister {
         return _instance;
     }
 
+
     /**
      * Registers a new Persistence Plugin
      *
-     * @param type Type of Persistence Plugin to register
+     * @param location Location of the plugin to register
      * @throws PluginExistsException
      * @throws RegisterPluginException
      */
     @Override
-    public IPersistencePlugin registerPlugin(PersistenceType type) throws PluginExistsException, RegisterPluginException {
-        IPersistencePlugin plugin;
-        String path = registry.get(type);
-
-        switch (type){
-            case SQL:
-                plugin = new SQLPlugin(path);
-                break;
-            case ROCK_DB:
-                plugin = new RockDBPlugin(path);
-                break;
-            default:
-                plugin = new SQLPlugin(path);
-                break;
+    public IPersistencePlugin registerPlugin(String location) throws PluginExistsException, RegisterPluginException {
+        //Build the URI
+        try {
+            URI uri = new URI(location);
+            return null;
+            // TODO: 4/5/2016 Load the JAR file in and instantiate the class that implements IPersistencePlugin
+        } catch (URISyntaxException e) {
+            throw new PluginExistsException("Malformed URI!");
         }
-
-        return plugin;
     }
 }
