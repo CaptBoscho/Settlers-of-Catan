@@ -55,7 +55,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void startTransaction() {
-
+        database.startTransaction();
     }
 
     /**
@@ -65,7 +65,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void endTransaction(boolean commitTransaction) {
-
+        database.endTransaction(commitTransaction);
     }
 
 
