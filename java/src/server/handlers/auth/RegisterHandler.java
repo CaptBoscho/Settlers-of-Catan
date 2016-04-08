@@ -33,6 +33,11 @@ public class RegisterHandler implements Route {
             response.status(result.getStatus());
         } else {
             response.status(200);
+
+            //Save the command to the db
+            persistence.startTransaction();
+            persistence.getCommandDAO();//.storeCommand(dto);
+            persistence.endTransaction(true);
         }
 
         // set any new cookies
