@@ -1,11 +1,11 @@
-package server.persistence.provider;
+package server.persistence.plugin;
 
 import server.persistence.daos.*;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public interface IPersistenceProvider {
+public interface IDatabase {
     //region Plugin Methods
     /**
      * Returns a connection to the database
@@ -21,7 +21,6 @@ public interface IPersistenceProvider {
 
     /**
      * Starts a transaction on the database
-     *
      */
     void startTransaction();
 
@@ -31,28 +30,26 @@ public interface IPersistenceProvider {
      * @param commitTransaction
      */
     void endTransaction(boolean commitTransaction);
-    //endregion
-
-    //region Factory Methods
-    /**
-     * Creates and returns a new UserDAO
-     *
-     * @return UserDAO which implements IUserDAO
-     */
-    IUserDAO getUserDAO();
 
     /**
-     * Creates and returns a new GameDAO
+     * Creates a new UserDAO
      *
-     * @return GameDAO which implements IGameDAO
+     * @return UserDAO
      */
-    IGameDAO getGameDAO();
+    IUserDAO createUserDAO();
 
     /**
-     * Creates and returns a new CommandDAO
+     * Creates a new GameDAO
      *
-     * @return CommandDAO which implements ICommandDAO
+     * @return GameDAO
      */
-    ICommandDAO getCommandDAO();
+    IGameDAO createGameDAO();
+
+    /**
+     * Creates a new CommandDAO
+     *
+     * @return CommandDAO
+     */
+    ICommandDAO createCommandDAO();
     //endregion
 }
