@@ -1,18 +1,20 @@
 package dto;
 
+import java.sql.Blob;
+
 /**
  * Created by boscho on 4/6/16.
  */
 public class UpdateGameDTO {
 
     private int gameID;
-    private String gameState;
+    private Blob gameState;
 
-    public String getGameState() {
+    public Blob getGameState() {
         return gameState;
     }
 
-    public void setGameState(String gameState) {
+    public void setGameState(Blob gameState) {
         this.gameState = gameState;
     }
 

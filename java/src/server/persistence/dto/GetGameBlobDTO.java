@@ -1,5 +1,7 @@
 package dto;
 
+import java.sql.Blob;
+
 /**
  * Get Game State for the game ID
  * Created by boscho on 4/6/16.
@@ -7,13 +9,13 @@ package dto;
 public class GetGameBlobDTO {
 
     private int gameID;
-    private String gameState;
+    private Blob gameState;
 
-    public String getGameState() {
+    public Blob getGameState() {
         return gameState;
     }
 
-    public void setGameState(String gameState) {
+    public void setGameState(Blob gameState) {
         this.gameState = gameState;
     }
 

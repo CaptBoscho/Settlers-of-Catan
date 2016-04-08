@@ -1,20 +1,22 @@
 package dto;
 
+import java.sql.Blob;
+
 /**
  * Adds a command to the database
  * Created by boscho on 4/6/16.
  */
 public class AddCommandDTO implements IDTO{
 
-    private Object iCommand;
+    private Blob iCommand;
     private int gameID;
     private int version;
 
-    public Object getiCommand() {
+    public Blob getiCommand() {
         return iCommand;
     }
 
-    public void setiCommand(Object iCommand) {
+    public void setiCommand(Blob iCommand) {
         this.iCommand = iCommand;
     }
 

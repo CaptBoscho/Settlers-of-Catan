@@ -1,20 +1,22 @@
 package dto;
 
+import java.sql.Blob;
+
 /**
  * Created by boscho on 4/8/16.
  */
 public class CommandDTO {
     private int version;
-    private Object command;
+    private Blob command;
     private int gameID;
 
     public CommandDTO(){}
 
-    public Object getCommand() {
+    public Blob getCommand() {
         return command;
     }
 
-    public void setCommand(Object command) {
+    public void setCommand(Blob command) {
         this.command = command;
     }
 

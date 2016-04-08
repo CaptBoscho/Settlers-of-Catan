@@ -1,11 +1,13 @@
 package dto;
 
+import java.sql.Blob;
+
 /**
  * Created by boscho on 4/8/16.
  */
 public class GameDTO {
     private int gameID;
-    private String state;
+    private Blob state;
 
     public GameDTO() {
     }
@@ -18,11 +20,11 @@ public class GameDTO {
         this.gameID = gameID;
     }
 
-    public String getState() {
+    public Blob getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Blob state) {
         this.state = state;
     }
 
