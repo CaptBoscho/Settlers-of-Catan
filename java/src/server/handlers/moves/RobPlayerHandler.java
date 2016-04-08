@@ -5,6 +5,9 @@ import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
 import static server.utils.Strings.BAD_JSON_MESSAGE;
+
+import server.persistence.provider.IPersistenceProvider;
+import server.persistence.provider.PersistenceProvider;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.RobPlayerDTO;
 import spark.Request;
@@ -16,6 +19,7 @@ import spark.Route;
  * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class RobPlayerHandler implements Route {
+    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     // -- request keys
     private static final String kType = "type";

@@ -2,6 +2,8 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
+import server.persistence.provider.IPersistenceProvider;
+import server.persistence.provider.PersistenceProvider;
 import shared.dto.BuyDevCardDTO;
 import shared.dto.CookieWrapperDTO;
 import spark.Request;
@@ -13,6 +15,7 @@ import spark.Route;
  * {@link} http://sparkjava.com/documentation.html#routes
  */
 public final class BuyDevCardHandler implements Route {
+    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(final Request request, final Response response) throws Exception {
