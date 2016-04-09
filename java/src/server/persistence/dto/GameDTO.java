@@ -1,4 +1,4 @@
-package dto;
+package server.persistence.dto;
 
 import java.sql.Blob;
 
