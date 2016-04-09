@@ -8,6 +8,16 @@ import java.sql.Blob;
 public class GameDTO {
     private int gameID;
     private Blob state;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 
     public GameDTO() {
     }
