@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import server.exceptions.PluginExistsException;
 import server.persistence.plugin.IDatabase;
+import server.persistence.provider.DatabaseFacade;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -108,6 +109,8 @@ public class Registry implements IRegistry {
             if(tmp.get("originalname").getAsString().contains(plugin)) {
                 // -- found it
                 final String pathToJar = REGISTRY_URL + tmp.get("filename");
+                DatabaseFacade facade = new DatabaseFacade();
+                facade.loadJar(pathToJar);
             }
         }
         return null;

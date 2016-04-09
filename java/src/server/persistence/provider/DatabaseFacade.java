@@ -19,11 +19,16 @@ public class DatabaseFacade {
     private HashMap<String, Method> methods;
     private HashMap<String, Object> instances;
 
+    public DatabaseFacade(){
+        instances = new HashMap<>();
+        methods = new HashMap<>();
+    }
+
     public void loadJar(String url){
         try {
+
             URL jarURL = new URL(url);
             URLClassLoader child = new URLClassLoader(new URL[] {jarURL}, getClass().getClassLoader());
-
             Class gameDao = Class.forName("GameDAO",true,child);
             Object game = gameDao.newInstance();
             instances.put("gameDao", game);
@@ -43,6 +48,8 @@ public class DatabaseFacade {
             methods.put("deleteAllGames",deleteAllGames);
             Method deleteGame = gameDao.getDeclaredMethod("deleteGame",gameint);
             methods.put("deleteGame",deleteGame);
+            Method addGameObject = gameDao.getDeclaredMethod("addGameObject",gameDto);
+            methods.put("addGameObject",addGameObject);
 
             Class userDao = Class.forName("UserDAO",true,child);
             Object user = userDao.newInstance();
@@ -84,5 +91,61 @@ public class DatabaseFacade {
     public List<GameDTO> getAllGames() throws InvocationTargetException, IllegalAccessException {
         Object result = methods.get("getAllGames").invoke(instances.get("gameDao"));
         return (List<GameDTO>)result;
+    }
+
+    public void addGameObject(GameDTO dto) throws InvocationTargetException, IllegalAccessException {
+        methods.get("addGameObject").invoke(instances.get("gameDao"), dto);
+    }
+
+    public GameDTO getGameModel(int gameId) throws InvocationTargetException, IllegalAccessException {
+        Object result = methods.get("getGameModel").invoke(instances.get("gameDao"),gameId);
+        return (GameDTO) result;
+    }
+
+    public void updateGame(GameDTO dto) throws InvocationTargetException, IllegalAccessException {
+        methods.get("updateGame").invoke(instances.get("gameDao"),dto);
+    }
+
+    public void deleteAllGames() throws InvocationTargetException, IllegalAccessException {
+        methods.get("deleteAllGames").invoke(instances.get("gameDao"));
+    }
+
+    public void deleteGame(int gameId) throws InvocationTargetException, IllegalAccessException {
+        methods.get("deleteGame").invoke(instances.get("gameDao"),gameId);
+    }
+
+    public void addCommand(CommandDTO dto) throws InvocationTargetException, IllegalAccessException {
+        methods.get("addCommand").invoke(instances.get("commandDao"),dto);
+    }
+
+    public List<CommandDTO> getCommands(int gameId) throws InvocationTargetException, IllegalAccessException {
+        Object result = methods.get("getCommands").invoke(instances.get("commandDao"),gameId);
+        return (List<CommandDTO>) result;
+    }
+
+    public List<CommandDTO> getAllCommands() throws InvocationTargetException, IllegalAccessException {
+        Object result = methods.get("getCommands").invoke(instances.get("commandDao"));
+        return (List<CommandDTO>) result;
+    }
+
+    public void deleteAllCommands() throws InvocationTargetException, IllegalAccessException {
+        methods.get("deleteAllCommands").invoke(instances.get("commandDao"));
+    }
+
+    public void deleteCommandsFromGame(int gameId) throws InvocationTargetException, IllegalAccessException {
+        methods.get("deleteCommandsFromGame").invoke(instances.get("commandDao"));
+    }
+
+    public void addUser(UserDTO dto) throws InvocationTargetException, IllegalAccessException {
+        methods.get("addUser").invoke(instances.get("userDao"),dto);
+    }
+
+    public List<UserDTO> getUsers() throws InvocationTargetException, IllegalAccessException {
+        Object result = methods.get("getUsers").invoke(instances.get("userDao"));
+        return (List<UserDTO>) result;
+    }
+
+    public void deleteUsers() throws InvocationTargetException, IllegalAccessException {
+        methods.get("deleteUsers").invoke(instances.get("userDao"));
     }
 }

@@ -1,5 +1,6 @@
 package server.main;
 
+import server.exceptions.PluginExistsException;
 import server.facade.ServerFacade;
 import server.filters.AuthenticationFilter;
 import server.filters.GameFilter;
@@ -15,6 +16,7 @@ import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
+import server.persistence.registry.Registry;
 
 import static shared.definitions.Endpoints.*;
 import static spark.Spark.*;
