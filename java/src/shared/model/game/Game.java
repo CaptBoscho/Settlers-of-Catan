@@ -935,7 +935,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
                     for(int i=0; i<players.size(); i++) {
                         if(players.get(i) instanceof AIPlayer) {
                             AIPlayer aiPlayer = ((AIPlayer)players.get(i));
-                            aiPlayer.discarding(this);
+                            aiPlayer.setGame(this);
+                            aiPlayer.discard();
                         }
                     }
                     return;
@@ -1059,7 +1060,8 @@ public class Game extends Observable implements IGame, JsonSerializable {
             currentOffer.setActive(true);
             if(getPlayerManager().getPlayerByIndex(two.getPlayerIndex()) instanceof AIPlayer) {
                 AIPlayer aiPlayer = ((AIPlayer)getPlayerManager().getPlayerByIndex(two.getPlayerIndex()));
-                aiPlayer.acceptTrade(this);
+                aiPlayer.setGame(this);
+                aiPlayer.acceptTrade();
             }
         }
     }
@@ -1082,6 +1084,10 @@ public class Game extends Observable implements IGame, JsonSerializable {
             playerManager.offerTrade(currentOffer.getSender(), currentOffer.getReceiver(), currentOffer.getPackage1().getResources(), currentOffer.getPackage2().getResources());
         }
         currentOffer = null;
+        if(isAITurn() && !(playerManager.getPlayerByIndex(playerIndex) instanceof AIPlayer)) {
+            finishTurn(getCurrentTurn());
+            playAI();
+        }
     }
 
     /**
@@ -2193,28 +2199,31 @@ public class Game extends Observable implements IGame, JsonSerializable {
     }
 
     public void playAI() throws Exception {
-        while (isAITurn() && getCurrentPhase() != TurnTracker.Phase.DISCARDING) {
+        while (isAITurn() && getCurrentPhase() != TurnTracker.Phase.DISCARDING && currentOffer == null) {
             AIPlayer aiPlayer = (AIPlayer) playerManager.getPlayerByIndex(getCurrentTurn());
             assert aiPlayer != null;
+            aiPlayer.setGame(this);
             TurnTracker.Phase phase = getCurrentPhase();
             switch (phase) {
                 case SETUPONE:
-                    aiPlayer.setUpOne(this);
+                    aiPlayer.setUpOne();
                     finishTurn(aiPlayer.getPlayerIndex());
                     break;
                 case SETUPTWO:
-                    aiPlayer.setUpTwo(this);
+                    aiPlayer.setUpTwo();
                     finishTurn(aiPlayer.getPlayerIndex());
                     break;
                 case ROLLING:
-                    aiPlayer.rolling(this);
+                    aiPlayer.roll();
                     break;
                 case ROBBING:
-                    aiPlayer.robbing(this);
+                    aiPlayer.rob();
                     break;
                 case PLAYING:
-                    aiPlayer.playing(this);
-                    finishTurn(aiPlayer.getPlayerIndex());
+                    aiPlayer.play();
+                    if(currentOffer == null) {
+                        finishTurn(aiPlayer.getPlayerIndex());
+                    }
                     break;
                 default:
                     break;

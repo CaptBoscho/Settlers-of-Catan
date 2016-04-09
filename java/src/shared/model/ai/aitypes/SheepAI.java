@@ -8,6 +8,7 @@ import shared.exceptions.*;
 import shared.locations.*;
 import shared.model.ai.AIPlayer;
 import shared.model.ai.AIType;
+import shared.model.ai.SheepFacts;
 import shared.model.bank.InvalidTypeException;
 import shared.model.game.Dice;
 import shared.model.game.Game;
@@ -34,7 +35,7 @@ public class SheepAI extends AIPlayer {
     private ArrayList<HexLocation> sheepHexes;
     private ArrayList<VertexLocation> sheepVertices;
     private ArrayList<EdgeLocation> sheepEdges;
-    private boolean isTrading;
+    private SheepFacts sheepFacts;
 
     public SheepAI(int points, CatanColor color, int id, int playerIndex, String name, AIType type) throws InvalidPlayerException {
         super(points, color, id, playerIndex, name, type);
@@ -65,8 +66,26 @@ public class SheepAI extends AIPlayer {
         }
     }
 
+    private ArrayList<Integer> getPlayers(HexLocation hexLoc) {
+        final ArrayList<Integer> players = new ArrayList<>();
+        getPlayers(players, hexLoc, VertexDirection.NorthWest);
+        getPlayers(players, hexLoc, VertexDirection.NorthEast);
+        getPlayers(players, hexLoc, VertexDirection.East);
+        getPlayers(players, hexLoc, VertexDirection.SouthEast);
+        getPlayers(players, hexLoc, VertexDirection.SouthWest);
+        getPlayers(players, hexLoc, VertexDirection.West);
+        return players;
+    }
+
+    private void getPlayers(ArrayList<Integer> players, HexLocation hexLoc, VertexDirection vertexDir) {
+        final VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir).getNormalizedLocation();
+        final Vertex vertex = game.getMap().getVertices().get(vertexLoc);
+        if(vertex.hasBuilding()) {
+            players.add(vertex.getPlayerIndex());
+        }
+    }
+
     private void initiateSettlement() throws InvalidLocationException, InvalidPlayerException, PlayerExistsException, StructureException {
-        //TODO: this could potentially have a bug if all the sheep vertices are taken. fix this later
         for(VertexLocation vertex : sheepVertices) {
             if(game.canInitiateSettlement(getPlayerIndex(), vertex)) {
                 game.initiateSettlement(getPlayerIndex(), vertex);
@@ -76,7 +95,6 @@ public class SheepAI extends AIPlayer {
     }
 
     private void initiateRoad() throws InvalidLocationException, InvalidPlayerException, PlayerExistsException, StructureException {
-        //TODO: this could potentially have a bug if all the sheep edges are taken. fix this later
         for(EdgeLocation edge : sheepEdges) {
             if(game.canInitiateRoad(getPlayerIndex(), edge)) {
                 game.initiateRoad(getPlayerIndex(), edge);
@@ -133,12 +151,120 @@ public class SheepAI extends AIPlayer {
         }
     }
 
+    private void sendChat() throws PlayerExistsException {
+        String playerName = game.getPlayerNameByIndex(getPlayerIndex());
+        String message = sheepFacts.getFact();
+        MessageLine line = new MessageLine(playerName, message);
+        game.getChat().addMessage(line);
+    }
+
+    private void getDevCard() throws Exception {
+        if(game.canBuyDevelopmentCard(getPlayerIndex())) {
+            game.buyDevelopmentCard(getPlayerIndex());
+        }
+    }
+
+    private void playSoldier() {
+        //try and place robber on sheep hex where aiPlayer doesn't have a building itself
+        try {
+            for (HexLocation sheepHex : sheepHexes) {
+                ArrayList<Integer> potentialVictims = getPlayers(sheepHex);
+                if (potentialVictims.size() > 0 && !potentialVictims.contains(getPlayerIndex()) && !game.getMap().getRobber().getLocation().equals(sheepHex)) {
+                    game.useSoldier(getPlayerIndex(), potentialVictims.get(0), sheepHex);
+                    return;
+                }
+            }
+            //this is if the aiPlayer has a building on every single sheep hex.  Now it will just pick a random hex where it doesn't have a building
+            java.util.Map<HexLocation, Hex> hexes = game.getMap().getHexes();
+            for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
+                if(entry.getValue().getType() != HexType.WATER) {
+                    ArrayList<Integer> potentialVictims = getPlayers(entry.getKey());
+                    if (potentialVictims.size() != 0 && !potentialVictims.contains(getPlayerIndex()) && !game.getMap().getRobber().getLocation().equals(entry.getKey())) {
+                        //this robs a random person on a random hex where the aiPlayer doesn't have a building there
+                        int victim = potentialVictims.remove(0);
+                        game.useSoldier(getPlayerIndex(), victim, entry.getKey());
+                        return;
+                    }
+                }
+            }
+            //this is the aiPlayer has a building on every hex that has a building.  Now it will just not rob anyone
+            for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
+                if(entry.getValue().getType() != HexType.WATER) {
+                    if (!game.getMap().getRobber().getLocation().equals(entry.getKey())) {
+                        game.useSoldier(getPlayerIndex(), getPlayerIndex(), entry.getKey());
+                        return;
+                    }
+                }
+            }
+        } catch(Exception | InvalidTypeException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void playMonopoly() throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException, DevCardException {
+        game.useMonopoly(getPlayerIndex(), ResourceType.SHEEP);
+    }
+
+    private void playYearOfPlenty() throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException, DevCardException {
+        game.useYearOfPlenty(getPlayerIndex(), ResourceType.SHEEP, ResourceType.SHEEP);
+    }
+
+    private void playRoadBuilder() throws InvalidPlayerException, PlayerExistsException, InvalidLocationException, StructureException, DevCardException {
+        EdgeLocation firstRoad = null;
+        EdgeLocation secondRoad = null;
+        for(EdgeLocation edge : sheepEdges) {
+            if(game.canPlaceRoadBuildingCard(getPlayerIndex(), edge)) {
+                if(firstRoad == null && secondRoad == null) {
+                    firstRoad = edge;
+                } else if(firstRoad != null && secondRoad == null) {
+                    secondRoad = edge;
+                    game.useRoadBuilder(getPlayerIndex(), firstRoad, secondRoad);
+                    return;
+                }
+            }
+        }
+        java.util.Map<EdgeLocation, Edge> edges = game.getMap().getEdges();
+        for(java.util.Map.Entry<EdgeLocation, Edge> entry : edges.entrySet()) {
+            if(game.canPlaceRoadBuildingCard(getPlayerIndex(), entry.getKey())) {
+                if(firstRoad == null && secondRoad == null) {
+                    firstRoad = entry.getKey();
+                } else if(firstRoad != null && secondRoad == null) {
+                    secondRoad = entry.getKey();
+                    game.useRoadBuilder(getPlayerIndex(), firstRoad, secondRoad);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void playMonument() throws PlayerExistsException, DevCardException {
+        game.useMonument(getPlayerIndex());
+    }
+
+    private void playDevCard() throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException, DevCardException, InvalidLocationException, InvalidPlayerException, StructureException {
+        if(game.canUseSoldier(getPlayerIndex())) {
+            playSoldier();
+        }
+        if(game.canUseMonopoly(getPlayerIndex())) {
+            playMonopoly();
+        }
+        if(game.canUseYearOfPlenty(getPlayerIndex())) {
+            playYearOfPlenty();
+        }
+        if(game.canUseRoadBuilding(getPlayerIndex())) {
+            playRoadBuilder();
+        }
+        if(game.canUseMonument(getPlayerIndex())) {
+            playMonument();
+        }
+    }
+
     private void maritimeTrade() throws PlayerExistsException, InvalidTypeException, InsufficientResourcesException, InvalidPlayerException {
         int oreRatio = 4;
         int brickRatio = 4;
         int wheatRatio = 4;
         int woodRatio = 4;
-        Set<PortType> ports = this.game.getMap().getPortTypes(getPlayerIndex());
+        Set<PortType> ports = game.getMap().getPortTypes(getPlayerIndex());
         if(ports.contains(PortType.THREE)) {
             oreRatio = 3;
             brickRatio = 3;
@@ -159,23 +285,23 @@ public class SheepAI extends AIPlayer {
         }
         switch(new Random().nextInt(4)) {
             case 0:
-                if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.ORE) >= oreRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
-                    this.game.maritimeTrade(getPlayerIndex(), oreRatio, ResourceType.ORE, ResourceType.SHEEP);
+                if(game.amountOwnedResource(getPlayerIndex(), ResourceType.ORE) >= oreRatio && game.getBankResources().get(ResourceType.SHEEP) > 0) {
+                    game.maritimeTrade(getPlayerIndex(), oreRatio, ResourceType.ORE, ResourceType.SHEEP);
                 }
                 break;
             case 1:
-                if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.BRICK) >= brickRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
-                    this.game.maritimeTrade(getPlayerIndex(), brickRatio, ResourceType.BRICK, ResourceType.SHEEP);
+                if(game.amountOwnedResource(getPlayerIndex(), ResourceType.BRICK) >= brickRatio && game.getBankResources().get(ResourceType.SHEEP) > 0) {
+                    game.maritimeTrade(getPlayerIndex(), brickRatio, ResourceType.BRICK, ResourceType.SHEEP);
                 }
                 break;
             case 2:
-                if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.WHEAT) >= wheatRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
-                    this.game.maritimeTrade(getPlayerIndex(), wheatRatio, ResourceType.WHEAT, ResourceType.SHEEP);
+                if(game.amountOwnedResource(getPlayerIndex(), ResourceType.WHEAT) >= wheatRatio && game.getBankResources().get(ResourceType.SHEEP) > 0) {
+                    game.maritimeTrade(getPlayerIndex(), wheatRatio, ResourceType.WHEAT, ResourceType.SHEEP);
                 }
                 break;
             case 3:
-                if(this.game.amountOwnedResource(getPlayerIndex(), ResourceType.WOOD) >= woodRatio && this.game.getBankResources().get(ResourceType.SHEEP) > 0) {
-                    this.game.maritimeTrade(getPlayerIndex(), woodRatio, ResourceType.WOOD, ResourceType.SHEEP);
+                if(game.amountOwnedResource(getPlayerIndex(), ResourceType.WOOD) >= woodRatio && game.getBankResources().get(ResourceType.SHEEP) > 0) {
+                    game.maritimeTrade(getPlayerIndex(), woodRatio, ResourceType.WOOD, ResourceType.SHEEP);
                 }
                 break;
             default:
@@ -185,10 +311,10 @@ public class SheepAI extends AIPlayer {
 
     private void trade() throws PlayerExistsException, InvalidTypeException, InsufficientResourcesException {
         ArrayList<ResourceType> offers = new ArrayList<>();
-        int brick = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.BRICK);
-        int ore = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.ORE);
-        int wheat = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WHEAT);
-        int wood = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WOOD);
+        int brick = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.BRICK);
+        int ore = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.ORE);
+        int wheat = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WHEAT);
+        int wood = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WOOD);
         if(brick != 0) {
             offers.add(ResourceType.BRICK);
         }
@@ -211,125 +337,17 @@ public class SheepAI extends AIPlayer {
         while(otherPlayer == getPlayerIndex()) {
             otherPlayer = new Random().nextInt(4);
         }
-        ArrayList<ResourceType> offeree = new ArrayList<>();
-        offeree.add(ResourceType.SHEEP);
-        TradePackage two = new TradePackage(otherPlayer, offeree);
-        this.game.offerTrade(one, two);
-    }
-
-    private ArrayList<Integer> getPlayers(int playerIndex, HexLocation hexLoc) {
-        final ArrayList<Integer> players = new ArrayList<>();
-        getPlayers(playerIndex, players, hexLoc, VertexDirection.NorthWest);
-        getPlayers(playerIndex, players, hexLoc, VertexDirection.NorthEast);
-        getPlayers(playerIndex, players, hexLoc, VertexDirection.East);
-        getPlayers(playerIndex, players, hexLoc, VertexDirection.SouthEast);
-        getPlayers(playerIndex, players, hexLoc, VertexDirection.SouthWest);
-        getPlayers(playerIndex, players, hexLoc, VertexDirection.West);
-        return players;
-    }
-
-    private void getPlayers(int playerIndex, ArrayList<Integer> players, HexLocation hexLoc, VertexDirection vertexDir) {
-        final VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir).getNormalizedLocation();
-        final Vertex vertex = this.game.getMap().getVertices().get(vertexLoc);
-        if(vertex.hasBuilding()) {
-            players.add(vertex.getPlayerIndex());
-        }
-    }
-
-    private void sendChat() throws PlayerExistsException {
-        String playerName = game.getPlayerNameByIndex(getPlayerIndex());
-        String message = "I love sheep";
-        MessageLine line = new MessageLine(playerName, message);
-        game.getChat().addMessage(line);
-    }
-
-    private void getDevCard() throws Exception {
-        if(canBuyDevCard()) {
-            this.game.buyDevelopmentCard(getPlayerIndex());
-        }
-    }
-
-    private void playSoldier() {
-        //try and place robber on sheep hex where aiPlayer doesn't have a building itself
-        try {
-            for (HexLocation sheepHex : sheepHexes) {
-                ArrayList<Integer> potentialVictims = getPlayers(getPlayerIndex(), sheepHex);
-                if (potentialVictims.size() > 0 && !potentialVictims.contains(getPlayerIndex()) && !this.game.getMap().getRobber().getLocation().equals(sheepHex)) {
-                    this.game.useSoldier(getPlayerIndex(), potentialVictims.get(0), sheepHex);
-                    return;
-                }
-            }
-            //this is if the aiPlayer has a building on every single sheep hex.  Now it will just pick a random hex where it doesn't have a building
-            java.util.Map<HexLocation, Hex> hexes = game.getMap().getHexes();
-            for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
-                ArrayList<Integer> potentialVictims = getPlayers(getPlayerIndex(), entry.getKey());
-                if(potentialVictims.size() != 0 && !potentialVictims.contains(getPlayerIndex()) && !this.game.getMap().getRobber().getLocation().equals(entry.getKey())) {
-                    //this robs a random person on a random hex where the aiPlayer doesn't have a building there
-                    int victim = potentialVictims.remove(0);
-                    this.game.useSoldier(getPlayerIndex(), victim, entry.getKey());
-                    return;
-                }
-            }
-            //this is the aiPlayer has a building on every hex that has a building.  Now it will just not rob anyone
-            for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
-                if(!this.game.getMap().getRobber().getLocation().equals(entry.getKey())) {
-                    this.game.useSoldier(getPlayerIndex(), getPlayerIndex(), entry.getKey());
-                    return;
-                }
-            }
-        } catch(Exception | InvalidTypeException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void playDevCard() throws PlayerExistsException, InsufficientResourcesException, InvalidTypeException, DevCardException, InvalidLocationException, InvalidPlayerException, StructureException {
-        if(canUseSoldier()) {
-            playSoldier();
-        }
-        if(canUseMonopoly()) {
-            this.game.useMonopoly(getPlayerIndex(), ResourceType.SHEEP);
-        }
-        if(canUseYearOfPlenty()) {
-            this.game.useYearOfPlenty(getPlayerIndex(), ResourceType.SHEEP, ResourceType.SHEEP);
-        }
-        if(this.game.canUseRoadBuilding(getPlayerIndex())) {
-            EdgeLocation firstRoad = null;
-            EdgeLocation secondRoad = null;
-            for(EdgeLocation edge : sheepEdges) {
-                if(this.game.canPlaceRoadBuildingCard(getPlayerIndex(), edge)) {
-                    if(firstRoad == null && secondRoad == null) {
-                        firstRoad = edge;
-                    } else if(firstRoad != null && secondRoad == null) {
-                        secondRoad = edge;
-                        this.game.useRoadBuilder(getPlayerIndex(), firstRoad, secondRoad);
-                        return;
-                    }
-                }
-            }
-            java.util.Map<EdgeLocation, Edge> edges = game.getMap().getEdges();
-            for(java.util.Map.Entry<EdgeLocation, Edge> entry : edges.entrySet()) {
-                if(this.game.canPlaceRoadBuildingCard(getPlayerIndex(), entry.getKey())) {
-                    if(firstRoad == null && secondRoad == null) {
-                        firstRoad = entry.getKey();
-                    } else if(firstRoad != null && secondRoad == null) {
-                        secondRoad = entry.getKey();
-                        this.game.useRoadBuilder(getPlayerIndex(), firstRoad, secondRoad);
-                        return;
-                    }
-                }
-            }
-        }
-        if(canUseMonument()) {
-            this.game.useMonument(getPlayerIndex());
-        }
+        ArrayList<ResourceType> wanted = new ArrayList<>();
+        wanted.add(ResourceType.SHEEP);
+        TradePackage two = new TradePackage(otherPlayer, wanted);
+        game.offerTrade(one, two);
     }
 
     @Override
-    public void acceptTrade(Game game) {
-        this.game = game;
+    public void acceptTrade() {
         try {
-            if (this.game.isTradeActive()) {
-                Trade currentOffer = this.game.getCurrentOffer();
+            if (game.isTradeActive()) {
+                Trade currentOffer = game.getCurrentOffer();
                 if (currentOffer.getPackage1().getResources().contains(ResourceType.SHEEP) &&
                         !currentOffer.getPackage2().getResources().contains(ResourceType.SHEEP)) {
                     List<ResourceType> sending = currentOffer.getPackage2().getResources();
@@ -346,34 +364,38 @@ public class SheepAI extends AIPlayer {
                             case ORE:
                                 oreAsked++;
                                 if(oreAsked > ownedOre) {
-                                    this.game.acceptTrade(getPlayerIndex(), false);
+                                    game.acceptTrade(getPlayerIndex(), false);
+                                    return;
                                 }
                                 break;
                             case BRICK:
                                 brickAsked++;
                                 if(brickAsked > ownedBrick) {
-                                    this.game.acceptTrade(getPlayerIndex(), false);
+                                    game.acceptTrade(getPlayerIndex(), false);
+                                    return;
                                 }
                                 break;
                             case WHEAT:
                                 wheatAsked++;
                                 if(wheatAsked > ownedWheat) {
-                                    this.game.acceptTrade(getPlayerIndex(), false);
+                                    game.acceptTrade(getPlayerIndex(), false);
+                                    return;
                                 }
                                 break;
                             case WOOD:
                                 woodAsked++;
                                 if(woodAsked > ownedWood) {
-                                    this.game.acceptTrade(getPlayerIndex(), false);
+                                    game.acceptTrade(getPlayerIndex(), false);
+                                    return;
                                 }
                                 break;
                             default:
                                 break;
                         }
                     }
-                    this.game.acceptTrade(getPlayerIndex(), true);
+                    game.acceptTrade(getPlayerIndex(), true);
                 } else {
-                    this.game.acceptTrade(getPlayerIndex(), false);
+                    game.acceptTrade(getPlayerIndex(), false);
                 }
             }
         } catch(Exception | InvalidTypeException e) {
@@ -382,9 +404,7 @@ public class SheepAI extends AIPlayer {
     }
 
     @Override
-    public void setUpOne(Game game) {
-        this.game = game;
-        setSheepLocations();
+    public void setUpOne() {
         try {
             initiateSettlement();
             initiateRoad();
@@ -394,9 +414,7 @@ public class SheepAI extends AIPlayer {
     }
 
     @Override
-    public void setUpTwo(Game game) {
-        this.game = game;
-        setSheepLocations();
+    public void setUpTwo() {
         try {
             initiateSettlement();
             initiateRoad();
@@ -406,9 +424,7 @@ public class SheepAI extends AIPlayer {
     }
 
     @Override
-    public void rolling(Game game) {
-        this.game = game;
-        setSheepLocations();
+    public void roll() {
         try {
             Dice roller = new Dice(2);
             int roll = roller.roll();
@@ -419,7 +435,7 @@ public class SheepAI extends AIPlayer {
     }
 
     @Override
-    public void discarding(Game game) {
+    public void discard() {
         try {
             if (!hasDiscarded()) {
                 ArrayList<ResourceType> unwanted = new ArrayList<>();
@@ -428,12 +444,11 @@ public class SheepAI extends AIPlayer {
                 unwanted.add(ResourceType.WOOD);
                 unwanted.add(ResourceType.WHEAT);
                 ArrayList<ResourceType> resources = new ArrayList<>();
-                int totalToDiscard = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberResourceCards() / 2;
-                int brick = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.BRICK);
-                int ore = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.ORE);
-                int wheat = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WHEAT);
-                int wood = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WOOD);
-                int sheep = this.game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.SHEEP);
+                int totalToDiscard = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberResourceCards() / 2;
+                int brick = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.BRICK);
+                int ore = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.ORE);
+                int wheat = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WHEAT);
+                int wood = game.getPlayerManager().getPlayerByIndex(getPlayerIndex()).getNumberOfType(ResourceType.WOOD);
                 while(totalToDiscard != 0 && unwanted.size() != 0) {
                     ResourceType random = unwanted.remove(new Random().nextInt(unwanted.size()));
                     switch(random) {
@@ -471,10 +486,9 @@ public class SheepAI extends AIPlayer {
                 }
                 while(totalToDiscard != 0) {
                     resources.add(ResourceType.SHEEP);
-                    sheep--;
                     totalToDiscard--;
                 }
-                this.game.discardCards(getPlayerIndex(), resources);
+                game.discardCards(getPlayerIndex(), resources);
             }
         } catch(Exception | InvalidTypeException e) {
             e.printStackTrace();
@@ -482,34 +496,36 @@ public class SheepAI extends AIPlayer {
     }
 
     @Override
-    public void robbing(Game game) {
-        this.game = game;
-        setSheepLocations();
+    public void rob() {
         //try and place robber on sheep hex where aiPlayer doesn't have a building itself
         try {
             for (HexLocation sheepHex : sheepHexes) {
-                ArrayList<Integer> potentialVictims = getPlayers(getPlayerIndex(), sheepHex);
-                if (potentialVictims.size() > 0 && !potentialVictims.contains(getPlayerIndex()) && !this.game.getMap().getRobber().getLocation().equals(sheepHex)) {
-                    this.game.rob(getPlayerIndex(), potentialVictims.get(0), sheepHex);
+                ArrayList<Integer> potentialVictims = getPlayers(sheepHex);
+                if (potentialVictims.size() > 0 && !potentialVictims.contains(getPlayerIndex()) && !game.getMap().getRobber().getLocation().equals(sheepHex)) {
+                    game.rob(getPlayerIndex(), potentialVictims.get(0), sheepHex);
                     return;
                 }
             }
             //this is if the aiPlayer has a building on every single sheep hex.  Now it will just pick a random hex where it doesn't have a building
             java.util.Map<HexLocation, Hex> hexes = game.getMap().getHexes();
             for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
-                ArrayList<Integer> potentialVictims = getPlayers(getPlayerIndex(), entry.getKey());
-                if(potentialVictims.size() != 0 && !potentialVictims.contains(getPlayerIndex()) && !this.game.getMap().getRobber().getLocation().equals(entry.getKey())) {
-                    //this robs a random person on a random hex where the aiPlayer doesn't have a building there
-                    int victim = potentialVictims.remove(0);
-                    this.game.rob(getPlayerIndex(), victim, entry.getKey());
-                    return;
+                if(entry.getValue().getType() != HexType.WATER) {
+                    ArrayList<Integer> potentialVictims = getPlayers(entry.getKey());
+                    if (potentialVictims.size() != 0 && !potentialVictims.contains(getPlayerIndex()) && !game.getMap().getRobber().getLocation().equals(entry.getKey())) {
+                        //this robs a random person on a random hex where the aiPlayer doesn't have a building there
+                        int victim = potentialVictims.remove(0);
+                        game.rob(getPlayerIndex(), victim, entry.getKey());
+                        return;
+                    }
                 }
             }
             //this is if the aiPlayer has a building on every hex that has a building.  Now it will just not rob anyone
             for(java.util.Map.Entry<HexLocation, Hex> entry : hexes.entrySet()) {
-                if(!this.game.getMap().getRobber().getLocation().equals(entry.getKey())) {
-                    this.game.rob(getPlayerIndex(), getPlayerIndex(), entry.getKey());
-                    return;
+                if(entry.getValue().getType() != HexType.WATER) {
+                    if (!game.getMap().getRobber().getLocation().equals(entry.getKey())) {
+                        game.rob(getPlayerIndex(), getPlayerIndex(), entry.getKey());
+                        return;
+                    }
                 }
             }
         } catch(Exception | InvalidTypeException e) {
@@ -518,33 +534,48 @@ public class SheepAI extends AIPlayer {
     }
 
     @Override
-    public void playing(Game game) {
-        this.game = game;
-        setSheepLocations();
+    public void play() {
         try {
-            if(!isTrading) {
-                playRoad();
-                playSettlement();
-                playCity();
-                getDevCard();
-                playDevCard();
-                maritimeTrade();
-                //trade();
-                isTrading = true;
-                sendChat();
+            ArrayList<Integer> choices = new ArrayList<>();
+            for(int i=0; i<6; i++) {
+                choices.add(i);
             }
+            while(choices.size() > 0) {
+                int random = choices.remove(new Random().nextInt(choices.size()));
+                switch(random) {
+                    case 0:
+                        playRoad();
+                        break;
+                    case 1:
+                        playSettlement();
+                        break;
+                    case 2:
+                        playCity();
+                        break;
+                    case 3:
+                        getDevCard();
+                        break;
+                    case 4:
+                        playDevCard();
+                        break;
+                    case 5:
+                        maritimeTrade();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            sendChat();
+            trade();
         } catch (Exception | InvalidTypeException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void setTrading(boolean isTrading) {
-        this.isTrading = isTrading;
-    }
-
-    @Override
-    public boolean isTrading() {
-        return isTrading;
+    public void setGame(Game game) {
+        this.game = game;
+        setSheepLocations();
+        sheepFacts = new SheepFacts();
     }
 }

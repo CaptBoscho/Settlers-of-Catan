@@ -48,21 +48,19 @@ abstract public class AIPlayer extends Player {
         return aiType;
     }
 
-    abstract public void setUpOne(Game game);
+    abstract public void setUpOne();
 
-    abstract public void setUpTwo(Game game);
+    abstract public void setUpTwo();
 
-    abstract public void rolling(Game game);
+    abstract public void roll();
 
-    abstract public void discarding(Game game);
+    abstract public void discard();
 
-    abstract public void robbing(Game game);
+    abstract public void rob();
 
-    abstract public void playing(Game game);
+    abstract public void play();
 
-    abstract public void acceptTrade(Game game);
+    abstract public void acceptTrade();
 
-    abstract public void setTrading(boolean isTrading);
-
-    abstract public boolean isTrading();
+    abstract public void setGame(Game game);
 }
