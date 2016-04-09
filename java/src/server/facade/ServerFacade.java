@@ -1,11 +1,21 @@
 package server.facade;
 
 import client.data.GameInfo;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
+import server.commands.ICommand;
 import server.exceptions.*;
+import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
+import server.persistence.dto.CommandDTO;
+import server.persistence.dto.GameDTO;
+import server.persistence.exceptions.CommandTableException;
+import server.persistence.exceptions.UserTableException;
+import server.persistence.plugin.IDatabase;
+import server.persistence.provider.PersistenceProvider;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.*;
@@ -21,6 +31,7 @@ import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
 
 import javax.naming.InsufficientResourcesException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +49,7 @@ public final class ServerFacade implements IFacade {
     private ServerFacade(){
         gameManager = GameManager.getInstance();
         userManager = UserManager.getInstance();
+        importData();
     }
 
     private HexLocation getModelHexLocation(HexLocation hexLoc) {
@@ -806,6 +818,42 @@ public final class ServerFacade implements IFacade {
         final JsonObject json = game.toJSON();
         final String jsonString = json.toString();
         return new CommandExecutionResult(jsonString);
+    }
+
+    /**
+     * retrieves games and users from the database and populates the server.  This function should be run when
+     * ServerFacade is constructed so that it can start out with up to date information
+     */
+    private void importData() {
+        IDatabase database = Config.database;
+        //// TODO: 4/9/16 use this database below instead of PersistenceProvider
+
+        try {
+            userManager.addUsers(PersistenceProvider.getInstance().getUserDAO().getUsers());
+
+            List<GameDTO> gameDTOs = PersistenceProvider.getInstance().getGameDAO().getAllGames();
+            ArrayList<Game> games = new ArrayList<>();
+            for (GameDTO dto : gameDTOs) {
+                games.add(new Game(new JsonParser().parse(dto.getState()).getAsJsonObject()));
+            }
+
+            gameManager.addGames(games);
+
+            for (GameDTO dto : gameDTOs) {
+                List<CommandDTO> commands = PersistenceProvider.getInstance().getCommandDAO().getCommands(dto.getGameID());
+                for (CommandDTO commandDTO : commands) {
+                    try {
+                        Gson gson = new Gson();
+                        ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
+                        command.execute();
+                    } catch (CommandExecutionFailedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (SQLException | UserTableException | CommandTableException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

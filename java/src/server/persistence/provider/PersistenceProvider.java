@@ -17,7 +17,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      * Default Constructor
      */
     private PersistenceProvider(){
-        this.database = Config.database;
+        this.database = (IDatabase)Config.database;
     }
 
     /**
