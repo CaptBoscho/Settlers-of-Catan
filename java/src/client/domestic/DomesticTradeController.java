@@ -1,12 +1,17 @@
 package client.domestic;
 
+import client.base.Controller;
 import client.facade.Facade;
+import client.misc.IWaitView;
 import client.services.UserCookie;
-import shared.definitions.*;
-import client.base.*;
-import client.misc.*;
+import shared.definitions.ResourceType;
+import shared.exceptions.PlayerExistsException;
+import shared.model.ai.AIPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 
 /**
@@ -384,9 +389,15 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			receiving.add(ResourceType.ORE);
 		}
 
-		facade.tradeWithPlayer(UserCookie.getInstance().getPlayerIndex(), tradePartner, sending, receiving);
 		getTradeOverlay().closeModal();
-		getWaitOverlay().showModal();
+		try {
+			if(!(facade.getGame().getPlayerManager().getPlayerByIndex(tradePartner) instanceof AIPlayer)) {
+				getWaitOverlay().showModal();
+			}
+		} catch (PlayerExistsException e) {
+			e.printStackTrace();
+		}
+		facade.tradeWithPlayer(UserCookie.getInstance().getPlayerIndex(), tradePartner, sending, receiving);
 
 		sendwood = 0;
 		sendbrick = 0;

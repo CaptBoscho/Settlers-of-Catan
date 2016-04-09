@@ -7,5 +7,4 @@ public enum AIType {
     SHEEP,
     LARGEST_ARMY,
     LONGEST_ROAD
-    //TODO: add RODHAMMER AI for phase 4 - Implementing a DQN would be pretty cool
 }
