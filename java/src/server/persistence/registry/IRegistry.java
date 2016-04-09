@@ -1,4 +1,4 @@
-package server.persistence.register;
+package server.persistence.registry;
 
 import server.exceptions.PluginExistsException;
 import server.persistence.plugin.IDatabase;
