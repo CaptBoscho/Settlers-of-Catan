@@ -30,6 +30,12 @@ public class Main {
 
     public static void main(String[] args) {
 
+        try {
+            Registry.getInstance().getPlugin("postgres");
+        } catch (PluginExistsException e) {
+            e.printStackTrace();
+        }
+
         // set the configuration
         if(args.length == 2) {
             Config.host = args[0];

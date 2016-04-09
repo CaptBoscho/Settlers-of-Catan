@@ -81,9 +81,6 @@ public class Registry implements IRegistry {
             return null;
         }
 
-        System.out.println("Response Code : "
-                + response.getStatusLine().getStatusCode());
-
         BufferedReader rd = null;
         try {
             rd = new BufferedReader(
@@ -94,7 +91,7 @@ public class Registry implements IRegistry {
 
         assert rd != null;
         StringBuilder result = new StringBuilder();
-        String line = "";
+        String line;
         try {
             while ((line = rd.readLine()) != null) {
                 result.append(line);
@@ -106,11 +103,12 @@ public class Registry implements IRegistry {
         JsonArray stuff = new JsonParser().parse(result.toString()).getAsJsonArray();
         for(final JsonElement obj : stuff) {
             final JsonObject tmp = obj.getAsJsonObject();
+            System.out.println("looking for " + plugin + " in " + tmp.get("originalname"));
             if(tmp.get("originalname").getAsString().contains(plugin)) {
                 // -- found it
                 final String pathToJar = REGISTRY_URL + tmp.get("filename");
-                DatabaseFacade facade = new DatabaseFacade();
-                facade.loadJar(pathToJar);
+                System.out.println(pathToJar.replace("\"", ""));
+                new DatabaseFacade().loadJar(pathToJar.replace("\"", ""));
             }
         }
         return null;
