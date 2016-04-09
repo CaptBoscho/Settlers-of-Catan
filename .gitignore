@@ -3,6 +3,7 @@ java/dist/
 java/build/
 
 .DS_Store
+/docs/
 
 # Package Files #
 # *.jar
