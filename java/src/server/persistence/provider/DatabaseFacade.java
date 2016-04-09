@@ -21,10 +21,15 @@ public class DatabaseFacade {
 
     public void loadJar(String url){
         try {
+
+            instances = new HashMap<>();
+            methods = new HashMap<>();
+
             URL jarURL = new URL(url);
             URLClassLoader child = new URLClassLoader(new URL[] {jarURL}, getClass().getClassLoader());
 
-            Class gameDao = Class.forName("GameDAO",true,child);
+
+            Class gameDao = Class.forName("daos.GameDAO",true,child);
             Object game = gameDao.newInstance();
             instances.put("gameDao", game);
 
@@ -35,16 +40,16 @@ public class DatabaseFacade {
 
             Method getAllGames = gameDao.getDeclaredMethod("getAllGames", null);
             methods.put("getAllGames",getAllGames);
-            Method getGameModel = gameDao.getDeclaredMethod("getGameModel",gameint);
+            Method getGameModel = gameDao.getDeclaredMethod("getGameModel", Integer.TYPE);
             methods.put("getGameModel",getGameModel);
             Method updateGame = gameDao.getDeclaredMethod("updateGame",gameDto);
             methods.put("updateGame",updateGame);
             Method deleteAllGames = gameDao.getDeclaredMethod("deleteAllGames",null);
             methods.put("deleteAllGames",deleteAllGames);
-            Method deleteGame = gameDao.getDeclaredMethod("deleteGame",gameint);
+            Method deleteGame = gameDao.getDeclaredMethod("deleteGame", Integer.TYPE);
             methods.put("deleteGame",deleteGame);
 
-            Class userDao = Class.forName("UserDAO",true,child);
+            Class userDao = Class.forName("daos.UserDAO",true,child);
             Object user = userDao.newInstance();
             instances.put("userDao", user);
 
@@ -58,7 +63,7 @@ public class DatabaseFacade {
             Method deleteUsers = userDao.getDeclaredMethod("deleteUsers",null);
             methods.put("deleteUsers",deleteUsers);
 
-            Class commandDao = Class.forName("CommandDAO",true,child);
+            Class commandDao = Class.forName("daos.CommandDAO",true,child);
             Object command = commandDao.newInstance();
             instances.put("commandDao",command);
 
@@ -67,13 +72,13 @@ public class DatabaseFacade {
 
             Method addCommand = commandDao.getDeclaredMethod("addCommand",commandDto);
             methods.put("addCommand",addCommand);
-            Method getCommands = commandDao.getDeclaredMethod("getCommands",gameint);
+            Method getCommands = commandDao.getDeclaredMethod("getCommands",Integer.TYPE);
             methods.put("getCommands",getCommands);
             Method getAllCommands = commandDao.getDeclaredMethod("getAllCommands",null);
             methods.put("getAllCommands",getAllCommands);
             Method deleteAllCommands = commandDao.getDeclaredMethod("deleteAllCommands",null);
             methods.put("deleteAllCommands",deleteAllCommands);
-            Method deleteCommandsFromGame = commandDao.getDeclaredMethod("deleteCommandsFromGame",gameint);
+            Method deleteCommandsFromGame = commandDao.getDeclaredMethod("deleteCommandsFromGame",Integer.TYPE);
             methods.put("deleteCommandsFromGame",deleteCommandsFromGame);
 
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
