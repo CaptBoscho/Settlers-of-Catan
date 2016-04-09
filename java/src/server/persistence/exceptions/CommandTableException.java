@@ -1,4 +1,4 @@
-package exceptions;
+package server.persistence.exceptions;
 
 /**
  * Created by boscho on 4/8/16.
