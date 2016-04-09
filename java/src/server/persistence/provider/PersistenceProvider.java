@@ -33,16 +33,6 @@ public class PersistenceProvider implements IPersistenceProvider {
     }
 
     /**
-     * Returns a connection to the database
-     *
-     * @return
-     */
-    @Override
-    public Object getConnection() {
-        return database.getConnection();
-    }
-
-    /**
      * Clears the database
      */
     @Override
@@ -55,7 +45,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void startTransaction() {
-
+        database.startTransaction();
     }
 
     /**
@@ -65,7 +55,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void endTransaction(boolean commitTransaction) {
-
+        database.endTransaction(commitTransaction);
     }
 
 
