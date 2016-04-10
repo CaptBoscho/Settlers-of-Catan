@@ -15,7 +15,9 @@ import java.util.Map;
 
 /**
  * A factory class that creates User Commands on demand.  Use this class to get a User Command
+ *
  * @author Danny Harding
+ * {@link} https://en.wikipedia.org/wiki/Command_pattern#Java_8
  */
 public final class UserCommandFactory {
 

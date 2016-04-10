@@ -1,5 +1,6 @@
 package server.persistence;
 
+import server.persistence.dto.GameDTO;
 import server.persistence.dto.UserDTO;
 
 /**
@@ -37,5 +38,9 @@ public class PersistenceCoordinator {
 
     public static void addUser(UserDTO dto) {
         getInstance().database.addUser(dto);
+    }
+
+    public static void addGame(GameDTO dto) {
+        getInstance().database.addGame(dto);
     }
 }

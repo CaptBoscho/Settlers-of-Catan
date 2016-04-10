@@ -7,7 +7,6 @@ import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.*;
-import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
 import server.persistence.IDatabase;
@@ -823,30 +822,31 @@ public final class ServerFacade implements IFacade {
     public void importData() {
         final IDatabase database = PersistenceCoordinator.getDatabase();
 
-            userManager.addUsers(database.getUsers());
+        userManager.addUsers(database.getUsers());
 
-            final List<GameDTO> gameDTOs = database.getAllGames();
-            final ArrayList<Game> games = new ArrayList<>();
-            for (GameDTO dto : gameDTOs) {
-                final JsonParser parser = new JsonParser();
-                final String gameState = dto.getState();
-                games.add(new Game(parser.parse(gameState).getAsJsonObject()));
-            }
 
-            gameManager.addGames(games);
+        final List<GameDTO> gameDTOs = database.getAllGames();
+        final ArrayList<Game> games = new ArrayList<>();
+        for (final GameDTO dto : gameDTOs) {
+            final JsonParser parser = new JsonParser();
+            final String gameState = dto.getState();
+            games.add(new Game(parser.parse(gameState).getAsJsonObject()));
+        }
 
-            for (final GameDTO dto : gameDTOs) {
-                final List<CommandDTO> commands = database.getCommands(dto.getGameID());
-                for (final CommandDTO commandDTO : commands) {
-                    final Gson gson = new Gson();
-                    final ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
-                    try {
-                        command.execute();
-                    } catch (CommandExecutionFailedException e) {
-                        e.printStackTrace();
-                    }
+        gameManager.addGames(games);
+
+        for (final GameDTO dto : gameDTOs) {
+            final List<CommandDTO> commands = database.getCommands(dto.getGameID());
+            for (final CommandDTO commandDTO : commands) {
+                final Gson gson = new Gson();
+                final ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
+                try {
+                    command.execute();
+                } catch (CommandExecutionFailedException e) {
+                    e.printStackTrace();
                 }
             }
+        }
     }
 
     @Override
