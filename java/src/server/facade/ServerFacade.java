@@ -1,15 +1,19 @@
 package server.facade;
 
 import client.data.GameInfo;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
+import server.commands.ICommand;
 import server.exceptions.*;
 import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
 import server.persistence.IDatabase;
 import server.persistence.PersistenceCoordinator;
+import server.persistence.dto.CommandDTO;
+import server.persistence.dto.GameDTO;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.*;
@@ -817,37 +821,32 @@ public final class ServerFacade implements IFacade {
      * ServerFacade is constructed so that it can start out with up to date information
      */
     public void importData() {
-        // TODO - fix
         final IDatabase database = PersistenceCoordinator.getDatabase();
 
-//        try {
-//            userManager.addUsers(database.getUsers());
+            userManager.addUsers(database.getUsers());
 
-//            final List<GameDTO> gameDTOs = database.getAllGames();
+            final List<GameDTO> gameDTOs = database.getAllGames();
             final ArrayList<Game> games = new ArrayList<>();
-//            for (GameDTO dto : gameDTOs) {
+            for (GameDTO dto : gameDTOs) {
                 final JsonParser parser = new JsonParser();
-//                final String gameState = dto.getState();
-//                games.add(new Game(parser.parse(gameState).getAsJsonObject()));
-//            }
-//
-//            gameManager.addGames(games);
-//
-//            for (final GameDTO dto : gameDTOs) {
-//                final List<CommandDTO> commands = database.getCommands(dto.getGameID());
-//                for (final CommandDTO commandDTO : commands) {
-//                    try {
-//                        final Gson gson = new Gson();
-//                        final ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
-//                        command.execute();
-//                    } catch (CommandExecutionFailedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        } catch (IllegalAccessException | InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
+                final String gameState = dto.getState();
+                games.add(new Game(parser.parse(gameState).getAsJsonObject()));
+            }
+
+            gameManager.addGames(games);
+
+            for (final GameDTO dto : gameDTOs) {
+                final List<CommandDTO> commands = database.getCommands(dto.getGameID());
+                for (final CommandDTO commandDTO : commands) {
+                    final Gson gson = new Gson();
+                    final ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
+                    try {
+                        command.execute();
+                    } catch (CommandExecutionFailedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
     }
 
     @Override
