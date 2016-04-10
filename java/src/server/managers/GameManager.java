@@ -59,7 +59,7 @@ public class GameManager {
     }
 
     public List<GameInfo> getGamesInfos() {
-        List<GameInfo> infos = new ArrayList<>();
+        final List<GameInfo> infos = new ArrayList<>();
         for(final Game game : this.games.values()) {
             final GameInfo gameInfo = new GameInfo();
             gameInfo.setId(game.getId());
@@ -76,9 +76,9 @@ public class GameManager {
 
     public static Game makeGameFromFile(String filePath) throws FileNotFoundException {
         try {
-            FileReader reader = new FileReader(filePath);
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = (JsonObject) jsonParser.parse(reader);
+            final FileReader reader = new FileReader(filePath);
+            final JsonParser jsonParser = new JsonParser();
+            final JsonObject jsonObject = (JsonObject) jsonParser.parse(reader);
 
             return new Game(jsonObject);
         } catch (FileNotFoundException e) {
@@ -91,6 +91,7 @@ public class GameManager {
     }
 
     public static Map<Integer, Game> getGames() {
+        // TODO - no idea who thought this code would work
         return (Map<Integer, Game>)instance.getAllGames();
     }
 

@@ -21,10 +21,10 @@ import static org.apache.http.protocol.HTTP.USER_AGENT;
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public class Registry implements IRegistry {
+public class Registry {
 
     private static final String REGISTRY_URL = "http://soc-registry-service.herokuapp.com/";
-    private static IRegistry _instance;
+    private static Registry _instance;
 
     /**
      * Default Constructor
@@ -37,7 +37,7 @@ public class Registry implements IRegistry {
      * Gets the instance of the Register
      * @return
      */
-    public static IRegistry getInstance(){
+    public static Registry getInstance(){
         if(_instance == null)
             _instance = new Registry();
 
@@ -51,8 +51,7 @@ public class Registry implements IRegistry {
      * @return
      * @throws PluginExistsException
      */
-    @Override
-    public IDatabase getPlugin(final String plugin) throws PluginExistsException {
+    public void getPlugin(final String plugin) throws PluginExistsException {
         String url = REGISTRY_URL + "/jars";
 
         HttpClient client = HttpClientBuilder.create().build();
@@ -60,12 +59,11 @@ public class Registry implements IRegistry {
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
-        HttpResponse response;
+        HttpResponse response = null;
         try {
             response = client.execute(request);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
 
         BufferedReader rd = null;
@@ -93,10 +91,13 @@ public class Registry implements IRegistry {
             if(tmp.get("originalname").getAsString().contains(plugin)) {
                 // -- found it
                 final String pathToJar = REGISTRY_URL + tmp.get("filename");
-                System.out.println(pathToJar.replace("\"", ""));
+                System.out.println("Fetching plugin JAR from " + pathToJar.replace("\"", ""));
                 Config.database.loadJar(pathToJar.replace("\"", ""));
+                return;
             }
         }
-        return null;
+
+        System.out.println("Couldn't find JAR");
+        System.exit(-1);
     }
 }
