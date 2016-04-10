@@ -10,12 +10,14 @@ import shared.dto.IDTO;
 import shared.dto.RobPlayerDTO;
 import shared.locations.HexLocation;
 
+import java.io.Serializable;
+
 /**
  * A command object that robs a player
  *
  * @author Joel Bradley
  */
-public final class RobPlayerCommand implements ICommand {
+public final class RobPlayerCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

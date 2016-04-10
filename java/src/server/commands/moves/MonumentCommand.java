@@ -9,12 +9,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.PlayMonumentDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that plays a monument card
  *
  * @author Joel Bradley
  */
-public final class MonumentCommand implements ICommand {
+public final class MonumentCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

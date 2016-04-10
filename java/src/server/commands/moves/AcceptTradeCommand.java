@@ -9,12 +9,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.TradeOfferResponseDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that accepts a trade
  *
  * @author Joel Bradley
  */
-public final class AcceptTradeCommand implements ICommand {
+public final class AcceptTradeCommand implements Serializable, ICommand {
 
     private int gameId = -1;
     private int playerIndex = -1;

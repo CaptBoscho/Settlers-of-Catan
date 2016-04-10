@@ -9,12 +9,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.SendChatDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that sends a chat
  *
  * @author Joel Bradley
  */
-public final class SendChatCommand implements ICommand {
+public final class SendChatCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

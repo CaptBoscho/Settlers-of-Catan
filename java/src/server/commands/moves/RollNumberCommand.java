@@ -9,12 +9,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.RollNumberDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that rolls a number
  *
  * @author Joel Bradley
  */
-public final class RollNumberCommand implements ICommand {
+public final class RollNumberCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

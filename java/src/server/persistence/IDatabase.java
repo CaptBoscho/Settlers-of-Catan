@@ -15,11 +15,11 @@ public interface IDatabase {
 
     void shutdown();
 
-    void addUser(UserDTO dto);
+    int addUser(UserDTO dto);
 
     List<UserDTO> getUsers();
 
-    void addGame(GameDTO dto);
+    int addGame(GameDTO dto);
 
     List<GameDTO> getAllGames();
 

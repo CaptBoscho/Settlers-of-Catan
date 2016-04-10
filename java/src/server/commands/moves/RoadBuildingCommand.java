@@ -10,12 +10,14 @@ import shared.dto.IDTO;
 import shared.dto.RoadBuildingDTO;
 import shared.locations.EdgeLocation;
 
+import java.io.Serializable;
+
 /**
  * A command object that plays a road building card
  *
  * @author Joel Bradley
  */
-public final class RoadBuildingCommand implements ICommand {
+public final class RoadBuildingCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

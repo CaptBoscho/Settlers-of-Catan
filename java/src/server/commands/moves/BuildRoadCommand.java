@@ -10,12 +10,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.locations.EdgeLocation;
 
+import java.io.Serializable;
+
 /**
  * A command object that builds a road
  *
  * @author Joel Bradley
  */
-public final class BuildRoadCommand implements ICommand {
+public final class BuildRoadCommand implements Serializable, ICommand {
 
     private int gameId;
     private int playerIndex;

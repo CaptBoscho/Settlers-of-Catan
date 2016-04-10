@@ -1,6 +1,7 @@
 package server.persistence;
 
 import server.main.Config;
+import server.managers.UserManager;
 import server.persistence.dto.CommandDTO;
 import server.persistence.dto.GameDTO;
 import server.persistence.dto.UserDTO;
@@ -42,7 +43,11 @@ public class PersistenceCoordinator {
     }
 
     public static void addUser(UserDTO dto) {
-        getInstance().database.addUser(dto);
+        int oldId = dto.getId();
+        int newId = getInstance().database.addUser(dto);
+        if(oldId != newId) {
+            UserManager.getInstance().setNewIdForUser(oldId, newId);
+        }
     }
 
     public static void addCommand(CommandDTO dto) {

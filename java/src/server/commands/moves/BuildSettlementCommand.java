@@ -10,12 +10,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.locations.VertexLocation;
 
+import java.io.Serializable;
+
 /**
  * A command object that builds a settlement
  *
  * @author Joel Bradley
  */
-public final class BuildSettlementCommand implements ICommand {
+public final class BuildSettlementCommand implements Serializable, ICommand {
 
     private int gameId;
     private int playerIndex;

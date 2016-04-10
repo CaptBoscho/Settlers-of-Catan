@@ -9,12 +9,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.OfferTradeDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that offers a trade
  *
  * @author Joel Bradley
  */
-public final class OfferTradeCommand implements ICommand {
+public final class OfferTradeCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;
