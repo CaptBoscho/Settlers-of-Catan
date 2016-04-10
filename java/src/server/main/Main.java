@@ -45,13 +45,8 @@ public class Main {
         }
 
         // set the configuration
-        if(args.length == 2) {
-            Config.host = args[0];
-            Config.port = Integer.parseInt(args[1]);
-            Config.facade = ServerFacade.getInstance();
-        } else {
-            Config.facade = ServerFacade.getInstance();
-        }
+        Config.commandCount = Integer.parseInt(args[0]); //TODO: change this to a 1 later
+        Config.facade = ServerFacade.getInstance();
 
         port(Config.port);
 

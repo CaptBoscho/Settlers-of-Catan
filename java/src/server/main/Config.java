@@ -12,4 +12,5 @@ public final class Config {
     public static IFacade facade = ServerFacade.getInstance();
     public static String host = "localhost";
     public static int port = 8081;
+    public static int commandCount = 1;
 }

@@ -1,11 +1,9 @@
 package server.managers;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import server.persistence.dto.UserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * This class maintains a list of users. A user is defined as being a unique username/password

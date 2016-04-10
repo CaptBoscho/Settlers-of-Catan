@@ -1,6 +1,10 @@
 package server.persistence;
 
+import server.main.Config;
+import server.persistence.dto.CommandDTO;
 import server.persistence.dto.UserDTO;
+
+import java.util.HashMap;
 
 /**
  * A wrapper around the plugin database to add any additional tracking and
@@ -11,12 +15,12 @@ import server.persistence.dto.UserDTO;
  */
 public class PersistenceCoordinator {
 
-    private int commandCommitCount;
+    private java.util.Map<Integer, Integer> commandCommitCount;
     private static PersistenceCoordinator instance;
     private IDatabase database;
 
     private PersistenceCoordinator() {
-        this.commandCommitCount = 0;
+        this.commandCommitCount = new HashMap<>();
         this.database = null;
     }
 
@@ -37,5 +41,15 @@ public class PersistenceCoordinator {
 
     public static void addUser(UserDTO dto) {
         getInstance().database.addUser(dto);
+    }
+
+    public static void addCommand(CommandDTO dto) {
+        getInstance().database.addCommand(dto);
+        getInstance().commandCommitCount++;
+        if(getInstance().commandCommitCount % Config.commandCount == 0) {
+            getInstance().commandCommitCount = 0;
+            getInstance().database.updateGame(dto);
+            getInstance().database.deleteCommandsFromGame(0);
+        }
     }
 }
