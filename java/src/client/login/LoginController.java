@@ -84,6 +84,7 @@ public class LoginController extends Controller implements ILoginController {
 				final AuthDTO dto = new AuthDTO(username, password);
 				if (ServerProxy.getInstance().registerUser(dto)) {
 					// If register succeeded
+					this.setLocalPlayerInfo();
 					getLoginView().closeModal();
 					loginAction.execute();
 				} else {
