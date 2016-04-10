@@ -18,6 +18,8 @@ import server.managers.GameManager;
 import server.managers.UserManager;
 import server.persistence.registry.Registry;
 
+import java.lang.reflect.InvocationTargetException;
+
 import static shared.definitions.Endpoints.*;
 import static spark.Spark.*;
 
@@ -28,10 +30,11 @@ import static spark.Spark.*;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 
         try {
             Registry.getInstance().getPlugin("postgres");
+            System.out.println(Config.dbFacade.getUsers().toString());
         } catch (PluginExistsException e) {
             e.printStackTrace();
         }

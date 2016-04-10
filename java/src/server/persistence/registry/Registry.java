@@ -9,8 +9,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import server.exceptions.PluginExistsException;
+import server.main.Config;
 import server.persistence.plugin.IDatabase;
-import server.persistence.provider.DatabaseFacade;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -103,12 +103,11 @@ public class Registry implements IRegistry {
         JsonArray stuff = new JsonParser().parse(result.toString()).getAsJsonArray();
         for(final JsonElement obj : stuff) {
             final JsonObject tmp = obj.getAsJsonObject();
-            System.out.println("looking for " + plugin + " in " + tmp.get("originalname"));
             if(tmp.get("originalname").getAsString().contains(plugin)) {
                 // -- found it
                 final String pathToJar = REGISTRY_URL + tmp.get("filename");
                 System.out.println(pathToJar.replace("\"", ""));
-                new DatabaseFacade().loadJar(pathToJar.replace("\"", ""));
+                Config.dbFacade.loadJar(pathToJar.replace("\"", ""));
             }
         }
         return null;
