@@ -829,7 +829,9 @@ public final class ServerFacade implements IFacade {
         for (final GameDTO dto : gameDTOs) {
             final JsonParser parser = new JsonParser();
             final String gameState = dto.getState();
-            games.add(new Game(parser.parse(gameState).getAsJsonObject()));
+            Game tmpGame = new Game(parser.parse(gameState).getAsJsonObject());
+            tmpGame.setTitle(dto.getTitle());
+            games.add(tmpGame);
         }
 
         gameManager.addGames(games);
