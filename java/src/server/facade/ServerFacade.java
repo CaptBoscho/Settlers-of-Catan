@@ -1,7 +1,6 @@
 package server.facade;
 
 import client.data.GameInfo;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
@@ -838,8 +837,7 @@ public final class ServerFacade implements IFacade {
         for (final GameDTO dto : gameDTOs) {
             final List<CommandDTO> commands = database.getCommands(dto.getGameID());
             for (final CommandDTO commandDTO : commands) {
-                final Gson gson = new Gson();
-                final ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
+                final ICommand command = PersistenceCoordinator.deserializeCommand(commandDTO.getCommand());
                 try {
                     command.execute();
                 } catch (CommandExecutionFailedException e) {
