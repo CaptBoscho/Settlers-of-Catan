@@ -10,7 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import server.exceptions.PluginExistsException;
 import server.main.Config;
-import server.persistence.plugin.IDatabase;
+import server.persistence.database.IDatabase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,19 +42,6 @@ public class Registry implements IRegistry {
             _instance = new Registry();
 
         return _instance;
-    }
-
-    /**
-     * Checks if the specified plugin exists
-     *
-     * @param plugin
-     * @return
-     */
-    @Override
-    public boolean pluginExists(final String plugin) {
-        // -- TODO make an HTTP GET request to /jars
-        // -- look through resulting JSON for plugin
-        return false;
     }
 
     /**
@@ -107,7 +94,7 @@ public class Registry implements IRegistry {
                 // -- found it
                 final String pathToJar = REGISTRY_URL + tmp.get("filename");
                 System.out.println(pathToJar.replace("\"", ""));
-                Config.dbFacade.loadJar(pathToJar.replace("\"", ""));
+                Config.database.loadJar(pathToJar.replace("\"", ""));
             }
         }
         return null;

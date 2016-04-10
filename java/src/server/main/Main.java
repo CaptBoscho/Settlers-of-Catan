@@ -34,7 +34,7 @@ public class Main {
 
         try {
             Registry.getInstance().getPlugin("postgres");
-            System.out.println(Config.dbFacade.getUsers().toString());
+            System.out.println(Config.database.getUsers().toString());
         } catch (PluginExistsException e) {
             e.printStackTrace();
         }

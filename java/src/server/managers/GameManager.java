@@ -89,4 +89,12 @@ public class GameManager {
     public static void reset() {
         instance = new GameManager();
     }
+
+    public static Map<Integer, Game> getGames() {
+        return (Map<Integer, Game>)instance.getAllGames();
+    }
+
+    public void addGames(ArrayList<Game> games) {
+        games.forEach(this::addGame);
+    }
 }

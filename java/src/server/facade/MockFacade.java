@@ -94,7 +94,6 @@ public final class MockFacade implements IFacade {
      * List the current games
      *
      * @return CommandExecutionResult
-     * @throws ListException
      */
     @Override
     public CommandExecutionResult list() {
@@ -690,6 +689,11 @@ public final class MockFacade implements IFacade {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Game getGameByID(int gameID) {
+        return null;
     }
 
     public Game getGame(GameType game) {
