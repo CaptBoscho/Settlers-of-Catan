@@ -1,7 +1,5 @@
 package server.persistence.dto;
 
-import java.sql.Blob;
-
 /**
  * Created by boscho on 4/8/16.
  */
@@ -9,8 +7,6 @@ public class CommandDTO {
     private int version;
     private String command;
     private int gameID;
-
-    public CommandDTO(){}
 
     public CommandDTO(int gameID, int version, String command) {
         this.gameID = gameID;
@@ -36,10 +32,6 @@ public class CommandDTO {
 
     public int getGameID(){
         return gameID;
-    }
-
-    public void setGameID(int game){
-        gameID = game;
     }
 
 }

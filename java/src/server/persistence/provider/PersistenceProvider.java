@@ -8,8 +8,8 @@ import server.persistence.daos.IUserDAO;
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
 public class PersistenceProvider implements IPersistenceProvider {
-    private static IPersistenceProvider _instance;
 
+    private static IPersistenceProvider _instance;
 
     /**
      * Gets the instance of the persistence provider

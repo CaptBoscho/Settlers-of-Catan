@@ -23,9 +23,6 @@ public class UserDTO {
         this.id = id;
     }
 
-
-    public UserDTO(){}
-
     public String getPassword() {
         return password;
     }
@@ -36,9 +33,5 @@ public class UserDTO {
 
     public String getUserName() {
         return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 }

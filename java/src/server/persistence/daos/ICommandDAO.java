@@ -1,7 +1,6 @@
 package server.persistence.daos;
 
 import server.persistence.dto.CommandDTO;
-import server.persistence.exceptions.CommandTableException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +15,7 @@ public interface ICommandDAO {
      * adding a game
      * @param dto
      */
-    void addCommand(CommandDTO dto) throws CommandTableException, SQLException;
+    void addCommand(CommandDTO dto) throws SQLException;
 
     /**
      * Handles verifying user which returns userID
@@ -24,18 +23,18 @@ public interface ICommandDAO {
      * getting a list of Commands
      * @return
      */
-    List<CommandDTO> getCommands(int gameID) throws CommandTableException, SQLException;
+    List<CommandDTO> getCommands(int gameID) throws SQLException;
 
     List<CommandDTO> getAllCommands() throws SQLException;
 
     /**
      * mostly be used for updating the game blob state
      */
-    void deleteAllCommands() throws CommandTableException, SQLException;
+    void deleteAllCommands() throws SQLException;
 
     /**
      * Mostly be used for deleting commands every n
      * moves.
      */
-    void deleteCommandsFromGame(int gameID) throws CommandTableException, SQLException;
+    void deleteCommandsFromGame(int gameID) throws SQLException;
 }

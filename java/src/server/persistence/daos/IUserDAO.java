@@ -1,7 +1,6 @@
 package server.persistence.daos;
 
 import server.persistence.dto.UserDTO;
-import server.persistence.exceptions.UserTableException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -14,18 +13,18 @@ public interface IUserDAO {
      * Handles adding a user
      * @param dto
      */
-    void addUser(UserDTO dto) throws UserTableException, SQLException;
+    void addUser(UserDTO dto) throws SQLException;
 
     /**
      * Handles verifying user which returns userID
      *
      * @return
      */
-    List<UserDTO> getUsers() throws SQLException, UserTableException;
+    List<UserDTO> getUsers() throws SQLException;
 
 
     /**
      * delete a user
      */
-    void deleteUsers() throws SQLException, UserTableException;
+    void deleteUsers() throws SQLException;
 }
