@@ -3,6 +3,8 @@ package server.controllers;
 import server.commands.CommandExecutionResult;
 import server.commands.CommandName;
 import server.factories.UserCommandFactory;
+import server.persistence.PersistenceCoordinator;
+import server.persistence.dto.UserDTO;
 import shared.dto.AuthDTO;
 import shared.dto.IDTO;
 
@@ -18,7 +20,10 @@ public final class UserController {
     }
 
     public static CommandExecutionResult register(final AuthDTO dto) {
-        return executeCommand(USER_REGISTER, dto);
+        CommandExecutionResult result = executeCommand(USER_REGISTER, dto);
+        UserDTO userDto = new UserDTO(Integer.parseInt(result.getNewCookies().get("totalhack")), dto.getUsername(), dto.getPassword());
+        PersistenceCoordinator.addUser(userDto);
+        return result;
     }
 
     private static CommandExecutionResult executeCommand(final CommandName commandName, final IDTO dto) {

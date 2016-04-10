@@ -33,6 +33,7 @@ public final class RegisterCommand implements ICommand {
 
             // TODO - implement a reasonable cookie scheme
             result.addCookie("catan.user", "%7B%22name%22%3A%22" + username + "%22%2C%22password%22%3A%22" + password + "%22%2C%22playerID%22%3A" + userId + "%7D");
+            result.addCookie("totalhack", userId);
             return result;
         }
 

@@ -1,5 +1,7 @@
 package server.persistence;
 
+import server.persistence.dto.UserDTO;
+
 /**
  * A wrapper around the plugin database to add any additional tracking and
  * analytics that the main program may need to know, such as keeping track of
@@ -31,5 +33,9 @@ public class PersistenceCoordinator {
 
     public static IDatabase getDatabase() {
         return getInstance().database;
+    }
+
+    public static void addUser(UserDTO dto) {
+        getInstance().database.addUser(dto);
     }
 }
