@@ -65,6 +65,14 @@ public class UserManager {
         return false;
     }
 
+    public void setNewIdForUser(int oldId, int newId) {
+        for(UserCredentials credentials : this.users) {
+            if(credentials.getUserId() == oldId) {
+                credentials.setUserId(newId);
+            }
+        }
+    }
+
     public int getNumberOfUsers() {
         return this.users.size();
     }
@@ -145,5 +153,9 @@ class UserCredentials {
 
     int getUserId() {
         return this.userId;
+    }
+
+    void setUserId(int newId) {
+        this.userId = newId;
     }
 }

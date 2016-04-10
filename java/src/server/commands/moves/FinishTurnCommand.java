@@ -9,12 +9,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.FinishTurnDTO;
 import shared.dto.IDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that finishes a turn
  *
  * @author Joel Bradley
  */
-public final class FinishTurnCommand implements ICommand {
+public final class FinishTurnCommand implements Serializable, ICommand {
 
     private int gameId;
     private int playerIndex;

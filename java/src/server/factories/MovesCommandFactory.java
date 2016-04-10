@@ -5,13 +5,15 @@ import server.commands.CommandName;
 import server.commands.ICommand;
 import server.commands.moves.*;
 import server.exceptions.CommandExecutionFailedException;
+import server.persistence.dto.CommandDTO;
+import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
-
-import static server.commands.CommandName.*;
-import static server.utils.Strings.BAD_COMMAND_NAME_MSG;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static server.commands.CommandName.*;
+import static server.utils.Strings.BAD_COMMAND_NAME_MSG;
 
 /**
  * A factory class that creates Moves Commands on demand.  Use this class to get a Moves Command
@@ -61,6 +63,7 @@ public final class MovesCommandFactory {
             try {
                 ICommand command = commands.get(name);
                 command.setParams(dto);
+                CommandDTO commandDTO = new CommandDTO(((CookieWrapperDTO)dto).getGameId(), );
                 // TODO - break out into "execute" and "fetchResult"
                 return command.execute();
             } catch (CommandExecutionFailedException e) {

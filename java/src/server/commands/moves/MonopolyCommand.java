@@ -11,12 +11,14 @@ import shared.dto.IDTO;
 import shared.dto.PlayMonopolyDTO;
 import shared.model.bank.InvalidTypeException;
 
+import java.io.Serializable;
+
 /**
  * A command object that plays a monopoly card
  *
  * @author Joel Bradley
  */
-public final class MonopolyCommand implements ICommand {
+public final class MonopolyCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

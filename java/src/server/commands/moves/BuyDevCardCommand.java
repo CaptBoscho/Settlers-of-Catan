@@ -9,12 +9,14 @@ import shared.dto.BuyDevCardDTO;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that buys a development card
  *
  * @author Joel Bradley
  */
-public final class BuyDevCardCommand implements ICommand {
+public final class BuyDevCardCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

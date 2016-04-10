@@ -10,12 +10,14 @@ import shared.dto.IDTO;
 import shared.dto.PlaySoldierCardDTO;
 import shared.locations.HexLocation;
 
+import java.io.Serializable;
+
 /**
  * A command object that plays a soldier card
  *
  * @author Joel Bradley
  */
-public final class SoldierCommand implements ICommand {
+public final class SoldierCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

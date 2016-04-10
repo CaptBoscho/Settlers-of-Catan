@@ -16,7 +16,8 @@ import java.io.Serializable;
  *
  * @author Joel Bradley
  */
-public final class AcceptTradeCommand implements ICommand, Serializable {
+
+public final class AcceptTradeCommand implements Serializable, ICommand {
 
     private int gameId = -1;
     private int playerIndex = -1;

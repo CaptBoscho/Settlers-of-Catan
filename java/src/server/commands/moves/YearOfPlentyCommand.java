@@ -10,12 +10,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.dto.PlayYOPCardDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that plays a year of plenty card
  *
  * @author Joel Bradley
  */
-public final class YearOfPlentyCommand implements ICommand {
+public final class YearOfPlentyCommand implements Serializable, ICommand {
 
     private boolean paramsSet = false;
     private int gameId;

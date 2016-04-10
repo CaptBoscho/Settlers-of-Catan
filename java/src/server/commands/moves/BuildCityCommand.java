@@ -10,12 +10,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
 import shared.locations.VertexLocation;
 
+import java.io.Serializable;
+
 /**
  * A command object that builds a city
  *
  * @author Joel Bradley
  */
-public final class BuildCityCommand implements ICommand {
+public final class BuildCityCommand implements Serializable, ICommand {
 
     private int gameId;
     private int playerIndex;

@@ -9,12 +9,14 @@ import shared.dto.CookieWrapperDTO;
 import shared.dto.DiscardCardsDTO;
 import shared.dto.IDTO;
 
+import java.io.Serializable;
+
 /**
  * A command object that discards cards
  *
  * @author Joel Bradley
  */
-public final class DiscardCardsCommand implements ICommand {
+public final class DiscardCardsCommand implements Serializable, ICommand {
 
     private boolean paramsSet;
     private int gameId;
