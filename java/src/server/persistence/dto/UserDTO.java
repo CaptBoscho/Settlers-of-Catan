@@ -15,6 +15,10 @@ public class UserDTO {
         this.password = password;
     }
 
+    public UserDTO() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -29,6 +33,10 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setUserName(String name) {
+        this.userName = name;
     }
 
     public String getUserName() {
