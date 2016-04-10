@@ -3,6 +3,7 @@ package shared.model.game.trade;
 import com.google.gson.JsonObject;
 import shared.definitions.ResourceType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author Danny Harding
  */
-public final class Trade {
+public final class Trade implements Serializable {
     private TradePackage package1;
     private TradePackage package2;
     private int sender;

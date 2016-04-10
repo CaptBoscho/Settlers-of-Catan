@@ -6,13 +6,14 @@ import shared.model.ai.aitypes.LargestArmyAI;
 import shared.model.ai.aitypes.LongestRoadAI;
 import shared.model.ai.aitypes.SheepAI;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 3/19/2016.
  */
-public class AIFactory implements IAIFactory {
+public final class AIFactory implements Serializable, IAIFactory {
     private static AIFactory _instance;
 
     private AIFactory(){

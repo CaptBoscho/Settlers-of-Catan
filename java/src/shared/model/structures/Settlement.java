@@ -1,11 +1,13 @@
 package shared.model.structures;
 
+import java.io.Serializable;
+
 /**
  * A Settlement is a first-level structure for players
  *
  * @author Joel Bradley
  */
-public final class Settlement {
+public final class Settlement implements Serializable {
 
     private int playerIndex;
 

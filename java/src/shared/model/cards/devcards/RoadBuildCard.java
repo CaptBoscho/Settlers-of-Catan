@@ -2,10 +2,12 @@ package shared.model.cards.devcards;
 
 import shared.definitions.DevCardType;
 
+import java.io.Serializable;
+
 /**
  * @author Danny Harding
  */
-public class RoadBuildCard extends DevelopmentCard{
+public final class RoadBuildCard extends DevelopmentCard implements Serializable {
 
     public RoadBuildCard() {
         this.type = DevCardType.ROAD_BUILD;

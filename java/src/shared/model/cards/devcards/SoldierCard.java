@@ -2,10 +2,12 @@ package shared.model.cards.devcards;
 
 import shared.definitions.DevCardType;
 
+import java.io.Serializable;
+
 /**
  * @author Danny Harding
  */
-public class SoldierCard extends DevelopmentCard {
+public final class SoldierCard extends DevelopmentCard implements Serializable {
 
     public SoldierCard() {
         this.type = DevCardType.SOLDIER;

@@ -3,12 +3,14 @@ package shared.model.map;
 
 import shared.locations.HexLocation;
 
+import java.io.Serializable;
+
 /**
  * Robber class representing the Robber piece in a game.
  *
  * @author Joel Bradley
  */
-public final class Robber {
+public final class Robber implements Serializable {
     private HexLocation hexLoc;
 
     /**

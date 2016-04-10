@@ -3,10 +3,12 @@ package shared.model.game;
 import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * @author Corbin Byers
  */
-public final class MessageLine implements JsonSerializable {
+public final class MessageLine implements Serializable, JsonSerializable {
 
     private String source;
     private String content;

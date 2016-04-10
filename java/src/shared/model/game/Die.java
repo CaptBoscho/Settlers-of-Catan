@@ -1,11 +1,12 @@
 package shared.model.game;
 
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Representation of a game die
  */
-public final class Die {
+public final class Die implements Serializable {
     private int min;
     private int max;
 

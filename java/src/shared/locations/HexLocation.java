@@ -3,10 +3,12 @@ package shared.locations;
 import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * Represents the location of a hex on a hex map
  */
-public final class HexLocation implements JsonSerializable {
+public final class HexLocation implements Serializable, JsonSerializable {
 	
 	private int x;
 	private int y;

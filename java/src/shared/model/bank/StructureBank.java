@@ -1,12 +1,14 @@
 package shared.model.bank;
 
 
+import java.io.Serializable;
+
 /**
  * A bank owned by a Player which holds a count of the owners remaining structures
  *
  * @author Danny Harding
  */
-public final class StructureBank {
+public final class StructureBank implements Serializable {
     private final static int MAX_ROADS = 15;
     private final static int MAX_SETTLEMENTS = 5;
     private final static int MAX_CITIES = 4;

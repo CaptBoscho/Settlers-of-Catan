@@ -3,10 +3,12 @@ package shared.locations;
 import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * Represents the location of a vertex on a hex map
  */
-public final class VertexLocation implements JsonSerializable {
+public final class VertexLocation implements Serializable, JsonSerializable {
 	
 	private HexLocation hexLoc;
 	private VertexDirection dir;

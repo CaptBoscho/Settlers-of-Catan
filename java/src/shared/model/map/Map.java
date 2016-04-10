@@ -9,6 +9,7 @@ import shared.model.JsonSerializable;
 import shared.model.map.hex.*;
 import shared.model.structures.*;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author Joel Bradley
  */
-public final class Map implements IMap, JsonSerializable {
+public final class Map implements Serializable, IMap, JsonSerializable {
 
     private java.util.Map<HexLocation, Hex> hexes;
     private java.util.Map<EdgeLocation, Edge> edges;

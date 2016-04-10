@@ -20,9 +20,10 @@ import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.player.PlayerManager;
 import javax.naming.InsufficientResourcesException;
+import java.io.Serializable;
 import java.util.*;
 
-public interface IGame {
+public interface IGame extends Serializable {
     //region Game methods
     //================================================================================
     /**

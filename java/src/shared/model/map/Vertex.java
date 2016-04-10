@@ -3,6 +3,8 @@ package shared.model.map;
 import shared.locations.VertexLocation;
 import shared.model.structures.*;
 
+import java.io.Serializable;
+
 /**
  * Contains a normalized VertexLocation also contains a building object, if
  * there is no building on the vertex, set as null. Also has a port object, if
@@ -10,7 +12,7 @@ import shared.model.structures.*;
  *
  * @author Joel Bradley
  */
-public final class Vertex {
+public final class Vertex implements Serializable {
 
     private VertexLocation vertexLoc;
     private Settlement settlement;

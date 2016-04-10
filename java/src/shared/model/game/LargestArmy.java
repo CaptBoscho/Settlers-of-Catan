@@ -1,9 +1,11 @@
 package shared.model.game;
 
+import java.io.Serializable;
+
 /**
  * Representation of Largest Army
  */
-public final class LargestArmy {
+public final class LargestArmy implements Serializable {
     private int playerIndex;
     private static final int pointWorth = 2;
     private int mostSoldiers = 0;

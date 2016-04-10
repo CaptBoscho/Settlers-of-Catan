@@ -5,10 +5,12 @@ import shared.definitions.DevCardType;
 import shared.exceptions.BadCallerException;
 import shared.model.cards.devcards.DevelopmentCard;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public interface IDevelopmentCardBank {
+public interface IDevelopmentCardBank extends Serializable {
 
     DevelopmentCard draw() throws Exception;
 

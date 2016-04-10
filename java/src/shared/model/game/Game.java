@@ -31,12 +31,13 @@ import shared.model.player.Player;
 import shared.model.player.PlayerManager;
 
 import javax.naming.InsufficientResourcesException;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * game class representing a Catan game
  */
-public class Game extends Observable implements IGame, JsonSerializable {
+public final class Game extends Observable implements Serializable, IGame, JsonSerializable {
     //region Member variables
     private int gameId;
     private String title;

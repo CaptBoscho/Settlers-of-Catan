@@ -2,10 +2,12 @@ package shared.model.cards.devcards;
 
 import shared.definitions.DevCardType;
 
+import java.io.Serializable;
+
 /**
  * @author Danny Harding
  */
-public class MonumentCard extends DevelopmentCard {
+public final class MonumentCard extends DevelopmentCard implements Serializable {
 
     public MonumentCard() {
         this.type = DevCardType.MONUMENT;

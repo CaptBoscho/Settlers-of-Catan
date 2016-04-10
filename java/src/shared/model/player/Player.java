@@ -11,6 +11,7 @@ import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
 import shared.model.cards.resources.ResourceCard;
 import javax.naming.InsufficientResourcesException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +20,13 @@ import java.util.List;
  *
  * @author Kyle Cornelison
  */
-public class Player implements IPlayer, Comparable<Player> {
+public class Player implements Serializable, IPlayer, Comparable<Player> {
     //region Member variables
-    String name;
-    int playerId;
-    CatanColor color;
-    int playerIndex;
-    int victoryPoints;
+    private String name;
+    private int playerId;
+    private CatanColor color;
+    private int playerIndex;
+    private int victoryPoints;
     private int monuments;
     private int soldiers;
     private boolean discarded;

@@ -6,12 +6,13 @@ import shared.definitions.ResourceType;
 import shared.model.cards.resources.ResourceCard;
 
 import javax.naming.InsufficientResourcesException;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Danny Harding
  */
-public interface IResourceCardBank {
+public interface IResourceCardBank extends Serializable {
 
     void addResource(ResourceCard cardToAdd);
 

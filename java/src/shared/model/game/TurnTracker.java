@@ -3,10 +3,12 @@ package shared.model.game;
 import com.google.gson.JsonObject;
 import shared.exceptions.BadJsonException;
 
+import java.io.Serializable;
+
 /**
  * Representation of Player Turns
  */
-public final class TurnTracker {
+public final class TurnTracker implements Serializable {
     //region Member variables
     private int currentTurn;
     private Phase phase;

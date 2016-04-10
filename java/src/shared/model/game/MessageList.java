@@ -5,13 +5,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Corbin Byers
  */
-public final class MessageList implements JsonSerializable {
+public final class MessageList implements Serializable, JsonSerializable {
 
     private List<MessageLine> chat;
 

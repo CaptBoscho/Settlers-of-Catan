@@ -2,13 +2,15 @@ package shared.model.map;
 import shared.locations.EdgeLocation;
 import shared.model.structures.Road;
 
+import java.io.Serializable;
+
 /**
  * The edge class has a normalized EdgeLocation as well as a road object. If
  * there isn't a road on the edge then the road object is set to null.
  *
  * @author Joel Bradley
  */
-public final class Edge {
+public final class Edge implements Serializable {
 
     private EdgeLocation edgeLoc;
     private Road road;

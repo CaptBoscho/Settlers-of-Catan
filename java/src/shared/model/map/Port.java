@@ -3,6 +3,8 @@ package shared.model.map;
 import shared.definitions.PortType;
 import shared.locations.VertexLocation;
 
+import java.io.Serializable;
+
 /**
  * Representation of Port in the game. A port is a special structure that
  * players can interact with to trade certain resources for others depending on
@@ -10,7 +12,7 @@ import shared.locations.VertexLocation;
  *
  * @author Joel Bradley
  */
-public final class Port {
+public final class Port implements Serializable {
 
     private PortType portType;
     private VertexLocation vertexLoc;

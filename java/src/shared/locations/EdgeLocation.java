@@ -3,10 +3,12 @@ package shared.locations;
 import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * Represents the location of an edge on a hex map
  */
-public final class EdgeLocation implements JsonSerializable {
+public final class EdgeLocation implements Serializable, JsonSerializable {
 	
 	private HexLocation hexLoc;
 	private EdgeDirection dir;

@@ -7,6 +7,7 @@ import shared.model.JsonSerializable;
 import shared.model.cards.resources.*;
 
 import javax.naming.InsufficientResourcesException;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Danny Harding
  */
-public final class ResourceCardBank implements JsonSerializable, IResourceCardBank {
+public final class ResourceCardBank implements Serializable, JsonSerializable, IResourceCardBank {
     static final int MAX_NUMBER_BRICK = 19;
     static final int MAX_NUMBER_ORE = 19;
     static final int MAX_NUMBER_SHEEP = 19;

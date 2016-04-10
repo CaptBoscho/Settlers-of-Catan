@@ -7,10 +7,12 @@ import shared.model.game.Game;
 import shared.model.player.Player;
 import shared.model.player.PlayerType;
 
+import java.io.Serializable;
+
 /**
  * Created by Kyle 'TMD' Cornelison on 3/19/2016.
  */
-abstract public class AIPlayer extends Player {
+abstract public class AIPlayer extends Player implements Serializable {
 
     private AIType aiType;
 

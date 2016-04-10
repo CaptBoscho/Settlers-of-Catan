@@ -2,6 +2,7 @@ package shared.model.game.trade;
 
 import shared.definitions.ResourceType;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  *
  * @author Danny Harding
  */
-public final class TradePackage {
+public final class TradePackage implements Serializable {
     public int getPlayerIndex() {
         return playerID;
     }

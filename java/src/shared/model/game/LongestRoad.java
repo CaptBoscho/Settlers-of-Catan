@@ -1,9 +1,11 @@
 package shared.model.game;
 
+import java.io.Serializable;
+
 /**
  * Representation of Longest Road Card
  */
-public final class LongestRoad {
+public final class LongestRoad implements Serializable {
     private int playerID;
     private static final int pointWorth = 2;
     private int size = 0;

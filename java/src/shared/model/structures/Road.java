@@ -1,11 +1,13 @@
 package shared.model.structures;
 
+import java.io.Serializable;
+
 /**
  * A Road is built on an edge location
  *
  * @author Joel Bradley
  */
-public final class Road {
+public final class Road implements Serializable {
 
     private int playerIndex;
     private boolean visited;
