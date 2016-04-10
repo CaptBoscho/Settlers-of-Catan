@@ -1,4 +1,4 @@
-package server.persistence.provider;
+package server.persistence.database;
 
 import server.persistence.dto.CommandDTO;
 import server.persistence.dto.GameDTO;
@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * Created by boscho on 4/9/16.
  */
-public class DatabaseFacade {
+public class DatabaseFacade implements IDatabase {
     private HashMap<String, Method> methods;
     private HashMap<String, Object> instances;
 
-    public DatabaseFacade(){
+    public DatabaseFacade() {
         instances = new HashMap<>();
         methods = new HashMap<>();
     }
@@ -91,6 +91,21 @@ public class DatabaseFacade {
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void clear() {
+        //// TODO: 4/9/16 implement this
+    }
+
+    @Override
+    public void startTransaction() {
+        //// TODO: 4/9/16 don't know if we need this.
+    }
+
+    @Override
+    public void endTransaction(boolean commitTransaction) {
+        //// TODO: 4/9/16 don't know if we need this
     }
 
     public List<GameDTO> getAllGames() throws InvocationTargetException, IllegalAccessException {

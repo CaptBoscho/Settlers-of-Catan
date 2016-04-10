@@ -10,12 +10,9 @@ import server.exceptions.*;
 import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
+import server.persistence.database.IDatabase;
 import server.persistence.dto.CommandDTO;
 import server.persistence.dto.GameDTO;
-import server.persistence.exceptions.CommandTableException;
-import server.persistence.exceptions.UserTableException;
-import server.persistence.plugin.IDatabase;
-import server.persistence.provider.PersistenceProvider;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.*;
@@ -31,7 +28,7 @@ import shared.model.game.MessageLine;
 import shared.model.game.trade.Trade;
 
 import javax.naming.InsufficientResourcesException;
-import java.sql.SQLException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -826,12 +823,11 @@ public final class ServerFacade implements IFacade {
      */
     private void importData() {
         IDatabase database = Config.database;
-        //// TODO: 4/9/16 use this database below instead of PersistenceProvider
 
         try {
-            userManager.addUsers(PersistenceProvider.getInstance().getUserDAO().getUsers());
+            userManager.addUsers(database.getUsers());
 
-            List<GameDTO> gameDTOs = PersistenceProvider.getInstance().getGameDAO().getAllGames();
+            List<GameDTO> gameDTOs = database.getAllGames();
             ArrayList<Game> games = new ArrayList<>();
             for (GameDTO dto : gameDTOs) {
                 games.add(new Game(new JsonParser().parse(dto.getState()).getAsJsonObject()));
@@ -840,7 +836,7 @@ public final class ServerFacade implements IFacade {
             gameManager.addGames(games);
 
             for (GameDTO dto : gameDTOs) {
-                List<CommandDTO> commands = PersistenceProvider.getInstance().getCommandDAO().getCommands(dto.getGameID());
+                List<CommandDTO> commands = database.getCommands(dto.getGameID());
                 for (CommandDTO commandDTO : commands) {
                     try {
                         Gson gson = new Gson();
@@ -851,7 +847,7 @@ public final class ServerFacade implements IFacade {
                     }
                 }
             }
-        } catch (SQLException | UserTableException | CommandTableException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
