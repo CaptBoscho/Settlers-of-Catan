@@ -31,24 +31,6 @@ public class PersistenceProvider implements IPersistenceProvider {
         //database.clear();
     }
 
-    /**
-     * Starts a transaction on the database
-     */
-    @Override
-    public void startTransaction() {
-        //database.startTransaction();
-    }
-
-    /**
-     * Ends a transaction on the database
-     *
-     * @param commitTransaction
-     */
-    @Override
-    public void endTransaction(boolean commitTransaction) {
-        //database.endTransaction(commitTransaction);
-    }
-
 
     /**
      * Creates and returns a new UserDAO

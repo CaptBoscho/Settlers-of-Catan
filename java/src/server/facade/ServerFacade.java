@@ -821,7 +821,7 @@ public final class ServerFacade implements IFacade {
      * retrieves games and users from the database and populates the server.  This function should be run when
      * ServerFacade is constructed so that it can start out with up to date information
      */
-    private void importData() {
+    final public void importData() {
         IDatabase database = Config.database;
 
         try {

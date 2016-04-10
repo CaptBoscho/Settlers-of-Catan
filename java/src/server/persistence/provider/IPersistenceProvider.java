@@ -12,18 +12,6 @@ public interface IPersistenceProvider {
      */
     void clear();
 
-    /**
-     * Starts a transaction on the database
-     *
-     */
-    void startTransaction();
-
-    /**
-     * Ends a transaction on the database
-     *
-     * @param commitTransaction
-     */
-    void endTransaction(boolean commitTransaction);
     //endregion
 
     //region Factory Methods

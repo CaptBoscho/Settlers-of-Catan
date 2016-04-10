@@ -249,4 +249,6 @@ public interface IFacade {
     void resetGames();
 
     Game getGameByID(int gameID);
+
+    void importData();
 }

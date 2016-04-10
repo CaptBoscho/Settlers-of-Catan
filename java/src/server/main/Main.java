@@ -16,7 +16,6 @@ import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
-import server.persistence.database.DatabaseFacade;
 import server.persistence.registry.Registry;
 
 import java.lang.reflect.InvocationTargetException;
@@ -50,6 +49,8 @@ public class Main {
         }
 
         port(Config.port);
+
+        Config.facade.importData();
 
         // the following endpoint patterns require authentication cookies
 //        before("/games/*", new AuthenticationFilter()); TODO this is literally the worst application design that we are being forced to adhere to. And Swagger sucks kthnxbai.

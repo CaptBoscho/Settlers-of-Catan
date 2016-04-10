@@ -706,6 +706,11 @@ public final class MockFacade implements IFacade {
         }
     }
 
+    @Override
+    public void importData() {
+
+    }
+
     public enum GameType {
         DEFAULT_GAME,
         EMPTY_GAME

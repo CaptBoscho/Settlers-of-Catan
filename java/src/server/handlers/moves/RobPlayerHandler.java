@@ -46,9 +46,7 @@ public class RobPlayerHandler implements Route {
             response.status(200);
 
             //Save the command to the db
-            persistence.startTransaction();
             persistence.getCommandDAO();//.storeCommand(dto);
-            persistence.endTransaction(true);
         }
 
         return result.getBody();
