@@ -12,6 +12,12 @@ public class CommandDTO {
 
     public CommandDTO(){}
 
+    public CommandDTO(int gameID, int version, String command) {
+        this.gameID = gameID;
+        this.version = version;
+        this.command = command;
+    }
+
     public String getCommand() {
         return command;
     }

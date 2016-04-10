@@ -856,4 +856,9 @@ public final class ServerFacade implements IFacade {
     public void resetGames() {
         GameManager.reset();
     }
+
+    @Override
+    public Game getGameByID(int gameID) {
+        return gameManager.getGameByID(gameID);
+    }
 }

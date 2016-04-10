@@ -10,6 +10,12 @@ public class GameDTO {
     private String state;
     private String title;
 
+    public GameDTO(int gameID, String title, String state) {
+        this.gameID = gameID;
+        this.title = title;
+        this.state = state;
+    }
+
     public String getTitle() {
         return title;
     }

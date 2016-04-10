@@ -11,6 +11,7 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.game.Game;
 
 /**
  * @author Kyle Cornelison
@@ -246,4 +247,6 @@ public interface IFacade {
     CommandExecutionResult getModel(int gameID, int version) throws GetModelException;
 
     void resetGames();
+
+    Game getGameByID(int gameID);
 }
