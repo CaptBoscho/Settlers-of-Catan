@@ -1,7 +1,12 @@
 package server.persistence;
 
+import server.main.Config;
+import server.persistence.dto.CommandDTO;
 import server.persistence.dto.GameDTO;
 import server.persistence.dto.UserDTO;
+import shared.model.game.Game;
+
+import java.util.HashMap;
 
 /**
  * A wrapper around the plugin database to add any additional tracking and
@@ -12,12 +17,12 @@ import server.persistence.dto.UserDTO;
  */
 public class PersistenceCoordinator {
 
-    private int commandCommitCount;
+    private java.util.Map<Integer, Integer> commandCommitCount;
     private static PersistenceCoordinator instance;
     private IDatabase database;
 
     private PersistenceCoordinator() {
-        this.commandCommitCount = 0;
+        this.commandCommitCount = new HashMap<>();
         this.database = null;
     }
 
@@ -40,7 +45,22 @@ public class PersistenceCoordinator {
         getInstance().database.addUser(dto);
     }
 
+    public static void addCommand(CommandDTO dto) {
+        getInstance().database.addCommand(dto);
+        int commitCount = getInstance().commandCommitCount.get(dto.getGameID());
+        commitCount++;
+        getInstance().commandCommitCount.put(dto.getGameID(), commitCount);
+        if (commitCount % Config.commandCount == 0) {
+            getInstance().commandCommitCount.put(dto.getGameID(), 0);
+            Game game = Config.facade.getGameByID(dto.getGameID());
+            GameDTO gameDTO = new GameDTO(dto.getGameID(), game.getTitle(), game.toJSON().toString());
+            getInstance().database.updateGame(gameDTO);
+            getInstance().database.deleteCommandsFromGame(dto.getGameID());
+        }
+    }
+
     public static void addGame(GameDTO dto) {
+        getInstance().commandCommitCount.put(dto.getGameID(), 0);
         getInstance().database.addGame(dto);
     }
 }

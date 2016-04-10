@@ -24,4 +24,10 @@ public interface IDatabase {
     List<GameDTO> getAllGames();
 
     List<CommandDTO> getCommands(int gameId);
+
+    void addCommand(CommandDTO dto);
+
+    void updateGame(GameDTO dto);
+
+    void deleteCommandsFromGame(int gameId);
 }
