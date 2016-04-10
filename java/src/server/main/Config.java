@@ -14,4 +14,5 @@ public final class Config {
     public static String host = "localhost";
     public static int port = 8081;
     public static IDatabase database = null; //new Database();
+    public static int mod = 0;
 }

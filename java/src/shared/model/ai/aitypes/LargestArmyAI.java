@@ -508,7 +508,7 @@ public class LargestArmyAI extends AIPlayer {
             playDevCard();
             getDevCard();
             ArrayList<Integer> choices = new ArrayList<>();
-            for(int i=0; i<5; i++) {
+            for(int i=0; i<4; i++) {
                 choices.add(i);
             }
             while(choices.size() > 0) {
