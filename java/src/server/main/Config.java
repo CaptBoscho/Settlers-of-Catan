@@ -2,7 +2,6 @@ package server.main;
 
 import server.facade.IFacade;
 import server.facade.ServerFacade;
-import server.persistence.Database;
 import server.persistence.IDatabase;
 
 /**
@@ -14,5 +13,5 @@ public final class Config {
     public static IFacade facade = ServerFacade.getInstance();
     public static String host = "localhost";
     public static int port = 8081;
-    public static IDatabase database = new Database();
+    public static IDatabase database = null; //new Database();
 }

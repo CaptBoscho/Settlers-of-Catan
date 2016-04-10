@@ -35,7 +35,7 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 
         try {
-            Plugin dbPlugin = Registry.getInstance().getPlugin("postgres");
+            Plugin dbPlugin = Registry.getInstance().getPlugin("redis");
             Config.database = new PluginLoader().importDatabaseJar(dbPlugin);
 
 //            System.out.println(Config.database.getUsers().toString());
