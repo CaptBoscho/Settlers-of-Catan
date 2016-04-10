@@ -8,13 +8,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import server.exceptions.PluginExistsException;
+import server.exceptions.PluginNotFoundException;
 import server.main.Config;
-import server.persistence.database.IDatabase;
+import server.persistence.Plugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.apache.http.protocol.HTTP.USER_AGENT;
 
@@ -49,9 +51,9 @@ public class Registry {
      *
      * @param plugin
      * @return
-     * @throws PluginExistsException
+     * @throws PluginNotFoundException
      */
-    public void getPlugin(final String plugin) throws PluginExistsException {
+    public Plugin getPlugin(final String plugin) throws PluginNotFoundException {
         String url = REGISTRY_URL + "/jars";
 
         HttpClient client = HttpClientBuilder.create().build();
@@ -88,16 +90,19 @@ public class Registry {
         JsonArray stuff = new JsonParser().parse(result.toString()).getAsJsonArray();
         for(final JsonElement obj : stuff) {
             final JsonObject tmp = obj.getAsJsonObject();
-            if(tmp.get("originalname").getAsString().contains(plugin)) {
+            final String fileName = tmp.get("originalname").getAsString();
+            if(fileName.contains(plugin)) {
                 // -- found it
-                final String pathToJar = REGISTRY_URL + tmp.get("filename");
-                System.out.println("Fetching plugin JAR from " + pathToJar.replace("\"", ""));
-                Config.database.loadJar(pathToJar.replace("\"", ""));
-                return;
+                final String pathToJar = (REGISTRY_URL + tmp.get("filename")).replace("\"", "");
+                System.out.println("Fetching plugin JAR from " + pathToJar);
+                try {
+                    return new Plugin(fileName, new URL(pathToJar));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
-        System.out.println("Couldn't find JAR");
-        System.exit(-1);
+        throw new PluginNotFoundException();
     }
 }

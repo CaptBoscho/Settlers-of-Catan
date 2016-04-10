@@ -1,6 +1,6 @@
 package server.main;
 
-import server.exceptions.PluginExistsException;
+import server.exceptions.PluginNotFoundException;
 import server.facade.ServerFacade;
 import server.filters.AuthenticationFilter;
 import server.filters.GameFilter;
@@ -16,7 +16,9 @@ import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
+import server.persistence.Plugin;
 import server.persistence.registry.Registry;
+import server.utils.PluginLoader;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -33,9 +35,11 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 
         try {
-            Registry.getInstance().getPlugin("postgres");
-            System.out.println(Config.database.getUsers().toString());
-        } catch (PluginExistsException e) {
+            Plugin dbPlugin = Registry.getInstance().getPlugin("postgres");
+            Config.database = new PluginLoader().importDatabaseJar(dbPlugin);
+
+//            System.out.println(Config.database.getUsers().toString());
+        } catch (PluginNotFoundException e) {
             e.printStackTrace();
         }
 

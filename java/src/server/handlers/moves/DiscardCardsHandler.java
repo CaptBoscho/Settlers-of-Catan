@@ -4,8 +4,6 @@ import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
 import static server.utils.Strings.BAD_JSON_MESSAGE;
 
-import server.persistence.provider.IPersistenceProvider;
-import server.persistence.provider.PersistenceProvider;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.DiscardCardsDTO;
 import spark.Request;
@@ -17,7 +15,7 @@ import spark.Route;
  * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class DiscardCardsHandler implements Route {
-    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
+//    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
@@ -36,7 +34,7 @@ public class DiscardCardsHandler implements Route {
             response.status(200);
 
             //Save the command to the db
-            persistence.getCommandDAO();//.storeCommand(dto);
+//            persistence.getCommandDAO();//.storeCommand(dto);
         }
 
         return result.getBody();

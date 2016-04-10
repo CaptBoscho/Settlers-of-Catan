@@ -5,8 +5,6 @@ import server.controllers.GamesController;
 
 import static server.utils.Strings.BAD_JSON_MESSAGE;
 
-import server.persistence.provider.IPersistenceProvider;
-import server.persistence.provider.PersistenceProvider;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.JoinGameDTO;
 import spark.Request;
@@ -23,7 +21,7 @@ import java.util.Map;
  * {@link} http://sparkjava.com/documentation.html#routes
  */
 public final class JoinHandler implements Route {
-    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
+//    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(final Request request, final Response response) throws Exception {
@@ -42,7 +40,7 @@ public final class JoinHandler implements Route {
             response.status(200);
 
             //Save the command to the db
-            persistence.getCommandDAO();//.storeCommand(dto);
+//            persistence.getCommandDAO();//.storeCommand(dto);
         }
 
         // set any new cookies
