@@ -40,8 +40,7 @@ public class GameTest {
      * Tests initializing settlement when it's not your turn
      * Initializes the game for the other tests
      * Tests that SetUpTwo initiateSettlement gives resources
-     * @throws InvalidNameException
-     * @throws InvalidPlayerException
+     * @throws Exception
      */
     @Before
     public void testInitializeGame() throws Exception {

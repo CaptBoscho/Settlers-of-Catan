@@ -7,7 +7,6 @@ import org.junit.Test;
 import shared.definitions.CatanColor;
 import shared.definitions.PortType;
 import shared.exceptions.BadCallerException;
-import shared.exceptions.InvalidNameException;
 import shared.exceptions.InvalidPlayerException;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
@@ -468,7 +467,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testEquals() throws InvalidNameException, InvalidPlayerException {
+    public void testEquals() throws InvalidPlayerException {
         final Player playerOne = new Player(0, CatanColor.BROWN, 1, 0, "Derek");
         final Player playerTwo = new Player(0, CatanColor.BROWN, 1, 0, "Derek");
         final Player playerThree = new Player(0, CatanColor.BROWN, 1, 0, "Rick");

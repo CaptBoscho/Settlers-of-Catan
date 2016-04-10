@@ -678,7 +678,6 @@ public class Game extends Observable implements IGame, JsonSerializable {
                 playerManager.addAI(ai);
             } catch (CreateAIException e) {
                 e.printStackTrace();
-                throw new AddAIException(e.getMessage());
             }
         } else {
             throw new AddAIException("Game already has 4 players!");
