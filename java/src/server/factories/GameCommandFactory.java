@@ -18,7 +18,9 @@ import static server.utils.Strings.BAD_COMMAND_NAME_MSG;
 
 /**
  * A factory class that creates Game Commands on demand. Use this class to get a Game Command.
+ *
  * @author Derek Argueta
+ * {@link} https://en.wikipedia.org/wiki/Command_pattern#Java_8
  */
 public final class GameCommandFactory {
 

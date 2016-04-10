@@ -2,7 +2,9 @@ package server.persistence;
 
 import server.main.Config;
 import server.persistence.dto.CommandDTO;
+import server.persistence.dto.GameDTO;
 import server.persistence.dto.UserDTO;
+import shared.model.game.Game;
 
 import java.util.HashMap;
 
@@ -45,11 +47,20 @@ public class PersistenceCoordinator {
 
     public static void addCommand(CommandDTO dto) {
         getInstance().database.addCommand(dto);
-        getInstance().commandCommitCount++;
-        if(getInstance().commandCommitCount % Config.commandCount == 0) {
-            getInstance().commandCommitCount = 0;
-            getInstance().database.updateGame(dto);
-            getInstance().database.deleteCommandsFromGame(0);
+        int commitCount = getInstance().commandCommitCount.get(dto.getGameID());
+        commitCount++;
+        getInstance().commandCommitCount.put(dto.getGameID(), commitCount);
+        if (commitCount % Config.commandCount == 0) {
+            getInstance().commandCommitCount.put(dto.getGameID(), 0);
+            Game game = Config.facade.getGameByID(dto.getGameID());
+            GameDTO gameDTO = new GameDTO(dto.getGameID(), game.getTitle(), game.toJSON().toString());
+            getInstance().database.updateGame(gameDTO);
+            getInstance().database.deleteCommandsFromGame(dto.getGameID());
         }
+    }
+
+    public static void addGame(GameDTO dto) {
+        getInstance().commandCommitCount.put(dto.getGameID(), 0);
+        getInstance().database.addGame(dto);
     }
 }

@@ -15,6 +15,8 @@ import java.util.Map;
 
 /**
  * A factory class that creates Moves Commands on demand.  Use this class to get a Moves Command
+ *
+ * {@link} https://en.wikipedia.org/wiki/Command_pattern#Java_8
  */
 public final class MovesCommandFactory {
 
