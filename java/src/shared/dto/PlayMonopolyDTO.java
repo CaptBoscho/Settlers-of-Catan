@@ -7,10 +7,12 @@ import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
 import shared.model.bank.InvalidTypeException;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class PlayMonopolyDTO implements IDTO, JsonSerializable {
+public final class PlayMonopolyDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kType = "type";

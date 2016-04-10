@@ -4,10 +4,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class SaveGameDTO implements IDTO, JsonSerializable {
+public final class SaveGameDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kId = "id";

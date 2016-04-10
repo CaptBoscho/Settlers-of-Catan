@@ -5,12 +5,14 @@ import com.google.gson.JsonParser;
 import server.utils.JSONUtils;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * Transport object for the create game HTTP request
  *
  * @author Derek Argueta
  */
-public final class CreateGameDTO implements IDTO, JsonSerializable {
+public final class CreateGameDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kRandomTiles = "randomTiles";

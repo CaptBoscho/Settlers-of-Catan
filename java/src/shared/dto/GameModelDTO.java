@@ -4,10 +4,12 @@ import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
 import shared.model.game.Game;
 
+import java.io.Serializable;
+
 /**
  * @author Kyle Cornelison
  */
-public class GameModelDTO implements IDTO,JsonSerializable {
+public class GameModelDTO implements Serializable, IDTO, JsonSerializable {
 
     private Game game;
     private int version;

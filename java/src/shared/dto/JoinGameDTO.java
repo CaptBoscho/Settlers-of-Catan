@@ -6,12 +6,14 @@ import server.utils.JSONUtils;
 import shared.definitions.CatanColor;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * Transport object for joining a game
  *
  * @author Derek Argueta
  */
-public final class JoinGameDTO implements IDTO, JsonSerializable {
+public final class JoinGameDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kId = "id";

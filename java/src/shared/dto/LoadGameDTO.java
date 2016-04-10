@@ -3,10 +3,12 @@ package shared.dto;
 import com.google.gson.JsonObject;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class LoadGameDTO implements IDTO, JsonSerializable {
+public final class LoadGameDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kName = "name";

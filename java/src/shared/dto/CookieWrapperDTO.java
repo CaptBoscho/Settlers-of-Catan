@@ -3,6 +3,7 @@ package shared.dto;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  *
  * @author Derek Argueta
  */
-public class CookieWrapperDTO implements IDTO {
+public class CookieWrapperDTO implements Serializable, IDTO {
 
     private IDTO dto;
     private String username;

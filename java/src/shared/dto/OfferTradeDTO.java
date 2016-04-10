@@ -5,10 +5,12 @@ import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 import shared.model.game.trade.Trade;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class OfferTradeDTO implements IDTO, JsonSerializable {
+public final class OfferTradeDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kType = "type";

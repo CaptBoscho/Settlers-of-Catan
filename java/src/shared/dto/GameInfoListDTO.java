@@ -9,13 +9,14 @@ import com.google.gson.JsonParser;
 import shared.definitions.CatanColor;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Derek Argueta
  */
-public final class GameInfoListDTO implements IDTO,JsonSerializable {
+public final class GameInfoListDTO implements Serializable, IDTO, JsonSerializable {
 
     List<GameInfo> games;
 

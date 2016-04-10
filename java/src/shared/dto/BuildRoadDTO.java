@@ -5,10 +5,12 @@ import com.google.gson.JsonParser;
 import shared.locations.EdgeLocation;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class BuildRoadDTO implements IDTO, JsonSerializable {
+public final class BuildRoadDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kType = "type";

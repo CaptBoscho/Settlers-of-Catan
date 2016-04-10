@@ -6,10 +6,12 @@ import server.utils.JSONUtils;
 import shared.model.JsonSerializable;
 import shared.model.ai.AIType;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class AddAIDTO implements IDTO,JsonSerializable {
+public final class AddAIDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kType = "type";

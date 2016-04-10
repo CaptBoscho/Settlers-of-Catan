@@ -5,12 +5,13 @@ import client.data.PlayerInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Derek Argueta
  */
-public class ListGamesDTO implements IDTO {
+public class ListGamesDTO implements Serializable, IDTO {
 
     private List<GameInfo> games;
 

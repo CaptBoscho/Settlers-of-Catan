@@ -6,10 +6,12 @@ import server.utils.JSONUtils;
 import shared.definitions.ResourceType;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class PlayYOPCardDTO implements IDTO,JsonSerializable {
+public final class PlayYOPCardDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kType = "type";

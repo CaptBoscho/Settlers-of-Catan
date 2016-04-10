@@ -3,10 +3,12 @@ package shared.dto;
 import client.data.GameInfo;
 import com.google.gson.JsonObject;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public class GameInfoDTO implements IDTO {
+public class GameInfoDTO implements Serializable, IDTO {
 
     private GameInfo game;
 

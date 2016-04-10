@@ -1,15 +1,16 @@
 package shared.dto;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.locations.HexLocation;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class PlaySoldierCardDTO implements IDTO,JsonSerializable {
+public final class PlaySoldierCardDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kType = "type";

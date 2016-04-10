@@ -5,13 +5,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import shared.model.JsonSerializable;
 import shared.model.ai.AIType;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Derek Argueta
  */
-public final class ListAIDTO implements IDTO,JsonSerializable {
+public final class ListAIDTO implements Serializable, IDTO, JsonSerializable {
     // -- JSON keys
     private static final String kId = "id";
     private static final String kAIs = "ais";

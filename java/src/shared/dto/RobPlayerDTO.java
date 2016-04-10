@@ -5,10 +5,12 @@ import com.google.gson.JsonParser;
 import shared.locations.HexLocation;
 import shared.model.JsonSerializable;
 
+import java.io.Serializable;
+
 /**
  * @author Derek Argueta
  */
-public final class RobPlayerDTO implements IDTO,JsonSerializable {
+public final class RobPlayerDTO implements Serializable, IDTO, JsonSerializable {
 
     // -- JSON keys
     private static final String kType = "type";
