@@ -1,5 +1,6 @@
 package server.persistence;
 
+import server.commands.ICommand;
 import server.main.Config;
 import server.managers.UserManager;
 import server.persistence.dto.CommandDTO;
@@ -7,6 +8,10 @@ import server.persistence.dto.GameDTO;
 import server.persistence.dto.UserDTO;
 import shared.model.game.Game;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 /**
@@ -67,5 +72,32 @@ public class PersistenceCoordinator {
     public static void addGame(GameDTO dto) {
         getInstance().commandCommitCount.put(dto.getGameID(), 0);
         getInstance().database.addGame(dto);
+    }
+
+    public static String serializeCommand(ICommand command) {
+        String serializedObject = "";
+        try{
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream so = new ObjectOutputStream(bo);
+            so.writeObject(command);
+            so.flush();
+            serializedObject = bo.toString();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return serializedObject;
+    }
+
+    public static ICommand deserializeCommand(String serializedObject) {
+        ICommand command = null;
+        try{
+            byte b[] = serializedObject.getBytes();
+            ByteArrayInputStream bi = new ByteArrayInputStream(b);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            command = (ICommand) si.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return command;
     }
 }

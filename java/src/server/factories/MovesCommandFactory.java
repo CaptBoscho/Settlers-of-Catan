@@ -5,6 +5,7 @@ import server.commands.CommandName;
 import server.commands.ICommand;
 import server.commands.moves.*;
 import server.exceptions.CommandExecutionFailedException;
+import server.persistence.PersistenceCoordinator;
 import server.persistence.dto.CommandDTO;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.IDTO;
@@ -63,7 +64,8 @@ public final class MovesCommandFactory {
             try {
                 ICommand command = commands.get(name);
                 command.setParams(dto);
-                CommandDTO commandDTO = new CommandDTO(((CookieWrapperDTO)dto).getGameId(), );
+                CommandDTO commandDTO = new CommandDTO(((CookieWrapperDTO)dto).getGameId(), PersistenceCoordinator.serializeCommand(command));
+                PersistenceCoordinator.addCommand(commandDTO);
                 // TODO - break out into "execute" and "fetchResult"
                 return command.execute();
             } catch (CommandExecutionFailedException e) {
