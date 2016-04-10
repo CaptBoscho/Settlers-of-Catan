@@ -89,8 +89,12 @@ final class Utils {
                     throw new InternalServerErrorException();
             }
             if(response.containsHeader("Set-cookie")) {
-                final Header cookieHeader = response.getFirstHeader("Set-cookie");
-                UserCookie.getInstance().setCookies(cookieHeader.getValue());
+                Header[] headers = response.getHeaders("Set-cookie");
+                for(Header header : headers) {
+                    if(header.getValue().startsWith("catan.user") || header.getValue().startsWith("catan.game")) {
+                        UserCookie.getInstance().setCookies(header.getValue());
+                    }
+                }
             }
             return Utils.getStringFromHttpResponse(response);
         } catch (IOException e) {
