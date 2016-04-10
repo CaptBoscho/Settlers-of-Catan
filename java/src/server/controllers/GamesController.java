@@ -22,7 +22,7 @@ public final class GamesController {
         final CommandExecutionResult result =  executeCommand(GAMES_CREATE, dto);
         final int gameId = Integer.parseInt(result.getNewCookies().get("catan.game"));
         final Game game = GameManager.getInstance().getGameByID(gameId);
-        final GameDTO gameDTO = new GameDTO(gameId, game.getTitle(), "");
+        final GameDTO gameDTO = new GameDTO(gameId, game.getTitle(), game.toJSON().toString());
         PersistenceCoordinator.addGame(gameDTO);
         return result;
     }
