@@ -17,7 +17,6 @@ import java.util.Map;
  * {@link} http://sparkjava.com/documentation.html#routes
  */
 public final class CreateHandler implements Route {
-//    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(final Request request, final Response response) throws Exception {
@@ -32,9 +31,6 @@ public final class CreateHandler implements Route {
             response.status(result.getStatus());
         } else {
             response.status(200);
-
-            //Save the command to the db
-//            persistence.getCommandDAO();//.storeCommand(dto);
         }
 
         // set any new cookies

@@ -9,6 +9,7 @@ import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
 import server.persistence.IDatabase;
+import server.persistence.PersistenceCoordinator;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.*;
@@ -817,7 +818,7 @@ public final class ServerFacade implements IFacade {
      */
     public void importData() {
         // TODO - fix
-        final IDatabase database = Config.database; //Config.database;
+        final IDatabase database = PersistenceCoordinator.getDatabase();
 
 //        try {
 //            userManager.addUsers(database.getUsers());

@@ -17,7 +17,6 @@ import spark.Route;
  * {@link} http://sparkjava.com/documentation.html#routes
  */
 public class YearOfPlentyHandler implements Route {
-//    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
@@ -34,9 +33,6 @@ public class YearOfPlentyHandler implements Route {
             response.status(result.getStatus());
         } else {
             response.status(200);
-
-            //Save the command to the db
-//            persistence.getCommandDAO();//.storeCommand(dto);
         }
 
         return result.getBody();
