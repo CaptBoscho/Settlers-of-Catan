@@ -691,6 +691,11 @@ public final class MockFacade implements IFacade {
         }
     }
 
+    @Override
+    public Game getGameByID(int gameID) {
+        return null;
+    }
+
     public Game getGame(GameType game) {
         if (game == GameType.DEFAULT_GAME) {
             return defaultGame;
