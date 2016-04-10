@@ -11,6 +11,7 @@ import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.ai.AIType;
+import shared.model.game.Game;
 
 /**
  * @author Kyle Cornelison
@@ -59,7 +60,6 @@ public interface IFacade {
     /**
      * List the current games
      * @return info on the current games
-     * @throws ListException
      * @return CommandExecutinResult
      */
     CommandExecutionResult list();
@@ -235,7 +235,6 @@ public interface IFacade {
      * @param gameID
      * @param dto
      * @throws DiscardCardsException
-     * @return CommandExecutionResult
      */
     CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
 
@@ -243,10 +242,13 @@ public interface IFacade {
      * Gets the Model
      * @param gameID
      * @param version
-     * @return CommandExecutionResult
      * @throws GetModelException
      */
     CommandExecutionResult getModel(int gameID, int version) throws GetModelException;
 
     void resetGames();
+
+    Game getGameByID(int gameID);
+
+    void importData();
 }

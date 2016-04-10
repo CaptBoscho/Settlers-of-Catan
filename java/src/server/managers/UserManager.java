@@ -1,5 +1,8 @@
 package server.managers;
 
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+import server.persistence.dto.UserDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Pack200;
@@ -83,6 +86,12 @@ public class UserManager {
 
     public static void reset() {
         instance = new UserManager();
+    }
+
+    public void addUsers(List<UserDTO> users) {
+        for (UserDTO userDTO : users) {
+            addUser(userDTO.getUserName(), userDTO.getPassword());
+        }
     }
 }
 

@@ -4,8 +4,6 @@ import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
 import static server.utils.Strings.BAD_JSON_MESSAGE;
 
-import server.persistence.provider.IPersistenceProvider;
-import server.persistence.provider.PersistenceProvider;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.RollNumberDTO;
 import spark.Request;
@@ -16,7 +14,7 @@ import spark.Route;
  * @author Derek Argueta
  */
 public final class RollNumberHandler implements Route {
-    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
+//    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(final Request request, final Response response) throws Exception {
@@ -35,9 +33,7 @@ public final class RollNumberHandler implements Route {
             response.status(200);
 
             //Save the command to the db
-            persistence.startTransaction();
-            persistence.getCommandDAO();//.storeCommand(dto);
-            persistence.endTransaction(true);
+//            persistence.getCommandDAO();//.storeCommand(dto);
         }
 
         return result.getBody();

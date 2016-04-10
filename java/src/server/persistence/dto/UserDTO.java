@@ -9,6 +9,12 @@ public class UserDTO {
     private String password;
     private int id;
 
+    public UserDTO (int ID, String userName, String password) {
+        this.id = ID;
+        this.userName = userName;
+        this.password = password;
+    }
+
     public int getId() {
         return id;
     }
@@ -16,9 +22,6 @@ public class UserDTO {
     public void setId(int id) {
         this.id = id;
     }
-
-
-    public UserDTO(){}
 
     public String getPassword() {
         return password;
@@ -30,9 +33,5 @@ public class UserDTO {
 
     public String getUserName() {
         return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 }

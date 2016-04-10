@@ -1,14 +1,18 @@
 package server.persistence.dto;
 
-import java.sql.Blob;
-
 /**
  * Created by boscho on 4/8/16.
  */
 public class GameDTO {
     private int gameID;
-    private Blob state;
+    private String state;
     private String title;
+
+    public GameDTO(int gameID, String title, String state) {
+        this.gameID = gameID;
+        this.title = title;
+        this.state = state;
+    }
 
     public String getTitle() {
         return title;
@@ -18,26 +22,15 @@ public class GameDTO {
         this.title = title;
     }
 
-
-    public GameDTO() {
-    }
-
     public int getGameID() {
         return gameID;
     }
 
-    public void setGameID(int gameID) {
-        this.gameID = gameID;
-    }
-
-    public Blob getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(Blob state) {
+    public void setState(String state) {
         this.state = state;
     }
-
-
-
 }

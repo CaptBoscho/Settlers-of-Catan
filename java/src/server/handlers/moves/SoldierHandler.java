@@ -2,8 +2,6 @@ package server.handlers.moves;
 
 import server.commands.CommandExecutionResult;
 import server.controllers.MovesController;
-import server.persistence.provider.IPersistenceProvider;
-import server.persistence.provider.PersistenceProvider;
 import shared.dto.CookieWrapperDTO;
 import shared.dto.PlaySoldierCardDTO;
 import spark.Request;
@@ -14,7 +12,7 @@ import spark.Route;
  * @author Derek Argueta
  */
 public final class SoldierHandler implements Route {
-    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
+//    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(final Request request, final Response response) throws Exception {
@@ -30,9 +28,7 @@ public final class SoldierHandler implements Route {
             response.status(200);
 
             //Save the command to the db
-            persistence.startTransaction();
-            persistence.getCommandDAO();//.storeCommand(dto);
-            persistence.endTransaction(true);
+//            persistence.getCommandDAO();//.storeCommand(dto);
         }
 
         return result.getBody();

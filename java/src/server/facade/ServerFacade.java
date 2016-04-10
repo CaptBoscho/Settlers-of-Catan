@@ -2,10 +2,13 @@ package server.facade;
 
 import client.data.GameInfo;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.exceptions.*;
+import server.main.Config;
 import server.managers.GameManager;
 import server.managers.UserManager;
+import server.persistence.IDatabase;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.dto.*;
@@ -808,8 +811,51 @@ public final class ServerFacade implements IFacade {
         return new CommandExecutionResult(jsonString);
     }
 
+    /**
+     * retrieves games and users from the database and populates the server.  This function should be run when
+     * ServerFacade is constructed so that it can start out with up to date information
+     */
+    public void importData() {
+        // TODO - fix
+        final IDatabase database = Config.database; //Config.database;
+
+//        try {
+//            userManager.addUsers(database.getUsers());
+
+//            final List<GameDTO> gameDTOs = database.getAllGames();
+            final ArrayList<Game> games = new ArrayList<>();
+//            for (GameDTO dto : gameDTOs) {
+                final JsonParser parser = new JsonParser();
+//                final String gameState = dto.getState();
+//                games.add(new Game(parser.parse(gameState).getAsJsonObject()));
+//            }
+//
+//            gameManager.addGames(games);
+//
+//            for (final GameDTO dto : gameDTOs) {
+//                final List<CommandDTO> commands = database.getCommands(dto.getGameID());
+//                for (final CommandDTO commandDTO : commands) {
+//                    try {
+//                        final Gson gson = new Gson();
+//                        final ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
+//                        command.execute();
+//                    } catch (CommandExecutionFailedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        } catch (IllegalAccessException | InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
+    }
+
     @Override
     public void resetGames() {
         GameManager.reset();
+    }
+
+    @Override
+    public Game getGameByID(int gameID) {
+        return gameManager.getGameByID(gameID);
     }
 }

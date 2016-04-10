@@ -1,7 +1,6 @@
 package server.persistence.daos;
 
 import server.persistence.dto.GameDTO;
-import server.persistence.exceptions.GameTableException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +15,7 @@ public interface IGameDAO {
      * adding a game
      * @param dto
      */
-    void addGameObject(GameDTO dto) throws GameTableException, SQLException;
+    void addGameObject(GameDTO dto) throws SQLException;
 
     /**
      * Handles verifying user which returns userID
@@ -24,7 +23,7 @@ public interface IGameDAO {
      * getting a list of Commands
      * @return
      */
-    GameDTO getGameModel(int gameID) throws SQLException, GameTableException;
+    GameDTO getGameModel(int gameID) throws SQLException;
 
     List<GameDTO> getAllGames() throws SQLException;
 
@@ -32,15 +31,15 @@ public interface IGameDAO {
      * mostly be used for updating the game blob state
      * @param dto
      */
-    void updateGame(GameDTO dto) throws GameTableException, SQLException;
+    void updateGame(GameDTO dto) throws SQLException;
 
     /**
      * Deletes all games
      */
-    void deleteAllGames() throws SQLException, GameTableException;
+    void deleteAllGames() throws SQLException;
 
     /**
      * Deletes a game
      */
-    void deleteGame(int gameID) throws GameTableException, SQLException;
+    void deleteGame(int gameID) throws SQLException;
 }

@@ -8,28 +8,30 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import server.exceptions.PluginExistsException;
-import server.persistence.plugin.IDatabase;
-import server.persistence.provider.DatabaseFacade;
+import server.exceptions.PluginNotFoundException;
+import server.main.Config;
+import server.persistence.Plugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.apache.http.protocol.HTTP.USER_AGENT;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
  */
-public class Registry implements IRegistry {
+public class Registry {
 
     private static final String REGISTRY_URL = "http://soc-registry-service.herokuapp.com/";
-    private static IRegistry _instance;
+    private static Registry _instance;
 
     /**
      * Default Constructor
      */
-    private Registry(){
+    private Registry() {
 
     }
 
@@ -37,7 +39,7 @@ public class Registry implements IRegistry {
      * Gets the instance of the Register
      * @return
      */
-    public static IRegistry getInstance(){
+    public static Registry getInstance(){
         if(_instance == null)
             _instance = new Registry();
 
@@ -45,27 +47,13 @@ public class Registry implements IRegistry {
     }
 
     /**
-     * Checks if the specified plugin exists
-     *
-     * @param plugin
-     * @return
-     */
-    @Override
-    public boolean pluginExists(final String plugin) {
-        // -- TODO make an HTTP GET request to /jars
-        // -- look through resulting JSON for plugin
-        return false;
-    }
-
-    /**
      * Gets a database plugin
      *
      * @param plugin
      * @return
-     * @throws PluginExistsException
+     * @throws PluginNotFoundException
      */
-    @Override
-    public IDatabase getPlugin(final String plugin) throws PluginExistsException {
+    public Plugin getPlugin(final String plugin) throws PluginNotFoundException {
         String url = REGISTRY_URL + "/jars";
 
         HttpClient client = HttpClientBuilder.create().build();
@@ -78,7 +66,6 @@ public class Registry implements IRegistry {
             response = client.execute(request);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
 
         BufferedReader rd = null;
@@ -103,14 +90,19 @@ public class Registry implements IRegistry {
         JsonArray stuff = new JsonParser().parse(result.toString()).getAsJsonArray();
         for(final JsonElement obj : stuff) {
             final JsonObject tmp = obj.getAsJsonObject();
-            System.out.println("looking for " + plugin + " in " + tmp.get("originalname"));
-            if(tmp.get("originalname").getAsString().contains(plugin)) {
+            final String fileName = tmp.get("originalname").getAsString();
+            if(fileName.contains(plugin)) {
                 // -- found it
-                final String pathToJar = REGISTRY_URL + tmp.get("filename");
-                System.out.println(pathToJar.replace("\"", ""));
-                new DatabaseFacade().loadJar(pathToJar.replace("\"", ""));
+                final String pathToJar = (REGISTRY_URL + tmp.get("filename")).replace("\"", "");
+                System.out.println("Fetching plugin JAR from " + pathToJar);
+                try {
+                    return new Plugin(fileName, new URL(pathToJar));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        return null;
+
+        throw new PluginNotFoundException();
     }
 }

@@ -94,7 +94,6 @@ public final class MockFacade implements IFacade {
      * List the current games
      *
      * @return CommandExecutionResult
-     * @throws ListException
      */
     @Override
     public CommandExecutionResult list() {
@@ -692,6 +691,11 @@ public final class MockFacade implements IFacade {
         }
     }
 
+    @Override
+    public Game getGameByID(int gameID) {
+        return null;
+    }
+
     public Game getGame(GameType game) {
         if (game == GameType.DEFAULT_GAME) {
             return defaultGame;
@@ -700,6 +704,11 @@ public final class MockFacade implements IFacade {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void importData() {
+
     }
 
     public enum GameType {
