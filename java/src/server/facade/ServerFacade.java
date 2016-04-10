@@ -46,7 +46,6 @@ public final class ServerFacade implements IFacade {
     private ServerFacade(){
         gameManager = GameManager.getInstance();
         userManager = UserManager.getInstance();
-//        importData();
     }
 
     private HexLocation getModelHexLocation(HexLocation hexLoc) {
@@ -821,26 +820,28 @@ public final class ServerFacade implements IFacade {
      * retrieves games and users from the database and populates the server.  This function should be run when
      * ServerFacade is constructed so that it can start out with up to date information
      */
-    final public void importData() {
-        IDatabase database = Config.database;
+    public void importData() {
+        final IDatabase database = Config.database;
 
         try {
             userManager.addUsers(database.getUsers());
 
-            List<GameDTO> gameDTOs = database.getAllGames();
-            ArrayList<Game> games = new ArrayList<>();
+            final List<GameDTO> gameDTOs = database.getAllGames();
+            final ArrayList<Game> games = new ArrayList<>();
             for (GameDTO dto : gameDTOs) {
-                games.add(new Game(new JsonParser().parse(dto.getState()).getAsJsonObject()));
+                final JsonParser parser = new JsonParser();
+                final String gameState = dto.getState();
+                games.add(new Game(parser.parse(gameState).getAsJsonObject()));
             }
 
             gameManager.addGames(games);
 
-            for (GameDTO dto : gameDTOs) {
-                List<CommandDTO> commands = database.getCommands(dto.getGameID());
-                for (CommandDTO commandDTO : commands) {
+            for (final GameDTO dto : gameDTOs) {
+                final List<CommandDTO> commands = database.getCommands(dto.getGameID());
+                for (final CommandDTO commandDTO : commands) {
                     try {
-                        Gson gson = new Gson();
-                        ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
+                        final Gson gson = new Gson();
+                        final ICommand command = gson.fromJson(commandDTO.getCommand(), ICommand.class);
                         command.execute();
                     } catch (CommandExecutionFailedException e) {
                         e.printStackTrace();
