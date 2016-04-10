@@ -154,10 +154,6 @@ public class DatabaseFacade implements IDatabase {
 
     @Override
     public List<UserDTO> getUsers() throws InvocationTargetException, IllegalAccessException {
-        System.out.println(methods.toString());
-        System.out.println(instances.toString());
-        System.out.println(methods.containsKey("getUsers"));
-        System.out.println(instances.containsKey("userDao"));
         Object result = methods.get("getUsers").invoke(instances.get("userDao"));
         return (List<UserDTO>) result;
     }

@@ -16,6 +16,7 @@ import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
+import server.persistence.database.DatabaseFacade;
 import server.persistence.registry.Registry;
 
 import java.lang.reflect.InvocationTargetException;

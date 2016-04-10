@@ -46,7 +46,7 @@ public final class ServerFacade implements IFacade {
     private ServerFacade(){
         gameManager = GameManager.getInstance();
         userManager = UserManager.getInstance();
-        importData();
+//        importData();
     }
 
     private HexLocation getModelHexLocation(HexLocation hexLoc) {

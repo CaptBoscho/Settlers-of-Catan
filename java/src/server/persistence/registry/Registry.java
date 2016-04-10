@@ -29,7 +29,7 @@ public class Registry implements IRegistry {
     /**
      * Default Constructor
      */
-    private Registry(){
+    private Registry() {
 
     }
 
@@ -60,7 +60,7 @@ public class Registry implements IRegistry {
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
-        HttpResponse response = null;
+        HttpResponse response;
         try {
             response = client.execute(request);
         } catch (IOException e) {
