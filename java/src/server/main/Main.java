@@ -16,6 +16,8 @@ import server.handlers.games.ListGamesHandler;
 import server.handlers.moves.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
+import server.persistence.IDatabase;
+import server.persistence.PersistenceCoordinator;
 import server.persistence.Plugin;
 import server.persistence.registry.Registry;
 import server.utils.PluginLoader;
@@ -36,9 +38,8 @@ public class Main {
 
         try {
             Plugin dbPlugin = Registry.getInstance().getPlugin("redis");
-            Config.database = new PluginLoader().importDatabaseJar(dbPlugin);
-
-//            System.out.println(Config.database.getUsers().toString());
+            IDatabase database = new PluginLoader().importDatabaseJar(dbPlugin);
+            PersistenceCoordinator.setDatabase(database);
         } catch (PluginNotFoundException e) {
             e.printStackTrace();
         }

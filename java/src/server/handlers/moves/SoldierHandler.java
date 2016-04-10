@@ -12,7 +12,6 @@ import spark.Route;
  * @author Derek Argueta
  */
 public final class SoldierHandler implements Route {
-//    private final IPersistenceProvider persistence = PersistenceProvider.getInstance();
 
     @Override
     public Object handle(final Request request, final Response response) throws Exception {
@@ -26,9 +25,6 @@ public final class SoldierHandler implements Route {
             response.status(result.getStatus());
         } else {
             response.status(200);
-
-            //Save the command to the db
-//            persistence.getCommandDAO();//.storeCommand(dto);
         }
 
         return result.getBody();
