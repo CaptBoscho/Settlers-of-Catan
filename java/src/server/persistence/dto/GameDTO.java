@@ -7,7 +7,7 @@ import java.sql.Blob;
  */
 public class GameDTO {
     private int gameID;
-    private Blob state;
+    private String state;
     private String title;
 
     public String getTitle() {
@@ -30,14 +30,11 @@ public class GameDTO {
         this.gameID = gameID;
     }
 
-    public Blob getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(Blob state) {
+    public void setState(String state) {
         this.state = state;
     }
-
-
-
 }

@@ -10,7 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import server.exceptions.PluginExistsException;
 import server.persistence.plugin.IDatabase;
-import server.persistence.provider.DatabaseFacade;
+import server.persistence.database.DatabaseFacade;
 
 import java.io.BufferedReader;
 import java.io.IOException;

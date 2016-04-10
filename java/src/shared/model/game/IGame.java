@@ -267,7 +267,6 @@ public interface IGame {
      * Adds an AI Player to the game
      *
      * @param type
-     * @return
      */
     void addAI(AIType type) throws AddAIException;
 

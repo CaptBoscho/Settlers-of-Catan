@@ -4,7 +4,7 @@ import server.main.Config;
 import server.persistence.daos.ICommandDAO;
 import server.persistence.daos.IGameDAO;
 import server.persistence.daos.IUserDAO;
-import server.persistence.plugin.IDatabase;
+import server.persistence.database.IDatabase;
 
 /**
  * Created by Kyle 'TMD' Cornelison on 4/2/2016.
@@ -37,7 +37,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void clear() {
-        database.clear();
+        //database.clear();
     }
 
     /**
@@ -45,7 +45,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void startTransaction() {
-        database.startTransaction();
+        //database.startTransaction();
     }
 
     /**
@@ -55,7 +55,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void endTransaction(boolean commitTransaction) {
-        database.endTransaction(commitTransaction);
+        //database.endTransaction(commitTransaction);
     }
 
 
@@ -66,7 +66,8 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public IUserDAO getUserDAO() {
-        return database.createUserDAO();
+        //return database.createUserDAO();
+        return null;
     }
 
     /**
@@ -76,7 +77,8 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public IGameDAO getGameDAO() {
-        return database.createGameDAO();
+        //return database.createGameDAO();
+        return null;
     }
 
     /**
@@ -86,6 +88,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public ICommandDAO getCommandDAO() {
-        return database.createCommandDAO();
+        //return database.createCommandDAO();
+        return null;
     }
 }

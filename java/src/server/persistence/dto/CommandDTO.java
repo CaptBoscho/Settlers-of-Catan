@@ -7,16 +7,16 @@ import java.sql.Blob;
  */
 public class CommandDTO {
     private int version;
-    private Blob command;
+    private String command;
     private int gameID;
 
     public CommandDTO(){}
 
-    public Blob getCommand() {
+    public String getCommand() {
         return command;
     }
 
-    public void setCommand(Blob command) {
+    public void setCommand(String command) {
         this.command = command;
     }
 

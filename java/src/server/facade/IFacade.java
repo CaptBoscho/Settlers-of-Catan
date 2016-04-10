@@ -59,7 +59,6 @@ public interface IFacade {
     /**
      * List the current games
      * @return info on the current games
-     * @throws ListException
      * @return CommandExecutinResult
      */
     CommandExecutionResult list();
@@ -235,7 +234,6 @@ public interface IFacade {
      * @param gameID
      * @param dto
      * @throws DiscardCardsException
-     * @return CommandExecutionResult
      */
     CommandExecutionResult discardCards(int gameID, DiscardCardsDTO dto) throws DiscardCardsException;
 
@@ -243,7 +241,6 @@ public interface IFacade {
      * Gets the Model
      * @param gameID
      * @param version
-     * @return CommandExecutionResult
      * @throws GetModelException
      */
     CommandExecutionResult getModel(int gameID, int version) throws GetModelException;

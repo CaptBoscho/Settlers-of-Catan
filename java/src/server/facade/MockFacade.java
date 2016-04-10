@@ -94,7 +94,6 @@ public final class MockFacade implements IFacade {
      * List the current games
      *
      * @return CommandExecutionResult
-     * @throws ListException
      */
     @Override
     public CommandExecutionResult list() {
