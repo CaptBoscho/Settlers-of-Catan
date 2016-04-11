@@ -115,7 +115,7 @@ public final class ServerFacade implements IFacade {
      */
     @Override
     public CommandExecutionResult addAI(final int gameId, final AIType type) throws AddAIException {
-        assert gameId > 0;
+        assert gameId >= 0;
         assert gameId < this.gameManager.getNumGames();
         assert type != null;
 
@@ -838,6 +838,7 @@ public final class ServerFacade implements IFacade {
 
         for (final GameDTO dto : gameDTOs) {
             final List<CommandDTO> commands = database.getCommands(dto.getGameID());
+            PersistenceCoordinator.getInstance().setCommitCount(dto.getGameID(), commands.size());
             for (final CommandDTO commandDTO : commands) {
                 final ICommand command = PersistenceCoordinator.deserializeCommand(commandDTO.getCommand());
                 try {
