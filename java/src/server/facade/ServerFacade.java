@@ -843,6 +843,7 @@ public final class ServerFacade implements IFacade {
             final List<CommandDTO> commands = database.getCommands(dto.getGameID());
             PersistenceCoordinator.getInstance().setCommitCount(dto.getGameID(), commands.size());
             for (final CommandDTO commandDTO : commands) {
+                commandDTO.toString();
                 final ICommand command = PersistenceCoordinator.deserializeCommand(commandDTO.getCommand());
                 try {
                     command.execute();
