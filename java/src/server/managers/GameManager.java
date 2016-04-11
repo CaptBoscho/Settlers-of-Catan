@@ -16,7 +16,6 @@ import java.util.*;
  */
 public class GameManager {
 
-    // -- TODO this code should not be coupled with business logic
     public static String DEFAULT_GAME = "sample/defaultGame.json";
     public static String EMPTY_GAME = "sample/emptyGame.json";
 
@@ -56,6 +55,20 @@ public class GameManager {
             infos.add(gameInfo);
         }
         return infos;
+    }
+
+    /**
+     * Computes the next available game ID.
+     *
+     * @return An ID that is unique to this instance of the server
+     */
+    public int getNextAvailableId() {
+        int uniqueId = 0;
+        while(this.games.containsKey(uniqueId)) {
+            uniqueId++;
+        }
+
+        return uniqueId;
     }
 
     public void addGame(final Game game) {
