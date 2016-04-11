@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
@@ -51,5 +53,22 @@ public final class RollNumberCommand implements Serializable, ICommand {
         this.gameId = cookieDTO.getGameId();
         this.playerIndex = tmpDTO.getPlayerIndex();
         this.value = tmpDTO.getValue();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("gameId", gameId);
+        json.addProperty("playerIndex", playerIndex);
+        json.addProperty("value",value);
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameId").getAsInt();
+        playerIndex = obj.get("playerIndex").getAsInt();
+        value = obj.get("value").getAsInt();
     }
 }

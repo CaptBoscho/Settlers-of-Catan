@@ -23,6 +23,23 @@ public final class MaritimeTradeDTO implements Serializable, IDTO, JsonSerializa
     private int playerIndex;
     private int ratio;
     private String inputResource;
+
+    public void setOutputResource(String outputResource) {
+        this.outputResource = outputResource;
+    }
+
+    public void setInputResource(String inputResource) {
+        this.inputResource = inputResource;
+    }
+
+    public void setRatio(int ratio) {
+        this.ratio = ratio;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
     private String outputResource;
 
     /**

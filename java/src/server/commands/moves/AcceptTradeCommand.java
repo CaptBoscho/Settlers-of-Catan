@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.AcceptTradeException;
@@ -47,6 +49,23 @@ public final class AcceptTradeCommand implements Serializable, ICommand {
         this.gameId = cookieDTO.getGameId();
         this.playerIndex = tmpDTO.getPlayerIndex();
         this.willAccept = tmpDTO.willAccept();
+    }
+
+    @Override
+    public JsonObject toJson(){
+        JsonObject json = new JsonObject();
+        json.addProperty("gameID",gameId);
+        json.addProperty("playerIndex", playerIndex);
+        json.addProperty("willAccept", willAccept);
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameID").getAsInt();
+        playerIndex = obj.get("playerIndex").getAsInt();
+        willAccept = obj.get("willAccept").getAsBoolean();
     }
 
 }

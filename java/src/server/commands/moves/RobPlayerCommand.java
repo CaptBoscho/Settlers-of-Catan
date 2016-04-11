@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
@@ -57,6 +59,25 @@ public final class RobPlayerCommand implements Serializable, ICommand {
         this.playerIndex = tmpDTO.getPlayerIndex();
         this.location = tmpDTO.getLocation();
         this.victimIndex = tmpDTO.getVictimIndex();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("gameId", gameId);
+        json.addProperty("playerIndex", playerIndex);
+        json.add("hexLocation",location.toJSON());
+        json.addProperty("victim",victimIndex);
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameId").getAsInt();
+        playerIndex = obj.get("playerIndex").getAsInt();
+        location = new HexLocation(obj.getAsJsonObject("hexLocation"));
+        victimIndex = obj.get("victim").getAsInt();
     }
 
 }

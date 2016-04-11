@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuildRoadException;
@@ -49,5 +51,23 @@ public final class BuildRoadCommand implements Serializable, ICommand {
         this.playerIndex = tmpDTO.getPlayerIndex();
         this.location = tmpDTO.getRoadLocation();
     }
+
+    @Override
+    public JsonObject toJson(){
+        JsonObject json = new JsonObject();
+        json.addProperty("gameId", gameId);
+        json.addProperty("playerIndex",playerIndex);
+        json.add("edgeLocation",location.toJSON());
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameId").getAsInt();
+        playerIndex = obj.get("playerIndex").getAsInt();
+        location = new EdgeLocation(obj.getAsJsonObject("edgeLocation"));
+    }
+
 
 }

@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
@@ -46,5 +48,21 @@ public final class DiscardCardsCommand implements Serializable, ICommand {
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         this.dto = (DiscardCardsDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("gameId", gameId);
+        json.add("discardDto", dto.toJSON());
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameId").getAsInt();
+        JsonObject discard = obj.getAsJsonObject("discardDto");
+        dto = new DiscardCardsDTO(discard.getAsString());
     }
 }

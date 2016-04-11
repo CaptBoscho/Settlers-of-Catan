@@ -1,5 +1,6 @@
 package server.commands;
 
+import com.google.gson.JsonObject;
 import server.exceptions.CommandExecutionFailedException;
 import shared.dto.IDTO;
 
@@ -22,4 +23,8 @@ public interface ICommand extends Serializable {
     CommandExecutionResult execute() throws CommandExecutionFailedException;
 
     void setParams(IDTO dto);
+
+    JsonObject toJson();
+
+    void getFromJson(String json);
 }
