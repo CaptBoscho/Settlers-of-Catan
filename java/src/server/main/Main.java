@@ -36,9 +36,6 @@ public class Main {
 
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 
-        System.out.println(Arrays.toString(args));
-        System.out.println(args.length);
-
         String pluginType = args[0];
         Config.commandCount = Integer.parseInt(args[1]);
 
@@ -47,7 +44,8 @@ public class Main {
             IDatabase database = new PluginLoader().importDatabaseJar(dbPlugin);
             PersistenceCoordinator.setDatabase(database);
         } catch (PluginNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            System.exit(0);
         }
 
         if(args[2].equals("true")) {
