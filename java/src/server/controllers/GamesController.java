@@ -23,7 +23,8 @@ public final class GamesController {
         final int gameId = Integer.parseInt(result.getNewCookies().get("catan.game"));
         final Game game = GameManager.getInstance().getGameByID(gameId);
         final GameDTO gameDTO = new GameDTO(gameId, game.getTitle(), game.toJSON().toString());
-        PersistenceCoordinator.addGame(gameDTO);
+        int newGameId = PersistenceCoordinator.addGame(gameDTO);
+        result.getNewCookies().put("catan.game", Integer.toString(newGameId));
         return result;
     }
 

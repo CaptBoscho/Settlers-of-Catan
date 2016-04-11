@@ -66,7 +66,7 @@ public class PersistenceCoordinator {
      * @param db An IDatabase that provides all core functionality for
      *           persistence
      */
-    public static void setDatabase(IDatabase db) {
+    public static void setDatabase(final IDatabase db) {
         getInstance().database = db;
     }
 
@@ -80,9 +80,13 @@ public class PersistenceCoordinator {
      * UserManager will update the user's ID to a non-conflicting ID that is
      * returned by the data store.
      *
+     * (@pre) The user is only stored in-memory
+     * (@post) The user is persisted in a data store and has a non-conflicting
+     * ID
+     *
      * @param dto The data-transfer-object for the user that is to be stored.
      */
-    public static void addUser(UserDTO dto) {
+    public static void addUser(final UserDTO dto) {
         assert dto != null;
 
         int oldId = dto.getId();
@@ -100,7 +104,7 @@ public class PersistenceCoordinator {
      *
      * @param dto The data-transfer-object for the command that is to be stored.
      */
-    public static void addCommand(CommandDTO dto) {
+    public static void addCommand(final CommandDTO dto) {
         assert dto != null;
 
         getInstance().database.addCommand(dto);
@@ -124,13 +128,15 @@ public class PersistenceCoordinator {
      * generates IDs, not the database, so the model is unaware if it assigns
      * an ID that is already occupied in the database.
      *
+     * TODO - decouple the responsibility of updating the game ID
+     *
      * (@pre) The game is only stored in-memory
      * (@post) The game is stored in persistence and has a non-conflicting ID.
      *
      * @param dto A data-transfer-object that contains the information needed
      *            to store a new game.
      */
-    public static void addGame(final GameDTO dto) {
+    public static int addGame(final GameDTO dto) {
         assert dto != null;
 
         int oldId = dto.getGameID();
@@ -141,6 +147,8 @@ public class PersistenceCoordinator {
 
         // update commit count
         getInstance().commandCommitCount.put(gameId, 0);
+
+        return gameId;
     }
 
     /**

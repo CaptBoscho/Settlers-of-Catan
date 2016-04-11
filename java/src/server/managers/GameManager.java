@@ -25,18 +25,6 @@ public class GameManager {
 
     private GameManager() {
         games = new HashMap<>();
-        try {
-            Game game = GameManager.makeGameFromFile(GameManager.DEFAULT_GAME);
-            game.setId(0);
-            game.setTitle("Default Game");
-            addGame(game);
-            game = GameManager.makeGameFromFile(GameManager.EMPTY_GAME);
-            game.setId(1);
-            game.setTitle("Empty Game");
-            addGame(game);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static GameManager getInstance() {
@@ -90,12 +78,7 @@ public class GameManager {
         instance = new GameManager();
     }
 
-    public static Map<Integer, Game> getGames() {
-        // TODO - no idea who thought this code would work
-        return (Map<Integer, Game>)instance.getAllGames();
-    }
-
-    public void addGames(ArrayList<Game> games) {
+    public void addGames(final List<Game> games) {
         games.forEach(this::addGame);
     }
 }

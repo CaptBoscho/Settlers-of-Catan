@@ -831,6 +831,7 @@ public final class ServerFacade implements IFacade {
             final String gameState = dto.getState();
             Game tmpGame = new Game(parser.parse(gameState).getAsJsonObject());
             tmpGame.setTitle(dto.getTitle());
+            tmpGame.setId(dto.getGameID());
             games.add(tmpGame);
         }
 
