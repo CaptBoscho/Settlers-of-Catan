@@ -1,5 +1,6 @@
 package shared.model.ai.aitypes;
 
+import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;
 import shared.definitions.HexType;
 import shared.definitions.PortType;
@@ -38,6 +39,10 @@ public class LongestRoadAI extends AIPlayer {
     public LongestRoadAI(int points, CatanColor color, int id, int playerIndex, String name, AIType type) throws InvalidPlayerException {
         super(points, color, id, playerIndex, name, type);
         super.setPlayerType(PlayerType.AI);
+    }
+
+    public LongestRoadAI(JsonObject blob) {
+        super(blob);
     }
 
     private void setRoadLocations() {

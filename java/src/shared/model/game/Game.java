@@ -1808,7 +1808,12 @@ public final class Game extends Observable implements Serializable, IGame, JsonS
     public CatanColor getPlayerColorByName(final String player) {
         assert player != null;
 
-        return playerManager.getPlayerColorByName(player);
+        try {
+            return playerManager.getPlayerColorByIndex(playerManager.getPlayerByName(player).getPlayerIndex());
+        } catch (PlayerExistsException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

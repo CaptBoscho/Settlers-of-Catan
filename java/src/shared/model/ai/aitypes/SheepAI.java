@@ -1,5 +1,6 @@
 package shared.model.ai.aitypes;
 
+import com.google.gson.JsonObject;
 import shared.definitions.CatanColor;
 import shared.definitions.HexType;
 import shared.definitions.PortType;
@@ -40,6 +41,10 @@ public class SheepAI extends AIPlayer {
     public SheepAI(int points, CatanColor color, int id, int playerIndex, String name, AIType type) throws InvalidPlayerException {
         super(points, color, id, playerIndex, name, type);
         super.setPlayerType(PlayerType.AI);
+    }
+
+    public SheepAI(JsonObject blob) {
+        super(blob);
     }
 
     private void setSheepLocations() {

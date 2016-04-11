@@ -167,7 +167,7 @@ public class PersistenceCoordinator {
             ObjectOutputStream so = new ObjectOutputStream(bo);
             so.writeObject(command);
             so.flush();
-            serializedObject = bo.toString();
+            serializedObject = bo.toString("ISO-8859-1");
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -189,7 +189,7 @@ public class PersistenceCoordinator {
 
         ICommand command = null;
         try {
-            byte b[] = serializedObject.getBytes();
+            byte b[] = serializedObject.getBytes("ISO-8859-1");
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
             command = (ICommand) si.readObject();

@@ -27,7 +27,8 @@ abstract public class AIPlayer extends Player implements Serializable {
      */
     public AIPlayer(JsonObject json) {
         super(json);
-        // TODO: 3/19/2016 Figure this out...
+        super.setPlayerType(PlayerType.AI);
+        this.aiType = AIType.translateFromString(getName());
     }
 
     /**
