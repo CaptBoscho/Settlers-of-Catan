@@ -59,6 +59,7 @@ public final class SendChatCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","SendChat");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         json.addProperty("content",content);

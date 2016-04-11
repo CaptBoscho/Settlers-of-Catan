@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
+import server.commands.moves.*;
 import server.exceptions.*;
 import server.managers.GameManager;
 import server.managers.UserManager;
@@ -843,7 +844,103 @@ public final class ServerFacade implements IFacade {
             final List<CommandDTO> commands = database.getCommands(dto.getGameID());
             PersistenceCoordinator.getInstance().setCommitCount(dto.getGameID(), commands.size());
             for (final CommandDTO commandDTO : commands) {
-                final ICommand command = PersistenceCoordinator.deserializeCommand(commandDTO.getCommand());
+                final JsonObject obj = new JsonParser().parse(commandDTO.getCommand()).getAsJsonObject();
+                String type = obj.get("type").getAsString();
+                ICommand command;
+                switch(type){
+                    case "AcceptTrade":{
+                        command = new AcceptTradeCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "BuildCity":{
+                        command = new BuildCityCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "BuildRoad":{
+                        command = new BuildRoadCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "BuildSettlement":{
+                        command = new BuildSettlementCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "BuyDevCard":{
+                        command = new BuyDevCardCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "DiscardCards":{
+                        command = new DiscardCardsCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "FinishTurn":{
+                        command = new FinishTurnCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "MaritimeTrade":{
+                        command = new MaritimeTradeCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "Monopoly":{
+                        command = new MonopolyCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "Monument":{
+                        command = new MonumentCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "OfferTrade":{
+                        command = new OfferTradeCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "RoadBuilding":{
+                        command = new RoadBuildingCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "RobPlayer":{
+                        command = new RobPlayerCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "RollNumber":{
+                        command = new RollNumberCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "SendChat":{
+                        command = new SendChatCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "Soldier":{
+                        command = new SoldierCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    case "YearOfPlenty":{
+                        command = new YearOfPlentyCommand();
+                        command.getFromJson(obj.getAsString());
+                        break;
+                    }
+                    default:{
+                        command = new FinishTurnCommand();
+                    }
+
+                }
+
+
+                //final ICommand command = PersistenceCoordinator.deserializeCommand(commandDTO.getCommand());
                 try {
                     command.execute();
                 } catch (CommandExecutionFailedException e) {

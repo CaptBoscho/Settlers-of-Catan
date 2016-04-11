@@ -64,6 +64,7 @@ public final class RobPlayerCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","RobPlayer");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         json.add("hexLocation",location.toJSON());

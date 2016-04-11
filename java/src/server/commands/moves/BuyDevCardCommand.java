@@ -55,6 +55,7 @@ public final class BuyDevCardCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","BuyDevCard");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         return json;

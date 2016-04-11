@@ -53,6 +53,7 @@ public final class DiscardCardsCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","DiscardCards");
         json.addProperty("gameId", gameId);
         json.add("discardDto", dto.toJSON());
         return json;

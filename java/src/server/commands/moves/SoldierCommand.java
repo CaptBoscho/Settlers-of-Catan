@@ -64,6 +64,7 @@ public final class SoldierCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","Soldier");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         json.add("hexLocation",location.toJSON());

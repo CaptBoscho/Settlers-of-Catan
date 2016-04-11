@@ -48,6 +48,7 @@ public final class FinishTurnCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","FinishTurn");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         return json;

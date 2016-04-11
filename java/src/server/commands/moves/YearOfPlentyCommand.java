@@ -64,6 +64,7 @@ public final class YearOfPlentyCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","YearOfPlenty");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         json.addProperty("resourceOne",resourceOne.toString());

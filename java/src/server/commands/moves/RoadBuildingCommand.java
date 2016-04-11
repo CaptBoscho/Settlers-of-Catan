@@ -63,6 +63,7 @@ public final class RoadBuildingCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","RoadBuilding");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         json.add("edgeLocationOne",locationOne.toJSON());

@@ -65,6 +65,7 @@ public final class MonopolyCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","Monopoly");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         json.addProperty("resource",resourceType.toString());

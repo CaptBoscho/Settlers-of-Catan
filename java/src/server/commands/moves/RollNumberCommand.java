@@ -58,6 +58,7 @@ public final class RollNumberCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","RollNumber");
         json.addProperty("gameId", gameId);
         json.addProperty("playerIndex", playerIndex);
         json.addProperty("value",value);

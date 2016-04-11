@@ -54,6 +54,7 @@ public final class MaritimeTradeCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson(){
         JsonObject jj = dto.toJSON();
+        jj.addProperty("type","MaritimeTrade");
         jj.addProperty("gameId",gameId);
         jj.add("maritime",dto.toJSON());
         return jj;

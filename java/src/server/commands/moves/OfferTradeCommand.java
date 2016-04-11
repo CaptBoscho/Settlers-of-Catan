@@ -55,6 +55,7 @@ public final class OfferTradeCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("type","OfferTrade");
         json.addProperty("gameId", gameId);
         json.add("offer",dto.toJSON());
         return json;

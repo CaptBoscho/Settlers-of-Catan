@@ -54,6 +54,7 @@ public final class AcceptTradeCommand implements Serializable, ICommand {
     @Override
     public JsonObject toJson(){
         JsonObject json = new JsonObject();
+        json.addProperty("type","AcceptTrade");
         json.addProperty("gameID",gameId);
         json.addProperty("playerIndex", playerIndex);
         json.addProperty("willAccept", willAccept);
