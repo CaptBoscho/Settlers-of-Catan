@@ -65,9 +65,10 @@ public final class MovesCommandFactory {
                 ICommand command = commands.get(name);
                 command.setParams(dto);
                 CommandDTO commandDTO = new CommandDTO(((CookieWrapperDTO)dto).getGameId(), PersistenceCoordinator.serializeCommand(command));
+                CommandExecutionResult result = command.execute();
                 PersistenceCoordinator.addCommand(commandDTO);
                 // TODO - break out into "execute" and "fetchResult"
-                return command.execute();
+                return result;
             } catch (CommandExecutionFailedException e) {
                 e.printStackTrace();
             }
