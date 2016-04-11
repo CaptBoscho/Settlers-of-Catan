@@ -1,7 +1,6 @@
 package server.main;
 
 import server.exceptions.PluginNotFoundException;
-import server.facade.ServerFacade;
 import server.filters.AuthenticationFilter;
 import server.filters.GameFilter;
 import server.handlers.Handlers;
@@ -23,6 +22,7 @@ import server.persistence.registry.Registry;
 import server.utils.PluginLoader;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import static shared.definitions.Endpoints.*;
 import static spark.Spark.*;
@@ -36,21 +36,20 @@ public class Main {
 
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 
+        String pluginType = args[0];
+        Config.commandCount = Integer.parseInt(args[1]);
+
         try {
-            Plugin dbPlugin = Registry.getInstance().getPlugin("redis");
+            Plugin dbPlugin = Registry.getInstance().getPlugin(args[0]);
             IDatabase database = new PluginLoader().importDatabaseJar(dbPlugin);
             PersistenceCoordinator.setDatabase(database);
         } catch (PluginNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            System.exit(0);
         }
 
-        // set the configuration
-        if(args.length == 2) {
-            Config.host = args[0];
-            Config.port = Integer.parseInt(args[1]);
-            Config.facade = ServerFacade.getInstance();
-        } else {
-            Config.facade = ServerFacade.getInstance();
+        if(args[2].equals("true")) {
+            PersistenceCoordinator.getDatabase().clear();
         }
 
         port(Config.port);
