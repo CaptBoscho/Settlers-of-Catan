@@ -20,7 +20,11 @@ import java.net.URL;
 import static org.apache.http.protocol.HTTP.USER_AGENT;
 
 /**
- * Created by Kyle 'TMD' Cornelison on 4/2/2016.
+ * This class is responsible for communication with the plugin registry. The
+ * registry is a Node app running on Heroku so all this class is really
+ * responsible for is making GET requests to that app and interpreting the JSON.
+ *
+ * @author Derek Argueta
  */
 public class Registry {
 

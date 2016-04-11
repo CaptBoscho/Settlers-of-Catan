@@ -7,6 +7,9 @@ import server.persistence.dto.UserDTO;
 import java.util.List;
 
 /**
+ * The interface implemented by all plugins. There is intentionally no
+ * implementing class in this project as that would mess with the classpaths.
+ *
  * @author Derek Argueta
  */
 public interface IDatabase {
