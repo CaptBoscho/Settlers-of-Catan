@@ -679,16 +679,7 @@ public final class MockFacade implements IFacade {
 
     @Override
     public void resetGames() {
-        try {
-            defaultGame = GameManager.makeGameFromFile(GameManager.DEFAULT_GAME);
-            defaultGame.setId(0);
-            defaultGame.setTitle("Default Game");
-            emptyGame = GameManager.makeGameFromFile(GameManager.EMPTY_GAME);
-            emptyGame.setId(1);
-            defaultGame.setTitle("Empty Game");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

@@ -191,7 +191,8 @@ public final class ServerFacade implements IFacade {
 
         // create the game in the model
         final Game game = new Game(name, randomPorts, randomNumbers, randomTiles);
-        game.setId(this.gameManager.getNumGames());
+        game.setId(this.gameManager.getNextAvailableId());
+//        game.setId(this.gameManager.getNumGames());
         this.gameManager.addGame(game);
 
         // construct an info object to send back
