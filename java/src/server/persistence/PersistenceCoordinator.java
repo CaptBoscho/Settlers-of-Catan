@@ -2,6 +2,7 @@ package server.persistence;
 
 import server.commands.ICommand;
 import server.main.Config;
+import server.managers.GameManager;
 import server.managers.UserManager;
 import server.persistence.dto.CommandDTO;
 import server.persistence.dto.GameDTO;
@@ -70,7 +71,9 @@ public class PersistenceCoordinator {
     }
 
     public static void addGame(GameDTO dto) {
+        int oldId = dto.getGameID();
         int gameId = getInstance().database.addGame(dto);
+        GameManager.getInstance().getGameByID(oldId).setId(gameId);
         getInstance().commandCommitCount.put(gameId, 0);
     }
 
