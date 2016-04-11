@@ -2,12 +2,19 @@ package shared.model.player;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import server.managers.UserManager;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
 import shared.definitions.ResourceType;
-import shared.exceptions.*;
+import shared.exceptions.BadCallerException;
+import shared.exceptions.DevCardException;
+import shared.exceptions.InvalidPlayerException;
+import shared.exceptions.PlayerExistsException;
+import shared.model.ai.AIPlayer;
+import shared.model.ai.AIType;
+import shared.model.ai.aitypes.LargestArmyAI;
+import shared.model.ai.aitypes.LongestRoadAI;
+import shared.model.ai.aitypes.SheepAI;
 import shared.model.bank.InvalidTypeException;
 import shared.model.cards.Card;
 import shared.model.cards.devcards.DevelopmentCard;
@@ -53,7 +60,18 @@ public final class PlayerManager implements IPlayerManager {
         this.players = new ArrayList<>();
         for(int i = 0; i < players.size(); i++) {
             if(players.get(i).getAsJsonObject().has("name")) {
-                addPlayer(new Player((JsonObject) players.get(i)));
+                String name = players.get(i).getAsJsonObject().get("name").getAsString();
+                if(AIType.translateFromString(name) != null) {
+                    if(name.equals("Sheep")) {
+                        addPlayer(new SheepAI((JsonObject) players.get(i)));
+                    } else if(name.equals("Largest Army")) {
+                        addPlayer(new LargestArmyAI((JsonObject) players.get(i)));
+                    } else if(name.equals("Longest Road")) {
+                        addPlayer(new LongestRoadAI((JsonObject) players.get(i)));
+                    }
+                } else {
+                    addPlayer(new Player((JsonObject) players.get(i)));
+                }
             }
         }
     }
@@ -134,7 +152,7 @@ public final class PlayerManager implements IPlayerManager {
         // TODO there needs to be better synchronization between PlayerManager and UserManager
         ai.setColor(color);
         ai.setPlayerId((int)(Math.random() * 9900 + 1));
-        ai.setName("AI-" + ai.getId());
+        ai.setName(AIType.typeToString(((AIPlayer)ai).getAIType()));
         this.addPlayer(ai);
         ai.setPlayerIndex(players.size() - 1);
     }
