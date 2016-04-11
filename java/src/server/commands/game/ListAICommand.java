@@ -1,6 +1,7 @@
 package server.commands.game;
 
 
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.ListAIException;
@@ -44,5 +45,15 @@ public final class ListAICommand implements ICommand {
         this.paramsSet = true;
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         this.gameId = cookieDTO.getGameId();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return null;
+    }
+
+    @Override
+    public void getFromJson(String json) {
+
     }
 }

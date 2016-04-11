@@ -1,5 +1,6 @@
 package server.commands.games;
 
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.main.Config;
@@ -38,5 +39,15 @@ public final class CreateCommand implements ICommand {
         randomTiles = tmpDTO.isRandomTiles();
         randomPorts = tmpDTO.isRandomPorts();
         randomNumbers = tmpDTO.isRandomNumbers();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return null;
+    }
+
+    @Override
+    public void getFromJson(String json) {
+
     }
 }

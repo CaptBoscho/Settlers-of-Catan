@@ -1,5 +1,6 @@
 package server.commands.games;
 
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.main.Config;
@@ -25,5 +26,15 @@ public final class ListCommand implements ICommand {
     @Override
     public void setParams(IDTO dto) {
         // -- not needed
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return null;
+    }
+
+    @Override
+    public void getFromJson(String json) {
+
     }
 }

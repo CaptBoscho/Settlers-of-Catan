@@ -1,5 +1,6 @@
 package server.commands.games;
 
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.JoinGameException;
@@ -56,5 +57,15 @@ public final class JoinCommand implements ICommand {
         this.color = tmpDTO.getColor();
         this.playerId = cookieDTO.getPlayerId();
         this.username = cookieDTO.getUsername();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return null;
+    }
+
+    @Override
+    public void getFromJson(String json) {
+
     }
 }
