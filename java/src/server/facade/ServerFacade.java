@@ -845,7 +845,7 @@ public final class ServerFacade implements IFacade {
             PersistenceCoordinator.getInstance().setCommitCount(dto.getGameID(), commands.size());
             for (final CommandDTO commandDTO : commands) {
                 final JsonObject obj = new JsonParser().parse(commandDTO.getCommand()).getAsJsonObject();
-                String type = obj.get("type").getAsString();
+                String type = obj.get("type").toString();
                 ICommand command;
                 switch(type){
                     case "AcceptTrade":{
