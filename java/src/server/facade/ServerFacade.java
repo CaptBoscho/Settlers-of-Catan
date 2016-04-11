@@ -846,91 +846,92 @@ public final class ServerFacade implements IFacade {
             for (final CommandDTO commandDTO : commands) {
                 final JsonObject obj = new JsonParser().parse(commandDTO.getCommand()).getAsJsonObject();
                 String type = obj.get("type").getAsString();
+                System.out.println(type);
                 ICommand command;
                 switch(type){
                     case "AcceptTrade":{
                         command = new AcceptTradeCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "BuildCity":{
                         command = new BuildCityCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "BuildRoad":{
                         command = new BuildRoadCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "BuildSettlement":{
                         command = new BuildSettlementCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "BuyDevCard":{
                         command = new BuyDevCardCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "DiscardCards":{
                         command = new DiscardCardsCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "FinishTurn":{
                         command = new FinishTurnCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "MaritimeTrade":{
                         command = new MaritimeTradeCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "Monopoly":{
                         command = new MonopolyCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "Monument":{
                         command = new MonumentCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "OfferTrade":{
                         command = new OfferTradeCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "RoadBuilding":{
                         command = new RoadBuildingCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "RobPlayer":{
                         command = new RobPlayerCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "RollNumber":{
                         command = new RollNumberCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "SendChat":{
                         command = new SendChatCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "Soldier":{
                         command = new SoldierCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     case "YearOfPlenty":{
                         command = new YearOfPlentyCommand();
-                        command.getFromJson(obj.getAsString());
+                        command.getFromJson(obj.toString());
                         break;
                     }
                     default:{
