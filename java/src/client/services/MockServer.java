@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author Derek Argueta
  */
-class MockServer implements IServer {
+final class MockServer implements IServer {
 
     // TODO - read directly out of .json files
     private final String noUser = "The catan.user HTTP cookie is missing.  You must login before calling this method.";

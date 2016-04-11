@@ -11,7 +11,7 @@ import java.util.Observer;
 /**
  * Implementation for the points controller
  */
-public class PointsController extends Controller implements IPointsController, Observer {
+public final class PointsController extends Controller implements IPointsController, Observer {
 
 	private IGameFinishedView finishedView;
 	private Facade facade;

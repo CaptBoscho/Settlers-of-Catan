@@ -12,7 +12,7 @@ import shared.locations.VertexLocation;
  *
  * Represents Setup 1 State
  */
-public class SetupOneState extends MapState {
+public final class SetupOneState extends MapState {
 
     private static SetupOneState instance;
 

@@ -10,7 +10,7 @@ import java.net.URLEncoder;
  *
  * @author Derek Argueta
  */
-public class ServerRunner {
+public final class ServerRunner {
 
     public static void main(String[] args) throws MissingUserCookieException, UnsupportedEncodingException {
         JsonObject obj = new JsonObject();

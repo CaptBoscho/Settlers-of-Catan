@@ -11,7 +11,7 @@ import java.util.Observer;
 /**
  * Implementation for the maritime trade controller
  */
-public class MaritimeTradeController extends Controller implements IMaritimeTradeController, Observer {
+public final class MaritimeTradeController extends Controller implements IMaritimeTradeController, Observer {
 
 	private Facade facade;
 	private MaritimeTradeControllerState state;

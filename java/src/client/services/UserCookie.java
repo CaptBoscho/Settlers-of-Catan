@@ -59,6 +59,7 @@ public final class UserCookie {
         assert catanGameCookieValue != null;
         assert catanGameCookieValue.length() > 0;
 
+        System.out.println("setting game cookie to: " + catanGameCookieValue);
         this.gameCookie = catanGameCookieValue;
     }
 

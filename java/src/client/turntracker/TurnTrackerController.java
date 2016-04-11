@@ -15,7 +15,7 @@ import java.util.Observer;
 /**
  * Implementation for the turn tracker controller
  */
-public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
+public final class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 	private Facade facade;
     private UserCookie userCookie;
     private boolean joining;

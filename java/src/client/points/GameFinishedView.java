@@ -14,7 +14,7 @@ import client.utils.*;
  * Implementation for the game finished view, which is displayed when the game is over
  */
 @SuppressWarnings({"serial", "unused"})
-public class GameFinishedView extends OverlayView implements IGameFinishedView {
+public final class GameFinishedView extends OverlayView implements IGameFinishedView {
 
 	private final int LABEL_TEXT_SIZE = 40;
 	private final int MESSAGE_TEXT_SIZE = 14;

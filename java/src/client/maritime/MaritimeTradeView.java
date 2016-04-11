@@ -11,7 +11,7 @@ import client.base.*;
  * Implementation for the maritime trade view, which displays the "Maritime Trade" button
  */
 @SuppressWarnings("serial")
-public class MaritimeTradeView extends PanelView implements IMaritimeTradeView {
+public final class MaritimeTradeView extends PanelView implements IMaritimeTradeView {
 
 	private JButton button;
 	

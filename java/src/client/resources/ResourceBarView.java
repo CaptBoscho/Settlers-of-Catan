@@ -45,7 +45,7 @@ import client.utils.ImageUtils;
  * Implementation for the resource bar view
  */
 @SuppressWarnings({"serial", "unused"})
-public class ResourceBarView extends PanelView implements IResourceBarView {
+public final class ResourceBarView extends PanelView implements IResourceBarView {
 	
 	private final String RESOURCE_IMAGE_PATH = "images" + File.separator +
 											   "resources" + File.separator;
@@ -216,7 +216,6 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 		this.setOpaque(true);
 		this.setLayout(new BorderLayout());
 
-
 		JPanel resourcePanel = new JPanel();
 		resourcePanel.setLayout(new BoxLayout(resourcePanel, BoxLayout.Y_AXIS));
 		resourcePanel.setBackground(Color.WHITE);
@@ -225,7 +224,6 @@ public class ResourceBarView extends PanelView implements IResourceBarView {
 		}
 		
 		this.add(resourcePanel, BorderLayout.CENTER);
-		
 		
 		JPanel discardButtonPanel = new JPanel();
 		discardButtonPanel.setBackground(Color.WHITE);

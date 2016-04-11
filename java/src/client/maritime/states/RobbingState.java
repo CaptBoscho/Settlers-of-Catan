@@ -8,7 +8,7 @@ import shared.definitions.ResourceType;
 /**
  * Created by Kyle 'TMD' Cornelison on 2/18/2016.
  */
-public class RobbingState extends MaritimeTradeControllerState {
+public final class RobbingState extends MaritimeTradeControllerState {
     private IMaritimeTradeView view;
 
     /**

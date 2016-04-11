@@ -16,7 +16,7 @@ import client.utils.*;
  * game history views.
  */
 @SuppressWarnings("serial")
-public class LogComponent extends JComponent {
+public final class LogComponent extends JComponent {
 	private int LEFT_MARGIN = 5;
 	private int RIGHT_MARGIN = 5;
 	private int TOP_MARGIN = 3;

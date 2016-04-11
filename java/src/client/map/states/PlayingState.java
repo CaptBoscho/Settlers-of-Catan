@@ -1,7 +1,6 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapComponent;
 import client.services.MissingUserCookieException;
 import shared.definitions.PieceType;
 import shared.exceptions.InvalidLocationException;
@@ -16,7 +15,7 @@ import shared.locations.VertexLocation;
  *
  * Represents Playing State - Default Gameplay State
  */
-public class PlayingState extends MapState {
+public final class PlayingState extends MapState {
 
     private static PlayingState instance;
 

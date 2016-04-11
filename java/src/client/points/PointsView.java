@@ -9,7 +9,7 @@ import client.utils.*;
  * Implementation for the points view, which displays the user's victory points
  */
 @SuppressWarnings("serial")
-public class PointsView extends ComponentView implements IPointsView {
+public final class PointsView extends ComponentView implements IPointsView {
 	
 	private final int TOP_MARGIN = 40;
 	private final int IMAGE_SPACING = 5;

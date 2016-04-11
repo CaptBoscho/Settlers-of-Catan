@@ -1,7 +1,6 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapController;
 import shared.definitions.PieceType;
 import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
@@ -13,7 +12,7 @@ import shared.locations.VertexLocation;
  *
  * Represents Setup 2 State
  */
-public class SetupTwoState extends MapState {
+public final class SetupTwoState extends MapState {
 
     private static SetupTwoState instance;
 

@@ -13,7 +13,7 @@ import shared.model.game.Game;
 /**
  * Implementation for the resource bar controller
  */
-public class ResourceBarController extends Controller implements IResourceBarController, Observer {
+public final class ResourceBarController extends Controller implements IResourceBarController, Observer {
 
 	private Map<ResourceBarElement, IAction> elementActions;
     private Facade facade = Facade.getInstance();
@@ -158,4 +158,3 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		}
 	}
 }
-

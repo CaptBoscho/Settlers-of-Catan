@@ -37,7 +37,7 @@ abstract public class MapState {
         this.mapController = mapController;
     }
 
-    protected HexLocation getUIHexLocation(HexLocation hexLoc) {
+    private HexLocation getUIHexLocation(HexLocation hexLoc) {
         return new HexLocation(hexLoc.getX(), hexLoc.getY()-hexLoc.getX());
     }
 

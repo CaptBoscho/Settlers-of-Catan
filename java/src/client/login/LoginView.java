@@ -20,7 +20,7 @@ import javax.swing.event.DocumentListener;
  * and login
  */
 @SuppressWarnings({"serial", "unused"})
-public class LoginView extends OverlayView implements ILoginView {
+public final class LoginView extends OverlayView implements ILoginView {
 
     private final int LABEL_TEXT_SIZE = 40;
     private final float SMALL_LABEL_TEXT_SIZE = 16.0F;
@@ -325,8 +325,7 @@ public class LoginView extends OverlayView implements ILoginView {
             TextFieldValidator passAgainValidator = new TextFieldValidator(txtPasswordAgain) {
 
                 @Override
-                public boolean validateContents(String input)
-                {
+                public boolean validateContents(String input) {
                     return input.equals(txtPassword.getText());
                 }
                 

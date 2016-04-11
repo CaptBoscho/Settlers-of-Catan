@@ -11,7 +11,7 @@ import shared.locations.VertexLocation;
  *
  * Represents Rolling Dice State
  */
-public class RollingState extends MapState {
+public final class RollingState extends MapState {
 
     private static RollingState instance;
 

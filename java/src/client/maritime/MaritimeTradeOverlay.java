@@ -17,7 +17,7 @@ import client.utils.ImageUtils;
  * Implementation for the maritime trade overlay, which lets the user make a maritime trade
  */
 @SuppressWarnings("serial")
-public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeOverlay {
+public final class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeOverlay {
 
 	// TODO - lol there has to be a better way to do all this....
 

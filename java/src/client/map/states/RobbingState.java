@@ -12,7 +12,7 @@ import shared.locations.VertexLocation;
  *
  * Represents Robbing a Player State
  */
-public class RobbingState extends MapState {
+public final class RobbingState extends MapState {
 
     private static RobbingState instance;
 

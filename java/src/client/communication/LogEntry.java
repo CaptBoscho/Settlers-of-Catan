@@ -5,7 +5,7 @@ import shared.definitions.*;
 /**
  * Message (or entry) displayed in the LogComponent
  */
-class LogEntry {
+final class LogEntry {
 	
 	/**
 	 * Color used when displaying the message

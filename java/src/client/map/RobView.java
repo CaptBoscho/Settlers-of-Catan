@@ -4,11 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import java.util.*;
+import java.util.List;
 
-import shared.definitions.PieceType;
 import client.base.*;
 import client.data.*;
 
@@ -21,14 +20,14 @@ public final class RobView extends OverlayView implements IRobView {
 
 	private final int LABEL_TEXT_SIZE = 40;
 	private final int BORDER_WIDTH = 10;
-	private final Dimension ITEM_SIZE = new Dimension(80,100);
+	private final Dimension ITEM_SIZE = new Dimension(80, 100);
 	private final int TOP_SIZE = 110;
 	private final int BOTTOM_SIZE = 130;
 
 	private JButton defaultButton = null;
 	private JPanel buttonPanel;
-	RobPlayerInfo[] victims;
-	private ArrayList<JButton> victimButtons;
+	private RobPlayerInfo[] victims;
+	private List<JButton> victimButtons;
 
 	public RobView() {
 		
@@ -44,7 +43,7 @@ public final class RobView extends OverlayView implements IRobView {
 		this.add(label, BorderLayout.NORTH);
 		
 		buttonPanel = new JPanel();
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(25,0,25,0));
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 25, 0));
 		
 		defaultButton = new JButton("<html>"
 				+ "<body style=\"text-align:center\">"

@@ -26,7 +26,7 @@ public class RollControllerState {
     private IRollView rollView;
     private IRollResultView rollResultView;
 
-    final int FOUR_SECONDS = 4 * 1000;
+    private final int FOUR_SECONDS = 4 * 1000;
 
 
     /**

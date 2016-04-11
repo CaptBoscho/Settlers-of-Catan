@@ -1,9 +1,7 @@
 package client.map.states;
 
 import client.data.RobPlayerInfo;
-import client.map.MapController;
 import shared.definitions.PieceType;
-import shared.exceptions.PlayerExistsException;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
@@ -13,7 +11,7 @@ import shared.locations.VertexLocation;
  *
  * Represents Discarding State
  */
-public class DiscardingState extends MapState {
+public final class DiscardingState extends MapState {
 
     private static DiscardingState instance;
 

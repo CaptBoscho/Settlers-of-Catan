@@ -8,7 +8,7 @@ import shared.definitions.ResourceType;
 /**
  * Created by Kyle 'TMD' Cornelison on 2/20/2016.
  */
-public class GameFinishedState extends MaritimeTradeControllerState {
+public final class GameFinishedState extends MaritimeTradeControllerState {
     private IMaritimeTradeView view;
 
     /**
