@@ -66,6 +66,6 @@ public final class OfferTradeCommand implements Serializable, ICommand {
         final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         gameId = obj.get("gameId").getAsInt();
         JsonObject offer = obj.getAsJsonObject("offer");
-        dto = new OfferTradeDTO(offer.getAsString());
+        dto = new OfferTradeDTO(offer.toString());
     }
 }

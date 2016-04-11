@@ -64,7 +64,7 @@ public final class MovesCommandFactory {
             try {
                 ICommand command = commands.get(name);
                 command.setParams(dto);
-                CommandDTO commandDTO = new CommandDTO(((CookieWrapperDTO)dto).getGameId(), command.toJson().getAsString());
+                CommandDTO commandDTO = new CommandDTO(((CookieWrapperDTO)dto).getGameId(), command.toJson().toString());
                 CommandExecutionResult result = command.execute();
                 PersistenceCoordinator.addCommand(commandDTO);
                 // TODO - break out into "execute" and "fetchResult"

@@ -65,6 +65,6 @@ public final class MaritimeTradeCommand implements Serializable, ICommand {
         final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
         obj.get("gameId").getAsInt();
         JsonObject maritime = obj.getAsJsonObject("maritime");
-        dto = new MaritimeTradeDTO(maritime.getAsString());
+        dto = new MaritimeTradeDTO(maritime.toString());
     }
 }
