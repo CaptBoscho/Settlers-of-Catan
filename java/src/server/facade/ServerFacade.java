@@ -802,7 +802,7 @@ public final class ServerFacade implements IFacade {
      * @throws GetModelException
      */
     @Override
-    public CommandExecutionResult getModel(int gameID, int version) throws GetModelException {
+    public CommandExecutionResult getModel(final int gameID, final int version) throws GetModelException {
         final Game game = gameManager.getGameByID(gameID);
         if(game.getVersion() == version) {
             // TODO - change this absurd stupidity of \"true\"
@@ -823,7 +823,7 @@ public final class ServerFacade implements IFacade {
 
         userManager.addUsers(database.getUsers());
 
-
+        // fetch all Game DTOs and store the game in the GameManager
         final List<GameDTO> gameDTOs = database.getAllGames();
         final ArrayList<Game> games = new ArrayList<>();
         for (final GameDTO dto : gameDTOs) {
@@ -836,6 +836,7 @@ public final class ServerFacade implements IFacade {
 
         gameManager.addGames(games);
 
+        // fetch the command DTOs and execute them on the game.
         for (final GameDTO dto : gameDTOs) {
             final List<CommandDTO> commands = database.getCommands(dto.getGameID());
             PersistenceCoordinator.getInstance().setCommitCount(dto.getGameID(), commands.size());

@@ -83,6 +83,8 @@ public class PersistenceCoordinator {
      * @param dto The data-transfer-object for the user that is to be stored.
      */
     public static void addUser(UserDTO dto) {
+        assert dto != null;
+
         int oldId = dto.getId();
         int newId = getInstance().database.addUser(dto);
         if(oldId != newId) {
@@ -99,6 +101,8 @@ public class PersistenceCoordinator {
      * @param dto The data-transfer-object for the command that is to be stored.
      */
     public static void addCommand(CommandDTO dto) {
+        assert dto != null;
+
         getInstance().database.addCommand(dto);
         int commitCount = getInstance().commandCommitCount.get(dto.getGameID());
         commitCount++;
@@ -196,6 +200,9 @@ public class PersistenceCoordinator {
      * @param commits The number of commits to be associated with the game.
      */
     public void setCommitCount(int gameId, int commits) {
+        assert gameId >= 0;
+        assert commits >= 0;
+
         getInstance().commandCommitCount.put(gameId, commits);
     }
 }
