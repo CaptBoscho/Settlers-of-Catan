@@ -70,8 +70,8 @@ public class PersistenceCoordinator {
     }
 
     public static void addGame(GameDTO dto) {
-        getInstance().commandCommitCount.put(dto.getGameID(), 0);
-        getInstance().database.addGame(dto);
+        int gameId = getInstance().database.addGame(dto);
+        getInstance().commandCommitCount.put(gameId, 0);
     }
 
     public static String serializeCommand(ICommand command) {
@@ -99,5 +99,9 @@ public class PersistenceCoordinator {
             e.printStackTrace();
         }
         return command;
+    }
+
+    public void setCommitCount(int gameId, int commits) {
+        getInstance().commandCommitCount.put(gameId, commits);
     }
 }
