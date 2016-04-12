@@ -107,16 +107,17 @@ public class PersistenceCoordinator {
     public static void addCommand(final CommandDTO dto) {
         assert dto != null;
 
-        getInstance().database.addCommand(dto);
         int commitCount = getInstance().commandCommitCount.get(dto.getGameID());
         commitCount++;
         getInstance().commandCommitCount.put(dto.getGameID(), commitCount);
-        if (commitCount % Config.commandCount == 0) {
+        if (commitCount % (Config.commandCount + 1) == 0) {
             getInstance().commandCommitCount.put(dto.getGameID(), 0);
             Game game = Config.facade.getGameByID(dto.getGameID());
             GameDTO gameDTO = new GameDTO(dto.getGameID(), game.getTitle(), game.toJSON().toString());
             getInstance().database.updateGame(gameDTO);
             getInstance().database.deleteCommandsFromGame(dto.getGameID());
+        } else {
+            getInstance().database.addCommand(dto);
         }
     }
 
