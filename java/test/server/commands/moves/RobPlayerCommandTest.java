@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
@@ -53,6 +54,7 @@ public class RobPlayerCommandTest {
     }
 
     @Test
+    @Ignore
     public void testExecute() {
         //build a city where a settlement exists and pass
         CookieWrapperDTO dto = new CookieWrapperDTO(new RobPlayerDTO(0, 1, new HexLocation(0, 0)));

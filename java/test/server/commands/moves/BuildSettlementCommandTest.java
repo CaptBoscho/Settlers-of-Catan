@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
@@ -42,6 +43,7 @@ public class BuildSettlementCommandTest {
     }
 
     @Test
+    @Ignore
     public void testExecute() {
         //build a settlement and pass
         CookieWrapperDTO dto = new CookieWrapperDTO(new BuildSettlementDTO(0, new VertexLocation(new HexLocation(0,2), VertexDirection.West), true));

@@ -3,6 +3,7 @@ package server.commands.moves;
 import com.google.gson.JsonObject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
@@ -62,6 +63,7 @@ public class BuildRoadCommandTest {
      * Validates that the command works with valid parameters
      */
     @Test
+    @Ignore
     public void testExecuteWithValidParams() {
         command = new BuildRoadCommand();
         CookieWrapperDTO wrapperDTO = new CookieWrapperDTO(new BuildRoadDTO(1, new EdgeLocation(new HexLocation(1,1), EdgeDirection.South), false));

@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
@@ -42,6 +43,7 @@ public class MaritimeTradeCommandTest {
     }
 
     @Test
+    @Ignore
     public void testExecute() {
         //build a city where a settlement exists and pass
         CookieWrapperDTO dto = new CookieWrapperDTO(new MaritimeTradeDTO(0,4, "ore","wheat"));

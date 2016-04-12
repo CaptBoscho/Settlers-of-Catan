@@ -3,6 +3,7 @@ package server.commands.moves;
 import com.google.gson.JsonParser;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.commands.CommandExecutionResult;
 import server.exceptions.CommandExecutionFailedException;
@@ -61,6 +62,7 @@ public class OfferTradeCommandTest {
      * checks to see if the command makes it to the facade and back
      */
     @Test
+    @Ignore
     public void testExecute() {
         List<ResourceType> send = new ArrayList<>();
         send.add(ResourceType.BRICK);
