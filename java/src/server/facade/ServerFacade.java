@@ -947,6 +947,7 @@ public final class ServerFacade implements IFacade {
 
 
                 //final ICommand command = PersistenceCoordinator.deserializeCommand(commandDTO.getCommand());
+
                 try {
                     command.execute();
                 } catch (CommandExecutionFailedException e) {

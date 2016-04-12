@@ -38,7 +38,7 @@ public class Main {
 
         String pluginType = args[0];
         Config.plugin = pluginType;
-        Config.commandCount = Integer.parseInt(args[1] + 1);
+        Config.commandCount = Integer.parseInt(args[1]);
 
         try {
             Plugin dbPlugin = Registry.getInstance().getPlugin(pluginType);

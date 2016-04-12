@@ -24,4 +24,13 @@ public class CommandDTO {
         return gameID;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("gameID: " + gameID + "\n");
+        sb.append("command: " + command + "\n");
+
+        return sb.toString();
+    }
+
 }
