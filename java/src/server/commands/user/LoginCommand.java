@@ -1,5 +1,6 @@
 package server.commands.user;
 
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.main.Config;
@@ -49,5 +50,15 @@ public final class LoginCommand implements ICommand {
         final AuthDTO tmpDTO = (AuthDTO)dto;
         this.username = tmpDTO.getUsername();
         this.password = tmpDTO.getPassword();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return null;
+    }
+
+    @Override
+    public void getFromJson(String json) {
+
     }
 }

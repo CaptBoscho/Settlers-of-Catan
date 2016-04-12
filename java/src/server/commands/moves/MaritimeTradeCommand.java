@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
@@ -47,5 +49,22 @@ public final class MaritimeTradeCommand implements Serializable, ICommand {
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO) dto;
         this.dto = (MaritimeTradeDTO) cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();
+    }
+
+    @Override
+    public JsonObject toJson(){
+        JsonObject jj = dto.toJSON();
+        jj.addProperty("type","MaritimeTrade");
+        jj.addProperty("gameId",gameId);
+        jj.add("maritime",dto.toJSON());
+        return jj;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        obj.get("gameId").getAsInt();
+        JsonObject maritime = obj.getAsJsonObject("maritime");
+        dto = new MaritimeTradeDTO(maritime.toString());
     }
 }

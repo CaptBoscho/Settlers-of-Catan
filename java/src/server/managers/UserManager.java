@@ -19,23 +19,6 @@ public class UserManager {
 
     private UserManager() {
         this.users = new ArrayList<>();
-
-        addUser("pedro", "pedro");
-        addUser("jose", "jose");
-        addUser("pablo", "pablo");
-        addUser("jesus", "jesus");
-        addUser("juan", "juan");
-        addUser("juana", "juana");
-        addUser("emilio", "emilio");
-        addUser("emilia", "emilia");
-        addUser("jorge", "jorge");
-        addUser("juanita", "juanita");
-        addUser("pancho", "pancho");
-        addUser("oscar", "oscar");
-        addUser("ivan", "ivan");
-        addUser("sergio", "sergio");
-        addUser("antonio", "antonio");
-        addUser("maria", "maria");
     }
 
     public static UserManager getInstance() {

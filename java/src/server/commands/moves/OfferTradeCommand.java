@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
@@ -48,5 +50,22 @@ public final class OfferTradeCommand implements Serializable, ICommand {
         final CookieWrapperDTO cookieDTO = (CookieWrapperDTO)dto;
         this.dto = (OfferTradeDTO)cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type","OfferTrade");
+        json.addProperty("gameId", gameId);
+        json.add("offer",dto.toJSON());
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameId").getAsInt();
+        JsonObject offer = obj.getAsJsonObject("offer");
+        dto = new OfferTradeDTO(offer.toString());
     }
 }

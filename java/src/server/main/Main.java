@@ -37,10 +37,11 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 
         String pluginType = args[0];
+        Config.plugin = pluginType;
         Config.commandCount = Integer.parseInt(args[1]);
 
         try {
-            Plugin dbPlugin = Registry.getInstance().getPlugin(args[0]);
+            Plugin dbPlugin = Registry.getInstance().getPlugin(pluginType);
             IDatabase database = new PluginLoader().importDatabaseJar(dbPlugin);
             PersistenceCoordinator.setDatabase(database);
         } catch (PluginNotFoundException e) {

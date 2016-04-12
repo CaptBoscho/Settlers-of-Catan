@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.BuildSettlementException;
@@ -48,6 +50,24 @@ public final class BuildSettlementCommand implements Serializable, ICommand {
         this.gameId = cookieDTO.getGameId();
         this.playerIndex = tmpDTO.getPlayerIndex();
         this.location = tmpDTO.getLocation();
+    }
+
+    @Override
+    public JsonObject toJson(){
+        JsonObject json = new JsonObject();
+        json.addProperty("type","BuildSettlement");
+        json.addProperty("gameId", gameId);
+        json.addProperty("playerIndex",playerIndex);
+        json.add("vertexLocation", location.toJSON());
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameId").getAsInt();
+        playerIndex = obj.get("playerIndex").getAsInt();
+        location = new VertexLocation(obj.getAsJsonObject("vertexLocation"));
     }
 
 }

@@ -1,5 +1,7 @@
 package server.commands.moves;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
@@ -56,6 +58,26 @@ public final class RoadBuildingCommand implements Serializable, ICommand {
         this.playerIndex = tmpDTO.getPlayerIndex();
         this.locationOne = tmpDTO.getRoadLocationOne();
         this.locationTwo = tmpDTO.getRoadLocationTwo();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type","RoadBuilding");
+        json.addProperty("gameId", gameId);
+        json.addProperty("playerIndex", playerIndex);
+        json.add("edgeLocationOne",locationOne.toJSON());
+        json.add("edgeLocationTwo",locationTwo.toJSON());
+        return json;
+    }
+
+    @Override
+    public void getFromJson(String json){
+        final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+        gameId = obj.get("gameId").getAsInt();
+        playerIndex = obj.get("playerIndex").getAsInt();
+        locationOne = new EdgeLocation(obj.getAsJsonObject("edgeLocationOne"));
+        locationTwo = new EdgeLocation(obj.getAsJsonObject("edgeLocationTwo"));
     }
 
 }

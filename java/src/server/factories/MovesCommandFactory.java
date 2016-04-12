@@ -5,6 +5,7 @@ import server.commands.CommandName;
 import server.commands.ICommand;
 import server.commands.moves.*;
 import server.exceptions.CommandExecutionFailedException;
+import server.main.Config;
 import server.persistence.PersistenceCoordinator;
 import server.persistence.dto.CommandDTO;
 import shared.dto.CookieWrapperDTO;
@@ -64,7 +65,13 @@ public final class MovesCommandFactory {
             try {
                 ICommand command = commands.get(name);
                 command.setParams(dto);
-                CommandDTO commandDTO = new CommandDTO(((CookieWrapperDTO)dto).getGameId(), PersistenceCoordinator.serializeCommand(command));
+                CommandDTO commandDTO;
+                if(Config.plugin.equals("postgres")) {
+                    commandDTO = new CommandDTO(((CookieWrapperDTO) dto).getGameId(), command.toJson().toString());
+
+                } else {
+                    commandDTO = new CommandDTO(((CookieWrapperDTO) dto).getGameId(), PersistenceCoordinator.serializeCommand(command));
+                }
                 CommandExecutionResult result = command.execute();
                 PersistenceCoordinator.addCommand(commandDTO);
                 // TODO - break out into "execute" and "fetchResult"

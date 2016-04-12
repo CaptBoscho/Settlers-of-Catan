@@ -1,5 +1,6 @@
 package server.commands.game;
 
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.CommandExecutionFailedException;
@@ -47,6 +48,16 @@ public final class ModelCommand implements ICommand {
 
         final GameModelDTO gameModelDTO = (GameModelDTO)tmpDto.getDto();
         this.requestedVersion = gameModelDTO.getVersion();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return null;
+    }
+
+    @Override
+    public void getFromJson(String json) {
+
     }
 
 }

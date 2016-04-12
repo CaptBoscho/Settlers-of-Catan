@@ -1,5 +1,6 @@
 package server.commands.game;
 
+import com.google.gson.JsonObject;
 import server.commands.CommandExecutionResult;
 import server.commands.ICommand;
 import server.exceptions.AddAIException;
@@ -50,5 +51,15 @@ public final class AddAICommand implements ICommand {
         final AddAIDTO tmpDTO = (AddAIDTO) cookieDTO.getDto();
         this.gameId = cookieDTO.getGameId();
         this.type = tmpDTO.getAIType();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return null;
+    }
+
+    @Override
+    public void getFromJson(String json) {
+
     }
 }
