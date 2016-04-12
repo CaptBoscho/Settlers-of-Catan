@@ -45,7 +45,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void startTransaction() {
-        database.startTransaction();
+//        database.startTransaction();
     }
 
     /**
@@ -55,7 +55,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public void endTransaction(boolean commitTransaction) {
-        database.endTransaction(commitTransaction);
+//        database.endTransaction(commitTransaction);
     }
 
 
@@ -86,6 +86,7 @@ public class PersistenceProvider implements IPersistenceProvider {
      */
     @Override
     public ICommandDAO getCommandDAO() {
-        return database.createCommandDAO();
+//        return database.createCommandDAO();
+        return null;
     }
 }
