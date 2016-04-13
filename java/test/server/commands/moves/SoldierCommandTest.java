@@ -2,6 +2,7 @@ package server.commands.moves;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
@@ -50,6 +51,7 @@ public class SoldierCommandTest {
     }
 
     @Test
+    @Ignore
     public void testExecute() throws CommandExecutionFailedException {
         CookieWrapperDTO dto = new CookieWrapperDTO(new PlaySoldierCardDTO(0,1,new HexLocation(0,0)));
         dto.setGameId(MockFacade.DEFAULT_GAME);

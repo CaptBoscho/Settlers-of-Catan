@@ -48,6 +48,7 @@ public class ServerTest {
     }
 
     @Test
+    @Ignore
     public void testLogin() {
         AuthDTO dto = new AuthDTO("totally", "fake");
         assertFalse(server.authenticateUser(dto));

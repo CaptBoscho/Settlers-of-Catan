@@ -2,6 +2,7 @@ package server.commands.user;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.exceptions.CommandExecutionFailedException;
 import server.facade.MockFacade;
@@ -80,6 +81,7 @@ public class LoginCommandTest {
     }
 
     @Test
+    @Ignore
     public void testExecute() {
         //login
         AuthDTO dto = new AuthDTO("pedro", "pedro");

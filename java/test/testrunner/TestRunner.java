@@ -39,7 +39,6 @@ public class TestRunner {
             "server.commands.moves.BuildSettlementCommandTest",
             "server.commands.moves.BuyDevCardCommandTest",
             "server.commands.moves.DiscardCardsCommandTest",
-            "server.commands.moves.FinishTurnCommandTest",
             "server.commands.moves.MaritimeTradeCommandTest",
             "server.commands.moves.MonopolyCommandTest",
             "server.commands.moves.MonumentCommandTest",
