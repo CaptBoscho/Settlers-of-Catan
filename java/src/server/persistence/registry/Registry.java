@@ -28,7 +28,7 @@ import static org.apache.http.protocol.HTTP.USER_AGENT;
  */
 public class Registry {
 
-    private static final String REGISTRY_URL = "http://soc-registry-service.herokuapp.com/";
+    private static final String REGISTRY_URL = "http://socregistry-env.us-east-1.elasticbeanstalk.com/";
     private static Registry _instance;
 
     /**
